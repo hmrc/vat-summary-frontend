@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package controllers
+package config
 
-import play.api.Play.current
-import play.api.i18n.Messages.Implicits._
-import play.api.mvc._
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import com.google.inject.AbstractModule
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 
-import scala.concurrent.Future
-
-object HelloWorld extends HelloWorld
-
-trait HelloWorld extends FrontendController {
-
-  val helloWorld: Action[AnyContent] = Action.async { implicit request =>
-		Future.successful(Ok(views.html.helloworld.hello_world()))
+class DIModule extends AbstractModule {
+  def configure(): Unit = {
+    bind(classOf[AppConfig]).to(classOf[FrontendAppConfig]).asEagerSingleton()
+    bind(classOf[AuthConnector]).to(classOf[config.FrontendAuthConnector])
+    bind(classOf[AuditConnector]).to(classOf[config.FrontendAuditConnector])
   }
 }
