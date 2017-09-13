@@ -35,8 +35,8 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
 
   private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
-  private val contactFormServiceIdentifier: String = "MyService"
+  private lazy val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
+  private lazy val contactFormServiceIdentifier: String = "MyService"
 
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
