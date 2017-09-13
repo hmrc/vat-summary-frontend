@@ -49,9 +49,14 @@
 
     <logger name="application" level="DEBUG"/>
 
-    <logger name="connector" level="TRACE">
+    <logger name="connector" level="INFO">
         <appender-ref ref="STDOUT"/>
     </logger>
+
+    <logger name="com.codahale.metrics.graphite.GraphiteReporter" level="OFF" />
+    <logger name="org.asynchttpclient.netty" level="WARN" />
+    <logger name="play.core.netty.utils.ServerCookieDecoder" level="WARN" />
+    <logger name="akka.stream" level="WARN" />
 
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
