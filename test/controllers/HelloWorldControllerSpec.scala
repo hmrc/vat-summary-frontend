@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.vatsummaryfrontend.controllers
+package controllers
 
 import play.api.http.Status
 import play.api.test.FakeRequest

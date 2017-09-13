@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.vatsummaryfrontend
+package config
 
 import java.io.File
 
 import com.typesafe.config.Config
+import views.html.error_template
 import net.ceedubs.ficus.Ficus._
 import play.api.Mode._
 import play.api.mvc.Request
@@ -47,7 +48,7 @@ object FrontendGlobal
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
-    uk.gov.hmrc.vatsummaryfrontend.views.html.error_template(pageTitle, heading, message)
+    error_template(pageTitle, heading, message)
 
   override def microserviceMetricsConfig(implicit app: Application): Option[Configuration] = app.configuration.getConfig(s"microservice.metrics")
 }
