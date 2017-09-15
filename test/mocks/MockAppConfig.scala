@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+package mocks
 
-@contentHeader = {
- <h1>@heading</h1>
+import config.AppConfig
+import play.api.mvc.Call
+
+class MockAppConfig extends AppConfig {
+  override val analyticsToken: String = ""
+  override val analyticsHost: String = ""
+  override val reportAProblemPartialUrl: String = ""
+  override val reportAProblemNonJSUrl: String = ""
+  override val whitelistedIps: Seq[String] = Seq("")
+  override val whitelistExcludedPaths: Seq[Call] = Nil
+  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/view-vat-returns"
 }
-
-@mainContent = {
- <p>@message</p>
-}
-
-@govuk_wrapper(appConfig = appConfig,
- title = pageTitle,
- contentHeader = Some(contentHeader),
- mainContent = mainContent
-)
