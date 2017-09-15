@@ -39,8 +39,8 @@ object FrontendGlobal
   override val frontendAuditFilter: AuditFilter.type = AuditFilter
 
   override protected lazy val defaultFrontendFilters: Seq[EssentialFilter] = {
-    val coreFilters = super.defaultFrontendFilters.filterNot(f => f.equals(RecoveryFilter))
-    val ipWhiteListKey = Play.current.configuration.getBoolean("whitelist.enabled").getOrElse(false)
+    val coreFilters: Seq[EssentialFilter] = super.defaultFrontendFilters.filterNot(f => f.equals(RecoveryFilter))
+    val ipWhiteListKey: Boolean = Play.current.configuration.getBoolean("whitelist.enabled").getOrElse(false)
 
     if(ipWhiteListKey)  {
       coreFilters.:+(new WhitelistFilter(Play.current))
