@@ -16,8 +16,10 @@
 
 package config
 
+import java.util.Base64
 import javax.inject.{Inject, Singleton}
 
+import play.api.mvc.Call
 import play.api.{Application, Configuration}
 import uk.gov.hmrc.play.config.ServicesConfig
 
@@ -26,6 +28,9 @@ trait AppConfig extends ServicesConfig {
   val analyticsHost: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
+  val whitelistedIps: Seq[String]
+  val whitelistExcludedPaths: Seq[Call]
+  val shutterPage: String
 }
 
 @Singleton
@@ -42,4 +47,12 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+
+  private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
+    .decode(configuration.getString(key).getOrElse("")), "UTF-8"))
+    .map(_.split(",")).getOrElse(Array.empty).toSeq
+
+  override lazy val whitelistedIps: Seq[String] = whitelistConfig("whitelist.allowedIps")
+  override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig("whitelist.excludePaths").map(path => Call("GET", path))
+  override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")
 }

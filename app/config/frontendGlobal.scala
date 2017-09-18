@@ -17,9 +17,9 @@
 package config
 
 import com.typesafe.config.Config
-import views.html.error_template
+import config.filters.WhitelistFilter
 import net.ceedubs.ficus.Ficus._
-import play.api.mvc.Request
+import play.api.mvc.{EssentialFilter, Request}
 import play.api.{Application, Configuration, Play}
 import play.twirl.api.Html
 import uk.gov.hmrc.crypto.ApplicationCrypto
@@ -27,7 +27,7 @@ import uk.gov.hmrc.play.audit.filters.FrontendAuditFilter
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
 import uk.gov.hmrc.play.frontend.bootstrap.DefaultFrontendGlobal
 import uk.gov.hmrc.play.http.logging.filters.FrontendLoggingFilter
-import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
+import uk.gov.hmrc.play.filters.{MicroserviceFilterSupport, RecoveryFilter}
 import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 
@@ -37,6 +37,18 @@ object FrontendGlobal
   override lazy val auditConnector = new FrontendAuditConnector(Play.current)
   override val loggingFilter: LoggingFilter.type = LoggingFilter
   override val frontendAuditFilter: AuditFilter.type = AuditFilter
+
+  override protected lazy val defaultFrontendFilters: Seq[EssentialFilter] = {
+    val coreFilters: Seq[EssentialFilter] = super.defaultFrontendFilters.filterNot(f => f.equals(RecoveryFilter))
+    val ipWhiteListKey: Boolean = Play.current.configuration.getBoolean("whitelist.enabled").getOrElse(false)
+
+    if(ipWhiteListKey)  {
+      coreFilters.:+(new WhitelistFilter(Play.current))
+    }
+    else {
+      coreFilters
+    }
+  }
 
   override def onStart(app: Application) {
     super.onStart(app)
@@ -66,7 +78,7 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 
   override lazy val applicationPort: None.type = None
 
-  override lazy val auditConnector = new FrontendAuditConnector(Play.current)
+  override lazy val auditConnector: FrontendAuditConnector = new FrontendAuditConnector(Play.current)
 
   override def controllerNeedsAuditing(controllerName: String): Boolean =
     ControllerConfiguration.paramsForController(controllerName).needsAuditing
