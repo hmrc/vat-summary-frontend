@@ -22,7 +22,7 @@ import config.AppConfig
 import play.api.Application
 import play.api.mvc.Call
 import uk.gov.hmrc.play.config.RunMode
-import uk.gov.hmrc.play.filters.MicroserviceFilterSupport
+import uk.gov.hmrc.play.frontend.filters.MicroserviceFilterSupport
 import uk.gov.hmrc.whitelist.AkamaiWhitelistFilter
 
 @Singleton
