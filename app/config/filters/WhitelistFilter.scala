@@ -17,7 +17,6 @@
 package config.filters
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import play.api.Application
 import play.api.mvc.Call
