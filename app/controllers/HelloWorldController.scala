@@ -17,17 +17,25 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.Future
 import play.api.i18n.{I18nSupport, MessagesApi}
+import services.{ErrorModel, TestService}
 
 @Singleton
-class HelloWorldController @Inject()(val appConfig: AppConfig, val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+class HelloWorldController @Inject()(val appConfig: AppConfig, val messagesApi: MessagesApi, service: TestService) extends FrontendController with I18nSupport {
 
   val helloWorld: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
+    service.call("error2").map(bm => Ok(views.html.helloworld.hello_world(appConfig)))
+      .recover {
+        case ErrorModel(message) => Ok(views.html.error_template(appConfig, "WoopsieDoo", "Error", message))
+        case _ => InternalServerError
+      }
+
+    //Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
   }
 }
