@@ -31,6 +31,7 @@ trait AppConfig extends ServicesConfig {
   val whitelistedIps: Seq[String]
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
+  val authUrl: String
 }
 
 @Singleton
@@ -43,6 +44,7 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   private lazy val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
   private lazy val contactFormServiceIdentifier: String = "MyService"
 
+  override lazy val authUrl: String = baseUrl("auth")
   override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
