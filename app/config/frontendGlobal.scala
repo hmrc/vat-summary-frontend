@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.frontend.filters.{FrontendAuditFilter, FrontendLoggingFi
 object FrontendGlobal
   extends DefaultFrontendGlobal {
 
-  override lazy val auditConnector = new FrontendAuditConnector(Play.current)
+  override val auditConnector: FrontendAuditConnector = new FrontendAuditConnector
   override val loggingFilter: LoggingFilter.type = LoggingFilter
   override val frontendAuditFilter: AuditFilter.type = AuditFilter
 
@@ -76,7 +76,7 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 
   override lazy val applicationPort: None.type = None
 
-  override lazy val auditConnector: FrontendAuditConnector = new FrontendAuditConnector(Play.current)
+  override lazy val auditConnector: FrontendAuditConnector = new FrontendAuditConnector
 
   override def controllerNeedsAuditing(controllerName: String): Boolean =
     ControllerConfiguration.paramsForController(controllerName).needsAuditing

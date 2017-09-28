@@ -17,25 +17,26 @@
 package config
 
 import javax.inject.{Inject, Singleton}
-import play.api.Application
+
+import uk.gov.hmrc.auth.core.PlayAuthConnector
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}
-import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
 import uk.gov.hmrc.play.frontend.config.LoadAuditingConfig
 import uk.gov.hmrc.http.hooks.HttpHook
+import uk.gov.hmrc.play.config.AppName
 
 @Singleton
-class FrontendAuditConnector @Inject()(val app: Application) extends Auditing {
+class FrontendAuditConnector @Inject()() extends Auditing with AppName {
   override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
 }
 
 @Singleton
-class WSHttp @Inject()(val app: Application) extends uk.gov.hmrc.play.http.ws.WSHttp with HttpGet with HttpPut with HttpPost with HttpDelete with HttpPatch {
-  override val hooks: Seq[HttpHook] = NoneRequired
+class WSHttp @Inject()() extends uk.gov.hmrc.play.http.ws.WSHttp
+  with HttpGet with HttpPut with HttpPost with HttpDelete with HttpPatch {
+  override val hooks: Seq[AnyRef with HttpHook] = NoneRequired
 }
 
 @Singleton
-class FrontendAuthConnector @Inject()(appConfig: AppConfig, val http: WSHttp) extends AuthConnector with ServicesConfig {
-  lazy val serviceUrl: String = baseUrl("auth")
+class FrontendAuthConnector @Inject()(appConfig: AppConfig, val http: HttpPost) extends PlayAuthConnector {
+  override lazy val serviceUrl: String = appConfig.authUrl
 }
