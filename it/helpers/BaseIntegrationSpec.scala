@@ -21,7 +21,6 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.{Application, Environment, Mode}
 import play.api.inject.guice.GuiceApplicationBuilder
 
-
 trait BaseIntegrationSpec extends WireMockHelper with GuiceOneServerPerSuite with TestSuite
   with BeforeAndAfterEach with BeforeAndAfterAll {
 

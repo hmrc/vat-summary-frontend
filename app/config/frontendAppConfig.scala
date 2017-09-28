@@ -32,6 +32,10 @@ trait AppConfig extends ServicesConfig {
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val authUrl: String
+  val governmentGateway: String
+  val governmentGatewaySignIn: String
+  val baseUrl: String
+  val ggSignInUrl: String
 }
 
 @Singleton
@@ -39,7 +43,8 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
 
   protected val configuration: Configuration = app.configuration
 
-  private def loadConfig(key: String): String = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def loadConfig(key: String): String = configuration.getString(key)
+    .getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   private lazy val contactHost: String = configuration.getString(s"contact-frontend.host").getOrElse("")
   private lazy val contactFormServiceIdentifier: String = "MyService"
@@ -57,4 +62,10 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   override lazy val whitelistedIps: Seq[String] = whitelistConfig("whitelist.allowedIps")
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig("whitelist.excludePaths").map(path => Call("GET", path))
   override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")
+  override lazy val governmentGateway: String = loadConfig(s"government-gateway.host")
+  override lazy val governmentGatewaySignIn: String = s"$governmentGateway/gg/sign-in"
+  override lazy val baseUrl: String = loadConfig(s"base.host")
+  override lazy val ggSignInUrl: String = governmentGatewaySignIn +
+    "?continue=" + baseUrl + controllers.routes.HelloWorldController.helloWorld() +
+    "&origin=" + loadConfig("appName")
 }
