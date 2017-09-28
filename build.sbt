@@ -58,7 +58,7 @@ val compile: Seq[ModuleID] = Seq(
   "org.typelevel" %% "cats" % "0.9.0"
 )
 
-def test(scope: String = "test"): Seq[ModuleID] = Seq(
+def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc" %% "hmrctest" % "2.4.0" % scope,
   "org.scalatest" %% "scalatest" % "3.0.1" % scope,
   "org.pegdown" % "pegdown" % "1.6.0" % scope,
