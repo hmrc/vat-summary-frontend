@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package auth
+package controllers.auth
 
 import cats.Monoid
 import play.api.mvc.{AnyContent, Request, Result}

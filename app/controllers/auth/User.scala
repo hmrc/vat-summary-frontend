@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package auth
+package controllers.auth
 
 case class User(mtdVatId: String)

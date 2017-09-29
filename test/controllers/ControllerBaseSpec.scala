@@ -16,27 +16,16 @@
 
 package controllers
 
-import play.api.http.Status
-import play.api.mvc.Result
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import scala.concurrent.Future
+import mocks.MockAppConfig
+import org.scalatest.mockito.MockitoSugar
+import play.api.i18n.MessagesApi
+import play.api.inject.Injector
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-class HelloWorldControllerSpec extends ControllerBaseSpec {
+trait ControllerBaseSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
 
-  lazy val target = new HelloWorldController(messages, mockAppConfig)
+  val injector: Injector = fakeApplication.injector
+  val messages: MessagesApi = injector.instanceOf[MessagesApi]
+  implicit val mockAppConfig: MockAppConfig = new MockAppConfig
 
-  "Calling the helloWorld action" should {
-
-    lazy val result: Future[Result] = target.helloWorld()(FakeRequest())
-
-    "return 200" in {
-      status(result) shouldBe Status.OK
-    }
-
-    "return HTML" in {
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
-    }
-  }
 }

@@ -22,13 +22,13 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import scala.concurrent.Future
 
-class HelloWorldControllerSpec extends ControllerBaseSpec {
+class NotEnrolledControllerSpec extends ControllerBaseSpec {
 
-  lazy val target = new HelloWorldController(messages, mockAppConfig)
+  lazy val target: NotEnrolledController = new NotEnrolledController(messages, mockAppConfig)
 
-  "Calling the helloWorld action" should {
+  "Calling the .show action" should {
 
-    lazy val result: Future[Result] = target.helloWorld()(FakeRequest())
+    lazy val result: Future[Result] = target.show()(FakeRequest())
 
     "return 200" in {
       status(result) shouldBe Status.OK

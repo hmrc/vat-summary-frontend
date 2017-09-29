@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package auth
+package controllers.auth
 
 import cats.implicits._
-import auth.AuthPredicate.{AuthPredicate, Success}
+import controllers.auth.AuthPredicate.{AuthPredicate, Success}
 import play.api.mvc.{Result, Results}
 import uk.gov.hmrc.http.SessionKeys.{authToken, lastRequestTimestamp}
 
