@@ -17,26 +17,60 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import scala.concurrent.Future
+import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.{ExecutionContext, Future}
 
 class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  lazy val target: HelloWorldController = new HelloWorldController(messages, mockAuthService, mockAppConfig)
+  def setupController(enrolments: Enrolments): HelloWorldController = {
 
-  "Calling the helloWorld action" should {
+    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *)
+      .returns(Future.successful(enrolments))
 
-    lazy val result: Future[Result] = target.helloWorld()(FakeRequest())
+    new HelloWorldController(messages, mockAuthService, mockAppConfig)
+  }
 
-    "return 200" in {
-      status(result) shouldBe Status.OK
+  "Calling the .helloWorld action" when {
+
+    "user is authenticated" should {
+
+      val enrolments = Enrolments(
+        Set(
+          Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
+        )
+      )
+
+      lazy val target = setupController(enrolments)
+      lazy val result = target.helloWorld()(FakeRequest())
+
+      "return 200" in {
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in {
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+      }
     }
 
-    "return HTML" in {
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
+    "user is unauthenticated" should {
+
+      val enrolments = Enrolments(
+        Set.empty
+      )
+
+      lazy val target = setupController(enrolments)
+      lazy val result = target.helloWorld()(FakeRequest())
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
     }
   }
 }
