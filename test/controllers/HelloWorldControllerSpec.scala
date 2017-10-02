@@ -24,7 +24,7 @@ import scala.concurrent.Future
 
 class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  lazy val target = new HelloWorldController(messages, mockAppConfig)
+  lazy val target: HelloWorldController = new HelloWorldController(messages, mockAuthService, mockAppConfig)
 
   "Calling the helloWorld action" should {
 

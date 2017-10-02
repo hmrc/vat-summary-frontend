@@ -17,15 +17,18 @@
 package controllers
 
 import mocks.MockAppConfig
-import org.scalatest.mockito.MockitoSugar
+import org.scalamock.scalatest.MockFactory
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
+import services.AuthService
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-trait ControllerBaseSpec extends UnitSpec with WithFakeApplication with MockitoSugar {
+trait ControllerBaseSpec extends UnitSpec with WithFakeApplication with MockFactory {
 
   val injector: Injector = fakeApplication.injector
   val messages: MessagesApi = injector.instanceOf[MessagesApi]
   implicit val mockAppConfig: MockAppConfig = new MockAppConfig
-
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
+  val mockAuthService: AuthService = new AuthService(mockAuthConnector)
 }

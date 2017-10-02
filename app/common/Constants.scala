@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-package controllers.auth
+package common
 
-import common.Constants
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+object Constants {
 
-case class User(enrolments: Enrolments) {
-
-  lazy val mtdVatId: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(Constants.vatEnrolmentKey, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
-  }
+  val vatEnrolmentKey: String = "HMRC-MTD-VAT"
 }
