@@ -16,36 +16,63 @@
 
 package controllers
 
-import config.AppConfig
+import common.Constants
 import play.api.http.Status
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
+import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
 
-class HelloWorldControllerSpec extends UnitSpec with WithFakeApplication{
+import scala.concurrent.{ExecutionContext, Future}
 
-  lazy val injector: Injector = fakeApplication.injector
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
+class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
+  def setupController(enrolments: Enrolments): HelloWorldController = {
 
-  lazy val target = new HelloWorldController(mockConfig, messages)
+    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *)
+      .returns(Future.successful(enrolments))
 
-  "Calling the helloWorld action" should {
+    new HelloWorldController(messages, mockAuthService, mockAppConfig)
+  }
 
-    "return 200" in {
-      val result = target.helloWorld()(fakeRequest)
-      status(result) shouldBe Status.OK
+  "Calling the .helloWorld action" when {
+
+    "user is authenticated" should {
+
+      val enrolments = Enrolments(
+        Set(
+          Enrolment(Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
+        )
+      )
+
+      lazy val target = setupController(enrolments)
+      lazy val result = target.helloWorld()(FakeRequest())
+
+      "return 200" in {
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in {
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+      }
     }
 
-    "return HTML" in {
-      val result = target.helloWorld()(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
+    "user is unauthenticated" should {
+
+      val enrolments = Enrolments(
+        Set.empty
+      )
+
+      lazy val target = setupController(enrolments)
+      lazy val result = target.helloWorld()(FakeRequest())
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
     }
   }
 }

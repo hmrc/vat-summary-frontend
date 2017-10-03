@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.auth
 
-import javax.inject.{Inject, Singleton}
-import config.AppConfig
-import play.api.mvc._
-import scala.concurrent.Future
-import play.api.i18n.{I18nSupport, MessagesApi}
-import services.AuthService
+import common.Constants
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-@Singleton
-class HelloWorldController @Inject()(val messagesApi: MessagesApi, val authService: AuthService,
-                                     implicit val appConfig: AppConfig)
-  extends AuthenticatedController with I18nSupport {
+case class User(enrolments: Enrolments) {
 
-  val helloWorld: Action[AnyContent] = AuthenticatedAction { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world()))
+  lazy val mtdVatId: Option[String] = enrolments.enrolments.collectFirst {
+    case Enrolment(Constants.VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
   }
 }

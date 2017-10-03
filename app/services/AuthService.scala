@@ -14,21 +14,10 @@
  * limitations under the License.
  */
 
-package controllers
+package services
 
 import javax.inject.{Inject, Singleton}
-import config.AppConfig
-import play.api.mvc._
-import scala.concurrent.Future
-import play.api.i18n.{I18nSupport, MessagesApi}
-import services.AuthService
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
 @Singleton
-class HelloWorldController @Inject()(val messagesApi: MessagesApi, val authService: AuthService,
-                                     implicit val appConfig: AppConfig)
-  extends AuthenticatedController with I18nSupport {
-
-  val helloWorld: Action[AnyContent] = AuthenticatedAction { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world()))
-  }
-}
+class AuthService @Inject()(val authConnector: AuthConnector) extends AuthorisedFunctions

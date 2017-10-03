@@ -16,6 +16,6 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = "Hello from vat-summary-frontend", bodyClasses = None, appConfig = appConfig) {
- <h1>Hello from vat-summary-frontend !</h1>
+@views.html.main_template(title = Messages("notEnrolled.title"), bodyClasses = None, appConfig = appConfig) {
+  <h1>@Messages("notEnrolled.title")</h1>
 }

@@ -16,19 +16,27 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-import config.AppConfig
-import play.api.mvc._
+import play.api.http.Status
+import play.api.mvc.Result
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import scala.concurrent.Future
-import play.api.i18n.{I18nSupport, MessagesApi}
-import services.AuthService
 
-@Singleton
-class HelloWorldController @Inject()(val messagesApi: MessagesApi, val authService: AuthService,
-                                     implicit val appConfig: AppConfig)
-  extends AuthenticatedController with I18nSupport {
+class SessionTimeoutControllerSpec extends ControllerBaseSpec {
 
-  val helloWorld: Action[AnyContent] = AuthenticatedAction { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world()))
+  lazy val target: SessionTimeoutController = new SessionTimeoutController(messages, mockAppConfig)
+
+  "Calling the .timeout action" should {
+
+    lazy val result: Future[Result] = target.timeout()(FakeRequest())
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "return HTML" in {
+      contentType(result) shouldBe Some("text/html")
+      charset(result) shouldBe Some("utf-8")
+    }
   }
 }

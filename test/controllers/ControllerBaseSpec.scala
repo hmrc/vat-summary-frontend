@@ -16,19 +16,19 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-import config.AppConfig
-import play.api.mvc._
-import scala.concurrent.Future
-import play.api.i18n.{I18nSupport, MessagesApi}
+import mocks.MockAppConfig
+import org.scalamock.scalatest.MockFactory
+import play.api.i18n.MessagesApi
+import play.api.inject.Injector
 import services.AuthService
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-@Singleton
-class HelloWorldController @Inject()(val messagesApi: MessagesApi, val authService: AuthService,
-                                     implicit val appConfig: AppConfig)
-  extends AuthenticatedController with I18nSupport {
+trait ControllerBaseSpec extends UnitSpec with WithFakeApplication with MockFactory {
 
-  val helloWorld: Action[AnyContent] = AuthenticatedAction { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world()))
-  }
+  val injector: Injector = fakeApplication.injector
+  val messages: MessagesApi = injector.instanceOf[MessagesApi]
+  implicit val mockAppConfig: MockAppConfig = new MockAppConfig
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
+  val mockAuthService: AuthService = new AuthService(mockAuthConnector)
 }
