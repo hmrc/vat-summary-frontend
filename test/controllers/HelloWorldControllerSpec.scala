@@ -16,6 +16,7 @@
 
 package controllers
 
+import common.Constants
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -23,6 +24,7 @@ import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, E
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class HelloWorldControllerSpec extends ControllerBaseSpec {
@@ -42,7 +44,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
       val enrolments = Enrolments(
         Set(
-          Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
+          Enrolment(Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
         )
       )
 

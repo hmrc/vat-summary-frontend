@@ -22,6 +22,6 @@ import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 case class User(enrolments: Enrolments) {
 
   lazy val mtdVatId: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(Constants.vatEnrolmentKey, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
+    case Enrolment(Constants.VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
   }
 }

@@ -37,7 +37,7 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
     Enrolments(
       Set(
         Enrolment(
-          Constants.vatEnrolmentKey, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0
+          Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0
         )
       )
     )

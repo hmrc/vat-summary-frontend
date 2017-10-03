@@ -18,5 +18,5 @@ package common
 
 object Constants {
 
-  val vatEnrolmentKey: String = "HMRC-MTD-VAT"
+  val VAT_ENROLMENT_KEY: String = "HMRC-MTD-VAT"
 }
