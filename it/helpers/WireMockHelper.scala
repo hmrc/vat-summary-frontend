@@ -28,9 +28,8 @@ import play.api.libs.ws.WSClient
 
 object WireMockHelper extends Eventually with IntegrationPatience {
 
-  val port: Int = 11111
+  val wireMockPort: Int = 11111
   val host: String = "localhost"
-  val url: String = s"http://$host:$port"
 
   def stubPost(url: String, status: Integer, responseBody: String): StubMapping =
     stubFor(post(urlMatching(url))
@@ -40,6 +39,19 @@ object WireMockHelper extends Eventually with IntegrationPatience {
           .withBody(responseBody)
       )
     )
+
+  def verifyGet(uri: String): Unit = {
+    verify(getRequestedFor(urlEqualTo(uri)))
+  }
+
+  def verifyPost(uri: String, optBody: Option[String] = None): Unit = {
+    val uriMapping = postRequestedFor(urlEqualTo(uri))
+    val postRequest = optBody match {
+      case Some(body) => uriMapping.withRequestBody(equalTo(body))
+      case None => uriMapping
+    }
+    verify(postRequest)
+  }
 }
 
 trait WireMockHelper {
@@ -49,12 +61,12 @@ trait WireMockHelper {
   import WireMockHelper._
 
   lazy val wsClient: WSClient = app.injector.instanceOf[WSClient]
-  lazy val wireMockPort: WireMockConfiguration = wireMockConfig().port(port)
-  lazy val wireMockServer: WireMockServer = new WireMockServer(wireMockPort)
+  lazy val wireMockConf: WireMockConfiguration = wireMockConfig.port(wireMockPort)
+  lazy val wireMockServer: WireMockServer = new WireMockServer(wireMockConf)
 
   def startWireMock(): Unit = {
     wireMockServer.start()
-    WireMock.configureFor(host, port)
+    WireMock.configureFor(host, wireMockPort)
   }
 
   def stopWireMock(): Unit = wireMockServer.stop()

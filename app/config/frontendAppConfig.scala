@@ -18,9 +18,9 @@ package config
 
 import java.util.Base64
 import javax.inject.{Inject, Singleton}
-
 import play.api.mvc.Call
 import play.api.{Application, Configuration}
+import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait AppConfig extends ServicesConfig {
@@ -65,7 +65,7 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   override lazy val governmentGateway: String = loadConfig(s"government-gateway.host")
   override lazy val governmentGatewaySignIn: String = s"$governmentGateway/gg/sign-in"
   override lazy val baseUrl: String = loadConfig(s"base.host")
-  override lazy val ggSignInUrl: String = governmentGatewaySignIn +
-    "?continue=" + baseUrl + controllers.routes.HelloWorldController.helloWorld() +
+  lazy val continueUrl: String = ContinueUrl(baseUrl + controllers.routes.HelloWorldController.helloWorld()).encodedUrl
+  override lazy val ggSignInUrl: String = governmentGatewaySignIn + "?continue=" + continueUrl +
     "&origin=" + loadConfig("appName")
 }
