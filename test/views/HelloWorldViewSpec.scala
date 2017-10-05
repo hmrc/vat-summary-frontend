@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package views.errors
+package views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import views.ViewSpec
 
-class UnauthorisedViewSpec extends ViewSpec {
+class HelloWorldViewSpec extends ViewSpec {
 
-  "Rendering the unauthorised page" should {
+  "Rendering the hello world page" should {
 
     object Selectors {
       val pageHeading = "#content h1"
       val instructions = "#content p"
     }
 
-    lazy val view = views.html.errors.unauthorised(mockConfig)
+    lazy val view = views.html.helloworld.hello_world(mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Unauthorised access - TODO"
+      document.title shouldBe "Hello from vat-summary-frontend"
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "You don't have access to this service."
+      elementText(Selectors.pageHeading) shouldBe "Hello from vat-summary-frontend!"
     }
   }
 }

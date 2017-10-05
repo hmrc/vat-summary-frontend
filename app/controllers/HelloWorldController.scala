@@ -29,6 +29,6 @@ class HelloWorldController @Inject()(val messagesApi: MessagesApi, val authServi
   extends AuthenticatedController with I18nSupport {
 
   val helloWorld: Action[AnyContent] = AuthenticatedAction { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world()))
+    Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
   }
 }
