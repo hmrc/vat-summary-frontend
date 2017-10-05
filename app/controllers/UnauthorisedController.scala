@@ -16,27 +16,18 @@
 
 package controllers
 
-import play.api.http.Status
-import play.api.mvc.Result
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import javax.inject.{Inject, Singleton}
+import config.AppConfig
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.Future
 
-class NotEnrolledControllerSpec extends ControllerBaseSpec {
+@Singleton
+class UnauthorisedController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
+  extends FrontendController with I18nSupport {
 
-  lazy val target: NotEnrolledController = new NotEnrolledController(messages, mockAppConfig)
-
-  "Calling the .show action" should {
-
-    lazy val result: Future[Result] = target.show()(FakeRequest())
-
-    "return 200" in {
-      status(result) shouldBe Status.OK
-    }
-
-    "return HTML" in {
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
-    }
+  val show: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(views.html.errors.unauthorised(appConfig)))
   }
 }

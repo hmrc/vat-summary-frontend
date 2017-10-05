@@ -4,4 +4,4 @@ GET        /hello-world             controllers.HelloWorldController.helloWorld
 
 GET        /session-timeout         controllers.SessionTimeoutController.timeout
 
-GET        /not-enrolled            controllers.NotEnrolledController.show
+GET        /unauthorised            controllers.UnauthorisedController.show
