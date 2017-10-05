@@ -1,6 +1,4 @@
 sessionTimeout.title = Your session has timed out
-sessionTimeout.helpOne = To manage your VAT account, you'll have to
-sessionTimeout.helpTwo = sign in
-sessionTimeout.helpThree = using your Government Gateway ID.
+sessionTimeout.instructions = Here are some instructions about what you should do next.
 
-notEnrolled.title = Not enrolled - TODO
+unauthorised.title = Not authorised - TODO

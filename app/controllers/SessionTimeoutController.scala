@@ -28,6 +28,6 @@ class SessionTimeoutController @Inject()(val messagesApi: MessagesApi, implicit 
   extends FrontendController with I18nSupport {
 
   val timeout: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.sessionTimeout(appConfig.ggSignInUrl)))
+    Future.successful(Ok(views.html.errors.sessionTimeout(appConfig)))
   }
 }
