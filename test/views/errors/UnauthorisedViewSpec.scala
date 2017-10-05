@@ -20,27 +20,27 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewSpec
 
-class SessionTimeoutViewSpec extends ViewSpec {
+class UnauthorisedViewSpec extends ViewSpec {
 
-  "Rendering the session timeout page" should {
+  "Rendering the unauthorised page" should {
 
     object Selectors {
       val pageHeading = "#content h1"
       val instructions = "#content p"
     }
 
-    lazy val view = views.html.errors.sessionTimeout(mockConfig)
+    lazy val view = views.html.errors.unauthorised(mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Session has timed out"
+      document.title shouldBe "Unauthorised access"
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Your session has timed out."
+      elementText(Selectors.pageHeading) shouldBe "You don't have access to this service."
     }
 
-    "have the correct instructions on the page" in {
+    "have the correct information on the page" in {
       elementText(Selectors.instructions) shouldBe "Here are some instructions about what you should do next."
     }
   }

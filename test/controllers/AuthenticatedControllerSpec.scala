@@ -39,7 +39,7 @@ class AuthenticatedControllerSpec extends ControllerBaseSpec {
 
   "Calling the .helloWorld action" when {
 
-    "user is enrolled" in new Test {
+    "user is authorised" in new Test {
       val enrolments = Enrolments(
         Set(
           Enrolment(Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
@@ -55,7 +55,7 @@ class AuthenticatedControllerSpec extends ControllerBaseSpec {
       status(result) shouldEqual 200
     }
 
-    "user is not enrolled" in new Test {
+    "user is not authorised" in new Test {
       val enrolments = Enrolments(Set.empty)
 
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))

@@ -88,10 +88,10 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
     }
   }
 
-  "Enrolled predicate" when {
+  "Authorised predicate" when {
 
     "mtdVatId is not empty" should {
-      lazy val predicate = enrolledPredicate(FakeRequest())(userWithMtdVatEnrolment)
+      lazy val predicate = authorisedPredicate(FakeRequest())(userWithMtdVatEnrolment)
 
       "return Success" in {
         predicate.right.value shouldBe Success
@@ -99,22 +99,22 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
     }
 
     "mtdVatId is empty" should {
-      lazy val predicate = enrolledPredicate(FakeRequest())(blankUser)
+      lazy val predicate = authorisedPredicate(FakeRequest())(blankUser)
       lazy val result = predicate.left.value
 
       "return 303" in {
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.NotEnrolledController.show().url}" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.NotEnrolledController.show().url)
+      s"redirect to ${controllers.routes.UnauthorisedController.show().url}" in {
+        redirectLocation(result) shouldBe Some(controllers.routes.UnauthorisedController.show().url)
       }
     }
   }
 
   "Predicates" when {
 
-    "Timeout predicate and enrolled predicate fail" should {
+    "Timeout predicate and authorised predicate fail" should {
       lazy val request = FakeRequest().withSession(
         lastRequestTimestamp -> "lastRequestTimestamp"
       )
@@ -149,8 +149,8 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
         status(result) shouldBe 303
       }
 
-      s"redirect to ${controllers.routes.NotEnrolledController.show().url}" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.NotEnrolledController.show().url)
+      s"redirect to ${controllers.routes.UnauthorisedController.show().url}" in {
+        redirectLocation(result) shouldBe Some(controllers.routes.UnauthorisedController.show().url)
       }
     }
   }

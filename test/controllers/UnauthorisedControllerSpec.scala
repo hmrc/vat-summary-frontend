@@ -22,9 +22,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import scala.concurrent.Future
 
-class NotEnrolledControllerSpec extends ControllerBaseSpec {
+class UnauthorisedControllerSpec extends ControllerBaseSpec {
 
-  lazy val target: NotEnrolledController = new NotEnrolledController(messages, mockAppConfig)
+  lazy val target: UnauthorisedController = new UnauthorisedController(messages, mockAppConfig)
 
   "Calling the .show action" should {
 

@@ -14,29 +14,20 @@
  * limitations under the License.
  */
 
-package views.errors
+package controllers
 
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import views.ViewSpec
+import javax.inject.{Inject, Singleton}
+import config.AppConfig
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
+import scala.concurrent.Future
 
-class NotEnrolledViewSpec extends ViewSpec {
+@Singleton
+class UnauthorisedController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
+  extends FrontendController with I18nSupport {
 
-  "Rendering the not enrolled page" should {
-
-    object Selectors {
-      val pageHeading = "#content h1"
-    }
-
-    lazy val view = views.html.errors.notEnrolled(mockConfig)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "have the correct document title" in {
-      document.title shouldBe "Not enrolled - TODO"
-    }
-
-    "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Not enrolled - TODO"
-    }
+  val show: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(views.html.errors.unauthorised(appConfig)))
   }
 }

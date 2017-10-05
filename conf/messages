@@ -1,4 +1,3 @@
-sessionTimeout.title = Your session has timed out
-sessionTimeout.instructions = Here are some instructions about what you should do next.
+sessionTimeout.title = Session has timed out
 
-unauthorised.title = Not authorised - TODO
+unauthorised.title = Unauthorised access

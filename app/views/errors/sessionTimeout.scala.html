@@ -17,6 +17,6 @@
 @(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
 
 @views.html.main_template(title = Messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig) {
-  <h1>@Messages("sessionTimeout.title")</h1>
-  <p>@Messages("sessionTimeout.instructions")</p>
+  <h1>Your session has timed out.</h1>
+  <p>Here are some instructions about what you should do next.</p>
 }
