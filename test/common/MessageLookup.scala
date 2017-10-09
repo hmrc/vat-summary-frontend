@@ -20,7 +20,7 @@ object MessageLookup {
 
   object SessionTimeout {
     val title: String = "Your session has timed out"
-    val instructions: String = "To manage your VAT account, you'll have to sign in using your Government Gateway ID."
+    val instructions: String = "To view your VAT summary, you'll have to sign in using your Government Gateway ID."
   }
 
   object Unauthorised {
