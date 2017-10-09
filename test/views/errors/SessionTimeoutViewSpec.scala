@@ -16,9 +16,11 @@
 
 package views.errors
 
+import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewSpec
+import common.MessageLookup.SessionTimeout._
 
 class SessionTimeoutViewSpec extends ViewSpec {
 
@@ -27,21 +29,30 @@ class SessionTimeoutViewSpec extends ViewSpec {
     object Selectors {
       val pageHeading = "#content h1"
       val instructions = "#content p"
+      val link = "#content p a"
     }
 
-    lazy val view = views.html.errors.sessionTimeout(mockConfig)
+    lazy val mockAppConfig: MockAppConfig = new MockAppConfig {
+      override val ggSignInUrl: String = "sign-in"
+    }
+
+    lazy val view = views.html.errors.sessionTimeout(mockAppConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Session has timed out"
+      document.title shouldBe title
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Your session has timed out."
+      elementText(Selectors.pageHeading) shouldBe title
     }
 
     "have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe "Here are some instructions about what you should do next."
+      elementText(Selectors.instructions) shouldBe instructions
+    }
+
+    "contain a link to sign in" in {
+      element(Selectors.link).attr("href") shouldBe "sign-in"
     }
   }
 }
