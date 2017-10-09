@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
+package common
 
-@views.html.main_template(title = Messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig) {
- <h1>@Messages("sessionTimeout.title")</h1>
+object MessageLookup {
 
- <p>@Messages("sessionTimeout.helpOne")
-   <a href=@appConfig.ggSignInUrl>@Messages("sessionTimeout.helpTwo")</a>
-   @Messages("sessionTimeout.helpThree")
- </p>
+  object SessionTimeout {
+    val title: String = "Your session has timed out"
+    val instructions: String = "To manage your VAT account, you'll have to sign in using your Government Gateway ID."
+  }
+
+  object Unauthorised {
+    val title: String = "Unauthorised access"
+    val instructions: String = "Here are some instructions about what you should do next."
+  }
 }

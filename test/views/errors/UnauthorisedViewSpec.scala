@@ -19,6 +19,7 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewSpec
+import common.MessageLookup.Unauthorised._
 
 class UnauthorisedViewSpec extends ViewSpec {
 
@@ -33,11 +34,15 @@ class UnauthorisedViewSpec extends ViewSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Unauthorised access - TODO"
+      document.title shouldBe title
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "You don't have access to this service."
+      elementText(Selectors.pageHeading) shouldBe title
+    }
+
+    "have the correct instructions on the page" in {
+      elementText(Selectors.instructions) shouldBe instructions
     }
   }
 }
