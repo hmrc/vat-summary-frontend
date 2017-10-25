@@ -16,7 +16,6 @@
 
 package controllers
 
-import common.Constants
 import play.api.http.Status
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -44,7 +43,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
       val enrolments = Enrolments(
         Set(
-          Enrolment(Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
+          Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
         )
       )
 

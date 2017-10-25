@@ -16,12 +16,13 @@
 
 package controllers.auth
 
-import common.Constants
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 case class User(enrolments: Enrolments) {
 
-  lazy val mtdVatId: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(Constants.VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
+  private val VAT_ENROLMENT_KEY: String = "HMRC-MTD-VAT"
+
+  lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
+    case Enrolment(VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
   }
 }

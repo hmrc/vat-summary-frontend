@@ -29,7 +29,7 @@ object AuthPredicates extends Results {
   lazy val timeoutRoute: Result = Redirect(controllers.routes.SessionTimeoutController.timeout())
 
   private[auth] val authorisedPredicate: AuthPredicate = request => user =>
-    if(user.mtdVatId.nonEmpty) {
+    if(user.Vrn.nonEmpty) {
       Right(Success)
     } else {
       Left(Future.successful(unauthorised))

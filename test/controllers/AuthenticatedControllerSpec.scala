@@ -16,7 +16,6 @@
 
 package controllers
 
-import common.Constants
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import services.AuthService
@@ -42,7 +41,7 @@ class AuthenticatedControllerSpec extends ControllerBaseSpec {
     "user is authorised" in new Test {
       val enrolments = Enrolments(
         Set(
-          Enrolment(Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
+          Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
         )
       )
 

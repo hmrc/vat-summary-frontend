@@ -16,7 +16,6 @@
 
 package controllers.auth
 
-import common.Constants
 import controllers.auth.AuthPredicate._
 import controllers.auth.AuthPredicates._
 import mocks.MockAppConfig
@@ -27,8 +26,9 @@ import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, E
 import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 import uk.gov.hmrc.http.SessionKeys.{authToken, lastRequestTimestamp}
 import play.api.test.Helpers._
+import common.EnrolmentKeys._
 
-class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherValues {
+class AuthPredicatesSpec extends UnitSpec with WithFakeApplication with EitherValues {
 
   lazy val injector: Injector = fakeApplication.injector
   lazy val mockAppConfig: MockAppConfig = new MockAppConfig
@@ -37,7 +37,7 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
     Enrolments(
       Set(
         Enrolment(
-          Constants.VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0
+          VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0
         )
       )
     )
@@ -90,7 +90,7 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
 
   "Authorised predicate" when {
 
-    "mtdVatId is not empty" should {
+    "Vrn is not empty" should {
       lazy val predicate = authorisedPredicate(FakeRequest())(userWithMtdVatEnrolment)
 
       "return Success" in {
@@ -98,7 +98,7 @@ class AuthPredicateSpec extends UnitSpec with WithFakeApplication with EitherVal
       }
     }
 
-    "mtdVatId is empty" should {
+    "Vrn is empty" should {
       lazy val predicate = authorisedPredicate(FakeRequest())(blankUser)
       lazy val result = predicate.left.value
 
