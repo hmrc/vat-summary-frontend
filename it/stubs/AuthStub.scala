@@ -17,7 +17,6 @@
 package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.Constants._
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
 
@@ -26,7 +25,7 @@ object AuthStub extends WireMockMethods {
   private val authoriseUri: String = "/auth/authorise"
 
   private val mtdVatEnrolment: JsObject = Json.obj(
-    "key" -> VAT_ENROLMENT_KEY,
+    "key" -> "HMRC-MTD-VAT",
     "identifiers" -> Json.arr(
       Json.obj(
         "key" -> "MTDVATID",
