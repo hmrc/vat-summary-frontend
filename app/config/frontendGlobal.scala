@@ -18,6 +18,7 @@ package config
 
 import com.typesafe.config.Config
 import config.filters.WhitelistFilter
+import connectors.FrontendAuditConnector
 import net.ceedubs.ficus.Ficus._
 import play.api.mvc.{EssentialFilter, Request}
 import play.api.{Application, Configuration, Play}
@@ -29,19 +30,19 @@ import play.api.i18n.Messages.Implicits._
 import play.api.Play.current
 import uk.gov.hmrc.play.frontend.filters.{FrontendAuditFilter, FrontendLoggingFilter, MicroserviceFilterSupport, RecoveryFilter}
 
-object FrontendGlobal
-  extends DefaultFrontendGlobal {
+object FrontendGlobal extends DefaultFrontendGlobal {
 
-  override val auditConnector: FrontendAuditConnector = new FrontendAuditConnector
+  lazy val application: Application = Play.current
+  override lazy val auditConnector: FrontendAuditConnector = new FrontendAuditConnector(application)
   override val loggingFilter: LoggingFilter.type = LoggingFilter
   override val frontendAuditFilter: AuditFilter.type = AuditFilter
 
   override protected lazy val defaultFrontendFilters: Seq[EssentialFilter] = {
     val coreFilters: Seq[EssentialFilter] = super.defaultFrontendFilters.filterNot(f => f.equals(RecoveryFilter))
-    val ipWhiteListKey: Boolean = Play.current.configuration.getBoolean("whitelist.enabled").getOrElse(false)
+    val ipWhiteListKey: Boolean = application.configuration.getBoolean("whitelist.enabled").getOrElse(false)
 
     if(ipWhiteListKey)  {
-      coreFilters.:+(new WhitelistFilter(Play.current))
+      coreFilters.:+(new WhitelistFilter(application))
     }
     else {
       coreFilters
@@ -54,7 +55,7 @@ object FrontendGlobal
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html = {
-    val appConfig: AppConfig = Play.current.injector.instanceOf[AppConfig]
+    val appConfig: AppConfig = application.injector.instanceOf[AppConfig]
     views.html.errors.error_template(appConfig, pageTitle, heading, message)
   }
 
@@ -62,7 +63,7 @@ object FrontendGlobal
 }
 
 object ControllerConfiguration extends ControllerConfig {
-  lazy val controllerConfigs: Config = Play.current.configuration.underlying.as[Config]("controllers")
+  lazy val controllerConfigs: Config = FrontendGlobal.application.configuration.underlying.as[Config]("controllers")
 }
 
 object LoggingFilter extends FrontendLoggingFilter with MicroserviceFilterSupport {
@@ -76,7 +77,7 @@ object AuditFilter extends FrontendAuditFilter with RunMode with AppName with Mi
 
   override lazy val applicationPort: None.type = None
 
-  override lazy val auditConnector: FrontendAuditConnector = new FrontendAuditConnector
+  override lazy val auditConnector: FrontendAuditConnector = new FrontendAuditConnector(FrontendGlobal.application)
 
   override def controllerNeedsAuditing(controllerName: String): Boolean =
     ControllerConfiguration.paramsForController(controllerName).needsAuditing

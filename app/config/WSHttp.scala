@@ -17,26 +17,12 @@
 package config
 
 import javax.inject.{Inject, Singleton}
-
-import uk.gov.hmrc.auth.core.PlayAuthConnector
+import play.api.Application
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}
-import uk.gov.hmrc.play.frontend.config.LoadAuditingConfig
 import uk.gov.hmrc.http.hooks.HttpHook
-import uk.gov.hmrc.play.config.AppName
 
 @Singleton
-class FrontendAuditConnector @Inject()() extends Auditing with AppName {
-  override lazy val auditingConfig = LoadAuditingConfig(s"auditing")
-}
-
-@Singleton
-class WSHttp @Inject()() extends uk.gov.hmrc.play.http.ws.WSHttp
+class WSHttp @Inject()(val app: Application) extends uk.gov.hmrc.play.http.ws.WSHttp
   with HttpGet with HttpPut with HttpPost with HttpDelete with HttpPatch {
   override val hooks: Seq[AnyRef with HttpHook] = NoneRequired
-}
-
-@Singleton
-class FrontendAuthConnector @Inject()(appConfig: AppConfig, val http: HttpPost) extends PlayAuthConnector {
-  override lazy val serviceUrl: String = appConfig.authUrl
 }
