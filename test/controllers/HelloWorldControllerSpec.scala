@@ -17,11 +17,10 @@
 package controllers
 
 import play.api.http.Status
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +47,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       )
 
       lazy val target = setupController(enrolments)
-      lazy val result = target.helloWorld()(FakeRequest())
+      lazy val result = target.helloWorld()(fakeRequest)
 
       "return 200" in {
         status(result) shouldBe Status.OK
@@ -67,7 +66,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       )
 
       lazy val target = setupController(enrolments)
-      lazy val result = target.helloWorld()(FakeRequest())
+      lazy val result = target.helloWorld()(fakeRequest)
 
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER

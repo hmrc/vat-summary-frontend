@@ -16,8 +16,8 @@
 
 @(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
 
-@views.html.main_template(title = Messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig) {
- <h1>@Messages("unauthorised.title")</h1>
+@views.html.main_template(title = messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig) {
+ <h1>@messages("unauthorised.title")</h1>
 
- <p>@Messages("unauthorised.instructions")</p>
+ <p>@messages("unauthorised.instructions")</p>
 }
