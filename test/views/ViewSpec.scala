@@ -54,5 +54,5 @@ trait ViewSpec extends UnitSpec with GuiceOneAppPerSuite {
     attributes.map(attribute => (attribute.getKey, attribute.getValue)).toMap
   }
 
-  def formatHtml(markup: String): String = Jsoup.parseBodyFragment("\n$markup\n").toString.trim
+  def formatHtml(markup: String): String = Jsoup.parseBodyFragment(s"\n$markup\n").toString.trim
 }

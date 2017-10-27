@@ -25,8 +25,8 @@ import scala.concurrent.Future
 
 object AuthPredicates extends Results {
 
-  lazy val unauthorised: Result = Redirect(controllers.routes.UnauthorisedController.show())
-  lazy val timeoutRoute: Result = Redirect(controllers.routes.SessionTimeoutController.timeout())
+  lazy val unauthorised: Result = Redirect(controllers.routes.ErrorsController.unauthorised())
+  lazy val timeoutRoute: Result = Redirect(controllers.routes.ErrorsController.sessionTimeout())
 
   private[auth] val authorisedPredicate: AuthPredicate = request => user =>
     if(user.Vrn.nonEmpty) {

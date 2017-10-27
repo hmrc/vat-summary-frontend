@@ -2,6 +2,6 @@
 
 GET        /hello-world             controllers.HelloWorldController.helloWorld
 
-GET        /session-timeout         controllers.SessionTimeoutController.timeout
+GET        /session-timeout         controllers.ErrorsController.sessionTimeout
 
-GET        /unauthorised            controllers.UnauthorisedController.show
+GET        /unauthorised            controllers.ErrorsController.unauthorised

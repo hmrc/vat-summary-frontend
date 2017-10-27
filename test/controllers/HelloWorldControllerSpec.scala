@@ -48,7 +48,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       )
 
       lazy val target = setupController(enrolments)
-      lazy val result = target.helloWorld()(FakeRequest())
+      lazy val result = target.helloWorld()(fakeRequest)
 
       "return 200" in {
         status(result) shouldBe Status.OK
@@ -67,7 +67,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       )
 
       lazy val target = setupController(enrolments)
-      lazy val result = target.helloWorld()(FakeRequest())
+      lazy val result = target.helloWorld()(fakeRequest)
 
       "return 303" in {
         status(result) shouldBe Status.SEE_OTHER

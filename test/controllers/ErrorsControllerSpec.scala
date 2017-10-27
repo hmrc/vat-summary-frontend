@@ -17,18 +17,29 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.Result
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import scala.concurrent.Future
 
-class UnauthorisedControllerSpec extends ControllerBaseSpec {
+class ErrorsControllerSpec extends ControllerBaseSpec {
 
-  lazy val target: UnauthorisedController = new UnauthorisedController(messages, mockAppConfig)
+  lazy val target: ErrorsController = new ErrorsController(mockAppConfig, messages)
 
-  "Calling the .show action" should {
+  "Calling the .unauthorised action" should {
 
-    lazy val result: Future[Result] = target.show()(FakeRequest())
+    lazy val result = target.unauthorised()(fakeRequest)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "return HTML" in {
+      contentType(result) shouldBe Some("text/html")
+      charset(result) shouldBe Some("utf-8")
+    }
+  }
+
+  "Calling the .sessionTimeout action" should {
+
+    lazy val result = target.sessionTimeout()(fakeRequest)
 
     "return 200" in {
       status(result) shouldBe Status.OK

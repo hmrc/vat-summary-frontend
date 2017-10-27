@@ -49,7 +49,7 @@ class AuthenticatedControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(Future.successful(enrolments))
 
-      val result = action(FakeRequest())
+      val result = action(fakeRequest)
 
       status(result) shouldEqual 200
     }
@@ -61,7 +61,7 @@ class AuthenticatedControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(Future.successful(enrolments))
 
-      val result = action(FakeRequest())
+      val result = action(fakeRequest)
 
       status(result) shouldEqual 303
     }
@@ -71,7 +71,7 @@ class AuthenticatedControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(Future.failed(new BearerTokenExpired))
 
-      val result = action(FakeRequest())
+      val result = action(fakeRequest)
 
       status(result) shouldEqual 303
     }
