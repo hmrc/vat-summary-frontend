@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import sbt.Tests.{SubProcess, Group}
-import sbt._
+package config
 
-private object TestPhases {
+import javax.inject.{Inject, Singleton}
+import play.api.Application
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.hooks.HttpHook
 
-  def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] =
-    tests map {
-      test => new Group(
-        test.name,
-        Seq(test),
-        SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
-      )
-    }
+@Singleton
+class WSHttp @Inject()(val app: Application) extends uk.gov.hmrc.play.http.ws.WSHttp
+  with HttpGet with HttpPut with HttpPost with HttpDelete with HttpPatch {
+  override val hooks: Seq[AnyRef with HttpHook] = NoneRequired
 }

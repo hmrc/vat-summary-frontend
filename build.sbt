@@ -19,7 +19,7 @@ import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import play.core.PlayVersion
-import TestPhases._
+import sbt.Tests.{Group, SubProcess}
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
@@ -68,6 +68,15 @@ def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0" % scope,
   "com.github.tomakehurst" % "wiremock" % "2.6.0" % scope
 )
+
+def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
+  test =>
+    Group(
+      test.name,
+      Seq(test),
+      SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
+    )
+}
 
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
