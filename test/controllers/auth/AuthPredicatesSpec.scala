@@ -95,7 +95,7 @@ class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherVa
   "Authorised predicate" when {
 
     "Vrn is not empty" should {
-      lazy val predicate = authorisedPredicate(fakeRequest)(userWithMtdVatEnrolment)
+      lazy val predicate = enrolledPredicate(fakeRequest)(userWithMtdVatEnrolment)
 
       "return Success" in {
         predicate.right.value shouldBe Success
@@ -103,7 +103,7 @@ class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherVa
     }
 
     "Vrn is empty" should {
-      lazy val predicate = authorisedPredicate(fakeRequest)(blankUser)
+      lazy val predicate = enrolledPredicate(fakeRequest)(blankUser)
       lazy val result = predicate.left.value
 
       "return 303" in {
@@ -123,7 +123,7 @@ class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherVa
         lastRequestTimestamp -> "lastRequestTimestamp"
       )
 
-      lazy val predicate = predicates(request)(blankUser)
+      lazy val predicate = enrolledUserPredicate(request)(blankUser)
       lazy val result = predicate.left.value
 
       "return 303" in {
@@ -137,7 +137,7 @@ class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherVa
 
     "Both predicates pass" should {
       lazy val request = fakeRequest
-      lazy val predicate = predicates(request)(userWithMtdVatEnrolment)
+      lazy val predicate = enrolledUserPredicate(request)(userWithMtdVatEnrolment)
 
       "return Success" in {
         predicate.right.value shouldBe Success
@@ -146,7 +146,7 @@ class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherVa
 
     "One predicate fails" should {
       lazy val request = fakeRequest
-      lazy val predicate = predicates(request)(blankUser)
+      lazy val predicate = enrolledUserPredicate(request)(blankUser)
       lazy val result = predicate.left.value
 
       "return 303" in {

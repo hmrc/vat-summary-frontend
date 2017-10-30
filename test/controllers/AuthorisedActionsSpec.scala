@@ -16,24 +16,24 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
-import config.AppConfig
+import controllers.auth.AuthorisedActions
 import controllers.auth.actions.VatUserAction
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
+import play.api.mvc.{Action, AnyContent}
+import services.AuthService
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class HelloWorldController @Inject()(val appConfig: AppConfig,
-                                     val messagesApi: MessagesApi,
-                                     val authFunctions: AuthorisedFunctions)
-  extends FrontendController with VatUserAction with I18nSupport {
+class AuthorisedActionsSpec extends ControllerBaseSpec {
 
-  val helloWorld: Action[AnyContent] = VatUserAction.async { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
+  private trait Test extends AuthorisedActions with FrontendController {
+    val enrolments: Enrolments
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockAuthorisedFunctions: AuthorisedFunctions = new AuthService(mockAuthConnector)
+    val mockFrontendController: FrontendController = mock[FrontendController]
   }
 }

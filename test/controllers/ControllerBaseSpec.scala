@@ -29,11 +29,9 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
 
-  val injector: Injector = app.injector
-  val messages: MessagesApi = injector.instanceOf[MessagesApi]
+  lazy val injector: Injector = app.injector
+  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   implicit val mockAppConfig: MockAppConfig = new MockAppConfig
-  val mockAuthConnector: AuthConnector = mock[AuthConnector]
-  val mockAuthService: AuthService = new AuthService(mockAuthConnector)
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 }
