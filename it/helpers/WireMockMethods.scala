@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package stubs
+package helpers
 
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.matching.UrlPattern
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import helpers.WireMockHelper
 import play.api.libs.json.Writes
 
 trait WireMockMethods {
-  def when[T](method: HTTPMethod, uri: String, body: T)(implicit writes: Writes[T]): Mapping = {
-    when(method, uri, Map.empty, body)
-  }
 
   def when(method: HTTPMethod, uri: String, headers: Map[String, String] = Map.empty): Mapping = {
     new Mapping(method, uri, headers, None)
-  }
-
-  def when[T](method: HTTPMethod, uri: String, headers: Map[String, String], body: T)(implicit writes: Writes[T]): Mapping = {
-    val stringBody = writes.writes(body).toString()
-    new Mapping(method, uri, headers, Some(stringBody))
   }
 
   class Mapping(method: HTTPMethod, uri: String, headers: Map[String, String], body: Option[String]) {
@@ -54,11 +45,6 @@ trait WireMockMethods {
     def thenReturn[T](status: Int, body: T)(implicit writes: Writes[T]): StubMapping = {
       val stringBody = writes.writes(body).toString()
       thenReturnInternal(status, Map.empty, Some(stringBody))
-    }
-
-    def thenReturn[T](status: Int, headers: Map[String, String], body: T)(implicit writes: Writes[T]): StubMapping = {
-      val stringBody = writes.writes(body).toString()
-      thenReturnInternal(status, headers, Some(stringBody))
     }
 
     def thenReturn(status: Int, headers: Map[String, String] = Map.empty): StubMapping = {
@@ -81,36 +67,11 @@ trait WireMockMethods {
     }
   }
 
-  def verify(method: HTTPMethod, uri: String): Unit = verifyInternal(method, uri, None)
-
-  def verify[T](method: HTTPMethod, uri: String, body: T)(implicit writes: Writes[T]): Unit = {
-    val stringBody = writes.writes(body).toString()
-    verifyInternal(method, uri, Some(stringBody))
-  }
-
-  private def verifyInternal(method: HTTPMethod, uri: String, bodyString: Option[String]): Unit = method match {
-    case GET => WireMockHelper.verifyGet(uri)
-    case POST => WireMockHelper.verifyPost(uri, bodyString)
-    case _ => ()
-  }
-
   sealed trait HTTPMethod {
     def wireMockMapping(pattern: UrlPattern): MappingBuilder
   }
 
-  case object GET extends HTTPMethod {
-    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = get(pattern)
-  }
-
   case object POST extends HTTPMethod {
     override def wireMockMapping(pattern: UrlPattern): MappingBuilder = post(pattern)
-  }
-
-  case object PUT extends HTTPMethod {
-    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = put(pattern)
-  }
-
-  case object DELETE extends HTTPMethod {
-    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = delete(pattern)
   }
 }

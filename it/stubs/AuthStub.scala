@@ -17,6 +17,7 @@
 package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import helpers.WireMockMethods
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
 
@@ -34,12 +35,27 @@ object AuthStub extends WireMockMethods {
     )
   )
 
-  def stubAuthSuccess(): StubMapping = {
+  private val otherEnrolment: JsObject = Json.obj(
+    "key" -> "HMRC-XXX-XXX",
+    "identifiers" -> Json.arr(
+      Json.obj(
+        "key" -> "XXX",
+        "value" -> "XXX"
+      )
+    )
+  )
+
+  def authorised(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = OK, body = successfulAuthResponse(mtdVatEnrolment))
   }
 
-  def stubAuthFailure(): StubMapping = {
+  def unauthorisedOtherEnrolment(): StubMapping = {
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = OK, body = successfulAuthResponse(otherEnrolment))
+  }
+
+  def unauthorisedNotLoggedIn(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
   }
