@@ -74,15 +74,20 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
     "user is unauthenticated" should {
 
-      val noEnrolments = Enrolments(
-        Set.empty
-      )
+      val noEnrolments = Enrolments(Set.empty)
 
       "return 303" in new Test {
-        override val enrolments: Enrolments = noEnrolments
+        val enrolments: Enrolments = noEnrolments
         val result = target.helloWorld(fakeRequest)
 
-        status(result) shouldBe Status.SEE_OTHER
+        status(result) shouldEqual 303
+      }
+
+      "redirect the user to the unauthorised page" in new Test {
+        val enrolments: Enrolments = noEnrolments
+        val result = target.helloWorld(fakeRequest)
+
+        redirectLocation(result) shouldBe Some(routes.ErrorsController.unauthorised().url)
       }
     }
   }

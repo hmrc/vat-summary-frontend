@@ -16,9 +16,13 @@
 
 package controllers
 
-import controllers.auth.AuthorisedActions
+import javax.inject.{Inject, Singleton}
+
+import config.AppConfig
 import controllers.auth.actions.VatUserAction
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import play.api.test.Helpers._
 import services.AuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -30,10 +34,73 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuthorisedActionsSpec extends ControllerBaseSpec {
 
-  private trait Test extends AuthorisedActions with FrontendController {
+  private trait Test {
     val enrolments: Enrolments
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
+
+    def setup() {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(Future.successful(enrolments))
+    }
+
     val mockAuthorisedFunctions: AuthorisedFunctions = new AuthService(mockAuthConnector)
-    val mockFrontendController: FrontendController = mock[FrontendController]
+
+    def target: TestAuthorisedActionsController = {
+      setup()
+      new TestAuthorisedActionsController(mockAppConfig, messages, mockAuthorisedFunctions)
+    }
+  }
+
+  "Calling the .authorisedAction action" when {
+
+    "user is authorised" should {
+
+      val goodEnrolments = Enrolments(
+        Set(
+          Enrolment("HMRC-MTD-VAT",
+            Seq(EnrolmentIdentifier("", "")),
+            "",
+            ConfidenceLevel.L0)
+        )
+      )
+
+      "return 200" in new Test {
+        override val enrolments: Enrolments = goodEnrolments
+        val result = target.authorisedActions(fakeRequest)
+
+        status(result) shouldEqual 200
+      }
+    }
+
+    "user is not authorised" should {
+
+      val noEnrolments = Enrolments(Set.empty)
+
+      "return 303" in new Test {
+        val enrolments: Enrolments = noEnrolments
+        val result = target.authorisedActions(fakeRequest)
+
+        status(result) shouldEqual 303
+      }
+
+      "redirect the user to the unauthorised page" in new Test {
+        val enrolments: Enrolments = noEnrolments
+        val result = target.authorisedActions(fakeRequest)
+
+        redirectLocation(result) shouldBe Some(routes.ErrorsController.unauthorised().url)
+      }
+    }
+  }
+}
+
+@Singleton
+class TestAuthorisedActionsController @Inject()(val appConfig: AppConfig,
+                                                val messagesApi: MessagesApi,
+                                                val authFunctions: AuthorisedFunctions)
+  extends FrontendController with VatUserAction with I18nSupport {
+
+  val authorisedActions: Action[AnyContent] = VatUserAction.async { implicit request => implicit user =>
+    Future.successful(Ok)
   }
 }
