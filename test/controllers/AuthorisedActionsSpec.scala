@@ -16,17 +16,23 @@
 
 package controllers
 
-import play.api.http.Status
+import javax.inject.{Inject, Singleton}
+
+import config.AppConfig
+import controllers.auth.actions.VatUserAction
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
 import play.api.test.Helpers._
 import services.AuthService
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class HelloWorldControllerSpec extends ControllerBaseSpec {
+class AuthorisedActionsSpec extends ControllerBaseSpec {
 
   private trait Test {
     val enrolments: Enrolments
@@ -40,55 +46,61 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
     val mockAuthorisedFunctions: AuthorisedFunctions = new AuthService(mockAuthConnector)
 
-    def target: HelloWorldController = {
+    def target: TestAuthorisedActionsController = {
       setup()
-      new HelloWorldController(mockAppConfig, messages, mockAuthorisedFunctions)
+      new TestAuthorisedActionsController(mockAppConfig, messages, mockAuthorisedFunctions)
     }
   }
 
-  "Calling the .helloWorld action" when {
+  "Calling the .authorisedAction action" when {
 
-    "user is authenticated" should {
+    "user is authorised" should {
 
-      val goodEnrolments: Enrolments = Enrolments(
+      val goodEnrolments = Enrolments(
         Set(
-          Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("", "VRN1234567890")), "", ConfidenceLevel.L0)
+          Enrolment("HMRC-MTD-VAT",
+            Seq(EnrolmentIdentifier("", "")),
+            "",
+            ConfidenceLevel.L0)
         )
       )
 
       "return 200" in new Test {
         override val enrolments: Enrolments = goodEnrolments
-        val result = target.helloWorld(fakeRequest)
+        val result = target.authorisedActions(fakeRequest)
 
-        status(result) shouldBe Status.OK
-      }
-
-      "return HTML" in new Test {
-        override val enrolments: Enrolments = goodEnrolments
-        val result = target.helloWorld(fakeRequest)
-
-        contentType(result) shouldBe Some("text/html")
-        charset(result) shouldBe Some("utf-8")
+        status(result) shouldEqual 200
       }
     }
 
-    "user is unauthenticated" should {
+    "user is not authorised" should {
 
       val noEnrolments = Enrolments(Set.empty)
 
       "return 303" in new Test {
         val enrolments: Enrolments = noEnrolments
-        val result = target.helloWorld(fakeRequest)
+        val result = target.authorisedActions(fakeRequest)
 
         status(result) shouldEqual 303
       }
 
       "redirect the user to the unauthorised page" in new Test {
         val enrolments: Enrolments = noEnrolments
-        val result = target.helloWorld(fakeRequest)
+        val result = target.authorisedActions(fakeRequest)
 
         redirectLocation(result) shouldBe Some(routes.ErrorsController.unauthorised().url)
       }
     }
+  }
+}
+
+@Singleton
+class TestAuthorisedActionsController @Inject()(val appConfig: AppConfig,
+                                                val messagesApi: MessagesApi,
+                                                val authFunctions: AuthorisedFunctions)
+  extends FrontendController with VatUserAction with I18nSupport {
+
+  val authorisedActions: Action[AnyContent] = VatUserAction.async { implicit request => implicit user =>
+    Future.successful(Ok)
   }
 }
