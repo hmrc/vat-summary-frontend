@@ -18,40 +18,15 @@ package helpers
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.libs.ws.WSClient
 
 object WireMockHelper extends Eventually with IntegrationPatience {
 
   val wireMockPort: Int = 11111
   val host: String = "localhost"
-
-  def stubPost(url: String, status: Integer, responseBody: String): StubMapping =
-    stubFor(post(urlMatching(url))
-      .willReturn(
-        aResponse()
-          .withStatus(status)
-          .withBody(responseBody)
-      )
-    )
-
-  def verifyGet(uri: String): Unit = {
-    verify(getRequestedFor(urlEqualTo(uri)))
-  }
-
-  def verifyPost(uri: String, optBody: Option[String] = None): Unit = {
-    val uriMapping = postRequestedFor(urlEqualTo(uri))
-    val postRequest = optBody match {
-      case Some(body) => uriMapping.withRequestBody(equalTo(body))
-      case None => uriMapping
-    }
-    verify(postRequest)
-  }
 }
 
 trait WireMockHelper {
@@ -60,7 +35,6 @@ trait WireMockHelper {
 
   import WireMockHelper._
 
-  lazy val wsClient: WSClient = app.injector.instanceOf[WSClient]
   lazy val wireMockConf: WireMockConfiguration = wireMockConfig.port(wireMockPort)
   lazy val wireMockServer: WireMockServer = new WireMockServer(wireMockConf)
 
