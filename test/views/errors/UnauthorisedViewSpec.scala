@@ -18,10 +18,10 @@ package views.errors
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import views.ViewSpec
+import views.ViewBaseSpec
 import common.MessageLookup.Unauthorised._
 
-class UnauthorisedViewSpec extends ViewSpec {
+class UnauthorisedViewSpec extends ViewBaseSpec {
 
   "Rendering the unauthorised page" should {
 

@@ -19,10 +19,10 @@ package views.errors
 import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import views.ViewSpec
+import views.ViewBaseSpec
 import common.MessageLookup.SessionTimeout._
 
-class SessionTimeoutViewSpec extends ViewSpec {
+class SessionTimeoutViewSpec extends ViewBaseSpec {
 
   "Rendering the session timeout page" should {
 

@@ -19,6 +19,7 @@ package views
 import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import org.scalatest.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
@@ -27,7 +28,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.FakeRequest
 import scala.collection.JavaConverters._
 
-trait ViewSpec extends UnitSpec with GuiceOneAppPerSuite {
+trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with Matchers {
 
   lazy val mockConfig = new MockAppConfig
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
