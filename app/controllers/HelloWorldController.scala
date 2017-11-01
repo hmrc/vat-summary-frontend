@@ -28,12 +28,12 @@ import uk.gov.hmrc.play.frontend.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class HelloWorldController @Inject()(val appConfig: AppConfig,
-                                     val messagesApi: MessagesApi,
-                                     val authFunctions: AuthorisedFunctions)
+class HelloWorldController @Inject()(val messagesApi: MessagesApi,
+                                     val authFunctions: AuthorisedFunctions,
+                                     implicit val appConfig: AppConfig)
   extends FrontendController with VatUserAction with I18nSupport {
 
   val helloWorld: Action[AnyContent] = VatUserAction.async { implicit request => implicit user =>
-    Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
+    Future.successful(Ok(views.html.helloworld.hello_world()))
   }
 }

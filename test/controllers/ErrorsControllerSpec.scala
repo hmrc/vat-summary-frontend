@@ -21,7 +21,7 @@ import play.api.test.Helpers._
 
 class ErrorsControllerSpec extends ControllerBaseSpec {
 
-  lazy val target: ErrorsController = new ErrorsController(mockAppConfig, messages)
+  lazy val target: ErrorsController = new ErrorsController(messages, mockAppConfig)
 
   "Calling the .unauthorised action" should {
 
