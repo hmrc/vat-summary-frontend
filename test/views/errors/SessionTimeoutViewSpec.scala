@@ -33,7 +33,7 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
     }
 
     lazy val mockAppConfig: MockAppConfig = new MockAppConfig {
-      override val ggServiceUrl: String = "sign-in"
+      override val signInUrl: String = "sign-in"
     }
 
     lazy val view = views.html.errors.sessionTimeout(mockAppConfig)
