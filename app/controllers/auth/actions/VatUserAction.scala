@@ -17,12 +17,15 @@
 package controllers.auth.actions
 
 import controllers.auth.{AuthPredicates, AuthorisedActions}
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.frontend.controller.FrontendController
+import scala.concurrent.Future
 
 trait VatUserAction extends AuthorisedActions {
   self: FrontendController =>
 
   object VatUserAction {
+    def apply(action: ActionBody): Action[AnyContent] = async(action andThen (_ andThen Future.successful))
     def async: AuthenticatedAction = action(AuthPredicates.enrolledUserPredicate)
   }
 }

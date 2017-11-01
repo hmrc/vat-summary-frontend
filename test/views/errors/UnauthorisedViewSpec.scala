@@ -19,7 +19,6 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import common.MessageLookup.Unauthorised._
 
 class UnauthorisedViewSpec extends ViewBaseSpec {
 
@@ -30,19 +29,19 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       val instructions = "#content p"
     }
 
-    lazy val view = views.html.errors.unauthorised(mockConfig)
+    lazy val view = views.html.errors.unauthorised()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe title
+      document.title shouldBe "Unauthorised access"
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe title
+      elementText(Selectors.pageHeading) shouldBe "Unauthorised access"
     }
 
     "have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe instructions
+      elementText(Selectors.instructions) shouldBe "Here are some instructions about what you should do next."
     }
   }
 }

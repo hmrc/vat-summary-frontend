@@ -42,7 +42,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
     def target: HelloWorldController = {
       setup()
-      new HelloWorldController(mockAppConfig, messages, mockAuthorisedFunctions)
+      new HelloWorldController(messages, mockAuthorisedFunctions, mockAppConfig)
     }
   }
 
