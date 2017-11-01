@@ -19,7 +19,6 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import common.MessageLookup.Unauthorised._
 
 class UnauthorisedViewSpec extends ViewBaseSpec {
 

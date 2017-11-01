@@ -17,23 +17,20 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-import scala.concurrent.Future
-
 @Singleton
 class ErrorsController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  val sessionTimeout: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.errors.sessionTimeout()))
+  val sessionTimeout: Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.errors.sessionTimeout())
   }
 
-  val unauthorised: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.errors.unauthorised()))
+  val unauthorised: Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.errors.unauthorised())
   }
 }
