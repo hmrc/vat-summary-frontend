@@ -16,19 +16,20 @@
 
 package app
 
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import uk.gov.hmrc.play.test.UnitSpec
 
-class RouteSpec extends UnitSpec {
+class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
 
   "The route for the BTA partial" should {
-    "be /bta-home" in {
-      controllers.partials.routes.BtaHomeController.vatSection().url shouldBe "/bta-home"
+    "be /vat-summary-partials/bta-home" in {
+      controllers.partials.routes.BtaHomeController.vatSection().url shouldBe "/vat-summary-partials/bta-home"
     }
   }
 
   "The route for the BTA stub" should {
-    "be /bta-stub" in {
-      controllers.routes.BtaStubController.landingPage().url shouldBe "/bta-stub"
+    "be /your-vat-summary/bta-stub" in {
+      controllers.routes.BtaStubController.landingPage().url shouldBe "/your-vat-summary/bta-stub"
     }
   }
 
