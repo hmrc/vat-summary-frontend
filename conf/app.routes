@@ -1,7 +1,11 @@
 # microservice specific routes
 
-GET        /hello-world             controllers.HelloWorldController.helloWorld
+GET        /hello-world            controllers.HelloWorldController.helloWorld
 
-GET        /session-timeout         controllers.ErrorsController.sessionTimeout
+GET        /session-timeout        controllers.ErrorsController.sessionTimeout
 
-GET        /unauthorised            controllers.ErrorsController.unauthorised
+GET        /unauthorised           controllers.ErrorsController.unauthorised
+
+# this route should be deleted once partial
+# is surfaced in BTA homepage and whitelist has been disabled
+GET        /bta-stub               controllers.BtaStubController.landingPage
