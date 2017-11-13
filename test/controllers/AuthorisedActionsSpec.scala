@@ -23,7 +23,7 @@ import controllers.auth.actions.VatUserAction
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.api.test.Helpers._
-import services.AuthService
+import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -44,7 +44,7 @@ class AuthorisedActionsSpec extends ControllerBaseSpec {
         .returns(Future.successful(enrolments))
     }
 
-    val mockAuthorisedFunctions: AuthorisedFunctions = new AuthService(mockAuthConnector)
+    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
 
     def target: TestAuthorisedActionsController = {
       setup()

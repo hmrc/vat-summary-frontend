@@ -18,7 +18,7 @@ package controllers
 
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.AuthService
+import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.auth.core._
@@ -38,7 +38,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
         .returns(Future.successful(enrolments))
     }
 
-    val mockAuthorisedFunctions: AuthorisedFunctions = new AuthService(mockAuthConnector)
+    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
 
     def target: HelloWorldController = {
       setup()
