@@ -22,7 +22,7 @@ import controllers.auth.actions.VatUserAction
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class HelloWorldController @Inject()(val messagesApi: MessagesApi, val authFunctions: AuthorisedFunctions,
