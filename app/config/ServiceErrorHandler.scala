@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 
-package services
+package config
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import javax.inject.Inject
 
-@Singleton
-class AuthService @Inject()(val authConnector: AuthConnector) extends AuthorisedFunctions
+import play.api.i18n.MessagesApi
+import play.api.mvc.Request
+import play.twirl.api.Html
+import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+
+class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi, appConfig: AppConfig) extends FrontendErrorHandler {
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html = {
+    views.html.errors.standardError(appConfig, pageTitle, heading, message)
+  }
+}

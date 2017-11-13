@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package config
+package config.filters
 
-import javax.inject.{Inject, Singleton}
-import play.api.Application
-import uk.gov.hmrc.http._
-import uk.gov.hmrc.http.hooks.HttpHook
+import javax.inject.Inject
 
-@Singleton
-class WSHttp @Inject()(val app: Application) extends uk.gov.hmrc.play.http.ws.WSHttp
-  with HttpGet with HttpPut with HttpPost with HttpDelete with HttpPatch {
-  override val hooks: Seq[AnyRef with HttpHook] = NoneRequired
-}
+import play.api.http.DefaultHttpFilters
+import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
+
+class ServiceFilters @Inject()(defaultFilters: FrontendFilters, whitelistFilter: WhitelistFilter)
+  extends DefaultHttpFilters(defaultFilters.filters :+ whitelistFilter :_*)

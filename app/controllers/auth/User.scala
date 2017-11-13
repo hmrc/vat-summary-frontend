@@ -23,6 +23,6 @@ case class User(enrolments: Enrolments) {
   private val VAT_ENROLMENT_KEY: String = "HMRC-MTD-VAT"
 
   lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
+    case Enrolment(VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _) => value
   }
 }

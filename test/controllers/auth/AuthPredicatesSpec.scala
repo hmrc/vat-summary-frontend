@@ -22,7 +22,7 @@ import mocks.MockAppConfig
 import org.scalatest.EitherValues
 import play.api.inject.Injector
 import play.api.test.FakeRequest
-import uk.gov.hmrc.auth.core.{ConfidenceLevel, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.play.test._
 import uk.gov.hmrc.http.SessionKeys.{authToken, lastRequestTimestamp}
 import play.api.test.Helpers._
@@ -33,16 +33,14 @@ import play.api.mvc.AnyContentAsEmpty
 class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherValues {
 
   lazy val injector: Injector = fakeApplication.injector
-  lazy val mockAppConfig: MockAppConfig = new MockAppConfig
+  lazy val mockAppConfig: MockAppConfig = new MockAppConfig(app.configuration)
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 
   val userWithMtdVatEnrolment = User(
     Enrolments(
       Set(
-        Enrolment(
-          VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0
-        )
+        Enrolment(VAT_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "")
       )
     )
   )

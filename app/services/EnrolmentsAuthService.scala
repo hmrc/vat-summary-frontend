@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package connectors
+package services
 
 import javax.inject.{Inject, Singleton}
-import config.AppConfig
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import uk.gov.hmrc.http.HttpPost
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 
 @Singleton
-class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
-  lazy val serviceUrl: String = configuration.authUrl
-}
+class EnrolmentsAuthService @Inject()(val authConnector: AuthConnector) extends AuthorisedFunctions
