@@ -28,7 +28,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -58,10 +58,7 @@ class AuthorisedActionsSpec extends ControllerBaseSpec {
 
       val goodEnrolments = Enrolments(
         Set(
-          Enrolment("HMRC-MTD-VAT",
-            Seq(EnrolmentIdentifier("", "")),
-            "",
-            ConfidenceLevel.L0)
+          Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("", "")), "")
         )
       )
 
