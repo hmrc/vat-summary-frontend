@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package views.partials
+package views.partials.btaHome
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
-class BtaPartialViewSpec extends ViewBaseSpec {
+class VatSectionViewSpec extends ViewBaseSpec {
 
   "Rendering the BTA partial" should {
 
@@ -29,7 +29,7 @@ class BtaPartialViewSpec extends ViewBaseSpec {
       val instructions = "p"
     }
 
-    lazy val view = views.html.partials.btaPartial()
+    lazy val view = views.html.partials.btaHome.vatSection()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
