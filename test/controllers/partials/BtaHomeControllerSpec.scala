@@ -16,16 +16,25 @@
 
 package controllers.partials
 
-import javax.inject.{Inject, Singleton}
+import controllers.ControllerBaseSpec
+import play.api.http.Status
+import play.api.test.Helpers._
 
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+class BtaHomeControllerSpec extends ControllerBaseSpec {
 
-@Singleton
-class BtaHomeController @Inject()(val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+  lazy val target: BtaHomeController = new BtaHomeController(messages)
 
-  def vatSection(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.partials.btaHome.vatSection())
+  "Calling the .vatSection action" should {
+
+    lazy val result = target.vatSection()(fakeRequest)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "return HTML" in {
+      contentType(result) shouldBe Some("text/html")
+      charset(result) shouldBe Some("utf-8")
+    }
   }
 }
