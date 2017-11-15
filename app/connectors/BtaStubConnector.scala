@@ -28,7 +28,8 @@ import scala.concurrent.Future
 
 class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig) extends HtmlPartialHttpReads {
 
-  lazy val partialUrl: String = s"${appConfig.signInContinueBaseUrl}/vat-summary-partials/bta-home"
+  lazy val partialUrl: String =
+    s"${appConfig.signInContinueBaseUrl}${controllers.partials.routes.BtaHomeController.vatSection().url}"
 
   def getPartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
     http.GET[HttpResponse](partialUrl).map { response =>

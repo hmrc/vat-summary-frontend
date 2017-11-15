@@ -26,21 +26,21 @@ import play.api.http.Status._
 
 class BtaStubServiceSpec extends ControllerBaseSpec {
 
-  def setup(partial: HtmlPartial): BtaStubService = {
-    val mockConnector = mock[BtaStubConnector]
-
-    (mockConnector.getPartial()(_: HeaderCarrier))
-      .expects(*)
-      .returns(Future.successful(partial))
-
-    new BtaStubService(mockConnector)
-  }
+  implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
   "Calling BtaStubService .getPartial" when {
 
-    "request is successful" should {
+    def setup(partial: HtmlPartial): BtaStubService = {
+      val mockConnector = mock[BtaStubConnector]
 
-      implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+      (mockConnector.getPartial()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(partial))
+
+      new BtaStubService(mockConnector)
+    }
+
+    "request is successful" should {
 
       lazy val service = setup(HtmlPartial.Success(None, Html("some html")))
       lazy val result = service.getPartial()
@@ -52,13 +52,40 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
 
     "request is unsuccessful" should {
 
-      implicit val hc: HeaderCarrier = mock[HeaderCarrier]
-
       lazy val service = setup(HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR)))
       lazy val result = service.getPartial()
 
       "return some html" in {
         await(result) shouldEqual Html("Alternative content")
+      }
+    }
+  }
+
+  "Calling BtaStubService .handlePartial" when {
+
+    "partial retrieval is a Success" should {
+
+      val mockConnector = mock[BtaStubConnector]
+
+      val partial = HtmlPartial.Success(None, Html("Success"))
+      lazy val service = new BtaStubService(mockConnector)
+      lazy val result = service.handlePartial(partial)
+
+      "return html" in {
+        await(result.body) shouldEqual "Success"
+      }
+    }
+
+    "partial retrieval is a Failure" should {
+
+      val mockConnector = mock[BtaStubConnector]
+
+      val partial = HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR), "")
+      lazy val service = new BtaStubService(mockConnector)
+      lazy val result = service.handlePartial(partial)
+
+      "return error text" in {
+        await(result.body) should include("Alternative content")
       }
     }
   }
