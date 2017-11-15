@@ -21,12 +21,17 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.BtaStubService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
-class BtaStubController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class BtaStubController @Inject()(val messagesApi: MessagesApi,
+                                  btaStubService: BtaStubService,
+                                  implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val landingPage: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.btaStub.landingPage())
+  val landingPage: Action[AnyContent] = Action.async { implicit request =>
+    btaStubService.getPartial().map { partial =>
+      Ok(views.html.btaStub.landingPage(partial))
+    }
   }
 }

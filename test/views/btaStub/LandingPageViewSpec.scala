@@ -18,6 +18,7 @@ package views.btaStub
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.Html
 import views.ViewBaseSpec
 
 class LandingPageViewSpec extends ViewBaseSpec {
@@ -26,9 +27,11 @@ class LandingPageViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
+      val h2 = "#content h2"
     }
 
-    lazy val view = views.html.btaStub.landingPage()
+    val htmlPartial = Html("<h2>Partial</h2>")
+    lazy val view = views.html.btaStub.landingPage(htmlPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -37,6 +40,10 @@ class LandingPageViewSpec extends ViewBaseSpec {
 
     "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe "BTA Landing Page Stub"
+    }
+
+    "contain content of a partial" in {
+      elementText(Selectors.h2) shouldBe "Partial"
     }
   }
 }

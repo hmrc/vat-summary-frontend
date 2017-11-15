@@ -17,19 +17,22 @@
 package connectors
 
 import javax.inject.Inject
+import config.AppConfig
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.http.ws.WSHttp
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.HtmlPartialHttpReads
 
 import scala.concurrent.Future
 
-class PartialsConnector @Inject()(wSHttp: WSHttp) extends HtmlPartialHttpReads {
+class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig) extends HtmlPartialHttpReads {
 
-  def getPartial(url: String)(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
-    wSHttp.GET[HttpResponse](url).map { response =>
-      read("GET", url, response)
+  lazy val partialUrl: String = s"${appConfig.signInContinueBaseUrl}/vat-summary-partials/bta-home"
+
+  def getPartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
+    http.GET[HttpResponse](partialUrl).map { response =>
+      read("GET", partialUrl, response)
     }
   }
 }

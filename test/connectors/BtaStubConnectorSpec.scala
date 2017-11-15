@@ -20,21 +20,21 @@ import controllers.ControllerBaseSpec
 import play.twirl.api.Html
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
-import uk.gov.hmrc.play.http.ws.WSHttp
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PartialsConnectorSpec extends ControllerBaseSpec {
+class BtaStubConnectorSpec extends ControllerBaseSpec {
 
-  def setup(response: HttpResponse): PartialsConnector = {
-    val mockWSHttp = mock[WSHttp]
+  def setup(response: HttpResponse): BtaStubConnector = {
+    val mockHttp = mock[HttpClient]
 
-    (mockWSHttp.GET[HttpResponse](_: String)(_: HttpReads[HttpResponse], _: HeaderCarrier, _: ExecutionContext))
+    (mockHttp.GET[HttpResponse](_: String)(_: HttpReads[HttpResponse], _: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(Future.successful(response))
 
-    new PartialsConnector(mockWSHttp)
+    new BtaStubConnector(mockHttp, mockAppConfig)
   }
 
   "PartialsConnector .getPartial" when {
@@ -45,8 +45,7 @@ class PartialsConnectorSpec extends ControllerBaseSpec {
 
       lazy val connector = setup(HttpResponse(OK, responseString = Some("content")))
 
-      val url: String = "url"
-      val result = connector.getPartial(url)
+      val result = connector.getPartial
 
       "return HtmlPartial Success with html content" in {
         await(result) shouldEqual HtmlPartial.Success(None, Html("content"))
@@ -57,8 +56,7 @@ class PartialsConnectorSpec extends ControllerBaseSpec {
 
       lazy val connector = setup(HttpResponse(INTERNAL_SERVER_ERROR, responseString = Some("")))
 
-      val url: String = "url"
-      val result = connector.getPartial(url)
+      val result = connector.getPartial
 
       "return HtmlPartial Failure" in {
         await(result) shouldEqual HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR), "")
