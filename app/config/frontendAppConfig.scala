@@ -36,6 +36,7 @@ trait AppConfig extends ServicesConfig {
   val shutterPage: String
   val authUrl: String
   val signInUrl: String
+  val signInContinueBaseUrl: String
 }
 
 @Singleton
@@ -65,7 +66,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")
 
   private lazy val signInBaseUrl: String = loadConfig("signIn.url")
-  private lazy val signInContinueBaseUrl: String = runModeConfiguration.getString("signIn.continueBaseUrl").getOrElse("")
+  override lazy val signInContinueBaseUrl: String = runModeConfiguration.getString("signIn.continueBaseUrl").getOrElse("")
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   private lazy val signInOrigin = loadConfig("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"

@@ -19,15 +19,22 @@ package controllers
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import play.twirl.api.Html
+import services.BtaStubService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 class BtaStubControllerSpec extends ControllerBaseSpec {
 
-  lazy val target = new BtaStubController(messages, mockAppConfig)
-
   "Calling the landingPage action" should {
+    lazy val mockService: BtaStubService = mock[BtaStubService]
 
+    (mockService.getPartial()(_: HeaderCarrier))
+      .expects(*)
+      .returns(Future.successful(Html("Some HTML")))
+
+    lazy val target = new BtaStubController(messages, mockService, mockAppConfig)
     lazy val result: Future[Result] = target.landingPage()(fakeRequest)
 
     "return 200" in {

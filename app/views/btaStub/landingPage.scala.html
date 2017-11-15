@@ -14,8 +14,10 @@
  * limitations under the License.
  *@
 
-@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(partial: Html)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(title = "BTA Landing Page Stub", bodyClasses = None, appConfig = appConfig) {
   <h1>BTA Landing Page Stub</h1>
+
+ @partial
 }
