@@ -30,10 +30,10 @@ import scala.concurrent.Future
 @Singleton
 class BtaStubController @Inject()(val messagesApi: MessagesApi, val authFunctions: AuthorisedFunctions,
                                   val authConnector: AuthConnector, btaStubService: BtaStubService, implicit val appConfig: AppConfig)
-  extends FrontendController with AuthBase with I18nSupport {
+  extends FrontendController with I18nSupport {
 
   def landingPage(): Action[AnyContent] = Action.async { implicit request =>
-    authorised() {
+    authFunctions.authorised() {
       btaStubService.getPartial().map { partial =>
         Ok(views.html.btaStub.landingPage(partial))
       }
