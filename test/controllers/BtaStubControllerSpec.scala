@@ -17,36 +17,73 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.BtaStubService
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, MissingBearerToken}
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class BtaStubControllerSpec extends ControllerBaseSpec {
 
-  "Calling the landingPage action" should {
-    lazy val mockService: BtaStubService = mock[BtaStubService]
+  private trait Test {
+    val success: Boolean = true
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockService: BtaStubService = mock[BtaStubService]
 
-    (mockService.getPartial()(_: HeaderCarrier))
-      .expects(*)
-      .returns(Future.successful(Html("Some HTML")))
-
-    lazy val target = new BtaStubController(messages, mockService, mockAppConfig)
-    lazy val result: Future[Result] = target.landingPage()(fakeRequest)
-
-    "return 200" in {
-      status(result) shouldBe Status.OK
+    def setup(): Any = if(success) {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(Future.successful(()))
+      (mockService.getPartial()(_: HeaderCarrier))
+        .expects(*)
+        .returns(Future.successful(Html("Some HTML")))
+    }
+    else {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(Future.failed(MissingBearerToken()))
     }
 
-    "return HTML" in {
-      contentType(result) shouldBe Some("text/html")
+    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
+
+    def target: BtaStubController = {
+      setup()
+      new BtaStubController(messages, mockAuthorisedFunctions, mockAuthConnector, mockService, mockAppConfig)
+    }
+  }
+
+  "Calling the landingPage action" when {
+
+    "the user is logged in" should {
+
+      "return 200" in new Test {
+        private val result = target.landingPage()(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        private val result = target.landingPage()(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset utf-8" in new Test {
+        private val result = target.landingPage()(fakeRequest)
+        charset(result) shouldBe Some("utf-8")
+      }
     }
 
-    "return charset utf-8" in {
-      charset(result) shouldBe Some("utf-8")
+    "the user is not logged in" should {
+
+      "return 401" in new Test {
+        override val success: Boolean = false
+        private val result = target.landingPage()(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
     }
   }
 }
