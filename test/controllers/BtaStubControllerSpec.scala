@@ -17,11 +17,12 @@
 package controllers
 
 import play.api.http.Status
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.BtaStubService
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, MissingBearerToken}
+import uk.gov.hmrc.auth.core.{AuthConnector, MissingBearerToken}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,11 +50,11 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
         .returns(Future.failed(MissingBearerToken()))
     }
 
-    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
     def target: BtaStubController = {
       setup()
-      new BtaStubController(messages, mockAuthorisedFunctions, mockAuthConnector, mockService, mockAppConfig)
+      new BtaStubController(messages, mockEnrolmentsAuthService, mockService, mockAppConfig)
     }
   }
 
@@ -79,10 +80,16 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
 
     "the user is not logged in" should {
 
-      "return 401" in new Test {
+      "return 303" in new Test {
         override val success: Boolean = false
-        private val result = target.landingPage()(fakeRequest)
-        status(result) shouldBe Status.UNAUTHORIZED
+        val result: Future[Result] = target.landingPage()(fakeRequest)
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect the user to the session timeout page" in new Test {
+        override val success: Boolean = false
+        val result: Future[Result] = target.landingPage()(fakeRequest)
+        redirectLocation(result) shouldBe Some(routes.ErrorsController.sessionTimeout().url)
       }
     }
   }

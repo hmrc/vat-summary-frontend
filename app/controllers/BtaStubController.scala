@@ -21,24 +21,24 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.BtaStubService
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions, NoActiveSession}
+import services.{BtaStubService, EnrolmentsAuthService}
+import uk.gov.hmrc.auth.core.NoActiveSession
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class BtaStubController @Inject()(val messagesApi: MessagesApi, val authFunctions: AuthorisedFunctions,
-                                  val authConnector: AuthConnector, btaStubService: BtaStubService, implicit val appConfig: AppConfig)
+class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService,
+                                  btaStubService: BtaStubService, implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
   def landingPage(): Action[AnyContent] = Action.async { implicit request =>
-    authFunctions.authorised() {
+    enrolmentsAuthService.authorised() {
       btaStubService.getPartial().map { partial =>
         Ok(views.html.btaStub.landingPage(partial))
       }
     }.recoverWith {
-      case _: NoActiveSession => Future.successful(Unauthorized)
+      case _: NoActiveSession => Future.successful(Redirect(controllers.routes.ErrorsController.sessionTimeout()))
     }
   }
 }
