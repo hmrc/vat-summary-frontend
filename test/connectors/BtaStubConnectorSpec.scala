@@ -64,6 +64,17 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
       }
     }
 
+    "403 is returned" should {
+
+      lazy val connector = setup(HttpResponse(FORBIDDEN, responseString = Some("response")))
+
+      lazy val result = connector.getPartial
+
+      "return HtmlPartial Failure" in {
+        await(result) shouldEqual HtmlPartial.Failure(Some(FORBIDDEN), "response")
+      }
+    }
+
     "500 is returned " should {
 
       lazy val connector = setup(HttpResponse(INTERNAL_SERVER_ERROR, responseString = Some("")))

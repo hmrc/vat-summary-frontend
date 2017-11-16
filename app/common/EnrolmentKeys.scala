@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package controllers.auth
+package common
 
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+object EnrolmentKeys {
 
-case class User(enrolments: Enrolments) {
+  val VatEnrolmentId = "HMRC-MTD-VAT"
 
-  private val VAT_ENROLMENT_KEY = "HMRC-MTD-VAT"
-
-  lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _) => value
-  }
 }

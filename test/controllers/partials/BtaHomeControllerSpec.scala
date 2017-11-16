@@ -19,22 +19,82 @@ package controllers.partials
 import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class BtaHomeControllerSpec extends ControllerBaseSpec {
 
-  lazy val target: BtaHomeController = new BtaHomeController(messages)
+  private trait Test {
+    val authResult: Future[Enrolments]
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-  "Calling the .vatSection action" should {
-
-    lazy val result = target.vatSection()(fakeRequest)
-
-    "return 200" in {
-      status(result) shouldBe Status.OK
+    def setup(): Any ={
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(authResult)
     }
 
-    "return HTML" in {
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+
+    def target: BtaHomeController = {
+      setup()
+      new BtaHomeController(messages, mockEnrolmentsAuthService)
+    }
+  }
+
+  "Calling the .vatSection action" when {
+
+    "A user is logged in and enrolled to HMRC-MTD-VAT" should {
+
+      val goodEnrolments: Enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "HMRC-MTD-VAT",
+            Seq(EnrolmentIdentifier("", "VRN1234567890")),
+            "Active")
+        )
+      )
+
+      "return 200" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+        private val result = target.vatSection()(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+        private val result = target.vatSection()(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset of utf-8" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+        private val result = target.vatSection()(fakeRequest)
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
+
+    "A user is logged in but not enrolled to HMRC-MTD-VAT" should {
+
+      "return FORBIDDEN" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        private val result = target.vatSection()(fakeRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "A user is not logged in" should {
+
+      "return UNAUTHORIZED" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        private val result = target.vatSection()(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
     }
   }
 }
