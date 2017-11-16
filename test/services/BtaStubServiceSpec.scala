@@ -23,6 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 import scala.concurrent.Future
 import play.api.http.Status._
+import play.api.mvc.{AnyContent, Request}
 
 class BtaStubServiceSpec extends ControllerBaseSpec {
 
@@ -33,7 +34,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
     def setup(partial: HtmlPartial): BtaStubService = {
       val mockConnector = mock[BtaStubConnector]
 
-      (mockConnector.getPartial()(_: HeaderCarrier))
+      (mockConnector.getPartial()(_: Request[AnyContent]))
         .expects(*)
         .returns(Future.successful(partial))
 

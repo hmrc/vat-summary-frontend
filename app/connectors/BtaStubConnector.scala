@@ -17,23 +17,32 @@
 package connectors
 
 import javax.inject.Inject
-import config.AppConfig
-import scala.concurrent.ExecutionContext.Implicits.global
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import config.{AppConfig, HeaderCarrierForPartials}
+import play.api.http.Status._
+import play.api.mvc.{AnyContent, Request}
+import uk.gov.hmrc.http.{HttpResponse, Upstream4xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.HtmlPartialHttpReads
-
 import scala.concurrent.Future
 
-class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig) extends HtmlPartialHttpReads {
+class BtaStubConnector @Inject()(http: HttpClient,
+                                 appConfig: AppConfig,
+                                 hc: HeaderCarrierForPartials) extends HtmlPartialHttpReads {
+
+  import hc._
 
   lazy val partialUrl: String =
     s"${appConfig.signInContinueBaseUrl}${controllers.partials.routes.BtaHomeController.vatSection().url}"
 
-  def getPartial()(implicit hc: HeaderCarrier): Future[HtmlPartial] = {
-    http.GET[HttpResponse](partialUrl).map { response =>
-      read("GET", partialUrl, response)
-    }
+  def getPartial()(implicit request: Request[AnyContent]): Future[HtmlPartial] = {
+    val result: Future[HttpResponse] = http.GET[HttpResponse](partialUrl)
+      .recover {
+        case ex: Upstream4xxResponse
+          if ex.upstreamResponseCode == UNAUTHORIZED || ex.upstreamResponseCode == FORBIDDEN =>
+          HttpResponse(ex.upstreamResponseCode)
+      }
+    result.map(p => read("GET", partialUrl, p))
   }
 }

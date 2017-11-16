@@ -16,6 +16,7 @@
 
 package connectors
 
+import config.HeaderCarrierForPartials
 import controllers.ControllerBaseSpec
 import play.twirl.api.Html
 import play.api.http.Status._
@@ -27,6 +28,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BtaStubConnectorSpec extends ControllerBaseSpec {
 
+  lazy val hc: HeaderCarrierForPartials = injector.instanceOf[HeaderCarrierForPartials]
+
   def setup(response: HttpResponse): BtaStubConnector = {
     val mockHttp = mock[HttpClient]
 
@@ -34,21 +37,30 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
       .expects(*, *, *, *)
       .returns(Future.successful(response))
 
-    new BtaStubConnector(mockHttp, mockAppConfig)
+    new BtaStubConnector(mockHttp, mockAppConfig, hc)
   }
 
   "PartialsConnector .getPartial" when {
-
-    implicit val hc: HeaderCarrier = mock[HeaderCarrier]
 
     "200 is returned" should {
 
       lazy val connector = setup(HttpResponse(OK, responseString = Some("content")))
 
-      val result = connector.getPartial
+      lazy val result = connector.getPartial
 
       "return HtmlPartial Success with html content" in {
         await(result) shouldEqual HtmlPartial.Success(None, Html("content"))
+      }
+    }
+
+    "401 is returned" should {
+
+      lazy val connector = setup(HttpResponse(UNAUTHORIZED, responseString = Some("response")))
+
+      lazy val result = connector.getPartial
+
+      "return HtmlPartial Failure" in {
+        await(result) shouldEqual HtmlPartial.Failure(Some(UNAUTHORIZED), "response")
       }
     }
 
@@ -56,7 +68,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
       lazy val connector = setup(HttpResponse(INTERNAL_SERVER_ERROR, responseString = Some("")))
 
-      val result = connector.getPartial
+      lazy val result = connector.getPartial
 
       "return HtmlPartial Failure" in {
         await(result) shouldEqual HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR), "")
