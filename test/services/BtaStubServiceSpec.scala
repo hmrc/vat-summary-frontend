@@ -23,6 +23,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 import scala.concurrent.Future
 import play.api.http.Status._
+import play.api.mvc.{AnyContent, Request}
 
 class BtaStubServiceSpec extends ControllerBaseSpec {
 
@@ -33,7 +34,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
     def setup(partial: HtmlPartial): BtaStubService = {
       val mockConnector = mock[BtaStubConnector]
 
-      (mockConnector.getPartial()(_: HeaderCarrier))
+      (mockConnector.getPartial()(_: Request[AnyContent]))
         .expects(*)
         .returns(Future.successful(partial))
 
@@ -50,7 +51,27 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
       }
     }
 
-    "request is unsuccessful" should {
+    "request is unsuccessful with status 401" should {
+
+      lazy val service = setup(HtmlPartial.Failure(Some(UNAUTHORIZED)))
+      lazy val result = service.getPartial()
+
+      "return some html" in {
+        await(result) shouldEqual Html("User is unauthorised")
+      }
+    }
+
+    "request is unsuccessful with status 403" should {
+
+      lazy val service = setup(HtmlPartial.Failure(Some(FORBIDDEN)))
+      lazy val result = service.getPartial()
+
+      "return some html" in {
+        await(result) shouldEqual Html("User is forbidden")
+      }
+    }
+
+    "request is unsuccessful with other status code" should {
 
       lazy val service = setup(HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR)))
       lazy val result = service.getPartial()

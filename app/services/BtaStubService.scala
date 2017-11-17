@@ -19,15 +19,17 @@ package services
 import javax.inject.Inject
 import connectors.BtaStubConnector
 import play.twirl.api.Html
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.{Failure, Success}
 import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.http.Status._
+import play.api.mvc.{AnyContent, Request}
+
 import scala.concurrent.Future
 
 class BtaStubService @Inject()(btaStubConnector: BtaStubConnector) {
 
-  def getPartial()(implicit hc: HeaderCarrier): Future[Html] = {
+  def getPartial()(implicit request: Request[AnyContent]): Future[Html] = {
     btaStubConnector.getPartial().flatMap { result =>
       handlePartial(result)
     }
@@ -36,6 +38,8 @@ class BtaStubService @Inject()(btaStubConnector: BtaStubConnector) {
   private[services] def handlePartial(partial: HtmlPartial): Future[Html] = {
     partial match {
       case Success(_, content) => Future.successful(content)
+      case Failure(Some(UNAUTHORIZED), _) => Future.successful(Html("User is unauthorised"))
+      case Failure(Some(FORBIDDEN), _) => Future.successful(Html("User is forbidden"))
       case Failure(_, _) => Future.successful(Html("Alternative content"))
     }
   }

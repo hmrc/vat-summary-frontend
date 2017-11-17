@@ -17,7 +17,7 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.BtaStubService
@@ -26,7 +26,6 @@ import uk.gov.hmrc.auth.core.{AuthConnector, MissingBearerToken}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class BtaStubControllerSpec extends ControllerBaseSpec {
@@ -40,7 +39,8 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(Future.successful(()))
-      (mockService.getPartial()(_: HeaderCarrier))
+
+      (mockService.getPartial()(_: Request[AnyContent]))
         .expects(*)
         .returns(Future.successful(Html("Some HTML")))
     }
