@@ -37,6 +37,15 @@ class VatSectionPageSpec extends IntegrationBaseSpec {
 
   "Calling the bta-home route" when {
 
+    "the user is authenticated" should {
+
+      "return 200" in new Test {
+        override def setupStubs(): StubMapping = AuthStub.authorised()
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.OK
+      }
+    }
+
     "the user is not authenticated" should {
 
       def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedNotLoggedIn()
