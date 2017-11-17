@@ -56,5 +56,16 @@ class VatSectionPageSpec extends IntegrationBaseSpec {
         response.status shouldBe Status.UNAUTHORIZED
       }
     }
+
+    "the user has a different enrolment" should {
+
+      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedOtherEnrolment()
+
+      "return 403" in new Test {
+        override def setupStubs(): StubMapping = setupStubsForScenario()
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.FORBIDDEN
+      }
+    }
   }
 }
