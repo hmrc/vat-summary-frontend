@@ -32,7 +32,7 @@ import scala.concurrent.Future
 class BtaHomeController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService)
   extends FrontendController with I18nSupport {
 
-  def vatSection(): Action[AnyContent] = enrolledAction { implicit request => user =>
+  def vatSection(): Action[AnyContent] = enrolledAction { implicit request => _ =>
     Future.successful(Ok(views.html.partials.btaHome.vatSection()))
   }
 
