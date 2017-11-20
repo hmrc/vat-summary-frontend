@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package controllers.auth
+package models
 
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
 
-case class User(enrolments: Enrolments) {
+case class User(vrn: String, active: Boolean = true)
 
-  private val VAT_ENROLMENT_KEY = "HMRC-MTD-VAT"
-
-  lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _) => value
-  }
+object User {
+  def apply(enrolments: Enrolments): User = enrolments.enrolments.collectFirst {
+    case Enrolment("HMRC-MTD-VAT", EnrolmentIdentifier(_, vatId) :: _, _, _) => User(vatId)
+  }.getOrElse(throw InternalError("VRN Missing"))
 }
+

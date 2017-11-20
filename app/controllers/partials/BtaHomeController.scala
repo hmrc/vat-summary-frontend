@@ -18,14 +18,33 @@ package controllers.partials
 
 import javax.inject.{Inject, Singleton}
 
+import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Request, Result}
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-@Singleton
-class BtaHomeController @Inject()(val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
+import scala.concurrent.Future
 
-  def vatSection(): Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.partials.btaHome.vatSection())
+@Singleton
+class BtaHomeController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService)
+  extends FrontendController with I18nSupport {
+
+  def vatSection(): Action[AnyContent] = enrolledAction { implicit request => _ =>
+    Future.successful(Ok(views.html.partials.btaHome.vatSection()))
+  }
+
+  private def enrolledAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
+    enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
+      enrolments => {
+        val user = User(enrolments)
+        block(request)(user)
+      }
+    }.recover {
+      case _: NoActiveSession => Unauthorized
+      case _: AuthorisationException => Forbidden
+    }
   }
 }
