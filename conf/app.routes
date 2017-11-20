@@ -1,7 +1,5 @@
 # microservice specific routes
 
-GET        /hello-world            controllers.HelloWorldController.helloWorld
-
 GET        /session-timeout        controllers.ErrorsController.sessionTimeout
 
 GET        /unauthorised           controllers.ErrorsController.unauthorised
