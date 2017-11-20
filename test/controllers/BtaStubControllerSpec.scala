@@ -22,32 +22,30 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.BtaStubService
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.{AuthConnector, MissingBearerToken}
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class BtaStubControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val success: Boolean = true
+    val runMock: Boolean = true
+    val authResult: Future[_]
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockService: BtaStubService = mock[BtaStubService]
 
-    def setup(): Any = if(success) {
+    def setup(): Any ={
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
-        .returns(Future.successful(()))
+        .returns(authResult)
 
-      (mockService.getPartial()(_: Request[AnyContent]))
+      if(runMock) {(mockService.getPartial()(_: Request[AnyContent]))
         .expects(*)
         .returns(Future.successful(Html("Some HTML")))
-    }
-    else {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(Future.failed(MissingBearerToken()))
+      }
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
@@ -63,16 +61,19 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
     "the user is logged in" should {
 
       "return 200" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
         private val result = target.landingPage()(fakeRequest)
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
         private val result = target.landingPage()(fakeRequest)
         contentType(result) shouldBe Some("text/html")
       }
 
       "return charset utf-8" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
         private val result = target.landingPage()(fakeRequest)
         charset(result) shouldBe Some("utf-8")
       }
@@ -81,13 +82,15 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
     "the user is not logged in" should {
 
       "return 303" in new Test {
-        override val success: Boolean = false
+        override val runMock: Boolean = false
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.landingPage()(fakeRequest)
         status(result) shouldBe Status.SEE_OTHER
       }
 
       "redirect the user to the session timeout page" in new Test {
-        override val success: Boolean = false
+        override val runMock: Boolean = false
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.landingPage()(fakeRequest)
         redirectLocation(result) shouldBe Some(routes.ErrorsController.sessionTimeout().url)
       }
