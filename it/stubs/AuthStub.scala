@@ -55,6 +55,16 @@ object AuthStub extends WireMockMethods {
       .thenReturn(status = OK, body = successfulAuthResponse(otherEnrolment))
   }
 
+  def authorisedBtaPartial(): StubMapping = {
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = OK, body = successfulAuthResponseBtaPartial(mtdVatEnrolment))
+  }
+
+  def unauthorisedOtherEnrolmentBtaPartial(): StubMapping = {
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = OK, body = successfulAuthResponseBtaPartial(otherEnrolment))
+  }
+
   def unauthorisedNotLoggedIn(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
@@ -62,5 +72,9 @@ object AuthStub extends WireMockMethods {
 
   private def successfulAuthResponse(enrolments: JsObject*): JsObject = {
     Json.obj("allEnrolments" -> enrolments)
+  }
+
+  private def successfulAuthResponseBtaPartial(enrolments: JsObject*): JsObject = {
+    Json.obj("authorisedEnrolments" -> enrolments)
   }
 }
