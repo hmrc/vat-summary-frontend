@@ -33,8 +33,7 @@ class BtaStubConnector @Inject()(http: HttpClient,
 
   import hc._
 
-  lazy val partialUrl: String =
-    s"${appConfig.signInContinueBaseUrl}${controllers.partials.routes.BtaHomeController.vatSection().url}"
+  lazy val partialUrl: String = appConfig.vatSummaryPartial
 
   def getPartial()(implicit request: Request[AnyContent]): Future[HtmlPartial] = {
     val result: Future[HttpResponse] = http.GET[HttpResponse](partialUrl)
