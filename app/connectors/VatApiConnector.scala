@@ -22,30 +22,30 @@ import javax.inject.{Inject, Singleton}
 import models.Obligations
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import utils.HttpResponseParsers.HttpGetResult
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VatApiConnector @Inject()(http: HttpClient) {
 
+  import utils.HttpResponseParsers.ObligationsReads
+
   private[connectors] def obligationsUrl(vrn: String): String = s"/vat/$vrn/obligations"
 
   def getAllObligations(vrn: String, from: LocalDate, to: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[String, Obligations]] = {
+  : Future[HttpGetResult[Obligations]] = {
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "A"))
-      .map(res => Right(res.json.as[Obligations]))
   }
 
   def getOutstandingObligations(vrn: String, from: LocalDate, to: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[String, Obligations]] = {
-    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "A"))
-      .map(res => Right(res.json.as[Obligations]))
+  : Future[HttpGetResult[Obligations]] = {
+    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "O"))
   }
 
   def getFulfilledObligations(vrn: String, from: LocalDate, to: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[String, Obligations]] = {
-    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "A"))
-      .map(res => Right(res.json.as[Obligations]))
+  : Future[HttpGetResult[Obligations]] = {
+    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "F"))
   }
 
 }
