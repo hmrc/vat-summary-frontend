@@ -24,7 +24,7 @@ import views.ViewBaseSpec
 
 class ReturnObligationTemplateSpec extends ViewBaseSpec {
 
-  "returnObligation template spec" when {
+  "returnObligation template" when {
 
     object Selectors {
       val p1 = "p:nth-of-type(1)"
@@ -72,7 +72,7 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
       }
     }
 
-    "start and end dates are not in the year" should {
+    "start and end dates are not in the same year" should {
 
       val obligation = Obligation(
         start = LocalDate.parse("2017-12-31"),
