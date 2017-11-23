@@ -16,7 +16,7 @@
 
 package utils
 
-import models.{BadRequestError, HttpError, Obligations, ServerSideError}
+import models._
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
@@ -28,8 +28,9 @@ object HttpResponseParsers {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Obligations] = {
       response.status match {
         case OK => Right(response.json.as[Obligations])
-        case BAD_REQUEST => Left(BadRequestError) // TODO: Need to check the client errors to make more specific error tpyes
+        case BAD_REQUEST => Left(BadRequestError) // TODO: Need to check the client errors to make more specific error types
         case s if s >= 500 && s <= 599 => Left(ServerSideError)
+        case s => Left(UnexpectedStatusError(s))
       }
     }
   }

@@ -33,4 +33,11 @@ object Obligation {
 
   implicit val format: Format[Obligation] = Json.format[Obligation]
 
+  object Status extends Enumeration {
+    val All: Status.Value = Value("A")
+    val Outstanding: Status.Value = Value("O")
+    val Fulfilled: Status.Value = Value("F")
+  }
+
+
 }

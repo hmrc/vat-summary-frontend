@@ -19,6 +19,7 @@ package connectors
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
+import models.Obligation.Status
 import models.Obligations
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -33,19 +34,14 @@ class VatApiConnector @Inject()(http: HttpClient) {
 
   private[connectors] def obligationsUrl(vrn: String): String = s"/vat/$vrn/obligations"
 
-  def getAllObligations(vrn: String, from: LocalDate, to: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext)
+  def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[HttpGetResult[Obligations]] = {
-    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "A"))
-  }
-
-  def getOutstandingObligations(vrn: String, from: LocalDate, to: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[Obligations]] = {
-    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "O"))
-  }
-
-  def getFulfilledObligations(vrn: String, from: LocalDate, to: LocalDate)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[Obligations]] = {
-    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> "F"))
+    val statusString = status match {
+      case Status.All => "A"
+      case Status.Outstanding => "O"
+      case Status.Fulfilled => "F"
+    }
+    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> statusString))
   }
 
 }

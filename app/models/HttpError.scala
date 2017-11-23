@@ -19,3 +19,4 @@ package models
 sealed trait HttpError
 case object BadRequestError extends HttpError
 case object ServerSideError extends HttpError
+case class UnexpectedStatusError(status: Int) extends HttpError
