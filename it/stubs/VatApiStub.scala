@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import models.{ApiSingleError, Obligation, Obligations}
+import models.{ApiMultiError, ApiSingleError, Obligation, Obligations}
 import play.api.http.Status._
 import play.api.libs.json.Json
 
@@ -69,6 +69,13 @@ object VatApiStub extends WireMockMethods {
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidStatus))
   }
 
+  def stubMultipleErrors: StubMapping = {
+    when(method = GET, uri = obligationsUri, queryParams = Map(
+      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+    ))
+      .thenReturn(BAD_REQUEST, body = Json.toJson(multipleErrors))
+  }
+
   private val allObligations = Obligations(
     Seq(
       Obligation(
@@ -103,5 +110,10 @@ object VatApiStub extends WireMockMethods {
   private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "", None)
   private val invalidDateRange = ApiSingleError("INVALID_DATE_RANGE", "", None)
   private val invalidStatus = ApiSingleError("INVALID_STATUS", "", None)
+
+  private val multipleErrors = ApiMultiError("BAD_REQUEST", "", Seq(
+    ApiSingleError("ERROR_1", "", None),
+    ApiSingleError("ERROR_2", "", None)
+  ))
 
 }

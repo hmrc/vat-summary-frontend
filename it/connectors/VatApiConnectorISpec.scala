@@ -135,7 +135,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid 'from' date" should {
 
-    "return an InvalidVrnError" in new Test {
+    "return an InvalidFromDateError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidFromDate
 
       val expected = Left(InvalidFromDateError)
@@ -153,7 +153,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid 'to' date" should {
 
-    "return an InvalidVrnError" in new Test {
+    "return an InvalidToDateError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidToDate
 
       val expected = Left(InvalidToDateError)
@@ -171,7 +171,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid date range" should {
 
-    "return an InvalidVrnError" in new Test {
+    "return an InvalidDateRangeError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidDateRange
 
       val expected = Left(InvalidDateRangeError)
@@ -189,10 +189,28 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid obligation status" should {
 
-    "return an InvalidVrnError" in new Test {
+    "return an InvalidStatusError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidStatus
 
       val expected = Left(InvalidStatusError)
+
+      setupStubs()
+      val result = await(connector.getObligations("111",
+        LocalDate.parse("2017-01-01"),
+        LocalDate.parse("2017-12-31"),
+        Status.Fulfilled))
+
+      result shouldEqual expected
+    }
+
+  }
+
+  "calling getObligations with multiple errors" should {
+
+    "return an MultipleErrors" in new Test {
+      override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
+
+      val expected = Left(MultipleErrors)
 
       setupStubs()
       val result = await(connector.getObligations("111",
