@@ -18,7 +18,7 @@ package utils
 
 import java.time.LocalDate
 
-import models.{BadRequestError, Obligation, Obligations, ServerSideError}
+import models._
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
@@ -64,15 +64,165 @@ class HttpResponseParsersSpec extends UnitSpec {
 
     }
 
-    "the http response status is 400 BAD_REQUEST" should {
+    "the http response status is 400 BAD_REQUEST (invalid VRN)" should {
 
-      val httpResponse = HttpResponse(Status.BAD_REQUEST)
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "VRN_INVALID",
+          "message" -> "fail!"
+        ))
+      )
 
-      val expected = Left(BadRequestError)
+      val expected = Left(InvalidVrnError)
 
       val result = ObligationsReads.read("", "", httpResponse)
 
-      "return a BadRequestError" in {
+      "return a InvalidVrnError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (invalid 'from' date)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "INVALID_DATE_FROM",
+          "message" -> "fail!"
+        ))
+      )
+
+      val expected = Left(InvalidFromDateError)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a InvalidFromDateError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (invalid 'to' date)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "INVALID_DATE_TO",
+          "message" -> "fail!"
+        ))
+      )
+
+      val expected = Left(InvalidToDateError)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a InvalidToDateError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (invalid date range)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "INVALID_DATE_RANGE",
+          "message" -> "fail!"
+        ))
+      )
+
+      val expected = Left(InvalidDateRangeError)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a InvalidDateRangeError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (invalid obligation status)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "INVALID_STATUS",
+          "message" -> "fail!"
+        ))
+      )
+
+      val expected = Left(InvalidStatusError)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a InvalidStatusError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (unknown API error code)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "RED_CAR",
+          "message" -> "fail!"
+        ))
+      )
+
+      val expected = Left(UnknownError)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a UnknownError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (multiple errors)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "code" -> "BAD_REQUEST",
+          "message" -> "fail!",
+          "errors" -> Json.arr(
+            Json.obj(
+              "code" -> "INVALID_DATE_FROM",
+              "message" -> "Bad date from",
+              "path" -> "/from"
+            ),
+            Json.obj(
+              "code" -> "INVALID_DATE_TO",
+              "message" -> "Bad date to",
+              "path" -> "/to"
+            )
+          )
+        ))
+      )
+
+      val expected = Left(MultipleErrors)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a MultipleErrors" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
+
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
+        responseJson = Some(Json.obj(
+          "foo" -> "RED_CAR",
+          "bar" -> "fail!"
+        ))
+      )
+
+      val expected = Left(UnknownError)
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a UnknownError" in {
         result shouldEqual expected
       }
 
@@ -87,6 +237,20 @@ class HttpResponseParsersSpec extends UnitSpec {
       val result = ObligationsReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
+        result shouldEqual expected
+      }
+
+    }
+
+    "the http response status is isn't handled" should {
+
+      val httpResponse = HttpResponse(Status.CREATED)
+
+      val expected = Left(UnexpectedStatusError(Status.CREATED))
+
+      val result = ObligationsReads.read("", "", httpResponse)
+
+      "return a UnexpectedStatusError" in {
         result shouldEqual expected
       }
 

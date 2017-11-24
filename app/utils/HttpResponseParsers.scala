@@ -18,6 +18,7 @@ package utils
 
 import models._
 import play.api.http.Status._
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object HttpResponseParsers {
@@ -28,11 +29,35 @@ object HttpResponseParsers {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Obligations] = {
       response.status match {
         case OK => Right(response.json.as[Obligations])
-        case BAD_REQUEST => Left(BadRequestError) // TODO: Need to check the client errors to make more specific error types
+        case BAD_REQUEST => handleBadRequest(response.json)
         case s if s >= 500 && s <= 599 => Left(ServerSideError)
         case s => Left(UnexpectedStatusError(s))
       }
     }
+
+    private def handleBadRequest(json: JsValue): Left[HttpError, Nothing] = {
+      val errorResponse = json.asOpt[ApiMultiError]
+        .orElse(json.asOpt[ApiSingleError])
+      errorResponse
+        .map(generateClientError)
+        .getOrElse(Left(UnknownError))
+    }
+
+    private def generateClientError(error: ApiError): Left[HttpError, Nothing] = {
+      error match {
+        case ApiSingleError(code, _, _) =>
+          code match {
+            case "VRN_INVALID" => Left(InvalidVrnError)
+            case "INVALID_DATE_FROM" => Left(InvalidFromDateError)
+            case "INVALID_DATE_TO" => Left(InvalidToDateError)
+            case "INVALID_DATE_RANGE" => Left(InvalidDateRangeError)
+            case "INVALID_STATUS" => Left(InvalidStatusError)
+            case _ => Left(UnknownError)
+          }
+        case ApiMultiError(_, _, _) => Left(MultipleErrors)
+      }
+    }
+
   }
 
 }

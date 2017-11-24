@@ -16,7 +16,41 @@
 
 package models
 
-sealed trait HttpError
-case object BadRequestError extends HttpError
-case object ServerSideError extends HttpError
-case class UnexpectedStatusError(status: Int) extends HttpError
+sealed trait HttpError {
+  def message: String
+}
+
+// === Obligation data errors ===
+case object InvalidVrnError extends HttpError {
+  override val message: String = "An invalid VRN was sent to the VAT API."
+}
+case object InvalidFromDateError extends HttpError {
+  override val message: String = "An invalid 'from' date was sent to the VAT API."
+}
+case object InvalidToDateError extends HttpError {
+  override val message: String = "An invalid 'to' date was sent to the VAT API."
+}
+case object InvalidDateRangeError extends HttpError {
+  override val message: String = "An invalid date range was sent to the VAT API."
+}
+case object InvalidStatusError extends HttpError {
+  override val message: String = "An invalid obligation status was sent to the VAT API."
+}
+// ==============================
+
+
+case object ServerSideError extends HttpError {
+  override val message: String = "The server you connecting to returned an error."
+}
+
+case class UnexpectedStatusError(status: Int) extends HttpError {
+  override val message: String = s"Received an unexpected status code: $status."
+}
+
+case object MultipleErrors extends HttpError {
+  override val message: String = "Received multiple errors."
+}
+
+case object UnknownError extends HttpError {
+  override val message: String = "Received an unknown error."
+}
