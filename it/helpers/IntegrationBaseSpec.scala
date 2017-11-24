@@ -36,7 +36,9 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
 
   def servicesConfig: Map[String, String] = Map(
     "microservice.services.auth.host" -> mockHost,
-    "microservice.services.auth.port" -> mockPort
+    "microservice.services.auth.port" -> mockPort,
+    "microservice.services.vat-api.host" -> mockHost,
+    "microservice.services.vat-api.port" -> mockPort
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
