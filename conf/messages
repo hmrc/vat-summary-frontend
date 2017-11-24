@@ -1,3 +1,5 @@
+common.dateRangeSeparator = to
+
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To view your VAT summary, you''ll have to
 sessionTimeout.helpTwo = sign in
@@ -10,7 +12,7 @@ partials.btaHome.vatSection.heading = BTA Partial
 partials.btaHome.vatSection.message = BTA Partial
 
 returnObligation.nextReturn = Next return due:
-returnObligation.period = For the period {0} to {1}
+returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
 returnObligation.submitUsingSoftware = submit using software

@@ -14,18 +14,8 @@
  * limitations under the License.
  *@
 
-@import models.Obligation
-@import views.html.templates.formatters.dates._
-@(model: Obligation)(implicit messages: Messages)
+@import java.time.LocalDate
 
- <p>@messages("returnObligation.nextReturn")
-   <br>
-   <strong>@displayDate(model.due)</strong>
- </p>
+@(from: LocalDate, to: LocalDate)(implicit messages: Messages)
 
- <p>@messages("returnObligation.period") @displayDateRange(model.start, model.end)</p>
-
- <p>@messages("returnObligation.nextPayment")</p>
-
- <p>@messages("returnObligation.you") <a href="#">@messages("returnObligation.submitUsingSoftware")</a></p>
-
+@displayDate(from, from.getYear != to.getYear) @messages("common.dateRangeSeparator") @displayDate(to)
