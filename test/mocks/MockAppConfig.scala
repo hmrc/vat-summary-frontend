@@ -31,6 +31,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val whitelistExcludedPaths: Seq[Call] = Nil
   override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/view-vat-returns"
   override val authUrl: String = ""
+  override val vatApiBaseUrl: String = ""
   override val signInUrl: String = ""
   override val signInContinueBaseUrl: String = ""
   override val vatSummaryPartial: String = ""

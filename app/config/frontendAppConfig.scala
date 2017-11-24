@@ -37,6 +37,7 @@ trait AppConfig extends ServicesConfig {
   val authUrl: String
   val signInUrl: String
   val signInContinueBaseUrl: String
+  val vatApiBaseUrl: String
   val vatSummaryPartial: String
 }
 
@@ -71,6 +72,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.BtaStubController.landingPage().url).encodedUrl
   private lazy val signInOrigin = loadConfig("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  override lazy val vatApiBaseUrl: String = baseUrl("vat-api")
 
   override lazy val vatSummaryPartial: String = baseUrl("selfLookup") + "/vat-summary-partials/bta-home"
 }

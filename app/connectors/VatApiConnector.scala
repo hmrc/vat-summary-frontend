@@ -19,6 +19,7 @@ package connectors
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
+import config.AppConfig
 import models.Obligation.Status
 import models.Obligations
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,11 +29,11 @@ import utils.HttpResponseParsers.HttpGetResult
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatApiConnector @Inject()(http: HttpClient) {
+class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   import utils.HttpResponseParsers.ObligationsReads
 
-  private[connectors] def obligationsUrl(vrn: String): String = s"/vat/$vrn/obligations"
+  private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 
   def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[HttpGetResult[Obligations]] = {

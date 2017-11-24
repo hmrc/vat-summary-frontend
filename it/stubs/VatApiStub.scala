@@ -1,0 +1,8 @@
+
+package stubs
+
+object VatApiStub {
+
+
+
+}
