@@ -37,12 +37,7 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[HttpGetResult[Obligations]] = {
-    val statusString = status match {
-      case Status.All => "A"
-      case Status.Outstanding => "O"
-      case Status.Fulfilled => "F"
-    }
-    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> statusString))
+    http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
   }
 
 }
