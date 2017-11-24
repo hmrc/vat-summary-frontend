@@ -33,7 +33,7 @@ class DisplayDateTemplateSpec extends ViewBaseSpec {
       lazy val template = views.html.templates.formatters.dates.displayDate(date)
       lazy val document: Document = Jsoup.parse(template.body)
 
-      "output the date with year" in {
+      "render the date with year" in {
         document.body().text() shouldEqual "1 January 2017"
       }
     }
@@ -43,7 +43,7 @@ class DisplayDateTemplateSpec extends ViewBaseSpec {
       lazy val template = views.html.templates.formatters.dates.displayDate(date, showYear = false)
       lazy val document: Document = Jsoup.parse(template.body)
 
-      "output the date with year" in {
+      "render the date with year" in {
         document.body().text() shouldEqual "1 January"
       }
     }

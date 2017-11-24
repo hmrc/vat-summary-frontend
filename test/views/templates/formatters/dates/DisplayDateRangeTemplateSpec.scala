@@ -16,6 +16,40 @@
 
 package views.templates.formatters.dates
 
-class DisplayDateRangeTemplateSpec {
+import java.time.LocalDate
 
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import views.ViewBaseSpec
+
+class DisplayDateRangeTemplateSpec extends ViewBaseSpec {
+
+  "Calling displayDateRange template" when {
+
+    val startDate: LocalDate = LocalDate.parse("2017-01-01")
+
+    "start and end dates are in the same year" should {
+
+      val endDate: LocalDate = LocalDate.parse("2017-04-01")
+
+      lazy val template = views.html.templates.formatters.dates.displayDateRange(startDate, endDate)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "render the correct text" in {
+        document.body().text() shouldEqual "1 January to 1 April 2017"
+      }
+    }
+
+    "start and end dates are not in the same year" should {
+
+      val endDate: LocalDate = LocalDate.parse("2018-04-01")
+
+      lazy val template = views.html.templates.formatters.dates.displayDateRange(startDate, endDate)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "render the correct text" in {
+        document.body().text() shouldEqual "1 January 2017 to 1 April 2018"
+      }
+    }
+  }
 }

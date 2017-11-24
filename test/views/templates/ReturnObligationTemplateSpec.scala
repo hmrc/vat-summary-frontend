@@ -27,11 +27,11 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
   "returnObligation template" when {
 
     object Selectors {
-      val p1 = "p:nth-of-type(1)"
-      val p2 = "p:nth-of-type(2)"
-      val p3 = "p:nth-of-type(3)"
-      val p4 = "p:nth-of-type(4)"
-      val link = s"$p4 a"
+      val nextReturnDue = "p:nth-of-type(1)"
+      val obligationPeriod = "p:nth-of-type(2)"
+      val nextPayment = "p:nth-of-type(3)"
+      val submitMethod = "p:nth-of-type(4)"
+      val softwareLink = s"$submitMethod a"
     }
 
     "start and end dates are in the same year" should {
@@ -49,25 +49,25 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "contain a first paragraph with correct text" in {
-        elementText(Selectors.p1) shouldEqual "Next return due: 31 January 2018"
+        elementText(Selectors.nextReturnDue) shouldEqual "Next return due: 31 January 2018"
       }
 
       "contain a second paragraph with correct text" in {
-        elementText(Selectors.p2) shouldEqual "For the period 1 January to 31 December 2017"
+        elementText(Selectors.obligationPeriod) shouldEqual "For the period 1 January to 31 December 2017"
       }
 
       "contain a third paragraph with correct text" in {
-        elementText(Selectors.p3) shouldEqual "This will calculate your next payment."
+        elementText(Selectors.nextPayment) shouldEqual "This will calculate your next payment."
       }
 
       "contain a fourth paragraph which" should {
 
         "contain the correct text" in {
-          elementText(Selectors.p4) shouldEqual "You submit using software"
+          elementText(Selectors.submitMethod) shouldEqual "You submit using software"
         }
 
-        "contain a link to '#'" in {
-          elementAttributes(Selectors.link) shouldBe Map("href" -> "#")
+        "contain a softwareLink to '#'" in {
+          elementAttributes(Selectors.softwareLink) shouldBe Map("href" -> "#")
         }
       }
     }
@@ -87,7 +87,7 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "contain a second paragraph with correct text" in {
-        elementText(Selectors.p2) shouldEqual "For the period 31 December 2017 to 1 March 2018"
+        elementText(Selectors.obligationPeriod) shouldEqual "For the period 31 December 2017 to 1 March 2018"
       }
     }
   }
