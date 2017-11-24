@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import models.Obligation.Status
 import models.Obligations
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import utils.HttpResponseParsers.HttpGetResult
@@ -38,6 +39,12 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
   def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[HttpGetResult[Obligations]] = {
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
+      .map {
+        case rObs@Right(_) => rObs
+        case lError@Left(error) =>
+          Logger.info("VatApiConnector received error: " + error.message)
+          lError
+      }
   }
 
 }
