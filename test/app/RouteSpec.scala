@@ -33,4 +33,9 @@ class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
     }
   }
 
+  "The route for the VAT details controller" should {
+    "be /your-vat-summary/details" in {
+      controllers.routes.VatDetailsController.details().url shouldBe "/your-vat-summary/details"
+    }
+  }
 }
