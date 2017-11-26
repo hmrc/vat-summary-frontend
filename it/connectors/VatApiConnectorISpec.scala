@@ -117,10 +117,13 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid VRN" should {
 
-    "return an InvalidVrnError" in new Test {
+    "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidVrn
 
-      val expected = Left(InvalidVrnError)
+      val expected = Left(BadRequestError(
+        code = "VRN_INVALID",
+        message = ""
+      ))
 
       setupStubs()
       val result = await(connector.getObligations("111",
@@ -135,10 +138,13 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid 'from' date" should {
 
-    "return an InvalidFromDateError" in new Test {
+    "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidFromDate
 
-      val expected = Left(InvalidFromDateError)
+      val expected = Left(BadRequestError(
+        code = "INVALID_DATE_FROM",
+        message = ""
+      ))
 
       setupStubs()
       val result = await(connector.getObligations("111",
@@ -153,10 +159,13 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid 'to' date" should {
 
-    "return an InvalidToDateError" in new Test {
+    "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidToDate
 
-      val expected = Left(InvalidToDateError)
+      val expected = Left(BadRequestError(
+        code = "INVALID_DATE_TO",
+        message = ""
+      ))
 
       setupStubs()
       val result = await(connector.getObligations("111",
@@ -171,10 +180,13 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid date range" should {
 
-    "return an InvalidDateRangeError" in new Test {
+    "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidDateRange
 
-      val expected = Left(InvalidDateRangeError)
+      val expected = Left(BadRequestError(
+        code = "INVALID_DATE_RANGE",
+        message = ""
+      ))
 
       setupStubs()
       val result = await(connector.getObligations("111",
@@ -189,10 +201,13 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   "calling getObligations with an invalid obligation status" should {
 
-    "return an InvalidStatusError" in new Test {
+    "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidStatus
 
-      val expected = Left(InvalidStatusError)
+      val expected = Left(BadRequestError(
+        code = "INVALID_STATUS",
+        message = ""
+      ))
 
       setupStubs()
       val result = await(connector.getObligations("111",

@@ -45,15 +45,7 @@ object HttpResponseParsers {
 
     private def generateClientError(error: ApiError): Left[HttpError, Nothing] = {
       error match {
-        case ApiSingleError(code, _, _) =>
-          code match {
-            case "VRN_INVALID" => Left(InvalidVrnError)
-            case "INVALID_DATE_FROM" => Left(InvalidFromDateError)
-            case "INVALID_DATE_TO" => Left(InvalidToDateError)
-            case "INVALID_DATE_RANGE" => Left(InvalidDateRangeError)
-            case "INVALID_STATUS" => Left(InvalidStatusError)
-            case _ => Left(UnknownError)
-          }
+        case ApiSingleError(code, message, _) => Left(BadRequestError(code, message))
         case ApiMultiError(_, _, _) => Left(MultipleErrors)
       }
     }

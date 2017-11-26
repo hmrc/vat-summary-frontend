@@ -64,7 +64,7 @@ class HttpResponseParsersSpec extends UnitSpec {
 
     }
 
-    "the http response status is 400 BAD_REQUEST (invalid VRN)" should {
+    "the http response status is 400 BAD_REQUEST (single error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
@@ -73,106 +73,14 @@ class HttpResponseParsersSpec extends UnitSpec {
         ))
       )
 
-      val expected = Left(InvalidVrnError)
+      val expected = Left(BadRequestError(
+        code = "VRN_INVALID",
+        message = "fail!"
+      ))
 
       val result = ObligationsReads.read("", "", httpResponse)
 
-      "return a InvalidVrnError" in {
-        result shouldEqual expected
-      }
-
-    }
-
-    "the http response status is 400 BAD_REQUEST (invalid 'from' date)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
-          "code" -> "INVALID_DATE_FROM",
-          "message" -> "fail!"
-        ))
-      )
-
-      val expected = Left(InvalidFromDateError)
-
-      val result = ObligationsReads.read("", "", httpResponse)
-
-      "return a InvalidFromDateError" in {
-        result shouldEqual expected
-      }
-
-    }
-
-    "the http response status is 400 BAD_REQUEST (invalid 'to' date)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
-          "code" -> "INVALID_DATE_TO",
-          "message" -> "fail!"
-        ))
-      )
-
-      val expected = Left(InvalidToDateError)
-
-      val result = ObligationsReads.read("", "", httpResponse)
-
-      "return a InvalidToDateError" in {
-        result shouldEqual expected
-      }
-
-    }
-
-    "the http response status is 400 BAD_REQUEST (invalid date range)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
-          "code" -> "INVALID_DATE_RANGE",
-          "message" -> "fail!"
-        ))
-      )
-
-      val expected = Left(InvalidDateRangeError)
-
-      val result = ObligationsReads.read("", "", httpResponse)
-
-      "return a InvalidDateRangeError" in {
-        result shouldEqual expected
-      }
-
-    }
-
-    "the http response status is 400 BAD_REQUEST (invalid obligation status)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
-          "code" -> "INVALID_STATUS",
-          "message" -> "fail!"
-        ))
-      )
-
-      val expected = Left(InvalidStatusError)
-
-      val result = ObligationsReads.read("", "", httpResponse)
-
-      "return a InvalidStatusError" in {
-        result shouldEqual expected
-      }
-
-    }
-
-    "the http response status is 400 BAD_REQUEST (unknown API error code)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
-          "code" -> "RED_CAR",
-          "message" -> "fail!"
-        ))
-      )
-
-      val expected = Left(UnknownError)
-
-      val result = ObligationsReads.read("", "", httpResponse)
-
-      "return a UnknownError" in {
+      "return a BadRequestError" in {
         result shouldEqual expected
       }
 
