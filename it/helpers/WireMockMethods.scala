@@ -33,7 +33,7 @@ trait WireMockMethods {
       val uriMapping = method.wireMockMapping(urlPathMatching(uri))
 
       val uriMappingWithQueryParams = queryParams.foldLeft(uriMapping) {
-        case (m, (key, value)) => m.withQueryParam(key, equalTo(value))
+        case (m, (key, value)) => m.withQueryParam(key, matching(value))
       }
 
       val uriMappingWithHeaders = headers.foldLeft(uriMappingWithQueryParams) {

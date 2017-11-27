@@ -28,66 +28,67 @@ import play.api.libs.json.Json
 object VatApiStub extends WireMockMethods {
 
   private val obligationsUri = "/vat/([0-9]+)/obligations"
+  private val dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"
 
   def stubAllObligations: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "A"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "A"
     ))
       .thenReturn(status = OK, body = Json.toJson(allObligations))
   }
 
   def stubOutstandingObligations: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "O"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
     ))
       .thenReturn(status = OK, body = Json.toJson(outstandingObligations))
   }
 
   def stubFulfilledObligations: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(status = OK, body = Json.toJson(fulfilledObligations))
   }
 
   def stubInvalidVrn: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
     ))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidVrn))
   }
 
   def stubInvalidFromDate: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidFromDate))
   }
 
   def stubInvalidToDate: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidToDate))
   }
 
   def stubInvalidDateRange: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-12-31", "to" -> "2017-01-01", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidDateRange))
   }
 
   def stubInvalidStatus: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidStatus))
   }
 
   def stubMultipleErrors: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> "2017-01-01", "to" -> "2017-12-31", "status" -> "F"
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(BAD_REQUEST, body = Json.toJson(multipleErrors))
   }
