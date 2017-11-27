@@ -25,7 +25,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import uk.gov.hmrc.play.test.UnitSpec
 
-trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite with TestSuite
+trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite
   with BeforeAndAfterEach with BeforeAndAfterAll {
 
   val mockHost: String = WireMockHelper.host
@@ -36,7 +36,9 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
 
   def servicesConfig: Map[String, String] = Map(
     "microservice.services.auth.host" -> mockHost,
-    "microservice.services.auth.port" -> mockPort
+    "microservice.services.auth.port" -> mockPort,
+    "microservice.services.vat-api.host" -> mockHost,
+    "microservice.services.vat-api.port" -> mockPort
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

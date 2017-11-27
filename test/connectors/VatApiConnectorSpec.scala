@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.auth
+package connectors
 
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import controllers.ControllerBaseSpec
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-case class User(enrolments: Enrolments) {
+class VatApiConnectorSpec extends ControllerBaseSpec {
 
-  private val VAT_ENROLMENT_KEY = "HMRC-MTD-VAT"
+  "VatApiConnector" should {
 
-  lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
-    case Enrolment(VAT_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _) => value
+    "generate the correct obligations url" in {
+
+      val connector = new VatApiConnector(mock[HttpClient], mockAppConfig)
+
+      connector.obligationsUrl("111") shouldEqual "/vat/111/obligations"
+
+    }
+
   }
+
 }

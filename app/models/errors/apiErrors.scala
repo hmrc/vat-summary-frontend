@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package models
-
-import java.time.LocalDate
+package models.errors
 
 import play.api.libs.json.{Format, Json}
 
-case class Obligation(start: LocalDate,
-                      end: LocalDate,
-                      due: LocalDate,
-                      status: String,
-                      received: Option[LocalDate],
-                      periodKey: String)
+sealed trait ApiError {
+  def code: String
 
-object Obligation {
+  def message: String
+}
 
-  implicit val format: Format[Obligation] = Json.format[Obligation]
+case class ApiSingleError(code: String, message: String, path: Option[String]) extends ApiError
 
-  object Status extends Enumeration {
-    val All: Status.Value = Value("A")
-    val Outstanding: Status.Value = Value("O")
-    val Fulfilled: Status.Value = Value("F")
-  }
+object ApiSingleError {
+  implicit val format: Format[ApiSingleError] = Json.format[ApiSingleError]
+}
 
+case class ApiMultiError(code: String, message: String, errors: Seq[ApiSingleError]) extends ApiError
+
+object ApiMultiError {
+  implicit val format: Format[ApiMultiError] = Json.format[ApiMultiError]
 }
