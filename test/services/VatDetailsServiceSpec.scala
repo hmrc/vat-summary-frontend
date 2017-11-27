@@ -17,13 +17,20 @@
 package services
 
 import java.time.LocalDate
+
+import connectors.VatApiConnector
+import connectors.httpParsers.ObligationsHttpParser._
 import controllers.ControllerBaseSpec
-import models.{Obligation, Obligations}
+import models.errors.BadRequestError
+import models.{Obligation, Obligations, User}
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.ExecutionContext.Implicits._
+import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsServiceSpec extends ControllerBaseSpec {
 
-  "Calling VatDetailsService .retrieveNextReturnObligation" when {
-
+  private trait Test {
     val currentObligation: Obligation = Obligation(
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-03-30"),
@@ -33,35 +40,87 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "#001"
     )
 
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val mockConnector: VatApiConnector = mock[VatApiConnector]
+    lazy val service = new VatDetailsService(mockConnector)
+  }
+
+  "Calling .retrieveNextReturnObligation" when {
+
     "sequence contains one obligation" should {
 
-      val obligations = Obligations(Seq(currentObligation))
-      lazy val service = new VatDetailsService
-      lazy val result = service.retrieveNextReturnObligation(obligations)
+      "return current obligation" in new Test {
+        val obligations = Obligations(Seq(currentObligation))
+        lazy val result: Obligation = service.retrieveNextReturnObligation(obligations)
 
-      "return current obligation" in {
         result shouldBe currentObligation
       }
     }
 
     "sequence contains more than one obligation" should {
 
-      val futureObligation: Obligation = Obligation(
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-03-30"),
-        due = LocalDate.parse("2017-07-30"),
-        "O",
-        None,
-        "#001"
-      )
+      "return the current obligation" in new Test {
+        val futureObligation: Obligation = Obligation(
+          LocalDate.parse("2017-01-01"),
+          LocalDate.parse("2017-03-30"),
+          due = LocalDate.parse("2017-07-30"),
+          "O",
+          None,
+          "#001"
+        )
 
-      val obligations = Obligations(Seq(futureObligation, currentObligation))
-      lazy val service = new VatDetailsService
-      lazy val result = service.retrieveNextReturnObligation(obligations)
+        val obligations = Obligations(Seq(futureObligation, currentObligation))
+        lazy val result: Obligation = service.retrieveNextReturnObligation(obligations)
 
-      "return the current obligation" in {
         result shouldBe currentObligation
       }
     }
   }
+
+  "Calling .getVatDetails" when {
+
+    "the connector returns some obligations" should {
+
+      "return the most recent outstanding obligation" in new Test {
+
+        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*,*,*,*,*,*)
+          .returns(Future.successful(Right(Obligations(Seq(currentObligation)))))
+
+        val result: HttpGetResult[Obligation] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe Right(currentObligation)
+      }
+
+    }
+
+    "the connector returns an HttpError" should {
+
+      "return a Future containing the error" in new Test {
+        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*,*,*,*,*,*)
+          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
+
+        val result: HttpGetResult[Obligation] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
+      }
+
+    }
+
+    "the connector returns an Exception" should {
+
+      "return a failed Future containing the exception" in new Test {
+        val expected = new RuntimeException("test")
+        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*,*,*,*,*,*)
+          .returns(Future.failed(expected))
+
+        intercept[RuntimeException](await(service.getVatDetails(User("1111"))))
+      }
+
+    }
+
+  }
+
 }

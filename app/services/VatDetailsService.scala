@@ -17,12 +17,21 @@
 package services
 
 import java.time.LocalDate
-import javax.inject.Singleton
+import java.time.temporal.ChronoUnit
+import javax.inject.{Inject, Singleton}
 
-import models.{Obligation, Obligations}
+import cats.data.EitherT
+import cats.implicits._
+import connectors.VatApiConnector
+import connectors.httpParsers.ObligationsHttpParser._
+import models.Obligation.Status._
+import models.{Obligation, Obligations, User}
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService {
+class VatDetailsService @Inject()(connector: VatApiConnector) {
 
   implicit def localDateOrdering: Ordering[LocalDate] = {
     Ordering.fromLessThan(_ isAfter _)
@@ -31,4 +40,17 @@ class VatDetailsService {
   def retrieveNextReturnObligation(obligations: Obligations): Obligation = {
     obligations.obligations.maxBy(_.due)
   }
+
+  def getVatDetails(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Obligation]] = {
+    val numDaysPrior = 90
+    val numDaysAhead = 395
+    val now = LocalDate.now()
+    val dateFrom = now.minus(numDaysPrior, ChronoUnit.DAYS)
+    val dateTo = now.plus(numDaysAhead, ChronoUnit.DAYS)
+
+    // TODO: possibly return the EitherT straight to the controller and use fold
+    EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
+      .map(retrieveNextReturnObligation).value
+  }
+
 }
