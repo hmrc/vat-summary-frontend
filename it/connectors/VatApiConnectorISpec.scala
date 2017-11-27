@@ -146,7 +146,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
+        Status.Outstanding))
 
       result shouldEqual expected
     }

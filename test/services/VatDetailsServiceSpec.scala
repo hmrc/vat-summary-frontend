@@ -112,7 +112,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return a failed Future containing the exception" in new Test {
         val expected = new RuntimeException("test")
-        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+        (mockConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _: Obligation.Status.Value)
+        (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.failed(expected))
 
