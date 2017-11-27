@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package utils
+package connectors.httpParsers
 
 import java.time.LocalDate
 
+import connectors.httpParsers.ObligationsHttpParser.ObligationsReads
 import models._
+import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
-import utils.HttpResponseParsers.ObligationsReads
 
 class HttpResponseParsersSpec extends UnitSpec {
 

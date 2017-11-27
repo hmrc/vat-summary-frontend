@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package connectors
 
@@ -7,6 +22,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.Obligation.Status
 import models._
+import models.errors.{BadRequestError, MultipleErrors}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -16,8 +32,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test {
     def setupStubs(): StubMapping
+
     val connector: VatApiConnector = app.injector.instanceOf[VatApiConnector]
-    implicit val hc = HeaderCarrier()
+    implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
   "calling getObligations with a status of 'A'" should {
@@ -47,7 +64,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getObligations("123456789",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.All))
@@ -76,7 +93,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getObligations("123456789",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Outstanding))
@@ -105,7 +122,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getObligations("123456789",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -126,7 +143,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("111",
+      private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -147,7 +164,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("111",
+      private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -168,7 +185,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("111",
+      private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -189,7 +206,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("111",
+      private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-12-31"),
         LocalDate.parse("2017-01-01"),
         Status.Fulfilled))
@@ -210,7 +227,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      val result = await(connector.getObligations("111",
+      private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -228,7 +245,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Left(MultipleErrors)
 
       setupStubs()
-      val result = await(connector.getObligations("111",
+      private val result = await(connector.getObligations("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))

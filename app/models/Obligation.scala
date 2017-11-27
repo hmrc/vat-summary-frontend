@@ -20,14 +20,12 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Format, Json}
 
-case class Obligation(
-                       start: LocalDate,
-                       end: LocalDate,
-                       due: LocalDate,
-                       status: String,
-                       received: Option[LocalDate],
-                       periodKey: String
-                     )
+case class Obligation(start: LocalDate,
+                      end: LocalDate,
+                      due: LocalDate,
+                      status: String,
+                      received: Option[LocalDate],
+                      periodKey: String)
 
 object Obligation {
 
@@ -38,6 +36,5 @@ object Obligation {
     val Outstanding: Status.Value = Value("O")
     val Fulfilled: Status.Value = Value("F")
   }
-
 
 }

@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package models.errors
 
 import play.api.libs.json.{Format, Json}
 
 sealed trait ApiError {
   def code: String
+
   def message: String
 }
 

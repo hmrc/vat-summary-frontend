@@ -20,19 +20,19 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
+import connectors.httpParsers.ObligationsHttpParser.HttpGetResult
 import models.Obligation.Status
 import models.Obligations
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import utils.HttpResponseParsers.HttpGetResult
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
-  import utils.HttpResponseParsers.ObligationsReads
+  import connectors.httpParsers.ObligationsHttpParser.ObligationsReads
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 

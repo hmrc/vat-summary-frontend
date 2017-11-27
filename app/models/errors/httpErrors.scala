@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models
+package models.errors
 
 sealed trait HttpError {
   def message: String
