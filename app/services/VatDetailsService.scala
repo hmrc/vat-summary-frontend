@@ -34,21 +34,24 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatDetailsService @Inject()(connector: VatApiConnector) {
 
   implicit def localDateOrdering: Ordering[LocalDate] = {
-    Ordering.fromLessThan(_ isAfter _)
+    Ordering.fromLessThan(_ isBefore _)
   }
 
-  def retrieveNextReturnObligation(obligations: Obligations): Obligation = {
-    obligations.obligations.maxBy(_.due)
+  def retrieveNextReturnObligation(obligations: Obligations): Option[Obligation] = {
+    if(obligations.obligations.isEmpty) {
+      None
+    } else {
+      Some(obligations.obligations.minBy(_.due))
+    }
   }
 
-  def getVatDetails(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Obligation]] = {
+  def getVatDetails(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Option[Obligation]]] = {
     val numDaysPrior = 90
     val numDaysAhead = 395
     val now = LocalDate.now()
     val dateFrom = now.minus(numDaysPrior, ChronoUnit.DAYS)
     val dateTo = now.plus(numDaysAhead, ChronoUnit.DAYS)
 
-    // TODO: possibly return the EitherT straight to the controller and use fold
     EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
       .map(retrieveNextReturnObligation).value
   }

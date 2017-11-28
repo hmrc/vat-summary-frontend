@@ -51,6 +51,13 @@ object VatApiStub extends WireMockMethods {
       .thenReturn(status = OK, body = Json.toJson(fulfilledObligations))
   }
 
+  def stubNoObligations: StubMapping = {
+    when(method = GET, uri = obligationsUri, queryParams = Map(
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+    ))
+      .thenReturn(status = OK, body = Json.toJson(noObligations))
+  }
+
   def stubInvalidVrn: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
       "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
@@ -121,6 +128,8 @@ object VatApiStub extends WireMockMethods {
   private val fulfilledObligations = Obligations(
     allObligations.obligations.filter(_.status == "F")
   )
+
+  private val noObligations = Obligations(Seq.empty)
 
   private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
   private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)

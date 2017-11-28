@@ -23,33 +23,55 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
     setupStubs()
   }
 
-  "Calling getVatDetails" should {
+  "Calling getVatDetails" when {
 
-    "return the user's latest obligation" in new Test {
-      override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
+    "the user has outstanding obligations" should {
 
-      val expected = Right(Obligation(
-        start = LocalDate.parse("2017-04-01"),
-        end = LocalDate.parse("2017-07-30"),
-        due = LocalDate.parse("2017-08-30"),
-        status = "O",
-        received = None,
-        periodKey = "#004"
-      ))
+      "return the user's latest obligation" in new Test {
+        override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
 
-      val result: HttpGetResult[Obligation] = await(service.getVatDetails(User("1111")))
+        val expected = Right(Some(Obligation(
+          start = LocalDate.parse("2017-04-01"),
+          end = LocalDate.parse("2017-07-30"),
+          due = LocalDate.parse("2017-08-30"),
+          status = "O",
+          received = None,
+          periodKey = "#004"
+        )))
 
-      result shouldBe expected
+        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe expected
+      }
+
     }
 
-    "return a BadRequestError (VRN_INVALID)" in new Test {
-      override def setupStubs(): StubMapping = VatApiStub.stubInvalidVrn
+    "the user has no outstanding obligations" should {
 
-      val expected = Left(BadRequestError("VRN_INVALID", ""))
+      "return nothing" in new Test {
+        override def setupStubs(): StubMapping = VatApiStub.stubNoObligations
 
-      val result: HttpGetResult[Obligation] = await(service.getVatDetails(User("1111")))
+        val expected = Right(None)
 
-      result shouldBe expected
+        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe expected
+      }
+
+    }
+
+    "the user has an invalid VRN" should {
+
+      "return a BadRequestError" in new Test {
+        override def setupStubs(): StubMapping = VatApiStub.stubInvalidVrn
+
+        val expected = Left(BadRequestError("VRN_INVALID", ""))
+
+        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe expected
+      }
+
     }
 
   }

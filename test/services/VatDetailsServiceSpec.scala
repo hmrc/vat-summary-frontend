@@ -51,9 +51,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return current obligation" in new Test {
         val obligations = Obligations(Seq(currentObligation))
-        lazy val result: Obligation = service.retrieveNextReturnObligation(obligations)
+        lazy val result: Option[Obligation] = service.retrieveNextReturnObligation(obligations)
 
-        result shouldBe currentObligation
+        result shouldBe Some(currentObligation)
       }
     }
 
@@ -70,9 +70,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         )
 
         val obligations = Obligations(Seq(futureObligation, currentObligation))
-        lazy val result: Obligation = service.retrieveNextReturnObligation(obligations)
+        lazy val result: Option[Obligation] = service.retrieveNextReturnObligation(obligations)
 
-        result shouldBe currentObligation
+        result shouldBe Some(currentObligation)
       }
     }
   }
@@ -87,9 +87,24 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(Obligations(Seq(currentObligation)))))
 
-        val result: HttpGetResult[Obligation] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
 
-        result shouldBe Right(currentObligation)
+        result shouldBe Right(Some(currentObligation))
+      }
+
+    }
+
+    "the connector returns no obligations" should {
+
+      "return nothing" in new Test {
+
+        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*,*,*,*,*,*)
+          .returns(Future.successful(Right(Obligations(Seq.empty))))
+
+        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe Right(None)
       }
 
     }
@@ -101,7 +116,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: HttpGetResult[Obligation] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
 
         result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
       }
