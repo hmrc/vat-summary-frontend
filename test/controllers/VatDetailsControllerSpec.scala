@@ -57,7 +57,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     def target: VatDetailsController = {
       setup()
-      new VatDetailsController(messages, mockEnrolmentsAuthService, mockService)
+      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockService)
     }
   }
 
