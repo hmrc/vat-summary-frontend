@@ -33,7 +33,14 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
                                      vatDetailsService: VatDetailsService)
   extends FrontendController with I18nSupport {
 
-  def detailsInternal(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
+  def details(): Action[AnyContent] = detailsInternal { implicit request =>user =>
+    vatDetailsService.getVatDetails(user).map {
+      case Right(obligation) => Ok("")
+      case Left(httpError) => Ok("")
+    }
+  }
+
+  private def detailsInternal(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
       enrolments => {
         val user = User(enrolments)
@@ -43,13 +50,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
     }.recover {
       case _: NoActiveSession => Unauthorized
       case _: AuthorisationException => Forbidden
-    }
-  }
-
-  def details(): Action[AnyContent] = detailsInternal { implicit request =>user =>
-    vatDetailsService.getVatDetails(user).map {
-      case Right(obligation) => Ok(TODO)
-      case Left(httpError) => Ok(TODO)
     }
   }
 }
