@@ -16,8 +16,9 @@
 
 package views.vatDetails
 
-import models.Obligation
+import models.{Obligation, User}
 import java.time.LocalDate
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -27,48 +28,44 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val instructions = "p"
-    val obligationsSection = "#obligationSection"
+    val nextReturnHeading = ".divider--bottom h2"
   }
 
   private val date = LocalDate.now()
-  val obligationStatus = "status"
-  val obligation = Obligation(date, date, date, obligationStatus, None, "")
+  private val user = User("1111")
+  val obligation = Obligation(date, date, date, "", None, "")
 
   "Rendering the VAT details page" should {
 
-    lazy val view = views.html.vatDetails.details(Some(obligation))
+    lazy val view = views.html.vatDetails.details(user, Some(obligation))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe ""
+      document.title shouldBe "Your VAT"
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Vat Details"
-    }
-
-    "have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe "Vat Details"
+      elementText(Selectors.pageHeading) shouldBe "Your VAT VAT registration number (VRN): 1111"
     }
   }
 
   "Rendering the VAT details page with an obligation" should {
 
-    lazy val view = views.html.vatDetails.details(Some(obligation))
+    lazy val view = views.html.vatDetails.details(user, Some(obligation))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the obligation section" in {
-      elementText(Selectors.obligationsSection) shouldBe obligationStatus
+      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
     }
   }
 
   "Rendering the VAT details page with no obligation" should {
 
-    lazy val view = views.html.vatDetails.details(None)
+    lazy val view = views.html.vatDetails.details(user, None)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no obligation message" in {
-      elementText(Selectors.obligationsSection) shouldBe "No obligation"
+      elementText(Selectors.nextReturnHeading) shouldBe "No obligation due"
     }
   }
 }

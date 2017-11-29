@@ -14,12 +14,30 @@
  * limitations under the License.
  *@
 
-@(obligation: Option[Obligation])(implicit request: Request[_], messages: Messages)
+@(user: models.User, obligation: Option[models.Obligation])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-<h1>@messages("Vat Details")</h1>
+  @noObligations = {
+    <section class="divider--bottom">
+      <h2 class="heading-large">No obligation due</h2>
+    </section>
+  }
 
-<p>@messages("Vat Details")</p>
+  @views.html.main_template(title = "Your VAT", bodyClasses = None, appConfig = appConfig) {
 
-<p id="obligationSection">
-@obligation.fold(Html("No obligation")) { ob => @ob.status }
-</p>
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+          Your VAT
+          <span class="heading-secondary">VAT registration number (VRN): @{user.vrn}</span>
+        </h1>
+
+        @obligation.fold(noObligations) { ob =>
+          <section class="divider--bottom">
+            <h2 class="heading-large">Next return due</h2>
+            <p class="lede">@{ob.due}</p>
+          </section>
+        }
+
+      </div>
+    </div>
+  }

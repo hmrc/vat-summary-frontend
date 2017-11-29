@@ -18,10 +18,10 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
+import config.AppConfig
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
-import play.twirl.api.Html
 import services.{EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.auth.core.{Enrolment, NoActiveSession}
@@ -31,13 +31,14 @@ import scala.concurrent.Future
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService,
+                                     implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService)
   extends FrontendController with I18nSupport {
 
   def details(): Action[AnyContent] = detailsInternal { implicit request =>user =>
     vatDetailsService.getVatDetails(user).map {
-      case Right(obligation) => Ok(Html(""))
-      case Left(httpError) => Ok(Html(""))
+      case Right(obligation) => Ok(views.html.vatDetails.details(user, obligation))
+      case Left(_) => Ok(views.html.vatDetails.details(user, None))
     }
   }
 
