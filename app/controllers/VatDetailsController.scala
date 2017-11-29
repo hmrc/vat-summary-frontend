@@ -21,9 +21,10 @@ import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.twirl.api.Html
 import services.{EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
+import uk.gov.hmrc.auth.core.{Enrolment, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -35,8 +36,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
 
   def details(): Action[AnyContent] = detailsInternal { implicit request =>user =>
     vatDetailsService.getVatDetails(user).map {
-      case Right(obligation) => Ok("")
-      case Left(httpError) => Ok("")
+      case Right(obligation) => Ok(Html(""))
+      case Left(httpError) => Ok(Html(""))
     }
   }
 
@@ -48,8 +49,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
       }
 
     }.recover {
-      case _: NoActiveSession => Unauthorized
-      case _: AuthorisationException => Forbidden
+      case _: NoActiveSession => Redirect(controllers.routes.ErrorsController.sessionTimeout())
     }
   }
 }
