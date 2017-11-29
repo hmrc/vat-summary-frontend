@@ -17,6 +17,7 @@
 package stubs
 
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
@@ -49,6 +50,13 @@ object VatApiStub extends WireMockMethods {
       "from" -> dateRegex, "to" -> dateRegex, "status" -> "F"
     ))
       .thenReturn(status = OK, body = Json.toJson(fulfilledObligations))
+  }
+
+  def stubNoObligations: StubMapping = {
+    when(method = GET, uri = obligationsUri, queryParams = Map(
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+    ))
+      .thenReturn(status = OK, body = Json.toJson(noObligations))
   }
 
   def stubInvalidVrn: StubMapping = {
@@ -93,24 +101,29 @@ object VatApiStub extends WireMockMethods {
       .thenReturn(BAD_REQUEST, body = Json.toJson(multipleErrors))
   }
 
+
+  private val pastFulfilledObligation = Obligation(
+    start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
+    end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
+    due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+    status = "F",
+    received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
+    periodKey = "#001"
+  )
+
+  private val pastOutstandingObligation = Obligation(
+    start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
+    end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+    due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+    status = "O",
+    received = None,
+    periodKey = "#004"
+  )
+
   private val allObligations = Obligations(
     Seq(
-      Obligation(
-        start = LocalDate.parse("2017-01-01"),
-        end = LocalDate.parse("2017-03-30"),
-        due = LocalDate.parse("2017-04-30"),
-        status = "F",
-        received = Some(LocalDate.parse("2017-04-15")),
-        periodKey = "#001"
-      ),
-      Obligation(
-        start = LocalDate.parse("2017-04-01"),
-        end = LocalDate.parse("2017-07-30"),
-        due = LocalDate.parse("2017-08-30"),
-        status = "O",
-        received = None,
-        periodKey = "#004"
-      )
+      pastFulfilledObligation,
+      pastOutstandingObligation
     )
   )
 
@@ -121,6 +134,8 @@ object VatApiStub extends WireMockMethods {
   private val fulfilledObligations = Obligations(
     allObligations.obligations.filter(_.status == "F")
   )
+
+  private val noObligations = Obligations(Seq.empty)
 
   private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
   private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)

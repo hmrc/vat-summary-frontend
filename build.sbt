@@ -32,14 +32,15 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   val excludedPackages = Seq(
     "<empty>",
     "Reverse.*",
-    ".*error_template*.*",
+    ".*standardError*.*",
     ".*govuk_wrapper*.*",
     ".*main_template*.*",
     "uk.gov.hmrc.BuildInfo",
     "app.*",
     "prod.*",
     "config.*",
-    "testOnlyDoNotUseInAppConf.*")
+    "testOnlyDoNotUseInAppConf.*",
+    "partials.*")
 
   Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),

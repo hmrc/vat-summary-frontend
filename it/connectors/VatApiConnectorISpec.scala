@@ -17,6 +17,7 @@
 package connectors
 
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
@@ -45,17 +46,17 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Obligations(
         Seq(
           Obligation(
-            start = LocalDate.parse("2017-01-01"),
-            end = LocalDate.parse("2017-03-30"),
-            due = LocalDate.parse("2017-04-30"),
+            start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
+            end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
+            due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
             status = "F",
-            received = Some(LocalDate.parse("2017-04-15")),
+            received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
             periodKey = "#001"
           ),
           Obligation(
-            start = LocalDate.parse("2017-04-01"),
-            end = LocalDate.parse("2017-07-30"),
-            due = LocalDate.parse("2017-08-30"),
+            start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
+            end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+            due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -65,8 +66,8 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getObligations("123456789",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
+        LocalDate.now(),
+        LocalDate.now(),
         Status.All))
 
       result shouldEqual expected
@@ -82,9 +83,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Obligations(
         Seq(
           Obligation(
-            start = LocalDate.parse("2017-04-01"),
-            end = LocalDate.parse("2017-07-30"),
-            due = LocalDate.parse("2017-08-30"),
+            start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
+            end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+            due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -94,8 +95,8 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getObligations("123456789",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
+        LocalDate.now(),
+        LocalDate.now(),
         Status.Outstanding))
 
       result shouldEqual expected
@@ -111,11 +112,11 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Obligations(
         Seq(
           Obligation(
-            start = LocalDate.parse("2017-01-01"),
-            end = LocalDate.parse("2017-03-30"),
-            due = LocalDate.parse("2017-04-30"),
+            start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
+            end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
+            due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
             status = "F",
-            received = Some(LocalDate.parse("2017-04-15")),
+            received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
             periodKey = "#001"
           )
         )

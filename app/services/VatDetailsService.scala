@@ -33,24 +33,31 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsService @Inject()(connector: VatApiConnector) {
 
-  implicit def localDateOrdering: Ordering[LocalDate] = {
-    Ordering.fromLessThan(_ isAfter _)
+  implicit def localDateOrdering: Ordering[Obligation] = {
+    Ordering.fromLessThan(_.due isBefore _.due)
   }
 
-  def retrieveNextReturnObligation(obligations: Obligations): Obligation = {
-    obligations.obligations.maxBy(_.due)
+  def retrieveNextReturnObligation(obligations: Obligations, date: LocalDate = LocalDate.now()): Option[Obligation] = {
+    val presetAndFuture = obligations.obligations
+      .filter(o => o.due.isEqual(date) || o.due.isAfter(date))
+      .sorted.headOption
+
+    val overdue = obligations.obligations
+      .filter(_.due.isBefore(date))
+      .sorted.lastOption
+
+    presetAndFuture orElse overdue
   }
 
-  def getVatDetails(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Obligation]] = {
+  def getVatDetails(user: User, date: LocalDate = LocalDate.now())(implicit hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[HttpGetResult[Option[Obligation]]] = {
     val numDaysPrior = 90
     val numDaysAhead = 395
-    val now = LocalDate.now()
-    val dateFrom = now.minus(numDaysPrior, ChronoUnit.DAYS)
-    val dateTo = now.plus(numDaysAhead, ChronoUnit.DAYS)
+    val dateFrom = date.minus(numDaysPrior, ChronoUnit.DAYS)
+    val dateTo = date.plus(numDaysAhead, ChronoUnit.DAYS)
 
-    // TODO: possibly return the EitherT straight to the controller and use fold
     EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
-      .map(retrieveNextReturnObligation).value
+      .map(retrieveNextReturnObligation(_)).value
   }
 
 }
