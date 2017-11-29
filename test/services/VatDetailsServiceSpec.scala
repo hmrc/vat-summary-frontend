@@ -51,7 +51,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return current obligation" in new Test {
         val obligations = Obligations(Seq(currentObligation))
-        lazy val result: Option[Obligation] = service.retrieveNextReturnObligation(obligations)
+        lazy val result: Option[Obligation] =
+          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-03-30"))
 
         result shouldBe Some(currentObligation)
       }
@@ -59,20 +60,37 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
     "sequence contains more than one obligation" should {
 
-      "return the current obligation" in new Test {
-        val futureObligation: Obligation = Obligation(
-          LocalDate.parse("2017-01-01"),
-          LocalDate.parse("2017-03-30"),
-          due = LocalDate.parse("2017-07-30"),
-          "O",
-          None,
-          "#001"
-        )
+      val futureObligation: Obligation = Obligation(
+        LocalDate.parse("2017-01-01"),
+        LocalDate.parse("2017-03-30"),
+        due = LocalDate.parse("2017-07-30"),
+        "O",
+        None,
+        "#001"
+      )
 
+      "return the obligation which is due today" in new Test {
         val obligations = Obligations(Seq(futureObligation, currentObligation))
-        lazy val result: Option[Obligation] = service.retrieveNextReturnObligation(obligations)
+        lazy val result: Option[Obligation] =
+          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-04-30"))
 
         result shouldBe Some(currentObligation)
+      }
+
+      "return the obligation which is due in the future" in new Test {
+        val obligations = Obligations(Seq(futureObligation, currentObligation))
+        lazy val result: Option[Obligation] =
+          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-05-30"))
+
+        result shouldBe Some(futureObligation)
+      }
+
+      "return the most recent overdue obligation" in new Test {
+        val obligations = Obligations(Seq(futureObligation, currentObligation))
+        lazy val result: Option[Obligation] =
+          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-08-30"))
+
+        result shouldBe Some(futureObligation)
       }
     }
   }

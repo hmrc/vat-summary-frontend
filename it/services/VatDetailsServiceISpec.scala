@@ -2,6 +2,7 @@
 package services
 
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import connectors.httpParsers.ObligationsHttpParser._
@@ -31,9 +32,9 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
 
         val expected = Right(Some(Obligation(
-          start = LocalDate.parse("2017-04-01"),
-          end = LocalDate.parse("2017-07-30"),
-          due = LocalDate.parse("2017-08-30"),
+          start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
+          end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+          due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
           status = "O",
           received = None,
           periodKey = "#004"
