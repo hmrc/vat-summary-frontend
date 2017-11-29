@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.AuthStub
+import stubs.{AuthStub, VatApiStub}
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
 
@@ -23,7 +23,10 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
     "the user is authenticated" should {
 
       "return 200" in new Test {
-        override def setupStubs(): StubMapping = AuthStub.authorisedBtaPartial()
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          VatApiStub.stubOutstandingObligations
+        }
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
       }
@@ -33,21 +36,10 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
 
       def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedNotLoggedIn()
 
-      "return 401" in new Test {
+      "return 303" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.UNAUTHORIZED
-      }
-    }
-
-    "the user has a different enrolment" should {
-
-      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedOtherEnrolmentBtaPartial()
-
-      "return 403" in new Test {
-        override def setupStubs(): StubMapping = setupStubsForScenario()
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.FORBIDDEN
+        response.status shouldBe Status.SEE_OTHER
       }
     }
 

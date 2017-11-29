@@ -40,7 +40,7 @@ class VatSectionPageSpec extends IntegrationBaseSpec {
     "the user is authenticated" should {
 
       "return 200" in new Test {
-        override def setupStubs(): StubMapping = AuthStub.authorisedBtaPartial()
+        override def setupStubs(): StubMapping = AuthStub.authorised()
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
       }
@@ -59,7 +59,7 @@ class VatSectionPageSpec extends IntegrationBaseSpec {
 
     "the user has a different enrolment" should {
 
-      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedOtherEnrolmentBtaPartial()
+      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedOtherEnrolment()
 
       "return 403" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
