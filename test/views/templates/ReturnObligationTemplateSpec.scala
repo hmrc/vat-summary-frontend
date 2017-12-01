@@ -27,68 +27,49 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
   "returnObligation template" when {
 
     object Selectors {
-      val nextReturnDue = "p:nth-of-type(1)"
-      val obligationPeriod = "p:nth-of-type(2)"
-      val nextPayment = "p:nth-of-type(3)"
-      val submitMethod = "p:nth-of-type(4)"
-      val softwareLink = s"$submitMethod a"
+      val nextReturnDueHeading = "h2:nth-of-type(1)"
+      val nextReturnDate = "p.lede:nth-of-type(1)"
+      val submitMethod = "p:nth-of-type(2)"
     }
 
-    "start and end dates are in the same year" should {
+    "there is an obligation to display" should {
 
       val obligation = Obligation(
         start = LocalDate.parse("2017-01-01"),
-        end = LocalDate.parse("2017-12-31"),
-        due = LocalDate.parse("2018-01-31"),
+        end = LocalDate.parse("2017-03-31"),
+        due = LocalDate.parse("2017-04-30"),
         "O",
         None,
         "#001"
       )
 
-      lazy val view = views.html.templates.returnObligation(obligation)
+      lazy val view = views.html.templates.returnObligation(Some(obligation))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "contain a first paragraph with correct text" in {
-        elementText(Selectors.nextReturnDue) shouldEqual "Next return due: 31 January 2018"
+      "display the 'Next return due' heading" in {
+        elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
       }
 
-      "contain a second paragraph with correct text" in {
-        elementText(Selectors.obligationPeriod) shouldEqual "For the period 1 January to 31 December 2017"
+      "display the due of the return obligation" in {
+        elementText(Selectors.nextReturnDate) shouldBe "30 April 2017"
       }
 
-      "contain a third paragraph with correct text" in {
-        elementText(Selectors.nextPayment) shouldEqual "This will calculate your next payment."
-      }
-
-      "contain a fourth paragraph which" should {
-
-        "contain the correct text" in {
-          elementText(Selectors.submitMethod) shouldEqual "You submit using software"
-        }
-
-        "contain a softwareLink to '#'" in {
-          elementAttributes(Selectors.softwareLink) shouldBe Map("href" -> "#")
-        }
+      "display the 'You submit using software' text" in {
+        elementText(Selectors.submitMethod) shouldBe "You submit using software."
       }
     }
 
-    "start and end dates are not in the same year" should {
+    "there is no obligation to display" should {
 
-      val obligation = Obligation(
-        start = LocalDate.parse("2017-12-31"),
-        end = LocalDate.parse("2018-03-01"),
-        due = LocalDate.parse("2018-01-31"),
-        "O",
-        None,
-        "#001"
-      )
-
-      lazy val view = views.html.templates.returnObligation(obligation)
+      lazy val view = views.html.templates.returnObligation(None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "contain a second paragraph with correct text" in {
-        elementText(Selectors.obligationPeriod) shouldEqual "For the period 31 December 2017 to 1 March 2018"
+      "display the 'No return due' heading" in {
+        elementText(Selectors.nextReturnDueHeading) shouldBe "No return due"
       }
+
     }
+
+
   }
 }

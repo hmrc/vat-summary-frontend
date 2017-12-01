@@ -16,16 +16,19 @@
 
 @import models.Obligation
 @import views.html.templates.formatters.dates._
-@(model: Obligation)(implicit messages: Messages)
+@(obligation: Option[Obligation])(implicit messages: Messages)
 
- <p>@messages("returnObligation.nextReturn")
-   <br>
-   <strong>@displayDate(model.due)</strong>
- </p>
+@noObligations = {
+    <section class="divider--bottom">
+        <h2 class="heading-large">@messages("returnObligation.noReturn")</h2>
+    </section>
+}
 
- <p>@messages("returnObligation.period") @displayDateRange(model.start, model.end)</p>
-
- <p>@messages("returnObligation.nextPayment")</p>
-
- <p>@messages("returnObligation.you") <a href="#">@messages("returnObligation.submitUsingSoftware")</a></p>
+@obligation.fold(noObligations) { ob =>
+    <section class="divider--bottom">
+        <h2 class="heading-large">@messages("returnObligation.nextReturn")</h2>
+        <p class="lede">@displayDate(ob.due)</p>
+        <p>@messages("returnObligation.you") @messages("returnObligation.submitUsingSoftware").</p>
+    </section>
+}
 

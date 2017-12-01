@@ -11,7 +11,8 @@ unauthorised.instructions = Here are some instructions about what you should do 
 partials.btaHome.vatSection.heading = BTA Partial
 partials.btaHome.vatSection.message = BTA Partial
 
-returnObligation.nextReturn = Next return due:
+returnObligation.noReturn = No return due
+returnObligation.nextReturn = Next return due
 returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
