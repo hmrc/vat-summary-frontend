@@ -27,7 +27,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val instructions = "p"
     val nextReturnHeading = ".divider--bottom h2"
   }
 
@@ -65,7 +64,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no obligation message" in {
-      elementText(Selectors.nextReturnHeading) shouldBe "No obligation due"
+      elementText(Selectors.nextReturnHeading) shouldBe "No return due"
     }
   }
 }
