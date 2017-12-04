@@ -51,8 +51,8 @@ class VatDetailsService @Inject()(connector: VatApiConnector) {
 
   def getVatDetails(user: User, date: LocalDate = LocalDate.now())(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[HttpGetResult[Option[Obligation]]] = {
-    val numDaysPrior = 90
-    val numDaysAhead = 395
+    val numDaysPrior = 0 //90
+    val numDaysAhead = 365 //395
     val dateFrom = date.minus(numDaysPrior, ChronoUnit.DAYS)
     val dateTo = date.plus(numDaysAhead, ChronoUnit.DAYS)
 
