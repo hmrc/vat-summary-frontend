@@ -28,6 +28,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val nextReturnHeading = ".divider--bottom h2"
+    val returnsHeading = "h2 a"
   }
 
   private val date = LocalDate.now()
@@ -45,6 +46,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe "Your VAT VAT registration number (VRN): 1111"
+    }
+
+    "have the Returns section" in {
+      elementText(Selectors.returnsHeading) shouldBe "Returns"
     }
   }
 

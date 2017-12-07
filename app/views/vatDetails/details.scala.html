@@ -16,16 +16,26 @@
 
 @(user: models.User, obligation: Option[models.Obligation])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-  @views.html.main_template(title = "Your VAT", bodyClasses = None, appConfig = appConfig) {
+  @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
 
     <div class="grid-row">
       <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-          Your VAT
-          <span class="heading-secondary">VAT registration number (VRN): @{user.vrn}</span>
+          @messages("vatDetails.title")
+          <span class="heading-secondary">@messages("vatDetails.vrn", user.vrn)</span>
         </h1>
 
         @views.html.templates.returnObligation(obligation)
+        <section>
+          <div class="grid-row">
+            <div class="column-one-half">
+              <h2 class="heading-medium">
+                <a href="#">@messages("vatDetails.returns.link")</a>
+              </h2>
+              <p>@messages("vatDetails.returns.check")</p>
+            </div>
+          </div>
+        </section>
 
       </div>
     </div>
