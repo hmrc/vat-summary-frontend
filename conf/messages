@@ -11,6 +11,11 @@ unauthorised.instructions = Here are some instructions about what you should do 
 partials.btaHome.vatSection.heading = BTA Partial
 partials.btaHome.vatSection.message = BTA Partial
 
+vatDetails.title = Your VAT
+vatDetails.vrn = VAT registration number (VRN): {0}
+vatDetails.returns.link = Returns
+vatDetails.returns.check = Check your current and previous returns.
+
 returnObligation.noReturn = No return due
 returnObligation.nextReturn = Next return due
 returnObligation.period = For the period
