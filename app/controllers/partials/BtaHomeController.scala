@@ -18,6 +18,7 @@ package controllers.partials
 
 import javax.inject.{Inject, Singleton}
 
+import config.AppConfig
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
@@ -29,7 +30,9 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class BtaHomeController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService)
+class BtaHomeController @Inject()(val messagesApi: MessagesApi,
+                                  enrolmentsAuthService: EnrolmentsAuthService,
+                                  implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
   def vatSection(): Action[AnyContent] = enrolledAction { implicit request => _ =>

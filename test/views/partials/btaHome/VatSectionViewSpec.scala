@@ -25,23 +25,19 @@ class VatSectionViewSpec extends ViewBaseSpec {
   "Rendering the BTA partial" should {
 
     object Selectors {
-      val pageHeading = "h1"
-      val instructions = "p"
+      val pageHeading = "h2"
+      val description = "p"
     }
 
     lazy val view = views.html.partials.btaHome.vatSection()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the correct document title" in {
-      document.title shouldBe ""
-    }
-
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "BTA Partial"
+      elementText(Selectors.pageHeading) shouldBe "Reporting VAT through software"
     }
 
-    "have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe "BTA Partial"
+    "have the correct description on the page" in {
+      elementText(Selectors.description) shouldBe "You've signed up to report your VAT through accounting software."
     }
   }
 }
