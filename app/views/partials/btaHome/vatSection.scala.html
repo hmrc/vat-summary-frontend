@@ -14,8 +14,14 @@
  * limitations under the License.
  *@
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-<h1>@messages("partials.btaHome.vatSection.heading")</h1>
-
-<p>@messages("partials.btaHome.vatSection.message")</p>
+<section class="divider--bottom">
+    <h2 class="heading-large">@messages("partials.btaHome.vatSection.reporting.heading")</h2>
+    <p>@messages("partials.btaHome.vatSection.reporting.message")</p>
+    <h3 class="heading-medium">@messages("common.vat")</h3>
+    <p>@messages("partials.btaHome.vatSection.vatMessage")</p>
+    <p>
+        <a href="">@messages("partials.btaHome.vatSection.manageVat")</a>
+    </p>
+</section>

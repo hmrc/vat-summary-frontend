@@ -43,7 +43,7 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
 
     def target: BtaHomeController = {
       setup()
-      new BtaHomeController(messages, mockEnrolmentsAuthService)
+      new BtaHomeController(messages, mockEnrolmentsAuthService, mockAppConfig)
     }
   }
 
