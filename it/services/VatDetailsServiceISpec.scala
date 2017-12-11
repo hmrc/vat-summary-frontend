@@ -79,9 +79,9 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
   "Calling getPaymentData" should {
 
-    "return a Payments m" in new Test {
+    "return a Payments model" in new Test {
 
-      override def setupStubs(): StubMapping = VatApiStub.stubInvalidVrn
+      override def setupStubs(): StubMapping = VatApiStub.stubAllObligations
       val expectedPayments: Payments = Payments(
         Seq(
           Payment(
