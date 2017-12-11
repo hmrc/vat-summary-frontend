@@ -18,11 +18,11 @@ package services
 
 import java.time.LocalDate
 
-import connectors.VatApiConnector
+import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.ObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
-import models.{Obligation, Obligations, User}
+import models._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits._
@@ -40,9 +40,18 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "#001"
     )
 
+    val payment:Payment = Payment(
+      endDate = LocalDate.parse("2017-12-22"),
+      dueDate = LocalDate.parse("2017-12-26"),
+      outstandingAmount = BigDecimal(1000.00),
+      status = "O",
+      periodKey = "#003"
+    )
+
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockConnector: VatApiConnector = mock[VatApiConnector]
-    lazy val service = new VatDetailsService(mockConnector)
+    val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+    lazy val service = new VatDetailsService(mockConnector, mockFinancialDataConnector)
   }
 
   "Calling .retrieveNextReturnObligation" when {
@@ -153,6 +162,24 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         intercept[RuntimeException](await(service.getVatDetails(User("1111"))))
       }
 
+    }
+
+  }
+
+  "Calling getPaymentData" when {
+
+    "sequence contains one payment" should {
+
+      "return one payment" in new Test {
+        val payments: Payments = Payments(Seq(payment))
+        (mockFinancialDataConnector.getPaymentData(_: String))
+          .expects(*)
+          .returns(Future.successful(payments))
+
+        lazy val result: Payments = await(service.getPaymentData(User("999999999")))
+
+        result shouldBe payments
+      }
     }
 
   }

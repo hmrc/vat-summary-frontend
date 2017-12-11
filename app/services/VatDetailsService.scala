@@ -22,16 +22,16 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
-import connectors.VatApiConnector
+import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.ObligationsHttpParser._
 import models.Obligation.Status._
-import models.{Obligation, Obligations, User}
+import models.{Obligation, Obligations, Payments, User}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService @Inject()(connector: VatApiConnector) {
+class VatDetailsService @Inject()(connector: VatApiConnector, financialDataConnector: FinancialDataConnector) {
 
   implicit def localDateOrdering: Ordering[Obligation] = {
     Ordering.fromLessThan(_.due isBefore _.due)
@@ -58,6 +58,10 @@ class VatDetailsService @Inject()(connector: VatApiConnector) {
 
     EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
       .map(retrieveNextReturnObligation(_)).value
+  }
+
+  def getPaymentData(user: User): Future[Payments] = {
+    financialDataConnector.getPaymentData(user.vrn)
   }
 
 }
