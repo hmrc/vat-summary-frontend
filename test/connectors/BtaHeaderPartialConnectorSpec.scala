@@ -14,17 +14,21 @@
  * limitations under the License.
  */
 
-package config
+package connectors
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.crypto.PlainText
-import uk.gov.hmrc.play.bootstrap.filters.frontend.crypto.SessionCookieCrypto
-import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
+import config.VatHeaderCarrierForPartialsConverter
+import controllers.ControllerBaseSpec
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-@Singleton
-class HeaderCarrierForPartials @Inject()(sessionCookieCrypto: SessionCookieCrypto) extends HeaderCarrierForPartialsConverter {
+class BtaHeaderPartialConnectorSpec extends ControllerBaseSpec {
 
-  override val crypto: (String) => String = cookie =>
-    sessionCookieCrypto.crypto.encrypt(PlainText(cookie)).value
+  "BtaHeaderPartialConnector" should {
 
+    "generate the correct partial url" in {
+
+      val connector = new BtaHeaderPartialConnector(mock[HttpClient], mockAppConfig, mock[VatHeaderCarrierForPartialsConverter])
+
+      connector.btaUrl shouldEqual "/business-account/partial/service-info"
+    }
+  }
 }

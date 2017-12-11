@@ -35,4 +35,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val signInUrl: String = ""
   override val signInContinueBaseUrl: String = ""
   override val vatSummaryPartial: String = ""
+  override val btaService: String = ""
 }

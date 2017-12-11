@@ -31,8 +31,7 @@ import scala.concurrent.Future
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService,
-                                     implicit val appConfig: AppConfig,
-                                     vatDetailsService: VatDetailsService)
+                                     implicit val appConfig: AppConfig, vatDetailsService: VatDetailsService)
   extends FrontendController with I18nSupport {
 
   def details(): Action[AnyContent] = detailsInternal { implicit request => user =>
