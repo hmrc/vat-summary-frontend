@@ -25,3 +25,8 @@ returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
 returnObligation.submitUsingSoftware = submit using software
+
+payment.noPayment = No payment due
+payment.nextPayment = Next payment due
+payment.viewDetails = View payment details
+payment.overdue = Overdue
