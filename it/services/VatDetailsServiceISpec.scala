@@ -77,35 +77,4 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
   }
 
-  "Calling getPaymentData" should {
-
-    "return a Payments model" in new Test {
-
-      override def setupStubs(): StubMapping = VatApiStub.stubAllObligations
-      val expectedPayments: Payments = Payments(
-        Seq(
-          Payment(
-            endDate = LocalDate.parse("2017-01-01"),
-            dueDate = LocalDate.parse("2017-10-25"),
-            outstandingAmount = BigDecimal(1000.00),
-            status = "O",
-            periodKey = "#003"
-          ),
-          Payment
-          (
-            endDate = LocalDate.parse("2017-10-19"),
-            dueDate = LocalDate.parse("2017-12-25"),
-            outstandingAmount = BigDecimal(10.00),
-            status = "O",
-            periodKey = "#001"
-          )
-        )
-      )
-
-      val result: Payments = await(service.getPaymentData(User("11111111")))
-
-      result shouldBe expectedPayments
-
-    }
-  }
 }

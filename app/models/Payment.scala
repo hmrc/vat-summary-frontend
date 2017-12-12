@@ -20,11 +20,11 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Format, Json}
 
-case class Payment(endDate: LocalDate,
-                   dueDate: LocalDate,
+case class Payment(end: LocalDate,
+                   due: LocalDate,
                    outstandingAmount: BigDecimal,
                    status: String,
-                   periodKey: String)
+                   periodKey: String) extends DueDate
 
 object Payment {
 

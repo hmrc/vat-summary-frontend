@@ -40,28 +40,28 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "#001"
     )
 
-    val payment:Payment = Payment(
-      endDate = LocalDate.parse("2017-12-22"),
-      dueDate = LocalDate.parse("2017-12-26"),
+    val payment: Payment = Payment(
+      end = LocalDate.parse("2017-12-22"),
+      due = LocalDate.parse("2017-12-26"),
       outstandingAmount = BigDecimal(1000.00),
       status = "O",
       periodKey = "#003"
     )
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockConnector: VatApiConnector = mock[VatApiConnector]
+    val mockVatApiConnector: VatApiConnector = mock[VatApiConnector]
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-    lazy val service = new VatDetailsService(mockConnector, mockFinancialDataConnector)
+    lazy val service = new VatDetailsService(mockVatApiConnector, mockFinancialDataConnector)
   }
 
-  "Calling .retrieveNextReturnObligation" when {
+  "Calling .retrieveNextDetail" when {
 
     "sequence contains one obligation" should {
 
       "return current obligation" in new Test {
         val obligations = Obligations(Seq(currentObligation))
         lazy val result: Option[Obligation] =
-          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-03-30"))
+          service.retrieveNextDetail(obligations.obligations, LocalDate.parse("2017-03-30"))
 
         result shouldBe Some(currentObligation)
       }
@@ -81,7 +81,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the obligation which is due today" in new Test {
         val obligations = Obligations(Seq(futureObligation, currentObligation))
         lazy val result: Option[Obligation] =
-          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-04-30"))
+          service.retrieveNextDetail(obligations.obligations, LocalDate.parse("2017-04-30"))
 
         result shouldBe Some(currentObligation)
       }
@@ -89,7 +89,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the obligation which is due in the future" in new Test {
         val obligations = Obligations(Seq(futureObligation, currentObligation))
         lazy val result: Option[Obligation] =
-          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-05-30"))
+          service.retrieveNextDetail(obligations.obligations, LocalDate.parse("2017-05-30"))
 
         result shouldBe Some(futureObligation)
       }
@@ -97,7 +97,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the most recent overdue obligation" in new Test {
         val obligations = Obligations(Seq(futureObligation, currentObligation))
         lazy val result: Option[Obligation] =
-          service.retrieveNextReturnObligation(obligations, LocalDate.parse("2017-08-30"))
+          service.retrieveNextDetail(obligations.obligations, LocalDate.parse("2017-08-30"))
 
         result shouldBe Some(futureObligation)
       }
@@ -106,13 +106,19 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
   "Calling .getVatDetails" when {
 
-    "the connector returns some obligations" should {
+    "the connector returns some obligations and payments" should {
 
       "return the most recent outstanding obligation" in new Test {
 
-        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:Obligation.Status.Value)
+        (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(Obligations(Seq(currentObligation)))))
+
+        (mockFinancialDataConnector.getPaymentData(_:String)
+        (_:HeaderCarrier, _:ExecutionContext))
+          .expects(*,*,*)
+          .returns(Future.successful(Right(Payments(Seq(payment)))))
 
         val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
 
@@ -121,13 +127,19 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
     }
 
-    "the connector returns no obligations" should {
+    "the connector returns no obligations or payments" should {
 
       "return nothing" in new Test {
 
-        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:Obligation.Status.Value)
+        (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(Obligations(Seq.empty))))
+
+        (mockFinancialDataConnector.getPaymentData(_:String)
+        (_:HeaderCarrier, _:ExecutionContext))
+          .expects(*,*,*)
+          .returns(Future.successful(Right(Payments(Seq.empty))))
 
         val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
 
@@ -139,8 +151,14 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns an HttpError" should {
 
       "return a Future containing the error" in new Test {
-        (mockConnector.getObligations(_:String,_:LocalDate,_:LocalDate,_: Obligation.Status.Value)(_: HeaderCarrier, _: ExecutionContext))
+        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:Obligation.Status.Value)
+        (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
+          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
+
+        (mockFinancialDataConnector.getPaymentData(_:String)
+        (_:HeaderCarrier, _:ExecutionContext))
+          .expects(*,*,*)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
         val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
@@ -154,7 +172,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return a failed Future containing the exception" in new Test {
         val expected = new RuntimeException("test")
-        (mockConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _: Obligation.Status.Value)
+        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:Obligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.failed(expected))
@@ -162,24 +180,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         intercept[RuntimeException](await(service.getVatDetails(User("1111"))))
       }
 
-    }
-
-  }
-
-  "Calling getPaymentData" when {
-
-    "sequence contains one payment" should {
-
-      "return one payment" in new Test {
-        val payments: Payments = Payments(Seq(payment))
-        (mockFinancialDataConnector.getPaymentData(_: String))
-          .expects(*)
-          .returns(Future.successful(payments))
-
-        lazy val result: Payments = await(service.getPaymentData(User("999999999")))
-
-        result shouldBe payments
-      }
     }
 
   }

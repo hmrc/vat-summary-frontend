@@ -26,7 +26,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
-class HttpResponseParsersSpec extends UnitSpec {
+class ObligationsHttpParserSpec extends UnitSpec {
 
   "ObligationsReads" when {
 
