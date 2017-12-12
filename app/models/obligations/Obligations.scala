@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-package models
-
-import java.time.LocalDate
+package models.obligations
 
 import play.api.libs.json.{Format, Json}
 
-case class Obligation(start: LocalDate,
-                      end: LocalDate,
-                      due: LocalDate,
-                      status: String,
-                      received: Option[LocalDate],
-                      periodKey: String) extends DueDate
+case class Obligations(obligations: Seq[Obligation])
 
-object Obligation {
+object Obligations {
 
-  implicit val format: Format[Obligation] = Json.format[Obligation]
-
-  object Status extends Enumeration {
-    val All: Status.Value = Value("A")
-    val Outstanding: Status.Value = Value("O")
-    val Fulfilled: Status.Value = Value("F")
-  }
+  implicit val format: Format[Obligations] = Json.format[Obligations]
 
 }

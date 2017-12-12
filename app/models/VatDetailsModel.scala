@@ -16,4 +16,7 @@
 
 package models
 
-case class VatDetailsModel(obligation: Obligation, payment: Payment)
+import models.obligations.Obligation
+import models.payments.Payment
+
+case class VatDetailsModel(obligation: Option[Obligation], payment: Option[Payment])

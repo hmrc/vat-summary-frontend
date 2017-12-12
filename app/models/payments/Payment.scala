@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package models.payments
 
+import java.time.LocalDate
+
+import models.DueDate
 import play.api.libs.json.{Format, Json}
 
-case class Obligations(obligations: Seq[Obligation])
+case class Payment(end: LocalDate,
+                   due: LocalDate,
+                   outstandingAmount: BigDecimal,
+                   status: String,
+                   periodKey: String) extends DueDate
 
-object Obligations {
+object Payment {
 
-  implicit val format: Format[Obligations] = Json.format[Obligations]
-
+  implicit val format: Format[Payment] = Json.format[Payment]
 }

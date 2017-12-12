@@ -23,6 +23,8 @@ import connectors.httpParsers.ObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
 import models._
+import models.obligations.{Obligation, Obligations}
+import models.payments.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits._
@@ -120,9 +122,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
 
-        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
-        result shouldBe Right(Some(currentObligation))
+        result shouldBe Right(VatDetailsModel(Some(currentObligation), Some(payment)))
       }
 
     }
@@ -141,9 +143,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq.empty))))
 
-        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
-        result shouldBe Right(None)
+        result shouldBe Right(VatDetailsModel(None, None))
       }
 
     }
@@ -156,12 +158,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        (mockFinancialDataConnector.getPaymentData(_:String)
-        (_:HeaderCarrier, _:ExecutionContext))
-          .expects(*,*,*)
-          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
-
-        val result: HttpGetResult[Option[Obligation]] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
         result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
       }

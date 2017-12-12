@@ -21,9 +21,9 @@ import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.Obligation.Status
-import models._
+import models.obligations.Obligation.Status
 import models.errors.{BadRequestError, MultipleErrors}
+import models.obligations.{Obligation, Obligations}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 

@@ -24,7 +24,7 @@ import cats.data.EitherT
 import cats.implicits._
 import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.ObligationsHttpParser._
-import models.Obligation.Status._
+import models.obligations.Obligation.Status._
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -46,18 +46,20 @@ class VatDetailsService @Inject()(connector: VatApiConnector, financialDataConne
   }
 
   def getVatDetails(user: User, date: LocalDate = LocalDate.now())(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[Option[Obligation]]] = {
+  : Future[HttpGetResult[VatDetailsModel]] = {
     val numDaysPrior = 0 //90
     val numDaysAhead = 365 //395
     val dateFrom = date.minus(numDaysPrior, ChronoUnit.DAYS)
     val dateTo = date.plus(numDaysAhead, ChronoUnit.DAYS)
 
-    for {
+    val result = for {
       returnObligation <- EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
-        .map(res => retrieveNextDetail(res.obligations)).value
+        .map(res => retrieveNextDetail(res.obligations))
       paymentObligation <- EitherT(financialDataConnector.getPaymentData(user.vrn))
-        .map(res => retrieveNextDetail(res.payments)).value
-    } yield returnObligation
+        .map(res => retrieveNextDetail(res.payments))
+    } yield VatDetailsModel(returnObligation, paymentObligation)
+
+    result.value
   }
 
 }

@@ -35,9 +35,9 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
                                      vatDetailsService: VatDetailsService)
   extends FrontendController with I18nSupport {
 
-  def details(): Action[AnyContent] = detailsInternal { implicit request =>user =>
+  def details(): Action[AnyContent] = detailsInternal { implicit request => user =>
     vatDetailsService.getVatDetails(user).map {
-      case Right(obligation) => Ok(views.html.vatDetails.details(user, obligation))
+      case Right(detailsModel) => Ok(views.html.vatDetails.details(user, detailsModel.obligation))
       case Left(_) => Ok(views.html.vatDetails.details(user, None))
     }
   }

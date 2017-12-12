@@ -16,9 +16,10 @@
 
 package views.vatDetails
 
-import models.{Obligation, User}
+import models.User
 import java.time.LocalDate
 
+import models.obligations.Obligation
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
