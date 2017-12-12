@@ -19,7 +19,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import models.User
+import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.{EnrolmentsAuthService, VatDetailsService}
@@ -37,8 +37,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
 
   def details(): Action[AnyContent] = detailsInternal { implicit request => user =>
     vatDetailsService.getVatDetails(user).map {
-      case Right(detailsModel) => Ok(views.html.vatDetails.details(user, detailsModel.obligation))
-      case Left(_) => Ok(views.html.vatDetails.details(user, None))
+      case Right(detailsModel) => Ok(views.html.vatDetails.details(user, detailsModel))
+      case Left(_) => Ok(views.html.vatDetails.details(user, VatDetailsModel(None, None)))
     }
   }
 

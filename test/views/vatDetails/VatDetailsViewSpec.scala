@@ -16,7 +16,7 @@
 
 package views.vatDetails
 
-import models.User
+import models.{User, VatDetailsModel}
 import java.time.LocalDate
 
 import models.obligations.Obligation
@@ -38,7 +38,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page" should {
 
-    lazy val view = views.html.vatDetails.details(user, Some(obligation))
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(Some(obligation), None))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -56,7 +56,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with an obligation" should {
 
-    lazy val view = views.html.vatDetails.details(user, Some(obligation))
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(Some(obligation), None))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the obligation section" in {
@@ -66,7 +66,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with no obligation" should {
 
-    lazy val view = views.html.vatDetails.details(user, None)
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(None, None))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no obligation message" in {

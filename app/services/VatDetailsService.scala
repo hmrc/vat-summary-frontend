@@ -33,7 +33,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsService @Inject()(connector: VatApiConnector, financialDataConnector: FinancialDataConnector) {
 
-  def retrieveNextDetail[T <: DueDate](data: Seq[T], date: LocalDate = LocalDate.now()): Option[T] = {
+  def retrieveNextDetail[T <: DueDate](data: Seq[T], date: LocalDate): Option[T] = {
     val presetAndFuture = data
       .filter(o => o.due.isEqual(date) || o.due.isAfter(date))
       .sortWith(_.due isBefore _.due).headOption
@@ -54,9 +54,9 @@ class VatDetailsService @Inject()(connector: VatApiConnector, financialDataConne
 
     val result = for {
       returnObligation <- EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
-        .map(res => retrieveNextDetail(res.obligations))
+        .map(res => retrieveNextDetail(res.obligations, date))
       paymentObligation <- EitherT(financialDataConnector.getPaymentData(user.vrn))
-        .map(res => retrieveNextDetail(res.payments))
+        .map(res => retrieveNextDetail(res.payments, date))
     } yield VatDetailsModel(returnObligation, paymentObligation)
 
     result.value
