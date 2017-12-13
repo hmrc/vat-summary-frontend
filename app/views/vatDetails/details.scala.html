@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(user: models.User, obligation: Option[models.Obligation])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: models.User, details: models.VatDetailsModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
   @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
 
@@ -25,7 +25,8 @@
           <span class="heading-secondary">@messages("vatDetails.vrn", user.vrn)</span>
         </h1>
 
-        @views.html.templates.returnObligation(obligation)
+        @views.html.templates.returnPayment(details.payment)
+        @views.html.templates.returnObligation(details.obligation)
         <section>
           <div class="grid-row">
             <div class="column-one-half">

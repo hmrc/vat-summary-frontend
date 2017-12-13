@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import models.errors.{ApiMultiError, ApiSingleError}
-import models.{Obligation, Obligations}
+import models.obligations.{Obligation, Obligations}
 import play.api.http.Status._
 import play.api.libs.json.Json
 

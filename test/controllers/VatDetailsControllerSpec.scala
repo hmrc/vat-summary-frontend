@@ -20,7 +20,8 @@ package controllers
 import java.time.LocalDate
 
 import models.errors.{BadRequestError, HttpError}
-import models.{Obligation, User}
+import models.obligations.Obligation
+import models.{User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -38,7 +39,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
   private trait Test {
     val runMock: Boolean = true
     val authResult: Future[_]
-    val vatServiceResult: Future[Either[HttpError, Option[Obligation]]]
+    val vatServiceResult: Future[Either[HttpError, VatDetailsModel]]
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockService: VatDetailsService = mock[VatDetailsService]
 
@@ -68,14 +69,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "the vat api service has returned an obligation" should {
 
         "return 200" in new Test {
-          override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-03-30"),
-            LocalDate.parse("2017-07-30"),
-            "O",
-            None,
-            "#004"
-          ))))
+          override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+            Right(
+              VatDetailsModel(
+                Some(
+                  Obligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+                ), None
+              )
+            )
+          }
 
           override val authResult: Future[Enrolments] = Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
           private val result = target.details()(fakeRequest)
@@ -83,14 +85,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         }
 
         "return HTML" in new Test {
-          override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-03-30"),
-            LocalDate.parse("2017-07-30"),
-            "O",
-            None,
-            "#004"
-          ))))
+          override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+            Right(
+              VatDetailsModel(
+                Some(
+                  Obligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+                ), None
+              )
+            )
+          }
 
           override val authResult: Future[Enrolments] = Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
           private val result = target.details()(fakeRequest)
@@ -98,14 +101,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         }
 
         "return charset utf-8" in new Test {
-          override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-03-30"),
-            LocalDate.parse("2017-07-30"),
-            "O",
-            None,
-            "#004"
-          ))))
+          override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+            Right(
+              VatDetailsModel(
+                Some(
+                  Obligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+                ), None
+              )
+            )
+          }
 
           override val authResult: Future[Enrolments] = Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
           private val result = target.details()(fakeRequest)
@@ -116,14 +120,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "the vat api service hasn't returned an obligation" should {
 
         "return 200" in new Test {
-          override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-03-30"),
-            LocalDate.parse("2017-07-30"),
-            "O",
-            None,
-            "#004"
-          ))))
+          override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+            Right(
+              VatDetailsModel(
+                None, None
+              )
+            )
+          }
 
           override val authResult: Future[Enrolments] = Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
           private val result = target.details()(fakeRequest)
@@ -131,14 +134,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         }
 
         "return HTML" in new Test {
-          override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-03-30"),
-            LocalDate.parse("2017-07-30"),
-            "O",
-            None,
-            "#004"
-          ))))
+          override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+            Right(
+              VatDetailsModel(
+                None, None
+              )
+            )
+          }
 
           override val authResult: Future[Enrolments] = Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
           private val result = target.details()(fakeRequest)
@@ -146,14 +148,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         }
 
         "return charset utf-8" in new Test {
-          override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-03-30"),
-            LocalDate.parse("2017-07-30"),
-            "O",
-            None,
-            "#004"
-          ))))
+          override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+            Right(
+              VatDetailsModel(
+                None, None
+              )
+            )
+          }
 
           override val authResult: Future[Enrolments] = Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
           private val result = target.details()(fakeRequest)
@@ -194,14 +195,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return 303" in new Test {
         override val runMock: Boolean = false
-        override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-          LocalDate.parse("2017-01-01"),
-          LocalDate.parse("2017-03-30"),
-          LocalDate.parse("2017-07-30"),
-          "O",
-          None,
-          "#004"
-        ))))
+        override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+          Right(
+            VatDetailsModel(
+              Some(
+                Obligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+              ), None
+            )
+          )
+        }
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.details()(fakeRequest)
@@ -210,14 +212,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "redirect the user to the session timeout page" in new Test {
         override val runMock: Boolean = false
-        override val vatServiceResult: Future[Right[Nothing, Some[Obligation]]] = Future.successful(Right(Some(Obligation(
-          LocalDate.parse("2017-01-01"),
-          LocalDate.parse("2017-03-30"),
-          LocalDate.parse("2017-07-30"),
-          "O",
-          None,
-          "#004"
-        ))))
+        override val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+          Right(
+            VatDetailsModel(
+              Some(
+                Obligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+              ), None
+            )
+          )
+        }
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.details()(fakeRequest)

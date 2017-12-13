@@ -19,36 +19,38 @@ package connectors
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
-import models.{Payment, Payments}
+import connectors.httpParsers.PaymentsHttpParser.HttpGetResult
+import models.payments.{Payment, Payments}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FinancialDataConnector  @Inject()(http: HttpClient) {
 
-  def getPaymentData(vrn: String): Future[Payments] = {
-    Future.successful(
+
+  def getPaymentData(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+    Future.successful(Right(
       Payments(
         Seq(
           Payment(
-            endDate = LocalDate.parse("2017-01-01"),
-            dueDate = LocalDate.parse("2017-10-25"),
+            end = LocalDate.parse("2017-01-01"),
+            due = LocalDate.parse("2017-10-25"),
             outstandingAmount = BigDecimal(1000.00),
             status = "O",
             periodKey = "#003"
           ),
-          Payment
-          (
-            endDate = LocalDate.parse("2017-10-19"),
-            dueDate = LocalDate.parse("2017-12-25"),
+          Payment(
+            end = LocalDate.parse("2017-10-19"),
+            due = LocalDate.parse("2017-12-25"),
             outstandingAmount = BigDecimal(10.00),
             status = "O",
             periodKey = "#001"
           )
         )
       )
-    )
+    ))
   }
 
 }

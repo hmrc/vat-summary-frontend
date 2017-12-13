@@ -16,9 +16,11 @@
 
 package views.vatDetails
 
-import models.{Obligation, User}
+import models.{User, VatDetailsModel}
 import java.time.LocalDate
 
+import models.obligations.Obligation
+import models.payments.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -27,6 +29,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
+    val nextPaymentHeading = "h2"
     val nextReturnHeading = ".divider--bottom h2"
     val returnsHeading = "h2 a"
   }
@@ -34,10 +37,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   private val date = LocalDate.now()
   private val user = User("1111")
   val obligation = Obligation(date, date, date, "", None, "")
+  val payment = Payment(date, date, BigDecimal(100), "", "")
 
   "Rendering the VAT details page" should {
 
-    lazy val view = views.html.vatDetails.details(user, Some(obligation))
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(Some(obligation), Some(payment)))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -53,23 +57,31 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the VAT details page with an obligation" should {
+  "Rendering the VAT details page with a next return and a next payment" should {
 
-    lazy val view = views.html.vatDetails.details(user, Some(obligation))
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(Some(obligation), Some(payment)))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render the obligation section" in {
+    "render the next return section" in {
       elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+    }
+
+    "render the next payment section" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
     }
   }
 
-  "Rendering the VAT details page with no obligation" should {
+  "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(user, None)
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(None, None))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render the no obligation message" in {
+    "render the no return message" in {
       elementText(Selectors.nextReturnHeading) shouldBe "No return due"
+    }
+
+    "render the no payment message" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "No payment due"
     }
   }
 }

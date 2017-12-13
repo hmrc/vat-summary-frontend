@@ -18,6 +18,7 @@ package models
 
 import java.time.LocalDate
 
+import models.payments.{Payment, Payments}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -35,8 +36,8 @@ class PaymentsSpec extends UnitSpec {
 
     val exampleString =
       """{
-        |"endDate":"2017-03-01",
-        |"dueDate":"2017-03-08",
+        |"end":"2017-03-01",
+        |"due":"2017-03-08",
         |"outstandingAmount":9999,
         |"status":"O",
         |"periodKey":"#001"
@@ -79,14 +80,14 @@ class PaymentsSpec extends UnitSpec {
     val exampleString =
       """{
         |"payments":[{
-        |"endDate":"2017-03-01",
-        |"dueDate":"2017-03-08",
+        |"end":"2017-03-01",
+        |"due":"2017-03-08",
         |"outstandingAmount":9999,
         |"status":"O",
         |"periodKey":"#001"
         |},{
-        |"endDate":"2017-04-01",
-        |"dueDate":"2017-05-08",
+        |"end":"2017-04-01",
+        |"due":"2017-05-08",
         |"outstandingAmount":7777,
         |"status":"O",
         |"periodKey":"#002"

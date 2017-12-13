@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import models.Payment
+@import models.payments.Payment
 @import views.html.templates.formatters.dates._
 @import views.html.templates.formatters.money._
 @(payment: Option[Payment])(implicit messages: Messages)
@@ -30,7 +30,7 @@
     <h2 class="heading-large">
       @messages("payment.nextPayment")
     </h2>
-    <p class="lede">@displayDate(pay.dueDate)</p>
+    <p class="lede">@displayDate(pay.due)</p>
     <p class="bold-small">@displayMoney(pay.outstandingAmount)</p>
     <a href="#" class="button">@messages("payment.viewDetails")</a>
   </section>
