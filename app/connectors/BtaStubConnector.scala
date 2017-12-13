@@ -17,7 +17,7 @@
 package connectors
 
 import javax.inject.Inject
-import config.{AppConfig, HeaderCarrierForPartials}
+import config.{AppConfig, VatHeaderCarrierForPartialsConverter}
 import play.api.http.Status._
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.http.{HttpResponse, Upstream4xxResponse}
@@ -27,9 +27,8 @@ import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.HtmlPartialHttpReads
 import scala.concurrent.Future
 
-class BtaStubConnector @Inject()(http: HttpClient,
-                                 appConfig: AppConfig,
-                                 hc: HeaderCarrierForPartials) extends HtmlPartialHttpReads {
+class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig, hc: VatHeaderCarrierForPartialsConverter)
+  extends HtmlPartialHttpReads {
 
   import hc._
 

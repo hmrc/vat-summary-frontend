@@ -16,7 +16,7 @@
 
 package connectors
 
-import config.HeaderCarrierForPartials
+import config.VatHeaderCarrierForPartialsConverter
 import controllers.ControllerBaseSpec
 import play.twirl.api.Html
 import play.api.http.Status._
@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class BtaStubConnectorSpec extends ControllerBaseSpec {
 
-  lazy val hc: HeaderCarrierForPartials = injector.instanceOf[HeaderCarrierForPartials]
+  lazy val hc: VatHeaderCarrierForPartialsConverter = injector.instanceOf[VatHeaderCarrierForPartialsConverter]
 
   def setup(response: HttpResponse): BtaStubConnector = {
     val mockHttp = mock[HttpClient]
