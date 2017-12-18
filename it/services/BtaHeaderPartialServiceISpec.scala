@@ -9,40 +9,38 @@
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUT WARRANTIED OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
 
-package connectors
+package services
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 import stubs.BtaHeaderPartialStub
-import uk.gov.hmrc.http.HeaderCarrier
 
-class BtaHeaderPartialConnectorISpec extends IntegrationBaseSpec {
+class BtaHeaderPartialServiceISpec extends IntegrationBaseSpec {
 
   private trait Test {
     def setupStubs(): StubMapping
 
-    val connector: BtaHeaderPartialConnector = app.injector.instanceOf[BtaHeaderPartialConnector]
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    lazy val service: BtaHeaderPartialService = app.injector.instanceOf[BtaHeaderPartialService]
   }
 
-  "Calling the getBtaHeaderPartial() function" when {
+  "Calling the method .btaHeaderPartial" when {
 
-    "a successful status is returned" should {
+    "a valid call is made" should {
 
-      "return partial content" in new Test {
+      "return the BTA header" in new Test {
         override def setupStubs(): StubMapping = BtaHeaderPartialStub.successfulContent
         setupStubs()
 
         val expectedContent = Html("<div>example</div>")
 
-        private val result = await(connector.getBtaHeaderPartial()(FakeRequest()))
+        private val result = await(service.btaHeaderPartial()(FakeRequest()))
         result shouldEqual expectedContent
       }
     }
@@ -55,7 +53,7 @@ class BtaHeaderPartialConnectorISpec extends IntegrationBaseSpec {
 
         val expectedContent = Html("")
 
-        private val result = await(connector.getBtaHeaderPartial()(FakeRequest()))
+        private val result = await(service.btaHeaderPartial()(FakeRequest()))
         result shouldEqual expectedContent
       }
     }
@@ -68,7 +66,7 @@ class BtaHeaderPartialConnectorISpec extends IntegrationBaseSpec {
 
         val expectedContent = Html("")
 
-        private val result = await(connector.getBtaHeaderPartial()(FakeRequest()))
+        private val result = await(service.btaHeaderPartial()(FakeRequest()))
         result shouldEqual expectedContent
       }
     }
