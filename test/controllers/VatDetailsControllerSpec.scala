@@ -23,9 +23,10 @@ import models.errors.{BadRequestError, HttpError}
 import models.obligations.Obligation
 import models.{User, VatDetailsModel}
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
-import services.{EnrolmentsAuthService, VatDetailsService}
+import play.twirl.api.Html
+import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -40,17 +41,24 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val runMock: Boolean = true
     val authResult: Future[_]
     val vatServiceResult: Future[Either[HttpError, VatDetailsModel]]
+    val btaPartialResult: Html = Html("<div>example</div>")
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockService: VatDetailsService = mock[VatDetailsService]
+    val mockBtaHeaderPartialService: BtaHeaderPartialService = mock[BtaHeaderPartialService]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResult)
 
-      if (runMock) { (mockService.getVatDetails(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+      if (runMock) {
+        (mockService.getVatDetails(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(vatServiceResult)
+
+        (mockBtaHeaderPartialService.btaHeaderPartial()(_: Request[AnyContent]))
+          .expects(*)
+          .returns(btaPartialResult)
       }
     }
 
@@ -58,7 +66,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     def target: VatDetailsController = {
       setup()
-      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockService)
+      new VatDetailsController(messages, mockEnrolmentsAuthService, mockBtaHeaderPartialService, mockAppConfig, mockService)
     }
   }
 
