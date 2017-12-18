@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package services
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -35,7 +36,6 @@ class BtaHeaderPartialServiceISpec extends IntegrationBaseSpec {
 
       "return the BTA header" in new Test {
         override def setupStubs(): StubMapping = BtaHeaderPartialStub.successfulContent
-
         setupStubs()
 
         val expectedContent = Html("<div>example</div>")
