@@ -23,6 +23,7 @@ import models.obligations.Obligation
 import models.payments.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.Html
 import views.ViewBaseSpec
 
 class VatDetailsViewSpec extends ViewBaseSpec {
@@ -32,6 +33,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val nextPaymentHeading = "h2"
     val nextReturnHeading = ".divider--bottom h2"
     val returnsHeading = "h2 a"
+    val header = "div.test"
   }
 
   private val date = LocalDate.now()
@@ -82,6 +84,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "render the no payment message" in {
       elementText(Selectors.nextPaymentHeading) shouldBe "No payment due"
+    }
+  }
+
+  "Rendering the VAT details page with a header" should {
+
+    val basicHeaderHtml: Html = Html("""<div class="test">Example</div>""")
+    lazy val view = views.html.vatDetails.details(user, VatDetailsModel(Some(obligation), Some(payment)), basicHeaderHtml)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the header" in {
+      elementText(Selectors.header) shouldBe "Example"
     }
   }
 }
