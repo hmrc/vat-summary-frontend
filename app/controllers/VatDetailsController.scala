@@ -18,7 +18,7 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import config.{AppConfig, VatHeaderCarrierForPartialsConverter}
+import config.AppConfig
 import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
