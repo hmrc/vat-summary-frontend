@@ -33,7 +33,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
 class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   private trait DetailsTest {
