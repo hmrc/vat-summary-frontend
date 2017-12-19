@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AuthStub, VatApiStub}
+import stubs.{AuthStub, BtaHeaderPartialStub, VatApiStub}
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
 
@@ -26,6 +26,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           VatApiStub.stubOutstandingObligations
+          BtaHeaderPartialStub.successfulContent
         }
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK

@@ -22,22 +22,31 @@ import config.AppConfig
 import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
-import services.{EnrolmentsAuthService, VatDetailsService}
+import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.auth.core.{Enrolment, NoActiveSession}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService,
+                                     btaHeaderPartialService: BtaHeaderPartialService,
                                      implicit val appConfig: AppConfig, vatDetailsService: VatDetailsService)
   extends FrontendController with I18nSupport {
 
   def details(): Action[AnyContent] = detailsInternal { implicit request => user =>
+    for {
+      detailsModel <- handleVatDetailsModel(user)
+      serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
+    } yield Ok(views.html.vatDetails.details(user, detailsModel, serviceInfo))
+  }
+
+  private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {
     vatDetailsService.getVatDetails(user).map {
-      case Right(detailsModel) => Ok(views.html.vatDetails.details(user, detailsModel))
-      case Left(_) => Ok(views.html.vatDetails.details(user, VatDetailsModel(None, None)))
+      case Right(detailsModel) => detailsModel
+      case Left(_) => VatDetailsModel(None, None)
     }
   }
 
