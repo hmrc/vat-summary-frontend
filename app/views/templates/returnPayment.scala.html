@@ -31,7 +31,7 @@
       @messages("payment.nextPayment")
     </h2>
     <p class="lede">@displayDate(pay.due)</p>
-    <p class="bold-small">@displayMoney(pay.outstandingAmount)</p>
+      <p><strong>@displayMoney(pay.outstandingAmount)</strong></p>
     <a href="#" class="button">@messages("payment.viewDetails")</a>
   </section>
 }
