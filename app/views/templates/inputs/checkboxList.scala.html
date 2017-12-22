@@ -17,9 +17,9 @@
 @(field: Field, question: String, choices: Seq[(String, String)], subtext: Option[String] = None, selectedChoices: Seq[String] = Seq())(implicit messages: Messages)
 
 @items = @{
-choices.map {
-case (choice, value) =>  (choice, value, selectedChoices.contains(value))
-}
+  choices.map {
+    case (choice, value) =>  (choice, value, selectedChoices.contains(value))
+  }
 }
 
 <div class="form-group@if(field.hasErrors) { form-field--error}">
