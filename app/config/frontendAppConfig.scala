@@ -83,5 +83,5 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val vatSummaryPartial: String = baseUrl("selfLookup") + "/vat-summary-partials/bta-home"
 
-  override lazy val btaService: String = baseUrl("business-account")
+  override lazy val btaService: String = baseUrl(Keys.businessAccountService)
 }

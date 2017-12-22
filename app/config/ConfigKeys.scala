@@ -33,4 +33,6 @@ object ConfigKeys {
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
+
+  val businessAccountService: String = "business-account"
 }
