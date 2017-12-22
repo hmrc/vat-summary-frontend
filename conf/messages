@@ -30,3 +30,8 @@ payment.noPayment = No payment due
 payment.nextPayment = Next payment due
 payment.viewDetails = View payment details
 payment.overdue = Overdue
+
+featureSwitch.title = Feature switches
+featureSwitch.heading = Features
+featureSwitch.submit = Submit
+features.simpleAuth.enabled = Simple auth

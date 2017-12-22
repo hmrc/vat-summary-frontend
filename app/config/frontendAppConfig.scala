@@ -50,9 +50,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override val mode: Mode = environment.mode
 
-  private def loadConfig(key: String): String = runModeConfiguration.getString(key)
-    .getOrElse(throw new Exception(s"Missing runModeConfiguration key: $key"))
-
   private lazy val contactHost: String = baseUrl(Keys.contactFrontendService)
   private lazy val contactFormServiceIdentifier: String = "MyService"
 
@@ -74,7 +71,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
   override lazy val signInContinueBaseUrl: String = runModeConfiguration.getString(Keys.signInContinueBaseUrl).getOrElse("")
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.BtaStubController.landingPage().url).encodedUrl
-  private lazy val signInOrigin = loadConfig("appName")
+  private lazy val signInOrigin = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
   override val features = new Features(runModeConfiguration)
