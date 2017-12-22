@@ -38,7 +38,7 @@ class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthSe
         Ok(views.html.btaStub.landingPage(partial))
       }
     }.recoverWith {
-      case _: NoActiveSession => Future.successful(Redirect(controllers.routes.ErrorsController.sessionTimeout()))
+      case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
     }
   }
 }

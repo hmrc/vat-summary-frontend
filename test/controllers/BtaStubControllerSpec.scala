@@ -81,18 +81,11 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
 
     "the user is not logged in" should {
 
-      "return 303" in new Test {
+      "return 401 (Unauthorised)" in new Test {
         override val runMock: Boolean = false
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.landingPage()(fakeRequest)
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect the user to the session timeout page" in new Test {
-        override val runMock: Boolean = false
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
-        val result: Future[Result] = target.landingPage()(fakeRequest)
-        redirectLocation(result) shouldBe Some(routes.ErrorsController.sessionTimeout().url)
+        status(result) shouldBe Status.UNAUTHORIZED
       }
     }
   }

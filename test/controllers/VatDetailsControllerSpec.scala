@@ -121,18 +121,21 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the user is not logged in" should {
 
-      "return 303" in new DetailsTest {
+      "return 401 (Unauthorised)" in new DetailsTest {
         override val runMock: Boolean = false
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.details()(fakeRequest)
-        status(result) shouldBe Status.SEE_OTHER
+        status(result) shouldBe Status.UNAUTHORIZED
       }
+    }
 
-      "redirect the user to the session timeout page" in new DetailsTest {
+    "the user is not authenticated" should {
+
+      "return 403 (Forbidden)" in new DetailsTest {
         override val runMock: Boolean = false
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.details()(fakeRequest)
-        redirectLocation(result) shouldBe Some(routes.ErrorsController.sessionTimeout().url)
+        status(result) shouldBe Status.FORBIDDEN
       }
     }
   }

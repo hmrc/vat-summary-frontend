@@ -1,9 +1,5 @@
 # microservice specific routes
 
-GET        /session-timeout        controllers.ErrorsController.sessionTimeout
-
-GET        /unauthorised           controllers.ErrorsController.unauthorised
-
 GET        /details                controllers.VatDetailsController.details
 
 # this route should be deleted once partial

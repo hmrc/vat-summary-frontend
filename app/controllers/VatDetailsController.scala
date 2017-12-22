@@ -21,22 +21,19 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.mvc.{Action, AnyContent}
 import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.auth.core.{Enrolment, NoActiveSession}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService,
+class VatDetailsController @Inject()(val messagesApi: MessagesApi, val enrolmentsAuthService: EnrolmentsAuthService,
                                      btaHeaderPartialService: BtaHeaderPartialService,
                                      implicit val appConfig: AppConfig, vatDetailsService: VatDetailsService)
-  extends FrontendController with I18nSupport {
+  extends AuthorisedController with I18nSupport {
 
-  def details(): Action[AnyContent] = detailsInternal { implicit request => user =>
+  def details(): Action[AnyContent] = authorisedAction { implicit request => user =>
     for {
       detailsModel <- handleVatDetailsModel(user)
       serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
@@ -47,18 +44,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi, enrolmentsAut
     vatDetailsService.getVatDetails(user).map {
       case Right(detailsModel) => detailsModel
       case Left(_) => VatDetailsModel(None, None)
-    }
-  }
-
-  private def detailsInternal(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
-    enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
-      enrolments => {
-        val user = User(enrolments)
-        block(request)(user)
-      }
-
-    }.recover {
-      case _: NoActiveSession => Redirect(controllers.routes.ErrorsController.sessionTimeout())
     }
   }
 }
