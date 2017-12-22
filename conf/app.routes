@@ -2,6 +2,9 @@
 
 GET        /details                controllers.VatDetailsController.details
 
+GET        /feature-switch         controllers.FeatureSwitchController.featureSwitch
+POST       /feature-switch         controllers.FeatureSwitchController.submitFeatureSwitch
+
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
 GET        /bta-stub               controllers.BtaStubController.landingPage
