@@ -17,6 +17,7 @@
 package mocks
 
 import config.AppConfig
+import config.features.Features
 import play.api.Mode.Mode
 import play.api.{Configuration, Mode}
 import play.api.mvc.Call
@@ -34,6 +35,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val vatApiBaseUrl: String = ""
   override val signInUrl: String = ""
   override val signInContinueBaseUrl: String = ""
+  override val features: Features = new Features(runModeConfiguration)
   override val vatSummaryPartial: String = ""
   override val btaService: String = ""
 }
