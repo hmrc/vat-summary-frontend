@@ -20,18 +20,28 @@
 @(payment: Option[Payment])(implicit messages: Messages)
 
 @noPayments = {
-  <section>
+  <div class="column-one-half">
+    <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.noPayment")</h2>
+  </div>
+
+  <!--<section>
     <h2 class="heading-large">@messages("payment.noPayment")</h2>
-  </section>
+  </section>-->
 }
 
 @payment.fold(noPayments) { pay =>
-  <section>
+  <div class="column-one-half">
+    <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
+    <p>@displayDate(pay.due)</p>
+    <p><a href="view-vat-payments">@messages("payment.viewDetails")</a></p>
+  </div>
+
+  <!--<section>
     <h2 class="heading-large">
       @messages("payment.nextPayment")
     </h2>
     <p class="lede">@displayDate(pay.due)</p>
       <p><strong>@displayMoney(pay.outstandingAmount)</strong></p>
     <a href="#" class="button">@messages("payment.viewDetails")</a>
-  </section>
+  </section>-->
 }

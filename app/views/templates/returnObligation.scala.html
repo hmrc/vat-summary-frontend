@@ -19,9 +19,15 @@
 @(obligation: Option[Obligation])(implicit messages: Messages)
 
 @noObligations = {
-    <section class="divider--bottom">
-        <h2 class="heading-large">@messages("returnObligation.noReturn")</h2>
-    </section>
+  <div class="column-one-half">
+    <h2 class="heading-medium" style="margin-top: 0px">Next return due</h2>
+    <p>30 February 2018</p>
+    <p><a href="your-previous-returns.html">View your returns</a></p>
+  </div>
+
+  <!--<section class="divider&#45;&#45;bottom">
+    <h2 class="heading-large">@messages("returnObligation.noReturn")</h2>
+  </section>-->
 }
 
 @obligation.fold(noObligations) { ob =>
