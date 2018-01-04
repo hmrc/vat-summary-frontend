@@ -25,11 +25,16 @@
   @helper.form(action = routes.FeatureSwitchController.submitFeatureSwitch) {
     @CSRF.formField
 
-    @views.html.templates.inputs.checkboxList(
-      Field(form, "featureSwitch", Seq(), None, Seq(), None),
-      messages("featureSwitch.heading"),
-      Seq((messages(ConfigKeys.simpleAuthFeature), messages(ConfigKeys.simpleAuthFeature)))
-    )
+    <div class="form-group">
+      <fieldset>
+        <legend>
+          <h1 class="heading-medium">@messages("featureSwitch.heading")</h1>
+        </legend>
+
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.simpleAuthFeature), messages(ConfigKeys.simpleAuthFeature))
+
+      </fieldset>
+    </div>
 
     <button class="button" type="submit" id="continue-button">@messages("featureSwitch.submit")</button>
   }
