@@ -18,17 +18,12 @@
 @import views.html.templates.formatters.dates._
 @(obligation: Option[Obligation])(implicit messages: Messages)
 
-@noObligations = {
-  <div class="column-one-half">
-    <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@messages("returnObligation.noReturn")</h2>
-  </div>
-}
+@returnMessage = {@messages(obligation.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
-@obligation.fold(noObligations) { ob =>
-  <div class="column-one-half">
-    <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
+<div class="column-one-half">
+  <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@returnMessage</h2>
+  @obligation.map { ob =>
     <p>@displayDate(ob.due)</p>
     <p><a href="#">@messages("returnObligation.viewReturns")</a></p>
-  </div>
-}
-
+  }
+</div>
