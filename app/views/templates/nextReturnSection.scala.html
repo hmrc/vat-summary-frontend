@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models.obligations
+@import models.VatReturn
+@import views.html.templates.formatters.dates._
+@(vatReturn: Option[VatReturn])(implicit messages: Messages)
 
-import play.api.libs.json.{Format, Json}
+@nextReturnMessage = {@messages(vatReturn.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
-case class Obligations(obligations: Seq[Obligation])
-
-object Obligations {
-
-  implicit val format: Format[Obligations] = Json.format[Obligations]
-
-}
+<div class="column-one-half">
+  <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@nextReturnMessage</h2>
+  @vatReturn.map { obligation =>
+    <p>@displayDate(obligation.due)</p>
+    <p><a href="#">@messages("returnObligation.viewReturns")</a></p>
+  }
+</div>

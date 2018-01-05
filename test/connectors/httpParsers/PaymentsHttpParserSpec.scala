@@ -19,8 +19,8 @@ package connectors.httpParsers
 import java.time.LocalDate
 
 import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
+import models.{Payment, Payments}
 import models.errors._
-import models.payments.{Payment, Payments}
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse

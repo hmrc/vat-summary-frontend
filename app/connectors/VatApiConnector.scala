@@ -20,9 +20,9 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import connectors.httpParsers.ObligationsHttpParser.HttpGetResult
-import models.obligations.Obligation.Status
-import models.obligations.Obligations
+import connectors.httpParsers.VatReturnsHttpParser.HttpGetResult
+import models.VatReturn.Status
+import models.VatReturns
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -32,19 +32,20 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
-  import connectors.httpParsers.ObligationsHttpParser.ObligationsReads
+  import connectors.httpParsers.VatReturnsHttpParser.VatReturnsReads
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 
-  def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[Obligations]] = {
+  def getReturns(vrn: String,
+                 from: LocalDate,
+                 to: LocalDate,
+                 status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturns]] = {
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
       .map {
-        case rObs@Right(_) => rObs
-        case lError@Left(error) =>
+        case vatReturns@Right(_) => vatReturns
+        case httpError@Left(error) =>
           Logger.info("VatApiConnector received error: " + error.message)
-          lError
+          httpError
       }
   }
-
 }

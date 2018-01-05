@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import models.obligations.Obligation
-@import views.html.templates.formatters.dates._
-@(obligation: Option[Obligation])(implicit messages: Messages)
+package models
 
-@returnMessage = {@messages(obligation.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
+import java.time.LocalDate
 
-<div class="column-one-half">
-  <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@returnMessage</h2>
-  @obligation.map { ob =>
-    <p>@displayDate(ob.due)</p>
-    <p><a href="#">@messages("returnObligation.viewReturns")</a></p>
-  }
-</div>
+import play.api.libs.json.{Format, Json}
+
+case class Payment(end: LocalDate,
+                   due: LocalDate,
+                   outstandingAmount: BigDecimal,
+                   status: String,
+                   periodKey: String) extends Obligation
+
+object Payment {
+
+  implicit val format: Format[Payment] = Json.format[Payment]
+}

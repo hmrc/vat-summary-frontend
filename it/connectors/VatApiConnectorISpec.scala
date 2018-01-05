@@ -17,13 +17,12 @@
 package connectors
 
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.obligations.Obligation.Status
+import models.VatReturn.Status
 import models.errors.{BadRequestError, MultipleErrors}
-import models.obligations.{Obligation, Obligations}
+import models.{VatReturn, VatReturns}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -38,25 +37,25 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  "calling getObligations with a status of 'A'" should {
+  "calling getReturns with a status of 'A'" should {
 
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubAllObligations
 
-      val expected = Right(Obligations(
+      val expected = Right(VatReturns(
         Seq(
-          Obligation(
-            start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+          VatReturn(
+            start = LocalDate.now().minusDays(80),
+            end = LocalDate.now().minusDays(50),
+            due = LocalDate.now().minusDays(40),
             status = "F",
-            received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
+            received = Some(LocalDate.now().minusDays(45)),
             periodKey = "#001"
           ),
-          Obligation(
-            start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+          VatReturn(
+            start = LocalDate.now().minusDays(70),
+            end = LocalDate.now().minusDays(40),
+            due = LocalDate.now().minusDays(30),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -65,7 +64,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getReturns("123456789",
         LocalDate.now(),
         LocalDate.now(),
         Status.All))
@@ -75,17 +74,17 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with a status of 'O'" should {
+  "calling getReturns with a status of 'O'" should {
 
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
 
-      val expected = Right(Obligations(
+      val expected = Right(VatReturns(
         Seq(
-          Obligation(
-            start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+          VatReturn(
+            start = LocalDate.now().minusDays(70),
+            end = LocalDate.now().minusDays(40),
+            due = LocalDate.now().minusDays(30),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -94,7 +93,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getReturns("123456789",
         LocalDate.now(),
         LocalDate.now(),
         Status.Outstanding))
@@ -104,26 +103,26 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with a status of 'F'" should {
+  "calling getReturns with a status of 'F'" should {
 
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubFulfilledObligations
 
-      val expected = Right(Obligations(
+      val expected = Right(VatReturns(
         Seq(
-          Obligation(
-            start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+          VatReturn(
+            start = LocalDate.now().minusDays(80),
+            end = LocalDate.now().minusDays(50),
+            due = LocalDate.now().minusDays(40),
             status = "F",
-            received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
+            received = Some(LocalDate.now().minusDays(45)),
             periodKey = "#001"
           )
         )
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getReturns("123456789",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -133,7 +132,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid VRN" should {
+  "calling getReturns with an invalid VRN" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidVrn
@@ -144,7 +143,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Outstanding))
@@ -154,7 +153,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid 'from' date" should {
+  "calling getReturns with an invalid 'from' date" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidFromDate
@@ -165,7 +164,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -175,7 +174,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid 'to' date" should {
+  "calling getReturns with an invalid 'to' date" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidToDate
@@ -186,7 +185,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -196,7 +195,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid date range" should {
+  "calling getReturns with an invalid date range" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidDateRange
@@ -207,7 +206,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-12-31"),
         LocalDate.parse("2017-01-01"),
         Status.Fulfilled))
@@ -217,7 +216,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid obligation status" should {
+  "calling getReturns with an invalid obligation status" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidStatus
@@ -228,7 +227,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -238,7 +237,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with multiple errors" should {
+  "calling getReturns with multiple errors" should {
 
     "return an MultipleErrors" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
@@ -246,7 +245,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Left(MultipleErrors)
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))

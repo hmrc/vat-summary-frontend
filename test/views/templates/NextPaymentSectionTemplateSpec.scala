@@ -18,14 +18,14 @@ package views.templates
 
 import java.time.LocalDate
 
-import models.payments.Payment
+import models.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
-class ReturnPaymentTemplateSpec extends ViewBaseSpec {
+class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
-  "The returnPayment template" when {
+  "The nextPaymentSection template" when {
 
     object Selectors {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"
@@ -43,7 +43,7 @@ class ReturnPaymentTemplateSpec extends ViewBaseSpec {
         "#001"
       )
 
-      lazy val view = views.html.templates.returnPayment(Some(payment))
+      lazy val view = views.html.templates.nextPaymentSection(Some(payment))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -61,7 +61,7 @@ class ReturnPaymentTemplateSpec extends ViewBaseSpec {
 
     "there is no payment to display" should {
 
-      lazy val view = views.html.templates.returnPayment(None)
+      lazy val view = views.html.templates.nextPaymentSection(None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'No payment due' heading" in {

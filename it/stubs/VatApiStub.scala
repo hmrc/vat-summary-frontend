@@ -21,8 +21,8 @@ import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
+import models.{VatReturn, VatReturns}
 import models.errors.{ApiMultiError, ApiSingleError}
-import models.obligations.{Obligation, Obligations}
 import play.api.http.Status._
 import play.api.libs.json.Json
 
@@ -102,7 +102,7 @@ object VatApiStub extends WireMockMethods {
   }
 
 
-  private val pastFulfilledObligation = Obligation(
+  private val pastFulfilledObligation = VatReturn(
     start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
     end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
     due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
@@ -111,7 +111,7 @@ object VatApiStub extends WireMockMethods {
     periodKey = "#001"
   )
 
-  private val pastOutstandingObligation = Obligation(
+  private val pastOutstandingObligation = VatReturn(
     start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
     end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
     due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
@@ -120,22 +120,22 @@ object VatApiStub extends WireMockMethods {
     periodKey = "#004"
   )
 
-  private val allObligations = Obligations(
+  private val allObligations = VatReturns(
     Seq(
       pastFulfilledObligation,
       pastOutstandingObligation
     )
   )
 
-  private val outstandingObligations = Obligations(
+  private val outstandingObligations = VatReturns(
     allObligations.obligations.filter(_.status == "O")
   )
 
-  private val fulfilledObligations = Obligations(
+  private val fulfilledObligations = VatReturns(
     allObligations.obligations.filter(_.status == "F")
   )
 
-  private val noObligations = Obligations(Seq.empty)
+  private val noObligations = VatReturns(Seq.empty)
 
   private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
   private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)

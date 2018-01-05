@@ -16,17 +16,17 @@
 
 package connectors.httpParsers
 
+import models.VatReturns
 import models.errors.{ServerSideError, UnexpectedStatusError}
-import models.obligations.Obligations
 import play.api.http.Status.{BAD_REQUEST, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object ObligationsHttpParser extends ResponseHttpParsers {
+object VatReturnsHttpParser extends ResponseHttpParsers {
 
-  implicit object ObligationsReads extends HttpReads[HttpGetResult[Obligations]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Obligations] = {
+  implicit object VatReturnsReads extends HttpReads[HttpGetResult[VatReturns]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[VatReturns] = {
       response.status match {
-        case OK => Right(response.json.as[Obligations])
+        case OK => Right(response.json.as[VatReturns])
         case BAD_REQUEST => handleBadRequest(response.json)
         case status if status >= 500 && status < 600 => Left(ServerSideError)
         case status => Left(UnexpectedStatusError(status))

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import models.payments.Payment
-@import views.html.templates.formatters.dates._
-@import views.html.templates.formatters.money._
-@(payment: Option[Payment])(implicit messages: Messages)
+package models
 
-@paymentMessage = {@messages(payment.fold("payment.noPayment") {_ => "payment.nextPayment"})}
+import play.api.libs.json.{Format, Json}
 
-  <div class="column-one-half">
-    <h2 class="heading-medium" id="payment-header" style="margin-top: 0px">@paymentMessage</h2>
-    @payment.map { pay =>
-      <p>@displayDate(pay.due)</p>
-      <p><a href="#">@messages("payment.check")</a></p>
-    }
-  </div>
+case class VatReturns(obligations: Seq[VatReturn])
+
+object VatReturns {
+
+  implicit val format: Format[VatReturns] = Json.format[VatReturns]
+
+}

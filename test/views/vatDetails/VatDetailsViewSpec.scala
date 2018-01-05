@@ -16,11 +16,9 @@
 
 package views.vatDetails
 
-import models.{User, VatDetailsModel}
+import models.{Payment, User, VatDetailsModel, VatReturn}
 import java.time.LocalDate
 
-import models.obligations.Obligation
-import models.payments.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
@@ -38,7 +36,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   private val date = LocalDate.now()
   private val user = User("1111")
-  val obligation = Obligation(date, date, date, "", None, "")
+  val obligation = VatReturn(date, date, date, "", None, "")
   val payment = Payment(date, date, BigDecimal(100), "", "")
 
   "Rendering the VAT details page" should {

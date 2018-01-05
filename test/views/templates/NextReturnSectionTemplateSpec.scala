@@ -18,14 +18,14 @@ package views.templates
 
 import java.time.LocalDate
 
-import models.obligations.Obligation
+import models.VatReturn
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
-class ReturnObligationTemplateSpec extends ViewBaseSpec {
+class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
-  "returnObligation template" when {
+  "nextReturnSection template" when {
 
     object Selectors {
       val nextReturnDueHeading = "h2:nth-of-type(1)"
@@ -33,9 +33,9 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
       val viewReturnsButton = "a:nth-of-type(1)"
     }
 
-    "there is an obligation to display" should {
+    "there is an VAT return to display" should {
 
-      val obligation = Obligation(
+      val obligation = VatReturn(
         start = LocalDate.parse("2017-01-01"),
         end = LocalDate.parse("2017-03-31"),
         due = LocalDate.parse("2017-04-30"),
@@ -44,14 +44,14 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
         "#001"
       )
 
-      lazy val view = views.html.templates.returnObligation(Some(obligation))
+      lazy val view = views.html.templates.nextReturnSection(Some(obligation))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
         elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
       }
 
-      "display the due of the return obligation" in {
+      "display the due of the return" in {
         elementText(Selectors.nextReturnDate) shouldBe "30 April 2017"
       }
 
@@ -60,9 +60,9 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
       }
     }
 
-    "there is no obligation to display" should {
+    "there is no VAT return to display" should {
 
-      lazy val view = views.html.templates.returnObligation(None)
+      lazy val view = views.html.templates.nextReturnSection(None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'No return due' heading" in {

@@ -28,16 +28,19 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.Future
 
 @Singleton
-class VatDetailsController @Inject()(val messagesApi: MessagesApi, val enrolmentsAuthService: EnrolmentsAuthService,
+class VatDetailsController @Inject()(val messagesApi: MessagesApi,
+                                     val enrolmentsAuthService: EnrolmentsAuthService,
                                      btaHeaderPartialService: BtaHeaderPartialService,
-                                     implicit val appConfig: AppConfig, vatDetailsService: VatDetailsService)
+                                     implicit val appConfig: AppConfig,
+                                     vatDetailsService: VatDetailsService)
   extends AuthorisedController with I18nSupport {
 
-  def details(): Action[AnyContent] = authorisedAction { implicit request => user =>
-    for {
-      detailsModel <- handleVatDetailsModel(user)
-      serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
-    } yield Ok(views.html.vatDetails.details(user, detailsModel, serviceInfo))
+  def details(): Action[AnyContent] = authorisedAction { implicit request =>
+    user =>
+      for {
+        detailsModel <- handleVatDetailsModel(user)
+        serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
+      } yield Ok(views.html.vatDetails.details(user, detailsModel, serviceInfo))
   }
 
   private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {

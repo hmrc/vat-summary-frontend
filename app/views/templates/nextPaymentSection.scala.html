@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models
+@import models.Payment
+@import views.html.templates.formatters.dates._
+@import views.html.templates.formatters.money._
+@(payment: Option[Payment])(implicit messages: Messages)
 
-case class VatDetailsModel(vatReturn: Option[VatReturn], payment: Option[Payment])
+@paymentMessage = {@messages(payment.fold("payment.noPayment") {_ => "payment.nextPayment"})}
+
+<div class="column-one-half">
+  <h2 class="heading-medium" id="payment-header" style="margin-top: 0px">@paymentMessage</h2>
+  @payment.map { pay =>
+    <p>@displayDate(pay.due)</p>
+    <p><a href="#">@messages("payment.check")</a></p>
+  }
+</div>
