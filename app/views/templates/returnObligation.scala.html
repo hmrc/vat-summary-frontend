@@ -19,16 +19,16 @@
 @(obligation: Option[Obligation])(implicit messages: Messages)
 
 @noObligations = {
-    <section class="divider--bottom">
-        <h2 class="heading-large">@messages("returnObligation.noReturn")</h2>
-    </section>
+  <div class="column-one-half">
+    <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@messages("returnObligation.noReturn")</h2>
+  </div>
 }
 
 @obligation.fold(noObligations) { ob =>
-    <section class="divider--bottom">
-        <h2 class="heading-large">@messages("returnObligation.nextReturn")</h2>
-        <p class="lede">@displayDate(ob.due)</p>
-        <p>@messages("returnObligation.you") @messages("returnObligation.submitUsingSoftware").</p>
-    </section>
+  <div class="column-one-half">
+    <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
+    <p>@displayDate(ob.due)</p>
+    <p><a href="#">@messages("returnObligation.viewReturns")</a></p>
+  </div>
 }
 

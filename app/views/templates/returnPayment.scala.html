@@ -19,19 +19,12 @@
 @import views.html.templates.formatters.money._
 @(payment: Option[Payment])(implicit messages: Messages)
 
-@noPayments = {
-  <section>
-    <h2 class="heading-large">@messages("payment.noPayment")</h2>
-  </section>
-}
+@paymentMessage = {@messages(payment.fold("payment.noPayment") {_ => "payment.nextPayment"})}
 
-@payment.fold(noPayments) { pay =>
-  <section>
-    <h2 class="heading-large">
-      @messages("payment.nextPayment")
-    </h2>
-    <p class="lede">@displayDate(pay.due)</p>
-      <p><strong>@displayMoney(pay.outstandingAmount)</strong></p>
-    <a href="#" class="button">@messages("payment.viewDetails")</a>
-  </section>
-}
+  <div class="column-one-half">
+    <h2 class="heading-medium" id="payment-header" style="margin-top: 0px">@paymentMessage</h2>
+    @payment.map { pay =>
+      <p>@displayDate(pay.due)</p>
+      <p><a href="#">@messages("payment.check")</a></p>
+    }
+  </div>

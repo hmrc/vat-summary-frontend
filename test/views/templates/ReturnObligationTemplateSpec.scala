@@ -29,8 +29,8 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
 
     object Selectors {
       val nextReturnDueHeading = "h2:nth-of-type(1)"
-      val nextReturnDate = "p.lede:nth-of-type(1)"
-      val submitMethod = "p:nth-of-type(2)"
+      val nextReturnDate = "p:nth-of-type(1)"
+      val viewReturnsButton = "a:nth-of-type(1)"
     }
 
     "there is an obligation to display" should {
@@ -55,8 +55,8 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.nextReturnDate) shouldBe "30 April 2017"
       }
 
-      "display the 'You submit using software' text" in {
-        elementText(Selectors.submitMethod) shouldBe "You submit using software."
+      "display the 'View your returns' button" in {
+        elementText(Selectors.viewReturnsButton) shouldBe "View your returns"
       }
     }
 

@@ -14,13 +14,13 @@ partials.btaHome.vatSection.reporting.message = You''ve signed up to report your
 partials.btaHome.vatSection.vatMessage = This is added to the price of goods and services.
 partials.btaHome.vatSection.manageVat = Manage your VAT
 
-vatDetails.title = Your VAT
-vatDetails.vrn = VAT registration number (VRN): {0}
-vatDetails.returns.link = Returns
-vatDetails.returns.check = Check your current and previous returns.
+vatDetails.title = VAT
+vatDetails.returns.link = VAT account details
+vatDetails.returns.view = View your registered VAT details and see how to change them.
 
 returnObligation.noReturn = No return due
 returnObligation.nextReturn = Next return due
+returnObligation.viewReturns = View your returns
 returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
@@ -28,7 +28,7 @@ returnObligation.submitUsingSoftware = submit using software
 
 payment.noPayment = No payment due
 payment.nextPayment = Next payment due
-payment.viewDetails = View payment details
+payment.check = Check before paying
 payment.overdue = Overdue
 
 featureSwitch.title = Feature switches
