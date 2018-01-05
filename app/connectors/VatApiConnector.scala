@@ -21,8 +21,8 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.ObligationsHttpParser.HttpGetResult
-import models.Obligations
-import models.obligations.Obligation.Status
+import models.VatReturns
+import models.VatReturn.Status
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -37,7 +37,7 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 
   def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[Obligations]] = {
+  : Future[HttpGetResult[VatReturns]] = {
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
       .map {
         case rObs@Right(_) => rObs

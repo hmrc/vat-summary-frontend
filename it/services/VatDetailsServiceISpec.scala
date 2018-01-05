@@ -24,7 +24,7 @@ import connectors.httpParsers.ObligationsHttpParser._
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
 import models.payments.Payment
-import models.{Obligation, User, VatDetailsModel}
+import models.{VatReturn, User, VatDetailsModel}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -47,7 +47,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
       "return the user's latest obligation" in new Test {
         override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
 
-        val obligation = Obligation(
+        val obligation = VatReturn(
           start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
           end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
           due = LocalDate.now().minus(30L, ChronoUnit.DAYS),

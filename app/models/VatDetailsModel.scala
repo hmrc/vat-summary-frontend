@@ -18,4 +18,4 @@ package models
 
 import models.payments.Payment
 
-case class VatDetailsModel(obligation: Option[Obligation], payment: Option[Payment])
+case class VatDetailsModel(obligation: Option[VatReturn], payment: Option[Payment])

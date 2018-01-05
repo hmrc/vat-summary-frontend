@@ -18,7 +18,7 @@ package views.templates
 
 import java.time.LocalDate
 
-import models.Obligation
+import models.VatReturn
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -35,7 +35,7 @@ class ReturnObligationTemplateSpec extends ViewBaseSpec {
 
     "there is an obligation to display" should {
 
-      val obligation = Obligation(
+      val obligation = VatReturn(
         start = LocalDate.parse("2017-01-01"),
         end = LocalDate.parse("2017-03-31"),
         due = LocalDate.parse("2017-04-30"),

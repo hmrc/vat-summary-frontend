@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import models.Obligation
+@import models.VatReturn
 @import views.html.templates.formatters.dates._
-@(obligation: Option[Obligation])(implicit messages: Messages)
+@(obligation: Option[VatReturn])(implicit messages: Messages)
 
 @returnMessage = {@messages(obligation.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 

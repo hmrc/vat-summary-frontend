@@ -21,7 +21,7 @@ import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.{Obligation, Obligations}
+import models.{VatReturn, VatReturns}
 import models.obligations.Obligation.Status
 import models.errors.{BadRequestError, MultipleErrors}
 import stubs.VatApiStub
@@ -43,9 +43,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubAllObligations
 
-      val expected = Right(Obligations(
+      val expected = Right(VatReturns(
         Seq(
-          Obligation(
+          VatReturn(
             start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
             end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
             due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
@@ -53,7 +53,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
             received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
             periodKey = "#001"
           ),
-          Obligation(
+          VatReturn(
             start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
             end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
             due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
@@ -80,9 +80,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
 
-      val expected = Right(Obligations(
+      val expected = Right(VatReturns(
         Seq(
-          Obligation(
+          VatReturn(
             start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
             end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
             due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
@@ -109,9 +109,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubFulfilledObligations
 
-      val expected = Right(Obligations(
+      val expected = Right(VatReturns(
         Seq(
-          Obligation(
+          VatReturn(
             start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
             end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
             due = LocalDate.now().minus(40L, ChronoUnit.DAYS),

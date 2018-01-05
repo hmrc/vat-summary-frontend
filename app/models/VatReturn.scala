@@ -16,12 +16,25 @@
 
 package models
 
+import java.time.LocalDate
+
 import play.api.libs.json.{Format, Json}
 
-case class Obligations(obligations: Seq[Obligation])
+case class VatReturn(start: LocalDate,
+                     end: LocalDate,
+                     due: LocalDate,
+                     status: String,
+                     received: Option[LocalDate],
+                     periodKey: String) extends DueDate
 
-object Obligations {
+object VatReturn {
 
-  implicit val format: Format[Obligations] = Json.format[Obligations]
+  implicit val format: Format[VatReturn] = Json.format[VatReturn]
+
+  object Status extends Enumeration {
+    val All: Status.Value = Value("A")
+    val Outstanding: Status.Value = Value("O")
+    val Fulfilled: Status.Value = Value("F")
+  }
 
 }

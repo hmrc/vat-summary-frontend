@@ -16,7 +16,7 @@
 
 package views.vatDetails
 
-import models.{Obligation, User, VatDetailsModel}
+import models.{VatReturn, User, VatDetailsModel}
 import java.time.LocalDate
 
 import models.payments.Payment
@@ -37,7 +37,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   private val date = LocalDate.now()
   private val user = User("1111")
-  val obligation = Obligation(date, date, date, "", None, "")
+  val obligation = VatReturn(date, date, date, "", None, "")
   val payment = Payment(date, date, BigDecimal(100), "", "")
 
   "Rendering the VAT details page" should {

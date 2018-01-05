@@ -19,7 +19,7 @@ package connectors.httpParsers
 import java.time.LocalDate
 
 import connectors.httpParsers.ObligationsHttpParser.ObligationsReads
-import models.{Obligations, _}
+import models.{VatReturns, _}
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -46,8 +46,8 @@ class ObligationsHttpParserSpec extends UnitSpec {
         )
       ))
 
-      val expected = Right(Obligations(Seq(
-        Obligation(
+      val expected = Right(VatReturns(Seq(
+        VatReturn(
           start = LocalDate.parse("2017-01-01"),
           end = LocalDate.parse("2017-03-30"),
           due = LocalDate.parse("2017-04-30"),

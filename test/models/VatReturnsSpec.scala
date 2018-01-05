@@ -21,13 +21,13 @@ import java.time.LocalDate
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 
-class ObligationsSpec extends UnitSpec {
+class VatReturnsSpec extends UnitSpec {
 
   "An obligation" should {
 
     "parse to the correct json format" in {
 
-      val input = Obligation(
+      val input = VatReturn(
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         LocalDate.parse("2018-01-31"),
@@ -50,7 +50,7 @@ class ObligationsSpec extends UnitSpec {
       val input =
         """{"start":"2017-02-02","end":"2017-11-11","due":"2018-01-31","status":"O","periodKey":"#003"}"""
 
-      val expected = Obligation(
+      val expected = VatReturn(
         LocalDate.parse("2017-02-02"),
         LocalDate.parse("2017-11-11"),
         LocalDate.parse("2018-01-31"),
@@ -59,7 +59,7 @@ class ObligationsSpec extends UnitSpec {
         "#003"
       )
 
-      val result = Json.parse(input).as[Obligation]
+      val result = Json.parse(input).as[VatReturn]
 
       result shouldEqual expected
 
@@ -71,9 +71,9 @@ class ObligationsSpec extends UnitSpec {
 
     "parse to the correct json" in {
 
-      val input = Obligations(
+      val input = VatReturns(
         Seq(
-          Obligation(
+          VatReturn(
             LocalDate.parse("2017-01-01"),
             LocalDate.parse("2017-12-31"),
             LocalDate.parse("2018-01-31"),
@@ -98,9 +98,9 @@ class ObligationsSpec extends UnitSpec {
       val input =
         """{"obligations":[{"start":"2017-01-01","end":"2017-12-31","due":"2018-01-31","status":"O","periodKey":"#001"}]}"""
 
-      val expected = Obligations(
+      val expected = VatReturns(
         Seq(
-          Obligation(
+          VatReturn(
             LocalDate.parse("2017-01-01"),
             LocalDate.parse("2017-12-31"),
             LocalDate.parse("2018-01-31"),
@@ -111,7 +111,7 @@ class ObligationsSpec extends UnitSpec {
         )
       )
 
-      val result = Json.parse(input).as[Obligations]
+      val result = Json.parse(input).as[VatReturns]
 
       result shouldEqual expected
 
