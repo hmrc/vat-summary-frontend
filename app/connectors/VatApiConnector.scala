@@ -48,4 +48,9 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
           httpError
       }
   }
+
+  // TODO: This is currently a static return; needs replacing with a real call
+  def getTradingName(vrn: String): Future[String] = {
+    Future.successful("Cheapo Clothing Ltd")
+  }
 }
