@@ -30,9 +30,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val nextPaymentHeading = "h2"
-    val nextReturnHeading = ".divider--bottom h2"
-    val returnsHeading = "h2 a"
+    val nextPaymentHeading = "h2#payment-header"
+    val nextReturnHeading = "h2#return-header"
+    val accountDetailsHeading = "h3 a"
     val header = "div.test"
   }
 
@@ -47,15 +47,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Your VAT"
+      document.title shouldBe "VAT"
     }
 
-    "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Your VAT VAT registration number (VRN): 1111"
-    }
-
-    "have the Returns section" in {
-      elementText(Selectors.returnsHeading) shouldBe "Returns"
+    "have the account details section" in {
+      elementText(Selectors.accountDetailsHeading) shouldBe "VAT account details"
     }
   }
 

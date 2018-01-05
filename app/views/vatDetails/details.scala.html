@@ -19,38 +19,21 @@
   @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig, serviceInfo = serviceInfo) {
     <div class="grid-row">
       <div class="column-two-thirds">
-        <h1 class="heading-xlarge"><span class="heading-secondary">Betty Jones</span>VAT</h1>
+        <h1 class="heading-xlarge"><span class="heading-secondary">Betty Jones</span>@messages("vatDetails.title")</h1>
 
-        <section class="divider-bottom">
+        <section class="divider--bottom">
           <div class="grid-row">
-            <div class="column-one-half">
-              @views.html.templates.returnPayment(details.payment)
-              @views.html.templates.returnObligation(details.obligation)
-
-        </section>
-
-      </div>
-    </div>
-
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-          @messages("vatDetails.title")
-          <span class="heading-secondary">@messages("vatDetails.vrn", user.vrn)</span>
-        </h1>
-
-        @views.html.templates.returnPayment(details.payment)
-        @views.html.templates.returnObligation(details.obligation)
-        <section>
-          <div class="grid-row">
-            <div class="column-one-half">
-              <h2 class="heading-medium">
-                <a href="#">@messages("vatDetails.returns.link")</a>
-              </h2>
-              <p>@messages("vatDetails.returns.check")</p>
-            </div>
+            @views.html.templates.returnPayment(details.payment)
+            @views.html.templates.returnObligation(details.obligation)
           </div>
         </section>
+
+        <div class="grid-row">
+          <div class="column-one-half">
+            <br><h3 class="heading-small"><a href="#">@messages("vatDetails.returns.link")</a></h3>
+            <p>@messages("vatDetails.returns.view")</p>
+          </div>
+        </div>
 
       </div>
     </div>

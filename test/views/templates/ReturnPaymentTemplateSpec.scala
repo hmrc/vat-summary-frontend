@@ -29,8 +29,7 @@ class ReturnPaymentTemplateSpec extends ViewBaseSpec {
 
     object Selectors {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"
-      val nextPaymentDate = "p.lede:nth-of-type(1)"
-      val outstandingAmount = "p:nth-of-type(2)"
+      val nextPaymentDate = "p:nth-of-type(1)"
       val viewPaymentButton = "a:nth-of-type(1)"
     }
 
@@ -55,12 +54,8 @@ class ReturnPaymentTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.nextPaymentDate) shouldBe "8 March 2017"
       }
 
-      "display the outstanding amount of the payment" in {
-        elementText(Selectors.outstandingAmount) shouldBe "£9,999"
-      }
-
       "display the 'View payment details' button" in {
-        elementText(Selectors.viewPaymentButton) shouldBe "View payment details"
+        elementText(Selectors.viewPaymentButton) shouldBe "Check before paying"
       }
     }
 
