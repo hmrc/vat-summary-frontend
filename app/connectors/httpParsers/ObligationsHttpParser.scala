@@ -16,8 +16,8 @@
 
 package connectors.httpParsers
 
+import models.Obligations
 import models.errors.{ServerSideError, UnexpectedStatusError}
-import models.obligations.Obligations
 import play.api.http.Status.{BAD_REQUEST, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 

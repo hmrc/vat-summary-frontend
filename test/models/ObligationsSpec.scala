@@ -18,7 +18,6 @@ package models
 
 import java.time.LocalDate
 
-import models.obligations.{Obligation, Obligations}
 import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 

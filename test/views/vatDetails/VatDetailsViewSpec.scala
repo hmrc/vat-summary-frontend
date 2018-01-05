@@ -16,10 +16,9 @@
 
 package views.vatDetails
 
-import models.{User, VatDetailsModel}
+import models.{Obligation, User, VatDetailsModel}
 import java.time.LocalDate
 
-import models.obligations.Obligation
 import models.payments.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

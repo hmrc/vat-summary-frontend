@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package models.obligations
+package models
 
 import java.time.LocalDate
 
-import models.DueDate
 import play.api.libs.json.{Format, Json}
 
 case class Obligation(start: LocalDate,

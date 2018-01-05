@@ -18,7 +18,7 @@ package views.templates
 
 import java.time.LocalDate
 
-import models.obligations.Obligation
+import models.Obligation
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec

@@ -21,8 +21,8 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.ObligationsHttpParser.HttpGetResult
+import models.Obligations
 import models.obligations.Obligation.Status
-import models.obligations.Obligations
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient

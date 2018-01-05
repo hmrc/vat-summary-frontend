@@ -22,8 +22,7 @@ import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.ObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
-import models._
-import models.obligations.{Obligation, Obligations}
+import models.{Obligations, _}
 import models.payments.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 
