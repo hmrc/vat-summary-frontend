@@ -20,17 +20,17 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import connectors.httpParsers.PaymentsHttpParser.HttpGetResult
-import models.payments.{Payment, Payments}
+import models.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FinancialDataConnector  @Inject()(http: HttpClient) {
+class FinancialDataConnector @Inject()(http: HttpClient) {
 
-
-  def getPaymentData(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+  def getPaymentsForVatReturns(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+    // TODO: This needs replacing with a real call to the financial data api once it becomes available
     Future.successful(Right(
       Payments(
         Seq(

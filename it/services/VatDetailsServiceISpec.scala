@@ -23,8 +23,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import connectors.httpParsers.VatReturnsHttpParser._
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
-import models.payments.Payment
-import models.{VatReturn, User, VatDetailsModel}
+import models.{Payment, User, VatDetailsModel, VatReturn}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 

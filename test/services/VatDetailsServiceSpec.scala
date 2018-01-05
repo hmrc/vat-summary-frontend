@@ -22,8 +22,7 @@ import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.VatReturnsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
-import models.{VatReturns, _}
-import models.payments.{Payment, Payments}
+import models.{Payments, VatReturns, _}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits._
@@ -116,7 +115,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturns(Seq(currentObligation)))))
 
-        (mockFinancialDataConnector.getPaymentData(_:String)
+        (mockFinancialDataConnector.getPaymentsForVatReturns(_:String)
         (_:HeaderCarrier, _:ExecutionContext))
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
@@ -137,7 +136,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturns(Seq.empty))))
 
-        (mockFinancialDataConnector.getPaymentData(_:String)
+        (mockFinancialDataConnector.getPaymentsForVatReturns(_:String)
         (_:HeaderCarrier, _:ExecutionContext))
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq.empty))))

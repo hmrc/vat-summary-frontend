@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package models.payments
+package models
 
 import java.time.LocalDate
 
-import models.Obligation
 import play.api.libs.json.{Format, Json}
 
 case class Payment(end: LocalDate,
