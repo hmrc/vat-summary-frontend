@@ -179,4 +179,18 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
   }
 
+  "Calling .getTradingName" should {
+
+    "return a trading name" in new Test {
+      val exampleTradingName: String = "Cheapo Clothing Ltd"
+
+      (mockVatApiConnector.getTradingName(_: String))
+        .expects(*)
+        .returns(Future.successful(exampleTradingName))
+
+      lazy val result: String = await(service.getTradingName(User("999999999")))
+
+      result shouldBe exampleTradingName
+    }
+  }
 }

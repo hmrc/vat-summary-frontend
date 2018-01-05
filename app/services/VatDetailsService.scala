@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService @Inject()(vatConnection: VatApiConnector, financialDataConnector: FinancialDataConnector) {
+class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDataConnector: FinancialDataConnector) {
 
   private[services] def getNextObligation[T <: Obligation](obligations: Seq[T], date: LocalDate): Option[T] = {
     val presetAndFuture = obligations
@@ -53,7 +53,7 @@ class VatDetailsService @Inject()(vatConnection: VatApiConnector, financialDataC
     val dateTo = date.plusDays(numDaysAhead)
 
     val result = for {
-      nextReturn <- EitherT(vatConnection.getReturns(user.vrn, dateFrom, dateTo, Outstanding))
+      nextReturn <- EitherT(vatApiConnector.getReturns(user.vrn, dateFrom, dateTo, Outstanding))
         .map(obligations => getNextObligation(obligations.obligations, date))
       nextPayment <- EitherT(financialDataConnector.getPaymentsForVatReturns(user.vrn))
         .map(payments => getNextObligation(payments.payments, date))
@@ -62,4 +62,7 @@ class VatDetailsService @Inject()(vatConnection: VatApiConnector, financialDataC
     result.value
   }
 
+  def getTradingName(user: User): Future[String] = {
+    vatApiConnector.getTradingName(user.vrn)
+  }
 }
