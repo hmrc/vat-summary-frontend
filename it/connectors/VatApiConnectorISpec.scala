@@ -37,7 +37,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  "calling getObligations with a status of 'A'" should {
+  "calling getReturns with a status of 'A'" should {
 
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubAllObligations
@@ -74,7 +74,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with a status of 'O'" should {
+  "calling getReturns with a status of 'O'" should {
 
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
@@ -103,7 +103,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with a status of 'F'" should {
+  "calling getReturns with a status of 'F'" should {
 
     "return all obligations for a given period" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubFulfilledObligations
@@ -132,7 +132,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid VRN" should {
+  "calling getReturns with an invalid VRN" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidVrn
@@ -153,7 +153,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid 'from' date" should {
+  "calling getReturns with an invalid 'from' date" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidFromDate
@@ -174,7 +174,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid 'to' date" should {
+  "calling getReturns with an invalid 'to' date" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidToDate
@@ -195,7 +195,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid date range" should {
+  "calling getReturns with an invalid date range" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidDateRange
@@ -216,7 +216,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with an invalid obligation status" should {
+  "calling getReturns with an invalid obligation status" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubInvalidStatus
@@ -237,7 +237,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
-  "calling getObligations with multiple errors" should {
+  "calling getReturns with multiple errors" should {
 
     "return an MultipleErrors" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors

@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
-  import connectors.httpParsers.VatReturnsHttpParser.ObligationsReads
+  import connectors.httpParsers.VatReturnsHttpParser.VatReturnsReads
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 

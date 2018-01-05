@@ -16,4 +16,4 @@
 
 package models
 
-case class VatDetailsModel(obligation: Option[VatReturn], payment: Option[Payment])
+case class VatDetailsModel(vatReturn: Option[VatReturn], payment: Option[Payment])

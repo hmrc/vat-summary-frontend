@@ -16,14 +16,14 @@
 
 @import models.VatReturn
 @import views.html.templates.formatters.dates._
-@(obligation: Option[VatReturn])(implicit messages: Messages)
+@(vatReturn: Option[VatReturn])(implicit messages: Messages)
 
-@returnMessage = {@messages(obligation.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
+@nextReturnMessage = {@messages(vatReturn.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
 <div class="column-one-half">
-  <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@returnMessage</h2>
-  @obligation.map { ob =>
-    <p>@displayDate(ob.due)</p>
+  <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@nextReturnMessage</h2>
+  @vatReturn.map { obligation =>
+    <p>@displayDate(obligation.due)</p>
     <p><a href="#">@messages("returnObligation.viewReturns")</a></p>
   }
 </div>

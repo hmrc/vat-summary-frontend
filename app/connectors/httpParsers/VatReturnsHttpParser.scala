@@ -23,7 +23,7 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object VatReturnsHttpParser extends ResponseHttpParsers {
 
-  implicit object ObligationsReads extends HttpReads[HttpGetResult[VatReturns]] {
+  implicit object VatReturnsReads extends HttpReads[HttpGetResult[VatReturns]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[VatReturns] = {
       response.status match {
         case OK => Right(response.json.as[VatReturns])
