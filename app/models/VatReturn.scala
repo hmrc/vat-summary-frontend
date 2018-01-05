@@ -25,7 +25,7 @@ case class VatReturn(start: LocalDate,
                      due: LocalDate,
                      status: String,
                      received: Option[LocalDate],
-                     periodKey: String) extends DueDate
+                     periodKey: String) extends Obligation
 
 object VatReturn {
 

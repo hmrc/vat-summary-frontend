@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsService @Inject()(vatConnection: VatApiConnector, financialDataConnector: FinancialDataConnector) {
 
-  private[services] def getNextObligation[T <: DueDate](obligations: Seq[T], date: LocalDate): Option[T] = {
+  private[services] def getNextObligation[T <: Obligation](obligations: Seq[T], date: LocalDate): Option[T] = {
     val presetAndFuture = obligations
       .filter(obligation => obligation.due == date || obligation.due.isAfter(date))
       .sortWith(_.due isBefore _.due).headOption

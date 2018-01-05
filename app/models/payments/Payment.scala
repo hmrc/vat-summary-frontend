@@ -18,14 +18,14 @@ package models.payments
 
 import java.time.LocalDate
 
-import models.DueDate
+import models.Obligation
 import play.api.libs.json.{Format, Json}
 
 case class Payment(end: LocalDate,
                    due: LocalDate,
                    outstandingAmount: BigDecimal,
                    status: String,
-                   periodKey: String) extends DueDate
+                   periodKey: String) extends Obligation
 
 object Payment {
 

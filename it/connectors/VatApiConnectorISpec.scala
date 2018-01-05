@@ -17,13 +17,12 @@
 package connectors
 
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.{VatReturn, VatReturns}
 import models.VatReturn.Status
 import models.errors.{BadRequestError, MultipleErrors}
+import models.{VatReturn, VatReturns}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -46,17 +45,17 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturns(
         Seq(
           VatReturn(
-            start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+            start = LocalDate.now().minusDays(80),
+            end = LocalDate.now().minusDays(50),
+            due = LocalDate.now().minusDays(40),
             status = "F",
-            received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
+            received = Some(LocalDate.now().minusDays(45)),
             periodKey = "#001"
           ),
           VatReturn(
-            start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+            start = LocalDate.now().minusDays(70),
+            end = LocalDate.now().minusDays(40),
+            due = LocalDate.now().minusDays(30),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -83,9 +82,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturns(
         Seq(
           VatReturn(
-            start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+            start = LocalDate.now().minusDays(70),
+            end = LocalDate.now().minusDays(40),
+            due = LocalDate.now().minusDays(30),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -112,11 +111,11 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturns(
         Seq(
           VatReturn(
-            start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
-            end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
-            due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+            start = LocalDate.now().minusDays(80),
+            end = LocalDate.now().minusDays(50),
+            due = LocalDate.now().minusDays(40),
             status = "F",
-            received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
+            received = Some(LocalDate.now().minusDays(45)),
             periodKey = "#001"
           )
         )

@@ -18,7 +18,7 @@ package models
 
 import java.time.LocalDate
 
-trait DueDate {
+trait Obligation {
 
   def due: LocalDate
 
