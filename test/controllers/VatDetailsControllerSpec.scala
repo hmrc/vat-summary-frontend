@@ -48,6 +48,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
       )
     }
+    val tradingNameResult: String = "Trading Name"
     val btaPartialResult: Html = Html("<div>example</div>")
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
@@ -62,6 +63,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         (mockVatDetailsService.getVatDetails(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(vatServiceResult)
+
+        (mockVatDetailsService.getTradingName(_: User))
+          .expects(*)
+          .returns(tradingNameResult)
 
         (mockBtaHeaderPartialService.btaHeaderPartial()(_: Request[AnyContent]))
           .expects(*)
