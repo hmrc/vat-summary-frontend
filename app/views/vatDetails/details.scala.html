@@ -14,12 +14,15 @@
  * limitations under the License.
  *@
 
-@(user: models.User, details: models.VatDetailsModel, serviceInfo: Html = Html(""))(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: models.User,
+  details: models.VatDetailsModel,
+  serviceInfo: Html = Html(""),
+  tradingName: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
   @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig, serviceInfo = serviceInfo) {
     <div class="grid-row">
       <div class="column-two-thirds">
-        <h1 class="heading-xlarge"><span class="heading-secondary">Betty Jones</span>@messages("vatDetails.title")</h1>
+        <h1 class="heading-xlarge"><span class="heading-secondary">@tradingName</span>@messages("vatDetails.title")</h1>
 
         <section class="divider--bottom">
           <div class="grid-row">
