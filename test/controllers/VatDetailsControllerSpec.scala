@@ -39,7 +39,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNum", "123")), ""))))
 
-    val vatServiceResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
+    val vatServiceDetailsResult: Future[Right[Nothing, VatDetailsModel]] = Future.successful {
       Right(
         VatDetailsModel(
           Some(
@@ -48,6 +48,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
       )
     }
+    val vatServiceTradingNameResult: String = "Trading Name"
     val btaPartialResult: Html = Html("<div>example</div>")
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
@@ -61,7 +62,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       if (runMock) {
         (mockVatDetailsService.getVatDetails(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
-        .returns(vatServiceResult)
+        .returns(vatServiceDetailsResult)
+
+        (mockVatDetailsService.getTradingName(_: User))
+          .expects(*)
+          .returns(vatServiceTradingNameResult)
 
         (mockBtaHeaderPartialService.btaHeaderPartial()(_: Request[AnyContent]))
           .expects(*)
