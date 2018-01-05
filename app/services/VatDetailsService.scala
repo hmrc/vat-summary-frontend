@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
-import connectors.httpParsers.ObligationsHttpParser._
+import connectors.httpParsers.VatReturnsHttpParser._
 import connectors.{FinancialDataConnector, VatApiConnector}
 import models.VatReturn.Status._
 import models._
@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService @Inject()(connector: VatApiConnector, financialDataConnector: FinancialDataConnector) {
+class VatDetailsService @Inject()(vatConnection: VatApiConnector, financialDataConnector: FinancialDataConnector) {
 
   private[services] def getNextObligation[T <: DueDate](obligations: Seq[T], date: LocalDate): Option[T] = {
     val presetAndFuture = obligations
@@ -45,19 +45,19 @@ class VatDetailsService @Inject()(connector: VatApiConnector, financialDataConne
   }
 
   def getVatDetails(user: User,
-                    date: LocalDate = LocalDate.now())(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[VatDetailsModel]] = {
+                    date: LocalDate = LocalDate.now())
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatDetailsModel]] = {
     val numDaysPrior = 0
     val numDaysAhead = 365
     val dateFrom = date.minusDays(numDaysPrior)
     val dateTo = date.plusDays(numDaysAhead)
 
     val result = for {
-      returnObligation <- EitherT(connector.getObligations(user.vrn, dateFrom, dateTo, Outstanding))
-        .map(res => getNextObligation(res.obligations, date))
-      paymentObligation <- EitherT(financialDataConnector.getPaymentData(user.vrn))
-        .map(res => getNextObligation(res.payments, date))
-    } yield VatDetailsModel(returnObligation, paymentObligation)
+      nextReturn <- EitherT(vatConnection.getReturns(user.vrn, dateFrom, dateTo, Outstanding))
+        .map(obligations => getNextObligation(obligations.obligations, date))
+      nextPayment <- EitherT(financialDataConnector.getPaymentData(user.vrn))
+        .map(payments => getNextObligation(payments.payments, date))
+    } yield VatDetailsModel(nextReturn, nextPayment)
 
     result.value
   }

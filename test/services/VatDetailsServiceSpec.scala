@@ -19,7 +19,7 @@ package services
 import java.time.LocalDate
 
 import connectors.{FinancialDataConnector, VatApiConnector}
-import connectors.httpParsers.ObligationsHttpParser._
+import connectors.httpParsers.VatReturnsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
 import models.{VatReturns, _}
@@ -111,7 +111,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the most recent outstanding obligation" in new Test {
 
-        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
+        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturns(Seq(currentObligation)))))
@@ -132,7 +132,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return nothing" in new Test {
 
-        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
+        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturns(Seq.empty))))
@@ -152,7 +152,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns an HttpError" should {
 
       "return a Future containing the error" in new Test {
-        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
+        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
@@ -168,7 +168,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return a failed Future containing the exception" in new Test {
         val expected = new RuntimeException("test")
-        (mockVatApiConnector.getObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
+        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturn.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.failed(expected))

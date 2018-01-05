@@ -20,7 +20,7 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import connectors.httpParsers.ObligationsHttpParser.HttpGetResult
+import connectors.httpParsers.VatReturnsHttpParser.HttpGetResult
 import models.VatReturns
 import models.VatReturn.Status
 import play.api.Logger
@@ -32,11 +32,11 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
-  import connectors.httpParsers.ObligationsHttpParser.ObligationsReads
+  import connectors.httpParsers.VatReturnsHttpParser.ObligationsReads
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 
-  def getObligations(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
+  def getReturns(vrn: String, from: LocalDate, to: LocalDate, status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[HttpGetResult[VatReturns]] = {
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
       .map {

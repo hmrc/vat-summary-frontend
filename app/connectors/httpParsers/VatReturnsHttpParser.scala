@@ -21,7 +21,7 @@ import models.errors.{ServerSideError, UnexpectedStatusError}
 import play.api.http.Status.{BAD_REQUEST, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object ObligationsHttpParser extends ResponseHttpParsers {
+object VatReturnsHttpParser extends ResponseHttpParsers {
 
   implicit object ObligationsReads extends HttpReads[HttpGetResult[VatReturns]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[VatReturns] = {

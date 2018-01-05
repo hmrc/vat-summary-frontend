@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import java.time.LocalDate
 
-import connectors.httpParsers.ObligationsHttpParser.ObligationsReads
+import connectors.httpParsers.VatReturnsHttpParser.ObligationsReads
 import models.{VatReturns, _}
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import play.api.http.Status
@@ -26,7 +26,7 @@ import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
-class ObligationsHttpParserSpec extends UnitSpec {
+class VatReturnsHttpParserSpec extends UnitSpec {
 
   "ObligationsReads" when {
 

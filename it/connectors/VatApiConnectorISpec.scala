@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.{VatReturn, VatReturns}
-import models.obligations.Obligation.Status
+import models.VatReturn.Status
 import models.errors.{BadRequestError, MultipleErrors}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -65,7 +65,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getReturns("123456789",
         LocalDate.now(),
         LocalDate.now(),
         Status.All))
@@ -94,7 +94,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getReturns("123456789",
         LocalDate.now(),
         LocalDate.now(),
         Status.Outstanding))
@@ -123,7 +123,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("123456789",
+      private val result = await(connector.getReturns("123456789",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -144,7 +144,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Outstanding))
@@ -165,7 +165,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -186,7 +186,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -207,7 +207,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-12-31"),
         LocalDate.parse("2017-01-01"),
         Status.Fulfilled))
@@ -228,7 +228,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
@@ -246,7 +246,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Left(MultipleErrors)
 
       setupStubs()
-      private val result = await(connector.getObligations("111",
+      private val result = await(connector.getReturns("111",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
