@@ -53,7 +53,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
     val dateTo = date.plusDays(numDaysAhead)
 
     val result = for {
-      nextReturn <- EitherT(vatApiConnector.getReturns(user.vrn, dateFrom, dateTo, Outstanding))
+      nextReturn <- EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
         .map(obligations => getNextObligation(obligations.obligations, date))
       nextPayment <- EitherT(financialDataConnector.getPaymentsForVatReturns(user.vrn))
         .map(payments => getNextObligation(payments.payments, date))

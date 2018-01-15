@@ -36,7 +36,7 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 
-  def getReturns(vrn: String,
+  def getVatReturnObligations(vrn: String,
                  from: LocalDate,
                  to: LocalDate,
                  status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {

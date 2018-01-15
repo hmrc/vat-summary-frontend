@@ -110,7 +110,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the most recent outstanding obligation" in new Test {
 
-        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
+        (mockVatApiConnector.getVatReturnObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
@@ -131,7 +131,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return nothing" in new Test {
 
-        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
+        (mockVatApiConnector.getVatReturnObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
@@ -151,7 +151,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns an HttpError" should {
 
       "return a Future containing the error" in new Test {
-        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
+        (mockVatApiConnector.getVatReturnObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
@@ -167,7 +167,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return a failed Future containing the exception" in new Test {
         val expected = new RuntimeException("test")
-        (mockVatApiConnector.getReturns(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
+        (mockVatApiConnector.getVatReturnObligations(_:String, _:LocalDate, _:LocalDate, _:VatReturnObligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*,*,*,*,*,*)
           .returns(Future.failed(expected))
