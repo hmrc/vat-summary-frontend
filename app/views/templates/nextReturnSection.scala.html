@@ -14,15 +14,14 @@
  * limitations under the License.
  *@
 
-@import models.VatReturn
 @import views.html.templates.formatters.dates._
-@(vatReturn: Option[VatReturn])(implicit messages: Messages, appConfig: config.AppConfig)
+@(vatReturnObligation: Option[VatReturnObligation])(implicit messages: Messages, appConfig: config.AppConfig)
 
-@nextReturnMessage = {@messages(vatReturn.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
+@nextReturnMessage = {@messages(vatReturnObligation.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
 <div class="column-one-half">
   <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@nextReturnMessage</h2>
-  @vatReturn.map { obligation =>
+  @vatReturnObligation.map { obligation =>
     <p>@displayDate(obligation.due)</p>
     <p><a href="@{appConfig.vatReturnsBaseUrl}">@messages("returnObligation.viewReturns")</a></p>
   }

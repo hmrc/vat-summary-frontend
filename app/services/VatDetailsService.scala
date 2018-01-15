@@ -21,10 +21,11 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
-import connectors.httpParsers.VatReturnsHttpParser._
+import connectors.httpParsers.VatReturnObligationsHttpParser._
 import connectors.{FinancialDataConnector, VatApiConnector}
-import models.VatReturn.Status._
+import models.VatReturnObligation.Status._
 import models._
+import models.viewModels.VatDetailsModel
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -53,7 +54,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
     val dateTo = date.plusDays(numDaysAhead)
 
     val result = for {
-      nextReturn <- EitherT(vatApiConnector.getReturns(user.vrn, dateFrom, dateTo, Outstanding))
+      nextReturn <- EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
         .map(obligations => getNextObligation(obligations.obligations, date))
       nextPayment <- EitherT(financialDataConnector.getPaymentsForVatReturns(user.vrn))
         .map(payments => getNextObligation(payments.payments, date))

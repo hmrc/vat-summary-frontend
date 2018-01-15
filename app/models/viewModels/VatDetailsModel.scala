@@ -14,27 +14,8 @@
  * limitations under the License.
  */
 
-package models
+package models.viewModels
 
-import java.time.LocalDate
+import models.{Payment, VatReturnObligation}
 
-import play.api.libs.json.{Format, Json}
-
-case class VatReturn(start: LocalDate,
-                     end: LocalDate,
-                     due: LocalDate,
-                     status: String,
-                     received: Option[LocalDate],
-                     periodKey: String) extends Obligation
-
-object VatReturn {
-
-  implicit val format: Format[VatReturn] = Json.format[VatReturn]
-
-  object Status extends Enumeration {
-    val All: Status.Value = Value("A")
-    val Outstanding: Status.Value = Value("O")
-    val Fulfilled: Status.Value = Value("F")
-  }
-
-}
+case class VatDetailsModel(vatReturn: Option[VatReturnObligation], payment: Option[Payment])

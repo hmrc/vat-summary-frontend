@@ -20,10 +20,11 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import connectors.httpParsers.VatReturnsHttpParser._
+import connectors.httpParsers.VatReturnObligationsHttpParser._
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
-import models.{Payment, User, VatDetailsModel, VatReturn}
+import models.viewModels.VatDetailsModel
+import models.{Payment, User, VatReturnObligation}
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -46,7 +47,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
       "return the user's latest obligation" in new Test {
         override def setupStubs(): StubMapping = VatApiStub.stubOutstandingObligations
 
-        val obligation = VatReturn(
+        val obligation = VatReturnObligation(
           start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
           end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
           due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
