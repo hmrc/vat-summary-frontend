@@ -18,15 +18,15 @@ package connectors.httpParsers
 
 import java.time.LocalDate
 
-import connectors.httpParsers.VatReturnsHttpParser.VatReturnsReads
-import models.{VatReturns, _}
+import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
+import models.{VatReturnObligations, _}
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
-class VatReturnsHttpParserSpec extends UnitSpec {
+class VatReturnObligationsHttpParserSpec extends UnitSpec {
 
   "VatReturnsReads" when {
 
@@ -46,8 +46,8 @@ class VatReturnsHttpParserSpec extends UnitSpec {
         )
       ))
 
-      val expected = Right(VatReturns(Seq(
-        VatReturn(
+      val expected = Right(VatReturnObligations(Seq(
+        VatReturnObligation(
           start = LocalDate.parse("2017-01-01"),
           end = LocalDate.parse("2017-03-30"),
           due = LocalDate.parse("2017-04-30"),

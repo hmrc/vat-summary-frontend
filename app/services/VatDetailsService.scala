@@ -21,9 +21,9 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
-import connectors.httpParsers.VatReturnsHttpParser._
+import connectors.httpParsers.VatReturnObligationsHttpParser._
 import connectors.{FinancialDataConnector, VatApiConnector}
-import models.VatReturn.Status._
+import models.VatReturnObligation.Status._
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
 

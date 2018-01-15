@@ -19,7 +19,7 @@ package controllers
 import java.time.LocalDate
 
 import models.errors.{BadRequestError, HttpError}
-import models.{VatReturn, User, VatDetailsModel}
+import models.{VatReturnObligation, User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
@@ -43,7 +43,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       Right(
         VatDetailsModel(
           Some(
-            VatReturn(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+            VatReturnObligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
           ), None
         )
       )
@@ -153,7 +153,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           Right(
             VatDetailsModel(
               Some(
-                VatReturn(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
+                VatReturnObligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
               ), None
             )
           )

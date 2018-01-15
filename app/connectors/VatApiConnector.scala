@@ -20,9 +20,9 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import connectors.httpParsers.VatReturnsHttpParser.HttpGetResult
-import models.VatReturn.Status
-import models.VatReturns
+import connectors.httpParsers.VatReturnObligationsHttpParser.HttpGetResult
+import models.VatReturnObligation.Status
+import models.VatReturnObligations
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -32,14 +32,14 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
-  import connectors.httpParsers.VatReturnsHttpParser.VatReturnsReads
+  import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/vat/$vrn/obligations"
 
   def getReturns(vrn: String,
                  from: LocalDate,
                  to: LocalDate,
-                 status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturns]] = {
+                 status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
       .map {
         case vatReturns@Right(_) => vatReturns
