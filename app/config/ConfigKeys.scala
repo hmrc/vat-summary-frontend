@@ -35,4 +35,6 @@ object ConfigKeys {
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
 
   val businessAccountService: String = "business-account"
+
+  val vatReturnsHost: String = "view-vat-returns-frontend"
 }
