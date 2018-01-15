@@ -23,6 +23,6 @@
   <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@nextReturnMessage</h2>
   @vatReturnObligation.map { obligation =>
     <p>@displayDate(obligation.due)</p>
-    <p><a href="@{appConfig.vatReturnsBaseUrl}">@messages("returnObligation.viewReturns")</a></p>
+    <p><a href="@{appConfig.vatReturnsBaseUrl}/returns">@messages("returnObligation.viewReturns")</a></p>
   }
 </div>
