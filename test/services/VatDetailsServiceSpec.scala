@@ -22,6 +22,7 @@ import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.VatReturnObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
+import models.viewModels.VatDetailsModel
 import models.{Payments, VatReturnObligations, _}
 import uk.gov.hmrc.http.HeaderCarrier
 

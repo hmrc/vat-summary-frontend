@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
-package models
+package models.viewModels
+
+import models.{Payment, VatReturnObligation}
 
 case class VatDetailsModel(vatReturn: Option[VatReturnObligation], payment: Option[Payment])

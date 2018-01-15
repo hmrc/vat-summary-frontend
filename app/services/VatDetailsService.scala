@@ -25,6 +25,7 @@ import connectors.httpParsers.VatReturnObligationsHttpParser._
 import connectors.{FinancialDataConnector, VatApiConnector}
 import models.VatReturnObligation.Status._
 import models._
+import models.viewModels.VatDetailsModel
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
