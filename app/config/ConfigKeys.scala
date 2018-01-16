@@ -36,5 +36,5 @@ object ConfigKeys {
 
   val businessAccountService: String = "business-account"
 
-  val vatReturnsHost: String = "view-vat-returns-frontend"
+  val vatReturnsUrl: String = "vat-returns-url"
 }
