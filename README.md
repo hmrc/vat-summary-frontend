@@ -6,7 +6,7 @@
 
 ## Summary
 
-This service provides end users with a mechanism to view their VAT Summary.
+This service provides end users with a mechanism to view their VAT Summary. 
 
 ## Requirements
 
