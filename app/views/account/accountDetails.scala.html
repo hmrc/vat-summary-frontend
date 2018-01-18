@@ -1,0 +1,87 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(user: models.User,
+  account: models.viewModels.AccountDetailsModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
+  @views.html.main_template(title = messages("accountDetails.title"), bodyClasses = None, appConfig = appConfig) {
+
+    <div class="grid-row">
+      <div class="column-two-thirds">
+        <h1 class="heading-xlarge">@messages("accountDetails.title")</h1>
+
+        <div class="panel panel-border-wide">
+          <p>@messages("accountDetails.edit")</p>
+        </div>
+
+        <h2 class="heading-medium">@messages("accountDetails.businessDetails")</h2>
+        <dl class="govuk-check-your-answers cya-questions-short tax-estimate">
+          <div>
+            <dt class="cya-question">@messages("accountDetails.name")</dt>
+            <dd class="cya-answer">@account.name</dd>
+          </div>
+
+          <div>
+            <dt class="cya-question">@messages("accountDetails.businessAddress")</dt>
+            <dd class="cya-answer">@account.businessAddress<br>@account.businessPostcode</dd>
+          </div>
+
+          <div>
+            <dt class="cya-question clear-bottom-border">@messages("accountDetails.businessContact")</dt>
+          </div>
+
+          <div>
+            <dt>
+              @messages("accountDetails.businessPhone")<br>
+              @messages("accountDetails.mobile")
+            </dt><dd class="cya-answer">
+            @account.businessPhone<br>
+            @account.mobilePhone
+          </dd>
+          </div>
+        </dl>
+
+        <h2 class="heading-medium">@messages("accountDetails.contactDetails")</h2>
+
+        <p>@messages("accountDetails.contactYou")</p>
+
+        <dl class="govuk-check-your-answers cya-questions-short tax-estimate">
+
+          <div>
+            <dt class="cya-question">@messages("accountDetails.correspondenceAddress")</dt>
+            <dd class="cya-answer">@account.correspondenceAddress<br>@account.correspondencePostcode</dd>
+          </div>
+
+          <div>
+            <dt class="cya-question clear-bottom-border">@messages("accountDetails.contactDetails")</dt>
+          </div>
+
+          <div>
+            <dt>
+              @messages("accountDetails.email")<br>
+              @messages("accountDetails.homePhone")<br>
+              @messages("accountDetails.mobile")
+            </dt><dd class="cya-answer">
+            @account.email<br>
+            @account.homePhone<br>
+            @account.mobilePhone
+          </dd>
+          </div>
+        </dl>
+
+      </div>
+    </div>
+  }
