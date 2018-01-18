@@ -55,7 +55,7 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
         Set(
           Enrolment(
             "HMRC-MTD-VAT",
-            Seq(EnrolmentIdentifier("", "VRN1234567890")),
+            Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
             "Active")
         )
       )
