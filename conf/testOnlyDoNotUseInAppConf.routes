@@ -10,4 +10,9 @@
 # Failing to follow this rule may result in test routes deployed in production.
 
 # Add all the application routes to the prod.routes file
-->         /                          prod.Routes
+
+POST        /your-vat-summary/test-only/populate-stub   @testOnly.controllers.DynamicStubController.populateStub
+DELETE      /your-vat-summary/test-only/clear-stub      @testOnly.controllers.DynamicStubController.clearStub
+
+->          /                                           prod.Routes
+
