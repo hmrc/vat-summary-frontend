@@ -61,7 +61,6 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
           LocalDate.parse("2017-10-19"),
           LocalDate.parse("2017-12-25"),
           BigDecimal(10.0),
-          "O",
           "#001")
 
         val expected = Right(VatDetailsModel(Some(obligation), Some(payment)))
@@ -82,7 +81,6 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
           LocalDate.parse("2017-10-19"),
           LocalDate.parse("2017-12-25"),
           BigDecimal(10.0),
-          "O",
           "#001"))))
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))

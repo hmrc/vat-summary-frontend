@@ -51,7 +51,6 @@ class PaymentsHttpParserSpec extends UnitSpec {
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.00),
-          status = "O",
           periodKey = "#003"
         )
       )))

@@ -46,7 +46,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       end = LocalDate.parse("2017-12-22"),
       due = LocalDate.parse("2017-12-26"),
       outstandingAmount = BigDecimal(1000.00),
-      status = "O",
       periodKey = "#003"
     )
 
