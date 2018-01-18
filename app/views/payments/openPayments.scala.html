@@ -18,10 +18,9 @@
 @import views.html.templates.formatters.money._
 
 @(user: models.User,
-  payments: Seq[models.viewModels.OpenPaymentsModel],
-  serviceInfo: Html = Html(""))(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+  payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-  @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig, serviceInfo = serviceInfo) {
+  @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
 
     <div class="grid-row">
       <div class="column-two-thirds">

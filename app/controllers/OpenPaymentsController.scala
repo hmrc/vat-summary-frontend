@@ -31,7 +31,6 @@ import scala.concurrent.Future
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
-                                     btaHeaderPartialService: BtaHeaderPartialService,
                                      implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
@@ -39,8 +38,7 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
     user =>
       for {
         paymentsModel <- handleOpenPaymentsModel(user)
-        serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
-      } yield Ok(views.html.payments.openPayments(user, paymentsModel, serviceInfo))
+      } yield Ok(views.html.payments.openPayments(user, paymentsModel))
   }
 
   private[controllers] def handleOpenPaymentsModel(user: User)(implicit hc: HeaderCarrier): Future[Seq[OpenPaymentsModel]] = {
