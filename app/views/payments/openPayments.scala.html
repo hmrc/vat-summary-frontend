@@ -1,0 +1,65 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.templates.formatters.dates._
+@import views.html.templates.formatters.money._
+
+@(user: models.User,
+  payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
+  @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+
+    <div class="grid-row">
+      <div class="column-two-thirds">
+
+        <h1 class="heading-xlarge">@messages("openPayments.title")</h1>
+        <div class="grid-row">
+          <div class="column-full">
+
+              <table class="margin-bottom">
+                <thead>
+                <tr>
+                  <th>@messages("openPayments.type")</th>
+                  <th>@messages("openPayments.due")</th>
+                  <th class="numeric">@messages("openPayments.amount")</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @payments.map { payment =>
+                    <tr>
+                      <td>@payment.paymentType</td>
+                      <td>@displayDate(payment.due)</td>
+                      <td class="numeric">@displayMoney(payment.amount)</td>
+                      <td class="numeric"><a href="#">
+                        @messages("openPayments.check", displayDate(payment.end))
+                      </a></td>
+                    </tr>
+                }
+                </tbody>
+              </table>
+
+          </div>
+        </div>
+
+        <br>
+        <p>@messages("openPayments.onlyByCard")</p>
+        <br>
+
+        <a href="#" class="button">@messages("openPayments.makePayment")</a>
+      </div>
+    </div>
+  }

@@ -31,6 +31,14 @@ payment.nextPayment = Next payment due
 payment.check = Check before paying
 payment.overdue = Overdue
 
+openPayments.title = VAT payments
+openPayments.type = Type
+openPayments.due = Due
+openPayments.amount = Amount
+openPayments.check = Check {0} return
+openPayments.onlyByCard = You can only pay by card
+openPayments.makePayment = Make a payment
+
 featureSwitch.title = Feature switches
 featureSwitch.heading = Features
 featureSwitch.submit = Submit
