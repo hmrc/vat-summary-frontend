@@ -18,7 +18,7 @@ package views.templates
 
 import java.time.LocalDate
 
-import models.Payment
+import models.payments.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec

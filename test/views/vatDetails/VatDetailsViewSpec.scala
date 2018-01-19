@@ -18,8 +18,9 @@ package views.vatDetails
 
 import java.time.LocalDate
 
-import models.viewModels.VatDetailsModel
-import models.{Payment, User, VatReturnObligation}
+import models.obligations.VatReturnObligation
+import models.payments.Payment
+import models.{User, VatDetailsModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html

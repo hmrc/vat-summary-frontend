@@ -22,10 +22,11 @@ import connectors.{FinancialDataConnector, VatApiConnector}
 import connectors.httpParsers.VatReturnObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
-import models.viewModels.VatDetailsModel
-import models.{Payments, VatReturnObligations, _}
+import models.obligations.{VatReturnObligation, VatReturnObligations}
+import models.payments.{Payment, Payments}
+import models.VatDetailsModel
 import uk.gov.hmrc.http.HeaderCarrier
-
+import models._
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 

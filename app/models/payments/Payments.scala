@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package models.payments
 
-import java.time.LocalDate
+import play.api.libs.json.{Format, Json}
 
-trait Obligation {
+case class Payments(payments: Seq[Payment])
 
-  def due: LocalDate
+object Payments {
 
+  implicit val format: Format[Payments] = Json.format[Payments]
 }

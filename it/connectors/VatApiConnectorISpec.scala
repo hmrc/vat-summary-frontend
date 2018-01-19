@@ -22,7 +22,8 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.VatReturnObligation.Status
 import models.errors.{BadRequestError, MultipleErrors}
-import models.{VatReturnObligation, VatReturnObligations}
+import models.obligations.{VatReturnObligation, VatReturnObligations}
+import models.VatReturnObligation
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 

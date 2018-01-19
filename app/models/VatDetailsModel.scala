@@ -16,12 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Format, Json}
+import models.obligations.VatReturnObligation
+import models.payments.Payment
 
-case class VatReturnObligations(obligations: Seq[VatReturnObligation])
-
-object VatReturnObligations {
-
-  implicit val format: Format[VatReturnObligations] = Json.format[VatReturnObligations]
-
-}
+case class VatDetailsModel(vatReturn: Option[VatReturnObligation], payment: Option[Payment])

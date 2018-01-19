@@ -19,8 +19,8 @@ package controllers
 import java.time.LocalDate
 
 import models.errors.{BadRequestError, HttpError}
-import models.viewModels.VatDetailsModel
-import models.{User, VatReturnObligation}
+import models.obligations.VatReturnObligation
+import models.{User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._

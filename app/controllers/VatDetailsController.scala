@@ -19,8 +19,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import models.User
-import models.viewModels.VatDetailsModel
+import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
