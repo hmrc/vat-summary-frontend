@@ -33,24 +33,17 @@
             <dt id="name" class="cya-question">@messages("accountDetails.name")</dt>
             <dd class="cya-answer">@account.name</dd>
           </div>
-
           <div>
             <dt id="business-address" class="cya-question">@messages("accountDetails.businessAddress")</dt>
             <dd class="cya-answer">@account.businessAddress<br>@account.businessPostcode</dd>
           </div>
-
           <div>
-            <dt id="business-contact" class="cya-question clear-bottom-border">@messages("accountDetails.businessContact")</dt>
+            <dt id="business-phone" class="cya-question">@messages("accountDetails.businessPhone")</dt>
+            <dd class="cya-answer">@account.businessPhone</dd>
           </div>
-
           <div>
-            <dt>
-              <div id="business-phone">@messages("accountDetails.businessPhone")</div>
-              <div id="business-mobile">@messages("accountDetails.mobile")</div>
-            </dt><dd class="cya-answer">
-            @account.businessPhone<br>
-            @account.mobilePhone
-          </dd>
+            <dt id="business-mobile" class="cya-question">@messages("accountDetails.mobile")</dt>
+            <dd class="cya-answer">@account.mobilePhone</dd>
           </div>
         </dl>
 
@@ -59,26 +52,21 @@
         <p>@messages("accountDetails.contactYou")</p>
 
         <dl class="govuk-check-your-answers cya-questions-short tax-estimate">
-
           <div>
             <dt id="correspondence-address" class="cya-question">@messages("accountDetails.correspondenceAddress")</dt>
             <dd class="cya-answer">@account.correspondenceAddress<br>@account.correspondencePostcode</dd>
           </div>
-
           <div>
-            <dt id="correspondence-contact" class="cya-question clear-bottom-border">@messages("accountDetails.contactDetails")</dt>
+            <dt id="correspondence-email" class="cya-question">@messages("accountDetails.email")</dt>
+            <dd class="cya-answer clear-bottom-border">@account.email</dd>
           </div>
-
           <div>
-            <dt>
-              <div id="correspondence-email">@messages("accountDetails.email")</div>
-              <div id="correspondence-phone">@messages("accountDetails.homePhone")</div>
-              <div id="correspondence-mobile">@messages("accountDetails.mobile")</div>
-            </dt><dd class="cya-answer">
-            @account.email<br>
-            @account.homePhone<br>
-            @account.mobilePhone
-          </dd>
+            <dt id="correspondence-phone" class="cya-question">@messages("accountDetails.homePhone")</dt>
+            <dd class="cya-answer">@account.homePhone</dd>
+          </div>
+          <div>
+            <dt id="correspondence-mobile" class="cya-question">@messages("accountDetails.mobile")</dt>
+            <dd class="cya-answer">@account.mobilePhone</dd>
           </div>
         </dl>
 

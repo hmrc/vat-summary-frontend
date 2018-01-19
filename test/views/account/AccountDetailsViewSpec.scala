@@ -29,18 +29,18 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
     val editAccountHeading = "div#edit-details p"
 
     val businessDetailsHeading = "h2:nth-of-type(1)"
-    val contactDetailsHeading = "h2:nth-of-type(2)"
+    val correspondenceDetailsHeading = "h2:nth-of-type(2)"
 
     val nameRow = "dt#name"
     val businessAddressRow = "dt#business-address"
     val businessContactRow = "dt#business-contact"
-    val businessPhoneRow = "div#business-phone"
-    val businessMobileRow = "div#business-mobile"
+    val businessPhoneRow = "dt#business-phone"
+    val businessMobileRow = "dt#business-mobile"
     val correspondenceAddressRow = "dt#correspondence-address"
     val correspondenceContactRow = "dt#correspondence-contact"
-    val correspondenceEmailRow = "div#correspondence-email"
-    val correspondencePhoneRow = "div#correspondence-phone"
-    val correspondenceMobileRow = "div#correspondence-mobile"
+    val correspondenceEmailRow = "dt#correspondence-email"
+    val correspondencePhoneRow = "dt#correspondence-phone"
+    val correspondenceMobileRow = "dt#correspondence-mobile"
   }
 
   private val user = User("1111")
@@ -68,7 +68,7 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the contact details section" in {
-      elementText(Selectors.contactDetailsHeading) shouldBe "Contact details"
+      elementText(Selectors.correspondenceDetailsHeading) shouldBe "Contact details"
     }
 
     "have the name heading" in {
@@ -77,10 +77,6 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
 
     "have the business address heading" in {
       elementText(Selectors.businessAddressRow) shouldBe "Business address"
-    }
-
-    "have the business contact details heading" in {
-      elementText(Selectors.businessContactRow) shouldBe "Business contact details"
     }
 
     "have the business phone heading" in {
@@ -93,10 +89,6 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
 
     "have the correspondence address heading" in {
       elementText(Selectors.correspondenceAddressRow) shouldBe "Correspondence address"
-    }
-
-    "have the contact details heading" in {
-      elementText(Selectors.correspondenceContactRow) shouldBe "Contact details"
     }
 
     "have the email heading" in {
