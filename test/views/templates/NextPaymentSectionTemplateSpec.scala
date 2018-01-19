@@ -17,8 +17,6 @@
 package views.templates
 
 import java.time.LocalDate
-
-import models.payments.Payment
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -35,15 +33,9 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is a payment to display" should {
 
-      val payment = Payment(
-        LocalDate.parse("2017-03-01"),
-        LocalDate.parse("2017-03-08"),
-        9999,
-        "O",
-        "#001"
-      )
+      val paymentDueDate = LocalDate.parse("2017-03-08")
 
-      lazy val view = views.html.templates.nextPaymentSection(Some(payment))
+      lazy val view = views.html.templates.nextPaymentSection(Some(paymentDueDate))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {

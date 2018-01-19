@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import models.payments.Payment
-@import views.html.templates.formatters.dates._
-@import views.html.templates.formatters.money._
-@import java.time.LocalDate
+package models.viewModels
 
-@(paymentDueDate: Option[LocalDate])(implicit messages: Messages)
+import java.time.LocalDate
 
-@paymentMessage = {@messages(paymentDueDate.fold("payment.noPayment") {_ => "payment.nextPayment"})}
+import play.api.libs.json.{Format, Json}
 
-<div class="column-one-half">
-  <h2 class="heading-medium" id="payment-header" style="margin-top: 0px">@paymentMessage</h2>
-  @paymentDueDate.map { date =>
-    <p>@displayDate(date)</p>
-    <p><a href="#">@messages("payment.check")</a></p>
-  }
-</div>
+case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
+                               nextObligationDueDate: Option[LocalDate])
+
+object VatDetailsViewModel {
+  implicit val format: Format[VatDetailsViewModel] = Json.format[VatDetailsViewModel]
+}
+

@@ -35,16 +35,9 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
     "there is an VAT return to display" should {
 
-      val obligation = VatReturnObligation(
-        start = LocalDate.parse("2017-01-01"),
-        end = LocalDate.parse("2017-03-31"),
-        due = LocalDate.parse("2017-04-30"),
-        "O",
-        None,
-        "#001"
-      )
+      val obligationDueDate = LocalDate.parse("2017-04-30")
 
-      lazy val view = views.html.templates.nextReturnSection(Some(obligation))
+      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -68,9 +61,6 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       "display the 'No return due' heading" in {
         elementText(Selectors.nextReturnDueHeading) shouldBe "No return due"
       }
-
     }
-
-
   }
 }
