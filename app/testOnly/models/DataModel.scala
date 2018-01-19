@@ -16,7 +16,7 @@
 
 package testOnly.models
 
-import play.api.libs.json.{JsValue, Json, OFormat}
+import play.api.libs.json.{JsValue, Json, Format}
 
 case class DataModel(_id: String,
                      method: String,
@@ -24,5 +24,5 @@ case class DataModel(_id: String,
                      response: Option[JsValue])
 
 object DataModel {
-  implicit val formats: OFormat[DataModel] = Json.format[DataModel]
+  implicit val formats: Format[DataModel] = Json.format[DataModel]
 }

@@ -17,8 +17,8 @@
 package testOnly.controllers
 
 import com.google.inject.Inject
+import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
-import testOnly.TestOnlyAppConfig
 import testOnly.connectors.DynamicStubConnector
 import testOnly.models.DataModel
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -26,19 +26,18 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 import scala.util.{Success, Try}
 
-class DynamicStubController @Inject()(val dynamicStubConnector: DynamicStubConnector,
-                                      implicit val appConfig: TestOnlyAppConfig)
+class DynamicStubController @Inject()(dynamicStubConnector: DynamicStubConnector)
   extends FrontendController {
 
-  val populateStub: Action[AnyContent] = Action.async { implicit request =>
-    Try(request.body.asJson.get.as[DataModel]) match {
+  val populateStub: Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
+    Try(request.body.as[DataModel]) match {
       case Success(dataModel) =>
-        dynamicStubConnector.populateStub(dataModel).map(
-          response => response.status match {
+        dynamicStubConnector.populateStub(dataModel).map { response =>
+          response.status match {
             case OK => Ok(s"Successfully populated stub with $dataModel")
             case _ => InternalServerError(s"Unable to populate stub with $dataModel")
           }
-        )
+        }
       case _ => Future.successful(BadRequest("Unable to convert json to model"))
     }
   }
