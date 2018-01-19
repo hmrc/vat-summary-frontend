@@ -55,7 +55,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.nextReturnDate) shouldBe "30 April 2017"
       }
 
-      "display the 'View your returns' button" in {
+      "display the 'View return deadlines' link" in {
         elementText(Selectors.viewReturnsButton) shouldBe "View your returns"
       }
     }

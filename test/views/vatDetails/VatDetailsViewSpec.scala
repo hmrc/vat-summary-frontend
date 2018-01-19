@@ -56,7 +56,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the account details section" in {
-      elementText(Selectors.accountDetailsHeading) shouldBe "VAT account details"
+      elementText(Selectors.accountDetailsHeading) shouldBe "Account details"
     }
   }
 
