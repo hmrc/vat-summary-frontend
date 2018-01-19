@@ -21,7 +21,6 @@ import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import models.VatReturnObligation
 import models.errors.{ApiMultiError, ApiSingleError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import play.api.http.Status._

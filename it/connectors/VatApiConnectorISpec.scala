@@ -20,10 +20,10 @@ import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.VatReturnObligation.Status
+import models.obligations.VatReturnObligation.Status
 import models.errors.{BadRequestError, MultipleErrors}
-import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.VatReturnObligation
+import models.obligations.VatReturnObligations
+import models.obligations.VatReturnObligation
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
