@@ -23,7 +23,4 @@ import play.api.libs.json.{Format, Json}
 case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
                                nextObligationDueDate: Option[LocalDate])
 
-object VatDetailsViewModel {
-  implicit val format: Format[VatDetailsViewModel] = Json.format[VatDetailsViewModel]
-}
 
