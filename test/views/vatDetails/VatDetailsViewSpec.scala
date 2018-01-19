@@ -32,8 +32,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val tradingNameHeading = "h1 span"
     val nextPaymentHeading = "h2#payment-header"
     val nextReturnHeading = "h2#return-header"
-    val accountDetailsHeading = "h3 a"
     val header = "div.test"
+    val accountDetails = ".account-details"
+    val submittedReturns = ".submitted-returns"
   }
 
   private val date = LocalDate.now()
@@ -52,11 +53,41 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct trading name" in {
-      elementText(Selectors.tradingNameHeading) shouldBe "Trading Name"
+      elementText(Selectors.tradingNameHeading) shouldBe tradingName
     }
 
-    "have the account details section" in {
-      elementText(Selectors.accountDetailsHeading) shouldBe "Account details"
+    "have the account details section" should {
+
+      lazy val accountDetails = element(Selectors.accountDetails)
+
+      "have the heading" in {
+        accountDetails.select("h3").text() shouldBe "Account details"
+      }
+
+      "have a link to '#'" in {
+        accountDetails.select("a").attr("href") shouldBe "#"
+      }
+
+      "have the text" in {
+        accountDetails.select("p").text() shouldBe "View your registered VAT details and see how to change them."
+      }
+    }
+
+    "have the submitted returns section" should {
+
+      lazy val submittedReturns = element(Selectors.submittedReturns)
+
+      "have the heading" in {
+        submittedReturns.select("h3").text() shouldBe "Submitted returns"
+      }
+
+      "have a link to 'returns-url'" in {
+        submittedReturns.select("a").attr("href") shouldBe "returns-url"
+      }
+
+      "have the text" in {
+        submittedReturns.select("p").text() shouldBe "Check the returns you've sent us."
+      }
     }
   }
 

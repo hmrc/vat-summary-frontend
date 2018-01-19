@@ -47,21 +47,9 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {
-//    vatDetailsService.getVatDetails(user).map {
-//      case Right(detailsModel) => detailsModel
-//      case Left(_) => VatDetailsModel(None, None)
-//    }
-    Future.successful(        VatDetailsModel(
-      Some(
-        VatReturnObligation(LocalDate.parse("2017-01-01"), LocalDate.parse("2017-03-30"), LocalDate.parse("2017-07-30"), "O", None, "#004")
-      ),
-      Some(Payment(
-        end = LocalDate.parse("2017-12-22"),
-        due = LocalDate.parse("2017-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        status = "O",
-        periodKey = "#003"
-      ))
-    ))
+    vatDetailsService.getVatDetails(user).map {
+      case Right(detailsModel) => detailsModel
+      case Left(_) => VatDetailsModel(None, None)
+    }
   }
 }
