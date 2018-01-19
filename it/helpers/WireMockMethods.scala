@@ -28,7 +28,7 @@ trait WireMockMethods {
     new Mapping(method, uri, queryParams, headers, None)
   }
 
-  class Mapping(method: HTTPMethod, uri: String, queryParams: Map[String, String] = Map.empty, headers: Map[String, String], body: Option[String]) {
+  class Mapping(method: HTTPMethod, uri: String, queryParams: Map[String, String], headers: Map[String, String], body: Option[String]) {
     private val mapping = {
       val uriMapping = method.wireMockMapping(urlPathMatching(uri))
 
@@ -86,4 +86,9 @@ trait WireMockMethods {
   case object GET extends HTTPMethod {
     override def wireMockMapping(pattern: UrlPattern): MappingBuilder = get(pattern)
   }
+
+  case object DELETE extends HTTPMethod {
+    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = delete(pattern)
+  }
+
 }
