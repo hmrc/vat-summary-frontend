@@ -40,7 +40,7 @@ openPayments.onlyByCard = You can only pay by card
 openPayments.makePayment = Make a payment
 
 accountDetails.title = Account details
-accountDetails.edit = You can edit these details in your accounting software
+accountDetails.edit = You edit these details in your accounting software.
 accountDetails.contactYou = HMRC will only use these to contact you.
 accountDetails.businessDetails = Business details
 accountDetails.contactDetails = Contact details

@@ -23,16 +23,14 @@ import models.User
 import models.viewModels.AccountDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
+import services.EnrolmentsAuthService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
-                                         btaHeaderPartialService: BtaHeaderPartialService,
-                                         implicit val appConfig: AppConfig,
-                                         vatDetailsService: VatDetailsService)
+                                         implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
   def accountDetails(): Action[AnyContent] = authorisedAction { implicit request =>
