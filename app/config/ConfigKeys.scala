@@ -36,7 +36,7 @@ object ConfigKeys {
 
   val businessAccountService: String = "business-account"
 
-  val vatReturnsBase: String = "view-vat-returns-frontend"
+  val vatReturnsBase: String = "view-vat-returns-frontend.host"
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"
   val vatSubmittedReturns: String = "view-vat-returns-frontend.submittedReturnsUrl"
 }
