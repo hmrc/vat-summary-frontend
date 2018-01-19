@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package config.filters
+package testOnly
 
 import javax.inject.Inject
 
-import play.api.http.DefaultHttpFilters
-import play.filters.csrf.CSRFFilter
-import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
+import config.FrontendAppConfig
+import play.api.{Configuration, Environment}
 
-class ServiceFilters @Inject()(defaultFilters: FrontendFilters, excludingCSRFFilter: ExcludingCSRFFilter, whitelistFilter: WhitelistFilter)
-  extends DefaultHttpFilters({
-    defaultFilters.filters.filterNot(f => f.isInstanceOf[CSRFFilter]) :+ excludingCSRFFilter :+ whitelistFilter
-  }:_*)
+class TestOnlyAppConfig @Inject()(env: Environment,
+                                  config: Configuration)
+  extends FrontendAppConfig(config, env){
+
+  lazy val dynamicStubUrl: String = baseUrl("vatvc-dynamic-stub")
+
+}
