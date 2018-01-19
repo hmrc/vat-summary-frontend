@@ -19,7 +19,6 @@ package connectors.httpParsers
 import java.time.LocalDate
 
 import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
-import models._
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import play.api.http.Status

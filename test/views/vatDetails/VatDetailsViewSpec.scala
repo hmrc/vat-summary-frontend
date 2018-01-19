@@ -17,9 +17,6 @@
 package views.vatDetails
 
 import java.time.LocalDate
-
-import models.obligations.VatReturnObligation
-import models.payments.Payment
 import models.viewModels.VatDetailsViewModel
 import models.User
 import org.jsoup.Jsoup
