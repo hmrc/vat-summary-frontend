@@ -25,6 +25,6 @@
   <h2 class="heading-medium" id="payment-header" style="margin-top: 0px">@paymentMessage</h2>
   @payment.map { pay =>
     <p>@displayDate(pay.due)</p>
-    <p><a href="#">@messages("payment.check")</a></p>
+    <p><a href="@{controllers.routes.OpenPaymentsController.openPayments().url}">@messages("payment.check")</a></p>
   }
 </div>

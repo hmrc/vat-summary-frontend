@@ -15,12 +15,14 @@ partials.btaHome.vatSection.vatMessage = This is added to the price of goods and
 partials.btaHome.vatSection.manageVat = Manage your VAT
 
 vatDetails.title = VAT
-vatDetails.returns.link = VAT account details
-vatDetails.returns.view = View your registered VAT details and see how to change them.
+vatDetails.accountDetails.link = Account details
+vatDetails.accountDetails.view = View your registered VAT details and see how to change them.
+vatDetails.submittedReturns.link = Submitted returns
+vatDetails.submittedReturns.view = Check the returns you''ve sent us.
 
 returnObligation.noReturn = No return due
 returnObligation.nextReturn = Next return due
-returnObligation.viewReturns = View your returns
+returnObligation.viewReturns = View return deadlines
 returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
