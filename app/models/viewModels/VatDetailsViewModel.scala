@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package models.viewModels
 
 import java.time.LocalDate
 
-trait Obligation {
+import play.api.libs.json.{Format, Json}
 
-  def due: LocalDate
+case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
+                               nextObligationDueDate: Option[LocalDate])
 
-}
+

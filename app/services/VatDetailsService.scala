@@ -23,9 +23,9 @@ import cats.data.EitherT
 import cats.implicits._
 import connectors.httpParsers.VatReturnObligationsHttpParser._
 import connectors.{FinancialDataConnector, VatApiConnector}
-import models.VatReturnObligation.Status._
+import models.obligations.VatReturnObligation.Status._
 import models._
-import models.viewModels.VatDetailsModel
+import models.obligations.Obligation
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

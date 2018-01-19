@@ -14,8 +14,14 @@
  * limitations under the License.
  */
 
-package models.viewModels
+package models.obligations
 
-import models.{Payment, VatReturnObligation}
+import play.api.libs.json.{Format, Json}
 
-case class VatDetailsModel(vatReturn: Option[VatReturnObligation], payment: Option[Payment])
+case class VatReturnObligations(obligations: Seq[VatReturnObligation])
+
+object VatReturnObligations {
+
+  implicit val format: Format[VatReturnObligations] = Json.format[VatReturnObligations]
+
+}
