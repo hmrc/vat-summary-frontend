@@ -20,7 +20,6 @@ import java.time.LocalDate
 
 import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector}
-import connectors.httpParsers.VatReturnObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
 import models.obligations.{VatReturnObligation, VatReturnObligations}

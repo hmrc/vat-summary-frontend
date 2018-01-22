@@ -43,8 +43,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
         tradingName <- vatDetailsService.getCustomerInfo(user)
       } yield Ok(views.html.vatDetails.details(
-          user, constructViewModel(detailsModel), serviceInfo, tradingName.right.get.tradingName
-        ))
+        user, constructViewModel(detailsModel), serviceInfo, tradingName.right.get.tradingName
+      ))
   }
 
   private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {
