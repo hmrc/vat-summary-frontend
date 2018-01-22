@@ -18,10 +18,9 @@ package controllers
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
-import models.{Payment, User, VatReturnObligation}
-import models.viewModels.VatDetailsModel
+import models.viewModels.VatDetailsViewModel
+import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
@@ -43,7 +42,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         detailsModel <- handleVatDetailsModel(user)
         serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
         tradingName <- vatDetailsService.getTradingName(user)
-      } yield Ok(views.html.vatDetails.details(user, detailsModel, serviceInfo, tradingName))
+      } yield Ok(views.html.vatDetails.details(user, constructViewModel(detailsModel), serviceInfo, tradingName))
   }
 
   private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {
@@ -51,5 +50,11 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case Right(detailsModel) => detailsModel
       case Left(_) => VatDetailsModel(None, None)
     }
+  }
+
+  private[controllers] def constructViewModel(model: VatDetailsModel): VatDetailsViewModel = {
+    val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
+    val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate)
   }
 }

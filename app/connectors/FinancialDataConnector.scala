@@ -20,7 +20,7 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import connectors.httpParsers.PaymentsHttpParser.HttpGetResult
-import models.{Payment, Payments}
+import models.payments.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 

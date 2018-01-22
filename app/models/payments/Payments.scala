@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package config.filters
+package models.payments
 
-import javax.inject.Inject
+import play.api.libs.json.{Format, Json}
 
-import play.api.http.DefaultHttpFilters
-import play.filters.csrf.CSRFFilter
-import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
+case class Payments(payments: Seq[Payment])
 
-class ServiceFilters @Inject()(defaultFilters: FrontendFilters, excludingCSRFFilter: ExcludingCSRFFilter, whitelistFilter: WhitelistFilter)
-  extends DefaultHttpFilters({
-    defaultFilters.filters.filterNot(f => f.isInstanceOf[CSRFFilter]) :+ excludingCSRFFilter :+ whitelistFilter
-  }:_*)
+object Payments {
+
+  implicit val format: Format[Payments] = Json.format[Payments]
+}

@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package config.filters
+package models.viewModels
 
-import javax.inject.Inject
+import java.time.LocalDate
 
-import play.api.http.DefaultHttpFilters
-import play.filters.csrf.CSRFFilter
-import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
+import play.api.libs.json.{Format, Json}
 
-class ServiceFilters @Inject()(defaultFilters: FrontendFilters, excludingCSRFFilter: ExcludingCSRFFilter, whitelistFilter: WhitelistFilter)
-  extends DefaultHttpFilters({
-    defaultFilters.filters.filterNot(f => f.isInstanceOf[CSRFFilter]) :+ excludingCSRFFilter :+ whitelistFilter
-  }:_*)
+case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
+                               nextObligationDueDate: Option[LocalDate])
+
+

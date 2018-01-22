@@ -19,8 +19,10 @@ package controllers
 import java.time.LocalDate
 
 import models.errors.{BadRequestError, HttpError}
-import models.viewModels.VatDetailsModel
-import models.{User, VatReturnObligation}
+import models.obligations.VatReturnObligation
+import models.payments.Payment
+import models.viewModels.VatDetailsViewModel
+import models.{User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
@@ -173,6 +175,65 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         val blankModel: VatDetailsModel = VatDetailsModel(None, None)
         private val result = await(target.handleVatDetailsModel(testUser))
         result shouldBe blankModel
+      }
+    }
+  }
+
+  "Calling .constructViewModel with a VatDetailsModel" when {
+
+    lazy val mockEnrolmentsAuthService = mock[EnrolmentsAuthService]
+    lazy val mockBtaHeaderPartialService = mock[BtaHeaderPartialService]
+    lazy val mockVatDetailsService = mock[VatDetailsService]
+    lazy val controller = new VatDetailsController(messages, mockEnrolmentsAuthService, mockBtaHeaderPartialService, mockAppConfig, mockVatDetailsService)
+    val payment = Payment(
+      LocalDate.now(),
+      LocalDate.now(),
+      1,
+      "O",
+      "#001"
+    )
+    val obligation = VatReturnObligation(
+      LocalDate.now(),
+      LocalDate.now(),
+      LocalDate.now(),
+      "O",
+      None,
+      "#001"
+    )
+
+    "there is both a payment and an obligation" should {
+
+      lazy val result = controller.constructViewModel(VatDetailsModel(Some(obligation), Some(payment)))
+
+      "return a VatDetailsViewModel with both due dates" in {
+        result shouldEqual VatDetailsViewModel(Some(payment.due), Some(obligation.due))
+      }
+    }
+
+    "there is a payment but no obligation" should {
+
+      lazy val result = controller.constructViewModel(VatDetailsModel(None, Some(payment)))
+
+      "return a VatDetailsViewModel with a payment due date and no obligation due date" in {
+        result shouldEqual VatDetailsViewModel(Some(payment.due), None)
+      }
+    }
+
+    "there is an obligation but no payment" should {
+
+      lazy val result = controller.constructViewModel(VatDetailsModel(Some(obligation), None))
+
+      "return a VatDetailsViewModel with an obligation due date and no payment due date" in {
+        result shouldEqual VatDetailsViewModel(None, Some(obligation.due))
+      }
+    }
+
+    "there is no obligation or payment" should {
+
+      lazy val result = controller.constructViewModel(VatDetailsModel(None, None))
+
+      "return a VatDetailsViewModel with no obligation due date and no payment due date" in {
+        result shouldEqual VatDetailsViewModel(None, None)
       }
     }
   }

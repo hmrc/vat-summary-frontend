@@ -15,14 +15,16 @@
  *@
 
 @import views.html.templates.formatters.dates._
-@(vatReturnObligation: Option[VatReturnObligation])(implicit messages: Messages, appConfig: config.AppConfig)
+@import java.time.LocalDate
 
-@nextReturnMessage = {@messages(vatReturnObligation.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
+@(obligationDueDate: Option[LocalDate])(implicit messages: Messages, appConfig: config.AppConfig)
+
+@nextReturnMessage = {@messages(obligationDueDate.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
 <div class="column-one-half">
   <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@nextReturnMessage</h2>
-  @vatReturnObligation.map { obligation =>
-    <p>@displayDate(obligation.due)</p>
+  @obligationDueDate.map { date =>
+    <p>@displayDate(date)</p>
     <p>
         <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
             @messages("returnObligation.viewReturns")

@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package models.viewModels
+package testOnly.models
 
-import models.{Payment, VatReturnObligation}
+import play.api.libs.json.{JsValue, Json, Format}
 
-case class VatDetailsModel(vatReturn: Option[VatReturnObligation], payment: Option[Payment])
+case class DataModel(_id: String,
+                     method: String,
+                     status: Int,
+                     response: Option[JsValue])
+
+object DataModel {
+  implicit val formats: Format[DataModel] = Json.format[DataModel]
+}

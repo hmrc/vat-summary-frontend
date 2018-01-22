@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.AppConfig
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -31,9 +32,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
 
   lazy val injector: Injector = app.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  implicit val mockAppConfig: MockAppConfig = new MockAppConfig(app.configuration)
+  implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
-  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
 

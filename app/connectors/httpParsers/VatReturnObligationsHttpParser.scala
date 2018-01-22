@@ -16,8 +16,8 @@
 
 package connectors.httpParsers
 
-import models.VatReturnObligations
 import models.errors.{ServerSideError, UnexpectedStatusError}
+import models.obligations.VatReturnObligations
 import play.api.http.Status.{BAD_REQUEST, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 

@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package testOnly
 
-import play.api.libs.json.{Format, Json}
+import javax.inject.Inject
 
-case class VatReturnObligations(obligations: Seq[VatReturnObligation])
+import config.FrontendAppConfig
+import play.api.{Configuration, Environment}
 
-object VatReturnObligations {
+class TestOnlyAppConfig @Inject()(env: Environment,
+                                  config: Configuration)
+  extends FrontendAppConfig(config, env){
 
-  implicit val format: Format[VatReturnObligations] = Json.format[VatReturnObligations]
+  lazy val dynamicStubUrl: String = baseUrl("vatvc-dynamic-stub")
 
 }

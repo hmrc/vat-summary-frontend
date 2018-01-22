@@ -14,8 +14,10 @@
  * limitations under the License.
  *@
 
-@(user: models.User,
-  details: models.viewModels.VatDetailsModel,
+@import models.viewModels._
+
+@(user: User,
+  details: VatDetailsViewModel,
   serviceInfo: Html = Html(""),
   tradingName: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -26,8 +28,8 @@
 
         <section class="divider--bottom">
           <div class="grid-row">
-            @views.html.templates.nextPaymentSection(details.payment)
-            @views.html.templates.nextReturnSection(details.vatReturn)
+            @views.html.templates.nextPaymentSection(details.nextPaymentDueDate)
+            @views.html.templates.nextReturnSection(details.nextObligationDueDate)
           </div>
         </section>
 
