@@ -33,11 +33,10 @@ class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
                                          implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
-  def accountDetails(): Action[AnyContent] = authorisedAction { implicit request =>
-    user =>
-      for {
-        accountModel <- handleAccountDetailsModel(user)
-      } yield Ok(views.html.account.accountDetails(user, accountModel))
+  def accountDetails(): Action[AnyContent] = authorisedAction { implicit request => user =>
+    handleAccountDetailsModel(user).map(accountModel => {
+      Ok(views.html.account.accountDetails(user, accountModel))
+    })
   }
 
   private[controllers] def handleAccountDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[AccountDetailsModel] = {

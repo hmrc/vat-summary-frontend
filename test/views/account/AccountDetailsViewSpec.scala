@@ -31,20 +31,41 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
     val businessDetailsHeading = "h2:nth-of-type(1)"
     val correspondenceDetailsHeading = "h2:nth-of-type(2)"
 
-    val nameRow = "dt#name"
-    val businessAddressRow = "dt#business-address"
-    val businessContactRow = "dt#business-contact"
-    val businessPhoneRow = "dt#business-phone"
-    val businessMobileRow = "dt#business-mobile"
-    val correspondenceAddressRow = "dt#correspondence-address"
-    val correspondenceContactRow = "dt#correspondence-contact"
-    val correspondenceEmailRow = "dt#correspondence-email"
-    val correspondencePhoneRow = "dt#correspondence-phone"
-    val correspondenceMobileRow = "dt#correspondence-mobile"
+    val nameRowQuestion = "div#name dt"
+    val businessAddressRowQuestion = "div#business-address dt"
+    val businessContactRowQuestion = "div#business-contact dt"
+    val businessPhoneRowQuestion = "div#business-phone dt"
+    val businessMobileRowQuestion = "div#business-mobile dt"
+    val correspondenceAddressRowQuestion = "div#correspondence-address dt"
+    val correspondenceContactRowQuestion = "div#correspondence-contact dt"
+    val correspondenceEmailRowQuestion = "div#correspondence-email dt"
+    val correspondencePhoneRowQuestion = "div#correspondence-phone dt"
+    val correspondenceMobileRowQuestion = "div#correspondence-mobile dt"
+
+    val nameRowAnswer = "div#name dd"
+    val businessAddressRowAnswer = "div#business-address dd"
+    val businessContactRowAnswer = "div#business-contact dd"
+    val businessPhoneRowAnswer = "div#business-phone dd"
+    val businessMobileRowAnswer = "div#business-mobile dd"
+    val correspondenceAddressRowAnswer = "div#correspondence-address dd"
+    val correspondenceContactRowAnswer = "div#correspondence-contact dd"
+    val correspondenceEmailRowAnswer = "div#correspondence-email dd"
+    val correspondencePhoneRowAnswer = "div#correspondence-phone dd"
+    val correspondenceMobileRowAnswer = "div#correspondence-mobile dd"
   }
 
   private val user = User("1111")
-  val account = AccountDetailsModel("", "", "", "", "", "", "", "", "")
+  val account = AccountDetailsModel(
+    "Test User",
+    "1 Correspondence Address",
+    "1CPC",
+    "1 Business Address",
+    "1BPC",
+    "123456789",
+    "987654321",
+    "123456789",
+    "user@test.com"
+  )
 
   "Rendering the VAT details page" should {
 
@@ -71,36 +92,68 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
       elementText(Selectors.correspondenceDetailsHeading) shouldBe "Contact details"
     }
 
-    "have the name heading" in {
-      elementText(Selectors.nameRow) shouldBe "Name"
+    "have the name question" in {
+      elementText(Selectors.nameRowQuestion) shouldBe "Name"
     }
 
-    "have the business address heading" in {
-      elementText(Selectors.businessAddressRow) shouldBe "Business address"
+    "have the business address question" in {
+      elementText(Selectors.businessAddressRowQuestion) shouldBe "Business address"
     }
 
-    "have the business phone heading" in {
-      elementText(Selectors.businessPhoneRow) shouldBe "Business phone"
+    "have the business phone question" in {
+      elementText(Selectors.businessPhoneRowQuestion) shouldBe "Business phone"
     }
 
-    "have the business mobile phone heading" in {
-      elementText(Selectors.businessMobileRow) shouldBe "Mobile phone"
+    "have the business mobile phone question" in {
+      elementText(Selectors.businessMobileRowQuestion) shouldBe "Mobile phone"
     }
 
-    "have the correspondence address heading" in {
-      elementText(Selectors.correspondenceAddressRow) shouldBe "Correspondence address"
+    "have the correspondence address question" in {
+      elementText(Selectors.correspondenceAddressRowQuestion) shouldBe "Correspondence address"
     }
 
-    "have the email heading" in {
-      elementText(Selectors.correspondenceEmailRow) shouldBe "Email"
+    "have the email question" in {
+      elementText(Selectors.correspondenceEmailRowQuestion) shouldBe "Email"
     }
 
-    "have the home phone heading" in {
-      elementText(Selectors.correspondencePhoneRow) shouldBe "Home phone"
+    "have the home phone question" in {
+      elementText(Selectors.correspondencePhoneRowQuestion) shouldBe "Home phone"
     }
 
-    "have the mobile phone heading" in {
-      elementText(Selectors.correspondenceMobileRow) shouldBe "Mobile phone"
+    "have the mobile phone question" in {
+      elementText(Selectors.correspondenceMobileRowQuestion) shouldBe "Mobile phone"
+    }
+
+    "have the name answer" in {
+      elementText(Selectors.nameRowAnswer) shouldBe "Test User"
+    }
+
+    "have the business address answer" in {
+      elementText(Selectors.businessAddressRowAnswer) shouldBe "1 Business Address 1BPC"
+    }
+
+    "have the business phone answer" in {
+      elementText(Selectors.businessPhoneRowAnswer) shouldBe "123456789"
+    }
+
+    "have the business mobile phone answer" in {
+      elementText(Selectors.businessMobileRowAnswer) shouldBe "987654321"
+    }
+
+    "have the correspondence address answer" in {
+      elementText(Selectors.correspondenceAddressRowAnswer) shouldBe "1 Correspondence Address 1CPC"
+    }
+
+    "have the email answer" in {
+      elementText(Selectors.correspondenceEmailRowAnswer) shouldBe "user@test.com"
+    }
+
+    "have the home phone answer" in {
+      elementText(Selectors.correspondencePhoneRowAnswer) shouldBe "123456789"
+    }
+
+    "have the mobile phone answer" in {
+      elementText(Selectors.correspondenceMobileRowAnswer) shouldBe "987654321"
     }
   }
 }

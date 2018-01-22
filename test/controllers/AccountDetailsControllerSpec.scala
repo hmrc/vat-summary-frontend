@@ -128,17 +128,3 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
