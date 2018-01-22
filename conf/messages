@@ -38,6 +38,21 @@ openPayments.amount = Amount
 openPayments.check = Check {0} return
 openPayments.onlyByCard = You can only pay by card
 openPayments.makePayment = Make a payment
+openPayments.noPayments = You have no open payments.
+
+accountDetails.title = Account details
+accountDetails.edit = You edit these details in your accounting software.
+accountDetails.contactYou = HMRC will only use these to contact you.
+accountDetails.businessDetails = Business details
+accountDetails.contactDetails = Contact details
+accountDetails.name = Name
+accountDetails.businessAddress = Business address
+accountDetails.businessContact = Business contact details
+accountDetails.businessPhone = Business phone
+accountDetails.correspondenceAddress = Correspondence address
+accountDetails.email = Email
+accountDetails.mobile = Mobile phone
+accountDetails.homePhone = Home phone
 
 featureSwitch.title = Feature switches
 featureSwitch.heading = Features

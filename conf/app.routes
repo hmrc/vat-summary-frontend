@@ -2,6 +2,8 @@
 
 GET        /details                controllers.VatDetailsController.details
 GET        /payments               controllers.OpenPaymentsController.openPayments
+GET        /account                controllers.AccountDetailsController.accountDetails
+
 GET        /feature-switch         controllers.FeatureSwitchController.featureSwitch
 POST       /feature-switch         controllers.FeatureSwitchController.submitFeatureSwitch
 

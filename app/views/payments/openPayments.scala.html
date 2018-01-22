@@ -26,10 +26,11 @@
       <div class="column-two-thirds">
 
         <h1 class="heading-xlarge">@messages("openPayments.title")</h1>
-        <div class="grid-row">
-          <div class="column-full">
 
-              <table class="margin-bottom">
+        @if(payments.nonEmpty) {
+          <div class="grid-row">
+            <div class="column-full form-field">
+              <table>
                 <thead>
                 <tr>
                   <th>@messages("openPayments.type")</th>
@@ -40,26 +41,26 @@
                 </thead>
                 <tbody>
                 @payments.map { payment =>
-                    <tr>
-                      <td>@payment.paymentType</td>
-                      <td>@displayDate(payment.due)</td>
-                      <td class="numeric">@displayMoney(payment.amount)</td>
-                      <td class="numeric"><a href="#">
-                        @messages("openPayments.check", displayDate(payment.end))
-                      </a></td>
-                    </tr>
+                  <tr>
+                    <td>@payment.paymentType</td>
+                    <td>@displayDate(payment.due)</td>
+                    <td class="numeric">@displayMoney(payment.amount)</td>
+                    <td class="numeric"><a href="#">
+                      @messages("openPayments.check", displayDate(payment.end))
+                    </a></td>
+                  </tr>
                 }
                 </tbody>
               </table>
-
+            </div>
           </div>
-        </div>
+          <p>@messages("openPayments.onlyByCard")</p>
+          <a href="#" class="button">@messages("openPayments.makePayment")</a>
 
-        <br>
-        <p>@messages("openPayments.onlyByCard")</p>
-        <br>
+        } else {
+          <p id="no-payments" class="lede">@messages("openPayments.noPayments")</p>
+        }
 
-        <a href="#" class="button">@messages("openPayments.makePayment")</a>
       </div>
     </div>
   }
