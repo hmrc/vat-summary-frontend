@@ -19,9 +19,9 @@ package models.payments
 import java.time.LocalDate
 
 import models.obligations.Obligation
-import play.api.libs.json._ // JSON library
-import play.api.libs.json.Reads._ // Custom validation helpers
-import play.api.libs.functional.syntax._ // Combinator syntax
+import play.api.libs.json._
+import play.api.libs.json.Reads._
+import play.api.libs.functional.syntax._
 
 case class Payment(end: LocalDate,
                    due: LocalDate,
@@ -30,9 +30,9 @@ case class Payment(end: LocalDate,
 
 object Payment {
 
-  implicit val paymentWrite: Writes[Payment] = Json.writes[Payment]
+  implicit val paymentWrites: Writes[Payment] = Json.writes[Payment]
 
-  implicit val paymentReads = (
+  implicit val paymentReads: Reads[Payment] = (
     (JsPath \ "taxPeriodTo").read[LocalDate] and
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "outstandingAmount").read[BigDecimal] and

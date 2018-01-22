@@ -16,9 +16,10 @@
 
 package models.payments
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json._
 
-case class Payments(payments: Seq[Payment])
+
+case class Payments(financialTransactions: Seq[Payment])
 
 object Payments {
 

@@ -34,12 +34,13 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(Status.OK, responseJson = Some(
         Json.obj(
-          "payments" -> Json.arr(
+          "financialTransactions" -> Json.arr(
             Json.obj(
-              "end" -> "2017-01-01",
-              "due" -> "2017-10-25",
+              "taxPeriodTo" -> "2017-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2017-10-25")
+              ),
               "outstandingAmount" -> 1000,
-              "status" -> "O",
               "periodKey" -> "#003"
             )
           )
