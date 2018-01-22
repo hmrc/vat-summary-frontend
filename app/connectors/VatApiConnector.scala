@@ -21,6 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.VatReturnObligationsHttpParser.HttpGetResult
+import models.CustomerInformation
 import models.obligations.VatReturnObligation.Status
 import models.obligations.VatReturnObligations
 import play.api.Logger
@@ -49,8 +50,9 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
       }
   }
 
-  // TODO: This is currently a static return; needs replacing with a real call
-  def getTradingName(vrn: String): Future[String] = {
-    Future.successful("Cheapo Clothing Ltd")
+  // TODO: Replace with a real call to an endpoint once it becomes available. This returns static data for now.
+  def getCustomerInfo(vrn: String)
+                     (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] = {
+    Future.successful(Right(CustomerInformation("Cheapo Clothing Ltd")))
   }
 }

@@ -18,8 +18,8 @@ package services
 
 import java.time.LocalDate
 
+import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector}
-import connectors.httpParsers.VatReturnObligationsHttpParser._
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
@@ -27,6 +27,7 @@ import models.payments.{Payment, Payments}
 import models.VatDetailsModel
 import uk.gov.hmrc.http.HeaderCarrier
 import models._
+
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -181,18 +182,19 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
   }
 
-  "Calling .getTradingName" should {
+  "Calling .getCustomerInfo" should {
 
-    "return a trading name" in new Test {
-      val exampleTradingName: String = "Cheapo Clothing Ltd"
+    "return a user's information" in new Test {
 
-      (mockVatApiConnector.getTradingName(_: String))
-        .expects(*)
-        .returns(Future.successful(exampleTradingName))
+      val exampleCustomerInfo: CustomerInformation = CustomerInformation("Cheapo Clothing Ltd")
 
-      lazy val result: String = await(service.getTradingName(User("999999999")))
+      (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *)
+        .returns(Future.successful(Right(exampleCustomerInfo)))
 
-      result shouldBe exampleTradingName
+      lazy val result: HttpGetResult[CustomerInformation] = await(service.getCustomerInfo(User("999999999")))
+
+      result shouldBe Right(exampleCustomerInfo)
     }
   }
 }
