@@ -64,8 +64,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         accountDetails.select("h3").text() shouldBe "Account details"
       }
 
-      "have a link to '#'" in {
-        accountDetails.select("a").attr("href") shouldBe "#"
+      s"have a link to ${controllers.routes.AccountDetailsController.accountDetails().url}" in {
+        accountDetails.select("a").attr("href") shouldBe controllers.routes.AccountDetailsController.accountDetails().url
       }
 
       "have the text" in {
