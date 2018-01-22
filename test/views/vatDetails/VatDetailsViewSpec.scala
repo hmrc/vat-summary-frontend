@@ -29,11 +29,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val tradingNameHeading = "h1 span"
-    val nextPaymentHeading = "h2#payment-header"
-    val nextReturnHeading = "h2#return-header"
+    val nextPayment = "#payments h2"
+    val nextReturn = "#next-return h2"
     val header = "div.test"
-    val accountDetails = ".account-details"
-    val submittedReturns = ".submitted-returns"
+    val accountDetails = "#account-details"
+    val submittedReturns = "#submitted-returns"
   }
 
   private val user = User("1111")
@@ -97,11 +97,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section" in {
-      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+      elementText(Selectors.nextReturn) shouldBe "Next return due"
     }
 
     "render the next payment section" in {
-      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+      elementText(Selectors.nextPayment) shouldBe "Next payment due"
     }
   }
 
@@ -111,11 +111,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no return message" in {
-      elementText(Selectors.nextReturnHeading) shouldBe "No return due"
+      elementText(Selectors.nextReturn) shouldBe "No return due"
     }
 
     "render the no payment message" in {
-      elementText(Selectors.nextPaymentHeading) shouldBe "No payment due"
+      elementText(Selectors.nextPayment) shouldBe "No payment due"
     }
   }
 

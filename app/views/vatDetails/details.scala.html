@@ -34,13 +34,13 @@
         </section>
 
         <div class="grid-row">
-          <div class="column-one-half account-details">
-            <br><h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}">@messages("vatDetails.accountDetails.link")</a></h3>
+          <div class="column-one-half" id="account-details">
+            <h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}">@messages("vatDetails.accountDetails.link")</a></h3>
             <p>@messages("vatDetails.accountDetails.view")</p>
           </div>
 
-        <div class="column-one-half submitted-returns">
-            <br><h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}">@messages("vatDetails.submittedReturns.link")</a></h3>
+        <div class="column-one-half" id="submitted-returns">
+            <h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}">@messages("vatDetails.submittedReturns.link")</a></h3>
             <p>@messages("vatDetails.submittedReturns.view")</p>
         </div>
 
