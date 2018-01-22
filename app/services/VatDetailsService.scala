@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
-import connectors.httpParsers.VatReturnObligationsHttpParser._
+import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector}
 import models.obligations.VatReturnObligation.Status._
 import models._
@@ -63,7 +63,8 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
     result.value
   }
 
-  def getTradingName(user: User): Future[String] = {
-    vatApiConnector.getTradingName(user.vrn)
+  def getCustomerInfo(user: User)
+                     (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] = {
+    vatApiConnector.getCustomerInfo(user.vrn)
   }
 }

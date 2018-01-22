@@ -22,7 +22,7 @@ import models.errors.{BadRequestError, HttpError}
 import models.obligations.VatReturnObligation
 import models.payments.Payment
 import models.viewModels.VatDetailsViewModel
-import models.{User, VatDetailsModel}
+import models.{CustomerInformation, User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
@@ -53,7 +53,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
       )
     }
-    val vatServiceTradingNameResult: String = "Trading Name"
+    val exampleCustomerInfo: CustomerInformation = CustomerInformation("Cheapo Clothing Ltd")
     val btaPartialResult: Html = Html("<div>example</div>")
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
@@ -69,9 +69,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(vatServiceDetailsResult)
 
-        (mockVatDetailsService.getTradingName(_: User))
-          .expects(*)
-          .returns(vatServiceTradingNameResult)
+        (mockVatDetailsService.getCustomerInfo(_: User)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(exampleCustomerInfo)))
 
         (mockBtaHeaderPartialService.btaHeaderPartial()(_: Request[AnyContent]))
           .expects(*)
