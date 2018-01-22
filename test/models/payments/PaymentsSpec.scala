@@ -83,7 +83,7 @@ class PaymentsSpec extends UnitSpec {
 
     val exampleOutputString =
       """{
-        |"payments":[{
+        |"financialTransactions":[{
         |"end":"2017-03-01",
         |"due":"2017-03-08",
         |"outstandingAmount":9999,
@@ -98,7 +98,7 @@ class PaymentsSpec extends UnitSpec {
 
     val exampleInputString =
       """{
-        |"payments":[{
+        |"financialTransactions":[{
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
