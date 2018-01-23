@@ -31,10 +31,4 @@ object VatReturnObligation {
 
   implicit val format: Format[VatReturnObligation] = Json.format[VatReturnObligation]
 
-  object Status extends Enumeration {
-    val All: Status.Value = Value("A")
-    val Outstanding: Status.Value = Value("O")
-    val Fulfilled: Status.Value = Value("F")
-  }
-
 }

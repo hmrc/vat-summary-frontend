@@ -16,10 +16,12 @@
 
 package connectors
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.PaymentsHttpParser.HttpGetResult
+import models.obligations.Obligation.Status
 import models.payments.Payments
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,15 +34,19 @@ class FinancialDataConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 
-  private[connectors] def paymentsUrl(vrn: String): String = s"/financial-transactions/vrn/$vrn"
+  private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vrn/$vrn"
 
-  def getPaymentsForVatReturns(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
-    http.GET(paymentsUrl(vrn)).map {
-      case payments@Right(_) => payments
-      case httpError@Left(error) =>
-        Logger.info("FinancialDataConnector received error: " + error.message)
-        httpError
-    }
+  def getPaymentsForVatReturns(vrn: String,
+                              from: LocalDate,
+                              to: LocalDate,
+                              status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+    http.GET(paymentsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
+      .map {
+        case payments@Right(_) => payments
+        case httpError@Left(error) =>
+          Logger.info("FinancialDataConnector received error: " + error.message)
+          httpError
+      }
   }
 
 }
