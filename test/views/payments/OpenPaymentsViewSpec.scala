@@ -31,7 +31,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val paymentType = "td:nth-of-type(1)"
     val paymentDue = "td:nth-of-type(2)"
     val paymentAmount = "td:nth-of-type(3)"
-    val paymentLink = "td:nth-of-type(4)"
+    val paymentLink = "td:nth-of-type(4) > a"
     val noPaymentMessage = "p#no-payments"
   }
 
@@ -80,6 +80,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the payment link" in {
       elementText(Selectors.paymentLink) shouldBe "Check 31 March 2000 return"
+    }
+
+    "have the correct link destination" in {
+      element(Selectors.paymentLink).attr("href") shouldBe "/return?start=2000-01-01&end=2000-03-31"
     }
   }
 
