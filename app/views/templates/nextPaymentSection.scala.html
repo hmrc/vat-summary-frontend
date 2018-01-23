@@ -23,10 +23,10 @@
 
 @paymentMessage = {@messages(paymentDueDate.fold("payment.noPayment") {_ => "payment.nextPayment"})}
 
-<div class="column-one-half">
-  <h2 class="heading-medium" id="payment-header" style="margin-top: 0px">@paymentMessage</h2>
+<div class="column-one-half" id="payments">
+  <h2 class="heading-medium" style="margin-top: 0px">@paymentMessage</h2>
   @paymentDueDate.map { date =>
     <p>@displayDate(date)</p>
-    <p><a href="#">@messages("payment.check")</a></p>
+    <p><a href="@{controllers.routes.OpenPaymentsController.openPayments().url}">@messages("payment.check")</a></p>
   }
 </div>

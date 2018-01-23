@@ -29,10 +29,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val tradingNameHeading = "h1 span"
-    val nextPaymentHeading = "h2#payment-header"
-    val nextReturnHeading = "h2#return-header"
-    val accountDetailsHeading = "h3 a"
+    val nextPayment = "#payments h2"
+    val nextReturn = "#next-return h2"
     val header = "div.test"
+    val accountDetails = "#account-details"
+    val submittedReturns = "#submitted-returns"
   }
 
   private val user = User("1111")
@@ -52,11 +53,41 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct trading name" in {
-      elementText(Selectors.tradingNameHeading) shouldBe "Trading Name"
+      elementText(Selectors.tradingNameHeading) shouldBe tradingName
     }
 
-    "have the account details section" in {
-      elementText(Selectors.accountDetailsHeading) shouldBe "VAT account details"
+    "have the account details section" should {
+
+      lazy val accountDetails = element(Selectors.accountDetails)
+
+      "have the heading" in {
+        accountDetails.select("h3").text() shouldBe "Account details"
+      }
+
+      s"have a link to ${controllers.routes.AccountDetailsController.accountDetails().url}" in {
+        accountDetails.select("a").attr("href") shouldBe controllers.routes.AccountDetailsController.accountDetails().url
+      }
+
+      "have the text" in {
+        accountDetails.select("p").text() shouldBe "View your registered VAT details and see how to change them."
+      }
+    }
+
+    "have the submitted returns section" should {
+
+      lazy val submittedReturns = element(Selectors.submittedReturns)
+
+      "have the heading" in {
+        submittedReturns.select("h3").text() shouldBe "Submitted returns"
+      }
+
+      "have a link to 'returns-url'" in {
+        submittedReturns.select("a").attr("href") shouldBe "returns-url"
+      }
+
+      "have the text" in {
+        submittedReturns.select("p").text() shouldBe "Check the returns you've sent us."
+      }
     }
   }
 
@@ -66,11 +97,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section" in {
-      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+      elementText(Selectors.nextReturn) shouldBe "Next return due"
     }
 
     "render the next payment section" in {
-      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+      elementText(Selectors.nextPayment) shouldBe "Next payment due"
     }
   }
 
@@ -80,11 +111,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no return message" in {
-      elementText(Selectors.nextReturnHeading) shouldBe "No return due"
+      elementText(Selectors.nextReturn) shouldBe "No return due"
     }
 
     "render the no payment message" in {
-      elementText(Selectors.nextPaymentHeading) shouldBe "No payment due"
+      elementText(Selectors.nextPayment) shouldBe "No payment due"
     }
   }
 

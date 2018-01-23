@@ -42,8 +42,9 @@ trait AppConfig extends ServicesConfig {
   val features: Features
   val vatApiBaseUrl: String
   val vatSummaryPartial: String
-  val vatReturnsUrl: String
   val btaService: String
+  val vatSubmittedReturnsUrl: String
+  val vatReturnDeadlinesUrl: String
 }
 
 @Singleton
@@ -81,7 +82,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val vatSummaryPartial: String = baseUrl("selfLookup") + "/vat-summary-partials/bta-home"
 
-  override lazy val vatReturnsUrl: String = getString(Keys.vatReturnsUrl)
+  private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
+  override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
+  override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
 
   override lazy val btaService: String = baseUrl(Keys.businessAccountService)
 }

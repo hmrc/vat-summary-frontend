@@ -35,7 +35,11 @@
           </div>
           <div id="business-address">
             <dt class="cya-question">@messages("accountDetails.businessAddress")</dt>
-            <dd class="cya-answer">@account.businessAddress<br>@account.businessPostcode</dd>
+            <dd class="cya-answer">@account.businessAddress
+                <span class="display-block">
+                    @account.businessPostcode
+                </span>
+            </dd>
           </div>
           <div id="business-phone">
             <dt class="cya-question">@messages("accountDetails.businessPhone")</dt>
@@ -54,7 +58,11 @@
         <dl class="govuk-check-your-answers cya-questions-short tax-estimate">
           <div id="correspondence-address">
             <dt class="cya-question">@messages("accountDetails.correspondenceAddress")</dt>
-            <dd class="cya-answer">@account.correspondenceAddress<br>@account.correspondencePostcode</dd>
+            <dd class="cya-answer">@account.correspondenceAddress
+                <span class="display-block">
+                    @account.correspondencePostcode
+                </span>
+            </dd>
           </div>
           <div id="correspondence-email">
             <dt class="cya-question">@messages("accountDetails.email")</dt>

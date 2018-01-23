@@ -21,12 +21,12 @@
 
 @nextReturnMessage = {@messages(obligationDueDate.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
-<div class="column-one-half">
-  <h2 class="heading-medium" id="return-header" style="margin-top: 0px">@nextReturnMessage</h2>
+<div class="column-one-half" id="next-return">
+  <h2 class="heading-medium" style="margin-top: 0px">@nextReturnMessage</h2>
   @obligationDueDate.map { date =>
     <p>@displayDate(date)</p>
     <p>
-        <a id="vat-returns-link" href="@{appConfig.vatReturnsUrl}">
+        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
             @messages("returnObligation.viewReturns")
         </a>
     </p>
