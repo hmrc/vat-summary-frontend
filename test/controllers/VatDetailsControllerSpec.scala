@@ -189,7 +189,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       LocalDate.now(),
       LocalDate.now(),
       1,
-      "O",
       "#001"
     )
     val obligation = VatReturnObligation(

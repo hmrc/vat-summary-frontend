@@ -19,15 +19,24 @@ package models.payments
 import java.time.LocalDate
 
 import models.obligations.Obligation
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json._
+import play.api.libs.json.Reads._
+import play.api.libs.functional.syntax._
 
 case class Payment(end: LocalDate,
                    due: LocalDate,
                    outstandingAmount: BigDecimal,
-                   status: String,
                    periodKey: String) extends Obligation
 
 object Payment {
 
-  implicit val format: Format[Payment] = Json.format[Payment]
+  implicit val paymentWrites: Writes[Payment] = Json.writes[Payment]
+
+  implicit val paymentReads: Reads[Payment] = (
+    (JsPath \ "taxPeriodTo").read[LocalDate] and
+    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
+    (JsPath \ "outstandingAmount").read[BigDecimal] and
+    (JsPath \ "periodKey").read[String]
+  )(Payment.apply _)
+
 }

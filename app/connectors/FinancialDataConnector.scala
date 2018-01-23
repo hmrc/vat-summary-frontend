@@ -38,14 +38,12 @@ class FinancialDataConnector @Inject()(http: HttpClient) {
             end = LocalDate.parse("2017-01-01"),
             due = LocalDate.parse("2017-10-25"),
             outstandingAmount = BigDecimal(1000.00),
-            status = "O",
             periodKey = "#003"
           ),
           Payment(
             end = LocalDate.parse("2017-10-19"),
             due = LocalDate.parse("2017-12-25"),
             outstandingAmount = BigDecimal(10.00),
-            status = "O",
             periodKey = "#001"
           )
         )
