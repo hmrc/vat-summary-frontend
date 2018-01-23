@@ -41,9 +41,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     OpenPaymentsModel(
       "Return",
       543.21,
-      LocalDate.parse("2000-02-23"),
-      LocalDate.parse("2000-04-12")
-    ))
+      LocalDate.parse("2000-04-08"),
+      LocalDate.parse("2000-01-01"),
+      LocalDate.parse("2000-03-31")
+    )
+  )
 
   "Rendering the open payments page" should {
 
@@ -69,7 +71,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the payment due date" in {
-      elementText(Selectors.paymentDue) shouldBe "23 February 2000"
+      elementText(Selectors.paymentDue) shouldBe "8 April 2000"
     }
 
     "render the payment amount" in {
@@ -77,7 +79,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the payment link" in {
-      elementText(Selectors.paymentLink) shouldBe "Check 12 April 2000 return"
+      elementText(Selectors.paymentLink) shouldBe "Check 31 March 2000 return"
     }
   }
 
