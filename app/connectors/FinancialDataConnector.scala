@@ -34,7 +34,7 @@ class FinancialDataConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 
-  private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vrn/$vrn"
+  private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
 
   def getPaymentsForVatReturns(vrn: String,
                               from: LocalDate,

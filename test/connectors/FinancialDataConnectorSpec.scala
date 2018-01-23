@@ -27,7 +27,7 @@ class FinancialDataConnectorSpec extends ControllerBaseSpec {
 
       val connector = new FinancialDataConnector(mock[HttpClient], mockAppConfig)
 
-      connector.paymentsUrl("111") shouldEqual "/financial-transactions/vrn/111"
+      connector.paymentsUrl("111") shouldEqual "/financial-transactions/vat/111"
 
     }
 

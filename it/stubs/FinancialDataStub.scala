@@ -3,12 +3,13 @@ package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
+import models.errors.ApiSingleError
 import play.api.http.Status._
 import play.api.libs.json.Json
 
 object FinancialDataStub extends WireMockMethods {
 
-  private val financialDataUri = "/financial-transactions/vrn/([0-9]+)"
+  private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
   private val dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"
 
   def stubAllOutstandingPayments: StubMapping = {
@@ -16,6 +17,34 @@ object FinancialDataStub extends WireMockMethods {
       "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
     ))
       .thenReturn(status = OK, body = allOutStandingPayments)
+  }
+
+  def stubNoPayments: StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map(
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+    ))
+      .thenReturn(status = OK, body = Json.toJson(noPayments))
+  }
+
+  def stubInvalidVrn: StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map(
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+    ))
+      .thenReturn(BAD_REQUEST, body = Json.toJson(invalidVrn))
+  }
+
+  def stubInvalidFromDate: StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map(
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+    ))
+      .thenReturn(BAD_REQUEST, body = Json.toJson(invalidFromDate))
+  }
+
+  def stubInvalidToDate: StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map(
+      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+    ))
+      .thenReturn(BAD_REQUEST, body = Json.toJson(invalidToDate))
   }
 
   private val allOutStandingPayments = Json.parse(
@@ -84,5 +113,18 @@ object FinancialDataStub extends WireMockMethods {
       |    ]
       |  }""".stripMargin
   )
+  private val noPayments = Json.parse(
+    """{
+      |    "idType" : "VRN",
+      |    "idNumber" : 111111111,
+      |    "regimeType" : "VATC",
+      |    "processingDate" : "2017-03-07T09:30:00.000Z",
+      |    "financialTransactions" : []
+      |  }""".stripMargin
+  )
+
+  private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
+  private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)
+  private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "", None)
 
 }
