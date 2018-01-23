@@ -16,23 +16,46 @@
 
 package models
 
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 
 class CustomerInformationSpec extends UnitSpec {
 
   "A CustomerInformation object" should {
 
-    val exampleCustomerInfo: CustomerInformation = CustomerInformation("Cheapo Clothing Ltd")
-    val exampleJson: JsValue = Json.parse("""{"tradingName":"Cheapo Clothing Ltd"}""")
+    val exampleCustomerInfo: CustomerInformation = CustomerInformation(
+      "John",
+      "Smith",
+      "Cheapo Clothing Ltd"
+    )
+
+    val exampleInputString =
+      """{
+        | "organisationDetails":{
+        |   "individualName":{
+        |     "firstName":"John",
+        |     "lastName":"Smith"
+        |   },
+        |   "tradingName":"Cheapo Clothing Ltd"
+        | }
+        |}"""
+        .stripMargin.replace("\n", "")
+
+    val exampleOutputString =
+      """{
+        |"firstName":"John",
+        |"lastName":"Smith",
+        |"tradingName":"Cheapo Clothing Ltd"
+        |}"""
+        .stripMargin.replace("\n", "")
 
     "parse to JSON" in {
-      val result = Json.toJson(exampleCustomerInfo)
-      result shouldBe exampleJson
+      val result = Json.toJson(exampleCustomerInfo).toString()
+      result shouldBe exampleOutputString
     }
 
     "be parsed from appropriate JSON" in {
-      val result = exampleJson.as[CustomerInformation]
+      val result = Json.parse(exampleInputString).as[CustomerInformation]
       result shouldBe exampleCustomerInfo
     }
   }

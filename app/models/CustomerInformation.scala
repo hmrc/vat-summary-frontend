@@ -16,10 +16,20 @@
 
 package models
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
-case class CustomerInformation(tradingName: String)
+case class CustomerInformation(firstName: String,
+                               lastName: String,
+                               tradingName: String)
+
 
 object CustomerInformation {
-  implicit val format: Format[CustomerInformation] = Json.format[CustomerInformation]
+  implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
+
+  implicit val customerInformationReads: Reads[CustomerInformation] = (
+      (JsPath \ "organisationDetails" \ "individualName" \ "firstName").read[String] and
+      (JsPath \ "organisationDetails" \ "individualName" \ "lastName").read[String] and
+      (JsPath \ "organisationDetails" \ "tradingName").read[String]
+    ) (CustomerInformation.apply _)
 }
