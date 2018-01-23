@@ -26,34 +26,22 @@ class PaymentsSpec extends UnitSpec {
   "A payment" should {
 
     val examplePayment = Payment(
+      LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-03-01"),
       LocalDate.parse("2017-03-08"),
       9999,
       "#001"
     )
 
-    val exampleOutputString =
-      """{
-        |"end":"2017-03-01",
-        |"due":"2017-03-08",
-        |"outstandingAmount":9999,
-        |"periodKey":"#001"
-        |}"""
-        .stripMargin.replace("\n", "")
-
     val exampleInputString =
       """{
+        |"taxPeriodFrom":"2017-01-01",
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
         |"periodKey":"#001"
         |}"""
         .stripMargin.replace("\n", "")
-
-    "parse to JSON" in {
-      val result = Json.toJson(examplePayment).toString
-      result shouldEqual exampleOutputString
-    }
 
     "be parsed from appropriate JSON" in {
       val result = Json.parse(exampleInputString).as[Payment]
@@ -67,12 +55,14 @@ class PaymentsSpec extends UnitSpec {
     val examplePayments = Payments(
       Seq(
         Payment(
+          LocalDate.parse("2017-01-01"),
           LocalDate.parse("2017-03-01"),
           LocalDate.parse("2017-03-08"),
           9999,
           "#001"
         ),
         Payment(
+          LocalDate.parse("2017-02-01"),
           LocalDate.parse("2017-04-01"),
           LocalDate.parse("2017-05-08"),
           7777,
@@ -81,40 +71,22 @@ class PaymentsSpec extends UnitSpec {
       )
     )
 
-    val exampleOutputString =
-      """{
-        |"financialTransactions":[{
-        |"end":"2017-03-01",
-        |"due":"2017-03-08",
-        |"outstandingAmount":9999,
-        |"periodKey":"#001"
-        |},{
-        |"end":"2017-04-01",
-        |"due":"2017-05-08",
-        |"outstandingAmount":7777,
-        |"periodKey":"#002"
-        |}]}"""
-        .stripMargin.replace("\n", "")
-
     val exampleInputString =
       """{
         |"financialTransactions":[{
+        |"taxPeriodFrom":"2017-01-01",
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
         |"periodKey":"#001"
         |},{
+        |"taxPeriodFrom":"2017-02-01",
         |"taxPeriodTo":"2017-04-01",
         |"items":[{"dueDate":"2017-05-08"}, {"dueDate":"2017-05-09"}],
         |"outstandingAmount":7777,
         |"periodKey":"#002"
         |}]}"""
         .stripMargin.replace("\n", "")
-
-    "parse to JSON" in {
-      val result = Json.toJson(examplePayments).toString
-      result shouldEqual exampleOutputString
-    }
 
     "be parsed from appropriate JSON" in {
       val result = Json.parse(exampleInputString).as[Payments]

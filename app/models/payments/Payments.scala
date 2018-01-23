@@ -16,12 +16,12 @@
 
 package models.payments
 
-import play.api.libs.json._
+import play.api.libs.json.{Json, Reads}
 
 
 case class Payments(financialTransactions: Seq[Payment])
 
 object Payments {
 
-  implicit val format: Format[Payments] = Json.format[Payments]
+  implicit val reads: Reads[Payments] = Json.reads[Payments]
 }

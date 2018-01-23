@@ -16,12 +16,12 @@
 
 package models.obligations
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Json, Reads}
 
 case class VatReturnObligations(obligations: Seq[VatReturnObligation])
 
 object VatReturnObligations {
 
-  implicit val format: Format[VatReturnObligations] = Json.format[VatReturnObligations]
+  implicit val format: Reads[VatReturnObligations] = Json.reads[VatReturnObligations]
 
 }

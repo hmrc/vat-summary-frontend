@@ -25,26 +25,6 @@ class VatReturnObligationsSpec extends UnitSpec {
 
   "An obligation" should {
 
-    "parse to the correct json format" in {
-
-      val input = VatReturnObligation(
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        LocalDate.parse("2018-01-31"),
-        "O",
-        None,
-        "#001"
-      )
-
-      val expected =
-        """{"start":"2017-01-01","end":"2017-12-31","due":"2018-01-31","status":"O","periodKey":"#001"}"""
-
-
-      val result = Json.toJson(input).toString()
-
-      result shouldEqual expected
-    }
-
     "parse from json" in {
 
       val input =
@@ -68,30 +48,6 @@ class VatReturnObligationsSpec extends UnitSpec {
   }
 
   "Obligations" should {
-
-    "parse to the correct json" in {
-
-      val input = VatReturnObligations(
-        Seq(
-          VatReturnObligation(
-            LocalDate.parse("2017-01-01"),
-            LocalDate.parse("2017-12-31"),
-            LocalDate.parse("2018-01-31"),
-            "O",
-            None,
-            "#001"
-          )
-        )
-      )
-
-      val expected =
-        """{"obligations":[{"start":"2017-01-01","end":"2017-12-31","due":"2018-01-31","status":"O","periodKey":"#001"}]}"""
-
-      val result = Json.toJson(input).toString()
-
-      result shouldEqual expected
-
-    }
 
     "parse from json" in {
 

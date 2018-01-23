@@ -61,6 +61,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
         )
 
         val payment = Payment(
+          LocalDate.parse("2015-03-01"),
           LocalDate.parse("2015-03-31"),
           LocalDate.parse("2019-01-15"),
           BigDecimal(10000),

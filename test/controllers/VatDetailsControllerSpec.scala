@@ -188,6 +188,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val payment = Payment(
       LocalDate.now(),
       LocalDate.now(),
+      LocalDate.now(),
       1,
       "#001"
     )

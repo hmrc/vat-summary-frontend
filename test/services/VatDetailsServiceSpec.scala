@@ -44,6 +44,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     )
 
     val payment: Payment = Payment(
+      start = LocalDate.parse("2017-11-22"),
       end = LocalDate.parse("2017-12-22"),
       due = LocalDate.parse("2017-12-26"),
       outstandingAmount = BigDecimal(1000.00),
