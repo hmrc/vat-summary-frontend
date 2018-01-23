@@ -6,7 +6,8 @@ import java.time.LocalDate
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.obligations.Obligation.Status
-import models.payments.Payments
+import models.payments.{Payment, Payments}
+import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -20,18 +21,31 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  "calling getPaymentsForVatReturns with a status of 'A'" should {
+  "calling getPaymentsForVatReturns with a status of 'O'" should {
 
-    "return all payments for a given period" in new Test {
-      override def setupStubs(): StubMapping = ???
+    "return all outstanding payments for a given period" in new Test {
+      override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
 
-      val expected = Right(Payments(Seq.empty))
+      val expected = Right(Payments(Seq(
+        Payment(
+          LocalDate.parse("2015-03-31"),
+          LocalDate.parse("2019-01-15"),
+          10000,
+          "15AC"
+        ),
+        Payment(
+          LocalDate.parse("2015-03-31"),
+          LocalDate.parse("2019-01-16"),
+          10000,
+          "15AC"
+        )
+      )))
 
       setupStubs()
       private val result = await(connector.getPaymentsForVatReturns("123456789",
         LocalDate.now(),
         LocalDate.now(),
-        Status.All))
+        Status.Outstanding))
 
       result shouldEqual expected
     }
