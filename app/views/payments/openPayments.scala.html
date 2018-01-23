@@ -45,7 +45,7 @@
                     <td>@payment.paymentType</td>
                     <td>@displayDate(payment.due)</td>
                     <td class="numeric">@displayMoney(payment.amount)</td>
-                    <td class="numeric"><a href="#">
+                    <td class="numeric"><a href="@appConfig.vatReturnUrl(payment.start.toString, payment.end.toString)">
                       @messages("openPayments.check", displayDate(payment.end))
                     </a></td>
                   </tr>

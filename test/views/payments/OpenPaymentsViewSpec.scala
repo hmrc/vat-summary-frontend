@@ -31,7 +31,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val paymentType = "td:nth-of-type(1)"
     val paymentDue = "td:nth-of-type(2)"
     val paymentAmount = "td:nth-of-type(3)"
-    val paymentLink = "td:nth-of-type(4)"
+    val paymentLink = "td:nth-of-type(4) > a"
     val noPaymentMessage = "p#no-payments"
   }
 
@@ -41,9 +41,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     OpenPaymentsModel(
       "Return",
       543.21,
-      LocalDate.parse("2000-02-23"),
-      LocalDate.parse("2000-04-12")
-    ))
+      LocalDate.parse("2000-04-08"),
+      LocalDate.parse("2000-01-01"),
+      LocalDate.parse("2000-03-31")
+    )
+  )
 
   "Rendering the open payments page" should {
 
@@ -69,7 +71,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the payment due date" in {
-      elementText(Selectors.paymentDue) shouldBe "23 February 2000"
+      elementText(Selectors.paymentDue) shouldBe "8 April 2000"
     }
 
     "render the payment amount" in {
@@ -77,7 +79,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the payment link" in {
-      elementText(Selectors.paymentLink) shouldBe "Check 12 April 2000 return"
+      elementText(Selectors.paymentLink) shouldBe "Check 31 March 2000 return"
+    }
+
+    "have the correct link destination" in {
+      element(Selectors.paymentLink).attr("href") shouldBe "/return?start=2000-01-01&end=2000-03-31"
     }
   }
 

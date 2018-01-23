@@ -115,13 +115,17 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             OpenPaymentsModel(
               "Return",
               543.21,
-              LocalDate.parse("2000-02-23"),
-              LocalDate.parse("2000-04-12")),
+              LocalDate.parse("2000-04-08"),
+              LocalDate.parse("2000-01-01"),
+              LocalDate.parse("2000-03-31")
+            ),
             OpenPaymentsModel(
               "Return",
               123.45,
-              LocalDate.parse("2000-01-10"),
-              LocalDate.parse("2000-05-22"))
+              LocalDate.parse("2000-08-08"),
+              LocalDate.parse("2000-04-01"),
+              LocalDate.parse("2000-07-30")
+            )
           )
         }
 
