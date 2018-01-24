@@ -76,6 +76,56 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
     }
 
+    "the user has an outstanding obligation but no outstanding payment" should {
+
+      "return the user's latest obligation but no payment" in new Test {
+        override def setupStubs(): StubMapping = {
+          VatApiStub.stubOutstandingObligations
+          FinancialDataStub.stubNoPayments
+        }
+
+        val obligation = VatReturnObligation(
+          start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
+          end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+          due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+          status = "O",
+          received = None,
+          periodKey = "#004"
+        )
+
+        val expected = Right(VatDetailsModel(Some(obligation), None))
+
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe expected
+      }
+
+    }
+
+    "the user has no outstanding obligation but an outstanding payment" should {
+
+      "returns the user's latest payment but no obligation" in new Test {
+        override def setupStubs(): StubMapping = {
+          VatApiStub.stubNoObligations
+          FinancialDataStub.stubAllOutstandingPayments
+        }
+
+        val payment = Payment(
+          LocalDate.parse("2015-03-01"),
+          LocalDate.parse("2015-03-31"),
+          LocalDate.parse("2019-01-15"),
+          BigDecimal(10000),
+          "15AC")
+
+        val expected = Right(VatDetailsModel(None, Some(payment)))
+
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
+
+        result shouldBe expected
+      }
+
+    }
+
     "the user has no outstanding obligations or payments" should {
 
       "return nothing" in new Test {

@@ -53,6 +53,20 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       result shouldEqual expected
     }
 
+    "return an empty list of payments" in new Test {
+      override def setupStubs(): StubMapping = FinancialDataStub.stubNoPayments
+
+      val expected = Right(Payments(Seq.empty))
+
+      setupStubs()
+      private val result = await(connector.getPaymentsForVatReturns("123456789",
+        LocalDate.now(),
+        LocalDate.now(),
+        Status.Outstanding))
+
+      result shouldEqual expected
+    }
+
   }
 
   "calling getVatReturnObligations with an invalid VRN" should {
