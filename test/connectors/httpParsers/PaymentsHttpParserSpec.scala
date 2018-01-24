@@ -36,6 +36,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
+              "taxPeriodFrom" -> "2016-12-01",
               "taxPeriodTo" -> "2017-01-01",
               "items" -> Json.arr(
                 Json.obj("dueDate" -> "2017-10-25")
@@ -49,6 +50,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val expected = Right(Payments(Seq(
         Payment(
+          start = LocalDate.parse("2016-12-01"),
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.00),

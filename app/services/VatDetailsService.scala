@@ -23,7 +23,7 @@ import cats.data.EitherT
 import cats.implicits._
 import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector}
-import models.obligations.VatReturnObligation.Status._
+import models.obligations.Obligation.Status._
 import models._
 import models.obligations.Obligation
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,7 +56,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
     val result = for {
       nextReturn <- EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
         .map(obligations => getNextObligation(obligations.obligations, date))
-      nextPayment <- EitherT(financialDataConnector.getPaymentsForVatReturns(user.vrn))
+      nextPayment <- EitherT(financialDataConnector.getPaymentsForVatReturns(user.vrn, dateFrom, dateTo, Outstanding))
         .map(payments => getNextObligation(payments.financialTransactions, date))
     } yield VatDetailsModel(nextReturn, nextPayment)
 

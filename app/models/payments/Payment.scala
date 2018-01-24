@@ -23,16 +23,16 @@ import play.api.libs.json._
 import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
 
-case class Payment(end: LocalDate,
+case class Payment(start: LocalDate,
+                   end: LocalDate,
                    due: LocalDate,
                    outstandingAmount: BigDecimal,
                    periodKey: String) extends Obligation
 
 object Payment {
 
-  implicit val paymentWrites: Writes[Payment] = Json.writes[Payment]
-
   implicit val paymentReads: Reads[Payment] = (
+    (JsPath \ "taxPeriodFrom").read[LocalDate] and
     (JsPath \ "taxPeriodTo").read[LocalDate] and
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "outstandingAmount").read[BigDecimal] and

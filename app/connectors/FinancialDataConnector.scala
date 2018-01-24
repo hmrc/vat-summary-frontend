@@ -19,36 +19,34 @@ package connectors
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
+import config.AppConfig
 import connectors.httpParsers.PaymentsHttpParser.HttpGetResult
-import models.payments.{Payment, Payments}
+import models.obligations.Obligation.Status
+import models.payments.Payments
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FinancialDataConnector @Inject()(http: HttpClient) {
+class FinancialDataConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
-  def getPaymentsForVatReturns(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
-    // TODO: This needs replacing with a real call to the financial data api once it becomes available
-    Future.successful(Right(
-      Payments(
-        Seq(
-          Payment(
-            end = LocalDate.parse("2017-01-01"),
-            due = LocalDate.parse("2017-10-25"),
-            outstandingAmount = BigDecimal(1000.00),
-            periodKey = "#003"
-          ),
-          Payment(
-            end = LocalDate.parse("2017-10-19"),
-            due = LocalDate.parse("2017-12-25"),
-            outstandingAmount = BigDecimal(10.00),
-            periodKey = "#001"
-          )
-        )
-      )
-    ))
+  import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
+
+  private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
+
+  def getPaymentsForVatReturns(vrn: String,
+                              from: LocalDate,
+                              to: LocalDate,
+                              status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+    http.GET(paymentsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
+      .map {
+        case payments@Right(_) => payments
+        case httpError@Left(error) =>
+          Logger.info("FinancialDataConnector received error: " + error.message)
+          httpError
+      }
   }
 
 }

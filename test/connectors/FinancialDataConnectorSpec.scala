@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package models.payments
+package connectors
 
-import play.api.libs.json.{Json, Reads}
+import controllers.ControllerBaseSpec
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
+class FinancialDataConnectorSpec extends ControllerBaseSpec {
 
-case class Payments(financialTransactions: Seq[Payment])
+  "FinancialDataConnector" should {
 
-object Payments {
+    "generate the correct obligations url" in {
 
-  implicit val reads: Reads[Payments] = Json.reads[Payments]
+      val connector = new FinancialDataConnector(mock[HttpClient], mockAppConfig)
+
+      connector.paymentsUrl("111") shouldEqual "/financial-transactions/vat/111"
+
+    }
+
+  }
+
 }
