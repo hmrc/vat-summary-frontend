@@ -43,9 +43,9 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       for {
         detailsModel <- handleVatDetailsModel(user)
         serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
-        tradingName <- vatDetailsService.getCustomerInfo(user)
+        customerInfo <- vatDetailsService.getCustomerInfo(user)
       } yield Ok(views.html.vatDetails.details(
-        user, constructViewModel(tradingName, detailsModel), serviceInfo
+        user, constructViewModel(customerInfo, detailsModel), serviceInfo
       ))
   }
 
