@@ -18,9 +18,11 @@ package controllers
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import models.viewModels.VatDetailsViewModel
-import models.{User, VatDetailsModel}
+import models.{CustomerInformation, User, VatDetailsModel}
+import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
@@ -43,7 +45,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
         tradingName <- vatDetailsService.getCustomerInfo(user)
       } yield Ok(views.html.vatDetails.details(
-        user, constructViewModel(detailsModel), serviceInfo, tradingName.right.get.tradingName
+        user, constructViewModel(tradingName, detailsModel), serviceInfo
       ))
   }
 
@@ -54,9 +56,13 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private[controllers] def constructViewModel(model: VatDetailsModel): VatDetailsViewModel = {
+  private[controllers] def constructViewModel(customerInfo: HttpGetResult[CustomerInformation], model: VatDetailsModel): VatDetailsViewModel = {
     val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
     val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
-    VatDetailsViewModel(paymentDueDate, obligationDueDate)
+    val tradingName: Option[String] = customerInfo match {
+      case Right(customerInformation) => Some(customerInformation.tradingName)
+      case Left(_) => None
+    }
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, tradingName)
   }
 }
