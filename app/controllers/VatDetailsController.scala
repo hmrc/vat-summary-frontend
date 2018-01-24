@@ -20,15 +20,12 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import models.viewModels.VatDetailsViewModel
-import models.{CustomerInformation, User, VatDetailsModel}
 import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
+import models.viewModels.VatDetailsViewModel
+import models.{CustomerInformation, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
-import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.Future
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi,
@@ -41,28 +38,33 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       for {
-        detailsModel <- handleVatDetailsModel(user)
+        nextActions <- vatDetailsService.getVatDetails(user)
         serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
         customerInfo <- vatDetailsService.getCustomerInfo(user)
-      } yield Ok(views.html.vatDetails.details(
-        user, constructViewModel(customerInfo, detailsModel), serviceInfo
-      ))
+      } yield {
+        val viewModel = constructViewModel(customerInfo, nextActions)
+        Ok(views.html.vatDetails.details(user, viewModel, serviceInfo))
+      }
   }
 
-  private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {
-    vatDetailsService.getVatDetails(user).map {
+  private[controllers] def constructViewModel(customerInfo: HttpGetResult[CustomerInformation],
+                                              nextActions: HttpGetResult[VatDetailsModel]): VatDetailsViewModel = {
+    // TODO: REVIEW - Handle failures properly
+    val model = nextActions match {
       case Right(detailsModel) => detailsModel
       case Left(_) => VatDetailsModel(None, None)
     }
-  }
 
-  private[controllers] def constructViewModel(customerInfo: HttpGetResult[CustomerInformation], model: VatDetailsModel): VatDetailsViewModel = {
-    val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
-    val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
+    // TODO: REVIEW - Handle failures properly
     val tradingName: Option[String] = customerInfo match {
       case Right(customerInformation) => Some(customerInformation.tradingName)
       case Left(_) => None
     }
+
+    val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
+
+    val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
+
     VatDetailsViewModel(paymentDueDate, obligationDueDate, tradingName)
   }
 }
