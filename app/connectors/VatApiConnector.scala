@@ -53,6 +53,12 @@ class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
   // TODO: Replace with a real call to an endpoint once it becomes available. This returns static data for now.
   def getCustomerInfo(vrn: String)
                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] = {
-    Future.successful(Right(CustomerInformation("Cheapo Clothing Ltd")))
+    Future.successful(Right(
+        CustomerInformation(
+          "Betty",
+          "Jones",
+          "Cheapo Clothing Ltd"
+        ))
+    )
   }
 }
