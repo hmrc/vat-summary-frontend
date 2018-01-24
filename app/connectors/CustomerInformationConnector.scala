@@ -19,12 +19,31 @@ package connectors
 import javax.inject.Inject
 
 import config.AppConfig
+import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
+import models.CustomerInformation
+import play.api.Logger
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class CustomerInformationConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
+  import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
+
   private[connectors] def customerInformationUrl(vrn: String): String = {
     s"${appConfig.customerInformationBaseUrl}/customer-information/vat/$vrn"
+  }
+
+  def getCustomerInfo(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[HttpGetResult[CustomerInformation]] = {
+    http.GET(customerInformationUrl(vrn))
+      .map {
+        case customerInfo@Right(_) => customerInfo
+        case httpError@Left(error) =>
+          Logger.info("CustomerInformationConnector received error: " + error.message)
+          httpError
+      }
   }
 
 }
