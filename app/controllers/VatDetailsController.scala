@@ -37,10 +37,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
+
+      val nextActionsCall = vatDetailsService.getVatDetails(user)
+      val serviceInfoCall = btaHeaderPartialService.btaHeaderPartial()
+      val customerInfoCall = vatDetailsService.getCustomerInfo(user)
+
       for {
-        nextActions <- vatDetailsService.getVatDetails(user)
-        serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
-        customerInfo <- vatDetailsService.getCustomerInfo(user)
+        nextActions <- nextActionsCall
+        serviceInfo <- serviceInfoCall
+        customerInfo <- customerInfoCall
       } yield {
         val viewModel = constructViewModel(customerInfo, nextActions)
         Ok(views.html.vatDetails.details(user, viewModel, serviceInfo))
@@ -56,9 +61,9 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
 
     // TODO: REVIEW - Handle failures properly
-    val tradingName: Option[String] = customerInfo match {
-      case Right(customerInformation) => Some(customerInformation.tradingName)
-      case Left(_) => None
+    val tradingName: String = customerInfo match {
+      case Right(customerInformation) => customerInformation.tradingName
+      case Left(_) => ""
     }
 
     val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)

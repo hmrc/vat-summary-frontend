@@ -22,6 +22,6 @@ import play.api.libs.json.{Format, Json}
 
 case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
                                nextObligationDueDate: Option[LocalDate],
-                               tradingName: Option[String])
+                               entityName: String)
 
 
