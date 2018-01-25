@@ -4,6 +4,7 @@ package connectors
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.CustomerInformation
+import models.errors.ServerSideError
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -24,6 +25,17 @@ class CustomerInformationConnectorISpec extends IntegrationBaseSpec {
       override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo
 
       val expected = Right(CustomerInformation("Vincent", "Vatreturn", "Cheapo Clothing"))
+
+      setupStubs()
+      private val result = await(connector.getCustomerInfo("1111"))
+
+      result shouldEqual expected
+    }
+
+    "return an HttpError if one is received" in new Test {
+      override def setupStubs(): StubMapping = CustomerInfoStub.stubErrorFromApi
+
+      val expected = Left(ServerSideError)
 
       setupStubs()
       private val result = await(connector.getCustomerInfo("1111"))

@@ -15,6 +15,11 @@ object CustomerInfoStub extends WireMockMethods {
       .thenReturn(status = OK, body = customerInfo)
   }
 
+  def stubErrorFromApi: StubMapping = {
+    when(method = GET, uri = financialDataUri)
+      .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
+  }
+
   private val customerInfo = Json.parse(
     """{
       |    "organisationDetails" : {
@@ -32,6 +37,11 @@ object CustomerInfoStub extends WireMockMethods {
       |      "businessStartDate" : "2017-01-01"
       |    }
       |  }""".stripMargin
+  )
+
+  private val errorJson = Json.obj(
+    "code" -> "500",
+    "message" -> "INTERNAL_SERVER_ERROR"
   )
 
 }
