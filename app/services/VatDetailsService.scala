@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
-import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector}
 import models.obligations.Obligation.Status._
 import models._

@@ -31,6 +31,14 @@ class VatApiConnectorSpec extends ControllerBaseSpec {
 
     }
 
+    "generate the correct customer information url" in {
+
+      val connector = new VatApiConnector(mock[HttpClient], mockAppConfig)
+
+      connector.customerInfoUrl("111") shouldEqual "/customer-information/vat/111"
+
+    }
+
   }
 
 }

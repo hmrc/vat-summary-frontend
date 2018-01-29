@@ -8,15 +8,15 @@ import play.api.libs.json.Json
 
 object CustomerInfoStub extends WireMockMethods {
 
-  private val financialDataUri = "/customer-information/vat/([0-9]+)"
+  private val customerInfoUri = "/customer-information/vat/([0-9]+)"
 
   def stubCustomerInfo: StubMapping = {
-    when(method = GET, uri = financialDataUri)
+    when(method = GET, uri = customerInfoUri)
       .thenReturn(status = OK, body = customerInfo)
   }
 
   def stubErrorFromApi: StubMapping = {
-    when(method = GET, uri = financialDataUri)
+    when(method = GET, uri = customerInfoUri)
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
   }
 

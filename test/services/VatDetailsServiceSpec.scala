@@ -18,7 +18,7 @@ package services
 
 import java.time.LocalDate
 
-import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector}
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
