@@ -58,7 +58,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
         .map(obligations => getNextObligation(obligations.obligations, date))
       nextPayment <- EitherT(financialDataConnector.getPaymentsForVatReturns(user.vrn, dateFrom, dateTo, Outstanding))
         .map(payments => getNextObligation(payments.financialTransactions, date))
-    } yield VatDetailsModel(nextReturn, nextPayment)
+    } yield VatDetailsModel(nextPayment, nextReturn)
 
     result.value
   }

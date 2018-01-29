@@ -125,7 +125,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
-        result shouldBe Right(VatDetailsModel(Some(currentObligation), Some(payment)))
+        result shouldBe Right(VatDetailsModel(Some(payment), Some(currentObligation)))
       }
 
     }

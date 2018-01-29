@@ -20,7 +20,6 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import models.viewModels.VatDetailsViewModel
 import models.VatDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -43,23 +42,16 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         nextActions <- nextActionsCall
         customerInfo <- entityNameCall
       } yield {
-        val viewModel = constructViewModel(customerInfo, nextActions)
-        Ok(views.html.vatDetails.details(user, viewModel))
+        nextActions match {
+          case Right(actions) => Ok(views.html.vatDetails.details(user, constructViewModel(actions, customerInfo)))
+          case Left(_) => Ok(views.html.vatDetails.details(user, constructViewModel(VatDetailsModel(None, None), customerInfo)))
+        }
       }
   }
 
-  private[controllers] def constructViewModel(entityName: Option[String],
-                                              nextActions: HttpGetResult[VatDetailsModel]): VatDetailsViewModel = {
-    // TODO: REVIEW - Handle failures properly
-    val model = nextActions match {
-      case Right(detailsModel) => detailsModel
-      case Left(_) => VatDetailsModel(None, None)
-    }
-
-    val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
-
-    val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
-
+  private[controllers] def constructViewModel(vatDetailsModel: VatDetailsModel, entityName: Option[String]): VatDetailsViewModel = {
+    val paymentDueDate: Option[LocalDate] = vatDetailsModel.payment.map(_.due)
+    val obligationDueDate: Option[LocalDate] = vatDetailsModel.vatReturn.map(_.due)
     VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
   }
 }

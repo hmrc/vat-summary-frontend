@@ -19,4 +19,4 @@ package models
 import models.obligations.VatReturnObligation
 import models.payments.Payment
 
-case class VatDetailsModel(vatReturn: Option[VatReturnObligation], payment: Option[Payment])
+case class VatDetailsModel(payment: Option[Payment], vatReturn: Option[VatReturnObligation])
