@@ -182,24 +182,99 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
   }
 
-  "Calling .getCustomerInfo" should {
+  "Calling .getEntityName" when {
 
-    "return a user's information" in new Test {
+    "the connector retrieves a trading name" should {
 
-      val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-        Some("Cheapo Clothing Ltd"),
-        Some("John"),
-        Some("Smith"),
-        Some("Cheapo Clothing")
-      )
+      "return the trading name" in new Test {
+        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
+          Some("My organisation name"),
+          Some("John"),
+          Some("Smith"),
+          Some("My trading name")
+        )
 
-      (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *)
-        .returns(Future.successful(Right(exampleCustomerInfo)))
+        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(exampleCustomerInfo)))
 
-      lazy val result: HttpGetResult[CustomerInformation] = await(service.getCustomerInfo(User("999999999")))
+        lazy val result: Option[String] = await(service.getEntityName(User("999999999")))
 
-      result shouldBe Right(exampleCustomerInfo)
+        result shouldBe Some("My trading name")
+      }
+    }
+
+    "the connector does not retrieve a trading name or organisation name" should {
+
+      "return the first and last name" in new Test {
+        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
+          None,
+          Some("John"),
+          Some("Smith"),
+          None
+        )
+
+        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(exampleCustomerInfo)))
+
+        val result: Option[String] = await(service.getEntityName(User("999999999")))
+
+        result shouldBe Some("John Smith")
+      }
+    }
+
+    "the connector does not retrieve a trading name or a first and last name" should {
+
+      "return the organisation name" in new Test {
+        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
+          Some("My organisation name"),
+          None,
+          None,
+          None
+        )
+
+        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(exampleCustomerInfo)))
+
+        val result: Option[String] = await(service.getEntityName(User("999999999")))
+
+        result shouldBe Some("My organisation name")
+      }
+    }
+
+    "the connector does not retrieve a trading name, organisation name, or individual names" should {
+
+      "return None" in new Test {
+        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
+          None,
+          None,
+          None,
+          None
+        )
+
+        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(exampleCustomerInfo)))
+
+        val result: Option[String] = await(service.getEntityName(User("999999999")))
+
+        result shouldBe None
+      }
+    }
+
+    "the connector returns an error" should {
+
+      "return None" in new Test {
+        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Left(BadRequestError("", ""))))
+
+        val result: Option[String] = await(service.getEntityName(User("999999999")))
+
+        result shouldBe None
+      }
     }
   }
 }

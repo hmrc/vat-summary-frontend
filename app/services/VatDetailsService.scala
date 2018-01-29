@@ -63,8 +63,13 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
     result.value
   }
 
-  def getCustomerInfo(user: User)
-                     (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] = {
-    vatApiConnector.getCustomerInfo(user.vrn)
+  def getEntityName(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
+    vatApiConnector.getCustomerInfo(user.vrn).map {
+      case Right(CustomerInformation(None, None, None, None)) => None
+      case Right(CustomerInformation(None, Some(firstName), Some(lastName), None)) => Some(s"$firstName $lastName")
+      case Right(CustomerInformation(organisationName, None, None, None)) => organisationName
+      case Right(CustomerInformation(_, _, _, tradingName)) => tradingName
+      case Left(_) => None
+    }
   }
 }

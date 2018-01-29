@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import connectors.httpParsers.CustomerInfoHttpParser.HttpGetResult
 import models.viewModels.VatDetailsViewModel
-import models.{CustomerInformation, VatDetailsModel}
+import models.VatDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, VatDetailsService}
@@ -36,20 +36,19 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
-
       val nextActionsCall = vatDetailsService.getVatDetails(user)
-      val customerInfoCall = vatDetailsService.getCustomerInfo(user)
+      val entityNameCall = vatDetailsService.getEntityName(user)
 
       for {
         nextActions <- nextActionsCall
-        customerInfo <- customerInfoCall
+        customerInfo <- entityNameCall
       } yield {
         val viewModel = constructViewModel(customerInfo, nextActions)
         Ok(views.html.vatDetails.details(user, viewModel))
       }
   }
 
-  private[controllers] def constructViewModel(customerInfo: HttpGetResult[CustomerInformation],
+  private[controllers] def constructViewModel(entityName: Option[String],
                                               nextActions: HttpGetResult[VatDetailsModel]): VatDetailsViewModel = {
     // TODO: REVIEW - Handle failures properly
     val model = nextActions match {
@@ -57,16 +56,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case Left(_) => VatDetailsModel(None, None)
     }
 
-    // TODO: REVIEW - Handle failures properly
-    val tradingName = customerInfo match {
-      case Right(customerInformation) => customerInformation.tradingName
-      case Left(_) => None
-    }
-
     val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
 
     val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
 
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, tradingName)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
   }
 }

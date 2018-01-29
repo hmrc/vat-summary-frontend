@@ -53,12 +53,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
       )
     }
-    val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-      Some("Cheapo Clothing Ltd"),
-      Some("John"),
-      Some("Smith"),
-      Some("Cheapo Clothing")
-    )
+    val exampleEntityName = Some("Cheapo Clothing")
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
 
@@ -72,9 +67,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(vatServiceDetailsResult)
 
-        (mockVatDetailsService.getCustomerInfo(_: User)(_: HeaderCarrier, _: ExecutionContext))
+        (mockVatDetailsService.getEntityName(_: User)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(Future.successful(Right(exampleCustomerInfo)))
+          .returns(Future.successful(exampleEntityName))
       }
     }
 
