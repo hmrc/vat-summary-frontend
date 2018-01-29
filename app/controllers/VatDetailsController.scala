@@ -25,12 +25,11 @@ import models.viewModels.VatDetailsViewModel
 import models.{CustomerInformation, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
+import services.{EnrolmentsAuthService, VatDetailsService}
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
-                                     btaHeaderPartialService: BtaHeaderPartialService,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService)
   extends AuthorisedController with I18nSupport {
@@ -39,16 +38,14 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     user =>
 
       val nextActionsCall = vatDetailsService.getVatDetails(user)
-      val serviceInfoCall = btaHeaderPartialService.btaHeaderPartial()
       val customerInfoCall = vatDetailsService.getCustomerInfo(user)
 
       for {
         nextActions <- nextActionsCall
-        serviceInfo <- serviceInfoCall
         customerInfo <- customerInfoCall
       } yield {
         val viewModel = constructViewModel(customerInfo, nextActions)
-        Ok(views.html.vatDetails.details(user, viewModel, serviceInfo))
+        Ok(views.html.vatDetails.details(user, viewModel))
       }
   }
 
@@ -70,6 +67,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
     val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
 
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, tradingName)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, Some(tradingName))
   }
 }

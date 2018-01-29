@@ -14,13 +14,11 @@
  * limitations under the License.
  *@
 
-@import models.viewModels._
+@import models.viewModels.VatDetailsViewModel
 
-@(user: User,
-  details: VatDetailsViewModel,
-  serviceInfo: Html = Html(""))(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: User, details: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-  @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig, serviceInfo = serviceInfo) {
+  @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
     <div class="grid-row">
       <div class="column-two-thirds">
         <h1 class="heading-xlarge"><span class="heading-secondary">@details.entityName</span>@messages("vatDetails.title")</h1>
