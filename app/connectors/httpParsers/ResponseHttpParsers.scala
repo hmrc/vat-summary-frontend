@@ -35,11 +35,8 @@ trait ResponseHttpParsers {
       case ApiMultiError(_, _, _) => Left(MultipleErrors)
     }
   }
-
 }
 
 object ResponseHttpParsers {
-
   type HttpGetResult[T] = Either[HttpError, T]
-
 }

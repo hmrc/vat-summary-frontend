@@ -262,7 +262,12 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     "return a user's customer information" in new Test {
       override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo
 
-      val expected = Right(CustomerInformation("Vincent", "Vatreturn", "Cheapo Clothing"))
+      val expected = Right(CustomerInformation(
+        Some("Cheapo Clothing Ltd"),
+        Some("Vincent"),
+        Some("Vatreturn"),
+        Some("Cheapo Clothing")
+      ))
 
       setupStubs()
       private val result = await(connector.getCustomerInfo("1111"))
