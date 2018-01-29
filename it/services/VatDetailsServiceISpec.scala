@@ -20,7 +20,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import connectors.httpParsers.VatReturnObligationsHttpParser._
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
 import models.obligations.VatReturnObligation

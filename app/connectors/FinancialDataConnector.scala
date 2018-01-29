@@ -20,7 +20,7 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import connectors.httpParsers.PaymentsHttpParser.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.obligations.Obligation.Status
 import models.payments.Payments
 import play.api.Logger
@@ -44,7 +44,7 @@ class FinancialDataConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
       .map {
         case payments@Right(_) => payments
         case httpError@Left(error) =>
-          Logger.info("FinancialDataConnector received error: " + error.message)
+          Logger.warn("FinancialDataConnector received error: " + error.message)
           httpError
       }
   }

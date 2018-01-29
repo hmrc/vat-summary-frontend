@@ -41,6 +41,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           VatApiStub.stubOutstandingObligations
+          CustomerInfoStub.stubCustomerInfo
           FinancialDataStub.stubAllOutstandingPayments
           BtaHeaderPartialStub.successfulContent
         }

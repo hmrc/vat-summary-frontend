@@ -16,6 +16,7 @@
 
 package connectors.httpParsers
 
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.payments.Payments
 import play.api.http.Status.{BAD_REQUEST, OK}

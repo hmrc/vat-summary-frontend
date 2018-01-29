@@ -23,7 +23,7 @@ class FinancialDataConnectorSpec extends ControllerBaseSpec {
 
   "FinancialDataConnector" should {
 
-    "generate the correct obligations url" in {
+    "generate the correct payments url" in {
 
       val connector = new FinancialDataConnector(mock[HttpClient], mockAppConfig)
 
