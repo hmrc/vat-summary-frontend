@@ -19,17 +19,18 @@ package models
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-case class CustomerInformation(firstName: String,
-                               lastName: String,
-                               tradingName: String)
-
+case class CustomerInformation(organisationName: Option[String],
+                               firstName: Option[String],
+                               lastName: Option[String],
+                               tradingName: Option[String])
 
 object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
 
   implicit val customerInformationReads: Reads[CustomerInformation] = (
-      (JsPath \ "organisationDetails" \ "individualName" \ "firstName").read[String] and
-      (JsPath \ "organisationDetails" \ "individualName" \ "lastName").read[String] and
-      (JsPath \ "organisationDetails" \ "tradingName").read[String]
-    ) (CustomerInformation.apply _)
+    (JsPath \ "organisationDetails" \ "organisationName").readNullable[String] and
+    (JsPath \ "organisationDetails" \ "individualName" \ "firstName").readNullable[String] and
+    (JsPath \ "organisationDetails" \ "individualName" \ "lastName").readNullable[String] and
+    (JsPath \ "organisationDetails" \ "tradingName").readNullable[String]
+  ) (CustomerInformation.apply _)
 }

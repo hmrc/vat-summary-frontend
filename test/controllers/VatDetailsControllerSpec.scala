@@ -54,9 +54,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       )
     }
     val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-      "John",
-      "Smith",
-      "Cheapo Clothing Ltd"
+      Some("Cheapo Clothing Ltd"),
+      Some("John"),
+      Some("Smith"),
+      Some("Cheapo Clothing")
     )
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]

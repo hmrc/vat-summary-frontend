@@ -187,9 +187,10 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "return a user's information" in new Test {
 
       val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-        "John",
-        "Smith",
-        "Cheapo Clothing Ltd"
+        Some("Cheapo Clothing Ltd"),
+        Some("John"),
+        Some("Smith"),
+        Some("Cheapo Clothing")
       )
 
       (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))

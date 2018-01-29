@@ -58,15 +58,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
 
     // TODO: REVIEW - Handle failures properly
-    val tradingName: String = customerInfo match {
+    val tradingName = customerInfo match {
       case Right(customerInformation) => customerInformation.tradingName
-      case Left(_) => ""
+      case Left(_) => None
     }
 
     val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
 
     val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
 
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, Some(tradingName))
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, tradingName)
   }
 }
