@@ -18,9 +18,6 @@ package models.viewModels
 
 import java.time.LocalDate
 
-import play.api.libs.json.{Format, Json}
-
 case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
-                               nextObligationDueDate: Option[LocalDate])
-
-
+                               nextObligationDueDate: Option[LocalDate],
+                               entityName: Option[String])

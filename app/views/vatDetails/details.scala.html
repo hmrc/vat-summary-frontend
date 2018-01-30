@@ -14,36 +14,38 @@
  * limitations under the License.
  *@
 
-@import models.viewModels._
+@import models.viewModels.VatDetailsViewModel
 
-@(user: User,
-  details: VatDetailsViewModel,
-  serviceInfo: Html = Html(""),
-  tradingName: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: User, detailsViewModel: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-  @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig, serviceInfo = serviceInfo) {
-    <div class="grid-row">
-      <div class="column-two-thirds">
-        <h1 class="heading-xlarge"><span class="heading-secondary">@tradingName</span>@messages("vatDetails.title")</h1>
+@views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-xlarge">
+        @detailsViewModel.entityName.map { entityName =>
+          <span class="heading-secondary">@entityName</span>
+        }
+        @messages("vatDetails.title")
+      </h1>
 
-        <section class="divider--bottom">
-          <div class="grid-row">
-            @views.html.templates.nextPaymentSection(details.nextPaymentDueDate)
-            @views.html.templates.nextReturnSection(details.nextObligationDueDate)
-          </div>
-        </section>
-
+      <section class="divider--bottom">
         <div class="grid-row">
-          <div class="column-one-half" id="account-details">
-            <h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}">@messages("vatDetails.accountDetails.link")</a></h3>
-            <p>@messages("vatDetails.accountDetails.view")</p>
-          </div>
+          @views.html.templates.nextPaymentSection(detailsViewModel.nextPaymentDueDate)
+          @views.html.templates.nextReturnSection(detailsViewModel.nextObligationDueDate)
+        </div>
+      </section>
+
+      <div class="grid-row">
+        <div class="column-one-half" id="account-details">
+          <h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}">@messages("vatDetails.accountDetails.link")</a></h3>
+          <p>@messages("vatDetails.accountDetails.view")</p>
+        </div>
 
         <div class="column-one-half" id="submitted-returns">
             <h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}">@messages("vatDetails.submittedReturns.link")</a></h3>
             <p>@messages("vatDetails.submittedReturns.view")</p>
         </div>
-
       </div>
     </div>
-  }
+  </div>
+}

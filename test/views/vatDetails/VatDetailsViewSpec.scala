@@ -21,7 +21,6 @@ import models.viewModels.VatDetailsViewModel
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.Html
 import views.ViewBaseSpec
 
 class VatDetailsViewSpec extends ViewBaseSpec {
@@ -39,13 +38,13 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   private val user = User("1111")
   val detailsModel = VatDetailsViewModel(
     Some(LocalDate.now()),
-    Some(LocalDate.now())
+    Some(LocalDate.now()),
+    Some("Cheapo Clothing")
   )
-  val tradingName = "Trading Name"
 
   "Rendering the VAT details page" should {
 
-    lazy val view = views.html.vatDetails.details(user, detailsModel, Html(""), tradingName)
+    lazy val view = views.html.vatDetails.details(user, detailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -53,7 +52,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct trading name" in {
-      elementText(Selectors.tradingNameHeading) shouldBe tradingName
+      elementText(Selectors.tradingNameHeading) shouldBe detailsModel.entityName.get
     }
 
     "have the account details section" should {
@@ -93,7 +92,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a next return and a next payment" should {
 
-    lazy val view = views.html.vatDetails.details(user, detailsModel, Html(""), tradingName)
+    lazy val view = views.html.vatDetails.details(user, detailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section" in {
@@ -107,7 +106,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None), Html(""), tradingName)
+    lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None, None))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no return message" in {
@@ -116,17 +115,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "render the no payment message" in {
       elementText(Selectors.nextPayment) shouldBe "No payment due"
-    }
-  }
-
-  "Rendering the VAT details page with a header" should {
-
-    val basicHeaderHtml: Html = Html("""<div class="test">Example</div>""")
-    lazy val view = views.html.vatDetails.details(user, detailsModel, basicHeaderHtml, tradingName)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "render the header" in {
-      elementText(Selectors.header) shouldBe "Example"
     }
   }
 }

@@ -18,45 +18,40 @@ package controllers
 
 import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import models.viewModels.VatDetailsViewModel
-import models.{User, VatDetailsModel}
+import models.VatDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{BtaHeaderPartialService, EnrolmentsAuthService, VatDetailsService}
-import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.Future
+import services.{EnrolmentsAuthService, VatDetailsService}
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
-                                     btaHeaderPartialService: BtaHeaderPartialService,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService)
   extends AuthorisedController with I18nSupport {
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
+      val nextActionsCall = vatDetailsService.getVatDetails(user)
+      val entityNameCall = vatDetailsService.getEntityName(user)
+
       for {
-        detailsModel <- handleVatDetailsModel(user)
-        serviceInfo <- btaHeaderPartialService.btaHeaderPartial()
-        tradingName <- vatDetailsService.getCustomerInfo(user)
-      } yield Ok(views.html.vatDetails.details(
-        user, constructViewModel(detailsModel), serviceInfo, tradingName.right.get.tradingName
-      ))
+        nextActions <- nextActionsCall
+        customerInfo <- entityNameCall
+      } yield {
+        nextActions match {
+          case Right(actions) => Ok(views.html.vatDetails.details(user, constructViewModel(actions, customerInfo)))
+          case Left(_) => Ok(views.html.vatDetails.details(user, constructViewModel(VatDetailsModel(None, None), customerInfo)))
+        }
+      }
   }
 
-  private[controllers] def handleVatDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[VatDetailsModel] = {
-    vatDetailsService.getVatDetails(user).map {
-      case Right(detailsModel) => detailsModel
-      case Left(_) => VatDetailsModel(None, None)
-    }
-  }
-
-  private[controllers] def constructViewModel(model: VatDetailsModel): VatDetailsViewModel = {
-    val paymentDueDate: Option[LocalDate] = model.payment.map(_.due)
-    val obligationDueDate: Option[LocalDate] = model.vatReturn.map(_.due)
-    VatDetailsViewModel(paymentDueDate, obligationDueDate)
+  private[controllers] def constructViewModel(vatDetailsModel: VatDetailsModel, entityName: Option[String]): VatDetailsViewModel = {
+    val paymentDueDate: Option[LocalDate] = vatDetailsModel.payment.map(_.due)
+    val obligationDueDate: Option[LocalDate] = vatDetailsModel.vatReturn.map(_.due)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
   }
 }

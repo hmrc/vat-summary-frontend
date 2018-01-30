@@ -24,28 +24,31 @@ class CustomerInformationSpec extends UnitSpec {
   "A CustomerInformation object" should {
 
     val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-      "John",
-      "Smith",
-      "Cheapo Clothing Ltd"
+      Some("Cheapo Clothing Ltd"),
+      Some("John"),
+      Some("Smith"),
+      Some("Cheapo Clothing")
     )
 
     val exampleInputString =
       """{
         | "organisationDetails":{
+        |   "organisationName":"Cheapo Clothing Ltd",
         |   "individualName":{
         |     "firstName":"John",
         |     "lastName":"Smith"
         |   },
-        |   "tradingName":"Cheapo Clothing Ltd"
+        |   "tradingName":"Cheapo Clothing"
         | }
         |}"""
         .stripMargin.replace("\n", "")
 
     val exampleOutputString =
       """{
+        |"organisationName":"Cheapo Clothing Ltd",
         |"firstName":"John",
         |"lastName":"Smith",
-        |"tradingName":"Cheapo Clothing Ltd"
+        |"tradingName":"Cheapo Clothing"
         |}"""
         .stripMargin.replace("\n", "")
 

@@ -67,7 +67,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
           BigDecimal(10000),
           "15AC")
 
-        val expected = Right(VatDetailsModel(Some(obligation), Some(payment)))
+        val expected = Right(VatDetailsModel(Some(payment), Some(obligation)))
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
@@ -93,7 +93,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
           periodKey = "#004"
         )
 
-        val expected = Right(VatDetailsModel(Some(obligation), None))
+        val expected = Right(VatDetailsModel(None, Some(obligation)))
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
@@ -117,7 +117,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
           BigDecimal(10000),
           "15AC")
 
-        val expected = Right(VatDetailsModel(None, Some(payment)))
+        val expected = Right(VatDetailsModel(Some(payment), None))
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
 
