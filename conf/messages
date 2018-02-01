@@ -16,9 +16,10 @@ partials.btaHome.vatSection.manageVat = Manage your VAT
 
 vatDetails.title = VAT
 vatDetails.accountDetails.link = Account details
-vatDetails.accountDetails.view = View your registered VAT details and see how to change them.
+vatDetails.accountDetails.view = See your contact information and other details.
 vatDetails.submittedReturns.link = Submitted returns
 vatDetails.submittedReturns.view = Check the returns you''ve sent us.
+vatDetails.vrn = VAT registration number (VRN): {0}
 
 returnObligation.noReturn = No return due
 returnObligation.nextReturn = Next return due
