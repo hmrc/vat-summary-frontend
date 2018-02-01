@@ -27,15 +27,16 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val tradingNameHeading = "h1 span"
+    val entityNameHeading = "h1 span"
     val nextPayment = "#payments h2"
     val nextReturn = "#next-return h2"
     val header = "div.test"
     val accountDetails = "#account-details"
     val submittedReturns = "#submitted-returns"
+    val vatRegNo = ".form-hint"
   }
 
-  private val user = User("1111")
+  private val user = User("123456789")
   val detailsModel = VatDetailsViewModel(
     Some(LocalDate.now()),
     Some(LocalDate.now()),
@@ -51,8 +52,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       document.title shouldBe "VAT"
     }
 
-    "have the correct trading name" in {
-      elementText(Selectors.tradingNameHeading) shouldBe detailsModel.entityName.get
+    "have the correct entity name" in {
+      elementText(Selectors.entityNameHeading) shouldBe detailsModel.entityName.getOrElse("Fail")
+    }
+
+    "have the correct VRN message" in {
+      elementText(Selectors.vatRegNo) shouldBe s"VAT registration number (VRN): ${user.vrn}"
     }
 
     "have the account details section" should {
@@ -68,7 +73,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "have the text" in {
-        accountDetails.select("p").text() shouldBe "View your registered VAT details and see how to change them."
+        accountDetails.select("p").text() shouldBe "See your contact information and other details."
       }
     }
 
