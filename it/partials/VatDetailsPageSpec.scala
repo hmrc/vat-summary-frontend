@@ -43,7 +43,6 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           VatApiStub.stubOutstandingObligations
           CustomerInfoStub.stubCustomerInfo
           FinancialDataStub.stubAllOutstandingPayments
-          BtaHeaderPartialStub.successfulContent
         }
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK

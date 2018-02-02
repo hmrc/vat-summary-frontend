@@ -24,7 +24,7 @@ import models.User
 import models.viewModels.OpenPaymentsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{BtaHeaderPartialService, EnrolmentsAuthService}
+import services.EnrolmentsAuthService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future

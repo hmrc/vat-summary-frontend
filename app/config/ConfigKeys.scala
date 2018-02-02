@@ -34,7 +34,6 @@ object ConfigKeys {
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
 
-  val businessAccountService: String = "business-account"
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
 
