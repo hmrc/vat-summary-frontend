@@ -80,8 +80,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         submittedReturns.select("h3").text() shouldBe "Submitted returns"
       }
 
-      "have a link to 'returns-url'" in {
-        submittedReturns.select("a").attr("href") shouldBe "returns-url"
+      s"have a link to 'returns-url/${LocalDate.now().getYear}'" in {
+        submittedReturns.select("a").attr("href") shouldBe s"returns-url/${LocalDate.now().getYear}"
       }
 
       "have the text" in {
