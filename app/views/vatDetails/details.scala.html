@@ -23,8 +23,8 @@
 @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
 
   @navigationBreadcrumb(
-    Map(appConfig.btaHomeUrl -> messages("common.breadcrumbs.Bta")),
-    messages("vatDetails.title")
+    links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
+    currentPage = messages("vatDetails.title")
   )
 
   <div class="grid-row">

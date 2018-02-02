@@ -1,6 +1,7 @@
 common.dateRangeSeparator = to
 common.vat = VAT
-common.breadcrumbs.Bta = Business tax account
+
+breadcrumbs.bta = Business tax account
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To view your VAT summary, you''ll have to
