@@ -20,17 +20,11 @@
         bodyClasses: Option[String] = None,
         mainClass: Option[String] = Some("full-width"),
         scriptElem: Option[Html] = None,
-        showBtaHeader: Boolean = true,
-        serviceInfo: Html = Html(""),
         appConfig: config.AppConfig)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
 
-@serviceInfoContent = {
-  @if(showBtaHeader) {
-    @serviceInfo
-  }
-}
+@serviceInfoContent = {}
 
 @sidebar = {
     @if(sidebarLinks.isDefined) {
