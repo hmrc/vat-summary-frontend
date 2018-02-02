@@ -42,8 +42,6 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     "microservice.services.vat-api.host" -> mockHost,
     "microservice.services.vat-api.port" -> mockPort,
     "microservice.services.vatvc-dynamic-stub.host" -> mockHost,
-    "microservice.services.vatvc-dynamic-stub.port" -> mockPort,
-    "microservice.services.vatvc-dynamic-stub.host" -> mockHost,
     "microservice.services.vatvc-dynamic-stub.port" -> mockPort
   )
 
