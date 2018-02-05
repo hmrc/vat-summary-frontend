@@ -48,7 +48,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       543.21,
       LocalDate.parse("2000-04-08"),
       LocalDate.parse("2000-01-01"),
-      LocalDate.parse("2000-03-31")
+      LocalDate.parse("2000-03-31"),
+      "#001"
     )
   )
 
@@ -111,7 +112,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct link destination" in {
-      element(Selectors.paymentLink).attr("href") shouldBe "/return?start=2000-01-01&end=2000-03-31"
+      element(Selectors.paymentLink).attr("href") shouldBe "/return/001"
     }
   }
 

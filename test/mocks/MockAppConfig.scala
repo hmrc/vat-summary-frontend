@@ -39,7 +39,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val vatSummaryPartial: String = ""
   override val vatSubmittedReturnsUrl: String = "returns-url"
   override val vatReturnDeadlinesUrl: String = ""
-  override def vatReturnUrl(start: String, end: String): String = s"/return?start=$start&end=$end"
+  override def vatReturnUrl(periodKey: String): String = s"/return/001"
   override val financialDataBaseUrl = ""
   override val btaHomeUrl: String = "bta-url"
 }
