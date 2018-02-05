@@ -1,3 +1,18 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package stubs
 
@@ -10,41 +25,20 @@ import play.api.libs.json.Json
 object FinancialDataStub extends WireMockMethods {
 
   private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
-  private val dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"
 
   def stubAllOutstandingPayments: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map(
-      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
-    ))
+    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
       .thenReturn(status = OK, body = allOutStandingPayments)
   }
 
   def stubNoPayments: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map(
-      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
-    ))
+    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
       .thenReturn(status = OK, body = Json.toJson(noPayments))
   }
 
   def stubInvalidVrn: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map(
-      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
-    ))
+    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidVrn))
-  }
-
-  def stubInvalidFromDate: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map(
-      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
-    ))
-      .thenReturn(BAD_REQUEST, body = Json.toJson(invalidFromDate))
-  }
-
-  def stubInvalidToDate: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map(
-      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
-    ))
-      .thenReturn(BAD_REQUEST, body = Json.toJson(invalidToDate))
   }
 
   private val allOutStandingPayments = Json.parse(
@@ -124,7 +118,4 @@ object FinancialDataStub extends WireMockMethods {
   )
 
   private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
-  private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)
-  private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "", None)
-
 }

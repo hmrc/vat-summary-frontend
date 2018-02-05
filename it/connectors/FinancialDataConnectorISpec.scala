@@ -1,3 +1,18 @@
+/*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package connectors
 
@@ -6,7 +21,6 @@ import java.time.LocalDate
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
-import models.obligations.Obligation.Status
 import models.payments.{Payment, Payments}
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -22,7 +36,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  "calling getPaymentsForVatReturns with a status of 'O'" should {
+  "calling getOpenPayments with a status of 'O'" should {
 
     "return all outstanding payments for a given period" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
@@ -45,10 +59,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       )))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("123456789",
-        LocalDate.now(),
-        LocalDate.now(),
-        Status.Outstanding))
+      private val result = await(connector.getOpenPayments("123456789"))
 
       result shouldEqual expected
     }
@@ -59,17 +70,14 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Payments(Seq.empty))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("123456789",
-        LocalDate.now(),
-        LocalDate.now(),
-        Status.Outstanding))
+      private val result = await(connector.getOpenPayments("123456789"))
 
       result shouldEqual expected
     }
 
   }
 
-  "calling getVatReturnObligations with an invalid VRN" should {
+  "calling getOpenPayments with an invalid VRN" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidVrn
@@ -80,52 +88,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
-
-      result shouldEqual expected
-    }
-
-  }
-
-  "calling getVatReturnObligations with an invalid 'from' date" should {
-
-    "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidFromDate
-
-      val expected = Left(BadRequestError(
-        code = "INVALID_DATE_FROM",
-        message = ""
-      ))
-
-      setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
-
-      result shouldEqual expected
-    }
-
-  }
-
-  "calling getVatReturnObligations with an invalid 'to' date" should {
-
-    "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidToDate
-
-      val expected = Left(BadRequestError(
-        code = "INVALID_DATE_TO",
-        message = ""
-      ))
-
-      setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
+      private val result = await(connector.getOpenPayments("111"))
 
       result shouldEqual expected
     }

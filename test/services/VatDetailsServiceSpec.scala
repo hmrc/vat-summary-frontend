@@ -118,9 +118,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
 
-        (mockFinancialDataConnector.getPaymentsForVatReturns(_:String, _:LocalDate, _:LocalDate, _:Obligation.Status.Value)
+        (mockFinancialDataConnector.getOpenPayments(_:String)
         (_:HeaderCarrier, _:ExecutionContext))
-          .expects(*,*,*,*,*,*)
+          .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
@@ -139,9 +139,10 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
 
-        (mockFinancialDataConnector.getPaymentsForVatReturns(_:String, _:LocalDate, _:LocalDate, _:Obligation.Status.Value)
+
+        (mockFinancialDataConnector.getOpenPayments(_:String)
         (_:HeaderCarrier, _:ExecutionContext))
-          .expects(*,*,*,*,*,*)
+          .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq.empty))))
 
         val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
