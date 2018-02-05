@@ -30,7 +30,7 @@ class UserResearchBannerSpec extends ViewBaseSpec {
 
   "The User Research banner" should {
 
-    lazy val view = views.html.templates.userResearchBanner()
+    lazy val view = views.html.templates.userResearchBanner(mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading message" in {
