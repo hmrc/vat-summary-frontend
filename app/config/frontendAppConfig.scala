@@ -16,7 +16,7 @@
 
 package config
 
-import java.net.{URLDecoder, URLEncoder}
+import java.net.URLEncoder
 import java.util.Base64
 import javax.inject.{Inject, Singleton}
 
