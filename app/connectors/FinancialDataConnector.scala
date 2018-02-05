@@ -36,11 +36,8 @@ class FinancialDataConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
 
-  def getPaymentsForVatReturns(vrn: String,
-                              from: LocalDate,
-                              to: LocalDate,
-                              status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
-    http.GET(paymentsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
+  def getPaymentsForVatReturns(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+    http.GET(paymentsUrl(vrn), Seq("status" -> Status.Outstanding.toString))
       .map {
         case payments@Right(_) => payments
         case httpError@Left(error) =>

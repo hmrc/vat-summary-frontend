@@ -45,10 +45,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       )))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("123456789",
-        LocalDate.now(),
-        LocalDate.now(),
-        Status.Outstanding))
+      private val result = await(connector.getPaymentsForVatReturns("123456789"))
 
       result shouldEqual expected
     }
@@ -59,10 +56,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Payments(Seq.empty))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("123456789",
-        LocalDate.now(),
-        LocalDate.now(),
-        Status.Outstanding))
+      private val result = await(connector.getPaymentsForVatReturns("123456789"))
 
       result shouldEqual expected
     }
@@ -80,10 +74,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
+      private val result = await(connector.getPaymentsForVatReturns("111"))
 
       result shouldEqual expected
     }
@@ -101,10 +92,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
+      private val result = await(connector.getPaymentsForVatReturns("111"))
 
       result shouldEqual expected
     }
@@ -122,10 +110,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
+      private val result = await(connector.getPaymentsForVatReturns("111"))
 
       result shouldEqual expected
     }
