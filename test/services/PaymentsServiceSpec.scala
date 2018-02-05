@@ -19,34 +19,39 @@ package services
 import java.time.LocalDate
 
 import connectors.FinancialDataConnector
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.payments.{Payment, Payments}
 import org.scalamock.matchers.Matchers
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
+import org.scalamock.scalatest.MockFactory
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PaymentsServiceSpec extends UnitSpec {
+class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
-//  private trait Test {
-//
-//    implicit val hc: HeaderCarrier = HeaderCarrier()
-//    val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-//    lazy val service = new PaymentsService(mockFinancialDataConnector)
-//  }
+  private trait Test {
 
-//  "getOpenPayments" should {
-//    "retrive a list of payments" in new Test {
-//      val payments = await(service.getOpenPayments())
-//
-//      (mockFinancialDataConnector.getOpenPaymnents()
-//      (_: HeaderCarrier, _: ExecutionContext))
-//        .expects(*, *)
-//        .returns(Future.successful(Right(Payments(Seq(Payment(LocalDate.parse("2008-12-06"), LocalDate.parse("2009-01-04"), LocalDate.parse("2008-12-06"), BigDecimal("21.22"), "ABCD"))))))
-//
-//      payment.size shouldBe 1
-//
-//    }
-//  }
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+    lazy val service = new PaymentsService(mockFinancialDataConnector)
+  }
+
+  val responseFromConnector = Right(Payments(Seq(Payment(LocalDate.parse("2008-12-06"), LocalDate.parse("2009-01-04"),
+    LocalDate.parse("2008-12-06"), BigDecimal("21.22"), "ABCD"))))
+
+  "getOpenPayments" should {
+    "retrive a list of payments" in new Test {
+      (mockFinancialDataConnector.getOpenPayments(_: String)
+      (_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *)
+        .returns(Future.successful(responseFromConnector))
+
+      val payments: HttpGetResult[Payments] = await(service.getOpenPayments("123456789"))
+      payments shouldBe responseFromConnector
+    }
+
+  }
 
 }
