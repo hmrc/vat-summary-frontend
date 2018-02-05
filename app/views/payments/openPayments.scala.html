@@ -16,11 +16,19 @@
 
 @import views.html.templates.formatters.dates._
 @import views.html.templates.formatters.money._
+@import views.html.templates.formatters.breadcrumbs._
 
 @(user: models.User,
   payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
   @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+
+    @navigationBreadcrumb(
+      links = Map(
+      appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
+      controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
+      currentPage = messages("openPayments.title")
+    )
 
     <div class="grid-row">
       <div class="column-two-thirds">

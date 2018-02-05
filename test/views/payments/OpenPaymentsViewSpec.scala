@@ -33,6 +33,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val paymentAmount = "td:nth-of-type(3)"
     val paymentLink = "td:nth-of-type(4) > a"
     val noPaymentMessage = "p#no-payments"
+    val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
+    val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
+    val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
+    val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
+    val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
   }
 
   private val user = User("1111")
@@ -58,6 +63,29 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe "VAT payments"
+    }
+
+    "render breadcrumbs which" should {
+
+      "have the text 'Business tax account'" in {
+        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+      }
+
+      "link to bta" in {
+        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      }
+
+      "have the text 'VAT'" in {
+        elementText(Selectors.vatBreadcrumb) shouldBe "VAT"
+      }
+
+      s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+        element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+      }
+
+      "have the text 'VAT payments'" in {
+        elementText(Selectors.paymentBreadcrumb) shouldBe "VAT payments"
+      }
     }
   }
 
