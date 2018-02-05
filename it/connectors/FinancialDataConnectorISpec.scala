@@ -36,7 +36,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
 
-  "calling getPaymentsForVatReturns with a status of 'O'" should {
+  "calling getOpenPayments with a status of 'O'" should {
 
     "return all outstanding payments for a given period" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
@@ -59,7 +59,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       )))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("123456789"))
+      private val result = await(connector.getOpenPayments("123456789"))
 
       result shouldEqual expected
     }
@@ -70,14 +70,14 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Payments(Seq.empty))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("123456789"))
+      private val result = await(connector.getOpenPayments("123456789"))
 
       result shouldEqual expected
     }
 
   }
 
-  "calling getVatReturnObligations with an invalid VRN" should {
+  "calling getOpenPayments with an invalid VRN" should {
 
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidVrn
@@ -88,7 +88,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       ))
 
       setupStubs()
-      private val result = await(connector.getPaymentsForVatReturns("111"))
+      private val result = await(connector.getOpenPayments("111"))
 
       result shouldEqual expected
     }

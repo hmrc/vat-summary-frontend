@@ -118,7 +118,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
 
-        (mockFinancialDataConnector.getPaymentsForVatReturns(_:String)
+        (mockFinancialDataConnector.getOpenPayments(_:String)
         (_:HeaderCarrier, _:ExecutionContext))
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
@@ -140,7 +140,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
 
 
-        (mockFinancialDataConnector.getPaymentsForVatReturns(_:String)
+        (mockFinancialDataConnector.getOpenPayments(_:String)
         (_:HeaderCarrier, _:ExecutionContext))
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq.empty))))

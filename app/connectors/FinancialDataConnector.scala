@@ -16,7 +16,6 @@
 
 package connectors
 
-import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
@@ -36,7 +35,7 @@ class FinancialDataConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
 
-  def getPaymentsForVatReturns(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
     http.GET(paymentsUrl(vrn), Seq("status" -> Status.Outstanding.toString))
       .map {
         case payments@Right(_) => payments
