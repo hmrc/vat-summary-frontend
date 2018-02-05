@@ -34,6 +34,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val accountDetails = "#account-details"
     val submittedReturns = "#submitted-returns"
     val vatRegNo = ".form-hint"
+    val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
+    val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
+    val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
   }
 
   private val user = User("123456789")
@@ -47,6 +50,21 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     lazy val view = views.html.vatDetails.details(user, detailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render breadcrumbs which" should {
+
+      "have the text 'Business tax account'" in {
+        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+      }
+
+      "links to bta" in {
+        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      }
+
+      "have the text 'VAT'" in {
+        elementText(Selectors.vatBreadcrumb) shouldBe "VAT"
+      }
+    }
 
     "have the correct document title" in {
       document.title shouldBe "VAT"

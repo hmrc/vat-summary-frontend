@@ -16,10 +16,17 @@
 
 @import models.viewModels.VatDetailsViewModel
 @import java.time.LocalDate
+@import views.html.templates.formatters.breadcrumbs._
 
 @(user: User, detailsViewModel: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
+
+  @navigationBreadcrumb(
+    links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
+    currentPage = messages("vatDetails.title")
+  )
+
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">
