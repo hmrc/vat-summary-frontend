@@ -22,4 +22,5 @@ case class OpenPaymentsModel(paymentType: String,
                              amount: BigDecimal,
                              due: LocalDate,
                              start: LocalDate,
-                             end: LocalDate)
+                             end: LocalDate,
+                             periodKey: String)

@@ -16,6 +16,7 @@
 
 package config
 
+import java.net.URLEncoder
 import java.util.Base64
 import javax.inject.{Inject, Singleton}
 
@@ -45,7 +46,7 @@ trait AppConfig extends ServicesConfig {
   val vatSummaryPartial: String
   val vatSubmittedReturnsUrl: String
   val vatReturnDeadlinesUrl: String
-  def vatReturnUrl(start: String, end: String): String
+  def vatReturnUrl(periodKey: String): String
   val btaHomeUrl: String
 }
 
@@ -88,8 +89,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
-  override def vatReturnUrl(start: String, end: String): String =
-    s"$vatReturnsBaseUrl${getString(Keys.vatReturn)}?start=$start&end=$end"
+  override def vatReturnUrl(periodKey: String): String =
+    vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
 
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)
