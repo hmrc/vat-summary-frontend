@@ -16,22 +16,18 @@
 
 package services
 
-import javax.inject.Inject
+
+import javax.inject.{Inject, Singleton}
 
 import connectors.FinancialDataConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.payments.Payments
-import uk.gov.hmrc.http.HttpGet
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-//@Singleton
-//class PaymentsService @Inject()(connector: FinancialDataConnector){
-//
-////  def getOpenPayments(vrn: String): Future[HttpGetResult[Payments]] = {
-////    connector.getPaymentsForVatReturns(vrn)
-////  }
-//
-//
-//
-//}
+@Singleton
+class PaymentsService @Inject()(connector: FinancialDataConnector){
+  def getOpenPayments(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext) :
+    Future[HttpGetResult[Payments]] = connector.getOpenPayments(vrn)
+}
