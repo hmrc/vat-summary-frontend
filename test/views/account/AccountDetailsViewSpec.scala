@@ -27,7 +27,11 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val editAccountHeading = "div#edit-details p"
-
+    val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
+    val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
+    val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
+    val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
+    val detailsBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
     val businessDetailsHeading = "h2:nth-of-type(1)"
     val correspondenceDetailsHeading = "h2:nth-of-type(2)"
 
@@ -78,6 +82,29 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
 
     "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe "Account details"
+    }
+
+    "render breadcrumbs which" should {
+
+      "have the text 'Business tax account'" in {
+        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+      }
+
+      "link to bta" in {
+        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      }
+
+      "have the text 'VAT'" in {
+        elementText(Selectors.vatBreadcrumb) shouldBe "VAT"
+      }
+
+      s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+        element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+      }
+
+      "have the text 'Account details'" in {
+        elementText(Selectors.detailsBreadcrumb) shouldBe "Account details"
+      }
     }
 
     "have the correct sub heading" in {
