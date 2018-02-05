@@ -48,7 +48,9 @@
       navLinks = Some(headerNavLinks))
 }
 
-@afterHeader = {}
+@afterHeader = {
+  @views.html.templates.userResearchBanner()
+}
 
 @bodyEnd = {
     @uiLayouts.footer(
