@@ -24,8 +24,6 @@
 
 @import uk.gov.hmrc.play.views.html.layouts
 
-@serviceInfoContent = {}
-
 @sidebar = {
     @if(sidebarLinks.isDefined) {
         @layouts.sidebar(sidebarLinks.get, Some("sidebar"))
@@ -39,6 +37,5 @@
     sidebar = sidebar,
     contentHeader = contentHeader,
     mainContent = layouts.article(mainContent),
-    serviceInfoContent = serviceInfoContent,
     scriptElem = scriptElem
 )
