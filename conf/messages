@@ -49,6 +49,14 @@ openPayments.onlyByCard = You can only pay by card
 openPayments.makePayment = Make a payment
 openPayments.noPayments = You have no open payments.
 
+noPayments.title = Your VAT payment
+noPayments.heading = What you owe
+noPayments.oweNothing = You don''t owe anything right now.
+noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
+noPayments.url.intro = You can still
+noPayments.url. = You can still
+
+
 accountDetails.title = Account details
 accountDetails.edit = You edit these details in your accounting software.
 accountDetails.contactYou = HMRC will only use these to contact you.
