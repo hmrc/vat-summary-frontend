@@ -16,49 +16,31 @@
 
 package controllers
 
-import java.time.LocalDate
 import javax.inject.Inject
 
 import config.AppConfig
-import models.User
+import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.EnrolmentsAuthService
-import uk.gov.hmrc.http.HeaderCarrier
-
-import scala.concurrent.Future
+import services.{EnrolmentsAuthService, PaymentsService}
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
-                                     val enrolmentsAuthService: EnrolmentsAuthService,
-                                     implicit val appConfig: AppConfig)
+                                       val enrolmentsAuthService: EnrolmentsAuthService,
+                                       val paymentsService: PaymentsService,
+                                       implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
-      for {
-        paymentsModel <- handleOpenPaymentsModel(user)
-      } yield Ok(views.html.payments.openPayments(user, paymentsModel))
+      paymentsService.getOpenPayments(user.vrn).map {
+        case Right(Payments(payments)) if payments.nonEmpty => Ok(views.html.payments.openPayments(user, getModel(payments)))
+        case Right(_) => Ok(views.html.payments.noPayments(user))
+        case Left(_) => InternalServerError(views.html.payments.paymentsError(user))
+      }
   }
 
-  private[controllers] def handleOpenPaymentsModel(user: User)(implicit hc: HeaderCarrier): Future[Seq[OpenPaymentsModel]] = {
-    Future.successful(Seq(
-      OpenPaymentsModel(
-        "Return",
-        543.21,
-        LocalDate.parse("2000-04-08"),
-        LocalDate.parse("2000-01-01"),
-        LocalDate.parse("2000-03-31"),
-        "#001"
-      ),
-      OpenPaymentsModel(
-        "Return",
-        123.45,
-        LocalDate.parse("2000-08-08"),
-        LocalDate.parse("2000-04-01"),
-        LocalDate.parse("2000-07-30"),
-        "#001"
-      )
-    ))
+  private[controllers] def getModel(payments: Seq[Payment]): Seq[OpenPaymentsModel] = payments.map { payment =>
+    OpenPaymentsModel("Return", payment.outstandingAmount, payment.due, payment.start, payment.end, "ABCD")
   }
 }
