@@ -28,11 +28,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val paymentType = "td:nth-of-type(1)"
-    val paymentDue = "td:nth-of-type(2)"
-    val paymentAmount = "td:nth-of-type(3)"
-    val paymentLink = "td:nth-of-type(4) > a"
-    val noPaymentMessage = "p#no-payments"
+    val paymentDue = "#payments span[data-due]"
+    val paymentAmount = "#payments span[data-amount]"
+    val paymentLink = "#payments a"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
@@ -95,10 +93,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy val view = views.html.payments.openPayments(user, payment)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render the payment type" in {
-      elementText(Selectors.paymentType) shouldBe "Return"
-    }
-
     "render the payment due date" in {
       elementText(Selectors.paymentDue) shouldBe "8 April 2000"
     }
@@ -108,21 +102,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the payment link" in {
-      elementText(Selectors.paymentLink) shouldBe "Check 31 March 2000 return"
+      elementText(Selectors.paymentLink) shouldBe "(1 January to 31 March 2000 return)"
     }
 
     "have the correct link destination" in {
-      element(Selectors.paymentLink).attr("href") shouldBe "/return/001"
-    }
-  }
-
-  "Rendering the open payments page no payment" should {
-
-    lazy val view = views.html.payments.openPayments(user, noPayment)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "render the payment type" in {
-      elementText(Selectors.noPaymentMessage) shouldBe "You have no open payments."
+      element(Selectors.paymentLink).attr("href") shouldBe "/return/%23001"
     }
   }
 }

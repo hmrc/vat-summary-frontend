@@ -47,7 +47,6 @@ openPayments.amount = Amount
 openPayments.check = Check {0} return
 openPayments.onlyByCard = You can only pay by card
 openPayments.makePayment = Make a payment
-openPayments.noPayments = You have no open payments.
 
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
