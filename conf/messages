@@ -52,8 +52,8 @@ noPayments.title = Your VAT payment
 noPayments.heading = What you owe
 noPayments.oweNothing = You don''t owe anything right now.
 noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
-noPayments.url.intro = You can still
-noPayments.url. = You can still
+noPayments.link.text = You can still
+noPayments.link.href = make a payment (opens in a new tab).
 
 
 accountDetails.title = Account details

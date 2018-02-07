@@ -25,16 +25,16 @@
       links = Map(
       appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
       controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
-      currentPage = messages("noPayments.title")
+      currentPage = messages("openPayments.title")
     )
 
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h1 class="heading-xlarge">What you owe</h1>
-            <div class="form-group">
-                <p class="lede">@messages("noPayments.oweNothing")</p>
+            <h1 class="heading-xlarge">@Messages("noPayments.heading")</h1>
+            <div class="form-group" id="noPaymentsDetail">
+                <h2 class="lede">@messages("noPayments.oweNothing")</h2>
                 <p>@messages("noPayments.twentyFourHours")</p>
-                <p>You can still <a href="#">make a payment (opens in a new tab).</a></p>
+                <p>@Messages("noPayments.link.text") <a href="#">@Messages("noPayments.link.href")</a></p>
             </div>
         </div>
     </div>
