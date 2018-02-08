@@ -47,14 +47,28 @@ openPayments.amount = Amount
 openPayments.check = Check {0} return
 openPayments.onlyByCard = You can only pay by card
 openPayments.makePayment = Make a payment
-openPayments.noPayments = You have no open payments.
 
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
 noPayments.oweNothing = You don''t owe anything right now.
 noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
-noPayments.url.intro = You can still
-noPayments.url. = You can still
+noPayments.link.text = You can still
+noPayments.link.linkText = make a payment (opens in a new tab).
+
+paymentsError.heading = We can''t let you pay here right now
+paymentsError.tryLater = Try reloading the page or coming back later.
+paymentsError.paymentServiceDetail.textOne = You can also use the
+paymentsError.paymentServiceLink.linkText = HMRC payments service
+paymentsError.paymentServiceDetail.textTwo = if you have your VAT details to hand.
+
+paymentsError.contactDetail.textOne = If you''re close to a payment deadline and worried you''ll miss it, please
+paymentsError.contactLink.linkText = contact HMRC
+paymentsError.contactDetail.textTwo = as soon as possible.
+paymentsError.reasonableExcuseDetail.textOne = Issues with HMRC''s online services are a
+paymentsError.reasonableExcuse.linkText = reasonable excuse
+paymentsError.reasonableExcuseDetail.textTwo = when appealing a penalty.
+paymentsError.reasonableExcuse.hiddenIconText = Warning
+paymentsError.technicalDifficulties = We''re experiencing technical problems
 
 
 accountDetails.title = Account details

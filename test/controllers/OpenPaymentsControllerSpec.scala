@@ -118,7 +118,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         val document = Jsoup.parse(bodyOf(result))
 
-        document.select("h1").first().text() shouldBe "Payments Error"
+        document.select("h1").first().text() shouldBe "We can't let you pay here right now"
       }
 
     }

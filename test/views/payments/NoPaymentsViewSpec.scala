@@ -24,12 +24,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
-class OpenPaymentsViewSpec extends ViewBaseSpec {
+class NoPaymentsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val paymentDue = "#payments span[data-due]"
-    val paymentAmount = "#payments span[data-amount]"
+    val secondaryHeading = "h2"
+    val noPaymentsDetail = "#noPaymentsDetail"
+    val paymentWaitingMessage = "#noPaymentsDetail p:nth-of-type(1)"
     val paymentLink = "#payments a"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
@@ -51,9 +52,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     )
   )
 
-  "Rendering the open payments page" should {
+  "Rendering the no payments page" should {
 
-    lazy val view = views.html.payments.openPayments(user, payment)
+    lazy val view = views.html.payments.noPayments(user)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -61,7 +62,26 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "VAT payments"
+      elementText(Selectors.pageHeading) shouldBe "What you owe"
+    }
+
+    "have the correct secondary heading" in {
+      elementText(Selectors.secondaryHeading) shouldBe "You don't owe anything right now."
+    }
+
+    "have the correct waiting information" in {
+      elementText(Selectors.paymentWaitingMessage) shouldBe
+        "If you've submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe."
+    }
+
+    lazy val noPaymentDetails = element(Selectors.noPaymentsDetail)
+
+    s"have the correct full link text" in {
+      noPaymentDetails.select("p:nth-of-type(2)").text shouldBe "You can still make a payment (opens in a new tab)."
+    }
+
+    s"have the correct href" in {
+      noPaymentDetails.select("p:nth-of-type(2) a").attr("href") shouldBe "#"
     }
 
     "render breadcrumbs which" should {
@@ -88,25 +108,4 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the open payments page with a payment" should {
-
-    lazy val view = views.html.payments.openPayments(user, payment)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "render the payment due date" in {
-      elementText(Selectors.paymentDue) shouldBe "8 April 2000"
-    }
-
-    "render the payment amount" in {
-      elementText(Selectors.paymentAmount) shouldBe "£543.21"
-    }
-
-    "render the payment link" in {
-      elementText(Selectors.paymentLink) shouldBe "(1 January to 31 March 2000 return)"
-    }
-
-    "have the correct link destination" in {
-      element(Selectors.paymentLink).attr("href") shouldBe "/return/%23001"
-    }
-  }
 }

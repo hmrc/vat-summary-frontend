@@ -16,6 +16,8 @@
 
 package mocks
 
+import java.net.URLEncoder
+
 import config.AppConfig
 import config.features.Features
 import play.api.Mode.Mode
@@ -39,7 +41,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val vatSummaryPartial: String = ""
   override val vatSubmittedReturnsUrl: String = "returns-url"
   override val vatReturnDeadlinesUrl: String = ""
-  override def vatReturnUrl(periodKey: String): String = s"/return/001"
+  override def vatReturnUrl(periodKey: String): String = s"/return/${URLEncoder.encode(periodKey)}"
   override val financialDataBaseUrl = ""
   override val btaHomeUrl: String = "bta-url"
 }
