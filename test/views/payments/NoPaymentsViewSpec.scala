@@ -80,6 +80,10 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       noPaymentDetails.select("p:nth-of-type(2)").text shouldBe "You can still make a payment (opens in a new tab)."
     }
 
+    s"have the correct href" in {
+      noPaymentDetails.select("p:nth-of-type(2) a").attr("href") shouldBe "#"
+    }
+
     "render breadcrumbs which" should {
 
       "have the text 'Business tax account'" in {
