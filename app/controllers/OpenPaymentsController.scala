@@ -41,6 +41,6 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def getModel(payments: Seq[Payment]): Seq[OpenPaymentsModel] = payments.map { payment =>
-    OpenPaymentsModel("Return", payment.outstandingAmount, payment.due, payment.start, payment.end, "#001")
+    OpenPaymentsModel("Return", payment.outstandingAmount, payment.due, payment.start, payment.end, payment.periodKey)
   }
 }
