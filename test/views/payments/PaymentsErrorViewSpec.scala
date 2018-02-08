@@ -24,7 +24,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
-class PaymentsErrorSpec extends ViewBaseSpec {
+class PaymentsErrorViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
