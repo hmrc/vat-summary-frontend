@@ -41,6 +41,11 @@ object FinancialDataStub extends WireMockMethods {
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidVrn))
   }
 
+  def stubApiError: StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
+      .thenReturn(INTERNAL_SERVER_ERROR, body = Json.toJson(""))
+  }
+
   private val allOutStandingPayments = Json.parse(
     """{
       |    "idType" : "VRN",
