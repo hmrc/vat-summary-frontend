@@ -17,13 +17,14 @@
 package connectors
 
 import controllers.ControllerBaseSpec
+import mocks.MockMetricsService
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 class FinancialDataConnectorSpec extends ControllerBaseSpec {
 
   "FinancialDataConnector" should {
     "generate the correct payments url" in {
-      val connector = new FinancialDataConnector(mock[HttpClient], mockAppConfig)
+      val connector = new FinancialDataConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
       connector.paymentsUrl("111") shouldEqual "/financial-transactions/vat/111"
     }
   }

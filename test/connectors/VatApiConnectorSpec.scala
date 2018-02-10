@@ -17,13 +17,14 @@
 package connectors
 
 import controllers.ControllerBaseSpec
+import mocks.MockMetricsService
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 class VatApiConnectorSpec extends ControllerBaseSpec {
 
   "VatApiConnector" should {
     "generate the correct obligations url" in {
-      val connector = new VatApiConnector(mock[HttpClient], mockAppConfig)
+      val connector = new VatApiConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
       connector.obligationsUrl("111") shouldEqual "/111/obligations"
     }
   }
