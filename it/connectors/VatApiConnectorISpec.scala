@@ -20,12 +20,10 @@ import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.CustomerInformation
+import models.errors.{BadRequestError, MultipleErrors}
 import models.obligations.Obligation.Status
-import models.errors.{BadRequestError, MultipleErrors, ServerSideError}
-import models.obligations.VatReturnObligations
-import models.obligations.VatReturnObligation
-import stubs.{CustomerInfoStub, VatApiStub}
+import models.obligations.{VatReturnObligation, VatReturnObligations}
+import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -251,37 +249,6 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-12-31"),
         Status.Fulfilled))
-
-      result shouldEqual expected
-    }
-
-  }
-
-  "calling getCustomerInfo" should {
-
-    "return a user's customer information" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo
-
-      val expected = Right(CustomerInformation(
-        Some("Cheapo Clothing Ltd"),
-        Some("Vincent"),
-        Some("Vatreturn"),
-        Some("Cheapo Clothing")
-      ))
-
-      setupStubs()
-      private val result = await(connector.getCustomerInfo("1111"))
-
-      result shouldEqual expected
-    }
-
-    "return an HttpError if one is received" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubErrorFromApi
-
-      val expected = Left(ServerSideError)
-
-      setupStubs()
-      private val result = await(connector.getCustomerInfo("1111"))
 
       result shouldEqual expected
     }

@@ -19,7 +19,7 @@ package services
 import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import connectors.{FinancialDataConnector, VatApiConnector}
+import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
 import models.errors.BadRequestError
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
@@ -54,7 +54,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockVatApiConnector: VatApiConnector = mock[VatApiConnector]
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-    lazy val service = new VatDetailsService(mockVatApiConnector, mockFinancialDataConnector)
+    val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
+    lazy val service = new VatDetailsService(mockVatApiConnector, mockFinancialDataConnector, mockSubscriptionConnector)
   }
 
   "Calling .retrieveNextDetail" when {
@@ -195,7 +196,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           Some("My trading name")
         )
 
-        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
@@ -215,7 +216,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           None
         )
 
-        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
@@ -235,7 +236,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           None
         )
 
-        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
@@ -255,7 +256,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           None
         )
 
-        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
@@ -268,7 +269,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns an error" should {
 
       "return None" in new Test {
-        (mockVatApiConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Left(BadRequestError("", ""))))
 

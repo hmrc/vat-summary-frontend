@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import cats.data.EitherT
 import cats.implicits._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import connectors.{FinancialDataConnector, VatApiConnector}
+import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import models.obligations.Obligation.Status._
 import models._
 import models.obligations.Obligation
@@ -31,7 +31,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDataConnector: FinancialDataConnector) {
+class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
+                                  financialDataConnector: FinancialDataConnector,
+                                  subscriptionConnector: VatSubscriptionConnector) {
 
   private[services] def getNextObligation[T <: Obligation](obligations: Seq[T], date: LocalDate): Option[T] = {
     val presetAndFuture = obligations
@@ -64,7 +66,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector, financialDat
   }
 
   def getEntityName(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
-    vatApiConnector.getCustomerInfo(user.vrn).map {
+    subscriptionConnector.getCustomerInfo(user.vrn).map {
       case Right(CustomerInformation(None, None, None, None)) => None
       case Right(CustomerInformation(None, Some(firstName), Some(lastName), None)) => Some(s"$firstName $lastName")
       case Right(CustomerInformation(organisationName, None, None, None)) => organisationName

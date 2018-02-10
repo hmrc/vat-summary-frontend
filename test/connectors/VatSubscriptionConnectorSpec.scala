@@ -19,12 +19,12 @@ package connectors
 import controllers.ControllerBaseSpec
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-class FinancialDataConnectorSpec extends ControllerBaseSpec {
+class VatSubscriptionConnectorSpec extends ControllerBaseSpec {
 
-  "FinancialDataConnector" should {
-    "generate the correct payments url" in {
-      val connector = new FinancialDataConnector(mock[HttpClient], mockAppConfig)
-      connector.paymentsUrl("111") shouldEqual "/financial-transactions/vat/111"
+  "VatApiConnector" should {
+    "generate the correct customer information url" in {
+      val connector = new VatSubscriptionConnector(mock[HttpClient], mockAppConfig)
+      connector.customerInfoUrl("111") shouldEqual "/customer-information/vat/111"
     }
   }
 
