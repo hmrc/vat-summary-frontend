@@ -20,8 +20,7 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.obligations.Obligation.Status
-import models.payments.Payments
+import models.CustomerInformation
 import play.api.Logger
 import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,28 +29,27 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class FinancialDataConnector @Inject()(http: HttpClient,
-                                       appConfig: AppConfig,
-                                       metrics: MetricsService) {
+class VatSubscriptionConnector @Inject()(http: HttpClient,
+                                         appConfig: AppConfig,
+                                         metrics: MetricsService) {
 
-  import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
+  private[connectors] def customerInfoUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/customer-information/vat/$vrn"
 
-  private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
+  def getCustomerInfo(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] = {
 
-  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+    import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 
-    val timer = metrics.getOpenPaymentsTimer.time()
+    val timer = metrics.getCustomerInfoTimer.time()
 
-    http.GET(paymentsUrl(vrn), Seq("status" -> Status.Outstanding.toString))
+    http.GET(customerInfoUrl(vrn))
       .map {
-        case payments@Right(_) =>
+        case customerInfo@Right(_) =>
           timer.stop()
-          payments
+          customerInfo
         case httpError@Left(error) =>
-          metrics.getOpenPaymentsCallFailureCounter.inc()
-          Logger.warn("FinancialDataConnector received error: " + error.message)
+          metrics.getCustomerInfoCallFailureCounter.inc()
+          Logger.warn("CustomerInformationConnector received error: " + error.message)
           httpError
       }
   }
-
 }

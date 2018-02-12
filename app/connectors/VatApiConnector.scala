@@ -21,44 +21,39 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.CustomerInformation
 import models.obligations.Obligation.Status
 import models.obligations.VatReturnObligations
 import play.api.Logger
+import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatApiConnector @Inject()(http: HttpClient, appConfig: AppConfig) {
+class VatApiConnector @Inject()(http: HttpClient,
+                                appConfig: AppConfig,
+                                metrics: MetricsService) {
 
   private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/$vrn/obligations"
 
-  private[connectors] def customerInfoUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/customer-information/vat/$vrn"
-
   def getVatReturnObligations(vrn: String,
-                 from: LocalDate,
-                 to: LocalDate,
-                 status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
+                              from: LocalDate,
+                              to: LocalDate,
+                              status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
+
     import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
+
+    val timer = metrics.getObligationsTimer.time()
+
     http.GET(obligationsUrl(vrn), Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString))
       .map {
-        case vatReturns@Right(_) => vatReturns
+        case vatReturns@Right(_) =>
+          timer.stop()
+          vatReturns
         case httpError@Left(error) =>
+          metrics.getObligationsCallFailureCounter.inc()
           Logger.warn("VatApiConnector received error: " + error.message)
-          httpError
-      }
-  }
-
-  def getCustomerInfo(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[HttpGetResult[CustomerInformation]] = {
-    import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
-    http.GET(customerInfoUrl(vrn))
-      .map {
-        case customerInfo@Right(_) => customerInfo
-        case httpError@Left(error) =>
-          Logger.warn("CustomerInformationConnector received error: " + error.message)
           httpError
       }
   }
