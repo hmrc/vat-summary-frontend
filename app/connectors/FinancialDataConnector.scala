@@ -42,7 +42,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     val timer = metrics.getOpenPaymentsTimer.time()
 
-    http.GET(paymentsUrl(vrn), Seq("status" -> Status.Outstanding.toString))
+    http.GET(paymentsUrl(vrn), Seq("onlyOpenItems" -> "true"))
       .map {
         case payments@Right(_) =>
           timer.stop()
