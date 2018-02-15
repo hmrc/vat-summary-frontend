@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.obligations.Obligation.Status
 import models.payments.Payments
 import play.api.Logger
 import services.MetricsService
