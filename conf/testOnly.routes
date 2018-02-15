@@ -12,10 +12,10 @@
 # Add all the application routes to the prod.routes file
 
 # NOCSRF
-POST        /your-vat-summary/test-only/populate-stub   @testOnly.controllers.DynamicStubController.populateStub
+POST        /vat-through-software/test-only/populate-stub   @testOnly.controllers.DynamicStubController.populateStub
 
 # NOCSRF
-DELETE      /your-vat-summary/test-only/clear-stub      @testOnly.controllers.DynamicStubController.clearStub
+DELETE      /vat-through-software/test-only/clear-stub      @testOnly.controllers.DynamicStubController.clearStub
 
-->          /                                           prod.Routes
+->          /                                               prod.Routes
 

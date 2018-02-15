@@ -44,7 +44,7 @@
               <div class="form-group">
                 <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span> by <span data-due="@(payment.due.toString)">@displayDate(payment.due)</span>
                 <p>
-                  <a href="@appConfig.vatReturnUrl(payment.periodKey, payment.end.getYear)" data-period="@(payment.start)-to-@(payment.end)">(@displayDateRange(payment.start, payment.end).toString().trim return)</a>
+                  <a href="@appConfig.vatReturnUrl(payment.periodKey)" data-period="@(payment.start)-to-@(payment.end)">(@displayDateRange(payment.start, payment.end).toString().trim return)</a>
                 </p>
                 <input class="button" type="submit" value="Make this payment" />
               </div>
