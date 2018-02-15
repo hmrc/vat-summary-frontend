@@ -106,7 +106,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct link destination" in {
-      element(Selectors.paymentLink).attr("href") shouldBe "/return/%23001?yearEnd=2000"
+      element(Selectors.paymentLink).attr("href") shouldBe "/submitted/%23001?yearEnd=2000"
     }
   }
 }

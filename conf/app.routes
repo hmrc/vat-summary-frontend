@@ -1,8 +1,8 @@
 # microservice specific routes
 
-GET        /details                controllers.VatDetailsController.details
-GET        /payments               controllers.OpenPaymentsController.openPayments
-GET        /account                controllers.AccountDetailsController.accountDetails
+GET        /vat-overview           controllers.VatDetailsController.details
+GET        /what-you-owe           controllers.OpenPaymentsController.openPayments
+GET        /account-details        controllers.AccountDetailsController.accountDetails
 
 GET        /feature-switch         controllers.FeatureSwitchController.featureSwitch
 POST       /feature-switch         controllers.FeatureSwitchController.submitFeatureSwitch

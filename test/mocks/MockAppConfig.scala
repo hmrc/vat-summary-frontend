@@ -32,7 +32,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val whitelistEnabled: Boolean = false
   override val whitelistedIps: Seq[String] = Seq("")
   override val whitelistExcludedPaths: Seq[Call] = Nil
-  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/view-vat-returns"
+  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/vat-through-software"
   override val authUrl: String = ""
   override val vatApiBaseUrl: String = ""
   override val signInUrl: String = ""
@@ -41,7 +41,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val vatSummaryPartial: String = ""
   override val vatSubmittedReturnsUrl: String = "returns-url"
   override val vatReturnDeadlinesUrl: String = ""
-  override def vatReturnUrl(periodKey: String, yearEnd: Int): String = s"/return/${URLEncoder.encode(periodKey, "UTF-8")}?yearEnd=$yearEnd"
+  override def vatReturnUrl(periodKey: String, yearEnd: Int): String = s"/submitted/${URLEncoder.encode(periodKey, "UTF-8")}?yearEnd=$yearEnd"
   override val financialDataBaseUrl = ""
   override val btaHomeUrl: String = "bta-url"
 }

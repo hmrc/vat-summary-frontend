@@ -29,25 +29,25 @@ class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
 
   "The route for the BTA stub" should {
     "be /your-vat-summary/bta-stub" in {
-      controllers.routes.BtaStubController.landingPage().url shouldBe "/your-vat-summary/bta-stub"
+      controllers.routes.BtaStubController.landingPage().url shouldBe "/vat-through-software/bta-stub"
     }
   }
 
   "The route for the VAT details controller" should {
     "be /your-vat-summary/details" in {
-      controllers.routes.VatDetailsController.details().url shouldBe "/your-vat-summary/details"
+      controllers.routes.VatDetailsController.details().url shouldBe "/vat-through-software/vat-overview"
     }
   }
 
   "The route for the Open payments controller" should {
     "be /your-vat-summary/payments" in {
-      controllers.routes.OpenPaymentsController.openPayments().url shouldBe "/your-vat-summary/payments"
+      controllers.routes.OpenPaymentsController.openPayments().url shouldBe "/vat-through-software/what-you-owe"
     }
   }
 
   "The route for the Account details controller" should {
     "be /your-vat-summary/account" in {
-      controllers.routes.AccountDetailsController.accountDetails().url shouldBe "/your-vat-summary/account"
+      controllers.routes.AccountDetailsController.accountDetails().url shouldBe "/vat-through-software/account-details"
     }
   }
 }
