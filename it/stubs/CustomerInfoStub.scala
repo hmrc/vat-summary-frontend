@@ -37,9 +37,10 @@ object CustomerInfoStub extends WireMockMethods {
 
   private val customerInfo = Json.parse(
     """{
-      |    "organisationDetails" : {
+      |  "approvedInformation" : {
+      |    "customerDetails" : {
       |      "organisationName" : "Cheapo Clothing Ltd",
-      |      "individualName" : {
+      |      "individual" : {
       |        "title" : "0001",
       |        "firstName" : "Vincent",
       |        "middleName" : "Victor",
@@ -51,7 +52,8 @@ object CustomerInfoStub extends WireMockMethods {
       |      "effectiveRegistrationDate" : "2017-08-21",
       |      "businessStartDate" : "2017-01-01"
       |    }
-      |  }""".stripMargin
+      |  }
+      |}""".stripMargin
   )
 
   private val errorJson = Json.obj(

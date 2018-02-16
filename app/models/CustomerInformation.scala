@@ -28,9 +28,9 @@ object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
 
   implicit val customerInformationReads: Reads[CustomerInformation] = (
-    (JsPath \ "organisationDetails" \ "organisationName").readNullable[String] and
-    (JsPath \ "organisationDetails" \ "individualName" \ "firstName").readNullable[String] and
-    (JsPath \ "organisationDetails" \ "individualName" \ "lastName").readNullable[String] and
-    (JsPath \ "organisationDetails" \ "tradingName").readNullable[String]
+    (JsPath \ "approvedInformation" \ "customerDetails" \ "organisationName").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "customerDetails" \\ "firstName").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "customerDetails" \\ "lastName").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "customerDetails" \ "tradingName").readNullable[String]
   ) (CustomerInformation.apply _)
 }

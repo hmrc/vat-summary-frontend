@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.obligations.Obligation.Status
 import models.payments.Payments
 import play.api.Logger
 import services.MetricsService
@@ -42,7 +41,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     val timer = metrics.getOpenPaymentsTimer.time()
 
-    http.GET(paymentsUrl(vrn), Seq("status" -> Status.Outstanding.toString))
+    http.GET(paymentsUrl(vrn), Seq("onlyOpenItems" -> "true"))
       .map {
         case payments@Right(_) =>
           timer.stop()

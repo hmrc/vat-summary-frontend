@@ -27,22 +27,22 @@ object FinancialDataStub extends WireMockMethods {
   private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
 
   def stubAllOutstandingPayments: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
+    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
       .thenReturn(status = OK, body = allOutStandingPayments)
   }
 
   def stubNoPayments: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
+    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
       .thenReturn(status = OK, body = Json.toJson(noPayments))
   }
 
   def stubInvalidVrn: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
+    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
       .thenReturn(BAD_REQUEST, body = Json.toJson(invalidVrn))
   }
 
   def stubApiError: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("status" -> "O"))
+    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
       .thenReturn(INTERNAL_SERVER_ERROR, body = Json.toJson(""))
   }
 

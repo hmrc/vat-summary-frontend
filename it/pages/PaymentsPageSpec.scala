@@ -30,7 +30,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest("/payments")
+      buildRequest("/what-you-owe")
     }
   }
 

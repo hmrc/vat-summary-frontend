@@ -46,7 +46,7 @@ trait AppConfig extends ServicesConfig {
   val vatSummaryPartial: String
   val vatSubmittedReturnsUrl: String
   val vatReturnDeadlinesUrl: String
-  def vatReturnUrl(periodKey: String, yearEnd: Int): String
+  def vatReturnUrl(periodKey: String): String
   val btaHomeUrl: String
 }
 
@@ -56,7 +56,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override val mode: Mode = environment.mode
 
   private lazy val contactHost: String = baseUrl(Keys.contactFrontendService)
-  private lazy val contactFormServiceIdentifier: String = "MyService"
+  private lazy val contactFormServiceIdentifier: String = "VATVC"
 
   override lazy val authUrl: String = baseUrl("auth")
   override lazy val analyticsToken: String = getString(Keys.googleAnalyticsToken)
@@ -89,8 +89,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
-  override def vatReturnUrl(periodKey: String, yearEnd: Int): String =
-    vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8") + s"?yearEnd=$yearEnd"
+  override def vatReturnUrl(periodKey: String): String =
+    vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
 
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)

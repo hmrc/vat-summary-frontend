@@ -32,13 +32,15 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(Status.OK, responseJson = Some(
         Json.obj(
-          "organisationDetails" -> Json.obj(
-            "organisationName" -> "Cheapo Clothing Ltd",
-            "individualName" -> Json.obj(
-              "firstName" -> "John",
-              "lastName" -> "Smith"
-            ),
-            "tradingName" -> "Cheapo Clothing"
+          "approvedInformation" -> Json.obj(
+            "customerDetails" -> Json.obj(
+              "organisationName" -> "Cheapo Clothing Ltd",
+              "individual" -> Json.obj(
+                "firstName" -> "John",
+                "lastName" -> "Smith"
+              ),
+              "tradingName" -> "Cheapo Clothing"
+            )
           )
         )
       ))
