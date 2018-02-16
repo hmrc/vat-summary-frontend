@@ -25,9 +25,25 @@ class CustomerInformationSpec extends UnitSpec {
 
     val exampleCustomerInfo: CustomerInformation = CustomerInformation(
       Some("Cheapo Clothing Ltd"),
-      Some("John"),
-      Some("Smith"),
-      Some("Cheapo Clothing")
+      Some("Betty"),
+      Some("Jones"),
+      Some("Cheapo Clothing"),
+      "Bedrock Quarry",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV2 4BB"),
+      Some("01632 982028"),
+      Some("07700 900018"),
+      Some("bettylucknexttime@gmail.com"),
+      "13 Pebble Lane",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV13 4BJ"),
+      Some("01632 960026"),
+      Some("07700 900018"),
+      Some("bettylucknexttime@gmail.com")
     )
 
     val exampleInputString =
@@ -36,10 +52,38 @@ class CustomerInformationSpec extends UnitSpec {
         |  "customerDetails":{
         |    "organisationName":"Cheapo Clothing Ltd",
         |    "individual":{
-        |      "firstName":"John",
-        |      "lastName":"Smith"
+        |      "firstName":"Betty",
+        |      "lastName":"Jones"
         |    },
         |    "tradingName":"Cheapo Clothing"
+        |  },
+        |  "PPOB":{
+        |    "address":{
+        |      "line1":"Bedrock Quarry",
+        |      "line2":"Bedrock",
+        |      "line3":"Graveldon",
+        |      "line4":"Graveldon",
+        |      "postCode":"GV2 4BB"
+        |    },
+        |    "contactDetails":{
+        |      "primaryPhoneNumber":"01632 982028",
+        |      "mobileNumber":"07700 900018",
+        |      "emailAddress":"bettylucknexttime@gmail.com"
+        |    }
+        |  },
+        |  "correspondenceContactDetails":{
+        |    "address":{
+        |      "line1":"13 Pebble Lane",
+        |      "line2":"Bedrock",
+        |      "line3":"Graveldon",
+        |      "line4":"Graveldon",
+        |      "postCode":"GV13 4BJ"
+        |    },
+        |    "contactDetails":{
+        |      "primaryPhoneNumber":"01632 960026",
+        |      "mobileNumber":"07700 900018",
+        |      "emailAddress":"bettylucknexttime@gmail.com"
+        |    }
         |  }
         |}
       }"""
@@ -48,9 +92,25 @@ class CustomerInformationSpec extends UnitSpec {
     val exampleOutputString =
       """{
         |"organisationName":"Cheapo Clothing Ltd",
-        |"firstName":"John",
-        |"lastName":"Smith",
-        |"tradingName":"Cheapo Clothing"
+        |"firstName":"Betty",
+        |"lastName":"Jones",
+        |"tradingName":"Cheapo Clothing",
+        |"businessLine1":"Bedrock Quarry",
+        |"businessLine2":"Bedrock",
+        |"businessLine3":"Graveldon",
+        |"businessLine4":"Graveldon",
+        |"businessPostCode":"GV2 4BB",
+        |"businessPrimaryPhoneNumber":"01632 982028",
+        |"businessMobileNumber":"07700 900018",
+        |"businessEmailAddress":"bettylucknexttime@gmail.com",
+        |"correspondenceLine1":"13 Pebble Lane",
+        |"correspondenceLine2":"Bedrock",
+        |"correspondenceLine3":"Graveldon",
+        |"correspondenceLine4":"Graveldon",
+        |"correspondencePostCode":"GV13 4BJ",
+        |"correspondencePrimaryPhoneNumber":"01632 960026",
+        |"correspondenceMobileNumber":"07700 900018",
+        |"correspondenceEmailAddress":"bettylucknexttime@gmail.com"
         |}"""
         .stripMargin.replace("\n", "")
 

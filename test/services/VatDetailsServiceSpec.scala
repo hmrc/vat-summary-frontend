@@ -190,10 +190,26 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the trading name" in new Test {
         val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          Some("My organisation name"),
-          Some("John"),
-          Some("Smith"),
-          Some("My trading name")
+          Some("Cheapo Clothing Ltd"),
+          Some("Betty"),
+          Some("Jones"),
+          Some("Cheapo Clothing"),
+          "Bedrock Quarry",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV2 4BB"),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          "13 Pebble Lane",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV13 4BJ"),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -202,7 +218,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         lazy val result: Option[String] = await(service.getEntityName(User("999999999")))
 
-        result shouldBe Some("My trading name")
+        result shouldBe Some("Cheapo Clothing")
       }
     }
 
@@ -211,9 +227,25 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the first and last name" in new Test {
         val exampleCustomerInfo: CustomerInformation = CustomerInformation(
           None,
-          Some("John"),
-          Some("Smith"),
-          None
+          Some("Betty"),
+          Some("Jones"),
+          None,
+          "Bedrock Quarry",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV2 4BB"),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          "13 Pebble Lane",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV13 4BJ"),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -222,7 +254,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         val result: Option[String] = await(service.getEntityName(User("999999999")))
 
-        result shouldBe Some("John Smith")
+        result shouldBe Some("Betty Jones")
       }
     }
 
@@ -230,10 +262,26 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the organisation name" in new Test {
         val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          Some("My organisation name"),
+          Some("Cheapo Clothing Ltd"),
           None,
           None,
-          None
+          None,
+          "Bedrock Quarry",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV2 4BB"),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          "13 Pebble Lane",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV13 4BJ"),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -242,7 +290,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         val result: Option[String] = await(service.getEntityName(User("999999999")))
 
-        result shouldBe Some("My organisation name")
+        result shouldBe Some("Cheapo Clothing Ltd")
       }
     }
 
@@ -253,7 +301,23 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           None,
           None,
           None,
-          None
+          None,
+          "Bedrock Quarry",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV2 4BB"),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          "13 Pebble Lane",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV13 4BJ"),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))

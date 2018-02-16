@@ -36,10 +36,38 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
             "customerDetails" -> Json.obj(
               "organisationName" -> "Cheapo Clothing Ltd",
               "individual" -> Json.obj(
-                "firstName" -> "John",
-                "lastName" -> "Smith"
+                "firstName" -> "Betty",
+                "lastName" -> "Jones"
               ),
               "tradingName" -> "Cheapo Clothing"
+            ),
+            "PPOB" -> Json.obj(
+              "address" -> Json.obj(
+                "line1" -> "Bedrock Quarry",
+                "line2" -> "Bedrock",
+                "line3" -> "Graveldon",
+                "line4" -> "Graveldon",
+                "postCode" -> "GV2 4BB"
+              ),
+              "contactDetails" -> Json.obj(
+                "primaryPhoneNumber" -> "01632 982028",
+                "mobileNumber" -> "07700 900018",
+                "emailAddress" -> "bettylucknexttime@gmail.com"
+              )
+            ),
+            "correspondenceContactDetails" -> Json.obj(
+              "address" -> Json.obj(
+                "line1" -> "13 Pebble Lane",
+                "line2" -> "Bedrock",
+                "line3" -> "Graveldon",
+                "line4" -> "Graveldon",
+                "postCode" -> "GV13 4BJ"
+              ),
+              "contactDetails" -> Json.obj(
+                "primaryPhoneNumber" -> "01632 960026",
+                "mobileNumber" -> "07700 900018",
+                "emailAddress" -> "bettylucknexttime@gmail.com"
+              )
             )
           )
         )
@@ -47,9 +75,25 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val expected = Right(CustomerInformation(
         Some("Cheapo Clothing Ltd"),
-        Some("John"),
-        Some("Smith"),
-        Some("Cheapo Clothing")
+        Some("Betty"),
+        Some("Jones"),
+        Some("Cheapo Clothing"),
+        "Bedrock Quarry",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV2 4BB"),
+        Some("01632 982028"),
+        Some("07700 900018"),
+        Some("bettylucknexttime@gmail.com"),
+        "13 Pebble Lane",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV13 4BJ"),
+        Some("01632 960026"),
+        Some("07700 900018"),
+        Some("bettylucknexttime@gmail.com")
       ))
       val result = CustomerInfoReads.read("", "", httpResponse)
 

@@ -43,7 +43,23 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some("Cheapo Clothing Ltd"),
         Some("Vincent"),
         Some("Vatreturn"),
-        Some("Cheapo Clothing")
+        Some("Cheapo Clothing"),
+        "Bedrock Quarry",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV2 4BB"),
+        Some("01632 982028"),
+        Some("07700 900018"),
+        Some("vvatreturn@gmail.com"),
+        "13 Pebble Lane",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV13 4BJ"),
+        Some("01632 960026"),
+        Some("07700 900018"),
+        Some("vvatreturn@gmail.com")
       ))
 
       setupStubs()
