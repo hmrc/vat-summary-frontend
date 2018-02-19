@@ -18,7 +18,7 @@ package services
 
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.CustomerInformation
+import models.{Address, CustomerInformation}
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
@@ -37,10 +37,28 @@ class AccountDetailsServiceSpec extends UnitSpec with MockFactory with Matchers 
   }
 
   val responseFromConnector = Right(CustomerInformation(
-    Some("abc"),
-    Some("abc"),
-    Some("abc"),
-    Some("abc")
+    Some("Cheapo Clothing Ltd"),
+    Some("Betty"),
+    Some("Jones"),
+    Some("Cheapo Clothing"),
+    Address("Bedrock Quarry",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV2 4BB")
+    ),
+    Some("01632 982028"),
+    Some("07700 900018"),
+    Some("bettylucknexttime@gmail.com"),
+    Address("13 Pebble Lane",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV13 4BJ")
+    ),
+    Some("01632 960026"),
+    Some("07700 900018"),
+    Some("bettylucknexttime@gmail.com")
   ))
 
   "getAccountDetails" should {
