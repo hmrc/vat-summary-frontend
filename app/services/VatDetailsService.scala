@@ -64,17 +64,4 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
 
     result.value
   }
-
-  def getEntityName(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
-    subscriptionConnector.getCustomerInfo(user.vrn).map {
-
-      case Right(model: CustomerInformation) => (model.firstName, model.lastName, model.tradingName, model.organisationName) match {
-        case (Some(first), Some(last), None, None) => Some(s"$first $last")
-        case (None, None, None, organisationName) => organisationName
-        case (_, _, tradingName, _) => tradingName
-      }
-
-      case Left(_) => None
-    }
-  }
 }
