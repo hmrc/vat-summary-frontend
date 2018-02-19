@@ -16,7 +16,7 @@
 
 package views.account
 
-import models.User
+import models.{Address, User}
 import models.viewModels.AccountDetailsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -61,10 +61,20 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
   private val user = User("1111")
   val account = AccountDetailsModel(
     "Test User",
-    "1 Correspondence Address",
-    "1CPC",
-    "1 Business Address",
-    "1BPC",
+    Address(
+      "1 Correspondence Address",
+      "Correspondence",
+      Some("Correspondence"),
+      Some("Correspondence"),
+      Some("1CPC")
+    ),
+    Address(
+      "1 Business Address",
+      "Business",
+      Some("Business"),
+      Some("Business"),
+      Some("1BPC")
+    ),
     "123456789",
     "987654321",
     "123456789",
@@ -156,7 +166,7 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the business address answer" in {
-      elementText(Selectors.businessAddressRowAnswer) shouldBe "1 Business Address 1BPC"
+      elementText(Selectors.businessAddressRowAnswer) shouldBe "1 Business Address, Business, Business, Business 1BPC"
     }
 
     "have the business phone answer" in {
@@ -168,7 +178,7 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correspondence address answer" in {
-      elementText(Selectors.correspondenceAddressRowAnswer) shouldBe "1 Correspondence Address 1CPC"
+      elementText(Selectors.correspondenceAddressRowAnswer) shouldBe "1 Correspondence Address, Correspondence, Correspondence, Correspondence 1CPC"
     }
 
     "have the email answer" in {
