@@ -16,11 +16,11 @@
 
 package models.viewModels
 
+import models.Address
+
 case class AccountDetailsModel(name: String,
-                               correspondenceAddress: String,
-                               correspondencePostcode: String,
-                               businessAddress: String,
-                               businessPostcode: String,
+                               correspondenceAddress: Address,
+                               businessAddress: Address,
                                businessPhone: String,
                                mobilePhone: String,
                                homePhone: String,

@@ -16,6 +16,7 @@
 
 package controllers
 
+import java.time.LocalDate
 import javax.inject.Inject
 
 import config.AppConfig
@@ -23,14 +24,15 @@ import models.User
 import models.viewModels.AccountDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.EnrolmentsAuthService
+import services.{EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
-                                         implicit val appConfig: AppConfig)
+                                         val detailsService: VatDetailsService,
+                                         val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
   def accountDetails(): Action[AnyContent] = authorisedAction { implicit request => user =>
@@ -40,7 +42,11 @@ class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def handleAccountDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[AccountDetailsModel] = {
-    Future.successful(
+      detailsService.getVatDetails(user.vrn)
+  }
+
+
+    /*Future.successful(
       AccountDetailsModel(
         "Betty Jones",
         "Bedrock Quarry, Bedrock, Graveldon",
@@ -52,6 +58,6 @@ class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
         "01632 960026",
         "bettylucknexttime@gmail.com"
       )
-    )
+    )*/
   }
 }
