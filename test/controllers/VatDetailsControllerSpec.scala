@@ -25,7 +25,7 @@ import models.{User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{EnrolmentsAuthService, VatDetailsService}
+import services.{AccountDetailsService, EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -64,6 +64,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
+    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -75,7 +76,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(vatServiceDetailsResult)
 
-        (mockVatDetailsService.getEntityName(_: User)(_: HeaderCarrier, _: ExecutionContext))
+        (mockAccountDetailsService.getEntityName(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(entityName))
       }
@@ -85,7 +86,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     def target: VatDetailsController = {
       setup()
-      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService)
+      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService)
     }
   }
 
@@ -133,8 +134,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
   "Calling .constructViewModel with a VatDetailsModel" when {
 
     lazy val mockEnrolmentsAuthService = mock[EnrolmentsAuthService]
+    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     lazy val mockVatDetailsService = mock[VatDetailsService]
-    lazy val controller = new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService)
+    lazy val controller = new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService)
     lazy val paymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-03-03"))
     lazy val obligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-06-06"))
 

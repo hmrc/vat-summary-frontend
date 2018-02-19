@@ -16,8 +16,8 @@
 
 package models
 
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class CustomerInformation(organisationName: Option[String],
                                firstName: Option[String],
@@ -31,7 +31,15 @@ case class CustomerInformation(organisationName: Option[String],
                                correspondencePrimaryPhoneNumber: Option[String],
                                correspondenceMobileNumber: Option[String],
                                correspondenceEmailAddress: Option[String]
-                              )
+                              ) {
+  def entityName: Option[String] = {
+    (this.firstName, this.lastName, this.tradingName, this.organisationName) match {
+      case (Some(first), Some(last), None, None) => Some(s"$first $last")
+      case (None, None, None, organisationName) => organisationName
+      case (_, _, tradingName, _) => tradingName
+    }
+  }
+}
 
 object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]

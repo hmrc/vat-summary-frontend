@@ -16,6 +16,8 @@
 
 package services
 
+import javax.inject.Inject
+
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.CustomerInformation
@@ -23,7 +25,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountDetailsService(connector: VatSubscriptionConnector) {
+class AccountDetailsService @Inject()(connector: VatSubscriptionConnector) {
+
   def getAccountDetails(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext) :
-  Future[HttpGetResult[CustomerInformation]] = connector.getCustomerInfo(vrn)
+    Future[HttpGetResult[CustomerInformation]] = connector.getCustomerInfo(vrn)
+
+
+  def getEntityName(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = connector.getCustomerInfo(vrn).map {
+    case Right(model: CustomerInformation) => model.entityName
+    case Left(_) => None
+  }
 }

@@ -16,12 +16,13 @@
 
 package controllers
 
-import models.User
+import connectors.VatSubscriptionConnector
+import models.{Address, CustomerInformation, User}
 import models.viewModels.AccountDetailsModel
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.EnrolmentsAuthService
+import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -31,36 +32,79 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
+  val exampleCunstomerInfo = CustomerInformation(
+    None,
+    Some("Betty"),
+    Some("Jones"),
+    None,
+    Address("Bedrock Quarry",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV2 4BB")
+    ),
+    Some("01632 982028"),
+    Some("07700 900018"),
+    Some("bettylucknexttime@gmail.com"),
+    Address("13 Pebble Lane",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV13 4BJ")
+    ),
+    Some("01632 960026"),
+    Some("07700 900018"),
+    Some("bettylucknexttime@gmail.com")
+  )
+
   private trait AccountDetailsTest {
+    val runMocks = true
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
         Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
       )))
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockVatSubscriptionConnector: VatSubscriptionConnector= mock[VatSubscriptionConnector]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResult)
+
+      if(runMocks) {
+        (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Right(exampleCunstomerInfo))
+      }
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
 
     def target: AccountDetailsController = {
       setup()
-      new AccountDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig)
+      new AccountDetailsController(messages, mockEnrolmentsAuthService, mockAccountDetailsService, mockAppConfig)
     }
   }
 
   private trait HandleAccountDetailsModelTest {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockVatSubscriptionConnector: VatSubscriptionConnector= mock[VatSubscriptionConnector]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
+    def setup(): Unit = {
+      (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *)
+        .returns(Right(exampleCunstomerInfo))
+    }
+
     def target: AccountDetailsController = {
-      new AccountDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig)
+      setup()
+      new AccountDetailsController(messages, mockEnrolmentsAuthService, mockAccountDetailsService, mockAppConfig)
     }
   }
 
@@ -87,6 +131,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     "the user is not logged in" should {
 
       "return 401 (Unauthorised)" in new AccountDetailsTest {
+        override val runMocks: Boolean = false
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.accountDetails()(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
@@ -96,6 +141,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     "the user is not authenticated" should {
 
       "return 403 (Forbidden)" in new AccountDetailsTest {
+        override val runMocks: Boolean = false
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.accountDetails()(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
@@ -111,10 +157,20 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
         val exampleAccountDetailsModel: AccountDetailsModel = {
           AccountDetailsModel(
             "Betty Jones",
-            "Bedrock Quarry, Bedrock, Graveldon",
-            "GV2 4BB",
-            "13 Pebble lane, Bedrock, Graveldon",
-            "GV13 4BJ",
+            Address(
+              "13 Pebble Lane",
+              "Bedrock",
+              Some("Graveldon"),
+              Some("Graveldon"),
+              Some("GV13 4BJ")
+            ),
+            Address(
+              "Bedrock Quarry",
+              "Bedrock",
+              Some("Graveldon"),
+              Some("Graveldon"),
+              Some("GV2 4BB")
+            ),
             "01632 982028",
             "07700 900018",
             "01632 960026",
