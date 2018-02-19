@@ -42,14 +42,14 @@ currentPage = messages("openPayments.title")
     @payments.zipWithIndex.map { case(payment, count) =>
         <div id="payment-section-@{count + 1}">
             <form>
-                <span class="heading-medium">@displayMoney(payment.amount)</span>
-                <div class="grid-row">
+                <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
+                <div class="grid-row" id="payment-row-@{count + 1}">
                     <div class="column-two-thirds"><span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span></div>
                     <div class="column-one-third form-hint"><input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")' data-journey-click="payment:make-payment:open-payments"/></div>
 
                 </div>
-                <div class="grid-row">
-                    <div class="column-two-thirds form-hint">@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</div>
+                <div class="grid-row" id="period-row-@{count + 1}">
+                    <div class="column-two-thirds form-hint"><span>@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span></div>
                     <div class="column-one-third form-hint"><a href="#" class="float--right">@messages("openPayments.viewReturn.link")</a></div>
                 </div>
                 <hr>
@@ -57,15 +57,19 @@ currentPage = messages("openPayments.title")
         </div>
     }
 
-    <p>@Messages("openPayments.processingTime")</p>
-    <h3 class="heading-small">Direct debits</h3>
-    <div class= "form-group">
+    <div id="payments-information">
+        <p id="processing-time">@Messages("openPayments.processingTime")</p>
+        <span id="direct-debits" class="heading-small">Direct debits</span>
+    </div>
+
+    <div id="check-direct-debit" class="form-group">
         <p>
             @Messages("openPayments.link.directDebit") <a href="#">@Messages("openPayments.link.directDebit.linkText")
         </a> @Messages("openPayments.link.directDebit.notSure")</p>
-        @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOwe.help"),hiddenHelpTextContent)
 
     </div>
+
+    @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOwe.help"),hiddenHelpTextContent)
 </div>
 
 }
