@@ -26,7 +26,7 @@
   @obligationDueDate.map { date =>
     <p>@displayDate(date)</p>
     <p>
-        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
+        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
             @messages("returnObligation.viewReturns")
         </a>
     </p>
