@@ -28,19 +28,21 @@ class CustomerInformationSpec extends UnitSpec {
       Some("Betty"),
       Some("Jones"),
       Some("Cheapo Clothing"),
-      "Bedrock Quarry",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV2 4BB"),
+      Address("Bedrock Quarry",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV2 4BB")
+      ),
       Some("01632 982028"),
       Some("07700 900018"),
       Some("bettylucknexttime@gmail.com"),
-      "13 Pebble Lane",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV13 4BJ"),
+      Address("13 Pebble Lane",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV13 4BJ")
+      ),
       Some("01632 960026"),
       Some("07700 900018"),
       Some("bettylucknexttime@gmail.com")
@@ -88,36 +90,6 @@ class CustomerInformationSpec extends UnitSpec {
         |}
       }"""
         .stripMargin.replace("\n", "")
-
-    val exampleOutputString =
-      """{
-        |"organisationName":"Cheapo Clothing Ltd",
-        |"firstName":"Betty",
-        |"lastName":"Jones",
-        |"tradingName":"Cheapo Clothing",
-        |"businessLine1":"Bedrock Quarry",
-        |"businessLine2":"Bedrock",
-        |"businessLine3":"Graveldon",
-        |"businessLine4":"Graveldon",
-        |"businessPostCode":"GV2 4BB",
-        |"businessPrimaryPhoneNumber":"01632 982028",
-        |"businessMobileNumber":"07700 900018",
-        |"businessEmailAddress":"bettylucknexttime@gmail.com",
-        |"correspondenceLine1":"13 Pebble Lane",
-        |"correspondenceLine2":"Bedrock",
-        |"correspondenceLine3":"Graveldon",
-        |"correspondenceLine4":"Graveldon",
-        |"correspondencePostCode":"GV13 4BJ",
-        |"correspondencePrimaryPhoneNumber":"01632 960026",
-        |"correspondenceMobileNumber":"07700 900018",
-        |"correspondenceEmailAddress":"bettylucknexttime@gmail.com"
-        |}"""
-        .stripMargin.replace("\n", "")
-
-    "parse to JSON" in {
-      val result = Json.toJson(exampleCustomerInfo).toString()
-      result shouldBe exampleOutputString
-    }
 
     "be parsed from appropriate JSON" in {
       val result = Json.parse(exampleInputString).as[CustomerInformation]

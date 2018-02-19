@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
-import models.CustomerInformation
+import models.{Address, CustomerInformation}
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import play.api.http.Status
 import play.api.libs.json.Json
@@ -78,23 +78,26 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
         Some("Betty"),
         Some("Jones"),
         Some("Cheapo Clothing"),
-        "Bedrock Quarry",
-        "Bedrock",
-        Some("Graveldon"),
-        Some("Graveldon"),
-        Some("GV2 4BB"),
+        Address("Bedrock Quarry",
+                "Bedrock",
+                Some("Graveldon"),
+                Some("Graveldon"),
+                Some("GV2 4BB")
+        ),
         Some("01632 982028"),
         Some("07700 900018"),
         Some("bettylucknexttime@gmail.com"),
-        "13 Pebble Lane",
-        "Bedrock",
-        Some("Graveldon"),
-        Some("Graveldon"),
-        Some("GV13 4BJ"),
+        Address("13 Pebble Lane",
+                "Bedrock",
+                Some("Graveldon"),
+                Some("Graveldon"),
+                Some("GV13 4BJ")
+        ),
         Some("01632 960026"),
         Some("07700 900018"),
         Some("bettylucknexttime@gmail.com")
       ))
+
       val result = CustomerInfoReads.read("", "", httpResponse)
 
       "return a Trading Name" in {

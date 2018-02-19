@@ -42,9 +42,9 @@ object CustomerInfoStub extends WireMockMethods {
       |      "organisationName" : "Cheapo Clothing Ltd",
       |      "individual" : {
       |        "title" : "0001",
-      |        "firstName" : "Vincent",
-      |        "middleName" : "Victor",
-      |        "lastName" : "Vatreturn"
+      |        "firstName" : "Betty",
+      |        "middleName" : "Vatreturn",
+      |        "lastName" : "Jones"
       |      },
       |      "tradingName" : "Cheapo Clothing",
       |      "mandationStatus" : "1",
@@ -63,7 +63,7 @@ object CustomerInfoStub extends WireMockMethods {
       |      "contactDetails":{
       |        "primaryPhoneNumber":"01632 982028",
       |        "mobileNumber":"07700 900018",
-      |        "emailAddress":"vvatreturn@gmail.com"
+      |        "emailAddress":"bettylucknexttime@gmail.com"
       |      }
       |    },
       |    "correspondenceContactDetails":{
@@ -77,7 +77,7 @@ object CustomerInfoStub extends WireMockMethods {
       |      "contactDetails":{
       |        "primaryPhoneNumber":"01632 960026",
       |        "mobileNumber":"07700 900018",
-      |        "emailAddress":"vvatreturn@gmail.com"
+      |        "emailAddress":"bettylucknexttime@gmail.com"
       |      }
       |    }
       |  }
