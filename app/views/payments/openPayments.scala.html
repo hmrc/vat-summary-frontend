@@ -50,7 +50,7 @@ currentPage = messages("openPayments.title")
                 </div>
                 <div class="grid-row" id="period-row-@{count + 1}">
                     <div class="column-two-thirds form-hint"><span>@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span></div>
-                    <div class="column-one-third form-hint"><a href="#" class="float--right">@messages("openPayments.viewReturn.link")</a></div>
+                    <div class="column-one-third form-hint"><a href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">@messages("openPayments.viewReturn.link")</a></div>
                 </div>
                 <hr>
             </form>

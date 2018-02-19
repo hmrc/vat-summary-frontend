@@ -49,8 +49,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val secondPaymentPay = "#payment-row-2 input:nth-of-type(1)"
     val firstPaymentPeriod = "#period-row-1 span:nth-of-type(1)"
     val secondPaymentPeriod = "#period-row-2 span:nth-of-type(1)"
-    val firstPaymentViewReturn = "#period-row-1 a:nth-of-type(1)"
-    val secondPaymentViewReturn = "#period-row-2 a:nth-of-type(1)"
+    lazy val firstPaymentViewReturn = "#period-row-1 a:nth-of-type(1)"
+    lazy val secondPaymentViewReturn = "#period-row-2 a:nth-of-type(1)"
     val processingTime = "#payments-information p:nth-of-type(1)"
     val directDebit = "#payments-information span:nth-of-type(1)"
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
@@ -153,7 +153,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct view return href for the first payment" in {
-      element(Selectors.firstPaymentViewReturn).attr("href") shouldBe "#"
+      element(Selectors.firstPaymentViewReturn).attr("href") shouldBe "/submitted/%23001"
     }
 
     "render the correct amount for the second payment" in {
@@ -185,7 +185,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct view return href for the second payment" in {
-      element(Selectors.secondPaymentViewReturn).attr("href") shouldBe "#"
+      element(Selectors.secondPaymentViewReturn).attr("href") shouldBe "/submitted/%23002"
     }
 
     "render the correct text for the processing time" in {
