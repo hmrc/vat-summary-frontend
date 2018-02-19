@@ -40,20 +40,34 @@ payment.nextPayment = Next payment due
 payment.check = Check before paying
 payment.overdue = Overdue
 
+payment.link.stillMake = You can still
+payment.link.stillMake.linkText = make a payment (opens in a new tab).
+
 openPayments.title = VAT payments
+openPayments.heading = What you owe
 openPayments.type = Type
 openPayments.due = Due
 openPayments.amount = Amount
 openPayments.check = Check {0} return
 openPayments.onlyByCard = You can only pay by card
 openPayments.makePayment = Make a payment
+openPayments.forPeriod = for the period
+openPayments.dueBy = due by
+openPayments.viewReturn.link = View return
+openPayments.payNow.link = Pay now
+openPayments.processingTime = Your payment could take up to 5 days to process. You''ll be fined if it''s late.
+openPayments.timeToAppear = It can take up to 24 hours to appear after you''ve submitted your return.
+openPayments.whatOwe.help = What I owe isn''t shown
+openPayments.link.directDebit = If you''ve already set up a direct debit, you don''t need to pay now. You can
+openPayments.link.directDebit.linkText = check if you''ve set up a direct debit
+openPayments.link.directDebit.notSure = if you''re not sure.
+
 
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
 noPayments.oweNothing = You don''t owe anything right now.
 noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
-noPayments.link.text = You can still
-noPayments.link.linkText = make a payment (opens in a new tab).
+
 
 paymentsError.heading = We can''t let you pay here right now
 paymentsError.tryLater = Try reloading the page or coming back later.

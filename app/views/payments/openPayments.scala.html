@@ -15,46 +15,57 @@
  *@
 
 @import views.html.templates.formatters.dates.{displayDateRange, displayDate}
+@import views.html.templates.expandingHelpSection
 @import views.html.templates.formatters.money.displayMoney
 @import views.html.templates.formatters.breadcrumbs._
 
 @(user: models.User,
-  payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-  @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+@hiddenHelpTextContent = {
+    <p>@Messages("openPayments.timeToAppear")</p>
+    <p>@Messages("payment.link.stillMake") <a href="#">@Messages("payment.link.stillMake.linkText")</a></p>
+}
 
-    @navigationBreadcrumb(
-      links = Map(
-      appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
-      controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
-      currentPage = messages("openPayments.title")
-    )
+@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
 
-    <div class="grid-row">
-      <div class="column-two-thirds">
+@navigationBreadcrumb(
+links = Map(
+appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
+controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
+currentPage = messages("openPayments.title")
+)
 
-        <h1 class="heading-xlarge">@messages("openPayments.title")</h1>
+<div class="grid-row column-two-thirds">
+    <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
-        <p>You must pay:</p>
+    @payments.zipWithIndex.map { case(payment, count) =>
+        <div id="payment-section-@{count + 1}">
+            <form>
+                <span class="heading-medium">@displayMoney(payment.amount)</span>
+                <div class="grid-row">
+                    <div class="column-two-thirds"><span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span></div>
+                    <div class="column-one-third form-hint"><input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")' data-journey-click="payment:make-payment:open-payments"/></div>
 
-        <ul id="payments" class="list list-bullet">
-        @payments.map { payment =>
-          <li>
-            <form class="form" method="post" action="#">
-              <div class="form-group">
-                <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span> by <span data-due="@(payment.due.toString)">@displayDate(payment.due)</span>
-                <p>
-                  <a href="@appConfig.vatReturnUrl(payment.periodKey)" data-period="@(payment.start)-to-@(payment.end)"
-                     data-journey-click="return:view-@(payment.start)-to-@(payment.end):open-payments">(@displayDateRange(payment.start, payment.end).toString().trim return)
-                  </a>
-                </p>
-                <input class="button" type="submit" value='@Messages("openPayments.makePayment")' data-journey-click="payment:make-payment:open-payments"/>
-              </div>
+                </div>
+                <div class="grid-row">
+                    <div class="column-two-thirds form-hint">@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</div>
+                    <div class="column-one-third form-hint"><a href="#" class="float--right">@messages("openPayments.viewReturn.link")</a></div>
+                </div>
+                <hr>
             </form>
-          </li>
-        }
-        </ul>
+        </div>
+    }
 
-      </div>
+    <p>@Messages("openPayments.processingTime")</p>
+    <h3 class="heading-small">Direct debits</h3>
+    <div class= "form-group">
+        <p>
+            @Messages("openPayments.link.directDebit") <a href="#">@Messages("openPayments.link.directDebit.linkText")
+        </a> @Messages("openPayments.link.directDebit.notSure")</p>
+        @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOwe.help"),hiddenHelpTextContent)
+
     </div>
-  }
+</div>
+
+}
