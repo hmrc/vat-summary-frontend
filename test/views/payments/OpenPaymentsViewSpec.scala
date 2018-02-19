@@ -56,7 +56,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
     val directDebitCheckLink = "#check-direct-debit a:nth-of-type(1)"
     val helpTwentyFourHours = "details p:nth-of-type(1)"
-    val helpMakePayent = "details p:nth-of-type(2)"
+    val helpMakePayment = "details p:nth-of-type(2)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
 
   }
@@ -218,7 +218,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayent) shouldBe "You can still make a payment (opens in a new tab)."
+      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new tab)."
     }
 
   }

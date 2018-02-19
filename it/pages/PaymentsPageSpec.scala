@@ -59,9 +59,8 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         lazy implicit val document: Document = Jsoup.parse(response.body)
 
-        val bulletPointSelector = ".list-bullet li"
-
-        document.select(bulletPointSelector).size() shouldBe 2
+        val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
+          document.select(firstPaymentAmount).text().length > 0 shouldBe true
       }
     }
 
