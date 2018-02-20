@@ -34,9 +34,9 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       paymentsService.getOpenPayments(user.vrn).map {
-        case Right(Payments(payments)) if payments.nonEmpty => Ok(views.html.payments.openPayments(user, getModel(payments)))
-        case Right(_) => Ok(views.html.payments.noPayments(user))
-        case Left(_) => InternalServerError(views.html.payments.paymentsError(user))
+        case Some(Payments(payments)) if payments.nonEmpty => Ok(views.html.payments.openPayments(user, getModel(payments)))
+        case Some(_) => Ok(views.html.payments.noPayments(user))
+        case None => InternalServerError(views.html.payments.paymentsError(user))
       }
   }
 

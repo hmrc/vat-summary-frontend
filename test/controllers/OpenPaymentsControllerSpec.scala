@@ -73,7 +73,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(Right(Payments(Seq(payment, payment)))))
+            .returns(Future.successful(Some(Payments(Seq(payment, payment)))))
         }
 
         val result = await(target.openPayments()(fakeRequest))
@@ -92,7 +92,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           super.setupMocks()
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(Right(Payments(Seq.empty))))
+            .returns(Future.successful(Some(Payments(Seq.empty))))
         }
 
         val result = await(target.openPayments()(fakeRequest))
@@ -111,7 +111,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           super.setupMocks()
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(Left(ServerSideError)))
+            .returns(Future.successful(None))
         }
 
         val result = await(target.openPayments()(fakeRequest))

@@ -20,13 +20,14 @@ import java.time.LocalDate
 
 import connectors.FinancialDataConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import models.errors.ServerSideError
 import models.payments.{Payment, Payments}
 import org.scalamock.matchers.Matchers
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 import org.scalamock.scalatest.MockFactory
-import scala.concurrent.ExecutionContext.Implicits.global
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
@@ -35,23 +36,59 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-    lazy val service = new PaymentsService(mockFinancialDataConnector)
-  }
+    val responseFromConnector: HttpGetResult[Payments]
 
-  val responseFromConnector = Right(Payments(Seq(Payment(LocalDate.parse("2008-12-06"), LocalDate.parse("2009-01-04"),
-    LocalDate.parse("2008-12-06"), BigDecimal("21.22"), "ABCD"))))
-
-  "getOpenPayments" should {
-    "retrive a list of payments" in new Test {
-      (mockFinancialDataConnector.getOpenPayments(_: String)
-      (_: HeaderCarrier, _: ExecutionContext))
+    def setup(): Any = {
+      (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
         .returns(Future.successful(responseFromConnector))
-
-      val payments: HttpGetResult[Payments] = await(service.getOpenPayments("123456789"))
-      payments shouldBe responseFromConnector
     }
 
+    def target: PaymentsService = {
+      setup()
+      new PaymentsService(mockFinancialDataConnector)
+    }
+  }
+
+  "Calling the .getOpenPayments function" when {
+
+    "the user has payments outstanding" should {
+
+      "return a list of payments" in new Test {
+        val payments = Payments(Seq(Payment(
+          LocalDate.parse("2008-12-06"),
+          LocalDate.parse("2009-01-04"),
+          LocalDate.parse("2008-12-06"),
+          BigDecimal("21.22"),
+          "ABCD"
+        )))
+        override val responseFromConnector = Right(payments)
+        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+
+        paymentsResponse shouldBe Some(payments)
+      }
+    }
+
+    "the user has no payments outstanding" should {
+
+      "return an empty list of payments" in new Test {
+        val payments = Payments(Seq.empty)
+        override val responseFromConnector = Right(payments)
+        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+
+        paymentsResponse shouldBe Some(payments)
+      }
+    }
+
+    "the connector call fails" should {
+
+      "return None" in new Test {
+        override val responseFromConnector = Left(ServerSideError)
+        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+
+        paymentsResponse shouldBe None
+      }
+    }
   }
 
 }

@@ -28,6 +28,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentsService @Inject()(connector: FinancialDataConnector){
-  def getOpenPayments(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext) :
-    Future[HttpGetResult[Payments]] = connector.getOpenPayments(vrn)
+  def getOpenPayments(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Payments]] =
+    connector.getOpenPayments(vrn).map {
+      case Right(Payments(payments)) if payments.nonEmpty =>
+        Some(Payments(payments.filter(payment => payment.outstandingAmount > 0)))
+      case Right(emptyPayments) => Some(emptyPayments)
+      case Left(_) => None
+    }
 }
