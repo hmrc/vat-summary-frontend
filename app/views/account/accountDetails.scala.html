@@ -15,6 +15,7 @@
  *@
 
 @import views.html.templates.formatters.breadcrumbs._
+@import views.html.templates.formatters.addresses._
 
 @(user: models.User,
   account: models.viewModels.AccountDetailsModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
@@ -44,10 +45,12 @@
           </div>
           <div id="business-address">
             <dt class="cya-question">@messages("accountDetails.businessAddress")</dt>
-            <dd class="cya-answer">@account.businessAddress
-                <span class="display-block">
-                    @account.businessPostcode
-                </span>
+            <dd class="cya-answer">@address(account.businessAddress)
+                @if(account.businessAddress.postCode.isDefined) {
+                  <span class="display-block">
+                    @account.businessAddress.postCode
+                  </span>
+                }
             </dd>
           </div>
           <div id="business-phone">
@@ -67,10 +70,12 @@
         <dl class="govuk-check-your-answers cya-questions-short tax-estimate">
           <div id="correspondence-address">
             <dt class="cya-question">@messages("accountDetails.correspondenceAddress")</dt>
-            <dd class="cya-answer">@account.correspondenceAddress
-                <span class="display-block">
-                    @account.correspondencePostcode
-                </span>
+            <dd class="cya-answer">@address(account.correspondenceAddress)
+                @if(account.correspondenceAddress.postCode.isDefined) {
+                  <span class="display-block">
+                    @account.correspondenceAddress.postCode
+                  </span>
+                }
             </dd>
           </div>
           <div id="correspondence-email">

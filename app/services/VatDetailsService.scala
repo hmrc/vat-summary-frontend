@@ -23,9 +23,9 @@ import cats.data.EitherT
 import cats.implicits._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
-import models.obligations.Obligation.Status._
 import models._
 import models.obligations.Obligation
+import models.obligations.Obligation.Status._
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,15 +63,5 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
     } yield VatDetailsModel(nextPayment, nextReturn)
 
     result.value
-  }
-
-  def getEntityName(user: User)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
-    subscriptionConnector.getCustomerInfo(user.vrn).map {
-      case Right(CustomerInformation(None, None, None, None)) => None
-      case Right(CustomerInformation(None, Some(firstName), Some(lastName), None)) => Some(s"$firstName $lastName")
-      case Right(CustomerInformation(organisationName, None, None, None)) => organisationName
-      case Right(CustomerInformation(_, _, _, tradingName)) => tradingName
-      case Left(_) => None
-    }
   }
 }

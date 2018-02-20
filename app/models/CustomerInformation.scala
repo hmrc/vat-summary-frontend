@@ -16,13 +16,30 @@
 
 package models
 
-import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class CustomerInformation(organisationName: Option[String],
                                firstName: Option[String],
                                lastName: Option[String],
-                               tradingName: Option[String])
+                               tradingName: Option[String],
+                               businessAddress: Address,
+                               businessPrimaryPhoneNumber: Option[String],
+                               businessMobileNumber: Option[String],
+                               businessEmailAddress: Option[String],
+                               correspondenceAddress: Address,
+                               correspondencePrimaryPhoneNumber: Option[String],
+                               correspondenceMobileNumber: Option[String],
+                               correspondenceEmailAddress: Option[String]
+                              ) {
+  def entityName: Option[String] = {
+    (this.firstName, this.lastName, this.tradingName, this.organisationName) match {
+      case (Some(first), Some(last), None, None) => Some(s"$first $last")
+      case (None, None, None, organisationName) => organisationName
+      case (_, _, tradingName, _) => tradingName
+    }
+  }
+}
 
 object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
@@ -31,6 +48,17 @@ object CustomerInformation {
     (JsPath \ "approvedInformation" \ "customerDetails" \ "organisationName").readNullable[String] and
     (JsPath \ "approvedInformation" \ "customerDetails" \\ "firstName").readNullable[String] and
     (JsPath \ "approvedInformation" \ "customerDetails" \\ "lastName").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "customerDetails" \ "tradingName").readNullable[String]
-  ) (CustomerInformation.apply _)
+    (JsPath \ "approvedInformation" \ "customerDetails" \ "tradingName").readNullable[String] and
+
+    (JsPath \ "approvedInformation" \ "PPOB").read[Address] and
+    (JsPath \ "approvedInformation" \ "PPOB" \\ "primaryPhoneNumber").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "PPOB" \\ "mobileNumber").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "PPOB" \\ "emailAddress").readNullable[String] and
+
+    (JsPath \ "approvedInformation" \ "correspondenceContactDetails").read[Address] and
+    (JsPath \ "approvedInformation" \ "correspondenceContactDetails" \\ "primaryPhoneNumber").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "correspondenceContactDetails" \\ "mobileNumber").readNullable[String] and
+    (JsPath \ "approvedInformation" \ "correspondenceContactDetails" \\ "emailAddress").readNullable[String]
+
+    ) (CustomerInformation.apply _)
 }

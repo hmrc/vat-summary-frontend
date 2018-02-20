@@ -24,19 +24,20 @@ import models.viewModels.VatDetailsViewModel
 import models.VatDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{EnrolmentsAuthService, VatDetailsService}
+import services.{AccountDetailsService, EnrolmentsAuthService, VatDetailsService}
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      implicit val appConfig: AppConfig,
-                                     vatDetailsService: VatDetailsService)
+                                     vatDetailsService: VatDetailsService,
+                                     accountDetailsService: AccountDetailsService)
   extends AuthorisedController with I18nSupport {
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       val nextActionsCall = vatDetailsService.getVatDetails(user)
-      val entityNameCall = vatDetailsService.getEntityName(user)
+      val entityNameCall = accountDetailsService.getEntityName(user.vrn)
 
       for {
         nextActions <- nextActionsCall

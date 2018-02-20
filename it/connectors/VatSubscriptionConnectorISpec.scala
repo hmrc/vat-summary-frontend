@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.CustomerInformation
+import models.{Address, CustomerInformation}
 import models.errors.ServerSideError
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -41,9 +41,27 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Right(CustomerInformation(
         Some("Cheapo Clothing Ltd"),
-        Some("Vincent"),
-        Some("Vatreturn"),
-        Some("Cheapo Clothing")
+        Some("Betty"),
+        Some("Jones"),
+        Some("Cheapo Clothing"),
+        Address("Bedrock Quarry",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV2 4BB")
+        ),
+        Some("01632 982028"),
+        Some("07700 900018"),
+        Some("bettylucknexttime@gmail.com"),
+        Address("13 Pebble Lane",
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV13 4BJ")
+        ),
+        Some("01632 960026"),
+        Some("07700 900018"),
+        Some("bettylucknexttime@gmail.com")
       ))
 
       setupStubs()
@@ -62,7 +80,5 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
 
       result shouldEqual expected
     }
-
   }
-
 }

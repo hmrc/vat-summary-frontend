@@ -55,7 +55,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     val mockVatApiConnector: VatApiConnector = mock[VatApiConnector]
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
     val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
-    lazy val service = new VatDetailsService(mockVatApiConnector, mockFinancialDataConnector, mockSubscriptionConnector)
+    lazy val vatDetailsService = new VatDetailsService(mockVatApiConnector, mockFinancialDataConnector, mockSubscriptionConnector)
+    lazy val accountDetailsService = new AccountDetailsService(mockSubscriptionConnector)
   }
 
   "Calling .retrieveNextDetail" when {
@@ -65,7 +66,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return current obligation" in new Test {
         val obligations = VatReturnObligations(Seq(currentObligation))
         lazy val result: Option[VatReturnObligation] =
-          service.getNextObligation(obligations.obligations, LocalDate.parse("2017-03-30"))
+          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-03-30"))
 
         result shouldBe Some(currentObligation)
       }
@@ -85,7 +86,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the obligation which is due today" in new Test {
         val obligations = VatReturnObligations(Seq(futureObligation, currentObligation))
         lazy val result: Option[VatReturnObligation] =
-          service.getNextObligation(obligations.obligations, LocalDate.parse("2017-04-30"))
+          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-04-30"))
 
         result shouldBe Some(currentObligation)
       }
@@ -93,7 +94,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the obligation which is due in the future" in new Test {
         val obligations = VatReturnObligations(Seq(futureObligation, currentObligation))
         lazy val result: Option[VatReturnObligation] =
-          service.getNextObligation(obligations.obligations, LocalDate.parse("2017-05-30"))
+          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-05-30"))
 
         result shouldBe Some(futureObligation)
       }
@@ -101,7 +102,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the most recent overdue obligation" in new Test {
         val obligations = VatReturnObligations(Seq(futureObligation, currentObligation))
         lazy val result: Option[VatReturnObligation] =
-          service.getNextObligation(obligations.obligations, LocalDate.parse("2017-08-30"))
+          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-08-30"))
 
         result shouldBe Some(futureObligation)
       }
@@ -124,7 +125,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111")))
 
         result shouldBe Right(VatDetailsModel(Some(payment), Some(currentObligation)))
       }
@@ -146,7 +147,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*)
           .returns(Future.successful(Right(Payments(Seq.empty))))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111")))
 
         result shouldBe Right(VatDetailsModel(None, None))
       }
@@ -161,7 +162,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111")))
+        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111")))
 
         result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
       }
@@ -177,7 +178,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*,*,*,*,*,*)
           .returns(Future.failed(expected))
 
-        intercept[RuntimeException](await(service.getVatDetails(User("1111"))))
+        intercept[RuntimeException](await(vatDetailsService.getVatDetails(User("1111"))))
       }
 
     }
@@ -190,19 +191,37 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the trading name" in new Test {
         val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          Some("My organisation name"),
-          Some("John"),
-          Some("Smith"),
-          Some("My trading name")
+          Some("Cheapo Clothing Ltd"),
+          Some("Betty"),
+          Some("Jones"),
+          Some("Cheapo Clothing"),
+          Address("Bedrock Quarry",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV2 4BB")
+          ),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          Address("13 Pebble Lane",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV13 4BJ")
+          ),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        lazy val result: Option[String] = await(service.getEntityName(User("999999999")))
+        lazy val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe Some("My trading name")
+        result shouldBe Some("Cheapo Clothing")
       }
     }
 
@@ -211,18 +230,36 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the first and last name" in new Test {
         val exampleCustomerInfo: CustomerInformation = CustomerInformation(
           None,
-          Some("John"),
-          Some("Smith"),
-          None
+          Some("Betty"),
+          Some("Jones"),
+          None,
+          Address("Bedrock Quarry",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV2 4BB")
+          ),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          Address("13 Pebble Lane",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV13 4BJ")
+          ),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        val result: Option[String] = await(service.getEntityName(User("999999999")))
+        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe Some("John Smith")
+        result shouldBe Some("Betty Jones")
       }
     }
 
@@ -230,19 +267,37 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the organisation name" in new Test {
         val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          Some("My organisation name"),
+          Some("Cheapo Clothing Ltd"),
           None,
           None,
-          None
+          None,
+          Address("Bedrock Quarry",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV2 4BB")
+          ),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          Address("13 Pebble Lane",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV13 4BJ")
+          ),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        val result: Option[String] = await(service.getEntityName(User("999999999")))
+        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe Some("My organisation name")
+        result shouldBe Some("Cheapo Clothing Ltd")
       }
     }
 
@@ -253,14 +308,32 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           None,
           None,
           None,
-          None
+          None,
+          Address("Bedrock Quarry",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV2 4BB")
+          ),
+          Some("01632 982028"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com"),
+          Address("13 Pebble Lane",
+            "Bedrock",
+            Some("Graveldon"),
+            Some("Graveldon"),
+            Some("GV13 4BJ")
+          ),
+          Some("01632 960026"),
+          Some("07700 900018"),
+          Some("bettylucknexttime@gmail.com")
         )
 
         (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        val result: Option[String] = await(service.getEntityName(User("999999999")))
+        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
 
         result shouldBe None
       }
@@ -273,7 +346,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Left(BadRequestError("", ""))))
 
-        val result: Option[String] = await(service.getEntityName(User("999999999")))
+        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
 
         result shouldBe None
       }

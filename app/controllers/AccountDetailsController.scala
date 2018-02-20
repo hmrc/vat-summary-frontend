@@ -19,17 +19,18 @@ package controllers
 import javax.inject.Inject
 
 import config.AppConfig
-import models.User
+import models.{CustomerInformation, User}
 import models.viewModels.AccountDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.EnrolmentsAuthService
+import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
 class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
+                                         val detailsService: AccountDetailsService,
                                          implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
@@ -40,18 +41,17 @@ class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def handleAccountDetailsModel(user: User)(implicit hc: HeaderCarrier): Future[AccountDetailsModel] = {
-    Future.successful(
-      AccountDetailsModel(
-        "Betty Jones",
-        "Bedrock Quarry, Bedrock, Graveldon",
-        "GV2 4BB",
-        "13 Pebble lane, Bedrock, Graveldon",
-        "GV13 4BJ",
-        "01632 982028",
-        "07700 900018",
-        "01632 960026",
-        "bettylucknexttime@gmail.com"
-      )
-    )
+      detailsService.getAccountDetails(user.vrn).map {
+        case Right(details: CustomerInformation) =>
+          AccountDetailsModel(
+            details.entityName.get,
+            details.correspondenceAddress,
+            details.businessAddress,
+            details.businessPrimaryPhoneNumber.get,
+            details.businessMobileNumber.get,
+            details.correspondencePrimaryPhoneNumber.get,
+            details.businessEmailAddress.get
+          )
+    }
   }
 }
