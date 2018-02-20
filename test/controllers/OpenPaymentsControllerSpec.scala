@@ -19,9 +19,10 @@ package controllers
 import java.time.LocalDate
 
 import models.User
-import models.errors.ServerSideError
 import models.payments.{Payment, Payments}
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import play.api.mvc.Result
 import services.{EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -76,9 +77,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(Some(Payments(Seq(payment, payment)))))
         }
 
-        val result = await(target.openPayments()(fakeRequest))
+        val result: Result = await(target.openPayments()(fakeRequest))
 
-        val document = Jsoup.parse(bodyOf(result))
+        val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "VAT payments"
       }
@@ -95,9 +96,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(Some(Payments(Seq.empty))))
         }
 
-        val result = await(target.openPayments()(fakeRequest))
+        val result: Result = await(target.openPayments()(fakeRequest))
 
-        val document = Jsoup.parse(bodyOf(result))
+        val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
       }
@@ -114,9 +115,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(None))
         }
 
-        val result = await(target.openPayments()(fakeRequest))
+        val result: Result = await(target.openPayments()(fakeRequest))
 
-        val document = Jsoup.parse(bodyOf(result))
+        val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "We can't let you pay here right now"
       }

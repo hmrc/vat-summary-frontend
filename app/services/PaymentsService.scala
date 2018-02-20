@@ -16,11 +16,9 @@
 
 package services
 
-
 import javax.inject.{Inject, Singleton}
 
 import connectors.FinancialDataConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.payments.Payments
 import uk.gov.hmrc.http.HeaderCarrier
 
