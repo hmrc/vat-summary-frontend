@@ -50,16 +50,16 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
   def getVatDetails(user: User,
                     date: LocalDate = LocalDate.now())
                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatDetailsModel]] = {
-    val numDaysPrior = 0
-    val numDaysAhead = 365
-    val dateFrom = date.minusDays(numDaysPrior)
-    val dateTo = date.plusDays(numDaysAhead)
+    // Static 2018 date range for MVP
+    val dateFrom = LocalDate.parse("2018-01-01")
+    val dateTo = LocalDate.parse("2018-12-31")
 
     val result = for {
       nextReturn <- EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
         .map(obligations => getNextObligation(obligations.obligations, date))
       nextPayment <- EitherT(financialDataConnector.getOpenPayments(user.vrn))
-        .map(payments => getNextObligation(payments.financialTransactions, date))
+        .map(payments => getNextObligation(payments.financialTransactions, date)
+        .filter(payment => payment.outstandingAmount > 0))
     } yield VatDetailsModel(nextPayment, nextReturn)
 
     result.value
