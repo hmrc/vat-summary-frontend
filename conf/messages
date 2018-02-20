@@ -37,7 +37,7 @@ returnObligation.submitUsingSoftware = submit using software
 
 payment.noPayment = No payment due
 payment.nextPayment = Next payment due
-payment.check = Check before paying
+payment.check = Check what you owe
 payment.overdue = Overdue
 
 payment.link.stillMake = You can still
