@@ -37,37 +37,50 @@ returnObligation.submitUsingSoftware = submit using software
 
 payment.noPayment = No payment due
 payment.nextPayment = Next payment due
-payment.check = Check before paying
+payment.check = Check what you owe
 payment.overdue = Overdue
 
+payment.stillMakeLink = You can still
+payment.stillMake = make a payment (opens in a new tab).
+
 openPayments.title = VAT payments
+openPayments.heading = What you owe
 openPayments.type = Type
 openPayments.due = Due
 openPayments.amount = Amount
 openPayments.check = Check {0} return
 openPayments.onlyByCard = You can only pay by card
-openPayments.makePayment = Make a payment
+openPayments.makePayment = Pay now
+openPayments.forPeriod = for the period
+openPayments.dueBy = due by
+openPayments.viewReturnLink = View return
+openPayments.processingTime = Your payment could take up to 5 days to process. You''ll be fined if it''s late.
+openPayments.timeToAppear = It can take up to 24 hours to appear after you''ve submitted your return.
+openPayments.whatOweHelp = What I owe isn''t shown
+openPayments.directDebitLink = If you''ve already set up a direct debit, you don''t need to pay now. You can
+openPayments.directDebitLinkText = check if you''ve set up a direct debit
+openPayments.directDebitNotSure = if you''re not sure.
+
 
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
 noPayments.oweNothing = You don''t owe anything right now.
 noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
-noPayments.link.text = You can still
-noPayments.link.linkText = make a payment (opens in a new tab).
+
 
 paymentsError.heading = We can''t let you pay here right now
 paymentsError.tryLater = Try reloading the page or coming back later.
-paymentsError.paymentServiceDetail.textOne = You can also use the
+paymentsError.paymentServiceDetailTextOne = You can also use the
 paymentsError.paymentServiceLink.linkText = HMRC payments service
-paymentsError.paymentServiceDetail.textTwo = if you have your VAT details to hand.
+paymentsError.paymentServiceDetailTextTwo = if you have your VAT details to hand.
 
-paymentsError.contactDetail.textOne = If you''re close to a payment deadline and worried you''ll miss it, please
-paymentsError.contactLink.linkText = contact HMRC
-paymentsError.contactDetail.textTwo = as soon as possible.
-paymentsError.reasonableExcuseDetail.textOne = Issues with HMRC''s online services are a
-paymentsError.reasonableExcuse.linkText = reasonable excuse
-paymentsError.reasonableExcuseDetail.textTwo = when appealing a penalty.
-paymentsError.reasonableExcuse.hiddenIconText = Warning
+paymentsError.contactDetailTextOne = If you''re close to a payment deadline and worried you''ll miss it, please
+paymentsError.contactLinkText = contact HMRC
+paymentsError.contactDetailTextTwo = as soon as possible.
+paymentsError.reasonableExcuseDetailTextOne = Issues with HMRC''s online services are a
+paymentsError.reasonableExcuseLink = reasonable excuse
+paymentsError.reasonableExcuseDetailTextTwo = when appealing a penalty.
+paymentsError.reasonableExcuseHiddenIconText = Warning
 paymentsError.technicalDifficulties = We''re experiencing technical problems
 
 

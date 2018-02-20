@@ -81,7 +81,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         val document: Document = Jsoup.parse(bodyOf(result))
 
-        document.select("h1").first().text() shouldBe "VAT payments"
+        document.select("h1").first().text() shouldBe "What you owe"
       }
 
     }

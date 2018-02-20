@@ -47,7 +47,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the 'View payment details' button" in {
-        elementText(Selectors.viewPaymentButton) shouldBe "Check before paying"
+        elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
       }
     }
 
