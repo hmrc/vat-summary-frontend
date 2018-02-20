@@ -117,10 +117,6 @@ class AccountDetailsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "have the correct sub heading" in {
-      elementText(Selectors.editAccountHeading) shouldBe "You edit these details in your accounting software."
-    }
-
     "have the business details section" in {
       elementText(Selectors.businessDetailsHeading) shouldBe "Business details"
     }
