@@ -53,6 +53,12 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   private[controllers] def constructViewModel(vatDetailsModel: VatDetailsModel, entityName: Option[String]): VatDetailsViewModel = {
     val paymentDueDate: Option[LocalDate] = vatDetailsModel.payment.map(_.due)
     val obligationDueDate: Option[LocalDate] = vatDetailsModel.vatReturn.map(_.due)
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
+
+    val isOverdue: Boolean = obligationDueDate match {
+      case Some(dueDate: LocalDate) => LocalDate.now().isAfter(dueDate)
+      case _ => false
+    }
+
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, isOverdue)
   }
 }
