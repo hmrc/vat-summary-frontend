@@ -24,17 +24,20 @@
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@nextReturnMessage</h2>
   @obligationDueDate.map { date =>
-    <p>@displayDate(date)</p>
     <p>
-        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
-            @messages("returnObligation.viewReturns")
-        </a>
+      @displayDate(date)
 
-        @if(isOverdue){
-          <span>
-            <strong class="task-overdue" id="overdue-tag">@messages("returnObligation.overdue")</strong>
-          </span>
-        }
+      @if(isOverdue){
+      <span>
+        <strong class="badge" id="overdue-tag">@messages("returnObligation.overdue")</strong>
+      </span>
+      }
+    </p>
+
+    <p>
+      <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
+          @messages("returnObligation.viewReturns")
+      </a>
     </p>
   }
 </div>
