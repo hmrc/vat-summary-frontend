@@ -53,6 +53,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   private[controllers] def constructViewModel(vatDetailsModel: VatDetailsModel, entityName: Option[String]): VatDetailsViewModel = {
     val paymentDueDate: Option[LocalDate] = vatDetailsModel.payment.map(_.due)
     val obligationDueDate: Option[LocalDate] = vatDetailsModel.vatReturn.map(_.due)
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, false)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
   }
 }
