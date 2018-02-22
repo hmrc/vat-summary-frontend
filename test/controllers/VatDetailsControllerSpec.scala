@@ -36,13 +36,21 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   val payment = Some(Payment(
-    LocalDate.parse("2017-01-01"),
-    LocalDate.parse("2017-02-02"),
-    LocalDate.parse("2017-03-03"),
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
+    LocalDate.parse("2019-03-03"),
     1,
     "#001"
   ))
   val obligation = Some(VatReturnObligation(
+    LocalDate.parse("2019-04-04"),
+    LocalDate.parse("2019-05-05"),
+    LocalDate.parse("2019-06-06"),
+    "O",
+    None,
+    "#001"
+  ))
+  val overdueObligation = Some(VatReturnObligation(
     LocalDate.parse("2017-04-04"),
     LocalDate.parse("2017-05-05"),
     LocalDate.parse("2017-06-06"),
@@ -137,8 +145,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     lazy val mockVatDetailsService = mock[VatDetailsService]
     lazy val controller = new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService)
-    lazy val paymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-03-03"))
-    lazy val obligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-06-06"))
+    lazy val paymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2019-03-03"))
+    lazy val obligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2019-06-06"))
+    lazy val overdueObligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-06-06"))
 
     "there is both a payment and an obligation" should {
 
@@ -186,6 +195,16 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       lazy val result = controller.constructViewModel(VatDetailsModel(None, None), None)
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name" in {
+        result shouldBe expected
+      }
+    }
+
+    "the obligation is overdue" should {
+
+      lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, isOverdue = true)
+      lazy val result = controller.constructViewModel(VatDetailsModel(payment, overdueObligation), entityName)
+
+      "return a VatDetailsViewModel with the overdue flag set" in {
         result shouldBe expected
       }
     }
