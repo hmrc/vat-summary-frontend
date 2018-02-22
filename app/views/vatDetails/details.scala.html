@@ -40,7 +40,7 @@
       <section class="divider--bottom">
         <div class="grid-row">
           @views.html.templates.nextPaymentSection(detailsViewModel.nextPaymentDueDate)
-          @views.html.templates.nextReturnSection(detailsViewModel.nextObligationDueDate)
+          @views.html.templates.nextReturnSection(detailsViewModel.nextObligationDueDate, detailsViewModel.isOverdue)
         </div>
       </section>
 

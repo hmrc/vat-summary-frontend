@@ -17,7 +17,7 @@
 @import views.html.templates.formatters.dates._
 @import java.time.LocalDate
 
-@(obligationDueDate: Option[LocalDate])(implicit messages: Messages, appConfig: config.AppConfig)
+@(obligationDueDate: Option[LocalDate], isOverdue: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @nextReturnMessage = {@messages(obligationDueDate.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
 
@@ -29,6 +29,12 @@
         <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
             @messages("returnObligation.viewReturns")
         </a>
+
+        @if(isOverdue){
+          <span>
+            <strong class="task-overdue" id="overdue-tag">@messages("returnObligation.overdue")</strong>
+          </span>
+        }
     </p>
   }
 </div>
