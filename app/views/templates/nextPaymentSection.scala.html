@@ -19,15 +19,27 @@
 @import views.html.templates.formatters.money._
 @import java.time.LocalDate
 
-@(paymentDueDate: Option[LocalDate])(implicit messages: Messages)
+@(paymentDueDate: Option[LocalDate], isOverdue: Boolean)(implicit messages: Messages)
 
 @paymentMessage = {@messages(paymentDueDate.fold("payment.noPayment") {_ => "payment.nextPayment"})}
 
 <div class="column-one-half" id="payments">
   <h2 class="heading-medium" style="margin-top: 0px">@paymentMessage</h2>
   @paymentDueDate.map { date =>
-    <p>@displayDate(date)</p>
-    <p><a href="@{controllers.routes.OpenPaymentsController.openPayments().url}"
-          data-journey-click="payment:check:vat-details">@messages("payment.check")</a></p>
+    <p>
+      @displayDate(date)
+
+      @if(isOverdue){
+        <span>
+            <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+          </span>
+        }
+    </p>
+
+    <p>
+      <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}"
+          data-journey-click="payment:check:vat-details">@messages("payment.check")
+      </a>
+    </p>
   }
 </div>

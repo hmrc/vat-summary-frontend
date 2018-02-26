@@ -46,11 +46,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some(LocalDate.now()),
     Some("Cheapo Clothing")
   )
-  val overdueDetailsModel = VatDetailsViewModel(
+  val overdueReturnDetailsModel = VatDetailsViewModel(
     Some(LocalDate.now()),
     Some(LocalDate.parse("2017-01-01")),
     Some("Cheapo Clothing"),
-    isOverdue = true
+    returnOverdue = true
+  )
+  val overduePaymentDetailsModel = VatDetailsViewModel(
+    Some(LocalDate.parse("2017-01-01")),
+    Some(LocalDate.now()),
+    Some("Cheapo Clothing"),
+    paymentOverdue = true
   )
 
   "Rendering the VAT details page" should {
@@ -150,7 +156,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with an overdue return" should {
 
-    lazy val view = views.html.vatDetails.details(user, overdueDetailsModel)
+    lazy val view = views.html.vatDetails.details(user, overdueReturnDetailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the overdue label" in {
+      elementText(Selectors.overdueLabel) shouldBe "overdue"
+    }
+  }
+
+  "Rendering the VAT details page with an overdue payment" should {
+
+    lazy val view = views.html.vatDetails.details(user, overduePaymentDetailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the overdue label" in {

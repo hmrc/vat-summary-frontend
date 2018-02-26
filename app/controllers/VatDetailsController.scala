@@ -58,7 +58,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case (Some(returnDate), Some(paymentDate)) => (LocalDate.now().isAfter(returnDate), LocalDate.now().isAfter(paymentDate))
       case (Some(returnDate), _) => (LocalDate.now().isAfter(returnDate), false)
       case (_, Some(paymentDate)) => (false, LocalDate.now().isAfter(paymentDate))
-      case _ => false
+      case (_ , _) => (false, false)
     }
 
     VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, returnOverdue, paymentOverdue)
