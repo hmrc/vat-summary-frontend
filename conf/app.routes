@@ -10,3 +10,5 @@ POST       /feature-switch         controllers.FeatureSwitchController.submitFea
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
 GET        /bta-stub               controllers.BtaStubController.landingPage
+
+GET        /assets/*file           controllers.Assets.at(path="/public", file)

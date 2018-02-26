@@ -34,6 +34,7 @@ returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
 returnObligation.submitUsingSoftware = submit using software
+returnObligation.overdue = overdue
 
 payment.noPayment = No payment due
 payment.nextPayment = Next payment due
@@ -61,12 +62,10 @@ openPayments.directDebitLink = If you''ve already set up a direct debit, you don
 openPayments.directDebitLinkText = check if you''ve set up a direct debit
 openPayments.directDebitNotSure = if you''re not sure.
 
-
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
 noPayments.oweNothing = You don''t owe anything right now.
 noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
-
 
 paymentsError.heading = We can''t let you pay here right now
 paymentsError.tryLater = Try reloading the page or coming back later.
@@ -82,7 +81,6 @@ paymentsError.reasonableExcuseLink = reasonable excuse
 paymentsError.reasonableExcuseDetailTextTwo = when appealing a penalty.
 paymentsError.reasonableExcuseHiddenIconText = Warning
 paymentsError.technicalDifficulties = We''re experiencing technical problems
-
 
 accountDetails.title = Account details
 accountDetails.contactYou = HMRC will only use these to contact you.

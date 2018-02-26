@@ -30,13 +30,14 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       val nextReturnDueHeading = "h2:nth-of-type(1)"
       val nextReturnDate = "p:nth-of-type(1)"
       val viewReturnsButton = "a:nth-of-type(1)"
+      val overdueLabel = "span strong"
     }
 
     "there is an VAT return to display" should {
 
-      val obligationDueDate = LocalDate.parse("2017-04-30")
+      val obligationDueDate = LocalDate.parse("2019-04-30")
 
-      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate))
+      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate), isOverdue = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -44,7 +45,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the due of the return" in {
-        elementText(Selectors.nextReturnDate) shouldBe "30 April 2017"
+        elementText(Selectors.nextReturnDate) shouldBe "30 April 2019"
       }
 
       "display the 'View return deadlines' link" in {
@@ -52,9 +53,21 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is an overdue return" should {
+
+      val obligationDueDate = LocalDate.parse("2017-04-30")
+
+      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate), isOverdue = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the overdue label" in {
+        elementText(Selectors.overdueLabel) shouldBe "overdue"
+      }
+    }
+
     "there is no VAT return to display" should {
 
-      lazy val view = views.html.templates.nextReturnSection(None)
+      lazy val view = views.html.templates.nextReturnSection(None, isOverdue = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'No return due' heading" in {

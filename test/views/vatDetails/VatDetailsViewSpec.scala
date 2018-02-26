@@ -37,6 +37,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
+    val overdueLabel = "span strong"
   }
 
   private val user = User("123456789")
@@ -44,6 +45,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some(LocalDate.now()),
     Some(LocalDate.now()),
     Some("Cheapo Clothing")
+  )
+  val overdueDetailsModel = VatDetailsViewModel(
+    Some(LocalDate.now()),
+    Some(LocalDate.parse("2017-01-01")),
+    Some("Cheapo Clothing"),
+    isOverdue = true
   )
 
   "Rendering the VAT details page" should {
@@ -138,6 +145,16 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "render the no payment message" in {
       elementText(Selectors.nextPayment) shouldBe "No payment due"
+    }
+  }
+
+  "Rendering the VAT details page with an overdue return" should {
+
+    lazy val view = views.html.vatDetails.details(user, overdueDetailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the overdue label" in {
+      elementText(Selectors.overdueLabel) shouldBe "overdue"
     }
   }
 }
