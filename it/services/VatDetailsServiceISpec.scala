@@ -52,9 +52,9 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
         }
 
         val obligation = VatReturnObligation(
-          start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-          end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-          due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+          start = LocalDate.parse("2018-01-01"),
+          end = LocalDate.parse("2018-03-31"),
+          due = LocalDate.parse("2018-05-07"),
           status = "O",
           received = None,
           periodKey = "#004"
@@ -85,9 +85,9 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
         }
 
         val obligation = VatReturnObligation(
-          start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-          end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-          due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+          start = LocalDate.parse("2018-01-01"),
+          end = LocalDate.parse("2018-03-31"),
+          due = LocalDate.parse("2018-05-07"),
           status = "O",
           received = None,
           periodKey = "#004"
