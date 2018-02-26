@@ -16,22 +16,45 @@
 
 package models.errors
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
-sealed trait ApiError {
-  def code: String
+sealed trait ApiError
 
-  def message: String
-}
-
-case class ApiSingleError(code: String, message: String, path: Option[String]) extends ApiError
+case class ApiSingleError(code: String, message: String) extends ApiError
 
 object ApiSingleError {
-  implicit val format: Format[ApiSingleError] = Json.format[ApiSingleError]
+  implicit val apiSingleErrorWrites: Writes[ApiSingleError] = Json.writes[ApiSingleError]
+
+  implicit val apiSingleErrorReads: Reads[ApiSingleError] = (
+    (JsPath \ "code").read[String] and
+      (JsPath \ "message").read[String]
+    ) (ApiSingleError.apply _)
+
+  implicit val apiSingleErrorFinancialReads: Reads[ApiSingleError] = (
+    (JsPath \ "code").read[String] and
+      (JsPath \ "reason").read[String]
+    ) (ApiSingleError.apply _)
 }
 
 case class ApiMultiError(code: String, message: String, errors: Seq[ApiSingleError]) extends ApiError
 
 object ApiMultiError {
-  implicit val format: Format[ApiMultiError] = Json.format[ApiMultiError]
+  implicit val apiMultiErrorWrites: Writes[ApiMultiError] = Json.writes[ApiMultiError]
+
+  implicit val apiMultiErrorReads: Reads[ApiMultiError] = (
+    (JsPath \ "code").read[String] and
+      (JsPath \ "message").read[String] and
+      (JsPath \ "errors").read(Reads.seq[ApiSingleError](ApiSingleError.apiSingleErrorReads))
+    ) (ApiMultiError.apply _)
+}
+
+case class ApiMultiErrorFinancial(errors: Seq[ApiSingleError]) extends ApiError
+
+object ApiMultiErrorFinancial {
+  implicit val apiMultiErrorFinancialWrites: Writes[ApiMultiErrorFinancial] = Json.writes[ApiMultiErrorFinancial]
+
+  implicit val apiMultiErrorFinancialReads: Reads[ApiMultiErrorFinancial] =
+    (JsPath \ "failures").read(Reads.seq[ApiSingleError](ApiSingleError.apiSingleErrorFinancialReads))
+      .map(ApiMultiErrorFinancial.apply)
 }

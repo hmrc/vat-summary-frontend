@@ -62,7 +62,6 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       "return an Obligations instance" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 400 BAD_REQUEST (single error)" should {
@@ -70,13 +69,13 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
           "code" -> "VRN_INVALID",
-          "message" -> "fail!"
+          "message" -> "Fail!"
         ))
       )
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
-        message = "fail!"
+        message = "Fail!"
       ))
 
       val result = VatReturnsReads.read("", "", httpResponse)
@@ -84,7 +83,6 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       "return a BadRequestError" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 400 BAD_REQUEST (multiple errors)" should {
@@ -92,17 +90,15 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
           "code" -> "BAD_REQUEST",
-          "message" -> "fail!",
+          "message" -> "Fail!",
           "errors" -> Json.arr(
             Json.obj(
               "code" -> "INVALID_DATE_FROM",
-              "message" -> "Bad date from",
-              "path" -> "/from"
+              "message" -> "Bad date from"
             ),
             Json.obj(
               "code" -> "INVALID_DATE_TO",
-              "message" -> "Bad date to",
-              "path" -> "/to"
+              "message" -> "Bad date to"
             )
           )
         ))
@@ -115,15 +111,14 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       "return a MultipleErrors" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
-          "foo" -> "RED_CAR",
-          "bar" -> "fail!"
+          "foo" -> "INVALID",
+          "bar" -> "Fail!"
         ))
       )
 
@@ -134,7 +129,6 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       "return a UnknownError" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 5xx" should {
@@ -148,7 +142,6 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       "return a ServerSideError" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is isn't handled" should {
@@ -162,9 +155,6 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       "return a UnexpectedStatusError" in {
         result shouldEqual expected
       }
-
     }
-
   }
-
 }

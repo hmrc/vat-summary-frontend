@@ -140,15 +140,15 @@ object VatApiStub extends WireMockMethods {
 
   private val noObligations = VatReturnObligations(Seq.empty)
 
-  private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
-  private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)
-  private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "", None)
-  private val invalidDateRange = ApiSingleError("INVALID_DATE_RANGE", "", None)
-  private val invalidStatus = ApiSingleError("INVALID_STATUS", "", None)
+  private val invalidVrn = ApiSingleError("VRN_INVALID", "")
+  private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "")
+  private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "")
+  private val invalidDateRange = ApiSingleError("INVALID_DATE_RANGE", "")
+  private val invalidStatus = ApiSingleError("INVALID_STATUS", "")
 
   private val multipleErrors = ApiMultiError("BAD_REQUEST", "", Seq(
-    ApiSingleError("ERROR_1", "", None),
-    ApiSingleError("ERROR_2", "", None)
+    ApiSingleError("ERROR_1", ""),
+    ApiSingleError("ERROR_2", "")
   ))
 
 }

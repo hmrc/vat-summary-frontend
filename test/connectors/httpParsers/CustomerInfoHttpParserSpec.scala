@@ -109,13 +109,13 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
         Json.obj(
-          "code" -> "777",
+          "code" -> "INVALID",
           "message" -> "Fail!"
         )
       ))
 
       val expected = Left(BadRequestError(
-        code = "777",
+        code = "INVALID",
         message = "Fail!"
       ))
 
@@ -134,14 +134,12 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
           "message" -> "Fail!",
           "errors" -> Json.arr(
             Json.obj(
-              "code" -> "777",
-              "message" -> "Fail!",
-              "path" -> "/from"
+              "code" -> "INVALID",
+              "message" -> "Fail!"
             ),
             Json.obj(
-              "code" -> "778",
-              "message" -> "Fail!",
-              "path" -> "/to"
+              "code" -> "INVALID_2",
+              "message" -> "Fail!"
             )
           )
         )
@@ -160,7 +158,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
         Json.obj(
-          "foo" -> "RED_CAR",
+          "foo" -> "INVALID",
           "bar" -> "Fail!"
         )
       ))
