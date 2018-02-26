@@ -50,6 +50,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     None,
     "#001"
   ))
+  val overduePayment = Some(Payment(
+    LocalDate.parse("2017-01-01"),
+    LocalDate.parse("2017-02-02"),
+    LocalDate.parse("2017-03-03"),
+    1,
+    "#001"
+  ))
   val overdueObligation = Some(VatReturnObligation(
     LocalDate.parse("2017-04-04"),
     LocalDate.parse("2017-05-05"),
@@ -147,6 +154,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     lazy val controller = new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService)
     lazy val paymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2019-03-03"))
     lazy val obligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2019-06-06"))
+    lazy val overduePaymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-03-03"))
     lazy val overdueObligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-06-06"))
 
     "there is both a payment and an obligation" should {
@@ -201,10 +209,20 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the obligation is overdue" should {
 
-      lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, isOverdue = true)
+      lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, returnOverdue = true)
       lazy val result = controller.constructViewModel(VatDetailsModel(payment, overdueObligation), entityName)
 
-      "return a VatDetailsViewModel with the overdue flag set" in {
+      "return a VatDetailsViewModel with the return overdue flag set" in {
+        result shouldBe expected
+      }
+    }
+
+    "the payment is overdue" should {
+
+      lazy val expected = VatDetailsViewModel(overduePaymentDueDate, obligationDueDate, entityName, paymentOverdue = true)
+      lazy val result = controller.constructViewModel(VatDetailsModel(overduePayment, obligation), entityName)
+
+      "return a VatDetailsViewModel with the payment overdue flag set" in {
         result shouldBe expected
       }
     }

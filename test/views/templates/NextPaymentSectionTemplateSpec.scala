@@ -29,13 +29,14 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"
       val nextPaymentDate = "p:nth-of-type(1)"
       val viewPaymentButton = "a:nth-of-type(1)"
+      val overdueLabel = "span strong"
     }
 
     "there is a payment to display" should {
 
       val paymentDueDate = LocalDate.parse("2017-03-08")
 
-      lazy val view = views.html.templates.nextPaymentSection(Some(paymentDueDate))
+      lazy val view = views.html.templates.nextPaymentSection(Some(paymentDueDate), isOverdue = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -51,9 +52,21 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is an overdue return" should {
+
+      val obligationDueDate = LocalDate.parse("2017-04-30")
+
+      lazy val view = views.html.templates.nextPaymentSection(Some(obligationDueDate), isOverdue = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the overdue label" in {
+        elementText(Selectors.overdueLabel) shouldBe "overdue"
+      }
+    }
+
     "there is no payment to display" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None)
+      lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'No payment due' heading" in {

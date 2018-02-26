@@ -21,4 +21,5 @@ import java.time.LocalDate
 case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
                                nextObligationDueDate: Option[LocalDate],
                                entityName: Option[String],
-                               isOverdue: Boolean = false)
+                               returnOverdue: Boolean = false,
+                               paymentOverdue: Boolean = false)

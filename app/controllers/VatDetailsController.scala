@@ -54,11 +54,13 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val paymentDueDate: Option[LocalDate] = vatDetailsModel.payment.map(_.due)
     val obligationDueDate: Option[LocalDate] = vatDetailsModel.vatReturn.map(_.due)
 
-    val isOverdue: Boolean = obligationDueDate match {
-      case Some(dueDate: LocalDate) => LocalDate.now().isAfter(dueDate)
-      case _ => false
+    val (returnOverdue: Boolean, paymentOverdue: Boolean) = (obligationDueDate, paymentDueDate) match {
+      case (Some(returnDate), Some(paymentDate)) => (LocalDate.now().isAfter(returnDate), LocalDate.now().isAfter(paymentDate))
+      case (Some(returnDate), _) => (LocalDate.now().isAfter(returnDate), false)
+      case (_, Some(paymentDate)) => (false, LocalDate.now().isAfter(paymentDate))
+      case (_ , _) => (false, false)
     }
 
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, isOverdue)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, returnOverdue, paymentOverdue)
   }
 }

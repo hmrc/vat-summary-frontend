@@ -1,5 +1,6 @@
 common.dateRangeSeparator = to
 common.vat = VAT
+common.overdue = overdue
 
 breadcrumbs.bta = Business tax account
 
@@ -34,13 +35,10 @@ returnObligation.period = For the period
 returnObligation.nextPayment = This will calculate your next payment.
 returnObligation.you = You
 returnObligation.submitUsingSoftware = submit using software
-returnObligation.overdue = overdue
 
 payment.noPayment = No payment due
 payment.nextPayment = Next payment due
 payment.check = Check what you owe
-payment.overdue = Overdue
-
 payment.stillMakeLink = You can still
 payment.stillMake = make a payment (opens in a new tab).
 
