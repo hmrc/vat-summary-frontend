@@ -23,61 +23,65 @@
 payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @hiddenHelpTextContent = {
-    <p>@Messages("openPayments.timeToAppear")</p>
-    <p>@Messages("payment.stillMakeLink") <a href="#">@Messages("payment.stillMake")</a></p>
+  <p>@Messages("openPayments.timeToAppear")</p>
+  <p>@Messages("payment.stillMakeLink") <a href="#">@Messages("payment.stillMake")</a></p>
 }
 
 @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
 
-    @navigationBreadcrumb(
-        links = Map(
-        appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
-        controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
-        currentPage = messages("openPayments.title")
-    )
+  @navigationBreadcrumb(
+    links = Map(
+    appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
+    controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
+    currentPage = messages("openPayments.title")
+  )
 
-    <div class="grid-row column-two-thirds">
-        <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
+  <div class="grid-row column-two-thirds">
+    <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
-        @payments.zipWithIndex.map { case(payment, count) =>
-            <div id="payment-section-@{count + 1}">
-                <form>
-                    <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
-                    <div class="grid-row" id="payment-row-@{count + 1}">
-                        <div class="column-two-thirds">
-                            <span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
-                        </div>
-                        <div class="column-one-third form-hint">
-                            <input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")'
-                                   data-journey-click="payment:make-payment:open-payments"/>
-                        </div>
-                    </div>
-                    <div class="grid-row" id="period-row-@{count + 1}">
-                        <div class="column-two-thirds form-hint">
-                            <span>@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
-                        </div>
-                        <div class="column-one-third form-hint">
-                            <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments" href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">@messages("openPayments.viewReturnLink")</a>
-                        </div>
-                    </div>
-                    <hr>
-                </form>
+    @payments.zipWithIndex.map { case(payment, count) =>
+      <div id="payment-section-@{count + 1}">
+        <form>
+          <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
+          <div class="grid-row" id="payment-row-@{count + 1}">
+            <div class="column-two-thirds">
+              <span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
+              @if(payment.overdue) {
+                <span>
+                  <strong class="task-overdue">@messages("common.overdue")</strong>
+                </span>
+              }
             </div>
-        }
+            <div class="column-one-third form-hint">
+              <input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")'
+                     data-journey-click="payment:make-payment:open-payments"/>
+            </div>
+          </div>
+          <div class="grid-row" id="period-row-@{count + 1}">
+            <div class="column-two-thirds form-hint">
+              <span>@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
+            </div>
+            <div class="column-one-third form-hint">
+              <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments" href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">@messages("openPayments.viewReturnLink")</a>
+            </div>
+          </div>
+          <hr>
+        </form>
+      </div>
+    }
 
-        <div id="payments-information">
-            <p id="processing-time">@Messages("openPayments.processingTime")</p>
-            <span id="direct-debits" class="heading-small">Direct debits</span>
-        </div>
-
-        <div id="check-direct-debit" class="form-group">
-            <p>
-                @Messages("openPayments.directDebitLink") <a href="#">@Messages("openPayments.directDebitLinkText")
-            </a> @Messages("openPayments.directDebitNotSure")</p>
-
-        </div>
-
-        @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOweHelp"),hiddenHelpTextContent)
+    <div id="payments-information">
+      <p id="processing-time">@Messages("openPayments.processingTime")</p>
+      <span id="direct-debits" class="heading-small">Direct debits</span>
     </div>
 
+    <div id="check-direct-debit" class="form-group">
+      <p>
+        @Messages("openPayments.directDebitLink") <a href="#">@Messages("openPayments.directDebitLinkText")
+      </a> @Messages("openPayments.directDebitNotSure")</p>
+
+    </div>
+
+    @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOweHelp"),hiddenHelpTextContent)
+  </div>
 }
