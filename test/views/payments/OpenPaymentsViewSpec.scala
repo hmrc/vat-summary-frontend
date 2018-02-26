@@ -58,7 +58,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpTwentyFourHours = "details p:nth-of-type(1)"
     val helpMakePayment = "details p:nth-of-type(2)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
-
+    val overdueLabel = ".task-overdue"
   }
 
   private val user = User("1111")
@@ -70,7 +70,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2000-04-08"),
       LocalDate.parse("2000-01-01"),
       LocalDate.parse("2000-03-31"),
-      "#001"
+      "#001",
+      overdue = true
     ),
     OpenPaymentsModel(
       "Return",
@@ -117,12 +118,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         elementText(Selectors.paymentBreadcrumb) shouldBe "VAT payments"
       }
     }
-  }
-
-  "Rendering the open payments page with payments" should {
-
-    lazy val view = views.html.payments.openPayments(user, payment)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct amount for the first payment" in {
       elementText(Selectors.firstPaymentAmount) shouldBe "£543.21"
@@ -221,5 +216,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new tab)."
     }
 
+    "render the overdue label" in {
+      elementText(Selectors.overdueLabel) shouldBe "overdue"
+    }
   }
 }

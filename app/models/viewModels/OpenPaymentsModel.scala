@@ -23,4 +23,5 @@ case class OpenPaymentsModel(paymentType: String,
                              due: LocalDate,
                              start: LocalDate,
                              end: LocalDate,
-                             periodKey: String)
+                             periodKey: String,
+                             overdue: Boolean = false)
