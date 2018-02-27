@@ -17,7 +17,6 @@
 package stubs
 
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
@@ -106,18 +105,18 @@ object VatApiStub extends WireMockMethods {
 
 
   private val pastFulfilledObligation = VatReturnObligation(
-    start = LocalDate.now().minus(80L, ChronoUnit.DAYS),
-    end = LocalDate.now().minus(50L, ChronoUnit.DAYS),
-    due = LocalDate.now().minus(40L, ChronoUnit.DAYS),
+    start = LocalDate.parse("2018-01-01"),
+    end = LocalDate.parse("2018-03-31"),
+    due = LocalDate.parse("2018-05-07"),
     status = "F",
-    received = Some(LocalDate.now().minus(45L, ChronoUnit.DAYS)),
+    received = Some(LocalDate.parse("2018-04-15")),
     periodKey = "#001"
   )
 
   private val pastOutstandingObligation = VatReturnObligation(
-    start = LocalDate.now().minus(70L, ChronoUnit.DAYS),
-    end = LocalDate.now().minus(40L, ChronoUnit.DAYS),
-    due = LocalDate.now().minus(30L, ChronoUnit.DAYS),
+    start = LocalDate.parse("2018-01-01"),
+    end = LocalDate.parse("2018-03-31"),
+    due = LocalDate.parse("2018-05-07"),
     status = "O",
     received = None,
     periodKey = "#004"
@@ -140,15 +139,15 @@ object VatApiStub extends WireMockMethods {
 
   private val noObligations = VatReturnObligations(Seq.empty)
 
-  private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
-  private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "", None)
-  private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "", None)
-  private val invalidDateRange = ApiSingleError("INVALID_DATE_RANGE", "", None)
-  private val invalidStatus = ApiSingleError("INVALID_STATUS", "", None)
+  private val invalidVrn = ApiSingleError("VRN_INVALID", "")
+  private val invalidFromDate = ApiSingleError("INVALID_DATE_FROM", "")
+  private val invalidToDate = ApiSingleError("INVALID_DATE_TO", "")
+  private val invalidDateRange = ApiSingleError("INVALID_DATE_RANGE", "")
+  private val invalidStatus = ApiSingleError("INVALID_STATUS", "")
 
   private val multipleErrors = ApiMultiError("BAD_REQUEST", "", Seq(
-    ApiSingleError("ERROR_1", "", None),
-    ApiSingleError("ERROR_2", "", None)
+    ApiSingleError("ERROR_1", ""),
+    ApiSingleError("ERROR_2", "")
   ))
 
 }

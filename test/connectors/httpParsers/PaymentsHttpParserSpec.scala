@@ -63,7 +63,6 @@ class PaymentsHttpParserSpec extends UnitSpec {
       "return a Payments instance" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 400 BAD_REQUEST (single error)" should {
@@ -71,13 +70,13 @@ class PaymentsHttpParserSpec extends UnitSpec {
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
           "code" -> "VRN_INVALID",
-          "message" -> "fail!"
+          "reason" -> "Fail!"
         ))
       )
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
-        message = "fail!"
+        message = "Fail!"
       ))
 
       val result = PaymentsReads.read("", "", httpResponse)
@@ -85,25 +84,20 @@ class PaymentsHttpParserSpec extends UnitSpec {
       "return a BadRequestError" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 400 BAD_REQUEST (multiple errors)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
-          "code" -> "BAD_REQUEST",
-          "message" -> "fail!",
-          "errors" -> Json.arr(
+          "failures" -> Json.arr(
             Json.obj(
               "code" -> "INVALID_DATE_FROM",
-              "message" -> "Bad date from",
-              "path" -> "/from"
+              "reason" -> "Bad date from"
             ),
             Json.obj(
               "code" -> "INVALID_DATE_TO",
-              "message" -> "Bad date to",
-              "path" -> "/to"
+              "reason" -> "Bad date to"
             )
           )
         ))
@@ -116,15 +110,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
       "return a MultipleErrors" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
-          "foo" -> "RED_CAR",
-          "bar" -> "fail!"
+          "foo" -> "INVALID",
+          "bar" -> "Fail!"
         ))
       )
 
@@ -135,7 +128,6 @@ class PaymentsHttpParserSpec extends UnitSpec {
       "return a UnknownError" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is 5xx" should {
@@ -149,7 +141,6 @@ class PaymentsHttpParserSpec extends UnitSpec {
       "return a ServerSideError" in {
         result shouldEqual expected
       }
-
     }
 
     "the http response status is isn't handled" should {
@@ -163,9 +154,6 @@ class PaymentsHttpParserSpec extends UnitSpec {
       "return a UnexpectedStatusError" in {
         result shouldEqual expected
       }
-
     }
-
   }
-
 }

@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.errors.{ServerSideError, UnexpectedStatusError}
+import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
 import models.obligations.VatReturnObligations
 import play.api.http.Status.{BAD_REQUEST, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
@@ -28,11 +28,10 @@ object VatReturnObligationsHttpParser extends ResponseHttpParsers {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[VatReturnObligations] = {
       response.status match {
         case OK => Right(response.json.as[VatReturnObligations])
-        case BAD_REQUEST => handleBadRequest(response.json)
+        case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorReads)
         case status if status >= 500 && status < 600 => Left(ServerSideError)
         case status => Left(UnexpectedStatusError(status))
       }
     }
   }
-
 }

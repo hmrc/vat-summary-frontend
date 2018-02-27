@@ -18,7 +18,6 @@ package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import models.errors.ApiSingleError
 import play.api.http.Status._
 import play.api.libs.json.Json
 
@@ -38,7 +37,7 @@ object FinancialDataStub extends WireMockMethods {
 
   def stubInvalidVrn: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
-      .thenReturn(BAD_REQUEST, body = Json.toJson(invalidVrn))
+      .thenReturn(BAD_REQUEST, body = invalidVrn)
   }
 
   def stubApiError: StubMapping = {
@@ -122,5 +121,8 @@ object FinancialDataStub extends WireMockMethods {
       |  }""".stripMargin
   )
 
-  private val invalidVrn = ApiSingleError("VRN_INVALID", "", None)
+  private val invalidVrn = Json.obj(
+    "code" -> "INVALID_VRN",
+    "reason" -> "VRN was invalid!"
+  )
 }

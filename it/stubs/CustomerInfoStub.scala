@@ -88,5 +88,4 @@ object CustomerInfoStub extends WireMockMethods {
     "code" -> "500",
     "message" -> "INTERNAL_SERVER_ERROR"
   )
-
 }

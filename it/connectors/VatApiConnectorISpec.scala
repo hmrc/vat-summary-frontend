@@ -45,17 +45,17 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturnObligations(
         Seq(
           VatReturnObligation(
-            start = LocalDate.now().minusDays(80),
-            end = LocalDate.now().minusDays(50),
-            due = LocalDate.now().minusDays(40),
+            start = LocalDate.parse("2018-01-01"),
+            end = LocalDate.parse("2018-03-31"),
+            due = LocalDate.parse("2018-05-07"),
             status = "F",
-            received = Some(LocalDate.now().minusDays(45)),
+            received = Some(LocalDate.parse("2018-04-15")),
             periodKey = "#001"
           ),
           VatReturnObligation(
-            start = LocalDate.now().minusDays(70),
-            end = LocalDate.now().minusDays(40),
-            due = LocalDate.now().minusDays(30),
+            start = LocalDate.parse("2018-01-01"),
+            end = LocalDate.parse("2018-03-31"),
+            due = LocalDate.parse("2018-05-07"),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -82,9 +82,9 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturnObligations(
         Seq(
           VatReturnObligation(
-            start = LocalDate.now().minusDays(70),
-            end = LocalDate.now().minusDays(40),
-            due = LocalDate.now().minusDays(30),
+            start = LocalDate.parse("2018-01-01"),
+            end = LocalDate.parse("2018-03-31"),
+            due = LocalDate.parse("2018-05-07"),
             status = "O",
             received = None,
             periodKey = "#004"
@@ -111,11 +111,11 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturnObligations(
         Seq(
           VatReturnObligation(
-            start = LocalDate.now().minusDays(80),
-            end = LocalDate.now().minusDays(50),
-            due = LocalDate.now().minusDays(40),
+            start = LocalDate.parse("2018-01-01"),
+            end = LocalDate.parse("2018-03-31"),
+            due = LocalDate.parse("2018-05-07"),
             status = "F",
-            received = Some(LocalDate.now().minusDays(45)),
+            received = Some(LocalDate.parse("2018-04-15")),
             periodKey = "#001"
           )
         )
