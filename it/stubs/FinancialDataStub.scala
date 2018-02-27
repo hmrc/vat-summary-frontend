@@ -18,7 +18,6 @@ package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import models.errors.ApiSingleError
 import play.api.http.Status._
 import play.api.libs.json.Json
 
