@@ -42,7 +42,7 @@ payment.check = Check what you owe
 payment.stillMakeLink = You can still
 payment.stillMake = make a payment (opens in a new tab).
 
-openPayments.title = VAT payments
+openPayments.title = What you owe
 openPayments.heading = What you owe
 openPayments.type = Type
 openPayments.due = Due

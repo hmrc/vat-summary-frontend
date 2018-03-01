@@ -54,7 +54,7 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "VAT payments"
+      document.title shouldBe "What you owe"
     }
 
     "have the correct page heading" in {
