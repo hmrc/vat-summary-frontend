@@ -26,18 +26,28 @@ class VatSectionViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "h2"
-      val description = "p"
+      val reportingMessage = "p:nth-of-type(1)"
+      val viewDeadlines = "p:nth-of-type(2)"
+      val viewVatLink = "a"
     }
 
     lazy val view = views.html.partials.btaHome.vatSection()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Reporting VAT through software"
+      elementText(Selectors.pageHeading) shouldBe "VAT reporting through software"
     }
 
-    "have the correct description on the page" in {
-      elementText(Selectors.description) shouldBe "You've signed up to report your VAT through accounting software."
+    "have the correct reporting message on the page" in {
+      elementText(Selectors.reportingMessage) shouldBe "You've signed up to report your VAT through software."
+    }
+
+    "have the correct deadlines message on the page" in {
+      elementText(Selectors.viewDeadlines) shouldBe "You can view your return deadlines, what you owe and previously submitted returns."
+    }
+
+    "have the correct link address" in {
+      element(Selectors.viewVatLink).attr("href") shouldBe "mock-url"
     }
   }
 }

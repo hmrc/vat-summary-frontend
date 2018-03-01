@@ -37,6 +37,7 @@ object ConfigKeys {
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
+  val btaVatOverviewUrl: String = "business-tax-account.vatSummaryUrl"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"

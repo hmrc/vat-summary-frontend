@@ -48,6 +48,7 @@ trait AppConfig extends ServicesConfig {
   val vatReturnDeadlinesUrl: String
   def vatReturnUrl(periodKey: String): String
   val btaHomeUrl: String
+  val btaVatOverviewUrl: String
 }
 
 @Singleton
@@ -94,4 +95,5 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)
+  override lazy val btaVatOverviewUrl: String = getString(Keys.btaVatOverviewUrl)
 }
