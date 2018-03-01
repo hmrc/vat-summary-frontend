@@ -36,7 +36,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
   private trait Test {
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
+        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
       )))
 
     def setupMocks(): Unit = {

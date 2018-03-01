@@ -52,7 +52,7 @@ class UserSpec extends UnitSpec {
     val enrolments = Enrolments(
       Set(Enrolment(
         "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+        Seq(EnrolmentIdentifier("VRN", "123456789")),
         "Activated"
       ))
     )
@@ -73,7 +73,7 @@ class UserSpec extends UnitSpec {
     val enrolments = Enrolments(
       Set(Enrolment(
         "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+        Seq(EnrolmentIdentifier("VRN", "123456789")),
         ""
       ))
     )
@@ -94,7 +94,7 @@ class UserSpec extends UnitSpec {
     val enrolments = Enrolments(
       Set(Enrolment(
         "HMRC-XXX-XXX",
-        Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+        Seq(EnrolmentIdentifier("VRN", "123456789")),
         ""
       ))
     )
@@ -140,7 +140,7 @@ class UserSpec extends UnitSpec {
     val enrolments = Enrolments(
       Set(Enrolment(
         "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VATRegNo", "")),
+        Seq(EnrolmentIdentifier("VRN", "")),
         ""
       ))
     )
