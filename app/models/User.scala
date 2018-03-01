@@ -23,7 +23,7 @@ case class User(vrn: String, active: Boolean = true)
 object User {
   def apply(enrolments: Enrolments): User = {
     val vatEnrolments = enrolments.enrolments.filter(
-      enrolment => enrolment.key == "HMRC-MTD-VAT" && enrolment.identifiers.head.key == "VATRegNo"
+      enrolment => enrolment.key == "HMRC-MTD-VAT" && enrolment.identifiers.head.key == "VRN"
     )
 
     if (vatEnrolments.isEmpty) {
