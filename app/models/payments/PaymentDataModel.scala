@@ -20,7 +20,7 @@ import play.api.libs.json.{Format, Json}
 
 sealed trait PaymentData
 
-case class PaymentDataModel(taxType: String, taxReference: String, amountInPence: Long, returnUrl: String)
+case class PaymentDataModel(taxType: String, taxReference: String, amountInPence: Long, taxPeriodMonth:String, taxPeriodYear:String, returnUrl: String)
 case class PaymentErrorModel(code: Int, message: String) extends PaymentData
 
 object PaymentDataModel {
