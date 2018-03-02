@@ -26,7 +26,7 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.simpleAuthFeature -> boolean,
       ConfigKeys.userResearchBannerFeature -> boolean,
-      ConfigKeys.paymentsFeature -> boolean
+      ConfigKeys.allowPaymentsFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
