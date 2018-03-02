@@ -16,12 +16,9 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-<section class="divider--bottom">
-    <h2 class="heading-large">@messages("partials.btaHome.vatSection.reporting.heading")</h2>
+<section id="section-vat" class="section divider--bottom">
+    <h2 id="vat-reporting-heading" class="heading-large">@messages("partials.btaHome.vatSection.reporting.heading")</h2>
     <p>@messages("partials.btaHome.vatSection.reporting.message")</p>
-    <h3 class="heading-medium">@messages("common.vat")</h3>
     <p>@messages("partials.btaHome.vatSection.vatMessage")</p>
-    <p>
-        <a href="">@messages("partials.btaHome.vatSection.manageVat")</a>
-    </p>
+    <p><a href="@{appConfig.btaVatOverviewUrl}">@messages("partials.btaHome.vatSection.viewVatDetails")</a></p>
 </section>
