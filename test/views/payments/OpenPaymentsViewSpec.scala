@@ -52,7 +52,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy val firstPaymentViewReturn = "#period-row-1 a:nth-of-type(1)"
     lazy val secondPaymentViewReturn = "#period-row-2 a:nth-of-type(1)"
     val processingTime = "#payments-information p:nth-of-type(1)"
-    val directDebit = "#payments-information span:nth-of-type(1)"
+    val directDebit = "#direct-debits"
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
     val directDebitCheckLink = "#check-direct-debit a:nth-of-type(1)"
     val helpTwentyFourHours = "details p:nth-of-type(1)"
