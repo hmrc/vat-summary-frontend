@@ -18,7 +18,7 @@
 @import views.html.templates.expandingHelpSection
 @import views.html.templates.formatters.money.displayMoney
 @import views.html.templates.formatters.breadcrumbs._
-
+@import uk.gov.hmrc.play.views.html.helpers.form
 @(user: models.User,
 payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -41,7 +41,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
     @payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}">
-        <form>
+          @form(action = controllers.routes.MakePaymentController.makePayment()) {
           <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
           <div class="grid-row" id="payment-row-@{count + 1}">
             <div class="column-two-thirds">
@@ -66,7 +66,12 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             </div>
           </div>
           <hr>
-        </form>
+            <div id="payment-detail-@{count + 1}">
+                <input type="hidden" name="amountInPence" value="@((payment.amount * 100).toInt)">
+                <input type="hidden" name="taxPeriodMonth" value='@(payment.end.getMonthValue.formatted("%02d"))'>
+                <input type="hidden" name="taxPeriodYear" value="@payment.end.getYear.toString.takeRight(2)">
+            </div>
+        }
       </div>
     }
 

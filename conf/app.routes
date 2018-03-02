@@ -7,6 +7,8 @@ GET        /account/details        controllers.AccountDetailsController.accountD
 GET        /feature-switch         controllers.FeatureSwitchController.featureSwitch
 POST       /feature-switch         controllers.FeatureSwitchController.submitFeatureSwitch
 
+POST       /make-payment         controllers.MakePaymentController.makePayment
+
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
 GET        /bta-stub               controllers.BtaStubController.landingPage

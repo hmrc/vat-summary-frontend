@@ -59,6 +59,13 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "details p:nth-of-type(2)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val overdueLabel = ".task-overdue"
+    val firstPaymentDetailAmount = "#payment-detail-1 input:nth-of-type(1)"
+    val firstPaymentDetailMonth = "#payment-detail-1 input:nth-of-type(2)"
+    val firstPaymentDetailYear = "#payment-detail-1 input:nth-of-type(3)"
+    val secondPaymentDetailAmount = "#payment-detail-2 input:nth-of-type(1)"
+    val secondPaymentDetailMonth = "#payment-detail-2 input:nth-of-type(2)"
+    val secondPaymentDetailYear = "#payment-detail-2 input:nth-of-type(3)"
+
   }
 
   private val user = User("1111")
@@ -67,18 +74,18 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     OpenPaymentsModel(
       "Return",
       543.21,
-      LocalDate.parse("2000-04-08"),
-      LocalDate.parse("2000-01-01"),
-      LocalDate.parse("2000-03-31"),
+      LocalDate.parse("2001-04-08"),
+      LocalDate.parse("2001-01-01"),
+      LocalDate.parse("2001-03-31"),
       "#001",
       overdue = true
     ),
     OpenPaymentsModel(
       "Return",
       100.00,
-      LocalDate.parse("2000-05-10"),
-      LocalDate.parse("2000-02-01"),
-      LocalDate.parse("2000-03-28"),
+      LocalDate.parse("2002-05-10"),
+      LocalDate.parse("2002-02-01"),
+      LocalDate.parse("2002-03-28"),
       "#002"
     )
   )
@@ -128,11 +135,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct due period for the first payment" in {
-      elementText(Selectors.firstPaymentDue) shouldBe "due by 8 April 2000"
+      elementText(Selectors.firstPaymentDue) shouldBe "due by 8 April 2001"
     }
 
     "render the correct due period for the first payment period data attribute" in {
-      elementText(Selectors.firstPaymentDueData) shouldBe "due by 8 April 2000"
+      elementText(Selectors.firstPaymentDueData) shouldBe "due by 8 April 2001"
     }
 
     "render the correct button text for the first payment" in {
@@ -140,7 +147,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct due period for the first payment period" in {
-      elementText(Selectors.firstPaymentPeriod) shouldBe "for the period 1 January to 31 March 2000"
+      elementText(Selectors.firstPaymentPeriod) shouldBe "for the period 1 January to 31 March 2001"
     }
 
     "render the correct view return link text for the first payment" in {
@@ -149,6 +156,18 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct view return href for the first payment" in {
       element(Selectors.firstPaymentViewReturn).attr("href") shouldBe "/submitted/%23001"
+    }
+
+    "render the correct value for the amount hidden input for the first payment" in {
+      element(Selectors.firstPaymentDetailAmount).attr("value") shouldBe "54321"
+    }
+
+    "render the correct value for the tax period month hidden input for the first payment" in {
+      element(Selectors.firstPaymentDetailMonth).attr("value") shouldBe "03"
+    }
+
+    "render the correct value for the tax period year hidden input for the first payment" in {
+      element(Selectors.firstPaymentDetailYear).attr("value") shouldBe "01"
     }
 
     "render the correct amount for the second payment" in {
@@ -160,11 +179,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct due period for the second payment" in {
-      elementText(Selectors.secondPaymentDue) shouldBe "due by 10 May 2000"
+      elementText(Selectors.secondPaymentDue) shouldBe "due by 10 May 2002"
     }
 
     "render the correct due period for the second payment period data attribute" in {
-      elementText(Selectors.secondPaymentDueData) shouldBe "due by 10 May 2000"
+      elementText(Selectors.secondPaymentDueData) shouldBe "due by 10 May 2002"
     }
 
     "render the correct button text for the second payment" in {
@@ -172,7 +191,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct due period for the second payment period" in {
-      elementText(Selectors.secondPaymentPeriod) shouldBe "for the period 1 February to 28 March 2000"
+      elementText(Selectors.secondPaymentPeriod) shouldBe "for the period 1 February to 28 March 2002"
     }
 
     "render the correct view return link text for the second payment" in {
@@ -181,6 +200,18 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct view return href for the second payment" in {
       element(Selectors.secondPaymentViewReturn).attr("href") shouldBe "/submitted/%23002"
+    }
+
+    "render the correct value for the amount hidden input for the second payment" in {
+      element(Selectors.secondPaymentDetailAmount).attr("value") shouldBe "10000"
+    }
+
+    "render the correct value for the tax period month hidden input for the second payment" in {
+      element(Selectors.secondPaymentDetailMonth).attr("value") shouldBe "03"
+    }
+
+    "render the correct value for the tax period year hidden input for the second payment" in {
+      element(Selectors.secondPaymentDetailYear).attr("value") shouldBe "02"
     }
 
     "render the correct text for the processing time" in {

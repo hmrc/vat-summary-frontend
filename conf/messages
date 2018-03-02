@@ -80,6 +80,9 @@ paymentsError.reasonableExcuseDetailTextTwo = when appealing a penalty.
 paymentsError.reasonableExcuseHiddenIconText = Warning
 paymentsError.technicalDifficulties = We''re experiencing technical problems
 
+paymentHandOffErrorHeading = We''re experiencing technical problems
+paymentHandOffErrorMessage = Something has gone wrong with this service, it wasn''t your fault. Please try again later.
+
 accountDetails.title = Account details
 accountDetails.contactYou = HMRC will only use these to contact you.
 accountDetails.businessDetails = Business details

@@ -42,4 +42,8 @@ object ConfigKeys {
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"
   val vatSubmittedReturns: String = "view-vat-returns-frontend.submittedReturnsUrl"
   val vatReturn: String = "view-vat-returns-frontend.returnUrl"
+
+  val paymentsBaseUrl: String = "payments-frontend.url"
+  val paymentsBaseReturnUrl = "payments-frontend.returnBaseUrl"
+
 }
