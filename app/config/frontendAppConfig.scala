@@ -49,6 +49,7 @@ trait AppConfig extends ServicesConfig {
   def vatReturnUrl(periodKey: String): String
   val btaHomeUrl: String
   val paymentsUrl: String
+  val paymentsVatUrl: String
   val paymentsReturnUrl: String
   val btaVatOverviewUrl: String
 }
@@ -102,6 +103,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val paymentsReturnBaseUrl: String = getString(Keys.paymentsBaseReturnUrl)
 
   override lazy val paymentsUrl: String = paymentsBaseUrl
+  override lazy val paymentsVatUrl: String = s"$paymentsBaseUrl/vat"
   override lazy val paymentsReturnUrl: String = paymentsReturnBaseUrl
 
   override lazy val btaVatOverviewUrl: String = getString(Keys.btaVatOverviewUrl)

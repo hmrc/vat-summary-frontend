@@ -46,5 +46,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val btaHomeUrl: String = "bta-url"
   override val paymentsUrl: String = "payments-url"
   override val paymentsReturnUrl: String = "payments-return-url"
+  override val paymentsVatUrl: String = "payments-return-url-vat"
   override val btaVatOverviewUrl: String = "mock-url"
 }

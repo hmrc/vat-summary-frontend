@@ -82,6 +82,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
+
+        document.select("#vatPaymentsLink").attr("href") shouldBe mockAppConfig.paymentsVatUrl
       }
 
     }
@@ -101,6 +103,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
+
       }
 
     }

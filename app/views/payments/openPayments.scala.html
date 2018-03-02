@@ -24,7 +24,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
 @hiddenHelpTextContent = {
   <p>@Messages("openPayments.timeToAppear")</p>
-  <p>@Messages("payment.stillMakeLink") <a href="#">@Messages("payment.stillMake")</a></p>
+  <p>@Messages("payment.stillMakeLink") <a href="@appConfig.paymentsVatUrl" id="vatPaymentsLink">@Messages("payment.stillMake")</a></p>
 }
 
 @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
