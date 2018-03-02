@@ -52,10 +52,12 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                 </span>
               }
             </div>
-            <div class="column-one-third form-hint">
-              <input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")'
-                     data-journey-click="payment:make-payment:open-payments"/>
-            </div>
+            @if(appConfig.features.allowPayments()) {
+              <div class="column-one-third form-hint">
+                <input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")'
+                data-journey-click="payment:make-payment:open-payments"/>
+              </div>
+            }
           </div>
           <div class="grid-row" id="period-row-@{count + 1}">
             <div class="column-two-thirds form-hint">
