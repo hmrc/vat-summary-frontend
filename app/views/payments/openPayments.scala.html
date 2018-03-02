@@ -53,7 +53,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
               }
             </div>
 
-            @if(appConfig.features.payments()) {
+            @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
                 <input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")'
                        data-journey-click="payment:make-payment:open-payments"/>
@@ -78,7 +78,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
       <p id="processing-time">@Messages("openPayments.processingTime")</p>
     </div>
 
-    @if(appConfig.features.payments()) {
+    @if(appConfig.features.allowPayments()) {
       <span id="direct-debits" class="heading-small">Direct debits</span>
       <div id="check-direct-debit" class="form-group">
         <p>
