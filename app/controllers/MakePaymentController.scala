@@ -70,7 +70,6 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
             Messages("paymentHandOffErrorMessage"))))
         },
         paymentDetail => {
-          println(payment(paymentDetail, user.vrn).toString())
           Future.successful(Redirect(appConfig.paymentsUrl).addingToSession(
             "payment-data" -> payment(paymentDetail, user.vrn).toString())
           )

@@ -54,7 +54,6 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
 
     def target: MakePaymentController = {
       setup()

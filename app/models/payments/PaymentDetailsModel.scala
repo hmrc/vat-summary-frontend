@@ -16,7 +16,7 @@
 
 package models.payments
 
-import play.api.libs.json.{Format, Json, _}
+import play.api.libs.json.{Json, Writes}
 
 case class PaymentDetailsModel(taxType: String,
                                taxReference: String,
@@ -26,9 +26,9 @@ case class PaymentDetailsModel(taxType: String,
                                returnUrl: String)
 
 object PaymentDetailsModel {
-  implicit val formatAAFormatWrites = Json.reads[PaymentDetailsModel]
+  implicit val reads = Json.reads[PaymentDetailsModel]
 
-  implicit val parentWrites = new Writes[PaymentDetailsModel] {
+  implicit val writes = new Writes[PaymentDetailsModel] {
     def writes(paymentDetail: PaymentDetailsModel) = Json.obj(
       "taxType" -> paymentDetail.taxType,
       "taxReference" -> paymentDetail.taxReference,
@@ -41,8 +41,3 @@ object PaymentDetailsModel {
   }
 }
 
-case class PaymentDetailsErrorModel(code: Int, message: String)
-
-object PaymentDetailsErrorModel {
-  implicit val format: Format[PaymentDetailsErrorModel] = Json.format[PaymentDetailsErrorModel]
-}
