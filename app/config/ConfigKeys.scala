@@ -34,9 +34,11 @@ object ConfigKeys {
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
   val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
+  val paymentsFeature: String = "features.payments.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
+  val btaVatOverviewUrl: String = "business-tax-account.vatSummaryUrl"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"

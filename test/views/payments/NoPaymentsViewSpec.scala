@@ -58,7 +58,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "VAT payments"
+      document.title shouldBe "What you owe"
     }
 
     "have the correct page heading" in {
@@ -102,8 +102,8 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
       }
 
-      "have the text 'VAT payments'" in {
-        elementText(Selectors.paymentBreadcrumb) shouldBe "VAT payments"
+      "have the text 'What you owe'" in {
+        elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
       }
     }
   }

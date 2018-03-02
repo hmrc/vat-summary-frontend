@@ -50,6 +50,7 @@ trait AppConfig extends ServicesConfig {
   val btaHomeUrl: String
   val paymentsUrl: String
   val paymentsReturnUrl: String
+  val btaVatOverviewUrl: String
 }
 
 @Singleton
@@ -102,4 +103,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val paymentsUrl: String = paymentsBaseUrl
   override lazy val paymentsReturnUrl: String = paymentsReturnBaseUrl
+
+  override lazy val btaVatOverviewUrl: String = getString(Keys.btaVatOverviewUrl)
+
 }

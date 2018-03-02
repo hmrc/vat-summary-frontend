@@ -29,7 +29,7 @@ object AuthStub extends WireMockMethods {
     "key" -> "HMRC-MTD-VAT",
     "identifiers" -> Json.arr(
       Json.obj(
-        "key" -> "VATRegNo",
+        "key" -> "VRN",
         "value" -> "555555555"
       )
     )

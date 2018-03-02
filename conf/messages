@@ -16,10 +16,10 @@ userResearch.heading = Please help us improve our service
 userResearch.enterSurvey = Enter our survey
 userResearch.close = No thanks
 
-partials.btaHome.vatSection.reporting.heading = Reporting VAT through software
-partials.btaHome.vatSection.reporting.message = You''ve signed up to report your VAT through accounting software.
-partials.btaHome.vatSection.vatMessage = This is added to the price of goods and services.
-partials.btaHome.vatSection.manageVat = Manage your VAT
+partials.btaHome.vatSection.reporting.heading = VAT reporting through software
+partials.btaHome.vatSection.reporting.message = You''ve signed up to report your VAT through software.
+partials.btaHome.vatSection.vatMessage = You can view your return deadlines, what you owe and previously submitted returns.
+partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
 vatDetails.title = VAT
 vatDetails.accountDetails.link = Account details
@@ -42,7 +42,7 @@ payment.check = Check what you owe
 payment.stillMakeLink = You can still
 payment.stillMake = make a payment (opens in a new tab).
 
-openPayments.title = VAT payments
+openPayments.title = What you owe
 openPayments.heading = What you owe
 openPayments.type = Type
 openPayments.due = Due

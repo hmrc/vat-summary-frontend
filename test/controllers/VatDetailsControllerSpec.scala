@@ -71,7 +71,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val runMock: Boolean = true
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
+        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
       )))
 
     val vatServiceDetailsResult: Future[Right[Nothing, VatDetailsModel]] =
