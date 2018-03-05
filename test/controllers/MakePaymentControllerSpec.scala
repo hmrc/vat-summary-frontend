@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MakePaymentControllerSpec extends ControllerBaseSpec {
 
-  val expectedPaymentSesssionCookieJson =
+  val expectedPaymentSessionCookieJson =
     """
       |{"taxType":"mtdfb-vat",
       |"taxReference":"123456789",
@@ -61,7 +61,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling the accountDetails action" when {
+  "Calling the makePayment action" when {
 
     "the user is logged in" should {
       "have valid cookie data stored in session and redirect to payments frontend if the posted data is valid" in new MakePaymentDetailsTest {
@@ -74,7 +74,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("payments-url")
 
-        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSesssionCookieJson.toString)
+        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
 
       }
 
@@ -91,7 +91,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("payments-url")
 
-        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSesssionCookieJson.toString)
+        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
 
       }
 
@@ -111,7 +111,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("payments-url")
 
-        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSesssionCookieJson.toString)
+        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
 
       }
 
