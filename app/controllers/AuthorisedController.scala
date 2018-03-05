@@ -16,7 +16,7 @@
 
 package controllers
 
-import common.EnrolmentKeys
+import common.EnrolmentKeys._
 import config.AppConfig
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -41,8 +41,8 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
       val predicate = if (appConfig.features.simpleAuth()) {
         EmptyPredicate
       } else {
-        (Enrolment("MHCE-VATDEC-ORG") and Enrolment(EnrolmentKeys.vatEnrolmentId))
-          .or(Enrolment(EnrolmentKeys.vatEnrolmentId))
+        (Enrolment(vatDecEnrolmentKey) and Enrolment(vatVarEnrolmentKey) and Enrolment(mtdVatEnrolmentKey))
+          .or(Enrolment(mtdVatEnrolmentKey))
       }
 
       enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments) {

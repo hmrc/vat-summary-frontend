@@ -47,6 +47,54 @@ class UserSpec extends UnitSpec {
     }
   }
 
+  "A User with valid MTD-VAT, VATDEC and VATVAR enrolments" should {
+
+    val enrolments = Enrolments(
+      Set(
+        Enrolment(
+          "HMRC-MTD-VAT",
+          Seq(EnrolmentIdentifier("VRN", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMCE-VATDEC-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMCE-VATVAR-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        )
+      )
+    )
+
+    val user = User(enrolments)
+
+    "say that it has the VATDEC and VATVAR enrolments" in {
+      user.hasNonMtdVat shouldBe true
+    }
+
+  }
+
+  "A User with only a valid MTD-VAT enrolment" should {
+
+    val enrolments = Enrolments(
+      Set(Enrolment(
+        "HMRC-MTD-VAT",
+        Seq(EnrolmentIdentifier("VRN", "123456789")),
+        "Activated"
+      ))
+    )
+
+    val user = User(enrolments)
+
+    "say that it doesn't have the VATDEC and VATVAR enrolments" in {
+      user.hasNonMtdVat shouldBe false
+    }
+
+  }
+
   "Creating a User with a valid, active VAT Enrolment" should {
 
     val enrolments = Enrolments(
