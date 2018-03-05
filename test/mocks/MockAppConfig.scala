@@ -38,6 +38,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val signInUrl: String = ""
   override val signInContinueBaseUrl: String = ""
   override val features: Features = new Features(runModeConfiguration)
+  features.allowPayments(true)
+  features.allowDirectDebits(true)
   override val vatSummaryPartial: String = ""
   override val vatSubmittedReturnsUrl: String = "returns-url"
   override val vatReturnDeadlinesUrl: String = ""
