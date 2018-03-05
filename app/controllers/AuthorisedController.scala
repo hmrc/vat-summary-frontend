@@ -38,13 +38,17 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async {
     implicit request =>
 
-      val predicate = if (appConfig.features.simpleAuth()) EmptyPredicate else Enrolment(EnrolmentKeys.vatEnrolmentId)
+      val predicate = if (appConfig.features.simpleAuth()) {
+        EmptyPredicate
+      } else {
+        (Enrolment("MHCE-VATDEC-ORG") and Enrolment(EnrolmentKeys.vatEnrolmentId))
+          .or(Enrolment(EnrolmentKeys.vatEnrolmentId))
+      }
 
       enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments) {
-        enrolments => {
+        enrolments =>
           val user = if (appConfig.features.simpleAuth()) User("123456789") else User(enrolments)
           block(request)(user)
-        }
       } recoverWith {
         case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
         case _: AuthorisationException => Future.successful(Forbidden(views.html.errors.unauthorised()))
