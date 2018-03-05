@@ -18,4 +18,5 @@ package models
 
 case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
                               userResearchBannerEnabled: Boolean,
-                              allowPaymentsEnabled: Boolean)
+                              allowPaymentsEnabled: Boolean,
+                              allowDirectDebitsEnabled: Boolean)

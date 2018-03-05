@@ -74,15 +74,16 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
     <div id="payments-information">
       <p id="processing-time">@Messages("openPayments.processingTime")</p>
+    </div>
+
+    @if(appConfig.features.allowDirectDebits()) {
       <span id="direct-debits" class="heading-small">Direct debits</span>
-    </div>
-
-    <div id="check-direct-debit" class="form-group">
-      <p>
-        @Messages("openPayments.directDebitLink") <a href="#">@Messages("openPayments.directDebitLinkText")
-      </a> @Messages("openPayments.directDebitNotSure")</p>
-
-    </div>
+      <div id="check-direct-debit" class="form-group">
+        <p>
+          @Messages("openPayments.directDebitLink") <a href="#">@Messages("openPayments.directDebitLinkText")
+        </a> @Messages("openPayments.directDebitNotSure")</p>
+      </div>
+    }
 
     @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOweHelp"),hiddenHelpTextContent)
   </div>

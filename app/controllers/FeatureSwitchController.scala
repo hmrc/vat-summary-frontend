@@ -33,7 +33,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
       FeatureSwitchModel(
         simpleAuthEnabled = appConfig.features.simpleAuth(),
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
-        allowPaymentsEnabled = appConfig.features.allowPayments()
+        allowPaymentsEnabled = appConfig.features.allowPayments(),
+        allowDirectDebitsEnabled = appConfig.features.allowDirectDebits()
       )
     )))
   }
@@ -49,6 +50,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.simpleAuth(model.simpleAuthEnabled)
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.allowPayments(model.allowPaymentsEnabled)
+    appConfig.features.allowDirectDebits(model.allowDirectDebitsEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
