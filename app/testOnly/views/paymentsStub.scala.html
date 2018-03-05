@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,22 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package forms
+@import models.payments.PaymentDetailsModel
 
-import config.ConfigKeys
-import models.FeatureSwitchModel
-import play.api.data.Form
-import play.api.data.Forms._
+@(model: PaymentDetailsModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-object FeatureSwitchForm {
-  val form: Form[FeatureSwitchModel] = Form(
-    mapping(
-      ConfigKeys.simpleAuthFeature -> boolean,
-      ConfigKeys.userResearchBannerFeature -> boolean,
-      ConfigKeys.allowPaymentsFeature -> boolean,
-      ConfigKeys.allowDirectDebitsFeature -> boolean
-    )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
-  )
+@views.html.main_template(title = "Payments stub page", bodyClasses = None, appConfig = appConfig) {
+
+  <ul class="list">
+    <li>taxType: @model.taxType</li>
+    <li>taxReference: @model.taxReference</li>
+    <li>taxPeriodMonth: @model.taxPeriodMonth</li>
+    <li>taxPeriodYear: @model.taxPeriodYear</li>
+    <li>amountInPence: @model.amountInPence</li>
+  </ul>
+
+  <a href="@model.returnUrl">Return to VAT</a>
 }

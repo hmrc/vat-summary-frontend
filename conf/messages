@@ -101,3 +101,5 @@ featureSwitch.heading = Features
 featureSwitch.submit = Submit
 features.simpleAuth.enabled = Simple auth
 features.userResearchBanner.enabled = User research banner
+features.allowPayments.enabled = Payments allowed
+features.allowDirectDebits.enabled = Direct debits allowed

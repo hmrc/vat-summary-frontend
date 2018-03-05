@@ -17,5 +17,7 @@ POST        /vat-through-software/test-only/populate-stub   @testOnly.controller
 # NOCSRF
 DELETE      /vat-through-software/test-only/clear-stub      @testOnly.controllers.DynamicStubController.clearStub
 
+GET         /vat-through-software/test-only/payments-stub   @testOnly.controllers.PaymentsStubController.stub
+
 ->          /                                               prod.Routes
 

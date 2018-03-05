@@ -26,5 +26,6 @@ class Features @Inject()(config: Configuration) {
 
   val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature, config)
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val payments = new Feature(ConfigKeys.paymentsFeature, config)
+  val allowPayments = new Feature(ConfigKeys.allowPaymentsFeature, config)
+  val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
 }
