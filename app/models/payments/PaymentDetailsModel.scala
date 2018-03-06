@@ -16,7 +16,8 @@
 
 package models.payments
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.functional.syntax._
 
 case class PaymentDetailsModel(taxType: String,
                                taxReference: String,
@@ -26,7 +27,14 @@ case class PaymentDetailsModel(taxType: String,
                                returnUrl: String)
 
 object PaymentDetailsModel {
-  implicit val reads = Json.reads[PaymentDetailsModel]
+  implicit val readsv: Reads[PaymentDetailsModel] = (
+    (JsPath \ "taxType").read[String] and
+    (JsPath \ "taxReference").read[String] and
+    (JsPath \ "amountInPence").read[String] and
+      (JsPath \ "taxPeriod" \ "month").read[String] and
+      (JsPath \ "taxPeriod" \ "year").read[String] and
+      (JsPath \ "returnUrl").read[String]
+    ) (PaymentDetailsModel.apply _)
 
   implicit val writes = new Writes[PaymentDetailsModel] {
     def writes(paymentDetail: PaymentDetailsModel) = Json.obj(
