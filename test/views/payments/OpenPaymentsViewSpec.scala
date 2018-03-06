@@ -18,13 +18,23 @@ package views.payments
 
 import java.time.LocalDate
 
+import config.features.Features
 import models.User
 import models.viewModels.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatest.BeforeAndAfterEach
+import play.api.Configuration
 import views.ViewBaseSpec
 
-class OpenPaymentsViewSpec extends ViewBaseSpec {
+class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
+
+  private val features = new Features(app.injector.instanceOf[Configuration])
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    features.allowPayments(true)
+  }
 
   object Selectors {
     val pageHeading = "h1"
