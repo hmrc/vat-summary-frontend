@@ -16,24 +16,27 @@
 
 package models
 
+import common.EnrolmentKeys._
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
 
-case class User(vrn: String, active: Boolean = true)
+case class User(vrn: String, active: Boolean = true, hasNonMtdVat: Boolean = false)
 
 object User {
-  def apply(enrolments: Enrolments): User = {
-    val vatEnrolments = enrolments.enrolments.filter(
-      enrolment => enrolment.key == "HMRC-MTD-VAT" && enrolment.identifiers.head.key == "VRN"
-    )
+  def apply(authorisedEnrolments: Enrolments): User = {
 
-    if (vatEnrolments.isEmpty) {
-      throw InternalError("VAT enrolment missing")
+    val vatEnrolments = authorisedEnrolments.enrolments.collect {
+      case mtd@Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier("VRN", _) :: _, _, _) => mtd
+      case Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => throw InternalError("VAT identifier invalid")
+      case nonMtd@Enrolment(`vatDecEnrolmentKey` | `vatVarEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
     }
-    else {
-      vatEnrolments.collectFirst {
-        case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
-          User(vrn, status == "Activated")
-      }.getOrElse(throw InternalError("VRN is invalid"))
-    }
+
+    val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) || vatEnrolments.exists(_.key == vatVarEnrolmentKey)
+
+
+    vatEnrolments.collectFirst {
+      case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
+        User(vrn, status == "Activated", containsNonMtdVat)
+    }.getOrElse(throw InternalError("VRN is invalid"))
+
   }
 }
