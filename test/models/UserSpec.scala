@@ -137,29 +137,6 @@ class UserSpec extends UnitSpec {
     }
   }
 
-  "Creating a User with an invalid VAT Enrolment Key" should {
-
-    val enrolments = Enrolments(
-      Set(Enrolment(
-        "HMRC-XXX-XXX",
-        Seq(EnrolmentIdentifier("VRN", "123456789")),
-        ""
-      ))
-    )
-
-    "throw an exception" in {
-      intercept[AuthorisationException] {
-        User(enrolments)
-      }
-    }
-
-    "have the correct message in the exception" in {
-      the[AuthorisationException] thrownBy {
-        User(enrolments)
-      } should have message "VAT enrolment missing"
-    }
-  }
-
   "Creating a User with an invalid VAT Identifier Name" should {
 
     val enrolments = Enrolments(
@@ -179,7 +156,7 @@ class UserSpec extends UnitSpec {
     "have the correct message in the exception" in {
       the[AuthorisationException] thrownBy {
         User(enrolments)
-      } should have message "VAT enrolment missing"
+      } should have message "VAT identifier invalid"
     }
   }
 

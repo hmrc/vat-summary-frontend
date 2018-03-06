@@ -22,23 +22,21 @@ import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, Intern
 case class User(vrn: String, active: Boolean = true, hasNonMtdVat: Boolean = false)
 
 object User {
-  def apply(enrolments: Enrolments): User = {
+  def apply(authorisedEnrolments: Enrolments): User = {
 
-    val vatEnrolments = enrolments.enrolments.collect {
+    val vatEnrolments = authorisedEnrolments.enrolments.collect {
       case mtd@Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier("VRN", _) :: _, _, _) => mtd
+      case Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => throw InternalError("VAT identifier invalid")
       case nonMtd@Enrolment(`vatDecEnrolmentKey` | `vatVarEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
     }
 
     val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) && vatEnrolments.exists(_.key == vatVarEnrolmentKey)
 
-    if (vatEnrolments.isEmpty) {
-      throw InternalError("VAT enrolment missing")
-    }
-    else {
-      vatEnrolments.collectFirst {
-        case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
-          User(vrn, status == "Activated", containsNonMtdVat)
-      }.getOrElse(throw InternalError("VRN is invalid"))
-    }
+
+    vatEnrolments.collectFirst {
+      case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
+        User(vrn, status == "Activated", containsNonMtdVat)
+    }.getOrElse(throw InternalError("VRN is invalid"))
+
   }
 }
