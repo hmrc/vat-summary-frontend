@@ -30,7 +30,7 @@ object User {
       case nonMtd@Enrolment(`vatDecEnrolmentKey` | `vatVarEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
     }
 
-    val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) && vatEnrolments.exists(_.key == vatVarEnrolmentKey)
+    val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) || vatEnrolments.exists(_.key == vatVarEnrolmentKey)
 
 
     vatEnrolments.collectFirst {
