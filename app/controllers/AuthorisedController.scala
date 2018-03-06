@@ -41,7 +41,7 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
       val predicate = if (appConfig.features.simpleAuth()) {
         EmptyPredicate
       } else {
-        (Enrolment(vatDecEnrolmentKey) and Enrolment(vatVarEnrolmentKey) and Enrolment(mtdVatEnrolmentKey))
+        ((Enrolment(vatDecEnrolmentKey) or Enrolment(vatVarEnrolmentKey)) and Enrolment(mtdVatEnrolmentKey))
           .or(Enrolment(mtdVatEnrolmentKey))
       }
 
