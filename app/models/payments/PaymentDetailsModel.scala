@@ -27,7 +27,7 @@ case class PaymentDetailsModel(taxType: String,
                                returnUrl: String)
 
 object PaymentDetailsModel {
-  implicit val readsv: Reads[PaymentDetailsModel] = (
+  implicit val reads: Reads[PaymentDetailsModel] = (
     (JsPath \ "taxType").read[String] and
     (JsPath \ "taxReference").read[String] and
     (JsPath \ "amountInPence").read[String] and
