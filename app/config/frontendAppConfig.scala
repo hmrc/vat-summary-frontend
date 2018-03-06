@@ -22,7 +22,6 @@ import javax.inject.{Inject, Singleton}
 
 import config.features.Features
 import config.{ConfigKeys => Keys}
-import controllers.feedback.routes
 import controllers.routes
 import play.api.Mode.Mode
 import play.api.mvc.Call
@@ -54,8 +53,8 @@ trait AppConfig extends ServicesConfig {
   val paymentsVatUrl: String
   val paymentsReturnUrl: String
   val btaVatOverviewUrl: String
-  val feedbackThankYouPartialUrl: String
-  val feedbackHmrcSubmitPartialUrl: String
+  val feedbackFormPartialUrl: String
+  val contactFormServiceIdentifier: String
 }
 
 @Singleton
@@ -64,18 +63,14 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override val mode: Mode = environment.mode
 
   private lazy val contactHost: String = getString(Keys.contactFrontendService)
-  private lazy val contactFormServiceIdentifier: String = "VATVC"
+  override lazy val contactFormServiceIdentifier: String = "VATVC"
 
   override lazy val authUrl: String = baseUrl("auth")
   override lazy val analyticsToken: String = getString(Keys.googleAnalyticsToken)
   override lazy val analyticsHost: String = getString(Keys.googleAnalyticsHost)
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  override lazy val feedbackThankYouPartialUrl: String = s"$contactHost/contact/beta-feedback/form/confirmation"
-  override lazy val feedbackHmrcSubmitPartialUrl: String = s"$contactHost/contact/beta-feedback/form?resubmitUrl"
-   config.                                        contactFrontendService}/contact/beta-feedback/form/?submitUrl
-
-feedbackFormPartialUrl
+  override lazy val feedbackFormPartialUrl: String = s"$contactHost/contact/beta-feedback/form"
 
   private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
     .decode(runModeConfiguration.getString(key).getOrElse("")), "UTF-8"))

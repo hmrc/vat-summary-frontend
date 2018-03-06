@@ -9,6 +9,11 @@ POST       /feature-switch         controllers.FeatureSwitchController.submitFea
 
 POST       /make-payment         controllers.MakePaymentController.makePayment
 
+#Feedback Routes
+GET         /feedback                               controllers.feedback.FeedbackController.show
+POST        /feedback                               controllers.feedback.FeedbackController.submit
+GET         /thankyou                               controllers.feedback.FeedbackController.thankyou
+
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
 GET        /bta-stub               controllers.BtaStubController.landingPage
