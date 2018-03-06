@@ -99,13 +99,14 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)
 
-  private lazy val paymentsBaseUrl: String = getString(Keys.paymentsBaseUrl)
-  private lazy val paymentsReturnBaseUrl: String = getString(Keys.paymentsBaseReturnUrl)
+  private lazy val paymentsBaseUrl: String = getString(Keys.paymentsServiceBaseUrl)
+  private lazy val paymentsReturnBaseUrl: String = getString(Keys.paymentsReturnUrlBase)
 
   override lazy val paymentsUrl: String = paymentsBaseUrl
   override lazy val paymentsVatUrl: String = s"$paymentsBaseUrl/vat"
-  override lazy val paymentsReturnUrl: String = paymentsReturnBaseUrl
+  override lazy val paymentsReturnUrl: String = paymentsReturnBaseUrl + getString(Keys.paymentsReturnUrl)
 
-  override lazy val btaVatOverviewUrl: String = getString(Keys.btaVatOverviewUrl)
+  private lazy val btaVatOverviewUrlBase: String = getString(Keys.btaVatOverviewUrlBase)
+  override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + getString(Keys.btaVatOverviewUrl)
 
 }
