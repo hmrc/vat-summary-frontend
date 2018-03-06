@@ -49,6 +49,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val paymentsServiceUrl: String = "payments-url"
   override val paymentsReturnUrl: String = "payments-return-url"
   override val btaVatOverviewUrl: String = "mock-url"
+  override val staticDateValue: String = "2018-05-01"
   override val feedbackFormPartialUrl: String = "BasefeedbackUrl"
   override val contactFormServiceIdentifier: String = "VATVC"
   override val staticDateValue: String = "2018-05-01"
