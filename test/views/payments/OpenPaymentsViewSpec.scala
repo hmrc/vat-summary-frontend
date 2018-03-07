@@ -75,7 +75,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     val secondPaymentDetailAmount = "#payment-detail-2 input:nth-of-type(1)"
     val secondPaymentDetailMonth = "#payment-detail-2 input:nth-of-type(2)"
     val secondPaymentDetailYear = "#payment-detail-2 input:nth-of-type(3)"
-
+    val makePayment = "#vatPaymentsLink"
   }
 
   private val user = User("1111")
@@ -259,6 +259,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
 
     "render the overdue label" in {
       elementText(Selectors.overdueLabel) shouldBe "overdue"
+    }
+
+    "have the correct destination for the make a payment link" in {
+      element(Selectors.makePayment).attr("href") shouldBe "payments-url"
     }
   }
 }

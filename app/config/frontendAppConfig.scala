@@ -49,8 +49,7 @@ trait AppConfig extends ServicesConfig {
   val vatReturnDeadlinesUrl: String
   def vatReturnUrl(periodKey: String): String
   val btaHomeUrl: String
-  val paymentsUrl: String
-  val paymentsVatUrl: String
+  val paymentsServiceUrl: String
   val paymentsReturnUrl: String
   val btaVatOverviewUrl: String
   val feedbackFormPartialUrl: String
@@ -104,14 +103,12 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)
 
-  private lazy val paymentsBaseUrl: String = getString(Keys.paymentsServiceBaseUrl)
-  private lazy val paymentsReturnBaseUrl: String = getString(Keys.paymentsReturnUrlBase)
-
-  override lazy val paymentsUrl: String = paymentsBaseUrl
-  override lazy val paymentsVatUrl: String = s"$paymentsBaseUrl/vat"
-  override lazy val paymentsReturnUrl: String = paymentsReturnBaseUrl + getString(Keys.paymentsReturnUrl)
+  private lazy val paymentsBaseUrl: String = getString(Keys.paymentsServiceBase)
+  private lazy val paymentsUrl: String = getString(Keys.paymentsServiceUrl)
+  override lazy val paymentsServiceUrl: String = paymentsBaseUrl + paymentsUrl
+  private lazy val paymentsReturnBase: String = getString(Keys.paymentsReturnBase)
+  override lazy val paymentsReturnUrl: String = paymentsReturnBase + getString(Keys.paymentsReturnUrl)
 
   private lazy val btaVatOverviewUrlBase: String = getString(Keys.btaVatOverviewUrlBase)
   override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + getString(Keys.btaVatOverviewUrl)
-
 }

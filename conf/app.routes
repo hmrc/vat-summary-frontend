@@ -7,7 +7,7 @@ GET        /account/details        controllers.AccountDetailsController.accountD
 GET        /feature-switch         controllers.FeatureSwitchController.featureSwitch
 POST       /feature-switch         controllers.FeatureSwitchController.submitFeatureSwitch
 
-POST       /make-payment         controllers.MakePaymentController.makePayment
+POST       /make-payment           controllers.MakePaymentController.makePayment
 
 #Feedback link Routes
 GET         /feedback                               controllers.feedback.FeedbackController.show
