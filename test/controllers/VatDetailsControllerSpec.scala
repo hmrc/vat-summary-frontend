@@ -25,7 +25,7 @@ import models.{User, VatDetailsModel}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, VatDetailsService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -68,7 +68,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
   val entityName = Some("Cheapo Clothing")
 
   private trait DetailsTest {
-    val runMock: Boolean = true
+    val needsAuth: Boolean = true
+    val needsDateService: Boolean = true
+    val needsVatDetailsService: Boolean = true
+    val needsAccountDetailsService: Boolean = true
+
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
         Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
@@ -80,17 +84,26 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
+    val mockDateService: DateService = mock[DateService]
 
     def setup(): Any = {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(authResult)
+      if (needsAuth) {
+        (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *)
+          .returns(authResult)
+      }
 
-      if (runMock) {
+      if (needsDateService) {
+        (mockDateService.now: () => LocalDate).expects().atLeastOnce().returns(LocalDate.parse("2018-05-01"))
+      }
+
+      if (needsVatDetailsService) {
         (mockVatDetailsService.getVatDetails(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(vatServiceDetailsResult)
+          .expects(*, *, *, *)
+          .returns(vatServiceDetailsResult)
+      }
 
+      if (needsAccountDetailsService) {
         (mockAccountDetailsService.getEntityName(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(entityName))
@@ -101,7 +114,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     def target: VatDetailsController = {
       setup()
-      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService)
+      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService, mockDateService)
     }
   }
 
@@ -128,7 +141,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user is not logged in" should {
 
       "return 401 (Unauthorised)" in new DetailsTest {
-        override val runMock: Boolean = false
+        override val needsDateService: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
+
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.details()(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
@@ -138,7 +154,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user is not authenticated" should {
 
       "return 403 (Forbidden)" in new DetailsTest {
-        override val runMock: Boolean = false
+        override val needsDateService: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
+
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.details()(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
@@ -148,10 +167,18 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   "Calling .constructViewModel with a VatDetailsModel" when {
 
-    lazy val mockEnrolmentsAuthService = mock[EnrolmentsAuthService]
+    /*lazy val mockEnrolmentsAuthService = mock[EnrolmentsAuthService]
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     lazy val mockVatDetailsService = mock[VatDetailsService]
-    lazy val controller = new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService)
+    lazy val mockDateService = mock[DateService]
+    (mockDateService.now: () => LocalDate).expects().returns(LocalDate.parse("2018-05-01"))
+    lazy val controller = new VatDetailsController(messages,
+        mockEnrolmentsAuthService,
+        mockAppConfig,
+        mockVatDetailsService,
+        mockAccountDetailsService,
+        mockDateService)*/
+
     lazy val paymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2019-03-03"))
     lazy val obligationDueDate: Option[LocalDate] = Some(LocalDate.parse("2019-06-06"))
     lazy val overduePaymentDueDate: Option[LocalDate] = Some(LocalDate.parse("2017-03-03"))
@@ -159,70 +186,100 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is both a payment and an obligation" should {
 
-      lazy val expected = VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
-      lazy val result = controller.constructViewModel(VatDetailsModel(payment, obligation), entityName)
+      "return a VatDetailsViewModel with both due dates" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with both due dates" in {
+        lazy val expected = VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(payment, obligation), entityName)
+
         result shouldBe expected
       }
     }
 
     "there is a payment but no obligation" should {
 
-      lazy val expected = VatDetailsViewModel(paymentDueDate, None, entityName)
-      lazy val result = controller.constructViewModel(VatDetailsModel(payment, None), entityName)
+      "return a VatDetailsViewModel with a payment due date and no obligation due date" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with a payment due date and no obligation due date" in {
+        lazy val expected = VatDetailsViewModel(paymentDueDate, None, entityName)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(payment, None), entityName)
+
         result shouldBe expected
       }
     }
 
     "there is an obligation but no payment" should {
 
-      lazy val expected = VatDetailsViewModel(None, obligationDueDate, entityName)
-      lazy val result = controller.constructViewModel(VatDetailsModel(None, obligation), entityName)
+      "return a VatDetailsViewModel with an obligation due date and no payment due date" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with an obligation due date and no payment due date" in {
+        lazy val expected = VatDetailsViewModel(None, obligationDueDate, entityName)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(None, obligation), entityName)
+
         result shouldBe expected
       }
     }
 
     "there is no obligation or payment" should {
 
-      lazy val expected = VatDetailsViewModel(None, None, entityName)
-      lazy val result = controller.constructViewModel(VatDetailsModel(None, None), entityName)
+      "return a VatDetailsViewModel with no obligation due date and no payment due date" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsDateService: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with no obligation due date and no payment due date" in {
+        lazy val expected = VatDetailsViewModel(None, None, entityName)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(None, None), entityName)
+
         result shouldBe expected
       }
     }
 
     "there is no obligation, payment, or entity name" should {
 
-      lazy val expected = VatDetailsViewModel(None, None, None)
-      lazy val result = controller.constructViewModel(VatDetailsModel(None, None), None)
+      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsDateService: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name" in {
+        lazy val expected = VatDetailsViewModel(None, None, None)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(None, None), None)
+
         result shouldBe expected
       }
     }
 
     "the obligation is overdue" should {
 
-      lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, returnOverdue = true)
-      lazy val result = controller.constructViewModel(VatDetailsModel(payment, overdueObligation), entityName)
+      "return a VatDetailsViewModel with the return overdue flag set" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with the return overdue flag set" in {
+        lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, returnOverdue = true)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(payment, overdueObligation), entityName)
+
         result shouldBe expected
       }
     }
 
     "the payment is overdue" should {
 
-      lazy val expected = VatDetailsViewModel(overduePaymentDueDate, obligationDueDate, entityName, paymentOverdue = true)
-      lazy val result = controller.constructViewModel(VatDetailsModel(overduePayment, obligation), entityName)
+      "return a VatDetailsViewModel with the payment overdue flag set" in new DetailsTest {
+        override val needsAuth: Boolean = false
+        override val needsVatDetailsService: Boolean = false
+        override val needsAccountDetailsService: Boolean = false
 
-      "return a VatDetailsViewModel with the payment overdue flag set" in {
+        lazy val expected = VatDetailsViewModel(overduePaymentDueDate, obligationDueDate, entityName, paymentOverdue = true)
+        lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(overduePayment, obligation), entityName)
+
         result shouldBe expected
       }
     }
