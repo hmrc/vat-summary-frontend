@@ -20,7 +20,7 @@
 @(partialUrl: String, redirectUrl: String)(implicit request: Request[_], cachedStaticHtmlPartialRetriever: CachedStaticHtmlPartialRetriever,
     messages: Messages, appConfig: FrontendAppConfig)
 
-@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(title = messages("feedbackThanks.title"), bodyClasses = None, appConfig = appConfig) {
     @cachedStaticHtmlPartialRetriever.getPartialContent(partialUrl)
     <a id="back" href='@redirectUrl' role="button" tabindex="0" class="button">@Messages("base.back")</a>
 }

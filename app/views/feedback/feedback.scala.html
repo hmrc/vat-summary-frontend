@@ -22,6 +22,6 @@
 partialRetriever: CachedStaticHtmlPartialRetriever, messages: Messages, appConfig: FrontendAppConfig)
 
 
-@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(title = messages("feedback.title"), bodyClasses = None, mainClass = None, appConfig = appConfig) {
  @formBody.getOrElse(formPartialRetriever.getPartialContent(partialUrl))
 }

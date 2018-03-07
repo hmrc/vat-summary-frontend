@@ -103,3 +103,5 @@ banner.feedback = feedback
 banner.feedbackImprove = will help us to improve it.
 banner.phaseName = BETA
 base.back = Back
+feedback.title = Feedback
+feedbackThanks.title = Thank you
