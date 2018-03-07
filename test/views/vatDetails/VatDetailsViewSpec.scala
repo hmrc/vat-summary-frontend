@@ -17,13 +17,15 @@
 package views.vatDetails
 
 import java.time.LocalDate
+
 import models.viewModels.VatDetailsViewModel
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatest.BeforeAndAfterEach
 import views.ViewBaseSpec
 
-class VatDetailsViewSpec extends ViewBaseSpec {
+class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
   object Selectors {
     val pageHeading = "h1"
@@ -58,6 +60,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     paymentOverdue = true
   )
+
+  override def beforeEach(): Unit = {
+    mockConfig.features.accountDetails(true)
+  }
 
   "Rendering the VAT details page" should {
 
@@ -104,7 +110,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "have the text" in {
-        accountDetails.select("p").text() shouldBe "See your contact information and other details."
+        accountDetails.select("p").text() shouldBe "See your business information and other details."
       }
     }
 

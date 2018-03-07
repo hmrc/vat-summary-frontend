@@ -28,7 +28,8 @@ object FeatureSwitchForm {
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.allowPaymentsFeature -> boolean,
       ConfigKeys.allowDirectDebitsFeature -> boolean,
-      ConfigKeys.staticDateEnabledFeature -> boolean
+      ConfigKeys.staticDateEnabledFeature -> boolean,
+      ConfigKeys.accountDetailsFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

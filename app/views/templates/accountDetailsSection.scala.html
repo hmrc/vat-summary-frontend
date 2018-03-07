@@ -1,0 +1,30 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(user: models.User, appConfig: config.AppConfig)(implicit messages: Messages)
+
+<div class="column-one-half" id="account-details">
+    @if(appConfig.features.accountDetails()) {
+    <h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}"
+                                 data-journey-click="account:view:vat-details">@messages("vatDetails.accountDetails.link")</a></h3>
+    } else {
+    <h3 class="heading-small"><a href="/vat/trader/@{user.vrn}/certificate"
+                                 data-journey-click="vat-certificate:view:vat-details"
+                                 target="_blank">@messages("vatDetails.accountDetails.portal.link")</a></h3>
+    }
+
+    <p>@messages("vatDetails.accountDetails.view")</p>
+</div>
