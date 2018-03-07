@@ -16,12 +16,12 @@
 
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
-@import views.html.templates.main_template
 @import config.FrontendAppConfig
 
 @(partialUrl: String, formBody: Option[Html])(implicit request: Request[_], formPartialRetriever: FormPartialRetriever,
 partialRetriever: CachedStaticHtmlPartialRetriever, messages: Messages, appConfig: FrontendAppConfig)
 
-@main_template(title = messages("feedback.title"), showBtaHeader = false) {
-  @formBody.getOrElse(formPartialRetriever.getPartialContent(partialUrl))
+
+@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+ @formBody.getOrElse(formPartialRetriever.getPartialContent(partialUrl))
 }

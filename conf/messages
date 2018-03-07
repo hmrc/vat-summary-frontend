@@ -103,3 +103,9 @@ features.simpleAuth.enabled = Simple auth
 features.userResearchBanner.enabled = User research banner
 features.allowPayments.enabled = Payments allowed
 features.allowDirectDebits.enabled = Direct debits allowed
+
+banner.newService = This is a new service – your
+banner.feedback = feedback
+banner.feedbackImprove = will help us to improve it.
+banner.phaseName = BETA
+base.back = Back

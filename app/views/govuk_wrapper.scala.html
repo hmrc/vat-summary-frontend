@@ -69,11 +69,10 @@
 @footerLinks = {}
 
 @phaseBanner = {
-        <!--TODO:Update href to feedback controller when in beta-->
-    <div class="alpha-banner">
+    <div class="beta-banner">
         <p>
-            <strong id="phase" class="phase-tag">ALPHA</strong>
-            <span>This is a new service – your <a id="alpha-banner-feedback" href="www.google.com">feedback</a> will help us to improve it.</span>
+            <strong id="phase" class="phase-tag">@Messages("banner.phaseName")</strong>
+            <span>@Messages("banner.newService") <a id="alpha-banner-feedback" href="@controllers.feedback.routes.FeedbackController.show()">@Messages("banner.feedback")</a> @Messages("banner.feedbackImprove")</span>
         </p>
     </div>
 }

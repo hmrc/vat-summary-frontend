@@ -15,13 +15,12 @@
  *@
 
 @import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
-@import views.html.templates.main_template
 @import config.FrontendAppConfig
 
-@(partialUrl: String, redirectUrl: String)(implicit request: Request[_], cachedStaticHtmlPartialRetriever: CachedStaticHtmlPartialRetriever
-, messages: Messages, appConfig: FrontendAppConfig)
+@(partialUrl: String, redirectUrl: String)(implicit request: Request[_], cachedStaticHtmlPartialRetriever: CachedStaticHtmlPartialRetriever,
+    messages: Messages, appConfig: FrontendAppConfig)
 
-@main_template(title = messages("feedback.title")) {
-  @cachedStaticHtmlPartialRetriever.getPartialContent(partialUrl)
-  <a id="back" href='@redirectUrl' role="button" tabindex="0" class="button">@Messages("base.back")</a>
+@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+    @cachedStaticHtmlPartialRetriever.getPartialContent(partialUrl)
+    <a id="back" href='@redirectUrl' role="button" tabindex="0" class="button">@Messages("base.back")</a>
 }
