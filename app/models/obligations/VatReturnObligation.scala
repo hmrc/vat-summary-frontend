@@ -17,8 +17,8 @@
 package models.obligations
 
 import java.time.LocalDate
-
-import play.api.libs.json.{Reads, Json}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
 case class VatReturnObligation(start: LocalDate,
                                end: LocalDate,
@@ -29,6 +29,14 @@ case class VatReturnObligation(start: LocalDate,
 
 object VatReturnObligation {
 
-  implicit val format: Reads[VatReturnObligation] = Json.reads[VatReturnObligation]
+  implicit val vatReturnObligationWrites: Writes[VatReturnObligation] = Json.writes[VatReturnObligation]
 
+  implicit val vatReturnObligationReads: Reads[VatReturnObligation] = (
+    (JsPath \ "start").read[LocalDate] and
+    (JsPath \ "end").read[LocalDate] and
+    (JsPath \ "due").read[LocalDate] and
+    (JsPath \ "status").read[String] and
+    (JsPath \ "received").readNullable[LocalDate] and
+    (JsPath \ "periodKey").read[String]
+  ) (VatReturnObligation.apply _)
 }
