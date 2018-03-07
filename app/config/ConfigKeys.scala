@@ -18,7 +18,8 @@ package config
 
 object ConfigKeys {
 
-  val contactFrontendService: String = "contact-frontend.host"
+  val contactFrontendHost: String = "contact-frontend.host"
+  val contactFrontendService: String = "contact-frontend"
 
   private val googleAnalyticsRoot: String = "google-analytics"
   val googleAnalyticsToken: String = googleAnalyticsRoot + ".token"
