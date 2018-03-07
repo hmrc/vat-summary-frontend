@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import models.User
 import models.payments.{Payment, Payments}
+import models.viewModels.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.Result
@@ -45,6 +46,14 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         .returns(authResult)
     }
 
+    val payment = Payment(
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-01-01"),
+      BigDecimal("10000"),
+      "ABCD"
+    )
+
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
@@ -64,28 +73,16 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return the payments view" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
-          val payment = Payment(
-            LocalDate.parse("2018-01-01"),
-            LocalDate.parse("2018-01-01"),
-            LocalDate.parse("2018-01-01"),
-            BigDecimal("10000"),
-            "ABCD"
-          )
-
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Some(Payments(Seq(payment, payment)))))
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
-
         val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
-
-        document.select("#vatPaymentsLink").attr("href") shouldBe mockAppConfig.paymentsVatUrl
       }
-
     }
 
     "the user has no open payments" should {
@@ -99,13 +96,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
-
         val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
-
       }
-
     }
 
     "an error occurs upstream" should {
@@ -124,8 +118,26 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         document.select("h1").first().text() shouldBe "We can't let you pay here right now"
       }
-
     }
+  }
 
+  "Calling the .getModel function" should {
+
+    "return a sequence of OpenPaymentsModel" in new Test {
+      override def setupMocks(): Unit = ()
+
+      val expected = Seq(OpenPaymentsModel(
+        "Return",
+        payment.outstandingAmount,
+        payment.due,
+        payment.start,
+        payment.end,
+        payment.periodKey,
+        overdue = true
+      ))
+      val result: Seq[OpenPaymentsModel] = target.getModel(Seq(payment))
+
+      result shouldBe expected
+    }
   }
 }
