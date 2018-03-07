@@ -39,6 +39,7 @@ object ConfigKeys {
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
+  val btaVatOverviewUrlBase: String = "business-tax-account.vatSummaryHost"
   val btaVatOverviewUrl: String = "business-tax-account.vatSummaryUrl"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
@@ -46,7 +47,8 @@ object ConfigKeys {
   val vatSubmittedReturns: String = "view-vat-returns-frontend.submittedReturnsUrl"
   val vatReturn: String = "view-vat-returns-frontend.returnUrl"
 
-  val paymentsBaseUrl: String = "payments-frontend.url"
-  val paymentsBaseReturnUrl = "payments-frontend.returnBaseUrl"
+  val paymentsServiceBaseUrl: String = "payments-frontend.url"
+  val paymentsReturnUrlBase: String = "payments-frontend.returnHost"
+  val paymentsReturnUrl = "payments-frontend.returnUrl"
 
 }

@@ -47,6 +47,54 @@ class UserSpec extends UnitSpec {
     }
   }
 
+  "A User with valid MTD-VAT, VATDEC and VATVAR enrolments" should {
+
+    val enrolments = Enrolments(
+      Set(
+        Enrolment(
+          "HMRC-MTD-VAT",
+          Seq(EnrolmentIdentifier("VRN", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMCE-VATDEC-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMCE-VATVAR-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        )
+      )
+    )
+
+    val user = User(enrolments)
+
+    "say that it has the VATDEC and VATVAR enrolments" in {
+      user.hasNonMtdVat shouldBe true
+    }
+
+  }
+
+  "A User with only a valid MTD-VAT enrolment" should {
+
+    val enrolments = Enrolments(
+      Set(Enrolment(
+        "HMRC-MTD-VAT",
+        Seq(EnrolmentIdentifier("VRN", "123456789")),
+        "Activated"
+      ))
+    )
+
+    val user = User(enrolments)
+
+    "say that it doesn't have the VATDEC and VATVAR enrolments" in {
+      user.hasNonMtdVat shouldBe false
+    }
+
+  }
+
   "Creating a User with a valid, active VAT Enrolment" should {
 
     val enrolments = Enrolments(
@@ -89,29 +137,6 @@ class UserSpec extends UnitSpec {
     }
   }
 
-  "Creating a User with an invalid VAT Enrolment Key" should {
-
-    val enrolments = Enrolments(
-      Set(Enrolment(
-        "HMRC-XXX-XXX",
-        Seq(EnrolmentIdentifier("VRN", "123456789")),
-        ""
-      ))
-    )
-
-    "throw an exception" in {
-      intercept[AuthorisationException] {
-        User(enrolments)
-      }
-    }
-
-    "have the correct message in the exception" in {
-      the[AuthorisationException] thrownBy {
-        User(enrolments)
-      } should have message "VAT enrolment missing"
-    }
-  }
-
   "Creating a User with an invalid VAT Identifier Name" should {
 
     val enrolments = Enrolments(
@@ -131,7 +156,7 @@ class UserSpec extends UnitSpec {
     "have the correct message in the exception" in {
       the[AuthorisationException] thrownBy {
         User(enrolments)
-      } should have message "VAT enrolment missing"
+      } should have message "VAT identifier invalid"
     }
   }
 
