@@ -37,7 +37,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
-      val nextActionsCall = vatDetailsService.getVatDetails(user, dateService.now)
+      val nextActionsCall = vatDetailsService.getVatDetails(user, dateService.now())
       val entityNameCall = accountDetailsService.getEntityName(user.vrn)
 
       for {
@@ -56,7 +56,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val obligationDueDate: Option[LocalDate] = vatDetailsModel.vatReturn.map(_.due)
 
     val (returnOverdue: Boolean, paymentOverdue: Boolean) = (obligationDueDate, paymentDueDate) match {
-      case (Some(returnDate), Some(paymentDate)) => (dateService.now.isAfter(returnDate), dateService.now.isAfter(paymentDate))
+      case (Some(returnDate), Some(paymentDate)) => (dateService.now().isAfter(returnDate), dateService.now().isAfter(paymentDate))
       case (Some(returnDate), _) => (dateService.now().isAfter(returnDate), false)
       case (_, Some(paymentDate)) => (false, dateService.now().isAfter(paymentDate))
       case (_ , _) => (false, false)
