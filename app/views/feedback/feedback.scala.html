@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package config.features
+@import uk.gov.hmrc.play.partials.FormPartialRetriever
+@import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
+@import config.FrontendAppConfig
 
-import javax.inject.{Inject, Singleton}
+@(partialUrl: String, formBody: Option[Html])(implicit request: Request[_], formPartialRetriever: FormPartialRetriever,
+partialRetriever: CachedStaticHtmlPartialRetriever, messages: Messages, appConfig: FrontendAppConfig)
 
-import config.ConfigKeys
-import play.api.Configuration
 
-@Singleton
-class Features @Inject()(config: Configuration) {
-
-  val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature, config)
-  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val allowPayments = new Feature(ConfigKeys.allowPaymentsFeature, config)
-  val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
-  val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
+@views.html.main_template(title = messages("feedback.title"), bodyClasses = None, mainClass = None, appConfig = appConfig) {
+ @formBody.getOrElse(formPartialRetriever.getPartialContent(partialUrl))
 }

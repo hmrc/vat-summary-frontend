@@ -21,6 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
+import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import models._
@@ -33,7 +34,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
                                   financialDataConnector: FinancialDataConnector,
-                                  subscriptionConnector: VatSubscriptionConnector) {
+                                  subscriptionConnector: VatSubscriptionConnector,
+                                  implicit val appConfig: AppConfig,
+                                  dateService: DateService) {
 
   private[services] def getNextObligation[T <: Obligation](obligations: Seq[T], date: LocalDate): Option[T] = {
     val presetAndFuture = obligations
@@ -48,7 +51,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
   }
 
   def getVatDetails(user: User,
-                    date: LocalDate = LocalDate.now())
+                    date: LocalDate)
                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatDetailsModel]] = {
     // Static 2018 date range for MVP
     val dateFrom = LocalDate.parse("2018-01-01")

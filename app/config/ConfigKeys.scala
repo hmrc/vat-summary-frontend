@@ -18,7 +18,8 @@ package config
 
 object ConfigKeys {
 
-  val contactFrontendService: String = "contact-frontend.host"
+  val contactFrontendHost: String = "contact-frontend.host"
+  val contactFrontendService: String = "contact-frontend"
 
   private val googleAnalyticsRoot: String = "google-analytics"
   val googleAnalyticsToken: String = googleAnalyticsRoot + ".token"
@@ -36,6 +37,8 @@ object ConfigKeys {
   val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
   val allowPaymentsFeature: String = "features.allowPayments.enabled"
   val allowDirectDebitsFeature: String = "features.allowDirectDebits.enabled"
+  val staticDateEnabledFeature: String = "features.date-service.staticDate.enabled"
+  val staticDateValue: String = "date-service.staticDate.value"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
@@ -47,8 +50,8 @@ object ConfigKeys {
   val vatSubmittedReturns: String = "view-vat-returns-frontend.submittedReturnsUrl"
   val vatReturn: String = "view-vat-returns-frontend.returnUrl"
 
-  val paymentsServiceBaseUrl: String = "payments-frontend.url"
-  val paymentsReturnUrlBase: String = "payments-frontend.returnHost"
-  val paymentsReturnUrl = "payments-frontend.returnUrl"
-
+  val paymentsServiceBase: String = "payments-frontend.host"
+  val paymentsServiceUrl: String = "payments-frontend.paymentUrl"
+  val paymentsReturnBase: String = "payments-frontend.returnHost"
+  val paymentsReturnUrl: String = "payments-frontend.returnUrl"
 }

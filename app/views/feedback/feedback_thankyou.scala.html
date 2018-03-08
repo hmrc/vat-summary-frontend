@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package config.features
+@import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
+@import config.FrontendAppConfig
 
-import javax.inject.{Inject, Singleton}
+@(partialUrl: String, redirectUrl: String)(implicit request: Request[_], cachedStaticHtmlPartialRetriever: CachedStaticHtmlPartialRetriever,
+    messages: Messages, appConfig: FrontendAppConfig)
 
-import config.ConfigKeys
-import play.api.Configuration
-
-@Singleton
-class Features @Inject()(config: Configuration) {
-
-  val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature, config)
-  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val allowPayments = new Feature(ConfigKeys.allowPaymentsFeature, config)
-  val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
-  val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
+@views.html.main_template(title = messages("feedbackThanks.title"), bodyClasses = None, appConfig = appConfig) {
+    @cachedStaticHtmlPartialRetriever.getPartialContent(partialUrl)
+    <a id="back" href='@redirectUrl' role="button" tabindex="0" class="button">@Messages("base.back")</a>
 }

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package config.features
+package services
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
-import config.ConfigKeys
-import play.api.Configuration
-
 @Singleton
-class Features @Inject()(config: Configuration) {
+class DateService @Inject()(appConfig: config.AppConfig) {
 
-  val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature, config)
-  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val allowPayments = new Feature(ConfigKeys.allowPaymentsFeature, config)
-  val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
-  val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
+  def now(): LocalDate = {
+    if (appConfig.features.staticDateEnabled()) {
+      LocalDate.parse(appConfig.staticDateValue)
+    } else {
+      LocalDate.now()
+    }
+  }
 }

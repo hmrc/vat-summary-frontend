@@ -20,10 +20,11 @@ import java.time.LocalDate
 
 import models.User
 import models.payments.{Payment, Payments}
+import models.viewModels.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.Result
-import services.{EnrolmentsAuthService, PaymentsService}
+import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -40,12 +41,23 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       )))
 
     def setupMocks(): Unit = {
+      (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
+
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResult)
     }
 
+    val payment = Payment(
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-01-01"),
+      BigDecimal("10000"),
+      "ABCD"
+    )
+
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockDateService: DateService = mock[DateService]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val testUser: User = User("999999999")
@@ -53,7 +65,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
     def target: OpenPaymentsController = {
       setupMocks()
-      new OpenPaymentsController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockAppConfig)
+      new OpenPaymentsController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockDateService, mockAppConfig)
     }
   }
 
@@ -64,28 +76,16 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return the payments view" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
-          val payment = Payment(
-            LocalDate.parse("2018-01-01"),
-            LocalDate.parse("2018-01-01"),
-            LocalDate.parse("2018-01-01"),
-            BigDecimal("10000"),
-            "ABCD"
-          )
-
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Some(Payments(Seq(payment, payment)))))
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
-
         val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
-
-        document.select("#vatPaymentsLink").attr("href") shouldBe mockAppConfig.paymentsVatUrl
       }
-
     }
 
     "the user has no open payments" should {
@@ -99,13 +99,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
-
         val document: Document = Jsoup.parse(bodyOf(result))
 
         document.select("h1").first().text() shouldBe "What you owe"
-
       }
-
     }
 
     "an error occurs upstream" should {
@@ -124,8 +121,28 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         document.select("h1").first().text() shouldBe "We can't let you pay here right now"
       }
-
     }
+  }
 
+  "Calling the .getModel function" should {
+
+    "return a sequence of OpenPaymentsModel" in new Test {
+      override def setupMocks(): Unit = (
+        mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
+      )
+
+      val expected = Seq(OpenPaymentsModel(
+        "Return",
+        payment.outstandingAmount,
+        payment.due,
+        payment.start,
+        payment.end,
+        payment.periodKey,
+        overdue = true
+      ))
+      val result: Seq[OpenPaymentsModel] = target.getModel(Seq(payment))
+
+      result shouldBe expected
+    }
   }
 }

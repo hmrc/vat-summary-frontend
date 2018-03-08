@@ -16,19 +16,19 @@
 
 package controllers
 
-import java.time.LocalDate
-import javax.inject.Inject
-
 import config.AppConfig
 import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{EnrolmentsAuthService, PaymentsService}
+import services.{DateService, EnrolmentsAuthService, PaymentsService}
+
+import javax.inject.Inject
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
                                        val paymentsService: PaymentsService,
+                                       val dateService: DateService,
                                        implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
@@ -49,7 +49,7 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
       payment.start,
       payment.end,
       payment.periodKey,
-      payment.due.isBefore(LocalDate.now())
+      payment.due.isBefore(dateService.now())
     )
   }
 }

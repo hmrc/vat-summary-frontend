@@ -23,25 +23,20 @@ import models.payments.PaymentDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class PaymentsStubController @Inject()(val messagesApi: MessagesApi,
-                                       val authConnector: AuthConnector,
-                                       authFunctions: AuthorisedFunctions,
-                                       implicit val appConfig: AppConfig)
+class PaymentsStubController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
   def stub(): Action[AnyContent] = Action.async { implicit request =>
-    authFunctions.authorised() {
-      val data: String = request.session("payment-data")
-      val model: PaymentDetailsModel = Json.parse(data).as[PaymentDetailsModel]
-      Future.successful(Ok(testOnly.views.html.paymentsStub(model)))
-    } recoverWith {
-      case _ => Future.successful(Forbidden(views.html.errors.unauthorised()))
+    val paymentData: Option[String] = request.session.get("payment-data")
+    val model: PaymentDetailsModel = paymentData match {
+      case Some(data) => Json.parse(data).as[PaymentDetailsModel]
+      case _ => PaymentDetailsModel("", "", "", "", "", "#")
     }
+    Future.successful(Ok(testOnly.views.html.paymentsStub(model)))
   }
 }
