@@ -127,7 +127,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
   "Calling the .getModel function" should {
 
     "return a sequence of OpenPaymentsModel" in new Test {
-      override def setupMocks(): Unit = ()
+      override def setupMocks(): Unit = (
+        mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
+      )
 
       val expected = Seq(OpenPaymentsModel(
         "Return",
