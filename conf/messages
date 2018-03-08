@@ -23,7 +23,8 @@ partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
 vatDetails.title = VAT
 vatDetails.accountDetails.link = Account details
-vatDetails.accountDetails.view = See your contact information and other details.
+vatDetails.accountDetails.view = See your business information and other details.
+vatDetails.accountDetails.portal.link = View VAT certificate (opens in a new tab)
 vatDetails.submittedReturns.link = Submitted returns
 vatDetails.submittedReturns.view = Check the returns you''ve sent us.
 vatDetails.vrn = VAT registration number (VRN): {0}
@@ -98,6 +99,7 @@ features.userResearchBanner.enabled = User research banner
 features.allowPayments.enabled = Payments allowed
 features.allowDirectDebits.enabled = Direct debits allowed
 features.date-service.staticDate.enabled = Use static date (2018-05-01)
+features.accountDetails.enabled = Show account details
 
 banner.newService = This is a new service – your
 banner.feedback = feedback
