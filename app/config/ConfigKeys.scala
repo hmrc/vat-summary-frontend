@@ -39,6 +39,7 @@ object ConfigKeys {
   val allowDirectDebitsFeature: String = "features.allowDirectDebits.enabled"
   val staticDateEnabledFeature: String = "features.date-service.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
+  val accountDetailsFeature: String = "features.accountDetails.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"

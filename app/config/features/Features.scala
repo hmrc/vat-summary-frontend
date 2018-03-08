@@ -29,4 +29,6 @@ class Features @Inject()(config: Configuration) {
   val allowPayments = new Feature(ConfigKeys.allowPaymentsFeature, config)
   val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
+  val accountDetails = new Feature(ConfigKeys.accountDetailsFeature, config)
+
 }

@@ -45,11 +45,7 @@
       </section>
 
       <div class="grid-row">
-        <div class="column-one-half" id="account-details">
-          <h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}"
-                                       data-journey-click="account:view:vat-details">@messages("vatDetails.accountDetails.link")</a></h3>
-          <p>@messages("vatDetails.accountDetails.view")</p>
-        </div>
+        @views.html.templates.accountDetailsSection(user, appConfig)
 
         <div class="column-one-half" id="submitted-returns">
             <h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}/@{LocalDate.now().getYear}"
