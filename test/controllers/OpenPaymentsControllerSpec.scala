@@ -24,7 +24,7 @@ import models.viewModels.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.Result
-import services.{EnrolmentsAuthService, PaymentsService}
+import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -41,6 +41,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       )))
 
     def setupMocks(): Unit = {
+      (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
+
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResult)
@@ -55,6 +57,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     )
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockDateService: DateService = mock[DateService]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val testUser: User = User("999999999")
@@ -62,7 +65,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
     def target: OpenPaymentsController = {
       setupMocks()
-      new OpenPaymentsController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockAppConfig)
+      new OpenPaymentsController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockDateService, mockAppConfig)
     }
   }
 
