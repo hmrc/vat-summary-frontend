@@ -97,6 +97,7 @@ features.simpleAuth.enabled = Simple auth
 features.userResearchBanner.enabled = User research banner
 features.allowPayments.enabled = Payments allowed
 features.allowDirectDebits.enabled = Direct debits allowed
+features.date-service.staticDate.enabled = Use static date (2018-05-01)
 
 banner.newService = This is a new service – your
 banner.feedback = feedback

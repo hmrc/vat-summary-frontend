@@ -51,4 +51,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val btaVatOverviewUrl: String = "mock-url"
   override val feedbackFormPartialUrl: String = "BasefeedbackUrl"
   override val contactFormServiceIdentifier: String = "VATVC"
+  override val staticDateValue: String = "2018-05-01"
 }

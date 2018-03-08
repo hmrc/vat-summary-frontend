@@ -54,6 +54,7 @@ trait AppConfig extends ServicesConfig {
   val btaVatOverviewUrl: String
   val feedbackFormPartialUrl: String
   val contactFormServiceIdentifier: String
+  val staticDateValue: String
 }
 
 @Singleton
@@ -97,8 +98,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
-  override def vatReturnUrl(periodKey: String): String =
-    vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
+  override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
 
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)
@@ -111,4 +111,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private lazy val btaVatOverviewUrlBase: String = getString(Keys.btaVatOverviewUrlBase)
   override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + getString(Keys.btaVatOverviewUrl)
+
+  override lazy val staticDateValue: String = getString(Keys.staticDateValue)
 }
