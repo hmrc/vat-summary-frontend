@@ -1,0 +1,70 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers.{form, inputRadioGroup}
+@import views.html.templates.inputs.singleCheckbox
+@import common.PostKeys._
+
+@(surveyForm: Form[SurveyJourneyModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
+  @views.html.main_template(title = messages("surveyJourney.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            @form(action = controllers.survey.routes.SurveyController.submit()) {
+
+            <div class="form-group">
+                <fieldset>
+                    <legend>
+                        <h1 class="heading-xlarge">@messages("surveyJourney.heading")</h1>
+                    </legend>
+
+                    <div class="form-group" id="yes-no">
+                        @inputRadioGroup(
+                        field = surveyForm("isExternalRoute"),
+                        Seq(
+                        common.PostKeys.radioYes -> messages("base.yes"),
+                        common.PostKeys.radioNo -> messages("base.no")),
+                        '_legend -> Messages("surveyJourney.yesNoHeading"),
+                        '_legendClass -> "heading-medium",
+                        '_legendID -> "isExternalRoute",
+                        '_labelAfter -> true,
+                        '_labelClass -> "block-label",
+                        '_groupClass -> "inline"
+                        )
+                    </div>
+
+                    <div class="form-group>">
+                        <h2 class="heading-medium">@Messages("surveyJourney.choicesHeading")</h2>
+                    </div>
+                    <div class="form-group" id="choices">
+                       @singleCheckbox(surveyForm("choice1"), messages("surveyJourney.choicesOne"))
+                       @singleCheckbox(surveyForm("choice2"), messages("surveyJourney.choicesTwo"))
+                       @singleCheckbox(surveyForm("choice3"), messages("surveyJourney.choicesThree"))
+                       @singleCheckbox(surveyForm("choice4"), messages("surveyJourney.choicesFour"))
+                       @singleCheckbox(surveyForm("choice5"), messages("surveyJourney.choicesFive"))
+                       @singleCheckbox(surveyForm("choice6"), messages("surveyJourney.choicesSix"))
+                    </div>
+                </fieldset>
+            </div>
+
+            <button class="button" type="submit" id="continue-button">@messages("featureSwitch.submit")</button>
+
+            }
+        </div>
+    </div>
+
+  }

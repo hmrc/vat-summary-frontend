@@ -1,6 +1,11 @@
 common.dateRangeSeparator = to
 common.vat = VAT
 common.overdue = overdue
+common.error.summary.heading = This page has errors
+base.back = Back
+base.signOut = Sign out
+base.yes = Yes
+base.no = No
 
 breadcrumbs.bta = Business tax account
 
@@ -105,6 +110,17 @@ banner.newService = This is a new service – your
 banner.feedback = feedback
 banner.feedbackImprove = will help us to improve it.
 banner.phaseName = BETA
-base.back = Back
+
 feedback.title = Feedback
 feedbackThanks.title = Thank you
+
+surveyJourney.title = About your journey
+surveyJourney.heading = About your journey
+surveyJourney.yesNoHeading = Did you do X today?
+surveyJourney.choicesHeading = Which of the following were applicable to your journey?
+surveyJourney.choicesOne = choice 1
+surveyJourney.choicesTwo = choice 2
+surveyJourney.choicesThree = choice 3
+surveyJourney.choicesFour = choice 4
+surveyJourney.choicesFive = choice 5
+surveyJourney.choicesSix = choice 6
