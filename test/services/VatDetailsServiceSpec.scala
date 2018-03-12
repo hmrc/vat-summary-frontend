@@ -131,7 +131,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
 
-        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(VatDetailsModel(Some(payment), Some(currentObligation)))
       }
@@ -153,7 +153,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(Payments(Seq.empty))))
 
-        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(VatDetailsModel(None, None))
       }
@@ -168,7 +168,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
       }
@@ -184,7 +184,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.failed(expected))
 
-        intercept[RuntimeException](await(vatDetailsService.getVatDetails(User("1111"), LocalDate.now())))
+        intercept[RuntimeException](await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01"))))
       }
 
     }
