@@ -66,6 +66,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "#001"
   ))
   val entityName = Some("Cheapo Clothing")
+  val currentYear: Int = 2018
 
   private trait DetailsTest {
     val authResult: Future[_] =
@@ -154,7 +155,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is both a payment and an obligation" should {
 
       "return a VatDetailsViewModel with both due dates" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName)
+        lazy val expected = VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(payment, obligation), entityName)
 
         result shouldBe expected
@@ -164,7 +165,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is a payment but no obligation" should {
 
       "return a VatDetailsViewModel with a payment due date and no obligation due date" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(paymentDueDate, None, entityName)
+        lazy val expected = VatDetailsViewModel(paymentDueDate, None, entityName, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(payment, None), entityName)
 
         result shouldBe expected
@@ -174,7 +175,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is an obligation but no payment" should {
 
       "return a VatDetailsViewModel with an obligation due date and no payment due date" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, obligationDueDate, entityName)
+        lazy val expected = VatDetailsViewModel(None, obligationDueDate, entityName, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(None, obligation), entityName)
 
         result shouldBe expected
@@ -184,7 +185,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation or payment" should {
 
       "return a VatDetailsViewModel with no obligation due date and no payment due date" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, entityName)
+        lazy val expected = VatDetailsViewModel(None, None, entityName, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(None, None), entityName)
 
         result shouldBe expected
@@ -194,7 +195,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation, payment, or entity name" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, None)
+        lazy val expected = VatDetailsViewModel(None, None, None, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(None, None), None)
 
         result shouldBe expected
@@ -204,7 +205,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the obligation is overdue" should {
 
       "return a VatDetailsViewModel with the return overdue flag set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, returnOverdue = true)
+        lazy val expected = VatDetailsViewModel(paymentDueDate, overdueObligationDueDate, entityName, returnOverdue = true, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(payment, overdueObligation), entityName)
 
         result shouldBe expected
@@ -214,7 +215,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the payment is overdue" should {
 
       "return a VatDetailsViewModel with the payment overdue flag set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(overduePaymentDueDate, obligationDueDate, entityName, paymentOverdue = true)
+        lazy val expected = VatDetailsViewModel(overduePaymentDueDate, obligationDueDate, entityName, paymentOverdue = true, currentYear = currentYear)
         lazy val result: VatDetailsViewModel = target.constructViewModel(VatDetailsModel(overduePayment, obligation), entityName)
 
         result shouldBe expected
