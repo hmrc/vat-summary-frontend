@@ -125,12 +125,4 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val signOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
 
-
-
-  //  thankYou = "http://localhost:9514/feedback-survey/thankYou/?origin=Childcare-Calculator"
-  //  url = "/feedback-survey/?origin=Childcare-Calculator"
-  //https://www.qa.tax.service.gov.uk/feedback-survey/thankYou/?origin=CC
-  //https://www.qa.tax.service.gov.uk/feedback-survey/?origin=SCC
-  //https://www.development.tax.service.gov.uk/gg/sign-out?continue=https://www.qa.tax.service.gov.uk/feedback-survey/?origin=SCC
-
 }
