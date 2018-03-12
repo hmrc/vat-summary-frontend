@@ -16,17 +16,21 @@
 
 package controllers.survey
 
+import audit.AuditingService
+import audit.models.ExitSurveyAuditing.ExitSurveyAuditModel
 import com.google.inject.{Inject, Singleton}
 import config.AppConfig
 import forms.SurveyJourneyForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
 @Singleton
 class SurveyController @Inject()(val messagesApi: MessagesApi,
+                                 val auditingService: AuditingService,
                                  implicit val appConfig: AppConfig
                                    ) extends BaseController with I18nSupport {
 
@@ -41,7 +45,7 @@ class SurveyController @Inject()(val messagesApi: MessagesApi,
           Future.successful(BadRequest(views.html.survey.journey(errors)))
         },
         surveyDetail => {
-          //TODO: save extra custom question data to splunk before handing back to survey
+          auditingService.audit(ExitSurveyAuditModel(surveyDetail), controllers.survey.routes.SurveyController.yourJourney().url)
           Future.successful(Redirect(appConfig.surveyThankYouUrl))
         }
       )

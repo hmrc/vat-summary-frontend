@@ -30,7 +30,7 @@ class SurveyControllerSpec extends ControllerBaseSpec {
 
   private trait SurveyControllerTest {
     def target: SurveyController = {
-      new SurveyController(messages, mockAppConfig)
+      new SurveyController(messages, mockAuditingService, mockAppConfig)
     }
   }
 
@@ -49,7 +49,7 @@ class SurveyControllerSpec extends ControllerBaseSpec {
   "posting empty survey data" should {
     "redirect to the thankyou end survey page without error as survey questins are optional" in new SurveyControllerTest {
       lazy val request = fakeRequestToPOSTWithSession(
-        ("isExternalRoute", ""),
+        ("anyApplicable", ""),
         ("choice1", ""),
         ("choice2", ""),
         ("choice3", ""),

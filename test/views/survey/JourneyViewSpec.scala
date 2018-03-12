@@ -29,8 +29,8 @@ class JourneyViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val yesNoLegend = "#yes-no legend:nth-of-type(1)"
-    val yesRadio= "#isExternalRoute-yes"
-    val noRadio= "#isExternalRoute-no"
+    val yesRadio= "#anyApplicable-yes"
+    val noRadio= "#anyApplicable-no"
     val choicesHeading= "h2"
     val choiceOne = "label[for=choice1]"
     val choiceTwo ="label[for=choice2]"

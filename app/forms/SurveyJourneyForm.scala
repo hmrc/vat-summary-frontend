@@ -23,7 +23,7 @@ import play.api.data.Forms._
 object SurveyJourneyForm {
   val form: Form[SurveyJourneyModel] = Form(
     mapping(
-      "isExternalRoute" -> optional(text),
+      "anyApplicable" -> optional(text),
       "choice1" -> optional(boolean),
       "choice2" -> optional(boolean),
       "choice3" -> optional(boolean),

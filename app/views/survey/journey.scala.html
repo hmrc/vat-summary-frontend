@@ -34,13 +34,13 @@
 
                     <div class="form-group" id="yes-no">
                         @inputRadioGroup(
-                        field = surveyForm("isExternalRoute"),
+                        field = surveyForm("anyApplicable"),
                         Seq(
                         common.PostKeys.radioYes -> messages("base.yes"),
                         common.PostKeys.radioNo -> messages("base.no")),
                         '_legend -> Messages("surveyJourney.yesNoHeading"),
                         '_legendClass -> "heading-medium",
-                        '_legendID -> "isExternalRoute",
+                        '_legendID -> "anyApplicable",
                         '_labelAfter -> true,
                         '_labelClass -> "block-label",
                         '_groupClass -> "inline"

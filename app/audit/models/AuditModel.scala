@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package models
+package audit.models
 
-import play.api.libs.json.Json
-
-case class SurveyJourneyModel(anyApplicable: Option[String],
-                              choiceOne: Option[Boolean],
-                              choiceTwo: Option[Boolean],
-                              choiceThree: Option[Boolean],
-                              choiceFour: Option[Boolean],
-                              Choice5: Option[Boolean],
-                              Choice6: Option[Boolean])
-
-object SurveyJourneyModel {
-  implicit val format = Json.format[SurveyJourneyModel]
+trait AuditModel {
+  val transactionName: String
+  val detail: Map[String, String]
+  val auditType: String
 }

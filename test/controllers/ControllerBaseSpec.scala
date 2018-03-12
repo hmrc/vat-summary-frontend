@@ -18,6 +18,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
+import audit.AuditingService
 import config.AppConfig
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
@@ -36,6 +37,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   lazy val injector: Injector = app.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
+
+  val mockAuditingService: AuditingService = mock[AuditingService]
+
   implicit val system = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
 
