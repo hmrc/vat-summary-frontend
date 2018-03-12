@@ -41,7 +41,7 @@ class SurveyController @Inject()(val messagesApi: MessagesApi,
           Future.successful(BadRequest(views.html.survey.journey(errors)))
         },
         surveyDetail => {
-          //TODO: save extra custom question data tto splunk before handing back to survey
+          //TODO: save extra custom question data to splunk before handing back to survey
           Future.successful(Redirect(appConfig.surveyThankYouUrl))
         }
       )
