@@ -22,4 +22,5 @@ case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
                                nextObligationDueDate: Option[LocalDate],
                                entityName: Option[String],
                                returnOverdue: Boolean = false,
-                               paymentOverdue: Boolean = false)
+                               paymentOverdue: Boolean = false,
+                               currentYear: Int)

@@ -48,7 +48,7 @@
         @views.html.templates.accountDetailsSection(user, appConfig)
 
         <div class="column-one-half" id="submitted-returns">
-            <h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}/@{LocalDate.now().getYear}"
+            <h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear"
                                          data-journey-click="return:view:vat-details">@messages("vatDetails.submittedReturns.link")</a></h3>
             <p>@messages("vatDetails.submittedReturns.view")</p>
         </div>

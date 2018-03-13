@@ -69,7 +69,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
         val expected = Right(VatDetailsModel(Some(payment), Some(obligation)))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe expected
       }
@@ -95,7 +95,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
         val expected = Right(VatDetailsModel(None, Some(obligation)))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe expected
       }
@@ -119,7 +119,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
         val expected = Right(VatDetailsModel(Some(payment), None))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe expected
       }
@@ -136,7 +136,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
         val expected = Right(VatDetailsModel(None, None))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe expected
       }
@@ -150,7 +150,7 @@ class VatDetailsServiceISpec extends IntegrationBaseSpec {
 
         val expected = Left(BadRequestError("VRN_INVALID", ""))
 
-        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.now()))
+        val result: HttpGetResult[VatDetailsModel] = await(service.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe expected
       }
