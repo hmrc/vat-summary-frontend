@@ -20,19 +20,19 @@ import models.SurveyJourneyModel
 
 object ExitSurveyAuditing {
 
-  val exitSurveyTransactionName = "ITVCExitSurvey"
+  val exitSurveyTransactionName = "VATVCExitSurvey"
   val exitSurveyAuditType = "exitSurveyFeedbackSubmitted"
 
   case class ExitSurveyAuditModel(exitSurveyModel: SurveyJourneyModel) extends AuditModel {
     override val transactionName: String = exitSurveyTransactionName
     override val detail: Map[String, String] = Map(
       "anyApplicable" -> exitSurveyModel.anyApplicable.fold("")(x => x),
-      "choiceOne" -> exitSurveyModel.choiceOne.fold("")(x => x.toString),
-      "choiceTwo" -> exitSurveyModel.choiceTwo.fold("")(x => x.toString),
-      "choiceThree" -> exitSurveyModel.choiceThree.fold("")(x => x.toString),
-      "choiceFour" -> exitSurveyModel.choiceFour.fold("")(x => x.toString),
-      "Choice5" -> exitSurveyModel.Choice5.fold("")(x => x.toString),
-      "Choice6" -> exitSurveyModel.Choice6.fold("")(x => x.toString)
+      "choice1" -> exitSurveyModel.choice1.fold("")(x => x.toString),
+      "choice2" -> exitSurveyModel.choice2.fold("")(x => x.toString),
+      "choice3" -> exitSurveyModel.choice3.fold("")(x => x.toString),
+      "choice4" -> exitSurveyModel.choice4.fold("")(x => x.toString),
+      "Choice5" -> exitSurveyModel.choice5.fold("")(x => x.toString),
+      "Choice6" -> exitSurveyModel.choice6.fold("")(x => x.toString)
     )
     override val auditType: String = exitSurveyAuditType
   }

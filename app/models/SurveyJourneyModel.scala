@@ -19,12 +19,12 @@ package models
 import play.api.libs.json.Json
 
 case class SurveyJourneyModel(anyApplicable: Option[String],
-                              choiceOne: Option[Boolean],
-                              choiceTwo: Option[Boolean],
-                              choiceThree: Option[Boolean],
-                              choiceFour: Option[Boolean],
-                              Choice5: Option[Boolean],
-                              Choice6: Option[Boolean])
+                              choice1: Option[Boolean],
+                              choice2: Option[Boolean],
+                              choice3: Option[Boolean],
+                              choice4: Option[Boolean],
+                              choice5: Option[Boolean],
+                              choice6: Option[Boolean])
 
 object SurveyJourneyModel {
   implicit val format = Json.format[SurveyJourneyModel]

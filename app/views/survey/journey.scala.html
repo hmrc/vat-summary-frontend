@@ -21,6 +21,7 @@
 @(surveyForm: Form[SurveyJourneyModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
   @views.html.main_template(title = messages("surveyJourney.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
+
     <div class="grid-row">
         <div class="column-two-thirds">
 
