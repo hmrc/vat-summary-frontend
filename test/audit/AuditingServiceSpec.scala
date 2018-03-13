@@ -50,7 +50,8 @@ class AuditingServiceSpec extends ControllerBaseSpec with BeforeAndAfterEach {
       "extract the data and pass it into the AuditConnector" in new Test {
 
         val testModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("true"), Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
-        val expectedData = target().toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel, controllers.survey.routes.SurveyController.yourJourney().url)
+        val expectedData: DataEvent = target().toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel,
+          controllers.survey.routes.SurveyController.yourJourney().url)
 
         override def setupMocks(): Unit = {
           (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
@@ -67,7 +68,8 @@ class AuditingServiceSpec extends ControllerBaseSpec with BeforeAndAfterEach {
       "extract the data and pass it into the AuditConnector" in new Test {
 
         val testModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("true"), None, None, None, None, None, None))
-        val expectedData = target().toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel, controllers.survey.routes.SurveyController.yourJourney().url)
+        val expectedData: DataEvent = target().toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel,
+          controllers.survey.routes.SurveyController.yourJourney().url)
 
         override def setupMocks(): Unit = {
           (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
@@ -84,7 +86,8 @@ class AuditingServiceSpec extends ControllerBaseSpec with BeforeAndAfterEach {
       "extract the data and pass it into the AuditConnector" in new Test {
 
         val testModel = ExitSurveyAuditModel(SurveyJourneyModel(None, None, None, None, None, None, None))
-        val expectedData = target().toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel, controllers.survey.routes.SurveyController.yourJourney().url)
+        val expectedData: DataEvent = target().toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel,
+          controllers.survey.routes.SurveyController.yourJourney().url)
 
         override def setupMocks(): Unit = {
           (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))

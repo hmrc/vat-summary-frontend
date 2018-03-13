@@ -19,7 +19,7 @@ package controllers
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import audit.AuditingService
-import config.AppConfig
+import config.{AppConfig, FrontendAuditConnector}
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -30,6 +30,7 @@ import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
 import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
@@ -38,14 +39,12 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
-  val mockAuditingService: AuditingService = mock[AuditingService]
-
-  implicit val system = ActorSystem()
+  implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
-  lazy val fakeRequestWithSession = fakeRequest.withSession(
+  lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
     SessionKeys.lastRequestTimestamp -> "1498236506662", SessionKeys.authToken -> "Bearer Token")
 
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =

@@ -21,11 +21,10 @@ import javax.inject.{Inject, Singleton}
 import audit.models.AuditModel
 import config.{AppConfig, FrontendAuditConnector}
 import play.api.Logger
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OWrites}
 import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.{Failure, Success}
 import uk.gov.hmrc.play.audit.model.DataEvent
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
 
 import scala.concurrent.ExecutionContext
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 @Singleton
 class AuditingService @Inject()(appConfig: AppConfig, auditConnector: FrontendAuditConnector) {
 
-  implicit val dataEventWrites = Json.writes[DataEvent]
+  implicit val dataEventWrites: OWrites[DataEvent] = Json.writes[DataEvent]
 
   def audit(auditModel: AuditModel, path: String = "N/A")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val dataEvent = toDataEvent(appConfig.contactFormServiceIdentifier, auditModel, path)
@@ -42,7 +41,7 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: FrontendAu
       //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
       case Success =>
         Logger.debug("Splunk Audit Successful")
-      case Failure(err,_) =>
+      case Failure(err, _) =>
         Logger.debug(s"Splunk Audit Error, message: $err")
       case _ =>
         Logger.debug(s"Unknown Splunk Error")

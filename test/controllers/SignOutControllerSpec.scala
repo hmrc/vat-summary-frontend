@@ -17,7 +17,8 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
@@ -32,7 +33,7 @@ class SignOutControllerSpec extends ControllerBaseSpec {
 
   "navigating to signout page" should {
     "return 303 and navigate to the survey url" in new SignOutControllerTest {
-      lazy val request = fakeRequestWithSession
+      lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithSession
       lazy val result: Future[Result] = target.signOut()(request)
 
       status(result) shouldBe Status.SEE_OTHER

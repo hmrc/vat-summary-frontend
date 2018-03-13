@@ -17,10 +17,10 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import config.{AppConfig, FrontendAppConfig}
+import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.controller.{BaseController, FrontendController}
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
 import scala.concurrent.Future
 

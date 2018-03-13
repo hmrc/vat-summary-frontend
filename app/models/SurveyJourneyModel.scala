@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SurveyJourneyModel(anyApplicable: Option[String],
                               choice1: Option[Boolean],
@@ -27,5 +27,5 @@ case class SurveyJourneyModel(anyApplicable: Option[String],
                               choice6: Option[Boolean])
 
 object SurveyJourneyModel {
-  implicit val format = Json.format[SurveyJourneyModel]
+  implicit val format: OFormat[SurveyJourneyModel] = Json.format[SurveyJourneyModel]
 }

@@ -15,17 +15,13 @@
  */
 
 package views.survey
-import config.features.Features
+
 import forms.SurveyJourneyForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.Configuration
 import views.ViewBaseSpec
 
 class JourneyViewSpec extends ViewBaseSpec {
-
-  private val features = new Features(app.injector.instanceOf[Configuration])
-
   object Selectors {
     val pageHeading = "h1"
     val yesNoLegend = "#yes-no legend:nth-of-type(1)"
@@ -41,7 +37,7 @@ class JourneyViewSpec extends ViewBaseSpec {
     val submitButton = "#continue-button"
   }
 
-  "Rendering the open payments page" should {
+  "Rendering the journey view survey page" should {
 
     lazy val view = views.html.survey.journey(SurveyJourneyForm.form)
     lazy implicit val document: Document = Jsoup.parse(view.body)

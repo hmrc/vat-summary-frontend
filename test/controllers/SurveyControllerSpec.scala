@@ -16,19 +16,32 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.ExitSurveyAuditing.ExitSurveyAuditModel
+import config.FrontendAuditConnector
 import controllers.survey.SurveyController
+import models.SurveyJourneyModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
+import uk.gov.hmrc.play.audit.model.DataEvent
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 
 class SurveyControllerSpec extends ControllerBaseSpec {
 
   private trait SurveyControllerTest {
+    lazy val mockAuditConnector: FrontendAuditConnector = mock[FrontendAuditConnector]
+    implicit val hc: HeaderCarrier = HeaderCarrier()
+
+    lazy val mockAuditingService: AuditingService = new AuditingService(mockAppConfig, mockAuditConnector)
+
     def target: SurveyController = {
       new SurveyController(messages, mockAuditingService, mockAppConfig)
     }
@@ -36,7 +49,7 @@ class SurveyControllerSpec extends ControllerBaseSpec {
 
   "navigating to survey page" should {
     "return ok and show the survey page" in new SurveyControllerTest {
-      lazy val request = fakeRequest
+      lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequest
       val result: Result = await(target.yourJourney()(fakeRequest))
       status(result) shouldBe Status.OK
       val document: Document = Jsoup.parse(bodyOf(result))
@@ -48,17 +61,27 @@ class SurveyControllerSpec extends ControllerBaseSpec {
 
   "posting empty survey data" should {
     "redirect to the thankyou end survey page without error as survey questions are optional" in new SurveyControllerTest {
-      lazy val request = fakeRequestToPOSTWithSession(
-        ("anyApplicable", ""),
-        ("choice1", ""),
-        ("choice2", ""),
-        ("choice3", ""),
-        ("choice4", ""),
-        ("choice5", ""),
-        ("choice6", ""))
+
+      val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"), Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
+      val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel, controllers.survey.routes.SurveyController.yourJourney().url)
+
+      (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(argThat[DataEvent](_.tags == expectedData.tags), *, *)
+        .noMoreThanOnce()
+        .returns(Future.successful(Success))
+
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
+        ("anyApplicable", "yes"),
+        ("choice1", "true"),
+        ("choice2", "true"),
+        ("choice3", "true"),
+        ("choice4", "true"),
+        ("choice5", "true"),
+        ("choice6", "true"))
       lazy val result: Future[Result] = target.submit()(request)
 
       status(result) shouldBe Status.SEE_OTHER
+
       redirectLocation(result) shouldBe Some(mockAppConfig.surveyThankYouUrl)
     }
 
