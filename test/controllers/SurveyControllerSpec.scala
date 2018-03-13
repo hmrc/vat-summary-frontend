@@ -47,7 +47,7 @@ class SurveyControllerSpec extends ControllerBaseSpec {
   }
 
   "posting empty survey data" should {
-    "redirect to the thankyou end survey page without error as survey questins are optional" in new SurveyControllerTest {
+    "redirect to the thankyou end survey page without error as survey questions are optional" in new SurveyControllerTest {
       lazy val request = fakeRequestToPOSTWithSession(
         ("anyApplicable", ""),
         ("choice1", ""),
@@ -55,7 +55,7 @@ class SurveyControllerSpec extends ControllerBaseSpec {
         ("choice3", ""),
         ("choice4", ""),
         ("choice5", ""),
-        ("choice5", ""))
+        ("choice6", ""))
       lazy val result: Future[Result] = target.submit()(request)
 
       status(result) shouldBe Status.SEE_OTHER

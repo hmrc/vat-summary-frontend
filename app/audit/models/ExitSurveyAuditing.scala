@@ -31,8 +31,8 @@ object ExitSurveyAuditing {
       "choice2" -> exitSurveyModel.choice2.fold("")(x => x.toString),
       "choice3" -> exitSurveyModel.choice3.fold("")(x => x.toString),
       "choice4" -> exitSurveyModel.choice4.fold("")(x => x.toString),
-      "Choice5" -> exitSurveyModel.choice5.fold("")(x => x.toString),
-      "Choice6" -> exitSurveyModel.choice6.fold("")(x => x.toString)
+      "choice5" -> exitSurveyModel.choice5.fold("")(x => x.toString),
+      "choice6" -> exitSurveyModel.choice6.fold("")(x => x.toString)
     )
     override val auditType: String = exitSurveyAuditType
   }
