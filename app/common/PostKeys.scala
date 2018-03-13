@@ -16,12 +16,7 @@
 
 package common
 
-object EnrolmentKeys {
-
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
-
+object PostKeys {
+  val radioYes = "Yes"
+  val radioNo = "No"
 }
-
-

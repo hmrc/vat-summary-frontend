@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object EnrolmentKeys {
+import play.api.libs.json.{Json, OFormat}
 
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
+case class SurveyJourneyModel(anyApplicable: Option[String],
+                              choice1: Option[Boolean],
+                              choice2: Option[Boolean],
+                              choice3: Option[Boolean],
+                              choice4: Option[Boolean],
+                              choice5: Option[Boolean],
+                              choice6: Option[Boolean])
 
+object SurveyJourneyModel {
+  implicit val format: OFormat[SurveyJourneyModel] = Json.format[SurveyJourneyModel]
 }
-
-

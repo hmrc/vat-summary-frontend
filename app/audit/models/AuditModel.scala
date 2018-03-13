@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package common
+package audit.models
 
-object EnrolmentKeys {
-
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
-
+trait AuditModel {
+  val transactionName: String
+  val detail: Map[String, String]
+  val auditType: String
 }
-
-

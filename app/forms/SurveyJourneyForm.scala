@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package common
+package forms
 
-object EnrolmentKeys {
+import models.SurveyJourneyModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
-
+object SurveyJourneyForm {
+  val form: Form[SurveyJourneyModel] = Form(
+    mapping(
+      "anyApplicable" -> optional(text),
+      "choice1" -> optional(boolean),
+      "choice2" -> optional(boolean),
+      "choice3" -> optional(boolean),
+      "choice4" -> optional(boolean),
+      "choice5" -> optional(boolean),
+      "choice6" -> optional(boolean)
+    )(SurveyJourneyModel.apply)(SurveyJourneyModel.unapply)
+  )
 }
-
-

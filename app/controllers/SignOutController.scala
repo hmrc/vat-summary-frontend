@@ -14,14 +14,22 @@
  * limitations under the License.
  */
 
-package common
+package controllers
 
-object EnrolmentKeys {
+import com.google.inject.{Inject, Singleton}
+import config.AppConfig
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
+import scala.concurrent.Future
 
+@Singleton
+class SignOutController @Inject()(val messagesApi: MessagesApi,
+                                  implicit val appConfig: AppConfig
+                                   ) extends BaseController with I18nSupport {
+
+  val signOut:Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Redirect(appConfig.signOutUrl))
+  }
 }
-
-

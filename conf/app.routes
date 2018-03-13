@@ -10,9 +10,15 @@ POST       /feature-switch         controllers.FeatureSwitchController.submitFea
 POST       /make-payment           controllers.MakePaymentController.makePayment
 
 #Feedback link Routes
-GET         /feedback                               controllers.feedback.FeedbackController.show
-POST        /feedback                               controllers.feedback.FeedbackController.submit
-GET         /thankyou                               controllers.feedback.FeedbackController.thankyou
+GET         /feedback              controllers.feedback.FeedbackController.show
+POST        /feedback              controllers.feedback.FeedbackController.submit
+GET         /thankyou              controllers.feedback.FeedbackController.thankyou
+
+#Sign Out Routes
+GET         /sign-out              controllers.SignOutController.signOut
+GET         /survey/your-journey   controllers.survey.SurveyController.yourJourney
+POST        /survey/submit         controllers.survey.SurveyController.submit
+
 
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled

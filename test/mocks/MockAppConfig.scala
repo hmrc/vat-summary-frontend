@@ -52,4 +52,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val feedbackFormPartialUrl: String = "BasefeedbackUrl"
   override val contactFormServiceIdentifier: String = "VATVC"
   override val staticDateValue: String = "2018-05-01"
+  override val surveyUrl: String = "/some-survey-url"
+  override val surveyThankYouUrl: String = "/some-survey-thankyou-url"
+  override val signOutUrl: String = "/some-gg-signout-url"
 }
