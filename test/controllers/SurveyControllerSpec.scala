@@ -62,8 +62,10 @@ class SurveyControllerSpec extends ControllerBaseSpec {
   "posting empty survey data" should {
     "redirect to the thankyou end survey page without error as survey questions are optional" in new SurveyControllerTest {
 
-      val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"), Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
-      val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier, testModel, controllers.survey.routes.SurveyController.yourJourney().url)
+      val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"),
+        Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
+      val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier,
+        testModel, controllers.survey.routes.SurveyController.yourJourney().url)
 
       (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(argThat[DataEvent](_.tags == expectedData.tags), *, *)
