@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package models.viewModels
+package audit.models
 
-import java.time.LocalDate
-
-case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
-                               nextObligationDueDate: Option[LocalDate],
-                               entityName: Option[String],
-                               returnOverdue: Boolean = false,
-                               paymentOverdue: Boolean = false,
-                               currentYear: Int)
+trait AuditModel {
+  val transactionName: String
+  val detail: Map[String, String]
+  val auditType: String
+}

@@ -65,8 +65,8 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
-        LocalDate.now(),
-        LocalDate.now(),
+        LocalDate.parse("2018-01-01"),
+        LocalDate.parse("2018-12-31"),
         Status.All))
 
       result shouldEqual expected
@@ -94,8 +94,8 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
-        LocalDate.now(),
-        LocalDate.now(),
+        LocalDate.parse("2018-01-01"),
+        LocalDate.parse("2018-12-31"),
         Status.Outstanding))
 
       result shouldEqual expected

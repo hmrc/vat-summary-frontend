@@ -62,6 +62,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case (_ , _) => (false, false)
     }
 
-    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, returnOverdue, paymentOverdue)
+    VatDetailsViewModel(paymentDueDate, obligationDueDate, entityName, returnOverdue, paymentOverdue, dateService.now().getYear)
   }
 }

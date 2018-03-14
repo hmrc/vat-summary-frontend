@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package models.viewModels
+package common
 
-import java.time.LocalDate
-
-case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
-                               nextObligationDueDate: Option[LocalDate],
-                               entityName: Option[String],
-                               returnOverdue: Boolean = false,
-                               paymentOverdue: Boolean = false,
-                               currentYear: Int)
+object PostKeys {
+  val radioYes = "Yes"
+  val radioNo = "No"
+}

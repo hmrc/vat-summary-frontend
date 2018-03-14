@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package models.viewModels
+package models
 
-import java.time.LocalDate
+import play.api.libs.json.{Json, OFormat}
 
-case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
-                               nextObligationDueDate: Option[LocalDate],
-                               entityName: Option[String],
-                               returnOverdue: Boolean = false,
-                               paymentOverdue: Boolean = false,
-                               currentYear: Int)
+case class SurveyJourneyModel(anyApplicable: Option[String],
+                              choice1: Option[Boolean],
+                              choice2: Option[Boolean],
+                              choice3: Option[Boolean],
+                              choice4: Option[Boolean],
+                              choice5: Option[Boolean],
+                              choice6: Option[Boolean])
+
+object SurveyJourneyModel {
+  implicit val format: OFormat[SurveyJourneyModel] = Json.format[SurveyJourneyModel]
+}

@@ -42,23 +42,27 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     val overdueLabel = "span strong"
   }
 
+  val currentYear: Int = 2018
   private val user = User("123456789")
   val detailsModel = VatDetailsViewModel(
-    Some(LocalDate.now()),
-    Some(LocalDate.now()),
-    Some("Cheapo Clothing")
+    Some(LocalDate.parse("2018-12-31")),
+    Some(LocalDate.parse("2018-12-31")),
+    Some("Cheapo Clothing"),
+    currentYear = currentYear
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
-    Some(LocalDate.now()),
+    Some(LocalDate.parse("2017-01-01")),
     Some(LocalDate.parse("2017-01-01")),
     Some("Cheapo Clothing"),
-    returnOverdue = true
+    returnOverdue = true,
+    currentYear = currentYear
   )
   val overduePaymentDetailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2017-01-01")),
-    Some(LocalDate.now()),
+    Some(LocalDate.parse("2018-12-31")),
     Some("Cheapo Clothing"),
-    paymentOverdue = true
+    paymentOverdue = true,
+    currentYear = currentYear
   )
 
   override def beforeEach(): Unit = {
@@ -122,8 +126,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
         submittedReturns.select("h3").text() shouldBe "Submitted returns"
       }
 
-      s"have a link to 'returns-url/${LocalDate.now().getYear}'" in {
-        submittedReturns.select("a").attr("href") shouldBe s"returns-url/${LocalDate.now().getYear}"
+      s"have a link to 'returns-url/$currentYear'" in {
+        submittedReturns.select("a").attr("href") shouldBe s"returns-url/$currentYear"
       }
 
       "have the text" in {
@@ -148,7 +152,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None, None))
+    lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None, None, currentYear = currentYear))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the no return message" in {
