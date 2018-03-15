@@ -54,17 +54,23 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
-                <input class="button--link-style float--right" type="submit" value='@Messages("openPayments.makePayment")'
-                data-journey-click="payment:make-payment:open-payments"/>
+                <label class="visuallyhidden" for="pay-now-@{count + 1}">@messages("openPayments.forPeriod")
+                    @displayDateRange(payment.start, payment.end).toString().trim</label>
+                <input class="button--link-style float--right" type="submit" id="pay-now-@{count + 1}" value='@Messages("openPayments.makePayment")'
+                data-journey-click="payment:make-payment:open-payments">
               </div>
             }
           </div>
           <div class="grid-row" id="period-row-@{count + 1}">
             <div class="column-two-thirds form-hint">
-              <span>@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
+              <span>@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
             </div>
             <div class="column-one-third form-hint">
-              <a data-journey-click="returns:view-return-@{payment.start}-to-@{payment.end}:open-payments" href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">@messages("openPayments.viewReturnLink")</a>
+              <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
+              href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
+              <span>@messages("openPayments.viewReturnLink")</span>
+              <span class="visuallyhidden">@messages("openPayments.forPeriod")
+                  @displayDateRange(payment.start, payment.end).toString().trim</span></a>
             </div>
           </div>
           <hr>
@@ -78,15 +84,15 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     }
 
     <div id="payments-information">
-      <p id="processing-time">@Messages("openPayments.processingTime")</p>
+      <p id="processing-time">@messages("openPayments.processingTime")</p>
     </div>
 
     @if(appConfig.features.allowDirectDebits()) {
       <span id="direct-debits" class="heading-small">Direct debits</span>
       <div id="check-direct-debit" class="form-group">
         <p>
-          @Messages("openPayments.directDebitLink") <a href="#">@Messages("openPayments.directDebitLinkText")
-        </a> @Messages("openPayments.directDebitNotSure")</p>
+          @messages("openPayments.directDebitLink") <a href="#">@messages("openPayments.directDebitLinkText")
+        </a> @messages("openPayments.directDebitNotSure")</p>
       </div>
     }
 
