@@ -31,7 +31,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     val pageHeading = "h1"
     val entityNameHeading = "h1 span"
     val nextPayment = "#payments h2"
-    val nextReturn = "#next-return h2"
+    val nextReturnHeading = "#next-return h2"
+    val nextReturn = "#next-return p"
     val header = "div.test"
     val accountDetails = "#account-details"
     val submittedReturns = "#submitted-returns"
@@ -40,6 +41,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val overdueLabel = "span strong"
+    val returnsVatLink = "#vat-returns-link"
   }
 
   val currentYear: Int = 2018
@@ -141,13 +143,26 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     lazy val view = views.html.vatDetails.details(user, detailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
+    "render the next return section heading" in {
+      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+    }
+
     "render the next return section" in {
-      elementText(Selectors.nextReturn) shouldBe "Next return due"
+      elementText(Selectors.nextReturn) shouldBe "31 December 2018"
     }
 
     "render the next payment section" in {
       elementText(Selectors.nextPayment) shouldBe "Next payment due"
     }
+
+    "render the next payment section vat returns link" in {
+      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
+    }
+
+    "have the correct next payment section vat returns link href" in {
+      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
+    }
+
   }
 
   "Rendering the VAT details page without a next return or next payment" should {
@@ -155,12 +170,24 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None, None, currentYear = currentYear))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
+    "render the next return section heading" in {
+      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+    }
+
     "render the no return message" in {
-      elementText(Selectors.nextReturn) shouldBe "No return due"
+      elementText(Selectors.nextReturn) shouldBe "No returns due right now"
     }
 
     "render the no payment message" in {
       elementText(Selectors.nextPayment) shouldBe "No payment due"
+    }
+
+    "render the next payment section vat returns link" in {
+      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
+    }
+
+    "have the correct next payment section vat returns link href" in {
+      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
   }
 

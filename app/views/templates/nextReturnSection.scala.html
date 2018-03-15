@@ -19,25 +19,24 @@
 
 @(obligationDueDate: Option[LocalDate], isOverdue: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
-@nextReturnMessage = {@messages(obligationDueDate.fold("returnObligation.noReturn") {_ => "returnObligation.nextReturn"})}
+@hasReturn = @{obligationDueDate.fold(false)(_ => true)}
 
 <div class="column-one-half" id="next-return">
-  <h2 class="heading-medium" style="margin-top: 0px">@nextReturnMessage</h2>
-  @obligationDueDate.map { date =>
+  <h2 class="heading-medium" style="margin-top: 0px">@Messages("returnObligation.nextReturn")</h2>
+
     <p>
-      @displayDate(date)
+      @if(hasReturn) {@displayDate(obligationDueDate.get)} else {@Messages("returnObligation.noReturn")}
 
       @if(isOverdue){
         <span>
           <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
         </span>
-      }
-    </p>
 
-    <p>
-      <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
-          @messages("returnObligation.viewReturns")
-      </a>
     </p>
   }
+  <p>
+    <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
+        @messages("returnObligation.viewReturns")
+   </a>
+  </p>
 </div>
