@@ -69,8 +69,16 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "display the 'No payment due' heading" in {
-        elementText(Selectors.nextPaymentDueHeading) shouldBe "No payment due"
+      "display the 'Next payment due' heading" in {
+        elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
+      }
+
+      "display the 'No payment due right now' message" in {
+        elementText(Selectors.nextPaymentDate) shouldBe "No payment due right now"
+      }
+
+      "display the 'View payment details' button" in {
+        elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
       }
     }
   }

@@ -70,8 +70,16 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = views.html.templates.nextReturnSection(None, isOverdue = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "display the 'No return due' heading" in {
+      "display the 'Next return due' heading" in {
         elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
+      }
+
+      "display the 'No returns due right now' message" in {
+        elementText(Selectors.nextReturnDate) shouldBe "No returns due right now"
+      }
+
+      "display the 'View return deadlines' link" in {
+        elementText(Selectors.viewReturnsButton) shouldBe "View return deadlines"
       }
     }
   }
