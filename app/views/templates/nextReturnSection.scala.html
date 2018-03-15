@@ -19,14 +19,11 @@
 
 @(obligationDueDate: Option[LocalDate], isOverdue: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
-@hasReturn = @{obligationDueDate.fold(false)(_ => true)}
-
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@Messages("returnObligation.nextReturn")</h2>
 
     <p>
-      @if(hasReturn) {@displayDate(obligationDueDate.get)} else {@Messages("returnObligation.noReturn")}
-
+     @obligationDueDate.map(date => displayDate(date)).getOrElse(messages("returnObligation.noReturn"))
       @if(isOverdue){
         <span>
           <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
