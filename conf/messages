@@ -34,7 +34,7 @@ vatDetails.submittedReturns.link = Submitted returns
 vatDetails.submittedReturns.view = Check the returns you''ve sent us.
 vatDetails.vrn = VAT registration number (VRN): {0}
 
-returnObligation.noReturn = No return due
+returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.viewReturns = View return deadlines
 returnObligation.you = You
