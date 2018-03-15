@@ -71,7 +71,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'No return due' heading" in {
-        elementText(Selectors.nextReturnDueHeading) shouldBe "No return due"
+        elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
       }
     }
   }
