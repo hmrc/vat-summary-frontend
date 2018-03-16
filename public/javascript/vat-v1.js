@@ -1,4 +1,4 @@
 $(document).ready(function() {
-    // Details/summary polyfill from frontend toolkit
+    //initialise <details> polyfill from frontend toolkit
     GOVUK.details.init()
 });
