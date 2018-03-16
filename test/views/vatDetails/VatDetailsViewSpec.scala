@@ -178,8 +178,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       elementText(Selectors.nextReturn) shouldBe "No returns due right now"
     }
 
-    "render the no payment message" in {
-      elementText(Selectors.nextPayment) shouldBe "No payment due"
+    "render the next payment section" in {
+      elementText(Selectors.nextPayment) shouldBe "Next payment due"
     }
 
     "render the next payment section vat returns link" in {
