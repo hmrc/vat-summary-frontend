@@ -42,19 +42,19 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     @payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}">
           @form(action = controllers.routes.MakePaymentController.makePayment()) {
-          <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
+          <span aria-hidden="true" data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
           <div class="grid-row" id="payment-row-@{count + 1}">
             <div class="column-two-thirds">
-              <span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
+              <span aria-hidden="true" data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
               @if(payment.overdue) {
                 <span>
-                  <strong class="task-overdue">@messages("common.overdue")</strong>
+                  <strong class="task-overdue" aria-hidden="true">@messages("common.overdue")</strong>
                 </span>
               }
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
-                <label class="visuallyhidden" for="pay-now-@{count + 1}"> @displayMoney(payment.amount) @if(payment.overdue) {
+                <label aria-hidden="true" class="visuallyhidden" for="pay-now-@{count + 1}"> @displayMoney(payment.amount) @if(payment.overdue) {
                     @messages("common.overdue")
                 } @messages("openPayments.forPeriod")
                     @displayDateRange(payment.start, payment.end).toString().trim</label>
@@ -65,7 +65,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
           </div>
           <div class="grid-row" id="period-row-@{count + 1}">
             <div class="column-two-thirds form-hint">
-              <span>@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
+              <span aria-hidden="true">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
             </div>
             <div class="column-one-third form-hint">
               <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
