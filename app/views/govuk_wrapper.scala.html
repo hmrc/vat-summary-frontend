@@ -25,7 +25,6 @@
   contentHeader: Option[Html] = None,
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
-  scriptElem: Option[Html] = None,
   showLogout: Boolean = true)(implicit request: Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
@@ -34,6 +33,10 @@
 
 @linksElement = {
   <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/vat-v1.css")'>
+}
+
+@scriptElement = {
+  <script type="text/javascript" src='@routes.Assets.at("javascript/vat-v1.js")'></script>
 }
 
 @head = {
@@ -65,7 +68,7 @@
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
-      scriptElem = scriptElem,
+      scriptElem = Some(scriptElement),
       gaCalls = None)
 }
 

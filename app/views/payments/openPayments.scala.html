@@ -64,7 +64,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
               <span>@Messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
             </div>
             <div class="column-one-third form-hint">
-              <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments" href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">@messages("openPayments.viewReturnLink")</a>
+              <a data-journey-click="returns:view-return-@{payment.start}-to-@{payment.end}:open-payments" href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">@messages("openPayments.viewReturnLink")</a>
             </div>
           </div>
           <hr>
@@ -90,6 +90,6 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
       </div>
     }
 
-    @expandingHelpSection("allowableLossesHiddenHelp", Messages("openPayments.whatOweHelp"),hiddenHelpTextContent)
+    @expandingHelpSection(Messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
   </div>
 }
