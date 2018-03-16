@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package testOnly.controllers
 
 import javax.inject.Inject
 
@@ -29,7 +29,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
   extends FrontendController with I18nSupport {
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.featureSwitch(FeatureSwitchForm.form.fill(
+    Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         simpleAuthEnabled = appConfig.features.simpleAuth(),
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
