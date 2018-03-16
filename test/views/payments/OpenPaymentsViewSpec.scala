@@ -54,10 +54,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     val firstPaymentDueData = "#payment-row-1 span[data-due]"
     val secondPaymentDue = "#payment-row-2 span:nth-of-type(1)"
     val secondPaymentDueData = "#payment-row-2 span[data-due]"
-    val firstPaymentPay = "#payment-row-1 input:nth-of-type(1)"
-    val firstPaymentPayContext = "#payment-row-1 label:nth-of-type(1)"
-    val secondPaymentPay = "#payment-row-2 input:nth-of-type(1)"
-    val secondPaymentPayContext = "#payment-row-2 label:nth-of-type(1)"
+    val firstPaymentPay = "#payment-row-1 button"
+    val firstPaymentPayContext = "#payment-row-1 button span"
+    val secondPaymentPay = "#payment-row-2 button"
+    val secondPaymentPayContext = "#payment-row-2 button span"
     val firstPaymentPeriod = "#period-row-1 span:nth-of-type(1)"
     val secondPaymentPeriod = "#period-row-2 span:nth-of-type(1)"
     lazy val firstPaymentViewReturn = "#period-row-1 a"
@@ -158,7 +158,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct button text for the first payment" in {
-      element(Selectors.firstPaymentPay).attr("value") shouldBe "Pay now"
+      elementText(Selectors.firstPaymentPay) should endWith("Pay now")
     }
 
     "render a hidden label for the button for the first payment" in {
@@ -210,10 +210,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct button text for the second payment" in {
-      element(Selectors.secondPaymentPay).attr("value") shouldBe "Pay now"
+      elementText(Selectors.secondPaymentPay) should endWith("Pay now")
     }
 
-    "render a hidden label for the button for the second payment" in {
+    "render a hidden text for the button for the second payment" in {
       elementText(Selectors.secondPaymentPayContext) shouldBe "£100 for the period 1 February to 28 March 2002"
     }
 

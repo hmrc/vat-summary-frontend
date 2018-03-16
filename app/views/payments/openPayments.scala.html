@@ -54,12 +54,17 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
-                <label aria-hidden="true" class="visuallyhidden" for="pay-now-@{count + 1}"> @displayMoney(payment.amount) @if(payment.overdue) {
-                    @messages("common.overdue")
-                } @messages("openPayments.forPeriod")
-                    @displayDateRange(payment.start, payment.end).toString().trim</label>
-                <input class="button--link-style float--right" type="submit" id="pay-now-@{count + 1}" value='@Messages("openPayments.makePayment")'
-                data-journey-click="payment:make-payment:open-payments">
+                  <button class="button--link-style float--right"
+                          type="submit" id="pay-now-@{count + 1}"
+                          data-journey-click="payment:make-payment:open-payments">
+                      <span class="visuallyhidden">
+                          @displayMoney(payment.amount)
+                          @if(payment.overdue) { @messages("common.overdue") }
+                          @messages("openPayments.forPeriod")
+                          @displayDateRange(payment.start, payment.end).toString().trim
+                      </span>
+                    @messages("openPayments.makePayment")
+                  </button>
               </div>
             }
           </div>
@@ -69,11 +74,14 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             </div>
             <div class="column-one-third form-hint">
               <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-              href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
-              <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
-              <span class="visuallyhidden">@messages("openPayments.viewReturnLink")
-                  @messages("openPayments.forPeriod")
-                  @displayDateRange(payment.start, payment.end).toString().trim</span></a>
+                  href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
+                  <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
+                  <span class="visuallyhidden">
+                      @messages("openPayments.viewReturnLink")
+                      @messages("openPayments.forPeriod")
+                      @displayDateRange(payment.start, payment.end).toString().trim
+                  </span>
+              </a>
             </div>
           </div>
           <hr>
