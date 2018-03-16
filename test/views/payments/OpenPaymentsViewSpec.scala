@@ -174,7 +174,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct view return link text for the first payment with hidden text for context" in {
-      elementText(Selectors.firstPaymentViewReturnContext) shouldBe "for the period 1 January to 31 March 2001"
+      elementText(Selectors.firstPaymentViewReturnContext) shouldBe "View return for the period 1 January to 31 March 2001"
     }
 
     "render the correct view return href for the first payment" in {
@@ -226,7 +226,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct view return link text for the second payment with hidden text for context" in {
-      elementText(Selectors.secondPaymentViewReturnContext) shouldBe "for the period 1 February to 28 March 2002"
+      elementText(Selectors.secondPaymentViewReturnContext) shouldBe "View return for the period 1 February to 28 March 2002"
     }
 
     "render the correct view return href for the second payment" in {
