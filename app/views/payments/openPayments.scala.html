@@ -54,7 +54,9 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
-                <label class="visuallyhidden" for="pay-now-@{count + 1}">@messages("openPayments.forPeriod")
+                <label class="visuallyhidden" for="pay-now-@{count + 1}"> @displayMoney(payment.amount) @if(payment.overdue) {
+                    @messages("common.overdue")
+                } @messages("openPayments.forPeriod")
                     @displayDateRange(payment.start, payment.end).toString().trim</label>
                 <input class="button--link-style float--right" type="submit" id="pay-now-@{count + 1}" value='@Messages("openPayments.makePayment")'
                 data-journey-click="payment:make-payment:open-payments">

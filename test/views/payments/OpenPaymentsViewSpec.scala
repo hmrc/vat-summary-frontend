@@ -44,7 +44,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-
     val paymentSectionFirst = "#payment-section-1"
     val paymentSectionSecond = "#payment-section-2"
     val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
@@ -163,7 +162,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render a hidden label for the button for the first payment" in {
-      elementText(Selectors.firstPaymentPayContext) shouldBe "for the period 1 January to 31 March 2001"
+      elementText(Selectors.firstPaymentPayContext) shouldBe "£543.21 overdue for the period 1 January to 31 March 2001"
     }
 
     "render the correct due period for the first payment period" in {
@@ -215,7 +214,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render a hidden label for the button for the second payment" in {
-      elementText(Selectors.secondPaymentPayContext) shouldBe "for the period 1 February to 28 March 2002"
+      elementText(Selectors.secondPaymentPayContext) shouldBe "£100 for the period 1 February to 28 March 2002"
     }
 
     "render the correct due period for the second payment period" in {

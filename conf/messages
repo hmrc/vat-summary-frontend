@@ -60,7 +60,6 @@ openPayments.whatOweHelp = What I owe isn''t shown
 openPayments.directDebitLink = If you''ve already set up a direct debit, you don''t need to pay now. You can
 openPayments.directDebitLinkText = check if you''ve set up a direct debit
 openPayments.directDebitNotSure = if you''re not sure.
-openPayments.viewReturnLinkContext = for the period
 
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
