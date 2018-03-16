@@ -19,7 +19,6 @@
         contentHeader: Option[Html] = None,
         bodyClasses: Option[String] = None,
         mainClass: Option[String] = Some("full-width"),
-        scriptElem: Option[Html] = None,
         showLogout: Boolean = true,
         appConfig: config.AppConfig)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
@@ -38,7 +37,5 @@
     sidebar = sidebar,
     contentHeader = contentHeader,
     mainContent = layouts.article(mainContent),
-    scriptElem = scriptElem,
     showLogout = showLogout
-
 )
