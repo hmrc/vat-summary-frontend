@@ -72,7 +72,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             <div class="column-two-thirds form-hint">
               <span aria-hidden="true">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
             </div>
-            @if(appConfig.features.nineBox()) {
+            @if(appConfig.features.allowNineBox()) {
               <div class="column-one-third form-hint">
                 <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
                     href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
