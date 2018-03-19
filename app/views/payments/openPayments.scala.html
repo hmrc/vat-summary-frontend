@@ -72,17 +72,19 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             <div class="column-two-thirds form-hint">
               <span aria-hidden="true">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
             </div>
-            <div class="column-one-third form-hint">
-              <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-                  href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
-                  <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
-                  <span class="visuallyhidden">
-                      @messages("openPayments.viewReturnLink")
-                      @messages("openPayments.forPeriod")
-                      @displayDateRange(payment.start, payment.end).toString().trim
-                  </span>
-              </a>
-            </div>
+            @if(appConfig.features.nineBox()) {
+              <div class="column-one-third form-hint">
+                <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
+                    href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
+                    <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
+                    <span class="visuallyhidden">
+                        @messages("openPayments.viewReturnLink")
+                        @messages("openPayments.forPeriod")
+                        @displayDateRange(payment.start, payment.end).toString().trim
+                    </span>
+                </a>
+              </div>
+            }
           </div>
           <hr>
             <div id="payment-detail-@{count + 1}">
