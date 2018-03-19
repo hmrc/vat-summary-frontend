@@ -58,6 +58,8 @@ trait AppConfig extends ServicesConfig {
   val surveyUrl: String
   val surveyThankYouUrl: String
   val signOutUrl: String
+  val mtdVatSignUpUrl: String
+  val unauthorisedSignOutUrl: String
 }
 
 @Singleton
@@ -124,5 +126,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
   override lazy val signOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
+  override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
+  private val mtdVatSignUpBaseUrl: String = getString(Keys.mtdVatSignUpBaseUrl)
+  override lazy val mtdVatSignUpUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatSignUpUrl)
 }

@@ -29,7 +29,8 @@ class SignOutController @Inject()(val messagesApi: MessagesApi,
                                   implicit val appConfig: AppConfig
                                    ) extends BaseController with I18nSupport {
 
-  val signOut:Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Redirect(appConfig.signOutUrl))
+  def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
+    val redirectUrl: String = if(authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl
+    Future.successful(Redirect(redirectUrl))
   }
 }
