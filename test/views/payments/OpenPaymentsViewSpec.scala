@@ -44,7 +44,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-
     val paymentSectionFirst = "#payment-section-1"
     val paymentSectionSecond = "#payment-section-2"
     val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
@@ -55,12 +54,18 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     val firstPaymentDueData = "#payment-row-1 span[data-due]"
     val secondPaymentDue = "#payment-row-2 span:nth-of-type(1)"
     val secondPaymentDueData = "#payment-row-2 span[data-due]"
-    val firstPaymentPay = "#payment-row-1 input:nth-of-type(1)"
-    val secondPaymentPay = "#payment-row-2 input:nth-of-type(1)"
+    val firstPaymentPay = "#payment-row-1 button"
+    val firstPaymentPayContext = "#payment-row-1 button span"
+    val secondPaymentPay = "#payment-row-2 button"
+    val secondPaymentPayContext = "#payment-row-2 button span"
     val firstPaymentPeriod = "#period-row-1 span:nth-of-type(1)"
     val secondPaymentPeriod = "#period-row-2 span:nth-of-type(1)"
-    lazy val firstPaymentViewReturn = "#period-row-1 a:nth-of-type(1)"
-    lazy val secondPaymentViewReturn = "#period-row-2 a:nth-of-type(1)"
+    lazy val firstPaymentViewReturn = "#period-row-1 a"
+    lazy val secondPaymentViewReturn = "#period-row-2 a"
+    val firstPaymentViewReturnText = "#period-row-1 div:nth-of-type(2) span:nth-of-type(1)"
+    val firstPaymentViewReturnContext = "#period-row-1 div:nth-of-type(2) span:nth-of-type(2)"
+    val secondPaymentViewReturnText = "#period-row-2 div:nth-of-type(2) span:nth-of-type(1)"
+    val secondPaymentViewReturnContext = "#period-row-2 span:nth-of-type(2)"
     val processingTime = "#payments-information p:nth-of-type(1)"
     val directDebit = "#direct-debits"
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
@@ -153,7 +158,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct button text for the first payment" in {
-      element(Selectors.firstPaymentPay).attr("value") shouldBe "Pay now"
+      elementText(Selectors.firstPaymentPay) should endWith("Pay now")
+    }
+
+    "render a hidden label for the button for the first payment" in {
+      elementText(Selectors.firstPaymentPayContext) shouldBe "£543.21 overdue for the period 1 January to 31 March 2001"
     }
 
     "render the correct due period for the first payment period" in {
@@ -161,7 +170,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct view return link text for the first payment" in {
-      elementText(Selectors.firstPaymentViewReturn) shouldBe "View return"
+      elementText(Selectors.firstPaymentViewReturnText) shouldBe "View return"
+    }
+
+    "render the correct view return link text for the first payment with hidden text for context" in {
+      elementText(Selectors.firstPaymentViewReturnContext) shouldBe "View return for the period 1 January to 31 March 2001"
     }
 
     "render the correct view return href for the first payment" in {
@@ -197,7 +210,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct button text for the second payment" in {
-      element(Selectors.secondPaymentPay).attr("value") shouldBe "Pay now"
+      elementText(Selectors.secondPaymentPay) should endWith("Pay now")
+    }
+
+    "render a hidden text for the button for the second payment" in {
+      elementText(Selectors.secondPaymentPayContext) shouldBe "£100 for the period 1 February to 28 March 2002"
     }
 
     "render the correct due period for the second payment period" in {
@@ -205,7 +222,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
     }
 
     "render the correct view return link text for the second payment" in {
-      elementText(Selectors.secondPaymentViewReturn) shouldBe "View return"
+      elementText(Selectors.secondPaymentViewReturnText) shouldBe "View return"
+    }
+
+    "render the correct view return link text for the second payment with hidden text for context" in {
+      elementText(Selectors.secondPaymentViewReturnContext) shouldBe "View return for the period 1 February to 28 March 2002"
     }
 
     "render the correct view return href for the second payment" in {
