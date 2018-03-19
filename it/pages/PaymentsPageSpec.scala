@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package pages
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -27,7 +28,6 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
   private trait Test {
     def setupStubs(): StubMapping
-
     def request(): WSRequest = {
       setupStubs()
       buildRequest("/what-you-owe")
@@ -56,11 +56,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().get())
-
         lazy implicit val document: Document = Jsoup.parse(response.body)
-
         val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
-          document.select(firstPaymentAmount).text().length > 0 shouldBe true
+
+        document.select(firstPaymentAmount).text().length > 0 shouldBe true
       }
     }
 
@@ -84,41 +83,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().get())
-
         lazy implicit val document: Document = Jsoup.parse(response.body)
+        val firstPaymentAmount = "#payment-section-1"
 
-        val heading = "h1"
-
-        document.select(heading).text() shouldBe "What you owe"
-      }
-    }
-
-    "the API failed to retrieve the data" should {
-
-      "return 500" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuthStub.authorised()
-          FinancialDataStub.stubApiError
-        }
-
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.INTERNAL_SERVER_ERROR
-      }
-
-      "return the error message" in new Test {
-
-        override def setupStubs(): StubMapping = {
-          AuthStub.authorised()
-          FinancialDataStub.stubApiError
-        }
-
-        val response: WSResponse = await(request().get())
-
-        lazy implicit val document: Document = Jsoup.parse(response.body)
-
-        val heading = "h1"
-
-        document.select(heading).text() shouldBe "We can't let you pay here right now"
+        document.select(firstPaymentAmount) shouldBe empty
       }
     }
   }
