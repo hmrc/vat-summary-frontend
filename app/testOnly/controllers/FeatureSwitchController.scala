@@ -37,7 +37,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         allowDirectDebitsEnabled = appConfig.features.allowDirectDebits(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         accountDetailsEnabled = appConfig.features.accountDetails(),
-        nineBoxEnabled = appConfig.features.nineBox()
+        allowNineBoxEnabled = appConfig.features.allowNineBox()
       )
     )))
   }
@@ -56,7 +56,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.allowDirectDebits(model.allowDirectDebitsEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.accountDetails(model.accountDetailsEnabled)
-    appConfig.features.nineBox(model.nineBoxEnabled)
+    appConfig.features.allowNineBox(model.allowNineBoxEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }

@@ -34,6 +34,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec with BeforeAndAfterEach{
   override def beforeEach(): Unit = {
     super.beforeEach()
     features.allowPayments(true)
+    features.allowNineBox(true)
   }
 
   object Selectors {
