@@ -76,7 +76,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
-        error = "Fail!"
+        errorResponse = "Fail!"
       ))
 
       val result = PaymentsReads.read("", "", httpResponse)
