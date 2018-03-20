@@ -20,14 +20,19 @@ sealed trait HttpError {
   def message: String
 }
 
-case class BadRequestError(code: String, message: String) extends HttpError
-
-case object ServerSideError extends HttpError {
-  override val message: String = "The server you connecting to returned an error."
+case class BadRequestError(code: String, errorResponse: String) extends HttpError {
+  override val message: String = s"The server you connecting to returned an error. " +
+    s"[BadRequest]- RESPONSE status: $code, message: $errorResponse"
 }
 
-case class UnexpectedStatusError(status: Int) extends HttpError {
-  override val message: String = s"Received an unexpected status code: $status."
+case class ServerSideError(code: Int, errorResponse: String) extends HttpError {
+  override val message: String = s"The server you connecting to returned an error. " +
+    s"[ServerSideError]- RESPONSE status: $code, body: $errorResponse"
+}
+
+case class UnexpectedStatusError(code: Int, errorResponse: String) extends HttpError {
+  override val message: String = s"The server you connecting to returned an unexpected error." +
+    s"[UnexpectedStatusError]- RESPONSE status: $code, body: $errorResponse"
 }
 
 case object MultipleErrors extends HttpError {

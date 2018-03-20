@@ -83,7 +83,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Left(BadRequestError(
         code = "INVALID_VRN",
-        message = "VRN was invalid!"
+        errorResponse = "VRN was invalid!"
       ))
 
       setupStubs()
