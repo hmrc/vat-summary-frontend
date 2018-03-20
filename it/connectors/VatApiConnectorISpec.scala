@@ -139,7 +139,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
-        message = ""
+        error = ""
       ))
 
       setupStubs()
@@ -160,7 +160,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Left(BadRequestError(
         code = "INVALID_DATE_FROM",
-        message = ""
+        error = ""
       ))
 
       setupStubs()
@@ -181,7 +181,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Left(BadRequestError(
         code = "INVALID_DATE_TO",
-        message = ""
+        error = ""
       ))
 
       setupStubs()
@@ -202,7 +202,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Left(BadRequestError(
         code = "INVALID_DATE_RANGE",
-        message = ""
+        error = ""
       ))
 
       setupStubs()
@@ -223,7 +223,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Left(BadRequestError(
         code = "INVALID_STATUS",
-        message = ""
+        error = ""
       ))
 
       setupStubs()

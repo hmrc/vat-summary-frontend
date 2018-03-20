@@ -22,7 +22,7 @@ import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 import models.errors._
 import models.payments.{Payment, Payments}
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -76,7 +76,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
-        message = "Fail!"
+        error = "Fail!"
       ))
 
       val result = PaymentsReads.read("", "", httpResponse)
@@ -130,30 +130,38 @@ class PaymentsHttpParserSpec extends UnitSpec {
       }
     }
 
-    "the http response status is 5xx" should {
 
-      val httpResponse = HttpResponse(Status.INTERNAL_SERVER_ERROR)
+    "the HTTP response status is 5xx" should {
 
-      val expected = Left(ServerSideError)
+      val body: JsObject = Json.obj(
+        "code" -> "GATEWAY_TIMEOUT",
+        "message" -> "GATEWAY_TIMEOUT"
+      )
 
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT, httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 
-    "the http response status is isn't handled" should {
+    "the HTTP response status isn't handled" should {
 
-      val httpResponse = HttpResponse(Status.CREATED)
+      val body: JsObject = Json.obj(
+        "code" -> "Conflict",
+        "message" -> "CONFLCIT"
+      )
 
-      val expected = Left(UnexpectedStatusError(Status.CREATED))
-
+      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val expected = Left(UnexpectedStatusError(Status.CONFLICT, httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
-      "return a UnexpectedStatusError" in {
-        result shouldEqual expected
+      "return an UnexpectedStatusError" in {
+        result shouldBe expected
       }
     }
+
   }
 }

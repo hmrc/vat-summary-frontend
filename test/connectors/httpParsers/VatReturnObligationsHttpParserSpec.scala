@@ -22,7 +22,7 @@ import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -75,7 +75,7 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
-        message = "Fail!"
+        error = "Fail!"
       ))
 
       val result = VatReturnsReads.read("", "", httpResponse)
@@ -131,30 +131,37 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       }
     }
 
-    "the http response status is 5xx" should {
+    "the HTTP response status is 5xx" should {
 
-      val httpResponse = HttpResponse(Status.INTERNAL_SERVER_ERROR)
+      val body: JsObject = Json.obj(
+        "code" -> "GATEWAY_TIMEOUT",
+        "message" -> "GATEWAY_TIMEOUT"
+      )
 
-      val expected = Left(ServerSideError)
-
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT, httpResponse.body))
       val result = VatReturnsReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 
-    "the http response status is isn't handled" should {
+    "the HTTP response status isn't handled" should {
 
-      val httpResponse = HttpResponse(Status.CREATED)
+      val body: JsObject = Json.obj(
+        "code" -> "Conflict",
+        "message" -> "CONFLCIT"
+      )
 
-      val expected = Left(UnexpectedStatusError(Status.CREATED))
-
+      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val expected = Left(UnexpectedStatusError(Status.CONFLICT, httpResponse.body))
       val result = VatReturnsReads.read("", "", httpResponse)
 
-      "return a UnexpectedStatusError" in {
-        result shouldEqual expected
+      "return an UnexpectedStatusError" in {
+        result shouldBe expected
       }
     }
+
   }
 }

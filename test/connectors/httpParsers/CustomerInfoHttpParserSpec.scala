@@ -20,7 +20,7 @@ import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 import models.{Address, CustomerInformation}
 import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -116,7 +116,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val expected = Left(BadRequestError(
         code = "INVALID",
-        message = "Fail!"
+        error = "Fail!"
       ))
 
       val result = CustomerInfoReads.read("", "", httpResponse)
@@ -185,8 +185,13 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
     "the HTTP response status isn't handled" should {
 
-      val httpResponse = HttpResponse(Status.CREATED)
-      val expected = Left(UnexpectedStatusError(Status.CREATED))
+      val body: JsObject = Json.obj(
+        "code" -> "Conflict",
+        "message" -> "CONFLCIT"
+      )
+
+      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val expected = Left(UnexpectedStatusError(Status.CONFLICT, httpResponse.body))
       val result = CustomerInfoReads.read("", "", httpResponse)
 
       "return an UnexpectedStatusError" in {
