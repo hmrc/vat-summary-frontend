@@ -48,7 +48,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
           payments
         case httpError@Left(error) =>
           metrics.getOpenPaymentsCallFailureCounter.inc()
-          Logger.warn("FinancialDataConnector received error: " + error.message)
+          Logger.warn("FinancialDataConnector received error: " + error.message )
           httpError
       }
   }

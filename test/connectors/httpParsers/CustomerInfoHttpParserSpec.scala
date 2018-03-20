@@ -174,8 +174,13 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
     "the HTTP response status is 5xx" should {
 
-      val httpResponse = HttpResponse(Status.INTERNAL_SERVER_ERROR)
-      val expected = Left(ServerSideError)
+      val body: JsObject = Json.obj(
+        "code" -> "GATEWAY_TIMEOUT",
+        "message" -> "GATEWAY_TIMEOUT"
+      )
+
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT, httpResponse.body))
       val result = CustomerInfoReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
