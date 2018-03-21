@@ -18,6 +18,7 @@ package controllers
 
 import common.EnrolmentKeys._
 import config.AppConfig
+import config.features.Feature
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
@@ -34,6 +35,10 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
   val messagesApi: MessagesApi
   val enrolmentsAuthService: EnrolmentsAuthService
   implicit val appConfig: AppConfig
+
+  def featureSwitchedAction(feature: Feature)(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] ={
+    feature.fold(Action(NotFound))(authorisedAction(block))
+  }
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async {
     implicit request =>

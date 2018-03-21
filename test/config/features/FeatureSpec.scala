@@ -40,5 +40,14 @@ class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterE
       features.simpleAuth(true)
       features.simpleAuth() mustBe true
     }
+
+    "perform an action if it is active" in {
+      features.simpleAuth(true)
+      features.simpleAuth.fold(0)(1) mustBe 1
+    }
+
+    "perform a default action if it is inactive" in {
+      features.simpleAuth.fold(0)(1) mustBe 0
+    }
   }
 }
