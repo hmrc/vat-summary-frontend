@@ -21,7 +21,10 @@ import java.time.LocalDate
 import models.User
 import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.api.http.Status
+import play.api.mvc.Result
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -82,6 +85,20 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         status(result) shouldBe Status.OK
       }
+
+      "return the payments view" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Some(Payments(Seq.empty))))
+        }
+
+        val result: Result = await(target.openPayments()(fakeRequest))
+        val document: Document = Jsoup.parse(bodyOf(result))
+
+        document.select("h1").first().text() shouldBe "What you owe"
+      }
     }
 
     "the user has no open payments" should {
@@ -96,6 +113,20 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         private val result = target.openPayments()(fakeRequest)
 
         status(result) shouldBe Status.OK
+      }
+
+      "return the payments view" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Some(Payments(Seq.empty))))
+        }
+
+        val result: Result = await(target.openPayments()(fakeRequest))
+        val document: Document = Jsoup.parse(bodyOf(result))
+
+        document.select("h1").first().text() shouldBe "What you owe"
       }
     }
 
@@ -129,6 +160,21 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         private val result = target.openPayments()(fakeRequest)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+
+      "return the payments error view" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(None))
+        }
+
+        val result: Result = await(target.openPayments()(fakeRequest))
+        val document: Document = Jsoup.parse(bodyOf(result))
+
+
+        document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
       }
     }
   }

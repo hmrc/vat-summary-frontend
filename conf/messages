@@ -73,15 +73,6 @@ paymentsError.payNowOne = If you know how much you owe,
 paymentsError.payNowTwo = use the payments service
 paymentsError.payNowThree = to pay now.
 
-paymentsError.contactDetailTextOne = If you''re close to a payment deadline and worried you''ll miss it, please
-paymentsError.contactLinkText = contact HMRC
-paymentsError.contactDetailTextTwo = as soon as possible.
-paymentsError.reasonableExcuseDetailTextOne = Issues with HMRC''s online services are a
-paymentsError.reasonableExcuseLink = reasonable excuse
-paymentsError.reasonableExcuseDetailTextTwo = when appealing a penalty.
-paymentsError.reasonableExcuseHiddenIconText = Warning
-paymentsError.technicalDifficulties = We''re experiencing technical problems
-
 paymentHandOffErrorHeading = We''re experiencing technical problems
 paymentHandOffErrorMessage = Something has gone wrong with this service, it wasn''t your fault. Please try again later.
 
