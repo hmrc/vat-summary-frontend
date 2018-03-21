@@ -29,7 +29,8 @@ object FeatureSwitchForm {
       ConfigKeys.allowPaymentsFeature -> boolean,
       ConfigKeys.allowDirectDebitsFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.accountDetailsFeature -> boolean
+      ConfigKeys.accountDetailsFeature -> boolean,
+      ConfigKeys.allowNineBoxFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

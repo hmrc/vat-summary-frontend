@@ -40,6 +40,7 @@ object ConfigKeys {
   val staticDateEnabledFeature: String = "features.date-service.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
   val accountDetailsFeature: String = "features.accountDetails.enabled"
+  val allowNineBoxFeature: String = "features.allowNineBox.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
@@ -61,5 +62,6 @@ object ConfigKeys {
   val surveyHost: String = "feedback-survey-frontend.host"
   val surveyUrl: String = "feedback-survey-frontend.url"
 
-
+  val mtdVatSignUpBaseUrl: String = "vat-subscription-frontend.host"
+  val mtdVatSignUpUrl: String = "vat-subscription-frontend.signUpUrl"
 }

@@ -16,7 +16,7 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = Messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(title = Messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
  <h1>@Messages("sessionTimeout.title")</h1>
 
  <p>@Messages("sessionTimeout.helpOne")
