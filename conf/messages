@@ -16,7 +16,7 @@ sessionTimeout.helpThree = using your Government Gateway ID.
 
 unauthorised.title = You''re not authorised to use this service
 unauthorised.youNeedTo = You need to
-unauthorised.signUpWithSoftware = sign up to use software to submit your VAT Returns.
+unauthorised.signUpWithSoftware = sign up to use software to submit your VAT Returns
 unauthorised.alreadySignedUp = If you''ve already signed up, you need to sign in with the correct Government Gateway details.
 
 userResearch.heading = Please help us improve our service

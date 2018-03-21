@@ -22,7 +22,6 @@ import javax.inject.{Inject, Singleton}
 
 import config.features.Features
 import config.{ConfigKeys => Keys}
-import controllers.routes
 import play.api.Mode.Mode
 import play.api.mvc.Call
 import play.api.{Configuration, Environment}
