@@ -20,14 +20,24 @@ import play.api.data.Form
 import play.api.data.Forms._
 
 object MakePaymentForm {
-  val form: Form[PaymentDetailsModel] = Form(
-    mapping(
-      "taxType" -> default(text, "mtdfb-vat"),
-      "taxReference" -> default(nonEmptyText, "/"),
-      "amountInPence" -> nonEmptyText,
-      "taxPeriodMonth" -> nonEmptyText(minLength = 2, maxLength = 2),
-      "taxPeriodYear" -> nonEmptyText(maxLength = 4),
-      "returnUrl" -> default(nonEmptyText, "/")
-    )(PaymentDetailsModel.apply)(PaymentDetailsModel.unapply)
-  )
+  val form: Form[PaymentDetailsModel] = {
+    import TaxPeriodConstants._
+
+    Form(
+      mapping(
+        "taxType" -> default(text, "mtdfb-vat"),
+        "taxReference" -> default(nonEmptyText, "/"),
+        "amountInPence" -> nonEmptyText,
+        "taxPeriodMonth" -> nonEmptyText(minLength = MonthMinLength, maxLength = MonthMaxLength),
+        "taxPeriodYear" -> nonEmptyText(maxLength = YearMaxLength),
+        "returnUrl" -> default(nonEmptyText, "/")
+      )(PaymentDetailsModel.apply)(PaymentDetailsModel.unapply)
+    )
+  }
+
+  object TaxPeriodConstants {
+    val MonthMinLength: Int = 2
+    val MonthMaxLength: Int = 2
+    val YearMaxLength: Int = 4
+  }
 }
