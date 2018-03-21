@@ -35,8 +35,9 @@ case class UnexpectedStatusError(code: Int, errorResponse: String) extends HttpE
     s"[UnexpectedStatusError]- RESPONSE status: $code, body: $errorResponse"
 }
 
-case object MultipleErrors extends HttpError {
-  override val message: String = "Received multiple errors."
+case class MultipleErrors(code: String, errorResponse: String) extends HttpError {
+  override val message: String = s"The server you connecting to returned an error. " +
+    s"[MultipleErrors]- RESPONSE status: $code, message: $errorResponse"
 }
 
 case object UnknownError extends HttpError {
