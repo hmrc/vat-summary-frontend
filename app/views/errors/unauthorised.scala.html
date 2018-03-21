@@ -16,8 +16,13 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig) {
- <h1>@messages("unauthorised.title")</h1>
+@views.html.main_template(title = messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig, feedbackOnSignOut = false) {
 
- <p>@messages("unauthorised.instructions")</p>
+ <h1>@messages("unauthorised.title")</h1>
+ <p>
+   @messages("unauthorised.youNeedTo")
+   <a href='@appConfig.mtdVatSignUpUrl'>@messages("unauthorised.signUpWithSoftware")</a>.
+ </p>
+ <p>@messages("unauthorised.alreadySignedUp")</p>
+ <p><a href="@routes.SignOutController.signOut(authorised = false)">@messages("base.signOut")</a></p>
 }

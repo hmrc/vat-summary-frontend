@@ -26,22 +26,42 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
-      val instructions = "#content p"
+      val signUpWithSoftware = "#content p:nth-of-type(1)"
+      val signUpLink = "#content p:nth-of-type(1) > a"
+      val signInCorrectCredentials = "#content p:nth-of-type(2)"
+      val signOut = "#content p:nth-of-type(3)"
+      val signOutLink = "#content p:nth-of-type(3) a"
     }
 
     lazy val view = views.html.errors.unauthorised()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Unauthorised access"
+      document.title shouldBe "You're not authorised to use this service"
     }
 
-    "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Unauthorised access"
+    "have a the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe "You're not authorised to use this service"
     }
 
-    "have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe "Here are some instructions about what you should do next."
+    "have the correct instructions to sign up" in {
+      elementText(Selectors.signUpWithSoftware) shouldBe "You need to sign up to use software to submit your VAT Returns."
+    }
+
+    "contain a link to sign up to MTD VAT" in {
+      element(Selectors.signUpLink).attr("href") shouldBe "mtd-sign-up"
+    }
+
+    "have the correct instructions to sign in" in {
+      elementText(Selectors.signInCorrectCredentials) shouldBe "If you've already signed up, you need to sign in with the correct Government Gateway details."
+    }
+
+    "have the correct sign out text" in {
+      elementText(Selectors.signOut) shouldBe "Sign out"
+    }
+
+    "have the correct sign out link" in {
+      element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/sign-out?authorised=false"
     }
   }
 }

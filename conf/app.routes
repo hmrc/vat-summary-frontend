@@ -12,7 +12,7 @@ POST        /feedback              controllers.feedback.FeedbackController.submi
 GET         /thankyou              controllers.feedback.FeedbackController.thankyou
 
 #Sign Out Routes
-GET         /sign-out              controllers.SignOutController.signOut
+GET         /sign-out              controllers.SignOutController.signOut(authorised: Boolean)
 GET         /survey/your-journey   controllers.survey.SurveyController.yourJourney
 POST        /survey/submit         controllers.survey.SurveyController.submit
 
