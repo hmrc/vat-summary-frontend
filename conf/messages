@@ -68,20 +68,12 @@ noPayments.heading = What you owe
 noPayments.oweNothing = You don''t owe anything right now.
 noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
 
-paymentsError.heading = We can''t let you pay here right now
-paymentsError.tryLater = Try reloading the page or coming back later.
-paymentsError.paymentServiceDetailTextOne = You can also use the
-paymentsError.paymentServiceLink.linkText = HMRC payments service
-paymentsError.paymentServiceDetailTextTwo = if you have your VAT details to hand.
-
-paymentsError.contactDetailTextOne = If you''re close to a payment deadline and worried you''ll miss it, please
-paymentsError.contactLinkText = contact HMRC
-paymentsError.contactDetailTextTwo = as soon as possible.
-paymentsError.reasonableExcuseDetailTextOne = Issues with HMRC''s online services are a
-paymentsError.reasonableExcuseLink = reasonable excuse
-paymentsError.reasonableExcuseDetailTextTwo = when appealing a penalty.
-paymentsError.reasonableExcuseHiddenIconText = Warning
-paymentsError.technicalDifficulties = We''re experiencing technical problems
+paymentsError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+paymentsError.heading = Sorry, there is a problem with the service
+paymentsError.message = Try again later.
+paymentsError.payNowOne = If you know how much you owe,
+paymentsError.payNowTwo = use the payments service
+paymentsError.payNowThree = to pay now.
 
 paymentHandOffErrorHeading = We''re experiencing technical problems
 paymentHandOffErrorMessage = Something has gone wrong with this service, it wasn''t your fault. Please try again later.

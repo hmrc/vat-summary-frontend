@@ -81,7 +81,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     }
 
     s"have the correct href" in {
-      noPaymentDetails.select("p:nth-of-type(2) a").attr("href") shouldBe "#"
+      noPaymentDetails.select("p:nth-of-type(2) a").attr("href") shouldBe "payments-url"
     }
 
     "render breadcrumbs which" should {
@@ -107,5 +107,4 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       }
     }
   }
-
 }

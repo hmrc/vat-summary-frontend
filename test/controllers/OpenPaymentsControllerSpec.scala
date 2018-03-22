@@ -23,6 +23,7 @@ import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.http.Status
 import play.api.mvc.Result
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
@@ -69,28 +70,23 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling the openPayments actions" when {
+  "Calling the openPayments action" when {
 
     "the user has open payments" should {
 
-      "return the payments view" in new Test {
+      "return 200 (OK)" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Some(Payments(Seq(payment, payment)))))
         }
+        private val result = target.openPayments()(fakeRequest)
 
-        val result: Result = await(target.openPayments()(fakeRequest))
-        val document: Document = Jsoup.parse(bodyOf(result))
-
-        document.select("h1").first().text() shouldBe "What you owe"
+        status(result) shouldBe Status.OK
       }
-    }
 
-    "the user has no open payments" should {
-
-      "return the no payments view" in new Test {
+      "return the payments view" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -105,7 +101,66 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "the user has no open payments" should {
+
+      "return 200 (OK)" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Some(Payments(Seq.empty))))
+        }
+        private val result = target.openPayments()(fakeRequest)
+
+        status(result) shouldBe Status.OK
+      }
+
+      "return the payments view" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Some(Payments(Seq.empty))))
+        }
+
+        val result: Result = await(target.openPayments()(fakeRequest))
+        val document: Document = Jsoup.parse(bodyOf(result))
+
+        document.select("h1").first().text() shouldBe "What you owe"
+      }
+    }
+
+    "the user is not authorised" should {
+
+      "return 403 (Forbidden)" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        private val result = target.openPayments()(fakeRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is not authenticated" should {
+
+      "return 401 (Unauthorised)" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        private val result = target.openPayments()(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+
     "an error occurs upstream" should {
+
+      "return 500 (Internal server error)" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(None))
+        }
+        private val result = target.openPayments()(fakeRequest)
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
 
       "return the payments error view" in new Test {
         override def setupMocks(): Unit = {
@@ -116,10 +171,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
-
         val document: Document = Jsoup.parse(bodyOf(result))
 
-        document.select("h1").first().text() shouldBe "We can't let you pay here right now"
+
+        document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
       }
     }
   }

@@ -14,39 +14,24 @@
  * limitations under the License.
  *@
 
-@(user: models.User)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages)
 
-@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
-
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Messages("paymentsError.heading")</h1>
-        <div class="form-group" id="errorDetails">
-            <p>@messages("paymentsError.tryLater")</p>
-            <p>@Messages("paymentsError.paymentServiceDetailTextOne")
-                <a href="#">@Messages("paymentsError.paymentServiceLink.linkText")</a>
-                @Messages("paymentsError.paymentServiceDetailTextTwo")
-            </p>
-            <p>@Messages("paymentsError.contactDetailTextOne")
-                <a href="#">@Messages("paymentsError.contactLinkText")</a>
-                @Messages("paymentsError.contactDetailTextTwo")
-            </p>
-        </div>
-        <div class="notice" id="reasonableExcuseDetail">
-            <i class="icon icon-important">
-                <span class="visually-hidden">@Messages("paymentsError.reasonableExcuseHiddenIconText")</span>
-            </i>
-            <strong class="bold-small">
-                <p>@Messages("paymentsError.reasonableExcuseDetailTextOne")
-                    <a href="#">@Messages("paymentsError.reasonableExcuseLink")</a>
-                    @Messages("paymentsError.reasonableExcuseDetailTextTwo")
-                </p>
-            </strong>
-        </div>
-        <div class="heading-medium" id="techDifficulties">
-            <p class="bold">@Messages("paymentsError.technicalDifficulties")</p>
-        </div>
-    </div>
-</div>
-
+@contentHeader = {
+  <h1>@messages("paymentsError.heading")</h1>
 }
+
+@mainContent = {
+  <p class="lede">@messages("paymentsError.message")</p>
+  <p>
+    @messages("paymentsError.payNowOne")
+    <a href="@appConfig.paymentsServiceUrl">@messages("paymentsError.payNowTwo")</a>
+    @messages("paymentsError.payNowThree")
+  </p>
+}
+
+@govuk_wrapper(appConfig = appConfig,
+  title = messages("paymentsError.title"),
+  contentHeader = Some(contentHeader),
+  mainContent = mainContent
+)
+
