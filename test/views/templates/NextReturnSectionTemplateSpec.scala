@@ -37,7 +37,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
       val obligationDueDate = LocalDate.parse("2019-04-30")
 
-      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate), isOverdue = false)
+      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate), isOverdue = false, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -57,7 +57,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
       val obligationDueDate = LocalDate.parse("2017-04-30")
 
-      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate), isOverdue = true)
+      lazy val view = views.html.templates.nextReturnSection(Some(obligationDueDate), isOverdue = true, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the overdue label" in {
@@ -67,7 +67,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
     "there is no VAT return to display" should {
 
-      lazy val view = views.html.templates.nextReturnSection(None, isOverdue = false)
+      lazy val view = views.html.templates.nextReturnSection(None, isOverdue = false, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -79,6 +79,24 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the 'View return deadlines' link" in {
+        elementText(Selectors.viewReturnsButton) shouldBe "View return deadlines"
+      }
+    }
+
+    "there is an error retrieving the return" should {
+
+      lazy val view = views.html.templates.nextReturnSection(None, isOverdue = false, isError = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the 'Next return due' heading" in {
+        elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
+      }
+
+      "display the error message" in {
+        elementText(Selectors.nextReturnDate) shouldBe "Sorry, there is a problem with the service. Try again later."
+      }
+
+      "display the 'View return deadlines' button" in {
         elementText(Selectors.viewReturnsButton) shouldBe "View return deadlines"
       }
     }
