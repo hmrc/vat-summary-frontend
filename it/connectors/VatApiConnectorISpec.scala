@@ -20,9 +20,10 @@ import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.errors.{BadRequestError, MultipleErrors}
+import models.errors.{ApiSingleError, BadRequestError, MultipleErrors}
 import models.obligations.Obligation.Status
 import models.obligations.{VatReturnObligation, VatReturnObligations}
+import play.api.libs.json.Json
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -237,12 +238,30 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
 
   }
 
+  "Calling getVatReturnObligations with multiple errors" should {
+
+    "return a MultipleErrors" in new Test {
+      override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
+
+      val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
+      val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
+      setupStubs()
+      private val result = await(connector.getVatReturnObligations("123456789",
+        LocalDate.parse("2017-01-01"),
+        LocalDate.parse("2017-12-31"),
+        Status.Fulfilled))
+
+      result shouldBe expected
+    }
+  }
+
   "calling getVatReturnObligations with multiple errors" should {
 
     "return an MultipleErrors" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
 
-      val expected = Left(MultipleErrors)
+      val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
+      val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",

@@ -86,29 +86,31 @@ class PaymentsHttpParserSpec extends UnitSpec {
       }
     }
 
-    "the http response status is 400 BAD_REQUEST (multiple errors)" should {
+    "a http response of 400 BAD_REQUEST (multiple errors)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         responseJson = Some(Json.obj(
           "failures" -> Json.arr(
             Json.obj(
-              "code" -> "INVALID_DATE_FROM",
+              "code" -> "INVALID DATE FROM",
               "reason" -> "Bad date from"
             ),
             Json.obj(
-              "code" -> "INVALID_DATE_TO",
+              "code" -> "INVALID DATE TO",
               "reason" -> "Bad date to"
             )
           )
         ))
       )
 
-      val expected = Left(MultipleErrors)
+      val errors = Seq(ApiSingleError("INVALID DATE FROM", "Bad date from"), ApiSingleError("INVALID DATE TO", "Bad date to"))
+
+      val expected = Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errors).toString()))
 
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a MultipleErrors" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 
@@ -139,7 +141,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       )
 
       val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
-      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT, httpResponse.body))
+      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
@@ -155,7 +157,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
-      val expected = Left(UnexpectedStatusError(Status.CONFLICT, httpResponse.body))
+      val expected = Left(UnexpectedStatusError("409", httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return an UnexpectedStatusError" in {

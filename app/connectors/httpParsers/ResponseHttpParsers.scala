@@ -17,7 +17,8 @@
 package connectors.httpParsers
 
 import models.errors._
-import play.api.libs.json.{JsValue, Reads}
+import play.api.http.Status
+import play.api.libs.json.{JsValue, Json, Reads}
 
 trait ResponseHttpParsers {
 
@@ -30,12 +31,12 @@ trait ResponseHttpParsers {
       .getOrElse(Left(UnknownError))
   }
 
-  private def generateClientError(error: ApiError): Left[HttpError, Nothing] = {
-    error match {
-      case ApiSingleError(code, message) => Left(BadRequestError(code, message))
-      case ApiMultiError(_, _, _) => Left(MultipleErrors)
-      case ApiMultiErrorFinancial(_) => Left(MultipleErrors)
-    }
+  private def generateClientError(error: ApiError): Left[HttpError, Nothing] = error match {
+    case ApiSingleError(code, message) => Left(BadRequestError(code, message))
+    case ApiMultiError(code, _, errorResponse) =>
+      Left(MultipleErrors(code, Json.toJson(errorResponse).toString()))
+    case ApiMultiErrorFinancial(errorResponse) =>
+      Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errorResponse).toString()))
   }
 }
 

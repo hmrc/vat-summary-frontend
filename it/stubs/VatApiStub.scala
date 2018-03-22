@@ -146,8 +146,8 @@ object VatApiStub extends WireMockMethods {
   private val invalidStatus = ApiSingleError("INVALID_STATUS", "")
 
   private val multipleErrors = ApiMultiError("BAD_REQUEST", "", Seq(
-    ApiSingleError("ERROR_1", ""),
-    ApiSingleError("ERROR_2", "")
+    ApiSingleError("ERROR_1", "MESSAGE_1"),
+    ApiSingleError("ERROR_2", "MESSAGE_2")
   ))
 
 }
