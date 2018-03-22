@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 import models.{Address, CustomerInformation}
-import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
+import models.errors._
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -79,19 +79,19 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
         Some("Jones"),
         Some("Cheapo Clothing"),
         Address("Bedrock Quarry",
-                "Bedrock",
-                Some("Graveldon"),
-                Some("Graveldon"),
-                Some("GV2 4BB")
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV2 4BB")
         ),
         Some("01632 982028"),
         Some("07700 900018"),
         Some("bettylucknexttime@gmail.com"),
         Address("13 Pebble Lane",
-                "Bedrock",
-                Some("Graveldon"),
-                Some("Graveldon"),
-                Some("GV13 4BJ")
+          "Bedrock",
+          Some("Graveldon"),
+          Some("Graveldon"),
+          Some("GV13 4BJ")
         ),
         Some("01632 960026"),
         Some("07700 900018"),
@@ -126,9 +126,10 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
       }
     }
 
+
     "the HTTP response status is BAD_REQUEST (400) (multiple errors)" should {
 
-      val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
+      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
         Json.obj(
           "code" -> "BAD_REQUEST",
           "message" -> "Fail!",
@@ -145,7 +146,9 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
         )
       ))
 
-      val expected = Left(MultipleErrors)
+      val errors = Seq(ApiSingleError("INVALID", "Fail!"), ApiSingleError("INVALID_2", "Fail!"))
+
+      val expected = Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errors).toString()))
 
       val result = CustomerInfoReads.read("", "", httpResponse)
 

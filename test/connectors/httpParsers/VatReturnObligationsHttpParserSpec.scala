@@ -19,7 +19,7 @@ package connectors.httpParsers
 import java.time.LocalDate
 
 import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
-import models.errors.{BadRequestError, MultipleErrors, ServerSideError, UnexpectedStatusError, UnknownError}
+import models.errors._
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
@@ -85,31 +85,33 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       }
     }
 
-    "the http response status is 400 BAD_REQUEST (multiple errors)" should {
+    "the HTTP response status is BAD_REQUEST (400) (multiple errors)" should {
 
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
+        Json.obj(
           "code" -> "BAD_REQUEST",
           "message" -> "Fail!",
           "errors" -> Json.arr(
             Json.obj(
-              "code" -> "INVALID_DATE_FROM",
-              "message" -> "Bad date from"
+              "code" -> "INVALID",
+              "message" -> "Fail!"
             ),
             Json.obj(
-              "code" -> "INVALID_DATE_TO",
-              "message" -> "Bad date to"
+              "code" -> "INVALID_2",
+              "message" -> "Fail!"
             )
           )
-        ))
-      )
+        )
+      ))
 
-      val expected = Left(MultipleErrors)
+      val errors = Seq(ApiSingleError("INVALID", "Fail!"), ApiSingleError("INVALID_2", "Fail!"))
+
+      val expected = Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errors).toString()))
 
       val result = VatReturnsReads.read("", "", httpResponse)
 
       "return a MultipleErrors" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 

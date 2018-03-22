@@ -35,7 +35,7 @@ trait ResponseHttpParsers {
     error match {
       case ApiSingleError(code, message) => Left(BadRequestError(code, message))
       case ApiMultiError(code, message, errorResponse) =>
-        Left(MultipleErrors(Status.BAD_REQUEST.toString, message + Json.toJson(errorResponse).toString()))
+        Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errorResponse).toString()))
       case ApiMultiErrorFinancial(errorResponse) =>
         Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errorResponse).toString()))
     }

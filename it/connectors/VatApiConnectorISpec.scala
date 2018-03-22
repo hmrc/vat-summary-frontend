@@ -20,7 +20,6 @@ import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.Obligation.Status
 import models.errors.{ApiSingleError, BadRequestError, MultipleErrors}
 import models.obligations.Obligation.Status
 import models.obligations.{VatReturnObligation, VatReturnObligations}
@@ -262,7 +261,8 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
     "return an MultipleErrors" in new Test {
       override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
 
-      val expected = Left(MultipleErrors)
+      val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
+      val expected = Left(MultipleErrors(httpStatus.BAD_REQUEST.toString, Json.toJson(errors).toString()))
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",
