@@ -91,7 +91,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           | """.stripMargin
 
       "return None" in new Test {
-        override val responseFromConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT, errorResponse))
+        override val responseFromConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, errorResponse))
         val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
 
         paymentsResponse shouldBe None

@@ -23,7 +23,6 @@ import helpers.IntegrationBaseSpec
 import models.errors.{ApiSingleError, BadRequestError, MultipleErrors}
 import models.obligations.Obligation.Status
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import play.api.http.{Status => httpStatus}
 import play.api.libs.json.Json
 import stubs.VatApiStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -245,7 +244,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
 
       val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
-      val expected = Left(MultipleErrors(httpStatus.BAD_REQUEST.toString, Json.toJson(errors).toString()))
+      val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
         LocalDate.parse("2017-01-01"),
@@ -262,7 +261,7 @@ class VatApiConnectorISpec extends IntegrationBaseSpec {
       override def setupStubs(): StubMapping = VatApiStub.stubMultipleErrors
 
       val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
-      val expected = Left(MultipleErrors(httpStatus.BAD_REQUEST.toString, Json.toJson(errors).toString()))
+      val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",

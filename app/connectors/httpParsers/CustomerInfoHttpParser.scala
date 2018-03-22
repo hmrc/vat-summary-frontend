@@ -29,8 +29,8 @@ object CustomerInfoHttpParser extends ResponseHttpParsers {
       response.status match {
         case OK => Right(response.json.as[CustomerInformation])
         case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorReads)
-        case status if status >= 500 && status < 600 => Left(ServerSideError(response.status, response.body))
-        case status => Left(UnexpectedStatusError(response.status, response.body))
+        case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
+        case status => Left(UnexpectedStatusError(response.status.toString, response.body))
       }
     }
   }

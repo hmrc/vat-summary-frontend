@@ -141,7 +141,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       )
 
       val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
-      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT, httpResponse.body))
+      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
@@ -157,7 +157,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
-      val expected = Left(UnexpectedStatusError(Status.CONFLICT, httpResponse.body))
+      val expected = Left(UnexpectedStatusError("409", httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return an UnexpectedStatusError" in {
