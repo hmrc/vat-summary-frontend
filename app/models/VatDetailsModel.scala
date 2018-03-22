@@ -16,7 +16,8 @@
 
 package models
 
+import models.errors.HttpError
 import models.obligations.VatReturnObligation
 import models.payments.Payment
 
-case class VatDetailsModel(payment: Option[Payment], vatReturn: Option[VatReturnObligation])
+case class VatDetailsModel(payment: Either[HttpError, Option[Payment]], vatReturn: Either[HttpError, Option[VatReturnObligation]])

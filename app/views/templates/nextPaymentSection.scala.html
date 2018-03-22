@@ -19,16 +19,20 @@
 @import views.html.templates.formatters.money._
 @import java.time.LocalDate
 
-@(paymentDueDate: Option[LocalDate], isOverdue: Boolean)(implicit messages: Messages)
+@(paymentDueDate: Option[LocalDate], isOverdue: Boolean, isError: Boolean)(implicit messages: Messages)
 
 <div class="column-one-half" id="payments">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
   <p>
-    @paymentDueDate.map{date => @displayDate(date)}.getOrElse(messages("payment.noPayment"))
-    @if(isOverdue){
-      <span>
-        <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
-      </span>
+    @if(isError){
+      @messages("vatDetails.error")
+    }else{
+      @paymentDueDate.map{date => @displayDate(date)}.getOrElse(messages("payment.noPayment"))
+      @if(isOverdue){
+        <span>
+          <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+        </span>
+      }
     }
   </p>
 

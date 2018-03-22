@@ -22,7 +22,6 @@ import javax.inject.{Inject, Singleton}
 import cats.data.EitherT
 import cats.implicits._
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import models._
 import models.obligations.Obligation
@@ -52,19 +51,21 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
 
   def getVatDetails(user: User,
                     date: LocalDate)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatDetailsModel]] = {
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VatDetailsModel] = {
     // Static 2018 date range for MVP
     val dateFrom = LocalDate.parse("2018-01-01")
     val dateTo = LocalDate.parse("2018-12-31")
 
-    val result = for {
-      nextReturn <- EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
-        .map(obligations => getNextObligation(obligations.obligations, date))
-      nextPayment <- EitherT(financialDataConnector.getOpenPayments(user.vrn))
-        .map(payments => getNextObligation(payments.financialTransactions, date)
-        .filter(payment => payment.outstandingAmount > 0))
-    } yield VatDetailsModel(nextPayment, nextReturn)
+    val nextReturn = EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
+      .map(obligations => getNextObligation(obligations.obligations, date)).value
 
-    result.value
+    val nextPayment = EitherT(financialDataConnector.getOpenPayments(user.vrn))
+      .map(payments => getNextObligation(payments.financialTransactions, date)
+      .filter(payment => payment.outstandingAmount > 0)).value
+
+    for {
+      nr <- nextReturn
+      np <- nextPayment
+    } yield VatDetailsModel(np, nr)
   }
 }

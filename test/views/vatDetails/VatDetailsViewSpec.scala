@@ -30,7 +30,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
   object Selectors {
     val pageHeading = "h1"
     val entityNameHeading = "h1 span"
-    val nextPayment = "#payments h2"
+    val nextPaymentHeading = "#payments h2"
+    val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
     val nextReturn = "#next-return p"
     val header = "div.test"
@@ -50,21 +51,43 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     Some(LocalDate.parse("2018-12-31")),
     Some(LocalDate.parse("2018-12-31")),
     Some("Cheapo Clothing"),
-    currentYear = currentYear
+    currentYear
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2017-01-01")),
     Some(LocalDate.parse("2017-01-01")),
     Some("Cheapo Clothing"),
-    returnOverdue = true,
-    currentYear = currentYear
+    currentYear,
+    returnOverdue = true
   )
   val overduePaymentDetailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2017-01-01")),
     Some(LocalDate.parse("2018-12-31")),
     Some("Cheapo Clothing"),
-    paymentOverdue = true,
-    currentYear = currentYear
+    currentYear,
+    paymentOverdue = true
+  )
+  val paymentErrorDetailsModel = VatDetailsViewModel(
+    None,
+    Some(LocalDate.parse("2018-12-31")),
+    Some("Cheapo Clothing"),
+    currentYear,
+    paymentError = true
+  )
+  val returnErrorDetailsModel = VatDetailsViewModel(
+    Some(LocalDate.parse("2018-12-31")),
+    None,
+    Some("Cheapo Clothing"),
+    currentYear,
+    returnError = true
+  )
+  val bothErrorDetailsModel = VatDetailsViewModel(
+    None,
+    None,
+    Some("Cheapo Clothing"),
+    currentYear,
+    paymentError = true,
+    returnError = true
   )
 
   override def beforeEach(): Unit = {
@@ -151,8 +174,12 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       elementText(Selectors.nextReturn) shouldBe "31 December 2018"
     }
 
+    "render the next payment section heading" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+    }
+
     "render the next payment section" in {
-      elementText(Selectors.nextPayment) shouldBe "Next payment due"
+      elementText(Selectors.nextPayment) shouldBe "31 December 2018"
     }
 
     "render the next payment section vat returns link" in {
@@ -167,7 +194,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None, None, currentYear = currentYear))
+    lazy val view = views.html.vatDetails.details(user, VatDetailsViewModel(None, None, None, currentYear))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -178,8 +205,12 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       elementText(Selectors.nextReturn) shouldBe "No returns due right now"
     }
 
+    "render the next payment section heading" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+    }
+
     "render the next payment section" in {
-      elementText(Selectors.nextPayment) shouldBe "Next payment due"
+      elementText(Selectors.nextPayment) shouldBe "No payment due right now"
     }
 
     "render the next payment section vat returns link" in {
@@ -208,6 +239,96 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
     "render the overdue label" in {
       elementText(Selectors.overdueLabel) shouldBe "overdue"
+    }
+  }
+
+  "Rendering the VAT details page with a payment error" should {
+
+    lazy val view = views.html.vatDetails.details(user, paymentErrorDetailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the next return section heading" in {
+      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+    }
+
+    "render the next return section" in {
+      elementText(Selectors.nextReturn) shouldBe "31 December 2018"
+    }
+
+    "render the next payment section heading" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+    }
+
+    "render the next payment section" in {
+      elementText(Selectors.nextPayment) shouldBe "Sorry, there is a problem with the service. Try again later."
+    }
+
+    "render the next payment section vat returns link" in {
+      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
+    }
+
+    "have the correct next payment section vat returns link href" in {
+      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
+    }
+  }
+
+  "Rendering the VAT details page with a return error" should {
+
+    lazy val view = views.html.vatDetails.details(user, returnErrorDetailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the next return section heading" in {
+      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+    }
+
+    "render the next return section" in {
+      elementText(Selectors.nextReturn) shouldBe "Sorry, there is a problem with the service. Try again later."
+    }
+
+    "render the next payment section heading" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+    }
+
+    "render the next payment section" in {
+      elementText(Selectors.nextPayment) shouldBe "31 December 2018"
+    }
+
+    "render the next payment section vat returns link" in {
+      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
+    }
+
+    "have the correct next payment section vat returns link href" in {
+      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
+    }
+  }
+
+  "Rendering the VAT details page with payment and return errors" should {
+
+    lazy val view = views.html.vatDetails.details(user, bothErrorDetailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the next return section heading" in {
+      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
+    }
+
+    "render the next return section" in {
+      elementText(Selectors.nextReturn) shouldBe "Sorry, there is a problem with the service. Try again later."
+    }
+
+    "render the next payment section heading" in {
+      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
+    }
+
+    "render the next payment section" in {
+      elementText(Selectors.nextPayment) shouldBe "Sorry, there is a problem with the service. Try again later."
+    }
+
+    "render the next payment section vat returns link" in {
+      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
+    }
+
+    "have the correct next payment section vat returns link href" in {
+      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
   }
 }

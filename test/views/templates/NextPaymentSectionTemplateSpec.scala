@@ -36,7 +36,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
       val paymentDueDate = LocalDate.parse("2017-03-08")
 
-      lazy val view = views.html.templates.nextPaymentSection(Some(paymentDueDate), isOverdue = false)
+      lazy val view = views.html.templates.nextPaymentSection(Some(paymentDueDate), isOverdue = false, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -56,7 +56,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
       val obligationDueDate = LocalDate.parse("2017-04-30")
 
-      lazy val view = views.html.templates.nextPaymentSection(Some(obligationDueDate), isOverdue = true)
+      lazy val view = views.html.templates.nextPaymentSection(Some(obligationDueDate), isOverdue = true, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the overdue label" in {
@@ -66,7 +66,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is no payment to display" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false)
+      lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -75,6 +75,24 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
       "display the 'No payment due right now' message" in {
         elementText(Selectors.nextPaymentDate) shouldBe "No payment due right now"
+      }
+
+      "display the 'View payment details' button" in {
+        elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
+      }
+    }
+
+    "there is an error retrieving the payment" should {
+
+      lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false, isError = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the 'Next payment due' heading" in {
+        elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
+      }
+
+      "display the error message" in {
+        elementText(Selectors.nextPaymentDate) shouldBe "Sorry, there is a problem with the service. Try again later."
       }
 
       "display the 'View payment details' button" in {
