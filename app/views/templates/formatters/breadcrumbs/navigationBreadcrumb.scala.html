@@ -16,8 +16,8 @@
 
 @(links: Map[String, String], currentPage: String)
 
-<div class="breadcrumbs">
-    <ol>
+<div class="breadcrumbs soft--top">
+    <ol class="push--top">
         @links.map {
             case (key, value) => { <li><a href="@key">@value</a></li> }
         }

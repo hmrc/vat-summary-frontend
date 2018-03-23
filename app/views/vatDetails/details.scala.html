@@ -27,30 +27,44 @@
     currentPage = messages("vatDetails.title")
   )
 
+  <div class="grid-row form-group">
+    <div class="column-two-thirds">
+      <header class="page-heading push--top">
+        <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
+        @detailsViewModel.entityName.map { entityName =>
+        <p class="heading-secondary">@entityName</p>
+        }
+        <span class="form-hint">@messages("vatDetails.vrn", user.vrn)</span>
+      </header>
+    </div>
+  </div>
+
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-xlarge">
-        @detailsViewModel.entityName.map { entityName =>
-          <span class="heading-secondary">@entityName</span>
-        }
-        @messages("vatDetails.title")
-        <span class="form-hint">@messages("vatDetails.vrn", user.vrn)</span>
-      </h1>
 
-      <section class="divider--bottom">
-        <div class="grid-row">
-          @views.html.templates.nextPaymentSection(detailsViewModel.nextPaymentDueDate, detailsViewModel.paymentOverdue, detailsViewModel.paymentError)
-          @views.html.templates.nextReturnSection(detailsViewModel.nextObligationDueDate, detailsViewModel.returnOverdue, detailsViewModel.returnError)
-        </div>
-      </section>
+      <div class="grid-row divider--bottom">
+        @views.html.templates.nextPaymentSection(
+          detailsViewModel.nextPaymentDueDate,
+          detailsViewModel.paymentOverdue,
+          detailsViewModel.paymentError
+        )
+        @views.html.templates.nextReturnSection(
+          detailsViewModel.nextObligationDueDate,
+          detailsViewModel.returnOverdue,
+          detailsViewModel.returnError
+        )
+      </div>
 
       <div class="grid-row">
         @views.html.templates.accountDetailsSection(user, appConfig)
 
         <div class="column-one-half" id="submitted-returns">
-            <h3 class="heading-small"><a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear"
-                                         data-journey-click="return:view:vat-details">@messages("vatDetails.submittedReturns.link")</a></h3>
-            <p>@messages("vatDetails.submittedReturns.view")</p>
+          <h2 class="heading-small">
+            <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
+              @messages("vatDetails.submittedReturns.link")
+            </a>
+          </h2>
+          <p>@messages("vatDetails.submittedReturns.view")</p>
         </div>
       </div>
     </div>

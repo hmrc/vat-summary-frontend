@@ -18,12 +18,12 @@
 
 <div class="column-one-half" id="account-details">
     @if(appConfig.features.accountDetails()) {
-    <h3 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}"
-                                 data-journey-click="account:view:vat-details">@messages("vatDetails.accountDetails.link")</a></h3>
+    <h2 class="heading-small"><a href="@{controllers.routes.AccountDetailsController.accountDetails().url}"
+                                 data-journey-click="account:view:vat-details">@messages("vatDetails.accountDetails.link")</a></h2>
     } else {
-    <h3 class="heading-small"><a href="/vat/trader/@{user.vrn}/certificate"
+    <h2 class="heading-small"><a href="/vat/trader/@{user.vrn}/certificate"
                                  data-journey-click="vat-certificate:view:vat-details"
-                                 target="_blank">@messages("vatDetails.accountDetails.portal.link")</a></h3>
+                                 target="_blank">@messages("vatDetails.accountDetails.portal.link")</a></h2>
     }
 
     <p>@messages("vatDetails.accountDetails.view")</p>

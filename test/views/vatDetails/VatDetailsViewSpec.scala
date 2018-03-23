@@ -22,14 +22,13 @@ import models.viewModels.VatDetailsViewModel
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.scalatest.BeforeAndAfterEach
 import views.ViewBaseSpec
 
-class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
+class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val entityNameHeading = "h1 span"
+    val entityNameHeading = "header > p"
     val nextPaymentHeading = "#payments h2"
     val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
@@ -90,9 +89,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     returnError = true
   )
 
-  override def beforeEach(): Unit = {
-    mockConfig.features.accountDetails(true)
-  }
+  mockConfig.features.accountDetails(true)
 
   "Rendering the VAT details page" should {
 
@@ -131,7 +128,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       lazy val accountDetails = element(Selectors.accountDetails)
 
       "have the heading" in {
-        accountDetails.select("h3").text() shouldBe "Account details"
+        accountDetails.select("h2").text() shouldBe "Account details"
       }
 
       s"have a link to ${controllers.routes.AccountDetailsController.accountDetails().url}" in {
@@ -148,7 +145,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       lazy val submittedReturns = element(Selectors.submittedReturns)
 
       "have the heading" in {
-        submittedReturns.select("h3").text() shouldBe "Submitted returns"
+        submittedReturns.select("h2").text() shouldBe "Submitted returns"
       }
 
       s"have a link to 'returns-url/$currentYear'" in {
