@@ -33,8 +33,8 @@ class NavigationBreadcrumbTemplateSpec extends TemplateBaseSpec {
 
     val expectedMarkup = Html(
       s"""
-         |<div class="breadcrumbs">
-         |    <ol>
+         |<div class="breadcrumbs soft--top">
+         |    <ol class="push--top">
          |        <li><a href="/link-url1">link text1</a></li>
          |        <li><a href="/link-url2">link text2</a></li>
          |        <li>$currentPage</li>

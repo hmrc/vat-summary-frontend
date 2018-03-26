@@ -16,21 +16,13 @@
 
 package views.templates
 
-import config.features.Features
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.scalatest.BeforeAndAfterEach
-import play.api.Configuration
 import views.ViewBaseSpec
 
-class UserResearchBannerSpec extends ViewBaseSpec with BeforeAndAfterEach {
+class UserResearchBannerSpec extends ViewBaseSpec {
 
-  private val features = new Features(app.injector.instanceOf[Configuration])
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    features.userResearchBanner(true)
-  }
+  mockConfig.features.userResearchBanner(true)
 
   object Selectors {
     val userResearchHeading = "h3.notice-banner__content"

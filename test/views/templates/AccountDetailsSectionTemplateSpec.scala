@@ -19,6 +19,7 @@ package views.templates
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
 
 class AccountDetailsSectionTemplateSpec extends ViewBaseSpec {
@@ -26,24 +27,23 @@ class AccountDetailsSectionTemplateSpec extends ViewBaseSpec {
   "The accountDetailsSection" when {
 
     object Selectors {
-      val accountDetailsHeading = "#account-details h3 a"
+      val accountDetailsHeading = "#account-details h2 a"
     }
 
-    def view = views.html.templates.accountDetailsSection(User("123456789"), mockConfig)
+    def view: HtmlFormat.Appendable = views.html.templates.accountDetailsSection(User("123456789"), mockConfig)
     implicit def document: Document = Jsoup.parse(view.body)
 
     "the account details feature is disabled" should {
 
       "have the correct heading" in {
         mockConfig.features.accountDetails(false)
-        elementText(Selectors.accountDetailsHeading) shouldBe "View VAT certificate (opens in a new tab)"
+        elementText(Selectors.accountDetailsHeading) shouldBe "View VAT certificate (opens in a new window)"
       }
 
       "have the correct portal link" in {
         mockConfig.features.accountDetails(false)
         elementAttributes(Selectors.accountDetailsHeading).get("href") shouldBe Some("/vat/trader/123456789/certificate")
       }
-
     }
 
     "the account details feature is enabled" should {
@@ -52,9 +52,6 @@ class AccountDetailsSectionTemplateSpec extends ViewBaseSpec {
         mockConfig.features.accountDetails(true)
         elementText(Selectors.accountDetailsHeading) shouldBe "Account details"
       }
-
     }
-
   }
-
 }
