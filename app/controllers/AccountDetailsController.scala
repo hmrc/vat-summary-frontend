@@ -52,6 +52,7 @@ class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
             details.correspondencePrimaryPhoneNumber.get,
             details.businessEmailAddress.get
           )
+        case Left(error) => throw new Exception(error.message)
     }
   }
 }

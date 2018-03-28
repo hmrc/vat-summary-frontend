@@ -17,6 +17,8 @@
 package controllers
 
 import connectors.VatSubscriptionConnector
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import models.errors.ServerSideError
 import models.{Address, CustomerInformation, User}
 import models.viewModels.AccountDetailsModel
 import play.api.http.Status
@@ -95,11 +97,12 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
+    val connectorReturn: HttpGetResult[CustomerInformation]
 
     def setup(): Unit = {
       (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
-        .returns(Right(exampleCunstomerInfo))
+        .returns(connectorReturn)
     }
 
     def target: AccountDetailsController = {
@@ -154,6 +157,8 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     "the AccountDetailsService retrieves a valid AccountDetailsModel" should {
 
       "return the AccountDetailsModel" in new HandleAccountDetailsModelTest {
+        override val connectorReturn = Right(exampleCunstomerInfo)
+
         val exampleAccountDetailsModel: AccountDetailsModel = {
           AccountDetailsModel(
             "Betty Jones",
@@ -180,6 +185,15 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
         private val result = await(target.handleAccountDetailsModel(testUser))
         result shouldBe exampleAccountDetailsModel
+      }
+    }
+
+    "the AccountDetailsService returns an error" should {
+
+      "throw an exception" in new HandleAccountDetailsModelTest {
+        override val connectorReturn = Left(ServerSideError("501", "Service not implemented."))
+
+        intercept[Exception](await(target.handleAccountDetailsModel(testUser)))
       }
     }
   }
