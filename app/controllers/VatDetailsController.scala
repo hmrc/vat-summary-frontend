@@ -17,11 +17,13 @@
 package controllers
 
 import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import models.viewModels.VatDetailsViewModel
 import models.VatDetailsModel
+import models.errors.HttpError
+import models.obligations.Obligation
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
@@ -51,28 +53,26 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def constructViewModel(vatDetailsModel: VatDetailsModel, entityName: Option[String]): VatDetailsViewModel = {
-    def getIsOverdue(date: Option[LocalDate]): Boolean = date.fold(false)(d => dateService.now().isAfter(d))
 
-    (vatDetailsModel.payment, vatDetailsModel.vatReturn) match {
-      case (Right(maybePayment), Right(maybeVatReturnObligation)) =>
-        val paymentDate = maybePayment.map(_.due)
-        val returnDate = maybeVatReturnObligation.map(_.due)
-        val paymentOverdue = getIsOverdue(paymentDate)
-        val returnOverdue = getIsOverdue(returnDate)
-        VatDetailsViewModel(paymentDate, returnDate, entityName, dateService.now().getYear, returnOverdue, paymentOverdue)
+    val getDueDate: Either[HttpError, Option[Obligation]] => Option[LocalDate] = _.fold(_ => None, _.map(_.due))
+    val getIsOverdue: Option[LocalDate] => Boolean = _.fold(false)(d => dateService.now().isAfter(d))
+    val payment: Option[LocalDate] = getDueDate(vatDetailsModel.payment)
+    val paymentIsOverdue = getIsOverdue(payment)
+    val paymentHasError = vatDetailsModel.payment.isLeft
+    val obligation: Option[LocalDate] = getDueDate(vatDetailsModel.vatReturn)
+    val obligationIsOverdue = getIsOverdue(obligation)
+    val obligationHasError = vatDetailsModel.vatReturn.isLeft
 
-      case (Left(_), Right(maybeVatReturnObligation)) =>
-        val returnDate = maybeVatReturnObligation.map(_.due)
-        val returnOverdue = getIsOverdue(returnDate)
-        VatDetailsViewModel(None, returnDate, entityName, dateService.now().getYear, returnOverdue, paymentError = true)
-
-      case (Right(maybePayment), Left(_)) =>
-        val paymentDate = maybePayment.map(_.due)
-        val paymentOverdue = getIsOverdue(paymentDate)
-        VatDetailsViewModel(paymentDate, None, entityName, dateService.now().getYear, paymentOverdue, returnError = true)
-
-      case (Left(_), Left(_)) =>
-        VatDetailsViewModel(None, None, entityName, dateService.now().getYear, returnError = true, paymentError = true)
-    }
+    VatDetailsViewModel(
+      payment,
+      obligation,
+      entityName,
+      dateService.now().getYear,
+      obligationIsOverdue,
+      paymentIsOverdue,
+      obligationHasError,
+      paymentHasError
+    )
   }
+
 }

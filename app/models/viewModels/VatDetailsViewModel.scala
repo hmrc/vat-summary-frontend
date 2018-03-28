@@ -19,10 +19,10 @@ package models.viewModels
 import java.time.LocalDate
 
 case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
-                               nextObligationDueDate: Option[LocalDate],
+                               nextReturnObligationDueDate: Option[LocalDate],
                                entityName: Option[String],
                                currentYear: Int,
-                               returnOverdue: Boolean = false,
+                               returnObligationOverdue: Boolean = false,
                                paymentOverdue: Boolean = false,
-                               returnError: Boolean = false,
+                               returnObligationError: Boolean = false,
                                paymentError: Boolean = false)

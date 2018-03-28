@@ -57,7 +57,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some(LocalDate.parse("2017-01-01")),
     Some("Cheapo Clothing"),
     currentYear,
-    returnOverdue = true
+    returnObligationOverdue = true
   )
   val overduePaymentDetailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2017-01-01")),
@@ -78,7 +78,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     Some("Cheapo Clothing"),
     currentYear,
-    returnError = true
+    returnObligationError = true
   )
   val bothErrorDetailsModel = VatDetailsViewModel(
     None,
@@ -86,7 +86,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     currentYear,
     paymentError = true,
-    returnError = true
+    returnObligationError = true
   )
 
   mockConfig.features.accountDetails(true)
