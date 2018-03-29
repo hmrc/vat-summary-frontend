@@ -159,10 +159,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       element(Selectors.firstPaymentPayLink).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(54321, 3, 2001).url
     }
 
-//    "render the correct button text for the first payment" in {
-//      elementText(Selectors.firstPaymentPay) should endWith("Pay now")
-//    }
-
     "render a hidden label for the button for the first payment" in {
       elementText(Selectors.firstPaymentPayNowContext) shouldBe "£543.21 overdue for the period 1 January to 31 March 2001"
     }
@@ -199,14 +195,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       elementText(Selectors.secondPaymentDueData) shouldBe "due by 10 May 2002"
     }
 
-//    "render the correct button text for the second payment" in {
-//      elementText(Selectors.secondPaymentPayLink) should endWith("Pay now")
-//    }
-
-//    "render the correct Pay now link text for the second payment" in {
-//      elementText(Selectors.secondPaymentPayContext) shouldBe "Pay now"
-//    }
-
     "render the correct pay now href for the second payment" in {
       element(Selectors.secondPaymentPayLink).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(10000, 3, 2002).url
     }
@@ -241,11 +229,12 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitCheckFullText) shouldBe
-        "If you've already set up a direct debit, you don't need to pay now. You can check if you've set up a direct debit if you're not sure."
+        "If you've already set up a direct debit, you don't need to pay now." +
+          " You can check if you've set up a direct debit (opens in a new window) if you're not sure."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitCheckLink) shouldBe "check if you've set up a direct debit"
+      elementText(Selectors.directDebitCheckLink) shouldBe "check if you've set up a direct debit (opens in a new window)"
     }
 
     "render the correct check direct debit href" in {
@@ -261,7 +250,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window)"
+      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window)."
     }
 
     "render the overdue label" in {

@@ -24,7 +24,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
 @hiddenHelpTextContent = {
   <p>@Messages("openPayments.timeToAppear")</p>
-  <p>@Messages("payment.stillMakeLink") <a href="@appConfig.paymentsServiceUrl" id="vatPaymentsLink">@Messages("payment.stillMake")</a></p>
+  <p>@Messages("payment.stillMakeLink") <a href="@appConfig.paymentsServiceUrl" id="vatPaymentsLink">@Messages("payment.stillMake").</a></p>
 }
 
 @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
@@ -97,8 +97,8 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
       <span id="direct-debits" class="heading-small">Direct debits</span>
       <div id="check-direct-debit" class="form-group">
         <p>
-          @messages("openPayments.directDebitLink") <a href="#">@messages("openPayments.directDebitLinkText")
-        </a> @messages("openPayments.directDebitNotSure")</p>
+          @messages("openPayments.directDebitLink") <a href="#">@messages("openPayments.directDebitLinkText")</a>
+            @messages("openPayments.directDebitNotSure")</p>
       </div>
     }
 
