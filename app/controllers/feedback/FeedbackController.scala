@@ -35,6 +35,7 @@ import views.html.feedback.feedback_thankyou
 
 import scala.concurrent.Future
 
+//$COVERAGE-OFF$
 @Singleton
 class FeedbackController @Inject()(implicit val config: FrontendAppConfig,
                                    val wsHttp: HttpClient,
@@ -118,3 +119,4 @@ class FeedbackController @Inject()(implicit val config: FrontendAppConfig,
     def read(method: String, url: String, response: HttpResponse): HttpResponse = response
   }
 }
+//$COVERAGE-ON$
