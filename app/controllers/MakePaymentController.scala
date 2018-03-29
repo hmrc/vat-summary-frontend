@@ -33,13 +33,10 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
-import forms.MakePaymentForm
 import models.payments.PaymentDetailsModel
-import play.api.Logger
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import services.EnrolmentsAuthService
 
@@ -51,29 +48,23 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
                                       implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
-  def makePayment(): Action[AnyContent] = authorisedAction { implicit request =>
-    user =>
 
-      def payment(paymentData: PaymentDetailsModel, vrn: String) = Json.toJson[PaymentDetailsModel](
-        paymentData.copy(
-          taxType = "mtdfb-vat",
-          taxReference = vrn,
-          returnUrl = appConfig.paymentsReturnUrl,
-          taxPeriodYear = paymentData.taxPeriodYear.takeRight(2)))
-
-      MakePaymentForm.form.bindFromRequest().fold(
-        errors => {
-          Logger.warn("[MakePaymentsController].[makePayment] invalid payment data")
-          Future.successful(InternalServerError(views.html.errors.standardError(
-            appConfig, Messages("paymentHandOffErrorHeading"),
-            Messages("paymentHandOffErrorHeading"),
-            Messages("paymentHandOffErrorMessage"))))
-        },
-        paymentDetail => {
-          Future.successful(Redirect(appConfig.paymentsServiceUrl).addingToSession(
-            "payment-data" -> payment(paymentDetail, user.vrn).toString())
+  def makePayment(amountInPence: Int, taxPeriodMonth: Int, taxPeriodYear: Int): Action[AnyContent] =
+    authorisedAction { implicit request =>
+      user =>
+        def payment(penceAmount: Int, taxMonth: Int, taxYear: Int, vrn: String): JsValue = Json.toJson[PaymentDetailsModel](
+          PaymentDetailsModel(
+            taxType = "mtdfb-vat",
+            taxReference = vrn,
+            amountInPence = penceAmount.toString,
+            taxPeriodMonth = taxMonth.formatted("%02d"),
+            taxPeriodYear = taxYear.toString.takeRight(2),
+            returnUrl = appConfig.paymentsReturnUrl
           )
-        }
-      )
-  }
+        )
+
+        Future.successful(Redirect(appConfig.paymentsServiceUrl).addingToSession(
+          "payment-data" -> payment(amountInPence, taxPeriodMonth, taxPeriodYear, user.vrn).toString())
+        )
+    }
 }

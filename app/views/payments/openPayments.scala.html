@@ -41,7 +41,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
     @payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}">
-          @form(action = controllers.routes.MakePaymentController.makePayment()) {
+
           <span aria-hidden="true" data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
           <div class="grid-row" id="payment-row-@{count + 1}">
             <div class="column-two-thirds">
@@ -54,19 +54,17 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
-                  <button class="button--link-style float--right"
-                          type="submit" id="pay-now-@{count + 1}"
-                          data-journey-click="payment:make-payment:open-payments">
+                  <a data-journey-click="payment:make-payment:open-payments"
+                     href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url" class="float--right">
+                      <span aria-hidden="true">@messages("openPayments.makePayment")</span>
                       <span class="visuallyhidden">
-                          @displayMoney(payment.amount)
-                          @if(payment.overdue) { @messages("common.overdue") }
-                          @messages("openPayments.forPeriod")
-                          @displayDateRange(payment.start, payment.end).toString().trim
-                      </span>
-                    @messages("openPayments.makePayment")
-                  </button>
+                         @displayMoney(payment.amount)
+                         @if(payment.overdue) { @messages("common.overdue") }
+                         @messages("openPayments.forPeriod")
+                         @displayDateRange(payment.start, payment.end).toString().trim
+                    </span>
+                  </a>
               </div>
-            }
           </div>
           <div class="grid-row" id="period-row-@{count + 1}">
             <div class="column-two-thirds form-hint">
@@ -87,11 +85,6 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             }
           </div>
           <hr>
-            <div id="payment-detail-@{count + 1}">
-                <input type="hidden" name="amountInPence" value="@((payment.amount * 100).toInt)">
-                <input type="hidden" name="taxPeriodMonth" value='@(payment.end.getMonthValue.formatted("%02d"))'>
-                <input type="hidden" name="taxPeriodYear" value="@payment.end.getYear.toString.takeRight(2)">
-            </div>
         }
       </div>
     }

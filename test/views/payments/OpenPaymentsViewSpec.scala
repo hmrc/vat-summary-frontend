@@ -39,27 +39,32 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
     val paymentSectionFirst = "#payment-section-1"
-    val paymentSectionSecond = "#payment-section-2"
     val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
     val firstPaymentAmountData = "#payment-section-1 span[data-amount]"
-    val secondPaymentAmount = "#payment-section-2 span:nth-of-type(1)"
-    val secondPaymentAmountData = "#payment-section-2 span[data-amount]"
     val firstPaymentDue = "#payment-row-1 span:nth-of-type(1)"
     val firstPaymentDueData = "#payment-row-1 span[data-due]"
+    val firstPaymentPayLink = "#payment-row-1 a"
+    val firstPaymentPayContext = "#payment-row-1 a span"
+    val firstPaymentPayNowLinkText = "#payment-row-1 div:nth-of-type(2) span:nth-of-type(1)"
+    val firstPaymentPayNowContext = "#payment-row-1 div:nth-of-type(2) span:nth-of-type(2)"
+    val paymentSectionSecond = "#payment-section-2"
+    val secondPaymentAmount = "#payment-section-2 span:nth-of-type(1)"
+    val secondPaymentAmountData = "#payment-section-2 span[data-amount]"
     val secondPaymentDue = "#payment-row-2 span:nth-of-type(1)"
     val secondPaymentDueData = "#payment-row-2 span[data-due]"
-    val firstPaymentPay = "#payment-row-1 button"
-    val firstPaymentPayContext = "#payment-row-1 button span"
-    val secondPaymentPay = "#payment-row-2 button"
-    val secondPaymentPayContext = "#payment-row-2 button span"
+    val secondPaymentPayLink = "#payment-row-2 a"
+    val secondPaymentPayNowLinkText = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(1)"
+    val secondPaymentPayContext = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(2)"
+
+    lazy val firstPaymentViewReturnLink = "#period-row-1 a"
     val firstPaymentPeriod = "#period-row-1 span:nth-of-type(1)"
-    val secondPaymentPeriod = "#period-row-2 span:nth-of-type(1)"
-    lazy val firstPaymentViewReturn = "#period-row-1 a"
-    lazy val secondPaymentViewReturn = "#period-row-2 a"
     val firstPaymentViewReturnText = "#period-row-1 div:nth-of-type(2) span:nth-of-type(1)"
     val firstPaymentViewReturnContext = "#period-row-1 div:nth-of-type(2) span:nth-of-type(2)"
+    lazy val secondPaymentViewReturnLink = "#period-row-2 a"
     val secondPaymentViewReturnText = "#period-row-2 div:nth-of-type(2) span:nth-of-type(1)"
     val secondPaymentViewReturnContext = "#period-row-2 span:nth-of-type(2)"
+    val secondPaymentPeriod = "#period-row-2 span:nth-of-type(1)"
+
     val processingTime = "#payments-information p:nth-of-type(1)"
     val directDebit = "#direct-debits"
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
@@ -68,12 +73,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "details p:nth-of-type(2)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val overdueLabel = ".task-overdue"
-    val firstPaymentDetailAmount = "#payment-detail-1 input:nth-of-type(1)"
-    val firstPaymentDetailMonth = "#payment-detail-1 input:nth-of-type(2)"
-    val firstPaymentDetailYear = "#payment-detail-1 input:nth-of-type(3)"
-    val secondPaymentDetailAmount = "#payment-detail-2 input:nth-of-type(1)"
-    val secondPaymentDetailMonth = "#payment-detail-2 input:nth-of-type(2)"
-    val secondPaymentDetailYear = "#payment-detail-2 input:nth-of-type(3)"
     val makePayment = "#vatPaymentsLink"
   }
 
@@ -151,12 +150,21 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       elementText(Selectors.firstPaymentDueData) shouldBe "due by 8 April 2001"
     }
 
-    "render the correct button text for the first payment" in {
-      elementText(Selectors.firstPaymentPay) should endWith("Pay now")
+
+    "render the correct Pay now link text for the first payment" in {
+      elementText(Selectors.firstPaymentPayContext) shouldBe "Pay now"
     }
 
+    "render the correct pay now href for the first payment" in {
+      element(Selectors.firstPaymentPayLink).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(54321, 3, 2001).url
+    }
+
+//    "render the correct button text for the first payment" in {
+//      elementText(Selectors.firstPaymentPay) should endWith("Pay now")
+//    }
+
     "render a hidden label for the button for the first payment" in {
-      elementText(Selectors.firstPaymentPayContext) shouldBe "£543.21 overdue for the period 1 January to 31 March 2001"
+      elementText(Selectors.firstPaymentPayNowContext) shouldBe "£543.21 overdue for the period 1 January to 31 March 2001"
     }
 
     "render the correct due period for the first payment period" in {
@@ -172,19 +180,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct view return href for the first payment" in {
-      element(Selectors.firstPaymentViewReturn).attr("href") shouldBe "/submitted/%23001"
-    }
-
-    "render the correct value for the amount hidden input for the first payment" in {
-      element(Selectors.firstPaymentDetailAmount).attr("value") shouldBe "54321"
-    }
-
-    "render the correct value for the tax period month hidden input for the first payment" in {
-      element(Selectors.firstPaymentDetailMonth).attr("value") shouldBe "03"
-    }
-
-    "render the correct value for the tax period year hidden input for the first payment" in {
-      element(Selectors.firstPaymentDetailYear).attr("value") shouldBe "01"
+      element(Selectors.firstPaymentViewReturnLink).attr("href") shouldBe "/submitted/%23001"
     }
 
     "render the correct amount for the second payment" in {
@@ -203,8 +199,16 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       elementText(Selectors.secondPaymentDueData) shouldBe "due by 10 May 2002"
     }
 
-    "render the correct button text for the second payment" in {
-      elementText(Selectors.secondPaymentPay) should endWith("Pay now")
+//    "render the correct button text for the second payment" in {
+//      elementText(Selectors.secondPaymentPayLink) should endWith("Pay now")
+//    }
+
+//    "render the correct Pay now link text for the second payment" in {
+//      elementText(Selectors.secondPaymentPayContext) shouldBe "Pay now"
+//    }
+
+    "render the correct pay now href for the second payment" in {
+      element(Selectors.secondPaymentPayLink).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(10000, 3, 2002).url
     }
 
     "render a hidden text for the button for the second payment" in {
@@ -224,19 +228,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct view return href for the second payment" in {
-      element(Selectors.secondPaymentViewReturn).attr("href") shouldBe "/submitted/%23002"
-    }
-
-    "render the correct value for the amount hidden input for the second payment" in {
-      element(Selectors.secondPaymentDetailAmount).attr("value") shouldBe "10000"
-    }
-
-    "render the correct value for the tax period month hidden input for the second payment" in {
-      element(Selectors.secondPaymentDetailMonth).attr("value") shouldBe "03"
-    }
-
-    "render the correct value for the tax period year hidden input for the second payment" in {
-      element(Selectors.secondPaymentDetailYear).attr("value") shouldBe "02"
+      element(Selectors.secondPaymentViewReturnLink).attr("href") shouldBe "/submitted/%23002"
     }
 
     "render the correct text for the processing time" in {
@@ -269,7 +261,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new tab)."
+      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window)"
     }
 
     "render the overdue label" in {
