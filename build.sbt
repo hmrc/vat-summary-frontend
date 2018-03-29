@@ -39,6 +39,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "app.*",
     "prod.*",
     "config.*",
+    "testOnly.*",
     "testOnlyDoNotUseInAppConf.*",
     "partials.*")
 
