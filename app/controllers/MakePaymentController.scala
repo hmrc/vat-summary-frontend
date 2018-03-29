@@ -35,7 +35,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import models.payments.PaymentDetailsModel
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
 import services.EnrolmentsAuthService
