@@ -20,7 +20,7 @@ import config.VatHeaderCarrierForPartialsConverter
 import controllers.ControllerBaseSpec
 import play.twirl.api.Html
 import play.api.http.Status._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse}
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 
@@ -33,9 +33,27 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
   def setup(response: HttpResponse): BtaStubConnector = {
     val mockHttp = mock[HttpClient]
 
+    def generateResponse(res: HttpResponse): Future[HttpResponse] = {
+      if(res.status >= 200 && res.status <= 399) {
+        Future.successful(res)
+      } else if(res.status >= 400 && res.status <= 499) {
+        Future.failed(Upstream4xxResponse(
+          message = res.body,
+          upstreamResponseCode = res.status,
+          reportAs = res.status
+        ))
+      } else {
+        Future.failed(Upstream5xxResponse(
+          message = res.body,
+          upstreamResponseCode = res.status,
+          reportAs = res.status
+        ))
+      }
+    }
+
     (mockHttp.GET[HttpResponse](_: String)(_: HttpReads[HttpResponse], _: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
-      .returns(Future.successful(response))
+      .returns(generateResponse(response))
 
     new BtaStubConnector(mockHttp, mockAppConfig, hc)
   }
@@ -72,17 +90,6 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
       "return HtmlPartial Failure" in {
         await(result) shouldEqual HtmlPartial.Failure(Some(FORBIDDEN), "response")
-      }
-    }
-
-    "500 is returned " should {
-
-      lazy val connector = setup(HttpResponse(INTERNAL_SERVER_ERROR, responseString = Some("")))
-
-      lazy val result = connector.getPartial
-
-      "return HtmlPartial Failure" in {
-        await(result) shouldEqual HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR), "")
       }
     }
   }

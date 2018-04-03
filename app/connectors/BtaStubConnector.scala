@@ -39,7 +39,7 @@ class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig, hc: Vat
       .recover {
         case ex: Upstream4xxResponse
           if ex.upstreamResponseCode == UNAUTHORIZED || ex.upstreamResponseCode == FORBIDDEN =>
-          HttpResponse(ex.upstreamResponseCode)
+          HttpResponse(ex.upstreamResponseCode, responseString = Some(ex.message))
       }
     result.map(p => read("GET", partialUrl, p))
   }

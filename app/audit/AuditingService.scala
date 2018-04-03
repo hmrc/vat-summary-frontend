@@ -36,17 +36,17 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: FrontendAu
 
   def audit(auditModel: AuditModel, path: String = "N/A")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val dataEvent = toDataEvent(appConfig.contactFormServiceIdentifier, auditModel, path)
+    //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
     Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(dataEvent)}")
     auditConnector.sendEvent(dataEvent).map {
-      //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
       case Success =>
         Logger.debug("Splunk Audit Successful")
       case Failure(err, _) =>
         Logger.debug(s"Splunk Audit Error, message: $err")
       case _ =>
         Logger.debug(s"Unknown Splunk Error")
-      //$COVERAGE-ON$
     }
+    //$COVERAGE-ON$
   }
 
   def toDataEvent(appName: String, auditModel: AuditModel, path: String)(implicit hc: HeaderCarrier): DataEvent = {
