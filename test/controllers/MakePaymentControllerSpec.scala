@@ -30,6 +30,10 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MakePaymentControllerSpec extends ControllerBaseSpec {
 
+  val testAmountInPence:Int = 10000
+  val testMonth: Int = 2
+  val testYear:Int = 18
+
   val expectedPaymentSessionCookieJson =
     """
       |{"taxType":"mtdfb-vat",
@@ -65,67 +69,13 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     "the user is logged in" should {
       "have valid cookie data stored in session and redirect to payments frontend if the posted data is valid" in new MakePaymentDetailsTest {
-        lazy val request = fakeRequestToPOSTWithSession(
-          ("amountInPence", "10000"),
-          ("taxPeriodMonth", "02"),
-          ("taxPeriodYear", "18"))
-        lazy val result: Future[Result] = target.makePayment()(request)
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear)(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("payments-url")
 
         await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
 
-      }
-
-    }
-
-    "the user is logged in" should {
-      "return 303 and navigate to the payments front end if the posted data is valid and allows 4 digit year" in new MakePaymentDetailsTest {
-        lazy val request = fakeRequestToPOSTWithSession(
-          ("amountInPence", "10000"),
-          ("taxPeriodMonth", "02"),
-          ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment()(request)
-
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("payments-url")
-
-        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
-
-      }
-
-    }
-
-    "the user is logged in" should {
-      "overwrite any posted values for taxType, taxReference (vrn) and return url redirecting to the payments front end" in new MakePaymentDetailsTest {
-        lazy val request = fakeRequestToPOSTWithSession(
-          ("taxTpe", "Some rubbish"),
-          ("taxReference", "878545258"),
-          ("amountInPence", "10000"),
-          ("taxPeriodMonth", "02"),
-          ("taxPeriodYear", "18"),
-          ("returnUrl", "/some/dodgy/url"))
-        lazy val result: Future[Result] = target.makePayment()(request)
-
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("payments-url")
-
-        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
-
-      }
-
-    }
-
-    "the user is logged in" should {
-      "return 500 internal server error if the posted data has a month that is not tow characters as expected" in new MakePaymentDetailsTest {
-        lazy val request = fakeRequestToPOSTWithSession(
-          ("amountInPence", "10000"),
-          ("taxPeriodMonth", "0233"),
-          ("taxPeriodYear", "18"))
-        lazy val result: Future[Result] = target.makePayment()(request)
-
-        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
     }
@@ -136,7 +86,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment()(request)
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear)(request)
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
 
@@ -150,7 +100,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment()(request)
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear)(request)
 
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
 
