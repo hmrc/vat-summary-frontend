@@ -42,7 +42,18 @@ class SurveyControllerSpec extends ControllerBaseSpec {
 
     lazy val mockAuditingService: AuditingService = new AuditingService(mockAppConfig, mockAuditConnector)
 
+    val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"),
+      Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
+    val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier,
+      testModel, controllers.survey.routes.SurveyController.yourJourney().url)
+
     def target: SurveyController = {
+
+      (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(argThat[DataEvent](_.tags == expectedData.tags), *, *)
+        .noMoreThanOnce()
+        .returns(Future.successful(Success))
+
       new SurveyController(messages, mockAuditingService, mockAppConfig)
     }
   }
@@ -61,16 +72,6 @@ class SurveyControllerSpec extends ControllerBaseSpec {
 
   "posting valid survey data" should {
     "redirect to the thankyou end survey page" in new SurveyControllerTest {
-
-      val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"),
-        Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
-      val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier,
-        testModel, controllers.survey.routes.SurveyController.yourJourney().url)
-
-      (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(argThat[DataEvent](_.tags == expectedData.tags), *, *)
-        .noMoreThanOnce()
-        .returns(Future.successful(Success))
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
         ("anyApplicable", "yes"),
@@ -92,16 +93,6 @@ class SurveyControllerSpec extends ControllerBaseSpec {
   "posting invalid survey data" should {
     "return a bad request" in new SurveyControllerTest {
 
-      val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"),
-        Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
-      val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier,
-        testModel, controllers.survey.routes.SurveyController.yourJourney().url)
-
-      (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(argThat[DataEvent](_.tags == expectedData.tags), *, *)
-        .noMoreThanOnce()
-        .returns(Future.successful(Success))
-
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
         ("anyApplicable", "yes"),
         ("choice1", "this is bad"),
@@ -119,16 +110,6 @@ class SurveyControllerSpec extends ControllerBaseSpec {
 
   "posting empty survey data" should {
     "redirect to the thankyou end survey page without error as survey questions are optional" in new SurveyControllerTest {
-
-      val testModel: ExitSurveyAuditModel = ExitSurveyAuditModel(SurveyJourneyModel(Some("yes"),
-        Some(true), Some(true), Some(true), Some(true), Some(true), Some(true)))
-      val expectedData: DataEvent = mockAuditingService.toDataEvent(mockAppConfig.contactFormServiceIdentifier,
-        testModel, controllers.survey.routes.SurveyController.yourJourney().url)
-
-      (mockAuditConnector.sendEvent(_: DataEvent)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(argThat[DataEvent](_.tags == expectedData.tags), *, *)
-        .noMoreThanOnce()
-        .returns(Future.successful(Success))
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession()
       lazy val result: Future[Result] = target.submit()(request)
