@@ -24,7 +24,7 @@ class Feature(val key: String, config: Configuration) {
 
   def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
 
-  def fold[A](default: A)(featureFunc:  A): A = {
+  def fold[A](default: A)(featureFunc: => A): A = {
     if(apply()) {
       featureFunc
     } else {
