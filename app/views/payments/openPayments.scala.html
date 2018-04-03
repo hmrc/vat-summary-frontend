@@ -56,7 +56,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
               <div class="column-one-third form-hint">
                   <a data-journey-click="payment:make-payment:open-payments"
                      href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url" class="float--right">
-                      <span aria-hidden="true">@messages("openPayments.makePayment")</span>
+                      <span>@messages("openPayments.makePayment")</span>
                       <span class="visuallyhidden">
                          @displayMoney(payment.amount)
                          @if(payment.overdue) { @messages("common.overdue") }
