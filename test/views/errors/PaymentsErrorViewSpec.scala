@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.payments
+package views.errors
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -29,9 +29,9 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
     val payNowLink = s"$payNow > a"
   }
 
-  "Rendering the no payments page" should {
+  "Rendering the payments error page" should {
 
-    lazy val view = views.html.payments.paymentsError()
+    lazy val view = views.html.errors.paymentsError()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -48,6 +48,10 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
 
     "have the correct pay now link" in {
       element(Selectors.payNowLink).attr("href") shouldBe "payments-url"
+    }
+
+    "have the correct GA tag for the graceful error content" in {
+      element(Selectors.payNow).attr("data-metrics") shouldBe "error:help-text:payments-service"
     }
   }
 }

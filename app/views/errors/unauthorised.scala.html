@@ -19,7 +19,7 @@
 @views.html.main_template(title = messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig, feedbackOnSignOut = false) {
 
  <h1>@messages("unauthorised.title")</h1>
- <p>
+ <p data-metrics="error:help-text:sign-up">
    @messages("unauthorised.youNeedTo")
    <a href='@appConfig.mtdVatSignUpUrl'>@messages("unauthorised.signUpWithSoftware")</a>.
  </p>

@@ -23,7 +23,7 @@
 
 <div class="column-one-half" id="payments">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
-  <p>
+  <p @if(isError){data-metrics="error:recovered:next-payment"}>
     @if(isError){
       @messages("vatDetails.error")
     }else{

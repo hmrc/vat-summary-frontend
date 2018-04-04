@@ -37,7 +37,7 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
       paymentsService.getOpenPayments(user.vrn).map {
         case Some(Payments(payments)) if payments.nonEmpty => Ok(views.html.payments.openPayments(user, getModel(payments)))
         case Some(_) => Ok(views.html.payments.noPayments(user))
-        case None => InternalServerError(views.html.payments.paymentsError())
+        case None => InternalServerError(views.html.errors.paymentsError())
       }
   }
 
