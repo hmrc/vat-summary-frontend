@@ -21,7 +21,7 @@
 
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
-  <p>
+  <p @if(isError){data-metrics="error:recovered:next-return"}>
     @if(isError){
       @messages("vatDetails.error")
     }else{

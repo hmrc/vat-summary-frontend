@@ -99,6 +99,10 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       "display the 'View return deadlines' button" in {
         elementText(Selectors.viewReturnsButton) shouldBe "View return deadlines"
       }
+
+      "have the correct GA tag for the graceful error content" in {
+        element(Selectors.nextReturnDate).attr("data-metrics") shouldBe "error:recovered:next-return"
+      }
     }
   }
 }

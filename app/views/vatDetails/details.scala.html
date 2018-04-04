@@ -29,10 +29,11 @@
 
   <div class="grid-row form-group">
     <div class="column-two-thirds">
-      <header class="page-heading push--top">
+      <header class="page-heading push--top"
+              @if(!detailsViewModel.entityName.isDefined){data-metrics="error:hidden-text:vat-overview-entity-name"}>
         <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
         @detailsViewModel.entityName.map { entityName =>
-        <p class="heading-secondary">@entityName</p>
+          <p class="heading-secondary">@entityName</p>
         }
         <span class="form-hint">@messages("vatDetails.vrn", user.vrn)</span>
       </header>

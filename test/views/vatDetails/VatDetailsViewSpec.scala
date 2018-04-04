@@ -28,12 +28,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
+    val header = "#content > article > div.grid-row.form-group > div > header"
     val entityNameHeading = "header > p"
     val nextPaymentHeading = "#payments h2"
     val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
     val nextReturn = "#next-return p"
-    val header = "div.test"
     val accountDetails = "#account-details"
     val submittedReturns = "#submitted-returns"
     val vatRegNo = ".form-hint"
@@ -83,7 +83,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   val bothErrorDetailsModel = VatDetailsViewModel(
     None,
     None,
-    Some("Cheapo Clothing"),
+    None,
     currentYear,
     paymentError = true,
     returnObligationError = true
@@ -299,7 +299,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the VAT details page with payment and return errors" should {
+  "Rendering the VAT details page with errors in all APIs" should {
 
     lazy val view = views.html.vatDetails.details(user, bothErrorDetailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -326,6 +326,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "have the correct next payment section vat returns link href" in {
       element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
+    }
+
+    "have the correct GA tag regarding the entity name graceful error handling" in {
+      element(Selectors.header).attr("data-metrics") shouldBe "error:hidden-text:vat-overview-entity-name"
     }
   }
 }

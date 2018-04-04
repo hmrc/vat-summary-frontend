@@ -63,5 +63,9 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     "have the correct sign out link" in {
       element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/sign-out?authorised=false"
     }
+
+    "have the correct GA tag for the graceful error content" in {
+      element(Selectors.signUpWithSoftware).attr("data-metrics") shouldBe "error:help-text:sign-up"
+    }
   }
 }

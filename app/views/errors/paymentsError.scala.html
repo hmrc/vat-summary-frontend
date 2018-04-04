@@ -22,7 +22,7 @@
 
 @mainContent = {
   <p class="lede">@messages("paymentsError.message")</p>
-  <p>
+  <p data-metrics="error:help-text:payments-service">
     @messages("paymentsError.payNowOne")
     <a href="@appConfig.paymentsServiceUrl">@messages("paymentsError.payNowTwo")</a>
     @messages("paymentsError.payNowThree")
