@@ -70,8 +70,8 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                   </div>
 
                @if(appConfig.features.allowNineBox()) {
-                    <div class="grid-row">
-                      <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
+                <div class="grid-row">
+                  <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
                          href="@appConfig.vatReturnUrl(payment.periodKey)"
                          class="float--right">
                           <span>@messages("openPayments.viewReturnLink")</span>
