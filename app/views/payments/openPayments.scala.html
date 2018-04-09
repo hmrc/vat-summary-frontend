@@ -40,21 +40,21 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
     @payments.zipWithIndex.map { case(payment, count) =>
-      <div id="payment-section-@{count + 1}">
+      <div id="payment-section-@{count + 1}" class="section divider--bottom">
 
           <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
           <div class="grid-row" id="payment-row-@{count + 1}">
             <div class="column-two-thirds">
               <span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
               @if(payment.overdue) {
-                <span style="display:inline">
+                <span class="inline">
                   <strong class="task-overdue">@messages("common.overdue")</strong>
                 </span>
-                <span style="display:block">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
+                <span class="form-hint">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
               }
             </div>
             @if(appConfig.features.allowPayments()) {
-              <div class="column-one-third form-hint payment-actions">
+              <div class="column-one-third payment-actions">
                   <div class="grid-row">
                     <a data-journey-click="payment:make-payment:open-payments"
                        href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url"
@@ -62,7 +62,6 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                       <span>@messages("openPayments.makePayment")</span>
                     </a>
                   </div>
-
 
                 <div class="grid-row">
                   <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
@@ -74,8 +73,6 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
               </div>
           </div>
-
-          <hr>
         }
       </div>
     }
