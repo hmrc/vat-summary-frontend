@@ -47,43 +47,31 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
             <div class="column-two-thirds">
               <span aria-hidden="true" data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
               @if(payment.overdue) {
-                <span>
+                <span style="display:inline">
                   <strong class="task-overdue" aria-hidden="true">@messages("common.overdue")</strong>
                 </span>
+                <span aria-hidden="true" style="display:block">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
               }
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
+                  <p float--right style="display:block">
                   <a data-journey-click="payment:make-payment:open-payments"
                      href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url" class="float--right">
                       <span>@messages("openPayments.makePayment")</span>
-                      <span class="visuallyhidden">
-                         @displayMoney(payment.amount)
-                         @if(payment.overdue) { @messages("common.overdue") }
-                         @messages("openPayments.forPeriod")
-                         @displayDateRange(payment.start, payment.end).toString().trim
-                    </span>
                   </a>
+                  </p>
+
+<span float--right>
+                  <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
+                     href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
+                      <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
+                  </a>
+</span>
+
               </div>
           </div>
-          <div class="grid-row" id="period-row-@{count + 1}">
-            <div class="column-two-thirds form-hint">
-              <span aria-hidden="true">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
-            </div>
-            @if(appConfig.features.allowNineBox()) {
-              <div class="column-one-third form-hint">
-                <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-                    href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
-                    <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
-                    <span class="visuallyhidden">
-                        @messages("openPayments.viewReturnLink")
-                        @messages("openPayments.forPeriod")
-                        @displayDateRange(payment.start, payment.end).toString().trim
-                    </span>
-                </a>
-              </div>
-            }
-          </div>
+
           <hr>
         }
       </div>
