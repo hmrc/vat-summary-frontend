@@ -60,6 +60,12 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                        href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url"
                        class="float--right">
                       <span>@messages("openPayments.makePayment")</span>
+                        <span class="visuallyhidden">
+                         @displayMoney(payment.amount)
+                         @if(payment.overdue) { @messages("common.overdue") }
+                         @messages("openPayments.forPeriod")
+                         @displayDateRange(payment.start, payment.end).toString().trim
+                    </span>
                     </a>
                   </div>
 
@@ -68,6 +74,11 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                      href="@appConfig.vatReturnUrl(payment.periodKey)"
                      class="float--right">
                       <span>@messages("openPayments.viewReturnLink")</span>
+                      <span class="visuallyhidden">
+                        @messages("openPayments.viewReturnLink")
+                        @messages("openPayments.forPeriod")
+                        @displayDateRange(payment.start, payment.end).toString().trim
+                    </span>
                   </a>
                 </div>
 
