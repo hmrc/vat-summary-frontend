@@ -47,7 +47,7 @@ payment.nextPayment = Next payment due
 payment.check = Check what you owe
 payment.stillMakeLink = You can still
 payment.stillMake = make a payment (opens in a new window)
-payment.stillMakeNotShown = even  if a make a payment (opens in a new window)
+payment.evenIfNotShown = even if a payment  isn''t shown
 
 openPayments.title = What you owe
 openPayments.heading = What you owe
