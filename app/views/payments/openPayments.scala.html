@@ -36,7 +36,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     currentPage = messages("openPayments.title")
   )
 
-  <div class="grid-row column-two-thirds">
+  <div id="paymentsSection" class="grid-row column-two-thirds payments">
     <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
     @payments.zipWithIndex.map { case(payment, count) =>
@@ -54,21 +54,23 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
               }
             </div>
             @if(appConfig.features.allowPayments()) {
-              <div class="column-one-third form-hint">
-                  <p>
+              <div class="column-one-third form-hint payment-actions">
+                  <div class="grid-row">
                     <a data-journey-click="payment:make-payment:open-payments"
-                     href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url" class="float--right">
-                      <span class="float--right" style="display:block">@messages("openPayments.makePayment")</span>
+                       href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url"
+                       class="float--right">
+                      <span>@messages("openPayments.makePayment")</span>
                     </a>
-                  </p>
+                  </div>
 
 
-                <p>
+                <div class="grid-row">
                   <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-                     href="@appConfig.vatReturnUrl(payment.periodKey)">
-                      <span class="float--right" style="display:block">@messages("openPayments.viewReturnLink")</span>
+                     href="@appConfig.vatReturnUrl(payment.periodKey)"
+                     class="float--right">
+                      <span>@messages("openPayments.viewReturnLink")</span>
                   </a>
-                </p>
+                </div>
 
               </div>
           </div>
