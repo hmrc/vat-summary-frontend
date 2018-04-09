@@ -69,18 +69,20 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                     </a>
                   </div>
 
-                <div class="grid-row">
-                  <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-                     href="@appConfig.vatReturnUrl(payment.periodKey)"
-                     class="float--right">
-                      <span>@messages("openPayments.viewReturnLink")</span>
-                      <span class="visuallyhidden">
-                        @messages("openPayments.viewReturnLink")
-                        @messages("openPayments.forPeriod")
-                        @displayDateRange(payment.start, payment.end).toString().trim
-                    </span>
-                  </a>
-                </div>
+               @if(appConfig.features.allowNineBox()) {
+                    <div class="grid-row">
+                      <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
+                         href="@appConfig.vatReturnUrl(payment.periodKey)"
+                         class="float--right">
+                          <span>@messages("openPayments.viewReturnLink")</span>
+                          <span class="visuallyhidden">
+                            @messages("openPayments.viewReturnLink")
+                            @messages("openPayments.forPeriod")
+                            @displayDateRange(payment.start, payment.end).toString().trim
+                        </span>
+                      </a>
+                    </div>
+               }
 
               </div>
           </div>
