@@ -42,32 +42,33 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     @payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}">
 
-          <span aria-hidden="true" data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
+          <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
           <div class="grid-row" id="payment-row-@{count + 1}">
             <div class="column-two-thirds">
-              <span aria-hidden="true" data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
+              <span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
               @if(payment.overdue) {
                 <span style="display:inline">
-                  <strong class="task-overdue" aria-hidden="true">@messages("common.overdue")</strong>
+                  <strong class="task-overdue">@messages("common.overdue")</strong>
                 </span>
-                <span aria-hidden="true" style="display:block">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
+                <span style="display:block">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
               }
             </div>
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third form-hint">
-                  <p float--right style="display:block">
-                  <a data-journey-click="payment:make-payment:open-payments"
+                  <p>
+                    <a data-journey-click="payment:make-payment:open-payments"
                      href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url" class="float--right">
-                      <span>@messages("openPayments.makePayment")</span>
-                  </a>
+                      <span class="float--right" style="display:block">@messages("openPayments.makePayment")</span>
+                    </a>
                   </p>
 
-<span float--right>
+
+                <p>
                   <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-                     href="@appConfig.vatReturnUrl(payment.periodKey)" class="float--right">
-                      <span aria-hidden="true">@messages("openPayments.viewReturnLink")</span>
+                     href="@appConfig.vatReturnUrl(payment.periodKey)">
+                      <span class="float--right" style="display:block">@messages("openPayments.viewReturnLink")</span>
                   </a>
-</span>
+                </p>
 
               </div>
           </div>
