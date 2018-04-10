@@ -35,6 +35,9 @@ trait MetricsService {
   val getVatReturnTimer: Timer
   val getVatReturnCallFailureCounter: Counter
 
+  val postSetupPaymentsJourneyTimer: Timer
+  val postSetupPaymentsJourneyCounter: Counter
+
 }
 
 @Singleton
@@ -51,5 +54,8 @@ class MetricsServiceImpl @Inject()(metrics: Metrics) extends MetricsService {
 
   val getVatReturnTimer: Timer = metrics.defaultRegistry.timer("get-vat-return-from-vat-api-timer")
   val getVatReturnCallFailureCounter: Counter = metrics.defaultRegistry.counter("get-vat-return-from-vat-api-failure-counter")
+
+  val postSetupPaymentsJourneyTimer: Timer = metrics.defaultRegistry.timer("post-setup-payments-journey-payment-api-timer")
+  val postSetupPaymentsJourneyCounter: Counter = metrics.defaultRegistry.counter("post-setup-payments-journey-payment-api-failure-counter")
 
 }
