@@ -54,11 +54,11 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
       user =>
         def payment(penceAmount: Int, taxMonth: Int, taxYear: Int, vrn: String): JsValue = Json.toJson[PaymentDetailsModel](
           PaymentDetailsModel(
-            taxType = "mtdfb-vat",
+            taxType = "vat",
             taxReference = vrn,
-            amountInPence = penceAmount.toString,
-            taxPeriodMonth = taxMonth.formatted("%02d"),
-            taxPeriodYear = taxYear.toString.takeRight(2),
+            amountInPence = penceAmount,
+            taxPeriodMonth = taxMonth,
+            taxPeriodYear = taxYear,
             returnUrl = appConfig.paymentsReturnUrl
           )
         )

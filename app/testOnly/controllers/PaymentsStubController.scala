@@ -35,7 +35,7 @@ class PaymentsStubController @Inject()(val messagesApi: MessagesApi, implicit va
     val paymentData: Option[String] = request.session.get("payment-data")
     val model: PaymentDetailsModel = paymentData match {
       case Some(data) => Json.parse(data).as[PaymentDetailsModel]
-      case _ => PaymentDetailsModel("", "", "", "", "", "#")
+      case _ => PaymentDetailsModel("", "", 0, 0, 0, "#")
     }
     Future.successful(Ok(testOnly.views.html.paymentsStub(model)))
   }

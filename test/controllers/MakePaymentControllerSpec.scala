@@ -32,14 +32,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
   val testAmountInPence:Int = 10000
   val testMonth: Int = 2
-  val testYear:Int = 18
+  val testYear:Int = 2018
 
   val expectedPaymentSessionCookieJson =
     """
-      |{"taxType":"mtdfb-vat",
-      |"taxReference":"123456789",
-      |"amountInPence":"10000",
-      |"taxPeriod":{"month":"02","year":"18"},
+      |{"taxType":"vat",
+      |"reference":"123456789",
+      |"amountInPence":10000,
+      |"extras":{"vatPeriod":{"month":2,"year":2018}},
       |"returnUrl":"payments-return-url"}""".stripMargin.replaceAll(System.lineSeparator, "")
 
   private trait MakePaymentDetailsTest {
