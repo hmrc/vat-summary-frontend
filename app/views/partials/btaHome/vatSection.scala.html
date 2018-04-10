@@ -20,5 +20,9 @@
     <h2 id="vat-reporting-heading" class="heading-large">@messages("partials.btaHome.vatSection.reporting.heading")</h2>
     <p>@messages("partials.btaHome.vatSection.reporting.message")</p>
     <p>@messages("partials.btaHome.vatSection.vatMessage")</p>
-    <p><a href="@{appConfig.btaVatOverviewUrl}">@messages("partials.btaHome.vatSection.viewVatDetails")</a></p>
+    <p>
+        <a data-journey-click="bta-partial:view:vat-overview" href="@{appConfig.btaVatOverviewUrl}">
+        @messages("partials.btaHome.vatSection.viewVatDetails")
+        </a>
+    </p>
 </section>
