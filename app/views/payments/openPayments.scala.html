@@ -26,9 +26,8 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
   <p>@Messages("openPayments.timeToAppear")</p>
   <p>@Messages("payment.stillMakeLink")
       <a href="@appConfig.paymentsServiceUrl" id="vatPaymentsLink">
-      <span>@messages("payment.stillMake")</span>
-      <span class="visuallyhidden">@messages("payment.evenIfNotShown")</span><span>.</span>
-    </a>
+     @messages("payment.stillMake")
+      <span class="visuallyhidden">@messages("payment.evenIfNotShown")</span></a>.
   </p>
 }
 
@@ -55,17 +54,17 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                 <span class="inline">
                   <strong class="task-overdue">@messages("common.overdue")</strong>
                 </span>
-                <span class="form-hint">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
               }
+              <span class="form-hint">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
             </div>
             @if(appConfig.features.allowPayments()) {
-              <div class="column-one-third payment-actions">
+              <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
                   <div class="grid-row">
                     <a data-journey-click="payment:make-payment:open-payments"
                        href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toInt, payment.end.getMonthValue, payment.end.getYear).url"
                        class="float--right">
                       <span>@messages("openPayments.makePayment")</span>
-                        <span class="visuallyhidden">
+                      <span class="visuallyhidden">
                          @displayMoney(payment.amount)
                          @if(payment.overdue) { @messages("common.overdue") }
                          @messages("openPayments.forPeriod")
@@ -81,7 +80,6 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
                          class="float--right">
                           <span>@messages("openPayments.viewReturnLink")</span>
                           <span class="visuallyhidden">
-                            @messages("openPayments.viewReturnLink")
                             @messages("openPayments.forPeriod")
                             @displayDateRange(payment.start, payment.end).toString().trim
                         </span>
