@@ -32,19 +32,17 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
+import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent}
-import services.EnrolmentsAuthService
-
-import scala.concurrent.Future
+import services.{EnrolmentsAuthService, PaymentsService}
 
 @Singleton
 class MakePaymentController @Inject()(val messagesApi: MessagesApi,
                                       val enrolmentsAuthService: EnrolmentsAuthService,
+                                      paymentsService: PaymentsService,
                                       implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 
@@ -52,19 +50,16 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
   def makePayment(amountInPence: Int, taxPeriodMonth: Int, taxPeriodYear: Int): Action[AnyContent] =
     authorisedAction { implicit request =>
       user =>
-        def payment(penceAmount: Int, taxMonth: Int, taxYear: Int, vrn: String): JsValue = Json.toJson[PaymentDetailsModel](
-          PaymentDetailsModel(
-            taxType = "vat",
-            taxReference = vrn,
-            amountInPence = penceAmount,
-            taxPeriodMonth = taxMonth,
-            taxPeriodYear = taxYear,
-            returnUrl = appConfig.paymentsReturnUrl
-          )
+
+        val paymentDetails = PaymentDetailsModel(
+          taxType = "vat",
+          taxReference = user.vrn,
+          amountInPence = amountInPence,
+          taxPeriodMonth = taxPeriodMonth,
+          taxPeriodYear = taxPeriodYear,
+          returnUrl = appConfig.paymentsReturnUrl
         )
 
-        Future.successful(Redirect(appConfig.paymentsServiceUrl).addingToSession(
-          "payment-data" -> payment(amountInPence, taxPeriodMonth, taxPeriodYear, user.vrn).toString())
-        )
+        paymentsService.setupPaymentsJourney(paymentDetails).map(url => Redirect(url))
     }
 }
