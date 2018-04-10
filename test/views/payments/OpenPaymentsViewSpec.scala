@@ -55,16 +55,14 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val secondPaymentPayLink = "#payment-row-2 a"
     val secondPaymentPayNowLinkText = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(1)"
     val secondPaymentPayContext = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(2)"
-
-    lazy val firstPaymentViewReturnLink = "#period-row-1 a"
-    val firstPaymentPeriod = "#period-row-1 span:nth-of-type(1)"
-    val firstPaymentViewReturnText = "#period-row-1 div:nth-of-type(2) span:nth-of-type(1)"
-    val firstPaymentViewReturnContext = "#period-row-1 div:nth-of-type(2) span:nth-of-type(2)"
-    lazy val secondPaymentViewReturnLink = "#period-row-2 a"
-    val secondPaymentViewReturnText = "#period-row-2 div:nth-of-type(2) span:nth-of-type(1)"
-    val secondPaymentViewReturnContext = "#period-row-2 span:nth-of-type(2)"
-    val secondPaymentPeriod = "#period-row-2 span:nth-of-type(1)"
-
+    lazy val firstPaymentViewReturnLink = "#links-section-1 div:nth-of-type(2) a"
+    val firstPaymentPeriod = "#payment-row-1 span:nth-of-type(3)"
+    val firstPaymentViewReturnText = "#links-section-1 div:nth-of-type(2) a span:nth-of-type(1)"
+    val firstPaymentViewReturnContext = "#links-section-1 div:nth-of-type(2) a"
+    lazy val secondPaymentViewReturnLink = "#links-section-2 div:nth-of-type(2) a"
+    val secondPaymentViewReturnText = "#links-section-2 div:nth-of-type(2) a span:nth-of-type(1)"
+    val secondPaymentViewReturnContext = "#links-section-2 div:nth-of-type(2) a"
+    val secondPaymentPeriod = "#payment-row-2 span:nth-of-type(2)"
     val processingTime = "#payments-information p:nth-of-type(1)"
     val directDebit = "#direct-debits"
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
@@ -250,7 +248,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window)."
+      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window) even if a payment isn't shown."
     }
 
     "render the overdue label" in {
