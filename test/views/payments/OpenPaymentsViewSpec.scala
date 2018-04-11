@@ -218,7 +218,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct text for the processing time" in {
-      elementText(Selectors.processingTime) shouldBe "Your payment could take up to 5 days to process. You'll be fined if it's late."
+      elementText(Selectors.processingTime) shouldBe "Your payment could take up to 5 days to process. You may be fined if it's late."
     }
 
     "render the correct text for the direct debits" in {
