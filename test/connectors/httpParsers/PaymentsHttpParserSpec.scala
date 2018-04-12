@@ -36,6 +36,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
+              "mainType" -> "VAT Return Charge",
               "taxPeriodFrom" -> "2016-12-01",
               "taxPeriodTo" -> "2017-01-01",
               "items" -> Json.arr(

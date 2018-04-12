@@ -20,6 +20,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
 import models.payments.Payments
 import play.api.http.Status.{BAD_REQUEST, OK}
+import play.api.libs.json.{JsArray, JsValue, Json}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object PaymentsHttpParser extends ResponseHttpParsers {
@@ -27,11 +28,24 @@ object PaymentsHttpParser extends ResponseHttpParsers {
   implicit object PaymentsReads extends HttpReads[HttpGetResult[Payments]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Payments] = {
       response.status match {
-        case OK => Right(response.json.as[Payments])
+        case OK => Right(removeNonVatReturnCharges(response.json).as[Payments])
         case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
-        case status => Left(UnexpectedStatusError(response.status.toString, response.body))
+        case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
       }
     }
   }
+
+  private def removeNonVatReturnCharges(json: JsValue): JsValue = {
+
+    val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
+
+    val vatReturnCharges = charges.filter { charge =>
+      val chargeType: String = (charge \ "mainType").as[String]
+      chargeType == "VAT Return Charge"
+    }
+
+    Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
+  }
+
 }

@@ -31,12 +31,20 @@ case class Payment(start: LocalDate,
 
 object Payment {
 
+  private def createPayment(start: LocalDate,
+                            end: LocalDate,
+                            due: LocalDate,
+                            outstandingAmount: BigDecimal,
+                            periodKey: Option[String]): Payment ={
+    Payment(start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
+  }
+
   implicit val paymentReads: Reads[Payment] = (
     (JsPath \ "taxPeriodFrom").read[LocalDate] and
     (JsPath \ "taxPeriodTo").read[LocalDate] and
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "outstandingAmount").read[BigDecimal] and
-    (JsPath \ "periodKey").read[String]
-  )(Payment.apply _)
+    (JsPath \ "periodKey").readNullable[String]
+  )(Payment.createPayment _)
 
 }
