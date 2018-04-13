@@ -64,6 +64,19 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
       }
     }
 
+    "the http response status is 404 NOT_FOUND" should {
+
+      val httpResponse = HttpResponse(Status.NOT_FOUND)
+
+      val expected = Right(VatReturnObligations(Seq.empty))
+
+      val result = VatReturnsReads.read("", "", httpResponse)
+
+      "returns an empty sequence of obligations" in {
+        result shouldEqual expected
+      }
+    }
+
     "the http response status is 400 BAD_REQUEST (single error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
