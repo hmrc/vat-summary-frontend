@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 
 object CustomerInfoStub extends WireMockMethods {
 
-  private val customerInfoUri = "/customer-information/vat/([0-9]+)"
+  private val customerInfoUri = "/([0-9]+)/customer-details"
 
   def stubCustomerInfo: StubMapping = {
     when(method = GET, uri = customerInfoUri)
