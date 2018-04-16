@@ -33,7 +33,7 @@ class VatSubscriptionConnector @Inject()(http: HttpClient,
                                          appConfig: AppConfig,
                                          metrics: MetricsService) {
 
-  private[connectors] def customerInfoUrl(vrn: String): String = s"${appConfig.vatSubscriptionBaseUrl}/$vrn/customer-details"
+  private[connectors] def customerInfoUrl(vrn: String): String = s"${appConfig.vatSubscriptionBaseUrl}/vat-subscription/$vrn/customer-details"
 
   def getCustomerInfo(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] = {
 
