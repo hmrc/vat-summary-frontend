@@ -37,48 +37,42 @@ object CustomerInfoStub extends WireMockMethods {
 
   private val customerInfo = Json.parse(
     """{
-      |  "approvedInformation" : {
-      |    "customerDetails" : {
-      |      "organisationName" : "Cheapo Clothing Ltd",
-      |      "individual" : {
-      |        "title" : "0001",
-      |        "firstName" : "Betty",
-      |        "middleName" : "Vatreturn",
-      |        "lastName" : "Jones"
-      |      },
-      |      "tradingName" : "Cheapo Clothing",
-      |      "mandationStatus" : "1",
-      |      "registrationReason" : "0001",
-      |      "effectiveRegistrationDate" : "2017-08-21",
-      |      "businessStartDate" : "2017-01-01"
+      |  "organisationName" : "Cheapo Clothing Ltd",
+      |  "title" : "0001",
+      |  "firstName" : "Betty",
+      |  "middleName" : "Vatreturn",
+      |  "lastName" : "Jones",
+      |  "tradingName" : "Cheapo Clothing",
+      |  "mandationStatus" : "1",
+      |  "registrationReason" : "0001",
+      |  "effectiveRegistrationDate" : "2017-08-21",
+      |  "businessStartDate" : "2017-01-01",
+      |  "PPOB":{
+      |    "address":{
+      |      "line1":"Bedrock Quarry",
+      |      "line2":"Bedrock",
+      |      "line3":"Graveldon",
+      |      "line4":"Graveldon",
+      |      "postCode":"GV2 4BB"
       |    },
-      |    "PPOB":{
-      |      "address":{
-      |        "line1":"Bedrock Quarry",
-      |        "line2":"Bedrock",
-      |        "line3":"Graveldon",
-      |        "line4":"Graveldon",
-      |        "postCode":"GV2 4BB"
-      |      },
-      |      "contactDetails":{
-      |        "primaryPhoneNumber":"01632 982028",
-      |        "mobileNumber":"07700 900018",
-      |        "emailAddress":"bettylucknexttime@gmail.com"
-      |      }
+      |    "contactDetails":{
+      |      "primaryPhoneNumber":"01632 982028",
+      |      "mobileNumber":"07700 900018",
+      |      "emailAddress":"bettylucknexttime@gmail.com"
+      |    }
+      |  },
+      |  "correspondenceContactDetails":{
+      |    "address":{
+      |      "line1":"13 Pebble Lane",
+      |      "line2":"Bedrock",
+      |      "line3":"Graveldon",
+      |      "line4":"Graveldon",
+      |      "postCode":"GV13 4BJ"
       |    },
-      |    "correspondenceContactDetails":{
-      |      "address":{
-      |        "line1":"13 Pebble Lane",
-      |        "line2":"Bedrock",
-      |        "line3":"Graveldon",
-      |        "line4":"Graveldon",
-      |        "postCode":"GV13 4BJ"
-      |      },
-      |      "contactDetails":{
-      |        "primaryPhoneNumber":"01632 960026",
-      |        "mobileNumber":"07700 900018",
-      |        "emailAddress":"bettylucknexttime@gmail.com"
-      |      }
+      |    "contactDetails":{
+      |      "primaryPhoneNumber":"01632 960026",
+      |      "mobileNumber":"07700 900018",
+      |      "emailAddress":"bettylucknexttime@gmail.com"
       |    }
       |  }
       |}""".stripMargin
