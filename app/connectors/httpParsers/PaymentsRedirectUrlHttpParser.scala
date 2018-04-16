@@ -30,9 +30,7 @@ object PaymentsRedirectUrlHttpParser extends ResponseHttpParsers {
     override def read(method: String, url: String, response: HttpResponse): HttpPostResult[String] = {
       response.status match {
         case OK => Right(extractRedirectUrl(response.json))
-        case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorReads)
-        case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
-        case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
+        case status => Left(UnexpectedStatusError(status.toString, response.body))
       }
     }
   }

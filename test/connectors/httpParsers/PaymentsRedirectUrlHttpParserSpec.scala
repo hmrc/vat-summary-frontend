@@ -19,7 +19,7 @@ package connectors.httpParsers
 import connectors.httpParsers.PaymentsRedirectUrlHttpParser.PaymentsRedirectUrlReads
 import models.errors._
 import play.api.http.Status
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -31,12 +31,13 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
 
       val redirectUrl = "https://www.google.com"
 
-      val json = s"""
-          |{
-          |  "links": {
-          |    "nextUrl": "$redirectUrl"
-          |  }
-          |}
+      val json =
+        s"""
+           |{
+           |  "links": {
+           |    "nextUrl": "$redirectUrl"
+           |  }
+           |}
         """.stripMargin
 
       val httpResponse = HttpResponse(Status.OK, responseJson = Some(Json.parse(json)))
@@ -50,105 +51,32 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
       }
     }
 
-    "the HTTP response status is BAD_REQUEST (400) (single error)" should {
+    "the HTTP response status is not OK (!200)" should {
 
-      val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
-        Json.obj(
-          "code" -> "INVALID",
-          "message" -> "Fail!"
-        )
-      ))
+      val errorBody =
+        """{
+          |  "errors": [
+          |    {
+          |      "code": "INVALID_TAXTYPE",
+          |      "message": "The tax type is invalid",
+          |      "path": "/taxType"
+          |    }
+          |  ]
+          |}""".stripMargin
 
-      val expected = Left(BadRequestError(
-        code = "INVALID",
-        errorResponse = "Fail!"
-      ))
-
-      val result = PaymentsRedirectUrlReads.read("", "", httpResponse)
-
-      "return a BadRequestError" in {
-        result shouldBe expected
-      }
-    }
-
-
-    "the HTTP response status is BAD_REQUEST (400) (multiple errors)" should {
-
-      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
-        Json.obj(
-          "code" -> "400",
-          "message" -> "Fail!",
-          "errors" -> Json.arr(
-            Json.obj(
-              "code" -> "INVALID",
-              "message" -> "Fail!"
-            ),
-            Json.obj(
-              "code" -> "INVALID_2",
-              "message" -> "Fail!"
-            )
-          )
-        )
-      ))
-
-      val errors = Seq(ApiSingleError("INVALID", "Fail!"), ApiSingleError("INVALID_2", "Fail!"))
-
-      val expected = Left(MultipleErrors("400", Json.toJson(errors).toString()))
+      val httpResponse = HttpResponse(
+        Status.BAD_REQUEST,
+        responseJson = Some(Json.parse(errorBody)))
 
       val result = PaymentsRedirectUrlReads.read("", "", httpResponse)
 
-      "return a MultipleErrors" in {
-        result shouldBe expected
-      }
-    }
-
-    "the HTTP response status is BAD_REQUEST (400) (unknown error)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
-        Json.obj(
-          "foo" -> "INVALID",
-          "bar" -> "Fail!"
-        )
-      ))
-
-      val expected = Left(UnknownError)
-
-      val result = PaymentsRedirectUrlReads.read("", "", httpResponse)
-
-      "return an UnknownError" in {
-        result shouldBe expected
-      }
-    }
-
-    "the HTTP response status is 5xx" should {
-
-      val body: JsObject = Json.obj(
-        "code" -> "GATEWAY_TIMEOUT",
-        "message" -> "GATEWAY_TIMEOUT"
-      )
-
-      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
-      val expected = Left(ServerSideError("504", httpResponse.body))
-      val result = PaymentsRedirectUrlReads.read("", "", httpResponse)
-
-      "return a ServerSideError" in {
-        result shouldBe expected
-      }
-    }
-
-    "the HTTP response status isn't handled" should {
-
-      val body: JsObject = Json.obj(
-        "code" -> "Conflict",
-        "message" -> "CONFLCIT"
-      )
-
-      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
-      val expected = Left(UnexpectedStatusError(Status.CONFLICT.toString, httpResponse.body))
-      val result = PaymentsRedirectUrlReads.read("", "", httpResponse)
-
-      "return an UnexpectedStatusError" in {
-        result shouldBe expected
+      "return a UnexpectedStatusError" in {
+        result match {
+          case Left(UnexpectedStatusError(code, message)) =>
+            code shouldBe "400"
+            Json.parse(message) shouldBe Json.parse(errorBody)
+          case _ => fail("Should have returned a Left with an error.")
+        }
       }
     }
   }

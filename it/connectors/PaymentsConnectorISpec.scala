@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.errors.ServerSideError
+import models.errors.UnexpectedStatusError
 import models.payments.PaymentDetailsModel
 import stubs.PaymentsStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -50,7 +50,7 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
     "return an error" in new Test {
       override def setupStubs(): StubMapping = PaymentsStub.stubErrorFromApi
 
-      val expected = Left(ServerSideError("500", "blah"))
+      val expected = Left(UnexpectedStatusError("500", "blah"))
 
       setupStubs()
       private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "")))
