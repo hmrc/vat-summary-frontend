@@ -14,19 +14,14 @@
  * limitations under the License.
  *@
 
-@import models.payments.PaymentDetailsModel
-
-@(model: PaymentDetailsModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(title = "Payments stub page", bodyClasses = None, appConfig = appConfig) {
 
-  <ul class="list">
-    <li>taxType: @model.taxType</li>
-    <li>taxReference: @model.taxReference</li>
-    <li>taxPeriodMonth: @model.taxPeriodMonth</li>
-    <li>taxPeriodYear: @model.taxPeriodYear</li>
-    <li>amountInPence: @model.amountInPence</li>
-  </ul>
+  <h1>Payments journey stub page</h1>
 
-  <a id="return" href="@model.returnUrl">Return to VAT</a>
+  <p>
+    This is a test-only page. When in a fully integrated test environment you will be redirected to the payments service.</p>
+
+  <a id="return" href="/vat-through-software/vat-overview">Return to VAT</a>
 }

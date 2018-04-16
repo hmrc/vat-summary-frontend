@@ -16,12 +16,10 @@
 
 package testOnly.controllers
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
+import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -32,11 +30,6 @@ class PaymentsStubController @Inject()(val messagesApi: MessagesApi, implicit va
   extends FrontendController with I18nSupport {
 
   def stub(): Action[AnyContent] = Action.async { implicit request =>
-    val paymentData: Option[String] = request.session.get("payment-data")
-    val model: PaymentDetailsModel = paymentData match {
-      case Some(data) => Json.parse(data).as[PaymentDetailsModel]
-      case _ => PaymentDetailsModel("", "", 0, 0, 0, "#")
-    }
-    Future.successful(Ok(testOnly.views.html.paymentsStub(model)))
+    Future.successful(Ok(testOnly.views.html.paymentsStub()))
   }
 }
