@@ -47,7 +47,7 @@ class PaymentsConnector @Inject()(http: HttpClient,
           url
         case httpError@Left(error) =>
           metrics.postSetupPaymentsJourneyCounter.inc()
-          Logger.warn("VatApiConnector received error: " + error.message)
+          Logger.warn("PaymentsConnector received error: " + error.message)
           httpError
       }
   }

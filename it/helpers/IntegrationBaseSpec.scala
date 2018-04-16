@@ -41,6 +41,8 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     "microservice.services.financial-transactions.port" -> mockPort,
     "microservice.services.vat-api.host" -> mockHost,
     "microservice.services.vat-api.port" -> mockPort,
+    "microservice.services.payments-frontend.host" -> mockHost,
+    "microservice.services.payments-frontend.port" -> mockPort,
     "microservice.services.vat-subscription.host" -> mockHost,
     "microservice.services.vat-subscription.port" -> mockPort
   )
