@@ -23,10 +23,8 @@ import javax.inject.{Inject, Singleton}
 class DateService @Inject()(appConfig: config.AppConfig) {
 
   def now(): LocalDate = {
-    if (appConfig.features.staticDateEnabled()) {
+    appConfig.features.staticDateEnabled.fold(LocalDate.now()) {
       LocalDate.parse(appConfig.staticDateValue)
-    } else {
-      LocalDate.now()
     }
   }
 }
