@@ -44,21 +44,32 @@ case class CustomerInformation(organisationName: Option[String],
 object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
 
+  private def createCustomerWithNameOnly(organisationName: Option[String],
+                                         firstName: Option[String],
+                                         lastName: Option[String],
+                                         tradingName: Option[String]): CustomerInformation = {
+
+    val dummyAddress = Address("", "", None, None, None)
+    CustomerInformation(
+      organisationName = organisationName,
+      firstName = firstName,
+      lastName = lastName,
+      tradingName = tradingName,
+      businessAddress = dummyAddress,
+      businessPrimaryPhoneNumber = None,
+      businessMobileNumber = None,
+      businessEmailAddress = None,
+      correspondenceAddress = dummyAddress,
+      correspondencePrimaryPhoneNumber = None,
+      correspondenceMobileNumber = None,
+      correspondenceEmailAddress = None
+    )
+  }
+
   implicit val customerInformationReads: Reads[CustomerInformation] = (
     (JsPath \ "organisationName").readNullable[String] and
       (JsPath \ "firstName").readNullable[String] and
       (JsPath \ "lastName").readNullable[String] and
-      (JsPath \ "tradingName").readNullable[String] and
-
-      (JsPath \ "PPOB").read[Address] and
-      (JsPath \ "PPOB" \\ "primaryPhoneNumber").readNullable[String] and
-      (JsPath \ "PPOB" \\ "mobileNumber").readNullable[String] and
-      (JsPath \ "PPOB" \\ "emailAddress").readNullable[String] and
-
-      (JsPath \ "correspondenceContactDetails").read[Address] and
-      (JsPath \ "correspondenceContactDetails" \\ "primaryPhoneNumber").readNullable[String] and
-      (JsPath \ "correspondenceContactDetails" \\ "mobileNumber").readNullable[String] and
-      (JsPath \ "correspondenceContactDetails" \\ "emailAddress").readNullable[String]
-
-    ) (CustomerInformation.apply _)
+      (JsPath \ "tradingName").readNullable[String]
+    ) (createCustomerWithNameOnly _)
 }

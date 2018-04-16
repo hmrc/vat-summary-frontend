@@ -23,29 +23,21 @@ class CustomerInformationSpec extends UnitSpec {
 
   "A CustomerInformation object" should {
 
+    val dummyAddress =Address("","",None,None,None)
+
     val exampleCustomerInfo: CustomerInformation = CustomerInformation(
       Some("Cheapo Clothing Ltd"),
       Some("Betty"),
       Some("Jones"),
       Some("Cheapo Clothing"),
-      Address("Bedrock Quarry",
-        "Bedrock",
-        Some("Graveldon"),
-        Some("Graveldon"),
-        Some("GV2 4BB")
-      ),
-      Some("01632 982028"),
-      Some("07700 900018"),
-      Some("bettylucknexttime@gmail.com"),
-      Address("13 Pebble Lane",
-        "Bedrock",
-        Some("Graveldon"),
-        Some("Graveldon"),
-        Some("GV13 4BJ")
-      ),
-      Some("01632 960026"),
-      Some("07700 900018"),
-      Some("bettylucknexttime@gmail.com")
+      dummyAddress,
+      None,
+      None,
+      None,
+      dummyAddress,
+      None,
+      None,
+      None
     )
 
     val exampleInputString =
