@@ -17,8 +17,8 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
-import models.{Address, CustomerInformation}
 import models.errors._
+import models.{Address, CustomerInformation}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -30,17 +30,14 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
     "the HTTP response status is OK (200)" should {
 
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(
-        Json.obj(
-          "approvedInformation" -> Json.obj(
-            "customerDetails" -> Json.obj(
-              "organisationName" -> "Cheapo Clothing Ltd",
-              "individual" -> Json.obj(
-                "firstName" -> "Betty",
-                "lastName" -> "Jones"
-              ),
-              "tradingName" -> "Cheapo Clothing"
-            ),
+      val httpResponse = HttpResponse(
+        Status.OK,
+        responseJson = Some(
+          Json.obj(
+            "organisationName" -> "Cheapo Clothing Ltd",
+            "firstName" -> "Betty",
+            "lastName" -> "Jones",
+            "tradingName" -> "Cheapo Clothing",
             "PPOB" -> Json.obj(
               "address" -> Json.obj(
                 "line1" -> "Bedrock Quarry",
@@ -71,7 +68,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
             )
           )
         )
-      ))
+      )
 
       val expected = Right(CustomerInformation(
         Some("Cheapo Clothing Ltd"),

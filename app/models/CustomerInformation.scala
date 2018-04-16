@@ -33,10 +33,10 @@ case class CustomerInformation(organisationName: Option[String],
                                correspondenceEmailAddress: Option[String]
                               ) {
   def entityName: Option[String] = {
-    (this.firstName, this.lastName, this.tradingName, this.organisationName) match {
+    (firstName, lastName, tradingName, organisationName) match {
       case (Some(first), Some(last), None, None) => Some(s"$first $last")
-      case (None, None, None, organisationName) => organisationName
-      case (_, _, tradingName, _) => tradingName
+      case (None, None, None, orgName) => orgName
+      case _ => tradingName
     }
   }
 }
@@ -45,20 +45,20 @@ object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
 
   implicit val customerInformationReads: Reads[CustomerInformation] = (
-    (JsPath \ "approvedInformation" \ "customerDetails" \ "organisationName").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "customerDetails" \\ "firstName").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "customerDetails" \\ "lastName").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "customerDetails" \ "tradingName").readNullable[String] and
+    (JsPath \ "organisationName").readNullable[String] and
+      (JsPath \ "firstName").readNullable[String] and
+      (JsPath \ "lastName").readNullable[String] and
+      (JsPath \ "tradingName").readNullable[String] and
 
-    (JsPath \ "approvedInformation" \ "PPOB").read[Address] and
-    (JsPath \ "approvedInformation" \ "PPOB" \\ "primaryPhoneNumber").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "PPOB" \\ "mobileNumber").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "PPOB" \\ "emailAddress").readNullable[String] and
+      (JsPath \ "PPOB").read[Address] and
+      (JsPath \ "PPOB" \\ "primaryPhoneNumber").readNullable[String] and
+      (JsPath \ "PPOB" \\ "mobileNumber").readNullable[String] and
+      (JsPath \ "PPOB" \\ "emailAddress").readNullable[String] and
 
-    (JsPath \ "approvedInformation" \ "correspondenceContactDetails").read[Address] and
-    (JsPath \ "approvedInformation" \ "correspondenceContactDetails" \\ "primaryPhoneNumber").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "correspondenceContactDetails" \\ "mobileNumber").readNullable[String] and
-    (JsPath \ "approvedInformation" \ "correspondenceContactDetails" \\ "emailAddress").readNullable[String]
+      (JsPath \ "correspondenceContactDetails").read[Address] and
+      (JsPath \ "correspondenceContactDetails" \\ "primaryPhoneNumber").readNullable[String] and
+      (JsPath \ "correspondenceContactDetails" \\ "mobileNumber").readNullable[String] and
+      (JsPath \ "correspondenceContactDetails" \\ "emailAddress").readNullable[String]
 
     ) (CustomerInformation.apply _)
 }

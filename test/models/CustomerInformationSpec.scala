@@ -50,45 +50,39 @@ class CustomerInformationSpec extends UnitSpec {
 
     val exampleInputString =
       """{
-        |"approvedInformation":{
-        |  "customerDetails":{
-        |    "organisationName":"Cheapo Clothing Ltd",
-        |    "individual":{
-        |      "firstName":"Betty",
-        |      "lastName":"Jones"
-        |    },
-        |    "tradingName":"Cheapo Clothing"
+        |"organisationName":"Cheapo Clothing Ltd",
+        |"firstName":"Betty",
+        |"lastName":"Jones",
+        |"tradingName":"Cheapo Clothing",
+        |"PPOB":{
+        |  "address":{
+        |    "line1":"Bedrock Quarry",
+        |    "line2":"Bedrock",
+        |    "line3":"Graveldon",
+        |    "line4":"Graveldon",
+        |    "postCode":"GV2 4BB"
         |  },
-        |  "PPOB":{
-        |    "address":{
-        |      "line1":"Bedrock Quarry",
-        |      "line2":"Bedrock",
-        |      "line3":"Graveldon",
-        |      "line4":"Graveldon",
-        |      "postCode":"GV2 4BB"
-        |    },
-        |    "contactDetails":{
-        |      "primaryPhoneNumber":"01632 982028",
-        |      "mobileNumber":"07700 900018",
-        |      "emailAddress":"bettylucknexttime@gmail.com"
-        |    }
+        |  "contactDetails":{
+        |    "primaryPhoneNumber":"01632 982028",
+        |    "mobileNumber":"07700 900018",
+        |    "emailAddress":"bettylucknexttime@gmail.com"
+        |  }
+        |},
+        |"correspondenceContactDetails":{
+        |  "address":{
+        |    "line1":"13 Pebble Lane",
+        |    "line2":"Bedrock",
+        |    "line3":"Graveldon",
+        |    "line4":"Graveldon",
+        |    "postCode":"GV13 4BJ"
         |  },
-        |  "correspondenceContactDetails":{
-        |    "address":{
-        |      "line1":"13 Pebble Lane",
-        |      "line2":"Bedrock",
-        |      "line3":"Graveldon",
-        |      "line4":"Graveldon",
-        |      "postCode":"GV13 4BJ"
-        |    },
-        |    "contactDetails":{
-        |      "primaryPhoneNumber":"01632 960026",
-        |      "mobileNumber":"07700 900018",
-        |      "emailAddress":"bettylucknexttime@gmail.com"
-        |    }
+        |  "contactDetails":{
+        |    "primaryPhoneNumber":"01632 960026",
+        |    "mobileNumber":"07700 900018",
+        |    "emailAddress":"bettylucknexttime@gmail.com"
         |  }
         |}
-      }"""
+        |}"""
         .stripMargin.replace("\n", "")
 
     "be parsed from appropriate JSON" in {
