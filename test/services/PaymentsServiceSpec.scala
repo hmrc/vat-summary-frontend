@@ -125,7 +125,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       amountInPence,
       taxPeriodMonth,
       taxPeriodYear,
-      "http://domain/path"
+      "http://domain/path",
+      "http://domain/return-path"
     )
 
     "the connector is successful" should {

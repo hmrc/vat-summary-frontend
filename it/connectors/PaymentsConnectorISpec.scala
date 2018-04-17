@@ -42,7 +42,7 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
       val expected = Right("http://www.google.com")
 
       setupStubs()
-      private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "")))
+      private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "", "")))
 
       result shouldEqual expected
     }
@@ -53,7 +53,7 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
       val expected = Left(UnexpectedStatusError("500", "blah"))
 
       setupStubs()
-      private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "")))
+      private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "", "")))
 
       result shouldEqual expected
     }

@@ -16,7 +16,6 @@
 
 package models.payments
 
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 case class PaymentDetailsModel(taxType: String,
@@ -24,17 +23,10 @@ case class PaymentDetailsModel(taxType: String,
                                amountInPence: Int,
                                taxPeriodMonth: Int,
                                taxPeriodYear: Int,
-                               returnUrl: String)
+                               returnUrl: String,
+                               backUrl: String)
 
 object PaymentDetailsModel {
-  implicit val reads: Reads[PaymentDetailsModel] = (
-    (JsPath \ "taxType").read[String] and
-      (JsPath \ "reference").read[String] and
-      (JsPath \ "amountInPence").read[Int] and
-      (JsPath \ "extras" \ "vatPeriod" \ "month").read[Int] and
-      (JsPath \ "extras" \ "vatPeriod" \ "year").read[Int] and
-      (JsPath \ "returnUrl").read[String]
-    ) (PaymentDetailsModel.apply _)
 
   implicit val writes = new Writes[PaymentDetailsModel] {
     def writes(paymentDetail: PaymentDetailsModel): JsObject = Json.obj(
@@ -45,8 +37,8 @@ object PaymentDetailsModel {
         "vatPeriod" -> Json.obj(
           "month" -> paymentDetail.taxPeriodMonth,
           "year" -> paymentDetail.taxPeriodYear)),
-      "returnUrl" -> paymentDetail.returnUrl
+      "returnUrl" -> paymentDetail.returnUrl,
+      "backUrl" -> paymentDetail.backUrl
     )
   }
 }
-
