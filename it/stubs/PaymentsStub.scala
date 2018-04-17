@@ -27,7 +27,7 @@ object PaymentsStub extends WireMockMethods {
 
   def stubPaymentsJourneyInfo: StubMapping = {
     when(method = POST, uri = setupJourneyUrl)
-      .thenReturn(status = OK, body = journeyInfo)
+      .thenReturn(status = CREATED, body = journeyInfo)
   }
 
   def stubErrorFromApi: StubMapping = {
