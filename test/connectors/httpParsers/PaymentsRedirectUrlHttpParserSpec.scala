@@ -27,7 +27,7 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
 
   "PaymentsRedirectUrlReads" when {
 
-    "the HTTP response status is OK (200)" should {
+    "the HTTP response status is CREATED (201)" should {
 
       val redirectUrl = "https://www.google.com"
 
@@ -40,7 +40,7 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
            |}
         """.stripMargin
 
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(Json.parse(json)))
+      val httpResponse = HttpResponse(Status.CREATED, responseJson = Some(Json.parse(json)))
 
       val expected = Right(redirectUrl)
 

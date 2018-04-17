@@ -17,8 +17,8 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
-import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
-import play.api.http.Status.{BAD_REQUEST, OK}
+import models.errors.UnexpectedStatusError
+import play.api.http.Status.CREATED
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
@@ -29,7 +29,7 @@ object PaymentsRedirectUrlHttpParser extends ResponseHttpParsers {
   implicit object PaymentsRedirectUrlReads extends HttpReads[HttpPostResult[String]] {
     override def read(method: String, url: String, response: HttpResponse): HttpPostResult[String] = {
       response.status match {
-        case OK => Right(extractRedirectUrl(response.json))
+        case CREATED => Right(extractRedirectUrl(response.json))
         case status => Left(UnexpectedStatusError(status.toString, response.body))
       }
     }
