@@ -16,21 +16,27 @@
 
 package services
 
+import connectors.{FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-
-import connectors.FinancialDataConnector
-import models.payments.Payments
+import models.payments.{PaymentDetailsModel, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PaymentsService @Inject()(connector: FinancialDataConnector){
-  def getOpenPayments(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Payments]] =
-    connector.getOpenPayments(vrn).map {
+class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, paymentsConnector: PaymentsConnector) {
+  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Payments]] =
+    financialDataConnector.getOpenPayments(vrn).map {
       case Right(Payments(payments)) if payments.nonEmpty =>
         Some(Payments(payments.filter(payment => payment.outstandingAmount > 0)))
       case Right(emptyPayments) => Some(emptyPayments)
       case Left(_) => None
     }
+
+  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[String] =
+    paymentsConnector.setupJourney(journeyDetails).map {
+      case Right(redirectUrl) => redirectUrl
+      case Left(error) => throw new Exception(error.message)
+    }
+
 }

@@ -17,10 +17,12 @@
 package controllers
 
 import connectors.VatSubscriptionConnector
+import models.payments.PaymentDetailsModel
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService}
+import services.{EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -30,17 +32,9 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class MakePaymentControllerSpec extends ControllerBaseSpec {
 
-  val testAmountInPence:Int = 10000
+  val testAmountInPence: Int = 10000
   val testMonth: Int = 2
-  val testYear:Int = 18
-
-  val expectedPaymentSessionCookieJson =
-    """
-      |{"taxType":"mtdfb-vat",
-      |"taxReference":"123456789",
-      |"amountInPence":"10000",
-      |"taxPeriod":{"month":"02","year":"18"},
-      |"returnUrl":"payments-return-url"}""".stripMargin.replaceAll(System.lineSeparator, "")
+  val testYear: Int = 2018
 
   private trait MakePaymentDetailsTest {
     val authResult: Future[_] =
@@ -50,6 +44,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
+    val mockPaymentsService: PaymentsService = mock[PaymentsService]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -61,7 +56,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     def target: MakePaymentController = {
       setup()
-      new MakePaymentController(messages, mockEnrolmentsAuthService, mockAppConfig)
+      new MakePaymentController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockAppConfig)
     }
   }
 
@@ -69,20 +64,28 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     "the user is logged in" should {
       "have valid cookie data stored in session and redirect to payments frontend if the posted data is valid" in new MakePaymentDetailsTest {
+
+        val expectedRedirectUrl = "http://www.google.com"
+
+        override def setup(): Any = {
+          super.setup()
+
+          (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(expectedRedirectUrl))
+        }
+
         lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear)(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("payments-url")
-
-        await(result).session.get("payment-data") shouldBe Some(expectedPaymentSessionCookieJson.toString)
-
+        redirectLocation(result) shouldBe Some(expectedRedirectUrl)
       }
 
     }
 
     "the user is not logged in" should {
       "return 401 (Unauthorised)" in new MakePaymentDetailsTest {
-        lazy val request = fakeRequestToPOSTWithSession(
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
@@ -96,7 +99,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     "the user is not authenticated" should {
       "return 403 (Forbidden)" in new MakePaymentDetailsTest {
-        lazy val request = fakeRequestToPOSTWithSession(
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))

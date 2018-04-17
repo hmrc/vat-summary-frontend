@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+package connectors
 
-@views.html.main_template(title = "Payments stub page", bodyClasses = None, appConfig = appConfig) {
+import controllers.ControllerBaseSpec
+import mocks.MockMetricsService
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-  <h1>Payments journey stub page</h1>
+class PaymentsConnectorSpec extends ControllerBaseSpec {
 
-  <p>
-    This is a test-only page. When in a fully integrated test environment you will be redirected to the payments service.</p>
+  "PaymentsConnector" should {
+    "generate the correct setup URL" in {
+      val connector = new PaymentsConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+      connector.setupUrl shouldEqual "payments-url/payment/start"
+    }
+  }
 
-  <a id="return" href="/vat-through-software/vat-overview">Return to VAT</a>
 }

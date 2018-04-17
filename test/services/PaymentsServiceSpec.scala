@@ -18,41 +18,42 @@ package services
 
 import java.time.LocalDate
 
-import connectors.FinancialDataConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.errors.ServerSideError
-import models.payments.{Payment, Payments}
+import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
+import connectors.{FinancialDataConnector, PaymentsConnector}
+import models.errors.{ServerSideError, UnknownError}
+import models.payments.{Payment, PaymentDetailsModel, Payments}
 import org.scalamock.matchers.Matchers
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 import org.scalamock.scalatest.MockFactory
 import play.api.http.Status
-import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
-  private trait Test {
-
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-    val responseFromConnector: HttpGetResult[Payments]
-
-    def setup(): Any = {
-      (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *)
-        .returns(Future.successful(responseFromConnector))
-    }
-
-    def target: PaymentsService = {
-      setup()
-      new PaymentsService(mockFinancialDataConnector)
-    }
-  }
-
   "Calling the .getOpenPayments function" when {
+
+    trait Test {
+
+      implicit val hc: HeaderCarrier = HeaderCarrier()
+      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val responseFromFinancialDataConnector: HttpGetResult[Payments]
+
+      def setup(): Any = {
+        (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(responseFromFinancialDataConnector))
+      }
+
+      def target: PaymentsService = {
+        setup()
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+      }
+    }
+
 
     "the user has payments outstanding" should {
 
@@ -64,7 +65,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           BigDecimal("21.22"),
           "ABCD"
         )))
-        override val responseFromConnector = Right(payments)
+        override val responseFromFinancialDataConnector = Right(payments)
         val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
 
         paymentsResponse shouldBe Some(payments)
@@ -75,7 +76,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       "return an empty list of payments" in new Test {
         val payments = Payments(Seq.empty)
-        override val responseFromConnector = Right(payments)
+        override val responseFromFinancialDataConnector = Right(payments)
         val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
 
         paymentsResponse shouldBe Some(payments)
@@ -91,7 +92,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           | """.stripMargin
 
       "return None" in new Test {
-        override val responseFromConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, errorResponse))
+        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, errorResponse))
         val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
 
         paymentsResponse shouldBe None
@@ -99,4 +100,70 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     }
   }
 
+  "Calling the .setupJourney method" when {
+
+    trait Test {
+
+      implicit val hc: HeaderCarrier = HeaderCarrier()
+      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+
+      def setup(): Any
+
+      def target: PaymentsService = {
+        setup()
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+      }
+    }
+
+    val amountInPence = 123456
+    val taxPeriodMonth = 2
+    val taxPeriodYear = 2018
+
+    val paymentDetails = PaymentDetailsModel("vat",
+      "123456789",
+      amountInPence,
+      taxPeriodMonth,
+      taxPeriodYear,
+      "http://domain/path"
+    )
+
+    "the connector is successful" should {
+
+      "return a redirect url" in new Test {
+
+        val expectedRedirectUrl = "http://www.google.com"
+        val expectedResult: HttpPostResult[String] = Right(expectedRedirectUrl)
+
+        override def setup(): Any = {
+          (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Right(expectedRedirectUrl))
+        }
+
+
+        val result: String = await(target.setupPaymentsJourney(paymentDetails))
+
+        result shouldBe expectedRedirectUrl
+      }
+    }
+
+    "the connector is unsuccessful" should {
+
+      "throw an exception" in new Test {
+
+        val expectedResult: HttpPostResult[String] = Left(UnknownError)
+
+        override def setup(): Any = {
+          (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(expectedResult)
+        }
+
+        the[Exception] thrownBy {
+          await(target.setupPaymentsJourney(paymentDetails))
+        } should have message "Received an unknown error."
+      }
+    }
+  }
 }
