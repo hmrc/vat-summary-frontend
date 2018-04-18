@@ -18,6 +18,8 @@ package controllers
 
 import java.time.LocalDate
 
+import audit.AuditingService
+import audit.models.ExtendedAuditModel
 import models.User
 import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
@@ -47,6 +49,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResult)
+
+      (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *, *)
+        .returns({})
     }
 
     val payment = Payment(
@@ -61,12 +67,20 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val mockDateService: DateService = mock[DateService]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
+    val mockAuditService: AuditingService = mock[AuditingService]
+
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     def target: OpenPaymentsController = {
       setupMocks()
-      new OpenPaymentsController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockDateService, mockAppConfig)
+      new OpenPaymentsController(
+        messages,
+        mockEnrolmentsAuthService,
+        mockPaymentsService,
+        mockDateService,
+        mockAppConfig,
+        mockAuditService)
     }
   }
 
@@ -81,6 +95,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .expects(*, *, *)
             .returns(Future.successful(Some(Payments(Seq(payment, payment)))))
         }
+
         private val result = target.openPayments()(fakeRequest)
 
         status(result) shouldBe Status.OK
@@ -110,6 +125,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .expects(*, *, *)
             .returns(Future.successful(Some(Payments(Seq.empty))))
         }
+
         private val result = target.openPayments()(fakeRequest)
 
         status(result) shouldBe Status.OK
@@ -157,6 +173,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .expects(*, *, *)
             .returns(Future.successful(None))
         }
+
         private val result = target.openPayments()(fakeRequest)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR

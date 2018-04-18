@@ -16,6 +16,8 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.PaymentAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
@@ -27,7 +29,8 @@ import services.{EnrolmentsAuthService, PaymentsService}
 class MakePaymentController @Inject()(val messagesApi: MessagesApi,
                                       val enrolmentsAuthService: EnrolmentsAuthService,
                                       paymentsService: PaymentsService,
-                                      implicit val appConfig: AppConfig)
+                                      implicit val appConfig: AppConfig,
+                                      auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 
 
@@ -45,6 +48,9 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           backUrl = appConfig.paymentsBackUrl
         )
 
-        paymentsService.setupPaymentsJourney(paymentDetails).map(url => Redirect(url))
+        paymentsService.setupPaymentsJourney(paymentDetails).map { url =>
+//          auditingService.audit(PaymentAuditModel(user, paymentDetails, url))
+          Redirect(url)
+        }
     }
 }

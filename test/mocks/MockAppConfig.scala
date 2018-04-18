@@ -58,4 +58,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val signOutUrl: String = "/some-gg-signout-url"
   override val unauthorisedSignOutUrl: String = ""
   override val vatSubscriptionBaseUrl: String = ""
+  override val appName: String = "vat-summary-frontend"
 }

@@ -16,27 +16,36 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.OutstandingPaymentsAuditModel
 import config.AppConfig
 import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
-
 import javax.inject.Inject
+import models.User
+import uk.gov.hmrc.http.HeaderCarrier
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
                                        val paymentsService: PaymentsService,
                                        val dateService: DateService,
-                                       implicit val appConfig: AppConfig)
-  extends AuthorisedController with I18nSupport {
+                                       implicit val appConfig: AppConfig,
+                                       auditingService: AuditingService)
+extends AuthorisedController with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       paymentsService.getOpenPayments(user.vrn).map {
-        case Some(Payments(payments)) if payments.nonEmpty => Ok(views.html.payments.openPayments(user, getModel(payments)))
-        case Some(_) => Ok(views.html.payments.noPayments(user))
+        case Some(Payments(payments)) if payments.nonEmpty =>
+          val model = getModel(payments)
+          auditEvent(user, model)
+          Ok(views.html.payments.openPayments(user, model))
+        case Some(_) =>
+          auditEvent(user, Seq.empty)
+          Ok(views.html.payments.noPayments(user))
         case None => InternalServerError(views.html.errors.paymentsError())
       }
   }
@@ -51,5 +60,9 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
       payment.periodKey,
       payment.due.isBefore(dateService.now())
     )
+  }
+
+  private[controllers] def auditEvent(user: User, payments: Seq[OpenPaymentsModel])(implicit hc: HeaderCarrier): Unit = {
+    auditingService.extendedAudit(OutstandingPaymentsAuditModel(user, payments))
   }
 }
