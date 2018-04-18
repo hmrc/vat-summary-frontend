@@ -256,7 +256,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct destination for the make a payment link" in {
-      element(Selectors.makePayment).attr("href") shouldBe "payments-url"
+      element(Selectors.makePayment).attr("href") shouldBe "unauthenticated-payments-url"
     }
   }
 }
