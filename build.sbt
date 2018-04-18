@@ -55,7 +55,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc" %% "bootstrap-play-25" % "1.5.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.19.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.20.0",
   "uk.gov.hmrc" %% "play-ui" % "7.14.0",
   "uk.gov.hmrc" %% "play-partials" % "6.1.0",
   "uk.gov.hmrc" %% "play-whitelist-filter" % "2.0.0",
