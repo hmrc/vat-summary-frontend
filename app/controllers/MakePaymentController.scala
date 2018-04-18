@@ -42,7 +42,7 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           taxPeriodMonth = taxPeriodMonth,
           taxPeriodYear = taxPeriodYear,
           returnUrl = appConfig.paymentsReturnUrl,
-          backUrl = controllers.routes.OpenPaymentsController.openPayments().url
+          backUrl = appConfig.paymentsBackUrl
         )
 
         paymentsService.setupPaymentsJourney(paymentDetails).map(url => Redirect(url))
