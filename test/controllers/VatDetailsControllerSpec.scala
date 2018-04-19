@@ -18,6 +18,8 @@ package controllers
 
 import java.time.LocalDate
 
+import audit.AuditingService
+import audit.models.AuditModel
 import models.errors.BadRequestError
 import models.obligations.VatReturnObligation
 import models.payments.Payment
@@ -82,6 +84,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockDateService: DateService = mock[DateService]
+    val mockAuditService: AuditingService = mock[AuditingService]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -97,13 +100,23 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       (mockAccountDetailsService.getEntityName(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *)
         .returns(Future.successful(entityName))
+
+      (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *, *)
+        .returns({})
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
     def target: VatDetailsController = {
       setup()
-      new VatDetailsController(messages, mockEnrolmentsAuthService, mockAppConfig, mockVatDetailsService, mockAccountDetailsService, mockDateService)
+      new VatDetailsController(messages,
+        mockEnrolmentsAuthService,
+        mockAppConfig,
+        mockVatDetailsService,
+        mockAccountDetailsService,
+        mockDateService,
+        mockAuditService)
     }
   }
 

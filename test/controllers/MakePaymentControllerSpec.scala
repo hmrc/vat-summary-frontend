@@ -16,6 +16,8 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.AuditModel
 import connectors.VatSubscriptionConnector
 import models.payments.PaymentDetailsModel
 import play.api.http.Status
@@ -45,25 +47,35 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
+    val mockAuditService: AuditingService = mock[AuditingService]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResult)
+
+      (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *, *)
+        .returns({})
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
     def target: MakePaymentController = {
       setup()
-      new MakePaymentController(messages, mockEnrolmentsAuthService, mockPaymentsService, mockAppConfig)
+      new MakePaymentController(
+        messages,
+        mockEnrolmentsAuthService,
+        mockPaymentsService,
+        mockAppConfig,
+        mockAuditService)
     }
   }
 
   "Calling the makePayment action" when {
 
     "the user is logged in" should {
-      "have valid cookie data stored in session and redirect to payments frontend if the posted data is valid" in new MakePaymentDetailsTest {
+      "redirected " in new MakePaymentDetailsTest {
 
         val expectedRedirectUrl = "http://www.google.com"
 

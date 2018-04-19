@@ -18,15 +18,19 @@ package controllers
 
 import java.time.LocalDate
 
+import audit.AuditingService
+import audit.models.{NextOpenObligationAuditModel, NextPaymentAuditModel}
 import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import models.viewModels.VatDetailsViewModel
-import models.VatDetailsModel
+import models.{User, VatDetailsModel}
 import models.errors.HttpError
-import models.obligations.Obligation
+import models.obligations.{Obligation, VatReturnObligation}
+import models.payments.Payment
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
+import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi,
@@ -34,7 +38,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService,
                                      accountDetailsService: AccountDetailsService,
-                                     dateService: DateService)
+                                     dateService: DateService,
+                                     auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
@@ -45,7 +50,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       val viewModel = for {
         nextActions <- nextActionsCall
         customerInfo <- entityNameCall
-      } yield constructViewModel(nextActions, customerInfo)
+      } yield {
+        auditEvents(user, nextActions)
+        constructViewModel(nextActions, customerInfo)
+      }
 
       viewModel.map { model =>
         Ok(views.html.vatDetails.details(user, model))
@@ -75,4 +83,18 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
+  private[controllers] def auditEvents(user: User, details: VatDetailsModel)(implicit hc: HeaderCarrier): Unit = {
+    val obligation: Option[VatReturnObligation] = details.vatReturn match {
+      case Right(data) => data
+      case _ => None
+    }
+
+    val payment: Option[Payment] = details.payment match {
+      case Right(data) => data
+      case _ => None
+    }
+
+    auditingService.audit(NextOpenObligationAuditModel(user, obligation), routes.VatDetailsController.details().url)
+    auditingService.audit(NextPaymentAuditModel(user, payment), routes.VatDetailsController.details().url)
+  }
 }
