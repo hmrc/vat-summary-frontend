@@ -110,15 +110,3 @@ banner.phaseName = BETA
 
 feedback.title = Feedback
 feedbackThanks.title = Thank you
-
-surveyJourney.title = About your journey
-surveyJourney.heading = About your journey
-surveyJourney.yesNoHeading = Did you do X today?
-surveyJourney.choicesHeading = Which of the following were applicable to your journey?
-surveyJourney.choicesOne = choice 1
-surveyJourney.choicesTwo = choice 2
-surveyJourney.choicesThree = choice 3
-surveyJourney.choicesFour = choice 4
-surveyJourney.choicesFive = choice 5
-surveyJourney.choicesSix = choice 6
-surveyJourney.submit = Submit

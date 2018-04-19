@@ -18,8 +18,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
-import audit.AuditingService
-import config.{AppConfig, FrontendAuditConnector}
+import config.AppConfig
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -30,7 +29,6 @@ import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
 import uk.gov.hmrc.http.SessionKeys
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {

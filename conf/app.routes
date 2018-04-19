@@ -13,9 +13,6 @@ GET         /thankyou              controllers.feedback.FeedbackController.thank
 
 #Sign Out Routes
 GET         /sign-out              controllers.SignOutController.signOut(authorised: Boolean)
-GET         /survey/your-journey   controllers.survey.SurveyController.yourJourney
-POST        /survey/submit         controllers.survey.SurveyController.submit
-
 
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
