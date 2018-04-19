@@ -94,7 +94,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case _ => None
     }
 
-    auditingService.audit(NextOpenObligationAuditModel(user, obligation))
-    auditingService.audit(NextPaymentAuditModel(user, payment))
+    auditingService.audit(NextOpenObligationAuditModel(user, obligation), routes.VatDetailsController.details().url)
+    auditingService.audit(NextPaymentAuditModel(user, payment), routes.VatDetailsController.details().url)
   }
 }

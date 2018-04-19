@@ -63,6 +63,6 @@ extends AuthorisedController with I18nSupport {
   }
 
   private[controllers] def auditEvent(user: User, payments: Seq[OpenPaymentsModel])(implicit hc: HeaderCarrier): Unit = {
-    auditingService.extendedAudit(OutstandingPaymentsAuditModel(user, payments))
+    auditingService.extendedAudit(OutstandingPaymentsAuditModel(user, payments), routes.OpenPaymentsController.openPayments().url)
   }
 }

@@ -49,7 +49,10 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
         )
 
         paymentsService.setupPaymentsJourney(paymentDetails).map { url =>
-//          auditingService.audit(PaymentAuditModel(user, paymentDetails, url))
+          auditingService.audit(
+            PaymentAuditModel(user, paymentDetails, url),
+            routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear).url
+          )
           Redirect(url)
         }
     }
