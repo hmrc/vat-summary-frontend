@@ -56,7 +56,6 @@ trait AppConfig extends ServicesConfig {
   val contactFormServiceIdentifier: String
   val staticDateValue: String
   val surveyUrl: String
-  val surveyThankYouUrl: String
   val signOutUrl: String
   val mtdVatSignUpUrl: String
   val unauthorisedSignOutUrl: String
@@ -122,7 +121,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private lazy val surveyBaseUrl = getString(Keys.surveyHost) + getString(Keys.surveyUrl)
   override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
-  override lazy val surveyThankYouUrl = s"$surveyBaseUrl/thankYou/?origin=$contactFormServiceIdentifier"
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
