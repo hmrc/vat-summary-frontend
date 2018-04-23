@@ -37,8 +37,10 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: FrontendAu
 
   def audit(auditModel: AuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val dataEvent = toDataEvent(appConfig.appName, auditModel, path)
-    Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(dataEvent)}")
-    handleAuditResult(auditConnector.sendEvent(dataEvent))
+    if(appConfig.features.enabledAuditing()){
+      Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(dataEvent)}")
+      handleAuditResult(auditConnector.sendEvent(dataEvent))
+    }
   }
 
   def toDataEvent(appName: String, auditModel: AuditModel, path: String)(implicit hc: HeaderCarrier): DataEvent =
@@ -52,8 +54,10 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: FrontendAu
 
   def extendedAudit(auditModel: ExtendedAuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val extendedDataEvent = toExtendedDataEvent(appConfig.appName, auditModel, path)
-    Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(extendedDataEvent)}")
-    handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
+    if(appConfig.features.enabledAuditing()) {
+      Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(extendedDataEvent)}")
+      handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
+    }
   }
 
   def toExtendedDataEvent(appName: String, auditModel: ExtendedAuditModel, path: String)(implicit hc: HeaderCarrier): ExtendedDataEvent = {
