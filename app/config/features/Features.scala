@@ -31,5 +31,6 @@ class Features @Inject()(config: Configuration) {
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
   val accountDetails = new Feature(ConfigKeys.accountDetailsFeature, config)
   val allowNineBox = new Feature(ConfigKeys.allowNineBoxFeature, config)
+  val enabledAuditing = new Feature(ConfigKeys.enableAuditingFeature, config)
 
 }

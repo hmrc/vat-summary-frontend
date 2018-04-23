@@ -22,4 +22,5 @@ case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
                               allowDirectDebitsEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               accountDetailsEnabled: Boolean,
-                              allowNineBoxEnabled: Boolean)
+                              allowNineBoxEnabled: Boolean,
+                              auditingEnabled: Boolean)
