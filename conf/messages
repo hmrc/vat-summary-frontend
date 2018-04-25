@@ -28,7 +28,7 @@ partials.btaHome.vatSection.reporting.message = You''ve signed up to report your
 partials.btaHome.vatSection.vatMessage = You can view your return deadlines, what you owe and previously submitted returns.
 partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
-vatDetails.title = VAT
+vatDetails.title = Your VAT details
 vatDetails.accountDetails.link = Account details
 vatDetails.accountDetails.view = See your business information and other details.
 vatDetails.accountDetails.portal.link = View VAT certificate (opens in a new window)

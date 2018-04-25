@@ -107,12 +107,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "have the text 'VAT'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "VAT"
+        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
       }
     }
 
     "have the correct document title" in {
-      document.title shouldBe "VAT"
+      document.title shouldBe "Your VAT details"
     }
 
     "have the correct entity name" in {
