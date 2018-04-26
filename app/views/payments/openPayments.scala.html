@@ -40,8 +40,9 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     currentPage = messages("openPayments.title")
   )
 
+  <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
   <div id="paymentsSection" class="grid-row column-two-thirds payments">
-    <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
+
 
     @payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}" class="section divider--bottom">
@@ -98,7 +99,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
     </div>
 
     @if(appConfig.features.allowDirectDebits()) {
-      <span id="direct-debits" class="heading-small">Direct debits</span>
+      <h2 id="direct-debits" class="heading-small">Direct debits</h2>
       <div id="check-direct-debit" class="form-group">
         <p>
           @messages("openPayments.directDebitLink") <a href="#">@messages("openPayments.directDebitLinkText")</a>

@@ -120,7 +120,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "have the text 'VAT'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "VAT"
+        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
       }
 
       s"link to ${controllers.routes.VatDetailsController.details().url}" in {
