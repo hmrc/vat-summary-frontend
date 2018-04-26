@@ -62,8 +62,9 @@ openPayments.viewReturnLink = View return
 openPayments.processingTime = Your payment could take up to 5 days to process. You may be fined if it''s late.
 openPayments.timeToAppear = It can take up to 24 hours to appear after you''ve submitted your return.
 openPayments.whatOweHelp = What I owe isn''t shown
-openPayments.directDebitLink = If you''ve already set up a direct debit, you don''t need to pay now. You can
-openPayments.directDebitLinkText = check if you''ve set up a direct debit  (opens in a new window)
+openPayments.directDebitLink = If you''ve already set up a direct debit, you don''t need to pay now.
+openPayments.directDebitYouCan = You can
+openPayments.directDebitLinkText = check if you''ve set up a direct debit (opens in a new window)
 openPayments.directDebitNotSure = if you''re not sure.
 
 noPayments.title = Your VAT payment

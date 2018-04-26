@@ -25,9 +25,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 @hiddenHelpTextContent = {
   <p>@Messages("openPayments.timeToAppear")</p>
   <p>@Messages("payment.stillMakeLink")
-      <a href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">
-     @messages("payment.stillMake")
-      <span class="visuallyhidden">@messages("payment.evenIfNotShown")</span></a>.
+    <a href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">@messages("payment.stillMake")<span class="visuallyhidden">@messages("payment.evenIfNotShown")</span></a>.
   </p>
 }
 
@@ -41,9 +39,8 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
   )
 
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
+
   <div id="paymentsSection" class="grid-row column-two-thirds payments">
-
-
     @payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}" class="section divider--bottom">
 
@@ -98,14 +95,18 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
       <p id="processing-time">@messages("openPayments.processingTime")</p>
     </div>
 
-    @if(appConfig.features.allowDirectDebits()) {
-      <h2 id="direct-debits" class="heading-small">Direct debits</h2>
-      <div id="check-direct-debit" class="form-group">
-        <p>
-          @messages("openPayments.directDebitLink") <a href="#">@messages("openPayments.directDebitLinkText")</a>
-            @messages("openPayments.directDebitNotSure")</p>
-      </div>
-    }
+    <span id="direct-debits" class="heading-small">Direct debits</span>
+    <div id="check-direct-debit" class="form-group">
+      <p>
+        @messages("openPayments.directDebitLink")
+
+        @if(appConfig.features.allowDirectDebits()) {
+          @messages("openPayments.directDebitYouCan")
+          <a href="#">@messages("openPayments.directDebitLinkText")</a>
+          @messages("openPayments.directDebitNotSure")
+        }
+      </p>
+    </div>
 
     @expandingHelpSection(Messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
   </div>
