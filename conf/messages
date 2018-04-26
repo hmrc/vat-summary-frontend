@@ -32,7 +32,7 @@ partials.btaHome.vatSection.viewVatDetails = View your VAT details
 vatDetails.title = Your VAT details
 vatDetails.accountDetails.link = Account details
 vatDetails.accountDetails.view = See your business information and other details.
-vatDetails.accountDetails.portal.link = View VAT certificate (opens in a new window)
+vatDetails.accountDetails.portal.link = View VAT certificate (opens in a new tab)
 vatDetails.submittedReturns.link = Submitted returns
 vatDetails.submittedReturns.view = Check the returns you''ve sent us.
 vatDetails.vrn = VAT registration number (VRN): {0}
@@ -47,7 +47,7 @@ payment.noPayment = No payment due right now
 payment.nextPayment = Next payment due
 payment.check = Check what you owe
 payment.stillMakeLink = You can still
-payment.stillMake = make a payment (opens in a new window)
+payment.stillMake = make a payment (opens in a new tab)
 payment.evenIfNotShown = even if a payment isn''t shown
 
 openPayments.title = What you owe
@@ -64,7 +64,7 @@ openPayments.timeToAppear = It can take up to 24 hours to appear after you''ve s
 openPayments.whatOweHelp = What I owe isn''t shown
 openPayments.directDebitLink = If you''ve already set up a direct debit, you don''t need to pay now.
 openPayments.directDebitYouCan = You can
-openPayments.directDebitLinkText = check if you''ve set up a direct debit (opens in a new window)
+openPayments.directDebitLinkText = check if you''ve set up a direct debit  (opens in a new tab)
 openPayments.directDebitNotSure = if you''re not sure.
 
 noPayments.title = Your VAT payment

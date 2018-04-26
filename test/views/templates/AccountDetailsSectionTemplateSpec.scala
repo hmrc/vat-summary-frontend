@@ -37,7 +37,7 @@ class AccountDetailsSectionTemplateSpec extends ViewBaseSpec {
 
       "have the correct heading" in {
         mockConfig.features.accountDetails(false)
-        elementText(Selectors.accountDetailsHeading) shouldBe "View VAT certificate (opens in a new window)"
+        elementText(Selectors.accountDetailsHeading) shouldBe "View VAT certificate (opens in a new tab)"
       }
 
       "have the correct portal link" in {
