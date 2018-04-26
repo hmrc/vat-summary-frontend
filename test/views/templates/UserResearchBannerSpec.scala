@@ -26,7 +26,8 @@ class UserResearchBannerSpec extends ViewBaseSpec {
 
   object Selectors {
     val userResearchHeading = "h3.notice-banner__content"
-    val userResearchSurvey = "a.notice-banner__content"
+    val userResearchSurveyLink = "a.notice-banner__content"
+    val userResearchSurveyText = "p.notice-banner__content"
     val userResearchClose = ".notice-banner__close"
   }
 
@@ -36,20 +37,21 @@ class UserResearchBannerSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading message" in {
-      elementText(Selectors.userResearchHeading) shouldBe "Please help us improve our service"
+      elementText(Selectors.userResearchHeading) shouldBe "Help HMRC work better"
     }
 
     "have the correct text to enter the survey" in {
-      elementText(Selectors.userResearchSurvey) shouldBe "Enter our survey"
+      elementText(Selectors.userResearchSurveyText) shouldBe "People like you are helping us improve." +
+        " Sign up to test our latest work (opens in a new tab)."
     }
 
     "have the correct link to the survey" in {
-      element(Selectors.userResearchSurvey).attr("href") shouldBe
+      element(Selectors.userResearchSurveyLink).attr("href") shouldBe
         "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34"
     }
 
     "have the correct rejection text" in {
-      elementText(Selectors.userResearchClose) shouldBe "No thanks"
+      elementText(Selectors.userResearchClose) shouldBe "Close"
     }
   }
 }

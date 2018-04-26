@@ -19,9 +19,10 @@ unauthorised.youNeedTo = You need to
 unauthorised.signUpWithSoftware = sign up to use software to submit your VAT Returns
 unauthorised.alreadySignedUp = If you''ve already signed up, you need to sign in with the correct Government Gateway details.
 
-userResearch.heading = Please help us improve our service
-userResearch.enterSurvey = Enter our survey
-userResearch.close = No thanks
+userResearch.heading = Help HMRC work better
+userResearch.enterSurvey = People like you are helping us improve.
+userResearch.enterSurvey.link = Sign up to test our latest work (opens in a new tab)
+userResearch.close = Close
 
 partials.btaHome.vatSection.reporting.heading = VAT reporting through software
 partials.btaHome.vatSection.reporting.message = You''ve signed up to report your VAT through software.
