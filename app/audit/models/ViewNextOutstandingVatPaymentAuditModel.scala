@@ -18,24 +18,25 @@ package audit.models
 
 import models.User
 import models.obligations.VatReturnObligation
+import models.payments.Payment
 
-case class NextOpenObligationAuditModel(user: User,
-                                        obligation: Option[VatReturnObligation]) extends AuditModel {
+case class ViewNextOutstandingVatPaymentAuditModel(user: User,
+                                                   payment: Option[Payment]) extends AuditModel {
 
-  private val openObligation: Map[String, String] = obligation match {
+  private val paymentDetails: Map[String, String] = payment match {
     case Some(data) => Map(
-      "obligationOpen" -> "yes",
-      "obligationDueBy" -> data.due.toString,
-      "obligationPeriodFrom" -> data.start.toString,
-      "obligationPeriodTo" -> data.end.toString
+      "paymentOutstanding" -> "yes",
+      "paymentDueBy" -> data.due.toString,
+      "paymentPeriodFrom" -> data.start.toString,
+      "paymentPeriodTo" -> data.end.toString
     )
-    case _ => Map("obligationOpen" -> "no")
+    case _ => Map("paymentOutstanding" -> "no")
   }
 
   override val auditType: String = "OverviewPageView"
 
-  override val transactionName: String = "OpenVatObligation"
+  override val transactionName: String = "view-next-outstanding-vat-payment"
 
-  override val detail: Map[String, String] = Map("vrn" -> user.vrn) ++ openObligation
+  override val detail: Map[String, String] = Map("vrn" -> user.vrn) ++ paymentDetails
 
 }
