@@ -27,7 +27,9 @@ class UserResearchBannerSpec extends ViewBaseSpec {
   object Selectors {
     val userResearchHeading = "h3.notice-banner__content"
     val userResearchSurvey = "a.notice-banner__content"
-    val userResearchClose = ".notice-banner__close"
+    val userResearchClose = "a.notice-banner__close"
+    val userResearchCloseText = "a.notice-banner__close span:nth-of-type(1)"
+    val userResearchCloseContext = "a.notice-banner__close span:nth-of-type(2)"
   }
 
   "The User Research banner" should {
@@ -48,12 +50,16 @@ class UserResearchBannerSpec extends ViewBaseSpec {
         "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34"
     }
 
+    "have an empty href for exiting in the banner" in {
+      element(Selectors.userResearchClose).attr("href") shouldBe "#"
+    }
+
     "have the correct close survey text" in {
-      elementText(Selectors.userResearchClose) shouldBe "No thanks"
+      elementText(Selectors.userResearchCloseText) shouldBe "No thanks"
     }
 
     "have hidden context on the close survey link" in {
-      element(Selectors.userResearchSurvey).attr("span") shouldBe "I do not want to enter the survey"
+      elementText(Selectors.userResearchCloseContext) shouldBe "I do not want to enter the survey"
     }
   }
 }
