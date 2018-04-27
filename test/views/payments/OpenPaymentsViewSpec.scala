@@ -248,7 +248,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window)even if a payment isn't shown."
+      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window) even if a payment isn't shown."
     }
 
     "render the overdue label" in {
