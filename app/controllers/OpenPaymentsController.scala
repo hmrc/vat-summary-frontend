@@ -17,7 +17,7 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.OutstandingPaymentsAuditModel
+import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
 import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
@@ -63,6 +63,6 @@ extends AuthorisedController with I18nSupport {
   }
 
   private[controllers] def auditEvent(user: User, payments: Seq[OpenPaymentsModel])(implicit hc: HeaderCarrier): Unit = {
-    auditingService.extendedAudit(OutstandingPaymentsAuditModel(user, payments), routes.OpenPaymentsController.openPayments().url)
+    auditingService.extendedAudit(ViewOutstandingVatPaymentsAuditModel(user, payments), routes.OpenPaymentsController.openPayments().url)
   }
 }

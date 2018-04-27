@@ -19,13 +19,13 @@ package audit.models
 import models.User
 import models.payments.PaymentDetailsModel
 
-case class PaymentAuditModel(user: User,
-                             payment: PaymentDetailsModel,
-                             returnUrl: String) extends AuditModel {
+case class PayVatReturnChargeAuditModel(user: User,
+                                        payment: PaymentDetailsModel,
+                                        returnUrl: String) extends AuditModel {
 
   override val auditType: String = "PaymentsHandOff"
 
-  override val transactionName: String = "PayVatReturnCharge"
+  override val transactionName: String = "pay-vat-return-charge"
 
   override val detail: Map[String, String] = Map(
     "vrn" -> user.vrn,

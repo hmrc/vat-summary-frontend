@@ -19,7 +19,7 @@ package controllers
 import java.time.LocalDate
 
 import audit.AuditingService
-import audit.models.{NextOpenObligationAuditModel, NextPaymentAuditModel}
+import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import models.viewModels.VatDetailsViewModel
@@ -94,7 +94,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case _ => None
     }
 
-    auditingService.audit(NextOpenObligationAuditModel(user, obligation), routes.VatDetailsController.details().url)
-    auditingService.audit(NextPaymentAuditModel(user, payment), routes.VatDetailsController.details().url)
+    auditingService.audit(ViewNextOpenVatObligationAuditModel(user, obligation), routes.VatDetailsController.details().url)
+    auditingService.audit(ViewNextOutstandingVatPaymentAuditModel(user, payment), routes.VatDetailsController.details().url)
   }
 }

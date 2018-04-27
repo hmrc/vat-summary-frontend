@@ -22,12 +22,12 @@ import models.User
 import models.viewModels.OpenPaymentsModel
 import play.api.libs.json.{JsValue, Json, Writes}
 
-case class OutstandingPaymentsAuditModel(user: User,
-                                         payments: Seq[OpenPaymentsModel]) extends ExtendedAuditModel {
+case class ViewOutstandingVatPaymentsAuditModel(user: User,
+                                                payments: Seq[OpenPaymentsModel]) extends ExtendedAuditModel {
 
   override val auditType: String = "CheckWhatYouOwePageView"
 
-  override val transactionName: String = "OutstandingVatPayments"
+  override val transactionName: String = "view-outstanding-vat-payments"
 
   private case class OutstandingPaymentDetails(paymentType: String,
                                                amount: BigDecimal,
