@@ -26,9 +26,10 @@ class UserResearchBannerSpec extends ViewBaseSpec {
 
   object Selectors {
     val userResearchHeading = "h3.notice-banner__content"
-    val userResearchSurveyLink = "a.notice-banner__content"
-    val userResearchSurveyText = "p.notice-banner__content"
-    val userResearchClose = ".notice-banner__close"
+    val userResearchSurvey = "a.notice-banner__content"
+    val userResearchClose = "a.notice-banner__close"
+    val userResearchCloseText = "a.notice-banner__close span:nth-of-type(1)"
+    val userResearchCloseContext = "a.notice-banner__close span:nth-of-type(2)"
   }
 
   "The User Research banner" should {
@@ -37,21 +38,28 @@ class UserResearchBannerSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading message" in {
-      elementText(Selectors.userResearchHeading) shouldBe "Help HMRC work better"
+      elementText(Selectors.userResearchHeading) shouldBe "Please help us improve our service"
     }
 
     "have the correct text to enter the survey" in {
-      elementText(Selectors.userResearchSurveyText) shouldBe "People like you are helping us improve." +
-        " Sign up to test our latest work (opens in a new tab)."
+      elementText(Selectors.userResearchSurvey) shouldBe "Enter our survey"
     }
 
     "have the correct link to the survey" in {
-      element(Selectors.userResearchSurveyLink).attr("href") shouldBe
+      element(Selectors.userResearchSurvey).attr("href") shouldBe
         "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34"
     }
 
-    "have the correct rejection text" in {
-      elementText(Selectors.userResearchClose) shouldBe "Close"
+    "have an empty href for exiting in the banner" in {
+      element(Selectors.userResearchClose).attr("href") shouldBe "#"
+    }
+
+    "have the correct close survey text" in {
+      elementText(Selectors.userResearchCloseText) shouldBe "No thanks"
+    }
+
+    "have hidden context on the close survey link" in {
+      elementText(Selectors.userResearchCloseContext) shouldBe "I do not want to enter the survey"
     }
   }
 }
