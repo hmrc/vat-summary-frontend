@@ -13,6 +13,7 @@ GET         /thankyou              controllers.feedback.FeedbackController.thank
 
 #Sign Out Routes
 GET         /sign-out              controllers.SignOutController.signOut(authorised: Boolean)
+GET         /time-out              controllers.SignOutController.timeout
 
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
