@@ -228,11 +228,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitCheckFullText) shouldBe
         "If you've already set up a direct debit, you don't need to pay now." +
-          " You can check if you've set up a direct debit (opens in a new window) if you're not sure."
+          " You can check if you've set up a direct debit (opens in a new tab) if you're not sure."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitCheckLink) shouldBe "check if you've set up a direct debit (opens in a new window)"
+      elementText(Selectors.directDebitCheckLink) shouldBe "check if you've set up a direct debit (opens in a new tab)"
     }
 
     "render the correct check direct debit href" in {
@@ -248,7 +248,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new window) even if a payment isn't shown."
+      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new tab) even if a payment isn't shown."
     }
 
     "render the overdue label" in {

@@ -77,7 +77,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     lazy val noPaymentDetails = element(Selectors.noPaymentsDetail)
 
     s"have the correct full link text" in {
-      noPaymentDetails.select("p:nth-of-type(2)").text shouldBe "You can still make a payment (opens in a new window)"
+      noPaymentDetails.select("p:nth-of-type(2)").text shouldBe "You can still make a payment (opens in a new tab)"
     }
 
     s"have the correct href" in {
