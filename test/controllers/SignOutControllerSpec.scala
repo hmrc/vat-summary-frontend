@@ -52,5 +52,15 @@ class SignOutControllerSpec extends ControllerBaseSpec {
         redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
       }
     }
+
+    "signing out on timeout" should {
+      "return 303 and navigate to the expected sign out url" in new SignOutControllerTest {
+        lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithSession
+        lazy val result: Future[Result] = target.timeout(request)
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
+      }
+    }
   }
 }
