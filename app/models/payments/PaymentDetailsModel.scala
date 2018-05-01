@@ -20,7 +20,7 @@ import play.api.libs.json._
 
 case class PaymentDetailsModel(taxType: String,
                                taxReference: String,
-                               amountInPence: Int,
+                               amountInPence: Long,
                                taxPeriodMonth: Int,
                                taxPeriodYear: Int,
                                returnUrl: String,
