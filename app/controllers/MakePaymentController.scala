@@ -34,7 +34,7 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
   extends AuthorisedController with I18nSupport {
 
 
-  def makePayment(amountInPence: Int, taxPeriodMonth: Int, taxPeriodYear: Int): Action[AnyContent] =
+  def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int): Action[AnyContent] =
     authorisedAction { implicit request =>
       user =>
 

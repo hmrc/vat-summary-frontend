@@ -79,7 +79,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   val payment = Seq(
     OpenPaymentsModel(
       "Return",
-      543.21,
+      2000000000.01,
       LocalDate.parse("2001-04-08"),
       LocalDate.parse("2001-01-01"),
       LocalDate.parse("2001-03-31"),
@@ -133,11 +133,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct amount for the first payment" in {
-      elementText(Selectors.firstPaymentAmount) shouldBe "£543.21"
+      elementText(Selectors.firstPaymentAmount) shouldBe "£2,000,000,000.01"
     }
 
     "render the correct amount for the first payment amount data attribute" in {
-      elementText(Selectors.firstPaymentAmountData) shouldBe "£543.21"
+      elementText(Selectors.firstPaymentAmountData) shouldBe "£2,000,000,000.01"
     }
 
     "render the correct due period for the first payment" in {
@@ -154,11 +154,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct pay now href for the first payment" in {
-      element(Selectors.firstPaymentPayLink).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(54321, 3, 2001).url
+      element(Selectors.firstPaymentPayLink).attr("href") should endWith("200000000001/3/2001")
     }
 
     "render a hidden label for the button for the first payment" in {
-      elementText(Selectors.firstPaymentPayNowContext) shouldBe "£543.21 overdue for the period 1 January to 31 March 2001"
+      elementText(Selectors.firstPaymentPayNowContext) shouldBe "£2,000,000,000.01 overdue for the period 1 January to 31 March 2001"
     }
 
     "render the correct due period for the first payment period" in {
@@ -194,7 +194,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct pay now href for the second payment" in {
-      element(Selectors.secondPaymentPayLink).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(10000, 3, 2002).url
+      element(Selectors.secondPaymentPayLink).attr("href") should endWith("10000/3/2002")
     }
 
     "render a hidden text for the button for the second payment" in {

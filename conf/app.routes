@@ -4,7 +4,7 @@ GET        /vat-overview           controllers.VatDetailsController.details
 GET        /what-you-owe           controllers.OpenPaymentsController.openPayments
 GET        /account/details        controllers.AccountDetailsController.accountDetails
 
-GET       /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear   controllers.MakePaymentController.makePayment(amountInPence: Int, taxPeriodMonth: Int, taxPeriodYear: Int)
+GET       /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear   controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int)
 
 #Feedback link Routes
 GET         /feedback              controllers.feedback.FeedbackController.show
