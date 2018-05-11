@@ -26,7 +26,7 @@ userResearch.close.context = I do not want to enter the survey
 
 partials.btaHome.vatSection.reporting.heading = VAT reporting through software
 partials.btaHome.vatSection.reporting.message = You''ve signed up to report your VAT through software.
-partials.btaHome.vatSection.vatMessage = You can view your return deadlines, what you owe and previously submitted returns.
+partials.btaHome.vatSection.features = You can view what you owe, your return deadlines, your VAT certificate and previously submitted returns.
 partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
 vatDetails.title = Your VAT details
