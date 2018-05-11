@@ -42,8 +42,8 @@ class VatSectionViewSpec extends ViewBaseSpec {
       elementText(Selectors.reportingMessage) shouldBe "You've signed up to report your VAT through software."
     }
 
-    "have the correct deadlines message on the page" in {
-      elementText(Selectors.viewDeadlines) shouldBe "You can view your return deadlines, what you owe and previously submitted returns."
+    "have the correct service features message on the page" in {
+      elementText(Selectors.viewDeadlines) shouldBe "You can view what you owe, your return deadlines, your VAT certificate and previously submitted returns."
     }
 
     "have the correct link address" in {
