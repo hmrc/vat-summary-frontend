@@ -73,8 +73,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
       }
 
-      "display the 'No payment due right now' message" in {
-        elementText(Selectors.nextPaymentDate) shouldBe "No payment due right now"
+      "display the 'No payments due right now' message" in {
+        elementText(Selectors.nextPaymentDate) shouldBe "No payments due right now"
       }
 
       "display the 'View payment details' button" in {

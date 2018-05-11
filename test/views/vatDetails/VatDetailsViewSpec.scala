@@ -207,7 +207,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "render the next payment section" in {
-      elementText(Selectors.nextPayment) shouldBe "No payment due right now"
+      elementText(Selectors.nextPayment) shouldBe "No payments due right now"
     }
 
     "render the next payment section vat returns link" in {
