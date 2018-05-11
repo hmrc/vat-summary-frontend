@@ -67,7 +67,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val directDebit = "#direct-debits"
     val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
     val directDebitCheckLink = "#check-direct-debit a:nth-of-type(1)"
-    val helpTwentyFourHours = "details p:nth-of-type(1)"
+    val helpText = "details p:nth-of-type(1)"
     val helpMakePayment = "details p:nth-of-type(2)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val overdueLabel = ".task-overdue"
@@ -228,11 +228,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitCheckFullText) shouldBe
         "If you've already set up a direct debit, you don't need to pay now." +
-          " You can check if you've set up a direct debit (opens in a new tab) if you're not sure."
+          " You can view your direct debits (opens in a new tab) if you're not sure."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitCheckLink) shouldBe "check if you've set up a direct debit (opens in a new tab)"
+      elementText(Selectors.directDebitCheckLink) shouldBe "view your direct debits (opens in a new tab)"
     }
 
     "render the correct check direct debit href" in {
@@ -240,15 +240,17 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct help revealing link text" in {
-      elementText(Selectors.helpSummaryRevealLink) shouldBe "What I owe isn't shown"
+      elementText(Selectors.helpSummaryRevealLink) shouldBe "What I owe is incorrect or missing"
     }
 
-    "render the correct 24 hour help text" in {
-      elementText(Selectors.helpTwentyFourHours) shouldBe "It can take up to 24 hours to appear after you've submitted your return."
+    "render the correct help text" in {
+      elementText(Selectors.helpText) shouldBe
+        "If what you owe is incorrect, check if you can correct errors on your VAT Return (opens in a new tab)."
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "You can still make a payment (opens in a new tab) even if a payment isn't shown."
+      elementText(Selectors.helpMakePayment) shouldBe "After you've submitted a return, it can take 24 hours for what you owe to show here. " +
+        "You can still make a payment (opens in a new tab) even if a payment isn't shown."
     }
 
     "render the overdue label" in {

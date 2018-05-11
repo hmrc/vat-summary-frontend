@@ -43,11 +43,12 @@ returnObligation.nextReturn = Next return due
 returnObligation.viewReturns = View return deadlines
 returnObligation.you = You
 
-payment.noPayment = No payment due right now
+payment.noPayment = No payments due right now
 payment.nextPayment = Next payment due
 payment.check = Check what you owe
-payment.stillMakeLink = You can still
-payment.stillMake = make a payment (opens in a new tab)
+payment.afterSubmitted = After you''ve submitted a return, it can take 24 hours for what you owe to show here.
+payment.stillMake = You can still
+payment.stillMakeLink = make a payment (opens in a new tab)
 payment.evenIfNotShown = even if a payment isn''t shown
 
 openPayments.title = What you owe
@@ -60,11 +61,12 @@ openPayments.forPeriod = for the period
 openPayments.dueBy = due by
 openPayments.viewReturnLink = View return
 openPayments.processingTime = Your payment could take up to 5 days to process. You may be fined if it''s late.
-openPayments.timeToAppear = It can take up to 24 hours to appear after you''ve submitted your return.
-openPayments.whatOweHelp = What I owe isn''t shown
+openPayments.incorrect = If what you owe is incorrect, check if you can
+openPayments.correctErrors = correct errors on your VAT Return (opens in a new tab)
+openPayments.whatOweHelp = What I owe is incorrect or missing
 openPayments.directDebitLink = If you''ve already set up a direct debit, you don''t need to pay now.
 openPayments.directDebitYouCan = You can
-openPayments.directDebitLinkText = check if you''ve set up a direct debit  (opens in a new tab)
+openPayments.directDebitLinkText = view your direct debits (opens in a new tab)
 openPayments.directDebitNotSure = if you''re not sure.
 
 noPayments.title = Your VAT payment
