@@ -24,6 +24,7 @@ import models.payments.PaymentDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
+import views.html.errors.paymentsError
 
 @Singleton
 class MakePaymentController @Inject()(val messagesApi: MessagesApi,
@@ -48,12 +49,14 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           backUrl = appConfig.paymentsBackUrl
         )
 
-        paymentsService.setupPaymentsJourney(paymentDetails).map { url =>
-          auditingService.audit(
-            PayVatReturnChargeAuditModel(user, paymentDetails, url),
-            routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear).url
-          )
-          Redirect(url)
+        paymentsService.setupPaymentsJourney(paymentDetails).map {
+          case Right(url) =>
+            auditingService.audit(
+              PayVatReturnChargeAuditModel(user, paymentDetails, url),
+              routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear).url
+            )
+            Redirect(url)
+          case Left(_) => InternalServerError(paymentsError())
         }
     }
 }

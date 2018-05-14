@@ -18,6 +18,8 @@ package services
 
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
+import models.ServiceResponse
+import models.errors.PaymentSetupError
 import models.payments.{PaymentDetailsModel, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -33,10 +35,10 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, 
       case Left(_) => None
     }
 
-  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[String] =
+  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] =
     paymentsConnector.setupJourney(journeyDetails).map {
-      case Right(redirectUrl) => redirectUrl
-      case Left(error) => throw new Exception(error.message)
+      case Right(url) => Right(url)
+      case Left(_) => Left(PaymentSetupError)
     }
 
 }
