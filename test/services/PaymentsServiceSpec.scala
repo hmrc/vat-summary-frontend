@@ -20,7 +20,8 @@ import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{FinancialDataConnector, PaymentsConnector}
-import models.errors.{ServerSideError, UnknownError}
+import models.ServiceResponse
+import models.errors.{PaymentSetupError, ServerSideError, UnknownError}
 import models.payments.{Payment, PaymentDetailsModel, Payments}
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
@@ -107,8 +108,13 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val connectorResponse: HttpPostResult[String]
 
-      def setup(): Any
+      def setup(): Unit = {
+        (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(connectorResponse)
+      }
 
       def target: PaymentsService = {
         setup()
@@ -129,41 +135,30 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       "http://domain/return-path"
     )
 
-    "the connector is successful" should {
+    "setting up the payments journey is successful" should {
 
       "return a redirect url" in new Test {
 
-        val expectedRedirectUrl = "http://www.google.com"
-        val expectedResult: HttpPostResult[String] = Right(expectedRedirectUrl)
+        val redirectUrl = "http://www.google.com"
+        override val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
+        val expectedResult: ServiceResponse[String] = Right(redirectUrl)
 
-        override def setup(): Any = {
-          (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returns(Right(expectedRedirectUrl))
-        }
+        private val result = await(target.setupPaymentsJourney(paymentDetails))
 
-
-        val result: String = await(target.setupPaymentsJourney(paymentDetails))
-
-        result shouldBe expectedRedirectUrl
+        result shouldBe expectedResult
       }
     }
 
-    "the connector is unsuccessful" should {
+    "setting up the payments journey is unsuccessful" should {
 
-      "throw an exception" in new Test {
+      "return an error" in new Test {
 
-        val expectedResult: HttpPostResult[String] = Left(UnknownError)
+        override val connectorResponse: HttpPostResult[String] = Left(UnknownError)
+        val expectedResult: ServiceResponse[String] = Left(PaymentSetupError)
 
-        override def setup(): Any = {
-          (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returns(expectedResult)
-        }
+        private val result = await(target.setupPaymentsJourney(paymentDetails))
 
-        the[Exception] thrownBy {
-          await(target.setupPaymentsJourney(paymentDetails))
-        } should have message "Received an unknown error."
+        result shouldBe expectedResult
       }
     }
   }
