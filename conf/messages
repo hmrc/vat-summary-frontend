@@ -107,6 +107,7 @@ features.date-service.staticDate.enabled = Use static date (2018-05-01)
 features.accountDetails.enabled = Show account details
 features.allowNineBox.enabled = Nine box page allowed
 features.auditing.enabled = Auditing service enabled
+features.allowPaymentHistory.enabled = Payment history page enabled
 
 banner.newService = This is a new service – your
 banner.feedback = feedback

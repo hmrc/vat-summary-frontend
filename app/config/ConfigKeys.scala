@@ -42,6 +42,7 @@ object ConfigKeys {
   val accountDetailsFeature: String = "features.accountDetails.enabled"
   val allowNineBoxFeature: String = "features.allowNineBox.enabled"
   val enableAuditingFeature: String = "features.auditing.enabled"
+  val allowPaymentHistoryFeature: String = "features.allowPaymentHistory.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"

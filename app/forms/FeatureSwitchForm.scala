@@ -31,7 +31,8 @@ object FeatureSwitchForm {
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.accountDetailsFeature -> boolean,
       ConfigKeys.allowNineBoxFeature -> boolean,
-      ConfigKeys.enableAuditingFeature -> boolean
+      ConfigKeys.enableAuditingFeature -> boolean,
+      ConfigKeys.allowPaymentHistoryFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
