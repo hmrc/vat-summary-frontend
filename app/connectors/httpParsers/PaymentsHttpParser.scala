@@ -19,7 +19,7 @@ package connectors.httpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
 import models.payments.Payments
-import play.api.http.Status.{BAD_REQUEST, OK}
+import play.api.http.Status.{BAD_REQUEST, OK, NOT_FOUND}
 import play.api.libs.json.{JsArray, JsValue, Json}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
@@ -29,6 +29,7 @@ object PaymentsHttpParser extends ResponseHttpParsers {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Payments] = {
       response.status match {
         case OK => Right(removeNonVatReturnCharges(response.json).as[Payments])
+        case NOT_FOUND => Right(Payments(Seq.empty))
         case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
         case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
