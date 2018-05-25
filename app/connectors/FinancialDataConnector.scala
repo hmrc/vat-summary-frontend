@@ -16,11 +16,12 @@
 
 package connectors
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.payments.Payments
+import models.viewModels.PaymentsHistoryModel
 import play.api.Logger
 import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -51,6 +52,23 @@ class FinancialDataConnector @Inject()(http: HttpClient,
           Logger.warn("FinancialDataConnector received error: " + error.message )
           httpError
       }
+  }
+
+  def getVatLiabilities(year: Int)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[PaymentsHistoryModel]] = {
+    Future(Seq(
+      PaymentsHistoryModel(
+        taxPeriodFrom = LocalDate.parse(s"$year-01-01"),
+        taxPeriodTo   = LocalDate.parse(s"$year-02-01"),
+        amount        = 123456789,
+        clearedDate   = LocalDate.parse(s"$year-03-01")
+      ),
+      PaymentsHistoryModel(
+        taxPeriodFrom = LocalDate.parse(s"$year-03-01"),
+        taxPeriodTo   = LocalDate.parse(s"$year-04-01"),
+        amount        = 987654321,
+        clearedDate   = LocalDate.parse(s"$year-03-01")
+      )
+    ))
   }
 
 }

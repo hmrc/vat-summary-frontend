@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
 import models.payments.{Payment, Payments}
+import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -88,6 +89,33 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getOpenPayments("111"))
+
+      result shouldEqual expected
+    }
+  }
+
+  "calling getVatLiabilities" should {
+
+    "return a PaymentsHistoryModel" in new Test {
+      override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
+
+      val expected = Seq(
+        PaymentsHistoryModel(
+          taxPeriodFrom = LocalDate.parse("2018-01-01"),
+          taxPeriodTo   = LocalDate.parse("2018-02-01"),
+          amount        = 123456789,
+          clearedDate   = LocalDate.parse("2018-03-01")
+        ),
+        PaymentsHistoryModel(
+          taxPeriodFrom = LocalDate.parse("2018-03-01"),
+          taxPeriodTo   = LocalDate.parse("2018-04-01"),
+          amount        = 987654321,
+          clearedDate   = LocalDate.parse("2018-03-01")
+        )
+      )
+
+      setupStubs()
+      private val result = await(connector.getVatLiabilities(year = 2018))
 
       result shouldEqual expected
     }
