@@ -66,6 +66,19 @@ class PaymentsHttpParserSpec extends UnitSpec {
       }
     }
 
+    "the http response status is 404 NOT_FOUND" should {
+
+      val httpResponse = HttpResponse(Status.NOT_FOUND, None)
+
+      val expected = Right(Payments(Seq.empty))
+
+      val result = PaymentsReads.read("", "", httpResponse)
+
+      "return an empty Payments object" in {
+        result shouldEqual expected
+      }
+    }
+
     "the http response status is 400 BAD_REQUEST (single error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
