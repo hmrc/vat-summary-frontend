@@ -16,10 +16,9 @@
 
 package connectors
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import javax.inject.{Inject, Singleton}
 import models.CustomerInformation
 import play.api.Logger
 import services.MetricsService

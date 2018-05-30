@@ -18,8 +18,8 @@ package connectors
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.{Address, CustomerInformation}
 import models.errors.ServerSideError
+import models.{Address, CustomerInformation}
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
 

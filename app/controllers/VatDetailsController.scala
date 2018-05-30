@@ -20,13 +20,13 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
-import models.viewModels.VatDetailsViewModel
-import models.{User, VatDetailsModel}
+import javax.inject.{Inject, Singleton}
 import models.errors.HttpError
 import models.obligations.{Obligation, VatReturnObligation}
 import models.payments.Payment
+import models.viewModels.VatDetailsViewModel
+import models.{User, VatDetailsModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}

@@ -16,10 +16,9 @@
 
 package services
 
-import javax.inject.Inject
-
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import javax.inject.Inject
 import models.CustomerInformation
 import uk.gov.hmrc.http.HeaderCarrier
 

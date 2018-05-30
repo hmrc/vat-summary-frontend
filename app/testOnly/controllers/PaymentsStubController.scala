@@ -18,7 +18,6 @@ package testOnly.controllers
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import models.payments.PaymentDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController

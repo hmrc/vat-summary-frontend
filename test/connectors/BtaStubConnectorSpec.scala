@@ -18,8 +18,8 @@ package connectors
 
 import config.VatHeaderCarrierForPartialsConverter
 import controllers.ControllerBaseSpec
-import play.twirl.api.Html
 import play.api.http.Status._
+import play.twirl.api.Html
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial

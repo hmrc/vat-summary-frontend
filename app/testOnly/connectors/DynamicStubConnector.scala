@@ -17,7 +17,6 @@
 package testOnly.connectors
 
 import javax.inject.Inject
-
 import testOnly.TestOnlyAppConfig
 import testOnly.models.DataModel
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}

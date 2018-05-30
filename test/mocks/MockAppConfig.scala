@@ -21,8 +21,8 @@ import java.net.URLEncoder
 import config.AppConfig
 import config.features.Features
 import play.api.Mode.Mode
-import play.api.{Configuration, Mode}
 import play.api.mvc.Call
+import play.api.{Configuration, Mode}
 
 class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
   override val analyticsToken: String = ""

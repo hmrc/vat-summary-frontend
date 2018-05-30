@@ -19,7 +19,7 @@ package connectors.httpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
 import models.obligations.VatReturnObligations
-import play.api.http.Status.{BAD_REQUEST, OK, NOT_FOUND}
+import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object VatReturnObligationsHttpParser extends ResponseHttpParsers {

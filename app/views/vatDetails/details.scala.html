@@ -22,52 +22,73 @@
 
 @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
 
-  @navigationBreadcrumb(
-    links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
-    currentPage = messages("vatDetails.title")
-  )
+    @navigationBreadcrumb(
+        links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
+        currentPage = messages("vatDetails.title")
+    )
 
-  <div class="grid-row form-group">
-    <div class="column-two-thirds">
-      <header class="page-heading push--top"
-              @if(!detailsViewModel.entityName.isDefined){data-metrics="error:hidden-text:vat-overview-entity-name"}>
-        <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
-        @detailsViewModel.entityName.map { entityName =>
-          <p class="heading-secondary">@entityName</p>
-        }
-        <span class="form-hint">@messages("vatDetails.vrn", user.vrn)</span>
-      </header>
-    </div>
-  </div>
-
-  <div class="grid-row">
-    <div class="column-two-thirds">
-
-      <div class="grid-row divider--bottom">
-        @views.html.templates.nextPaymentSection(
-          detailsViewModel.nextPaymentDueDate,
-          detailsViewModel.paymentOverdue,
-          detailsViewModel.paymentError
-        )
-        @views.html.templates.nextReturnSection(
-          detailsViewModel.nextReturnObligationDueDate,
-          detailsViewModel.returnObligationOverdue,
-          detailsViewModel.returnObligationError
-        )
-      </div>
-
-      <div class="grid-row">
-        @views.html.templates.accountDetailsSection(user, appConfig)
-
-        <div class="column-one-half" id="submitted-returns">
-          <h2 class="heading-small">
-            <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
-              @messages("vatDetails.submittedReturns.link")
-            </a>
-          </h2>
-          <p>@messages("vatDetails.submittedReturns.view")</p>
+    <div class="grid-row form-group">
+        <div class="column-two-thirds">
+            <header class="page-heading push--top"
+                @if(!detailsViewModel.entityName.isDefined){data-metrics="error:hidden-text:vat-overview-entity-name"}>
+                <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
+                @detailsViewModel.entityName.map { entityName =>
+                    <p class="heading-secondary">@entityName</p>
+                }
+                <span class="form-hint">@messages("vatDetails.vrn", user.vrn)</span>
+            </header>
         </div>
-      </div>
     </div>
-  </div>
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+
+            <div class="grid-row divider--bottom">
+                @views.html.templates.nextPaymentSection(
+                    detailsViewModel.nextPaymentDueDate,
+                    detailsViewModel.paymentOverdue,
+                    detailsViewModel.paymentError
+                )
+                @views.html.templates.nextReturnSection(
+                    detailsViewModel.nextReturnObligationDueDate,
+                    detailsViewModel.returnObligationOverdue,
+                    detailsViewModel.returnObligationError
+                )
+            </div>
+
+            <div class="grid-row">
+                @if(appConfig.features.allowPaymentHistory()) {
+                    <div class="column-one-half" id="payment-history">
+                        <h2 class="heading-small">
+                            <a href="#" data-journey-click="#">
+                            @messages("vatDetails.paymentHistory.link")
+                            </a>
+                        </h2>
+                        <p>@messages("vatDetails.paymentHistory.view")</p>
+                    </div>
+                    <div class="column-one-half" id="submitted-returns">
+                        <h2 class="heading-small">
+                            <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
+                            @messages("vatDetails.submittedReturns.link")
+                            </a>
+                        </h2>
+                        <p>@messages("vatDetails.submittedReturns.view")</p>
+                    </div>
+
+                    @views.html.templates.accountDetailsSection(user, appConfig)
+                } else {
+                    @views.html.templates.accountDetailsSection(user, appConfig)
+
+                    <div class="column-one-half" id="submitted-returns">
+                        <h2 class="heading-small">
+                            <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
+                            @messages("vatDetails.submittedReturns.link")
+                            </a>
+                        </h2>
+                        <p>@messages("vatDetails.submittedReturns.view")</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 }

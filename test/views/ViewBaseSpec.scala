@@ -23,8 +23,9 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
-import uk.gov.hmrc.play.test.UnitSpec
 import play.api.test.FakeRequest
+import uk.gov.hmrc.play.test.UnitSpec
+
 import scala.collection.JavaConverters._
 
 trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite {

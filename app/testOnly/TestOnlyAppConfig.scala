@@ -16,9 +16,8 @@
 
 package testOnly
 
-import javax.inject.Inject
-
 import config.FrontendAppConfig
+import javax.inject.Inject
 import play.api.{Configuration, Environment}
 
 class TestOnlyAppConfig @Inject()(env: Environment,

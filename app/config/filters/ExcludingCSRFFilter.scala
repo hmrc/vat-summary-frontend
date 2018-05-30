@@ -16,9 +16,8 @@
 
 package config.filters
 
-import javax.inject.Inject
-
 import akka.util.ByteString
+import javax.inject.Inject
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
 import play.filters.csrf._

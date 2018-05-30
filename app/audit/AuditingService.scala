@@ -16,9 +16,9 @@
 
 package audit
 
-import javax.inject.{Inject, Singleton}
 import audit.models.{AuditModel, ExtendedAuditModel}
 import config.{AppConfig, FrontendAuditConnector}
+import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.{JsObject, JsValue, Json, Writes}
 import uk.gov.hmrc.http.HeaderCarrier

@@ -18,13 +18,14 @@ package views.vatDetails
 
 import java.time.LocalDate
 
-import models.viewModels.VatDetailsViewModel
 import models.User
+import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatest.BeforeAndAfterEach
 import views.ViewBaseSpec
 
-class VatDetailsViewSpec extends ViewBaseSpec {
+class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
   object Selectors {
     val pageHeading = "h1"
@@ -42,6 +43,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
+    val paymentHistory = "#payment-history"
   }
 
   val currentYear: Int = 2018
@@ -89,7 +91,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     returnObligationError = true
   )
 
-  mockConfig.features.accountDetails(true)
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+    mockConfig.features.accountDetails(true)
+    mockConfig.features.allowPaymentHistory(true)
+  }
 
   "Rendering the VAT details page" should {
 
@@ -154,6 +160,102 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "have the text" in {
         submittedReturns.select("p").text() shouldBe "Check the returns you've sent us."
+      }
+    }
+
+    "have the payment history section" should {
+
+      lazy val submittedReturns = element(Selectors.paymentHistory)
+
+      "have the heading" in {
+        submittedReturns.select("h2").text() shouldBe "Payment history"
+      }
+
+      s"have a link to the payment history page" ignore {
+        //TODO: Revisit when page has been created
+        submittedReturns.select("a").attr("href") shouldBe s""
+      }
+
+      "have the text" in {
+        submittedReturns.select("p").text() shouldBe "Check the payments you've made."
+      }
+    }
+  }
+
+  "Rendering the VAT details page without the payment history section" should {
+
+    lazy val view = views.html.vatDetails.details(user, detailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render breadcrumbs which" should {
+
+      "have the text 'Business tax account'" in {
+        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+      }
+
+      "links to bta" in {
+        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      }
+
+      "have the text 'VAT'" in {
+        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
+      }
+    }
+
+    "have the correct document title" in {
+      document.title shouldBe "Your VAT details"
+    }
+
+    "have the correct entity name" in {
+      elementText(Selectors.entityNameHeading) shouldBe detailsModel.entityName.getOrElse("Fail")
+    }
+
+    "have the correct VRN message" in {
+      elementText(Selectors.vatRegNo) shouldBe s"VAT registration number (VRN): ${user.vrn}"
+    }
+
+    "have the account details section" should {
+
+      lazy val accountDetails = element(Selectors.accountDetails)
+
+      "have the heading" in {
+        accountDetails.select("h2").text() shouldBe "Account details"
+      }
+
+      s"have a link to ${controllers.routes.AccountDetailsController.accountDetails().url}" in {
+        accountDetails.select("a").attr("href") shouldBe controllers.routes.AccountDetailsController.accountDetails().url
+      }
+
+      "have the text" in {
+        accountDetails.select("p").text() shouldBe "See your business information and other details."
+      }
+    }
+
+    "have the submitted returns section" should {
+
+      lazy val submittedReturns = element(Selectors.submittedReturns)
+
+      "have the heading" in {
+        submittedReturns.select("h2").text() shouldBe "Submitted returns"
+      }
+
+      s"have a link to 'returns-url/$currentYear'" in {
+        submittedReturns.select("a").attr("href") shouldBe s"returns-url/$currentYear"
+      }
+
+      "have the text" in {
+        submittedReturns.select("p").text() shouldBe "Check the returns you've sent us."
+      }
+    }
+
+    "the payment history section" should {
+      "not be rendered" in {
+        mockConfig.features.allowPaymentHistory(false)
+
+        lazy val view = views.html.vatDetails.details(user, detailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.paymentHistory))
       }
     }
   }

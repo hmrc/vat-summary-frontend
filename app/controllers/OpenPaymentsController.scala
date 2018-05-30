@@ -19,13 +19,13 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
+import javax.inject.Inject
+import models.User
 import models.payments.{Payment, Payments}
 import models.viewModels.OpenPaymentsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
-import javax.inject.Inject
-import models.User
 import uk.gov.hmrc.http.HeaderCarrier
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,

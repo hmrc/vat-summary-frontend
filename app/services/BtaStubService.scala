@@ -16,15 +16,15 @@
 
 package services
 
-import javax.inject.Inject
 import connectors.BtaStubConnector
+import javax.inject.Inject
+import play.api.http.Status._
+import play.api.mvc.{AnyContent, Request}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.{Failure, Success}
-import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.http.Status._
-import play.api.mvc.{AnyContent, Request}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class BtaStubService @Inject()(btaStubConnector: BtaStubConnector) {

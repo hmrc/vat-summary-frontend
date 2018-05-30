@@ -16,15 +16,16 @@
 
 package connectors
 
-import javax.inject.Inject
 import config.{AppConfig, VatHeaderCarrierForPartialsConverter}
+import javax.inject.Inject
 import play.api.http.Status._
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.http.{HttpResponse, Upstream4xxResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.HtmlPartialHttpReads
+
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig, hc: VatHeaderCarrierForPartialsConverter)

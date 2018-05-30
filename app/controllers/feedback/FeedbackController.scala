@@ -17,9 +17,9 @@
 package controllers.feedback
 
 import java.net.URLEncoder
-import javax.inject.{Inject, Singleton}
 
 import config.{FrontendAppConfig, VatHeaderCarrierForPartialsConverter}
+import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.http.{Status => HttpStatus}
 import play.api.i18n.{I18nSupport, MessagesApi}

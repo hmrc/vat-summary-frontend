@@ -17,7 +17,6 @@
 package audit.models
 
 import models.User
-import models.obligations.VatReturnObligation
 import models.payments.Payment
 
 case class ViewNextOutstandingVatPaymentAuditModel(user: User,
