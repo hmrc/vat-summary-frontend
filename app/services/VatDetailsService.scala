@@ -17,12 +17,12 @@
 package services
 
 import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
 
 import cats.data.EitherT
 import cats.implicits._
 import config.AppConfig
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
+import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.Obligation
 import models.obligations.Obligation.Status._

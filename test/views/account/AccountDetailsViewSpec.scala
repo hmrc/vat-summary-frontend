@@ -16,8 +16,8 @@
 
 package views.account
 
-import models.{Address, User}
 import models.viewModels.AccountDetailsModel
+import models.{Address, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec

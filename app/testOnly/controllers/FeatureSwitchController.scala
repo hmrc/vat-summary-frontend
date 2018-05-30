@@ -16,10 +16,9 @@
 
 package testOnly.controllers
 
-import javax.inject.Inject
-
 import config.AppConfig
 import forms.FeatureSwitchForm
+import javax.inject.Inject
 import models.FeatureSwitchModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}

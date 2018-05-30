@@ -17,6 +17,7 @@
 package views.templates
 
 import java.time.LocalDate
+
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec

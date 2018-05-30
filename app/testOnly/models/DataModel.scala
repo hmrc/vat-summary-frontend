@@ -16,7 +16,7 @@
 
 package testOnly.models
 
-import play.api.libs.json.{JsValue, Json, Format}
+import play.api.libs.json.{Format, JsValue, Json}
 
 case class DataModel(_id: String,
                      method: String,

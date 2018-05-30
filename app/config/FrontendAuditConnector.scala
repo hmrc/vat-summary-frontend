@@ -17,7 +17,6 @@
 package config
 
 import javax.inject.{Inject, Singleton}
-
 import play.api.Mode._
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}

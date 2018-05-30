@@ -16,10 +16,9 @@
 
 package config.filters
 
-import javax.inject.{Inject, Singleton}
-
 import akka.stream.Materializer
 import config.AppConfig
+import javax.inject.{Inject, Singleton}
 import play.api.mvc.{Call, RequestHeader, Result}
 import uk.gov.hmrc.whitelist.AkamaiWhitelistFilter
 

@@ -16,10 +16,9 @@
 
 package services
 
-import javax.inject.{Inject, Singleton}
-
 import com.codahale.metrics.{Counter, Timer}
 import com.kenshoo.play.metrics.Metrics
+import javax.inject.{Inject, Singleton}
 
 trait MetricsService {
 

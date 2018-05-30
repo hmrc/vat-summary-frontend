@@ -25,7 +25,7 @@ import testOnly.connectors.DynamicStubConnector
 import testOnly.models.DataModel
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class DynamicStubControllerSpec extends ControllerBaseSpec {
 

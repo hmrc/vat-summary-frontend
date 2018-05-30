@@ -19,9 +19,9 @@ package models.payments
 import java.time.LocalDate
 
 import models.obligations.Obligation
-import play.api.libs.json._
-import play.api.libs.json.Reads._
 import play.api.libs.functional.syntax._
+import play.api.libs.json.Reads._
+import play.api.libs.json._
 
 case class Payment(start: LocalDate,
                    end: LocalDate,

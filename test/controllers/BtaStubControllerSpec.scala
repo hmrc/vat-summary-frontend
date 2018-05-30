@@ -20,8 +20,7 @@ import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.BtaStubService
-import services.EnrolmentsAuthService
+import services.{BtaStubService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval

@@ -17,9 +17,10 @@
 package connectors
 
 import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import javax.inject.{Inject, Singleton}
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
 import play.api.Logger

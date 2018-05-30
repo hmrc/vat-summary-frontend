@@ -16,11 +16,10 @@
 
 package controllers
 
-import javax.inject.Inject
-
 import config.AppConfig
-import models.{CustomerInformation, User}
+import javax.inject.Inject
 import models.viewModels.AccountDetailsModel
+import models.{CustomerInformation, User}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{AccountDetailsService, EnrolmentsAuthService}

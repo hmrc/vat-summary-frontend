@@ -19,8 +19,8 @@ package views.templates.inputs
 import forms.FeatureSwitchForm
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
-import views.templates.TemplateBaseSpec
 import views.html.templates.inputs.checkboxList
+import views.templates.TemplateBaseSpec
 
 class CheckboxListTemplateSpec extends TemplateBaseSpec {
   val fieldName: String = "fieldName"

@@ -16,15 +16,14 @@
 
 package controllers.partials
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
+import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future

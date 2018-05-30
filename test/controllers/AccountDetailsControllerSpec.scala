@@ -19,8 +19,8 @@ package controllers
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.ServerSideError
-import models.{Address, CustomerInformation, User}
 import models.viewModels.AccountDetailsModel
+import models.{Address, CustomerInformation, User}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._

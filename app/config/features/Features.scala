@@ -16,9 +16,8 @@
 
 package config.features
 
-import javax.inject.{Inject, Singleton}
-
 import config.ConfigKeys
+import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
