@@ -83,6 +83,19 @@ paymentsError.payNowOne = If you know how much you owe,
 paymentsError.payNowTwo = use the payments service
 paymentsError.payNowThree = to pay now.
 
+paymentsHistory.title = Payment history
+paymentsHistory.paymentReceivedTitle = Payment date
+paymentsHistory.descriptionTitle = Description
+paymentsHistory.amountPaidTitle = Amount paid
+paymentsHistory.description = {0} to {1} return
+paymentsHistory.activeTab = Currently viewing payment history from {0}
+paymentsHistory.inactiveTab = View payment history from {0}
+paymentsHistory.noHistory = You haven’t made or received any payments for {0} yet.
+
+notFound.title = Page not found
+notFound.heading = This page can''t be found
+notFound.message = Please check that you have entered the correct web address.
+
 paymentHandOffErrorHeading = We''re experiencing technical problems
 paymentHandOffErrorMessage = Something has gone wrong with this service, it wasn''t your fault. Please try again later.
 

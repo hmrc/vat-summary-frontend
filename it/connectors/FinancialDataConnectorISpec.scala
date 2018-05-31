@@ -99,7 +99,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return a PaymentsHistoryModel" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
 
-      val expected = Seq(
+      val expected = Right(Seq(
         PaymentsHistoryModel(
           taxPeriodFrom = LocalDate.parse("2018-01-01"),
           taxPeriodTo   = LocalDate.parse("2018-02-01"),
@@ -112,10 +112,14 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           amount        = 987654321,
           clearedDate   = LocalDate.parse("2018-03-01")
         )
-      )
+      ))
 
       setupStubs()
-      private val result = await(connector.getVatLiabilities(year = 2018))
+      private val result = await(connector.getVatLiabilities(
+        "5555555555",
+        LocalDate.parse("2018-01-01"),
+        LocalDate.parse("2018-12-31")
+      ))
 
       result shouldEqual expected
     }

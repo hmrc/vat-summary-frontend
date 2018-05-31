@@ -1,0 +1,83 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.templates.formatters.breadcrumbs._
+@import views.html.templates.formatters.tabs._
+@import views.html.templates.formatters.dates._
+@import views.html.templates.formatters.money._
+@import views.html.templates.payments._
+@import models.viewModels.PaymentsHistoryViewModel
+@import java.time.LocalDate
+
+@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
+@getDescriptionString(firstDate: LocalDate, secondDate: LocalDate) = @{
+  messages(
+    "paymentsHistory.description",
+    s"${firstDate.getDayOfMonth} ${firstDate.getMonth.toString.head}${firstDate.getMonth.toString.toLowerCase.substring(1, 3)}",
+    s"${secondDate.getDayOfMonth} ${secondDate.getMonth.toString.head}${secondDate.getMonth.toString.toLowerCase.substring(1, 3)} ${secondDate.getYear}"
+  )
+}
+
+@views.html.main_template(title = messages("paymentsHistory.title"), bodyClasses = None, appConfig = appConfig) {
+
+  @navigationBreadcrumb(
+    links = Map(
+    appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
+    controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
+    currentPage = messages("paymentsHistory.title")
+  )
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
+
+      <ul class="tabs-nav">
+        @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
+      </ul>
+
+      <h2>@model.selectedYear.toString</h2>
+
+
+      @if(model.transactions.isEmpty) {
+        <p>@messages("paymentsHistory.noHistory", model.selectedYear.toString)</p>
+      } else {
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">@messages("paymentsHistory.paymentReceivedTitle")</th>
+              <th scope="col">@messages("paymentsHistory.descriptionTitle")</th>
+              <th class="numeric" scope="col">@messages("paymentsHistory.amountPaidTitle")</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for(transaction <- model.transactions) {
+              <tr>
+                <td scope="row">@displayDate(transaction.clearedDate)</td>
+                <td>@getDescriptionString(transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
+                <td class="numeric">@displayMoney(transaction.amount)</td>
+              </tr>
+            }
+          </tbody>
+
+        </table>
+      }
+
+    </div>
+  </div>
+
+}
