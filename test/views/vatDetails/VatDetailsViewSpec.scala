@@ -171,9 +171,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
         submittedReturns.select("h2").text() shouldBe "Payment history"
       }
 
-      s"have a link to the payment history page" ignore {
-        //TODO: Revisit when page has been created
-        submittedReturns.select("a").attr("href") shouldBe s""
+      s"have a link to the payment history page" in {
+        submittedReturns.select("a").attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear).url
       }
 
       "have the text" in {

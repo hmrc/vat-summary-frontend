@@ -55,21 +55,22 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       }
   }
 
-  def getVatLiabilities(year: Int)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Seq[PaymentsHistoryModel]] = {
-    Future(Seq(
+  def getVatLiabilities(vrn: String, from: LocalDate, to: LocalDate)
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
+    Future.successful(Right(Seq(
       PaymentsHistoryModel(
-        taxPeriodFrom = LocalDate.parse(s"$year-01-01"),
-        taxPeriodTo   = LocalDate.parse(s"$year-02-01"),
+        taxPeriodFrom = LocalDate.parse(s"${from.getYear}-01-01"),
+        taxPeriodTo   = LocalDate.parse(s"${from.getYear}-02-01"),
         amount        = 123456789,
-        clearedDate   = LocalDate.parse(s"$year-03-01")
+        clearedDate   = LocalDate.parse(s"${from.getYear}-03-01")
       ),
       PaymentsHistoryModel(
-        taxPeriodFrom = LocalDate.parse(s"$year-03-01"),
-        taxPeriodTo   = LocalDate.parse(s"$year-04-01"),
+        taxPeriodFrom = LocalDate.parse(s"${from.getYear}-03-01"),
+        taxPeriodTo   = LocalDate.parse(s"${from.getYear}-04-01"),
         amount        = 987654321,
-        clearedDate   = LocalDate.parse(s"$year-03-01")
+        clearedDate   = LocalDate.parse(s"${from.getYear}-03-01")
       )
-    ))
+    )))
   }
 
 }

@@ -16,11 +16,15 @@
 
 package services
 
+import java.time.LocalDate
+
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-import models.ServiceResponse
+import models.{ServiceResponse, User}
 import models.errors.PaymentSetupError
 import models.payments.{PaymentDetailsModel, Payments}
+import models.viewModels.PaymentsHistoryModel
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,6 +38,15 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, 
       case Right(emptyPayments) => Some(emptyPayments)
       case Left(_) => None
     }
+
+  def getPaymentsHistory(user: User, searchYear: Int)
+                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
+    val from: LocalDate = LocalDate.parse(s"$searchYear-01-01")
+    val to: LocalDate = LocalDate.parse(s"$searchYear-12-31")
+
+    financialDataConnector.getVatLiabilities(user.vrn, from, to)
+  }
+
 
   def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] =
     paymentsConnector.setupJourney(journeyDetails).map {

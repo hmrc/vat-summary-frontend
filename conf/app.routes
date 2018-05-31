@@ -1,22 +1,23 @@
 # microservice specific routes
 
-GET        /vat-overview           controllers.VatDetailsController.details
-GET        /what-you-owe           controllers.OpenPaymentsController.openPayments
-GET        /account/details        controllers.AccountDetailsController.accountDetails
+GET        /vat-overview                 controllers.VatDetailsController.details
+GET        /what-you-owe                 controllers.OpenPaymentsController.openPayments
+GET        /account/details              controllers.AccountDetailsController.accountDetails
+GET        /payment-history/:year        controllers.PaymentHistoryController.paymentHistory(year: Int)
 
 GET       /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear   controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int)
 
 #Feedback link Routes
-GET         /feedback              controllers.feedback.FeedbackController.show
-POST        /feedback              controllers.feedback.FeedbackController.submit
-GET         /thankyou              controllers.feedback.FeedbackController.thankyou
+GET         /feedback                    controllers.feedback.FeedbackController.show
+POST        /feedback                    controllers.feedback.FeedbackController.submit
+GET         /thankyou                    controllers.feedback.FeedbackController.thankyou
 
 #Sign Out Routes
-GET         /sign-out              controllers.SignOutController.signOut(authorised: Boolean)
-GET         /time-out              controllers.SignOutController.timeout
+GET         /sign-out                    controllers.SignOutController.signOut(authorised: Boolean)
+GET         /time-out                    controllers.SignOutController.timeout
 
 # this route should be deleted once partial
 # is surfaced in BTA homepage and whitelist has been disabled
-GET        /bta-stub               controllers.BtaStubController.landingPage
+GET        /bta-stub                     controllers.BtaStubController.landingPage
 
-GET        /assets/*file           controllers.Assets.at(path="/public", file)
+GET        /assets/*file                 controllers.Assets.at(path="/public", file)

@@ -20,9 +20,10 @@ import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{FinancialDataConnector, PaymentsConnector}
-import models.ServiceResponse
-import models.errors.{PaymentSetupError, ServerSideError, UnknownError}
+import models.{ServiceResponse, User}
+import models.errors.{BadRequestError, PaymentSetupError, ServerSideError, UnknownError}
 import models.payments.{Payment, PaymentDetailsModel, Payments}
+import models.viewModels.PaymentsHistoryModel
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
 import play.api.http.Status
@@ -160,6 +161,66 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
         result shouldBe expectedResult
       }
+    }
+  }
+
+  "Calling the .getPaymentsHistory method" when {
+
+    trait Test {
+
+      implicit val hc: HeaderCarrier = HeaderCarrier()
+      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]]
+
+      def setup(): Unit = {
+        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *, *)
+          .returns(connectorResponse)
+      }
+
+      def target: PaymentsService = {
+        setup()
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+      }
+    }
+
+    val amountInPence = 123456
+    val taxPeriodMonth = 2
+    val taxPeriodYear = 2018
+
+    val paymentDetails = PaymentDetailsModel("vat",
+      "123456789",
+      amountInPence,
+      taxPeriodMonth,
+      taxPeriodYear,
+      "http://domain/path",
+      "http://domain/return-path"
+    )
+
+    "return a seq of payment history models" in new Test {
+      val paymentSeq = Right(Seq(
+        PaymentsHistoryModel(
+          taxPeriodFrom = LocalDate.of(2018, 1, 1),
+          taxPeriodTo   = LocalDate.of(2018, 1 , 26),
+          amount        = 10000,
+          clearedDate   = LocalDate.of(2018, 1, 13)
+        )
+      ))
+
+      override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
+
+      private val result = await(target.getPaymentsHistory(User("999999999"), searchYear = 2018))
+
+      result shouldBe paymentSeq
+    }
+
+    "return a http error" in new Test {
+      override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
+
+      private val result = await(target.getPaymentsHistory(User("999999999"), searchYear = 2018))
+
+      result shouldBe Left(BadRequestError("400", ""))
     }
   }
 }
