@@ -79,9 +79,8 @@ noPayments.twentyFourHours = If you''ve submitted a return and need to pay VAT, 
 paymentsError.title = There is a problem with the service - VAT reporting through software - GOV.UK
 paymentsError.heading = Sorry, there is a problem with the service
 paymentsError.message = Try again later.
-paymentsError.payNowOne = If you know how much you owe,
-paymentsError.payNowTwo = use the payments service
-paymentsError.payNowThree = to pay now.
+paymentsError.payNowOne = If you know how much you owe, you can still
+paymentsError.payNowTwo = pay now
 
 paymentsHistory.title = Payment history
 paymentsHistory.paymentReceivedTitle = Payment date
