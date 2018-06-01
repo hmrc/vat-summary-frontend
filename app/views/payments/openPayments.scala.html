@@ -102,7 +102,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
         @if(appConfig.features.allowDirectDebits()) {
           @messages("openPayments.directDebitYouCan")
-          <a target="_blank" href="#">@messages("openPayments.directDebitLinkText")</a>
+          <a target="_blank" href="@routes.DDController.directDebits">@messages("openPayments.directDebitLinkText")</a>
           @messages("openPayments.directDebitNotSure")
         }
       </p>
