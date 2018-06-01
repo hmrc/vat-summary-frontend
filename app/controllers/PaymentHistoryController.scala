@@ -21,7 +21,7 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.Inject
 import models.User
-import models.viewModels.PaymentsHistoryViewModel
+import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
@@ -43,26 +43,30 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
       if (isValidSearchYear(year) && appConfig.features.allowPaymentHistory()) {
         getFinancialTransactions(user, year).map {
           case Right(model) => Ok(views.html.payments.paymentHistory(model))
-          case Left(_) => InternalServerError(views.html.errors.paymentsError())
+          case Left(_)      => InternalServerError(views.html.errors.paymentsError())
         }
-
       } else {
         Future.successful(NotFound(views.html.errors.notFound()))
       }
   }
 
   private[controllers] def getFinancialTransactions(user: User, selectedYear: Int)
-                                               (implicit hc: HeaderCarrier): Future[HttpGetResult[PaymentsHistoryViewModel]] = {
+                                                   (implicit hc: HeaderCarrier): Future[HttpGetResult[PaymentsHistoryViewModel]] = {
+    val currentYear    = dateService.now().getYear
+    val potentialYears = List(currentYear, currentYear - 1)
 
-    val currentYear = dateService.now().getYear
-    val historyYears: Seq[Int] = Seq[Int](currentYear, currentYear - 1)
+    def getPaymentHistory(year: Int): Future[(Int, HttpGetResult[Seq[PaymentsHistoryModel]])] = {
+      paymentsService.getPaymentsHistory(user, year) map(year -> _)
+    }
 
-    paymentsService.getPaymentsHistory(user, selectedYear).map {
-      _.right.map { transactions =>
+    def getYearsWithData = Future.sequence(potentialYears map getPaymentHistory) map(_.toMap)
+
+    getYearsWithData map { map =>
+      map(selectedYear).right map { transactions =>
         PaymentsHistoryViewModel(
-          historyYears,
-          selectedYear,
-          transactions
+          displayedYears = map.collect { case (year, data) if data.isRight => year }.toSeq,
+          selectedYear   = selectedYear,
+          transactions   = transactions
         )
       }
     }

@@ -25,6 +25,7 @@ import models.{ServiceResponse, User}
 import models.errors.PaymentSetupError
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
+import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +41,7 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, 
     }
 
   def getPaymentsHistory(user: User, searchYear: Int)
-                                 (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
+                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
     val from: LocalDate = LocalDate.parse(s"$searchYear-01-01")
     val to: LocalDate = LocalDate.parse(s"$searchYear-12-31")
 

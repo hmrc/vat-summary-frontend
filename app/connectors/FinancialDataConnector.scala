@@ -21,6 +21,7 @@ import java.time.LocalDate
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
+import models.errors.ServerSideError
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
 import play.api.Logger
@@ -60,15 +61,15 @@ class FinancialDataConnector @Inject()(http: HttpClient,
     Future.successful(Right(Seq(
       PaymentsHistoryModel(
         taxPeriodFrom = LocalDate.parse(s"${from.getYear}-01-01"),
-        taxPeriodTo   = LocalDate.parse(s"${from.getYear}-02-01"),
-        amount        = 123456789,
-        clearedDate   = LocalDate.parse(s"${from.getYear}-03-01")
+        taxPeriodTo = LocalDate.parse(s"${from.getYear}-02-01"),
+        amount = 123456789,
+        clearedDate = LocalDate.parse(s"${from.getYear}-03-01")
       ),
       PaymentsHistoryModel(
         taxPeriodFrom = LocalDate.parse(s"${from.getYear}-03-01"),
-        taxPeriodTo   = LocalDate.parse(s"${from.getYear}-04-01"),
-        amount        = 987654321,
-        clearedDate   = LocalDate.parse(s"${from.getYear}-03-01")
+        taxPeriodTo = LocalDate.parse(s"${from.getYear}-04-01"),
+        amount = 987654321,
+        clearedDate = LocalDate.parse(s"${from.getYear}-03-01")
       )
     )))
   }
