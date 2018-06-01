@@ -53,6 +53,9 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           clearedDate   = LocalDate.parse(s"2018-03-01")
         )
       ))
+    val serviceResultYearOne: HttpGetResult[Seq[PaymentsHistoryModel]] = serviceResult
+    val serviceResultYearTwo: HttpGetResult[Seq[PaymentsHistoryModel]] = serviceResult
+
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
         Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
@@ -88,7 +91,15 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           .returns({})
 
         (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *)
+          .expects(*, *, *, *).noMoreThanOnce()
+          .returns(serviceResultYearOne)
+
+        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *).noMoreThanOnce()
+          .returns(serviceResultYearTwo)
+
+        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *).noMoreThanOnce()
           .returns(serviceResult)
       }
     }
@@ -169,10 +180,50 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   "Calling the getFinancialTransactions function" when {
 
+    "the user has no transactions for a specific year" should {
+
+      "return the correct year tabs" in new Test {
+        override val authCall = false
+        override val serviceResultYearTwo = Left(ServerSideError("501", "Service not implemented."))
+
+        val examplePaymentHistory: HttpGetResult[PaymentsHistoryViewModel] =
+          Right(PaymentsHistoryViewModel(
+            Seq(2018),
+            2018,
+            Seq(
+              PaymentsHistoryModel(
+                taxPeriodFrom = LocalDate.parse(s"2018-01-01"),
+                taxPeriodTo   = LocalDate.parse(s"2018-02-01"),
+                amount        = 123456789,
+                clearedDate   = LocalDate.parse(s"2018-03-01")
+              ),
+              PaymentsHistoryModel(
+                taxPeriodFrom = LocalDate.parse(s"2018-03-01"),
+                taxPeriodTo   = LocalDate.parse(s"2018-04-01"),
+                amount        = 987654321,
+                clearedDate   = LocalDate.parse(s"2018-03-01")
+              )
+            )
+          )
+        )
+
+        private val result = await(target.getFinancialTransactions(testUser, 2018))
+        result shouldBe examplePaymentHistory
+      }
+    }
+
     "the PaymentsService retrieves a valid PaymentHistoryModel" should {
 
       "return the PaymentHistoryModel" in new Test {
         override val authCall = false
+
+        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *).noMoreThanOnce()
+          .returns(serviceResultYearTwo)
+
+        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *).noMoreThanOnce()
+          .returns(serviceResultYearOne)
 
         val examplePaymentHistory: HttpGetResult[PaymentsHistoryViewModel] =
           Right(PaymentsHistoryViewModel(
@@ -203,14 +254,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val authCall = false
         override val serviceResult = Left(ServerSideError("501", "Service not implemented."))
 
-        val exampleError: HttpGetResult[PaymentsHistoryViewModel] =
-          Left(ServerSideError(
-            "501",
-            "Service not implemented."
-          ))
-
-        private val result = await(target.getFinancialTransactions(testUser, 2018))
-        result shouldBe exampleError
+        intercept[Exception](await(target.getFinancialTransactions(testUser, 2018)))
       }
     }
   }
