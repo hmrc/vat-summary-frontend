@@ -18,14 +18,14 @@ package services
 
 import java.time.LocalDate
 
-import cats.data.EitherT
-import cats.implicits._
 import config.AppConfig
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import javax.inject.{Inject, Singleton}
 import models._
-import models.obligations.Obligation
 import models.obligations.Obligation.Status._
+import models.obligations.{Obligation, VatReturnObligation}
+import models.payments.Payment
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,23 +49,26 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
     presetAndFuture orElse overdue
   }
 
-  def getVatDetails(user: User,
+  def getNextReturn(user: User,
                     date: LocalDate)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[VatDetailsModel] = {
-    // Static 2018 date range for MVP
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Option[VatReturnObligation]]] = {
+
     val dateFrom = LocalDate.parse("2018-01-01")
     val dateTo = LocalDate.parse("2018-12-31")
 
-    val nextReturn = EitherT(vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding))
-      .map(obligations => getNextObligation(obligations.obligations, date)).value
+    vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
+      case Right(nextReturns) => Right(getNextObligation(nextReturns.obligations, date))
+      case Left(error) => Left(error)
+    }
+  }
 
-    val nextPayment = EitherT(financialDataConnector.getOpenPayments(user.vrn))
-      .map(payments => getNextObligation(payments.financialTransactions, date)
-      .filter(payment => payment.outstandingAmount > 0)).value
+  def getNextPayment(user: User,
+                    date: LocalDate)
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Option[Payment]]] = {
 
-    for {
-      nr <- nextReturn
-      np <- nextPayment
-    } yield VatDetailsModel(np, nr)
+    financialDataConnector.getOpenPayments(user.vrn).map {
+      case Right(nextPayments) => Right(getNextObligation(nextPayments.financialTransactions, date))
+      case Left(error) => Left(error)
+    }
   }
 }

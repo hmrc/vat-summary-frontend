@@ -18,12 +18,13 @@ package services
 
 import java.time.LocalDate
 
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
+import models._
 import models.errors.BadRequestError
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
-import models.{VatDetailsModel, _}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits._
@@ -114,9 +115,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .getVatDetails" when {
+  "Calling .getNextReturn" when {
 
-    "the connector returns some obligations and payments" should {
+    "the connector returns some obligations" should {
 
       "return the most recent outstanding obligation" in new Test {
 
@@ -125,19 +126,13 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
 
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(Payments(Seq(payment)))))
+        val result: HttpGetResult[Option[VatReturnObligation]] = await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
 
-        val result: VatDetailsModel = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
-
-        result shouldBe VatDetailsModel(Right(Some(payment)), Right(Some(currentObligation)))
+        result shouldBe Right(Some(currentObligation))
       }
-
     }
 
-    "the connector returns no obligations or payments" should {
+    "the connector returns no obligations" should {
 
       "return nothing" in new Test {
 
@@ -146,77 +141,25 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
 
+        val result: HttpGetResult[Option[VatReturnObligation]] = await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
 
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(Payments(Seq.empty))))
-
-        val result: VatDetailsModel = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
-
-        result shouldBe VatDetailsModel(Right(None), Right(None))
+        result shouldBe Right(None)
       }
 
     }
 
-    "the VatApiConnector returns an HttpError" should {
+    "the connector returns an HttpError" should {
 
-      "return a VatDetailsModel containing the error" in new Test {
+      "return the error" in new Test {
 
         (mockVatApiConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(Payments(Seq.empty))))
+        val result: HttpGetResult[Option[VatReturnObligation]] = await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
 
-        val result: VatDetailsModel = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
-
-        result shouldBe VatDetailsModel(Right(None), Left(BadRequestError("TEST_FAIL", "this is a test")))
-      }
-
-    }
-
-    "the FinancialDataConnector returns an HttpError" should {
-
-      "return a VatDetailsModel containing the error" in new Test {
-
-        (mockVatApiConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
-
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
-
-        val result: VatDetailsModel = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
-
-        result shouldBe VatDetailsModel(Left(BadRequestError("TEST_FAIL", "this is a test")), Right(None))
-      }
-
-    }
-
-    "both connectors return an HttpError" should {
-
-      "return a VatDetailsModel containing the errors" in new Test {
-        (mockVatApiConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
-
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
-
-        val result: VatDetailsModel = await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01")))
-
-        result shouldBe VatDetailsModel(Left(BadRequestError("TEST_FAIL", "this is a test")), Left(BadRequestError("TEST_FAIL", "this is a test")))
+        result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
       }
 
     }
@@ -224,17 +167,79 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns an Exception" should {
 
       "return a failed Future containing the exception" in new Test {
-        val expected = new RuntimeException("test")
+
         (mockVatApiConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *, *)
-          .returns(Future.failed(expected))
+          .returns(Future.failed(new RuntimeException("test")))
 
-        intercept[RuntimeException](await(vatDetailsService.getVatDetails(User("1111"), LocalDate.parse("2018-01-01"))))
+        intercept[RuntimeException](await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01"))))
+      }
+    }
+  }
+
+  "Calling .getNextPayment" when {
+
+    "the connector returns some payments" should {
+
+      "return the most recent outstanding payment" in new Test {
+
+        (mockFinancialDataConnector.getOpenPayments(_: String)
+        (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(Payments(Seq(payment)))))
+
+        val result: HttpGetResult[Option[Payment]] = await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+
+        result shouldBe Right(Some(payment))
       }
 
     }
 
+    "the connector returns no payments" should {
+
+      "return nothing" in new Test {
+
+        (mockFinancialDataConnector.getOpenPayments(_: String)
+        (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(Payments(Seq.empty))))
+
+        val result: HttpGetResult[Option[Payment]] = await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+
+        result shouldBe Right(None)
+      }
+
+    }
+
+    "the connector returns an HttpError" should {
+
+      "return the error" in new Test {
+
+        (mockFinancialDataConnector.getOpenPayments(_: String)
+        (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
+
+        val result: HttpGetResult[Option[Payment]] = await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+
+        result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
+      }
+
+    }
+
+    "the connector returns an Exception" should {
+
+      "return a failed Future containing the exception" in new Test {
+
+        (mockFinancialDataConnector.getOpenPayments(_: String)
+        (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.failed(new RuntimeException("test")))
+
+        intercept[RuntimeException](await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01"))))
+      }
+    }
   }
 
   "Calling .getEntityName" when {
