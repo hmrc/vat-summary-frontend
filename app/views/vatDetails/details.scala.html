@@ -60,7 +60,8 @@
                 @if(appConfig.features.allowPaymentHistory()) {
                     <div class="column-one-half" id="payment-history">
                         <h2 class="heading-small">
-                            <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)" data-journey-click="#">
+                            <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)"
+                            data-journey-click="payment-history:view:payment-history-details">
                             @messages("vatDetails.paymentHistory.link")
                             </a>
                         </h2>
