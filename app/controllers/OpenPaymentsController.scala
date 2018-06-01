@@ -39,14 +39,14 @@ extends AuthorisedController with I18nSupport {
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       paymentsService.getOpenPayments(user.vrn).map {
-        case Some(Payments(payments)) if payments.nonEmpty =>
-          val model = getModel(payments)
+        case Right(Some(payments)) =>
+          val model = getModel(payments.financialTransactions)
           auditEvent(user, model)
           Ok(views.html.payments.openPayments(user, model))
-        case Some(_) =>
+        case Right(_) =>
           auditEvent(user, Seq.empty)
           Ok(views.html.payments.noPayments(user))
-        case None => InternalServerError(views.html.errors.paymentsError())
+        case Left(_) => InternalServerError(views.html.errors.paymentsError())
       }
   }
 

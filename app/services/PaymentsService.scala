@@ -18,34 +18,36 @@ package services
 
 import java.time.LocalDate
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
+
 import models.{ServiceResponse, User}
-import models.errors.PaymentSetupError
+import models.errors.{PaymentSetupError, PaymentsError, VatLiabilitiesError}
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
-import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, paymentsConnector: PaymentsConnector) {
-  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Payments]] =
+
+  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] =
     financialDataConnector.getOpenPayments(vrn).map {
-      case Right(Payments(payments)) if payments.nonEmpty =>
-        Some(Payments(payments.filter(payment => payment.outstandingAmount > 0)))
-      case Right(emptyPayments) => Some(emptyPayments)
-      case Left(_) => None
+      case Right(payments) if payments.financialTransactions.nonEmpty => Right(Some(payments))
+      case Right(_) => Right(None)
+      case Left(_) => Left(PaymentsError)
     }
 
   def getPaymentsHistory(user: User, searchYear: Int)
-                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
+                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Seq[PaymentsHistoryModel]]] = {
     val from: LocalDate = LocalDate.parse(s"$searchYear-01-01")
     val to: LocalDate = LocalDate.parse(s"$searchYear-12-31")
 
-    financialDataConnector.getVatLiabilities(user.vrn, from, to)
+    financialDataConnector.getVatLiabilities(user.vrn, from, to).map {
+      case Right(liabilities) => Right(liabilities)
+      case Left(_) => Left(VatLiabilitiesError)
+    }
   }
 
 
@@ -54,5 +56,4 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, 
       case Right(url) => Right(url)
       case Left(_) => Left(PaymentSetupError)
     }
-
 }
