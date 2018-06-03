@@ -19,19 +19,23 @@ package services
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.Inject
-import models.CustomerInformation
+
+import models.errors.CustomerInformationError
+import models.{CustomerInformation, ServiceResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AccountDetailsService @Inject()(connector: VatSubscriptionConnector) {
 
-  def getAccountDetails(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext) :
-    Future[HttpGetResult[CustomerInformation]] = connector.getCustomerInfo(vrn)
+  def getAccountDetails(vrn: String)
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] =
+    connector.getCustomerInfo(vrn)
 
 
-  def getEntityName(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = connector.getCustomerInfo(vrn).map {
-    case Right(model: CustomerInformation) => model.entityName
-    case Left(_) => None
-  }
+  def getEntityName(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[String]]] =
+    connector.getCustomerInfo(vrn).map {
+      case Right(model: CustomerInformation) => Right(model.entityName)
+      case Left(_) => Left(CustomerInformationError)
+    }
 }

@@ -21,7 +21,7 @@ import java.time.LocalDate
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import models.{ServiceResponse, User}
-import models.errors.{BadRequestError, PaymentSetupError, ServerSideError, UnknownError, VatLiabilitiesError}
+import models.errors.{BadRequestError, PaymentSetupError, PaymentsError, ServerSideError, UnknownError, VatLiabilitiesError}
 import models.payments.{Payment, PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
 import org.scalamock.matchers.Matchers
@@ -67,9 +67,9 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           "ABCD"
         )))
         override val responseFromFinancialDataConnector = Right(payments)
-        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe Some(payments)
+        paymentsResponse shouldBe Right(Some(payments))
       }
     }
 
@@ -78,25 +78,19 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       "return an empty list of payments" in new Test {
         val payments = Payments(Seq.empty)
         override val responseFromFinancialDataConnector = Right(payments)
-        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe Some(payments)
+        paymentsResponse shouldBe Right(None)
       }
     }
 
     "the connector call fails" should {
 
-      val errorResponse: String =
-        """
-          | "code" -> "GATEWAY_TIMEOUT",
-          | "message" -> "Gateway Timeout"
-          | """.stripMargin
-
       "return None" in new Test {
-        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, errorResponse))
-        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe None
+        paymentsResponse shouldBe Left(PaymentsError)
       }
     }
   }

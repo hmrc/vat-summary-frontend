@@ -63,7 +63,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def constructViewModel(nextReturn: ServiceResponse[Option[VatReturnObligation]],
-                                              nextPayment: ServiceResponse[Option[Payment]], entityName: Option[String]): VatDetailsViewModel = {
+                                              nextPayment: ServiceResponse[Option[Payment]],
+                                              entityName: ServiceResponse[Option[String]]): VatDetailsViewModel = {
 
     val getDueDate: ServiceResponse[Option[Obligation]] => Option[LocalDate] = _.fold(_ => None, _.map(_.due))
     val getIsOverdue: Option[LocalDate] => Boolean = _.fold(false)(d => dateService.now().isAfter(d))
@@ -73,11 +74,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val obligation: Option[LocalDate] = getDueDate(nextReturn)
     val obligationIsOverdue = getIsOverdue(obligation)
     val obligationHasError = nextReturn.isLeft
+    val displayedName = entityName match {
+      case Right(name) => name
+      case Left(_) => None
+    }
 
     VatDetailsViewModel(
       payment,
       obligation,
-      entityName,
+      displayedName,
       dateService.now().getYear,
       obligationIsOverdue,
       paymentIsOverdue,

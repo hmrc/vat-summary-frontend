@@ -18,11 +18,10 @@ package services
 
 import java.time.LocalDate
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
 import models._
-import models.errors.BadRequestError
+import models.errors.{BadRequestError, CustomerInformationError, NextObligationError, NextPaymentError}
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -126,7 +125,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
 
-        val result: HttpGetResult[Option[VatReturnObligation]] = await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligation]] =
+          await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(Some(currentObligation))
       }
@@ -141,7 +141,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
 
-        val result: HttpGetResult[Option[VatReturnObligation]] = await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligation]] =
+          await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(None)
       }
@@ -157,9 +158,10 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: HttpGetResult[Option[VatReturnObligation]] = await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligation]] =
+          await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
 
-        result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
+        result shouldBe Left(NextObligationError)
       }
 
     }
@@ -189,7 +191,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(Payments(Seq(payment)))))
 
-        val result: HttpGetResult[Option[Payment]] = await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[Payment]] =
+          await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(Some(payment))
       }
@@ -205,7 +208,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(Payments(Seq.empty))))
 
-        val result: HttpGetResult[Option[Payment]] = await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[Payment]] =
+          await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(None)
       }
@@ -221,9 +225,10 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: HttpGetResult[Option[Payment]] = await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[Payment]] =
+          await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
 
-        result shouldBe Left(BadRequestError("TEST_FAIL", "this is a test"))
+        result shouldBe Left(NextPaymentError)
       }
 
     }
@@ -276,9 +281,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        lazy val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
+        lazy val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe Some("Cheapo Clothing")
+        result shouldBe Right(Some("Cheapo Clothing"))
       }
     }
 
@@ -314,9 +319,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
+        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe Some("Betty Jones")
+        result shouldBe Right(Some("Betty Jones"))
       }
     }
 
@@ -352,9 +357,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
+        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe Some("Cheapo Clothing Ltd")
+        result shouldBe Right(Some("Cheapo Clothing Ltd"))
       }
     }
 
@@ -390,9 +395,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(exampleCustomerInfo)))
 
-        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
+        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe None
+        result shouldBe Right(None)
       }
     }
 
@@ -403,9 +408,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Left(BadRequestError("", ""))))
 
-        val result: Option[String] = await(accountDetailsService.getEntityName("999999999"))
+        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
 
-        result shouldBe None
+        result shouldBe Left(CustomerInformationError)
       }
     }
   }
