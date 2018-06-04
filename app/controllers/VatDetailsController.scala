@@ -21,10 +21,9 @@ import java.time.LocalDate
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
-import models.User
-import models.errors.HttpError
+
+import models.{ServiceResponse, User}
 import models.obligations.{Obligation, VatReturnObligation}
 import models.payments.Payment
 import models.viewModels.VatDetailsViewModel
@@ -63,10 +62,11 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       }
   }
 
-  private[controllers] def constructViewModel(nextReturn: HttpGetResult[Option[VatReturnObligation]],
-                                              nextPayment: HttpGetResult[Option[Payment]], entityName: Option[String]): VatDetailsViewModel = {
+  private[controllers] def constructViewModel(nextReturn: ServiceResponse[Option[VatReturnObligation]],
+                                              nextPayment: ServiceResponse[Option[Payment]],
+                                              entityName: ServiceResponse[Option[String]]): VatDetailsViewModel = {
 
-    val getDueDate: Either[HttpError, Option[Obligation]] => Option[LocalDate] = _.fold(_ => None, _.map(_.due))
+    val getDueDate: ServiceResponse[Option[Obligation]] => Option[LocalDate] = _.fold(_ => None, _.map(_.due))
     val getIsOverdue: Option[LocalDate] => Boolean = _.fold(false)(d => dateService.now().isAfter(d))
     val payment: Option[LocalDate] = getDueDate(nextPayment)
     val paymentIsOverdue = getIsOverdue(payment)
@@ -74,11 +74,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val obligation: Option[LocalDate] = getDueDate(nextReturn)
     val obligationIsOverdue = getIsOverdue(obligation)
     val obligationHasError = nextReturn.isLeft
+    val displayedName = entityName match {
+      case Right(name) => name
+      case Left(_) => None
+    }
 
     VatDetailsViewModel(
       payment,
       obligation,
-      entityName,
+      displayedName,
       dateService.now().getYear,
       obligationIsOverdue,
       paymentIsOverdue,
@@ -87,8 +91,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
-  private[controllers] def auditEvents(user: User, nextReturn: HttpGetResult[Option[VatReturnObligation]],
-                                       nextPayment: HttpGetResult[Option[Payment]])(implicit hc: HeaderCarrier): Unit = {
+  private[controllers] def auditEvents(user: User, nextReturn: ServiceResponse[Option[VatReturnObligation]],
+                                       nextPayment: ServiceResponse[Option[Payment]])(implicit hc: HeaderCarrier): Unit = {
     val obligation: Option[VatReturnObligation] = nextReturn match {
       case Right(data) => data
       case _ => None

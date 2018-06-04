@@ -18,9 +18,9 @@ package controllers
 
 import audit.AuditingService
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import javax.inject.Inject
-import models.User
+import javax.inject.{Inject, Singleton}
+
+import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -29,12 +29,13 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
+@Singleton
 class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
-                                          val paymentsService: PaymentsService,
-                                          dateService: DateService,
-                                          val enrolmentsAuthService: EnrolmentsAuthService,
-                                          implicit val appConfig: AppConfig,
-                                          auditingService: AuditingService)
+                                         val paymentsService: PaymentsService,
+                                         dateService: DateService,
+                                         val enrolmentsAuthService: EnrolmentsAuthService,
+                                         implicit val appConfig: AppConfig,
+                                         auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 
 
@@ -51,11 +52,11 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def getFinancialTransactions(user: User, selectedYear: Int)
-                                                   (implicit hc: HeaderCarrier): Future[HttpGetResult[PaymentsHistoryViewModel]] = {
+                                                   (implicit hc: HeaderCarrier): Future[ServiceResponse[PaymentsHistoryViewModel]] = {
     val currentYear    = dateService.now().getYear
     val potentialYears = List(currentYear, currentYear - 1)
 
-    def getPaymentHistory(year: Int): Future[(Int, HttpGetResult[Seq[PaymentsHistoryModel]])] = {
+    def getPaymentHistory(year: Int): Future[(Int, ServiceResponse[Seq[PaymentsHistoryModel]])] = {
       paymentsService.getPaymentsHistory(user, year) map(year -> _)
     }
 

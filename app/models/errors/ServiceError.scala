@@ -19,3 +19,8 @@ package models.errors
 sealed trait ServiceError
 
 case object PaymentSetupError extends ServiceError
+case object VatLiabilitiesError extends ServiceError
+case object PaymentsError extends ServiceError
+case object NextObligationError extends ServiceError
+case object NextPaymentError extends ServiceError
+case object CustomerInformationError extends ServiceError

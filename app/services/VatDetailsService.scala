@@ -19,10 +19,11 @@ package services
 import java.time.LocalDate
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import javax.inject.{Inject, Singleton}
+
 import models._
+import models.errors.{NextObligationError, NextPaymentError}
 import models.obligations.Obligation.Status._
 import models.obligations.{Obligation, VatReturnObligation}
 import models.payments.Payment
@@ -51,24 +52,24 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
 
   def getNextReturn(user: User,
                     date: LocalDate)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Option[VatReturnObligation]]] = {
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligation]]] = {
 
     val dateFrom = LocalDate.parse("2018-01-01")
     val dateTo = LocalDate.parse("2018-12-31")
 
     vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
       case Right(nextReturns) => Right(getNextObligation(nextReturns.obligations, date))
-      case Left(error) => Left(error)
+      case Left(_) => Left(NextObligationError)
     }
   }
 
   def getNextPayment(user: User,
                     date: LocalDate)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Option[Payment]]] = {
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payment]]] = {
 
     financialDataConnector.getOpenPayments(user.vrn).map {
       case Right(nextPayments) => Right(getNextObligation(nextPayments.financialTransactions, date))
-      case Left(error) => Left(error)
+      case Left(_) => Left(NextPaymentError)
     }
   }
 }

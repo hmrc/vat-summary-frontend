@@ -21,7 +21,7 @@ import java.time.LocalDate
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import models.{ServiceResponse, User}
-import models.errors.{BadRequestError, PaymentSetupError, ServerSideError, UnknownError}
+import models.errors.{BadRequestError, PaymentSetupError, PaymentsError, ServerSideError, UnknownError, VatLiabilitiesError}
 import models.payments.{Payment, PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
 import org.scalamock.matchers.Matchers
@@ -38,7 +38,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
   "Calling the .getOpenPayments function" when {
 
     trait Test {
-
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
@@ -68,9 +67,9 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           "ABCD"
         )))
         override val responseFromFinancialDataConnector = Right(payments)
-        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe Some(payments)
+        paymentsResponse shouldBe Right(Some(payments))
       }
     }
 
@@ -79,25 +78,19 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       "return an empty list of payments" in new Test {
         val payments = Payments(Seq.empty)
         override val responseFromFinancialDataConnector = Right(payments)
-        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe Some(payments)
+        paymentsResponse shouldBe Right(None)
       }
     }
 
     "the connector call fails" should {
 
-      val errorResponse: String =
-        """
-          | "code" -> "GATEWAY_TIMEOUT",
-          | "message" -> "Gateway Timeout"
-          | """.stripMargin
-
       "return None" in new Test {
-        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, errorResponse))
-        val paymentsResponse: Option[Payments] = await(target.getOpenPayments("123456789"))
+        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe None
+        paymentsResponse shouldBe Left(PaymentsError)
       }
     }
   }
@@ -105,7 +98,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
   "Calling the .setupJourney method" when {
 
     trait Test {
-
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
@@ -139,11 +131,9 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "setting up the payments journey is successful" should {
 
       "return a redirect url" in new Test {
-
         val redirectUrl = "http://www.google.com"
         override val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
         val expectedResult: ServiceResponse[String] = Right(redirectUrl)
-
         private val result = await(target.setupPaymentsJourney(paymentDetails))
 
         result shouldBe expectedResult
@@ -153,10 +143,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "setting up the payments journey is unsuccessful" should {
 
       "return an error" in new Test {
-
         override val connectorResponse: HttpPostResult[String] = Left(UnknownError)
         val expectedResult: ServiceResponse[String] = Left(PaymentSetupError)
-
         private val result = await(target.setupPaymentsJourney(paymentDetails))
 
         result shouldBe expectedResult
@@ -167,7 +155,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
   "Calling the .getPaymentsHistory method" when {
 
     trait Test {
-
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
@@ -185,42 +172,29 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       }
     }
 
-    val amountInPence = 123456
-    val taxPeriodMonth = 2
     val taxPeriodYear = 2018
-
-    val paymentDetails = PaymentDetailsModel("vat",
-      "123456789",
-      amountInPence,
-      taxPeriodMonth,
-      taxPeriodYear,
-      "http://domain/path",
-      "http://domain/return-path"
-    )
 
     "return a seq of payment history models" in new Test {
       val paymentSeq = Right(Seq(
         PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.of(2018, 1, 1),
-          taxPeriodTo   = LocalDate.of(2018, 1 , 26),
-          amount        = 10000,
-          clearedDate   = LocalDate.of(2018, 1, 13)
+          taxPeriodFrom = LocalDate.parse("2018-01-01"),
+          taxPeriodTo = LocalDate.parse("2018-01-26"),
+          amount = 10000,
+          clearedDate = LocalDate.parse("2018-01-13")
         )
       ))
 
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
-
-      private val result = await(target.getPaymentsHistory(User("999999999"), searchYear = 2018))
+      private val result = await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
 
       result shouldBe paymentSeq
     }
 
     "return a http error" in new Test {
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
+      private val result = await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
 
-      private val result = await(target.getPaymentsHistory(User("999999999"), searchYear = 2018))
-
-      result shouldBe Left(BadRequestError("400", ""))
+      result shouldBe Left(VatLiabilitiesError)
     }
   }
 }

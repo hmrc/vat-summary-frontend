@@ -21,7 +21,6 @@ import java.time.LocalDate
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
-import models.errors.ServerSideError
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
 import play.api.Logger
@@ -73,5 +72,4 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       )
     )))
   }
-
 }
