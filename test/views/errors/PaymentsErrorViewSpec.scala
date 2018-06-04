@@ -43,7 +43,7 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
     }
 
     "have the correct pay now message" in {
-      elementText(Selectors.payNow) shouldBe "If you know how much you owe, use the payments service to pay now."
+      elementText(Selectors.payNow) shouldBe "If you know how much you owe, you can still pay now."
     }
 
     "have the correct pay now link" in {
