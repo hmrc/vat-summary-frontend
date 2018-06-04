@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-package models.errors
+package models
 
-sealed trait ServiceError
-
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
+case class VatDetailsDataModel(displayData: Option[String],
+                               hasMultiple: Boolean,
+                               isOverdue: Boolean,
+                               hasError: Boolean)
