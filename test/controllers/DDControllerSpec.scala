@@ -16,8 +16,84 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.AuditModel
+import connectors.DDConnector
+import play.api.http.Status
+import play.api.mvc.Result
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers._
+
+import scala.concurrent.{ExecutionContext, Future}
+
 class DDControllerSpec extends ControllerBaseSpec {
 
+
+  private trait ConnectToDirectDebitTest {
+    val authResult: Future[_] =
+      Future.successful(Enrolments(Set(
+        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
+      )))
+
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+    val mockDDConnector: DDConnector = mock[DDConnector]
+    val mockAuditService: AuditingService = mock[AuditingService]
+
+    def setup(): Any = {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(authResult)
+
+      (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *, *)
+        .returns({})
+
+    }
+
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+
+    def target: DDController = {
+      setup()
+      new DDController(
+        messages,
+        mockEnrolmentsAuthService,
+        mockDDConnector,
+        mockAppConfig,
+        mockAuditService
+      )
+
+    }
+  }
+
+  "Calling the directDebits action" when {
+
+    "the user is logged in" should {
+      "redirected " in new ConnectToDirectDebitTest {
+
+        val redirectUrl = "www.google.co.uk"
+        val expectedRedirectLocation = Some(redirectUrl)
+        val serviceResponse = Right(redirectUrl)
+
+        override def setup(): Any = {
+          super.setup()
+          (mockDDConnector.startJourney(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(serviceResponse))
+        }
+
+        lazy val result: Future[Result] = target.directDebits()(fakeRequestWithSession)
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe expectedRedirectLocation
+      }
+
+    }
+
+  }
 
 
 }

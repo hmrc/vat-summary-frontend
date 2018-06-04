@@ -18,6 +18,7 @@ package connectors
 
 import controllers.ControllerBaseSpec
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import mocks.MockMetricsService
 
 
 
@@ -25,7 +26,7 @@ class DDConnectorSpec extends ControllerBaseSpec {
 
   "DirectDebitConnector" should {
     "generate the correct payments url" in {
-      val connector = new DDConnector(mock[HttpClient], mockAppConfig)
+      val connector = new DDConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
       connector.setupUrl shouldEqual "direct-debit-backend/start-journey"
     }
   }

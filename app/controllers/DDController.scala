@@ -23,6 +23,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.EnrolmentsAuthService
+import views.html.errors.paymentsError
 
 @Singleton
 class DDController @Inject()(val messagesApi: MessagesApi,
@@ -34,6 +35,10 @@ class DDController @Inject()(val messagesApi: MessagesApi,
 
   def directDebits(): Action[AnyContent] = authorisedAction { implicit request =>
 
-    user => ddConnector.startJourney(user.vrn).map{ url => Redirect(url)}
+    user => ddConnector.startJourney(user.vrn).map {
+        case Right(url) => Redirect(url)
+        case Left(_) => InternalServerError(paymentsError())
+
+      }
   }
 }

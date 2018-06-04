@@ -48,7 +48,6 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, 
     financialDataConnector.getVatLiabilities(user.vrn, from, to)
   }
 
-
   def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] =
     paymentsConnector.setupJourney(journeyDetails).map {
       case Right(url) => Right(url)
