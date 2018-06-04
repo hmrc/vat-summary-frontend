@@ -25,8 +25,8 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DirectDebitConnector @Inject() (http: HttpClient,
-                                      appConfig: AppConfig) {
+class DDConnector @Inject()(http: HttpClient,
+                            appConfig: AppConfig) {
 
   private[connectors] lazy val setupUrl: String = s"${appConfig.directDebitServiceUrl + appConfig.setupDirectDebitJourneyPath}"
 

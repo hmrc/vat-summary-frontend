@@ -21,11 +21,11 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 
 
-class DirectDebitConnectorSpec extends ControllerBaseSpec {
+class DDConnectorSpec extends ControllerBaseSpec {
 
   "DirectDebitConnector" should {
     "generate the correct payments url" in {
-      val connector = new DirectDebitConnector(mock[HttpClient], mockAppConfig)
+      val connector = new DDConnector(mock[HttpClient], mockAppConfig)
       connector.setupUrl shouldEqual "direct-debit-backend/start-journey"
     }
   }

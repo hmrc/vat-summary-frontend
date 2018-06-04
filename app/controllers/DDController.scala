@@ -18,7 +18,7 @@ package controllers
 
 import audit.AuditingService
 import config.AppConfig
-import connectors.DirectDebitConnector
+import connectors.DDConnector
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -27,7 +27,7 @@ import services.EnrolmentsAuthService
 @Singleton
 class DDController @Inject()(val messagesApi: MessagesApi,
                              val enrolmentsAuthService: EnrolmentsAuthService,
-                             ddConnector: DirectDebitConnector,
+                             ddConnector: DDConnector,
                              implicit val appConfig: AppConfig,
                              auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
