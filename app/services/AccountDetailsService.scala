@@ -18,7 +18,7 @@ package services
 
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import models.errors.CustomerInformationError
 import models.{CustomerInformation, ServiceResponse}
@@ -26,6 +26,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class AccountDetailsService @Inject()(connector: VatSubscriptionConnector) {
 
   def getAccountDetails(vrn: String)

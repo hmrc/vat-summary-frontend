@@ -37,23 +37,57 @@ import scala.concurrent.{ExecutionContext, Future}
 class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val serviceResult: ServiceResponse[Seq[PaymentsHistoryModel]] =
+    val serviceResultYearOne: ServiceResponse[Seq[PaymentsHistoryModel]] =
       Right(Seq(
         PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.parse(s"2018-01-01"),
-          taxPeriodTo   = LocalDate.parse(s"2018-02-01"),
+          taxPeriodFrom = LocalDate.parse("2018-01-01"),
+          taxPeriodTo   = LocalDate.parse("2018-02-01"),
           amount        = 123456789,
-          clearedDate   = LocalDate.parse(s"2018-03-01")
+          clearedDate   = LocalDate.parse("2018-03-01")
         ),
         PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.parse(s"2018-03-01"),
-          taxPeriodTo   = LocalDate.parse(s"2018-04-01"),
+          taxPeriodFrom = LocalDate.parse("2018-03-01"),
+          taxPeriodTo   = LocalDate.parse("2018-04-01"),
           amount        = 987654321,
-          clearedDate   = LocalDate.parse(s"2018-03-01")
+          clearedDate   = LocalDate.parse("2018-05-01")
         )
       ))
-    val serviceResultYearOne: ServiceResponse[Seq[PaymentsHistoryModel]] = serviceResult
-    val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] = serviceResult
+    val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] =
+      Right(Seq(
+        PaymentsHistoryModel(
+          taxPeriodFrom = LocalDate.parse("2017-01-01"),
+          taxPeriodTo   = LocalDate.parse("2017-02-01"),
+          amount        = 123456789,
+          clearedDate   = LocalDate.parse("2017-03-01")
+        ),
+        PaymentsHistoryModel(
+          taxPeriodFrom = LocalDate.parse("2017-03-01"),
+          taxPeriodTo   = LocalDate.parse("2017-04-01"),
+          amount        = 987654321,
+          clearedDate   = LocalDate.parse("2017-05-01")
+        )
+      ))
+
+    val displayedYears = Seq(2018, 2017)
+    lazy val examplePaymentHistory: ServiceResponse[PaymentsHistoryViewModel] =
+      Right(PaymentsHistoryViewModel(
+        displayedYears,
+        2018,
+        Seq(
+          PaymentsHistoryModel(
+            taxPeriodFrom = LocalDate.parse("2018-01-01"),
+            taxPeriodTo   = LocalDate.parse("2018-02-01"),
+            amount        = 123456789,
+            clearedDate   = LocalDate.parse("2018-03-01")
+          ),
+          PaymentsHistoryModel(
+            taxPeriodFrom = LocalDate.parse("2018-03-01"),
+            taxPeriodTo   = LocalDate.parse("2018-04-01"),
+            amount        = 987654321,
+            clearedDate   = LocalDate.parse("2018-05-01")
+          )
+        )
+      ))
 
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
@@ -96,10 +130,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
           .returns(serviceResultYearTwo)
-
-        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(serviceResult)
       }
     }
 
@@ -185,28 +215,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       "return the correct year tabs" in new Test {
         override val authCall = false
         override val serviceResultYearTwo = Left(VatLiabilitiesError)
-
-        val examplePaymentHistory: ServiceResponse[PaymentsHistoryViewModel] =
-          Right(PaymentsHistoryViewModel(
-            Seq(2018),
-            2018,
-            Seq(
-              PaymentsHistoryModel(
-                taxPeriodFrom = LocalDate.parse(s"2018-01-01"),
-                taxPeriodTo   = LocalDate.parse(s"2018-02-01"),
-                amount        = 123456789,
-                clearedDate   = LocalDate.parse(s"2018-03-01")
-              ),
-              PaymentsHistoryModel(
-                taxPeriodFrom = LocalDate.parse(s"2018-03-01"),
-                taxPeriodTo   = LocalDate.parse(s"2018-04-01"),
-                amount        = 987654321,
-                clearedDate   = LocalDate.parse(s"2018-03-01")
-              )
-            )
-          )
-        )
-
+        override val displayedYears = Seq(2018)
         private val result = await(target.getFinancialTransactions(testUser, targetYear))
         result shouldBe examplePaymentHistory
       }
@@ -216,45 +225,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return the PaymentHistoryModel" in new Test {
         override val authCall = false
-
-        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(serviceResultYearTwo)
-
-        (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(serviceResultYearOne)
-
-        val examplePaymentHistory: ServiceResponse[PaymentsHistoryViewModel] =
-          Right(PaymentsHistoryViewModel(
-            Seq(2018, 2017),
-            2018,
-            Seq(PaymentsHistoryModel(
-              taxPeriodFrom = LocalDate.parse(s"2018-01-01"),
-              taxPeriodTo   = LocalDate.parse(s"2018-02-01"),
-              amount        = 123456789,
-              clearedDate   = LocalDate.parse(s"2018-03-01")
-            ),
-            PaymentsHistoryModel(
-              taxPeriodFrom = LocalDate.parse(s"2018-03-01"),
-              taxPeriodTo   = LocalDate.parse(s"2018-04-01"),
-              amount        = 987654321,
-              clearedDate   = LocalDate.parse(s"2018-03-01")
-            ))
-          ))
-
         private val result = await(target.getFinancialTransactions(testUser, targetYear))
         result shouldBe examplePaymentHistory
       }
     }
 
-    "the PaymentsService returns an error" should {
+    "the PaymentsService returns a Left" should {
 
-      "throw an exception" in new Test {
+      "return the Left" in new Test {
         override val authCall = false
-        override val serviceResult = Left(VatLiabilitiesError)
-
-        intercept[Exception](await(target.getFinancialTransactions(testUser, targetYear)))
+        override val serviceResultYearOne = Left(VatLiabilitiesError)
+        override val serviceResultYearTwo = Left(VatLiabilitiesError)
+        private val result = await(target.getFinancialTransactions(testUser, targetYear))
+        result shouldBe Left(VatLiabilitiesError)
       }
     }
   }

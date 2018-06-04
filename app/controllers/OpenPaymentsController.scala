@@ -21,7 +21,7 @@ import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
 import javax.inject.Inject
 import models.User
-import models.payments.{Payment, Payments}
+import models.payments.Payment
 import models.viewModels.OpenPaymentsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
