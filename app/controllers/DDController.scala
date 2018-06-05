@@ -33,7 +33,7 @@ class DDController @Inject()(val messagesApi: MessagesApi,
                              auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 
-  def directDebits(): Action[AnyContent] = authorisedAction { implicit request =>
+  def directDebit(): Action[AnyContent] = authorisedAction { implicit request =>
 
     user => ddConnector.startJourney(user.vrn).map {
         case Right(url) => Redirect(url)

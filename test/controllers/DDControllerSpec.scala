@@ -32,11 +32,12 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DDControllerSpec extends ControllerBaseSpec {
 
+  private val vrn = "123456789"
 
   private trait ConnectToDirectDebitTest {
     val authResult: Future[_] =
       Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
+        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", vrn)), "")
       )))
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -81,11 +82,11 @@ class DDControllerSpec extends ControllerBaseSpec {
         override def setup(): Any = {
           super.setup()
           (mockDDConnector.startJourney(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
+            .expects(vrn, *, *)
             .returns(Future.successful(serviceResponse))
         }
 
-        lazy val result: Future[Result] = target.directDebits()(fakeRequestWithSession)
+        lazy val result: Future[Result] = target.directDebit()(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe expectedRedirectLocation

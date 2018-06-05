@@ -7,7 +7,7 @@ GET        /payment-history/:year        controllers.PaymentHistoryController.pa
 
 GET       /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear   controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int)
 
-POST       /direct-debit-backend/start-journey  controllers.DDController.directDebits
+GET       /manage-direct-debit           controllers.DDController.directDebit
 
 #Feedback link Routes
 GET         /feedback                    controllers.feedback.FeedbackController.show

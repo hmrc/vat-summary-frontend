@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object DDRedirectUrlHttpParser extends ResponseHttpParsers {
 
-  private def extractRedirectUrl(json: JsValue): String = (json \ "nextUrl").as[String]
+  private def extractRedirectUrl(json: JsValue): String = (json \ "redirectUrl").as[String]
 
   implicit object DDRedirectUrlReads extends HttpReads[HttpPostResult[String]] {
     override def read(method: String, url: String, response: HttpResponse): HttpPostResult[String] = {

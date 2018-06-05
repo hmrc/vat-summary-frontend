@@ -18,6 +18,7 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import controllers.routes
 import javax.inject.{Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
@@ -38,24 +39,26 @@ class DDConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.DDRedirectUrlHttpParser.DDRedirectUrlReads
 
-    val timer = metrics.postSetupDDJourneyTimer.time()
+    //    val timer = metrics.postSetupDDJourneyTimer.time()
 
-    val backUrl: String = ""
-    val returnUrl: String = ""
+    val backUrl: String = routes.OpenPaymentsController.openPayments().url
+    val returnUrl: String = routes.VatDetailsController.details().url
 
-    val json: JsValue = Json.obj(
-      "id" -> s"$vrn",
-      "userIdType" -> Json.obj("VRN" -> "VRN"),
-      "returnUrl" -> s"$returnUrl",
-      "backUrl" -> s"$backUrl"
+    def createBody(vrn: String, backUrl: String, returnUrl: String) = Json.obj(
+      "userId" -> vrn,
+      "userIdType" -> "VRN",
+      "returnUrl" -> returnUrl,
+      "backUrl" -> backUrl
     )
+
+    val json = createBody(vrn, backUrl, returnUrl)
 
     http.POST(setupUrl, json).map {
       case url@Right(_) =>
-        timer.stop()
+        //        timer.stop()
         url
       case httpError@Left(error) =>
-        metrics.postSetupDDJourneyCounter.inc()
+        //        metrics.postSetupDDJourneyCounter.inc()
         Logger.warn("DDConnector received error: " + error.message)
         httpError
     }
