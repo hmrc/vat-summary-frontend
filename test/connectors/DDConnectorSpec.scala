@@ -16,18 +16,13 @@
 
 package connectors
 
-import com.codahale.metrics.Clock.CpuTimeClock
-import com.codahale.metrics.Timer
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import controllers.{ControllerBaseSpec, routes}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import mocks.MockMetricsService
-import models.errors.HttpError
-import play.api.libs.json.{JsObject, Json, Writes}
 import org.scalatest.concurrent.ScalaFutures._
-import play.api.http.Status
-import uk.gov.hmrc.audit.handler.HttpResult
+import play.api.libs.json.{JsObject, Json, Writes}
 import uk.gov.hmrc.http._
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,7 +33,7 @@ class DDConnectorSpec extends ControllerBaseSpec {
     "connect with direct debit service" in {
 
       implicit val hc = HeaderCarrier()
-      import connectors.httpParsers.DDRedirectUrlHttpParser.DDRedirectUrlReads
+
       val vrn = "123456789"
       val backUrl: String = routes.OpenPaymentsController.openPayments().url
       val returnUrl: String = routes.VatDetailsController.details().url
