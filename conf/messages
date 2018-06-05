@@ -39,6 +39,7 @@ vatDetails.submittedReturns.link = Submitted returns
 vatDetails.submittedReturns.view = Check the returns you''ve sent us.
 vatDetails.vrn = VAT registration number (VRN): {0}
 vatDetails.error = Sorry, there is a problem with the service. Try again later.
+vatDetails.returnsDue = You have {0} returns due
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due

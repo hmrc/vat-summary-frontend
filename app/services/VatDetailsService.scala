@@ -23,9 +23,9 @@ import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConne
 import javax.inject.{Inject, Singleton}
 
 import models._
-import models.errors.{NextObligationError, NextPaymentError}
+import models.errors.{NextPaymentError, ObligationsError}
 import models.obligations.Obligation.Status._
-import models.obligations.{Obligation, VatReturnObligation}
+import models.obligations.{Obligation, VatReturnObligations}
 import models.payments.Payment
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -50,16 +50,18 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
     presetAndFuture orElse overdue
   }
 
-  def getNextReturn(user: User,
-                    date: LocalDate)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligation]]] = {
+  def getReturnObligations(user: User,
+                           date: LocalDate)
+                          (implicit hc: HeaderCarrier,
+                           ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] = {
 
     val dateFrom = LocalDate.parse("2018-01-01")
     val dateTo = LocalDate.parse("2018-12-31")
 
     vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
-      case Right(nextReturns) => Right(getNextObligation(nextReturns.obligations, date))
-      case Left(_) => Left(NextObligationError)
+      case Right(nextReturns) if nextReturns.obligations.nonEmpty => Right(Some(nextReturns))
+      case Right(_) => Right(None)
+      case Left(_) => Left(ObligationsError)
     }
   }
 

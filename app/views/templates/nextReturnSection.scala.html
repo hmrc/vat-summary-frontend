@@ -17,19 +17,21 @@
 @import views.html.templates.formatters.dates._
 @import java.time.LocalDate
 
-@(obligationDueDate: Option[LocalDate], isOverdue: Boolean, isError: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
+@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
   <p @if(isError){data-metrics="error:recovered:next-return"}>
-    @if(isError){
-      @messages("vatDetails.error")
-    }else{
-      @obligationDueDate.map{date => @displayDate(date)}.getOrElse(messages("returnObligation.noReturn"))
-      @if(isOverdue){
-        <span>
-          <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
-        </span>
+    @(obligationData, hasMultiple, isError) match {
+      case (_, _, true) => { @messages("vatDetails.error") }
+      case (Some(numOfObligations), true, _) => { @messages("vatDetails.returnsDue", numOfObligations)}
+      case _ => {
+        @obligationData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("returnObligation.noReturn"))
+        @if(isOverdue){
+          <span>
+            <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+          </span>
+        }
       }
     }
   </p>

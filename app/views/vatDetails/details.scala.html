@@ -50,7 +50,8 @@
                     detailsViewModel.paymentError
                 )
                 @views.html.templates.nextReturnSection(
-                    detailsViewModel.nextReturnObligationDueDate,
+                    detailsViewModel.obligationData,
+                    detailsViewModel.hasMultipleReturnObligations,
                     detailsViewModel.returnObligationOverdue,
                     detailsViewModel.returnObligationError
                 )

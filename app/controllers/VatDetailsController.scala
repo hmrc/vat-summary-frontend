@@ -23,8 +23,8 @@ import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVat
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 
-import models.{ServiceResponse, User}
-import models.obligations.{Obligation, VatReturnObligation}
+import models.{ServiceResponse, User, VatDetailsDataModel}
+import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.Payment
 import models.viewModels.VatDetailsViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -45,7 +45,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       val entityNameCall = accountDetailsService.getEntityName(user.vrn)
-      val nextReturnCall = vatDetailsService.getNextReturn(user, dateService.now())
+      val nextReturnCall = vatDetailsService.getReturnObligations(user, dateService.now())
       val nextPaymentCall = vatDetailsService.getNextPayment(user, dateService.now())
 
       val viewModel = for {
@@ -62,18 +62,34 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       }
   }
 
-  private[controllers] def constructViewModel(nextReturn: ServiceResponse[Option[VatReturnObligation]],
+  private[controllers] def getObligationFlags(obligations: Seq[Obligation]): VatDetailsDataModel = {
+    val hasMultiple = obligations.size > 1
+    val data: String = if(hasMultiple) obligations.size.toString else obligations.head.due.toString
+
+    VatDetailsDataModel(
+      displayData = Some(data),
+      hasMultiple = hasMultiple,
+      isOverdue = if(obligations.size == 1) obligations.head.due.isBefore(dateService.now()) else false,
+      hasError = false
+    )
+  }
+
+  private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               nextPayment: ServiceResponse[Option[Payment]],
                                               entityName: ServiceResponse[Option[String]]): VatDetailsViewModel = {
+
+    val returnModel: VatDetailsDataModel = obligations match {
+      case Right(Some(obs)) => getObligationFlags(obs.obligations)
+      case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
+      case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
+    }
 
     val getDueDate: ServiceResponse[Option[Obligation]] => Option[LocalDate] = _.fold(_ => None, _.map(_.due))
     val getIsOverdue: Option[LocalDate] => Boolean = _.fold(false)(d => dateService.now().isAfter(d))
     val payment: Option[LocalDate] = getDueDate(nextPayment)
     val paymentIsOverdue = getIsOverdue(payment)
     val paymentHasError = nextPayment.isLeft
-    val obligation: Option[LocalDate] = getDueDate(nextReturn)
-    val obligationIsOverdue = getIsOverdue(obligation)
-    val obligationHasError = nextReturn.isLeft
+
     val displayedName = entityName match {
       case Right(name) => name
       case Left(_) => None
@@ -81,20 +97,21 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
     VatDetailsViewModel(
       payment,
-      obligation,
+      returnModel.displayData,
       displayedName,
       dateService.now().getYear,
-      obligationIsOverdue,
+      returnModel.hasMultiple,
+      returnModel.isOverdue,
+      returnModel.hasError,
       paymentIsOverdue,
-      obligationHasError,
       paymentHasError
     )
   }
 
-  private[controllers] def auditEvents(user: User, nextReturn: ServiceResponse[Option[VatReturnObligation]],
+  private[controllers] def auditEvents(user: User, nextReturn: ServiceResponse[Option[VatReturnObligations]],
                                        nextPayment: ServiceResponse[Option[Payment]])(implicit hc: HeaderCarrier): Unit = {
     val obligation: Option[VatReturnObligation] = nextReturn match {
-      case Right(data) => data
+      case Right(data) => data.map(_.obligations.head) // TODO: Update this as part of the audit task BTAT-2777
       case _ => None
     }
 
