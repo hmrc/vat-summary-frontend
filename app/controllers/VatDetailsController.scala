@@ -45,7 +45,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       val entityNameCall = accountDetailsService.getEntityName(user.vrn)
-      val nextReturnCall = vatDetailsService.getReturns(user, dateService.now())
+      val nextReturnCall = vatDetailsService.getReturnObligations(user, dateService.now())
       val nextPaymentCall = vatDetailsService.getNextPayment(user, dateService.now())
 
       val viewModel = for {

@@ -21,7 +21,7 @@ import java.time.LocalDate
 import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
 import models._
-import models.errors.{BadRequestError, CustomerInformationError, NextObligationError, NextPaymentError}
+import models.errors.{BadRequestError, CustomerInformationError, NextPaymentError, ObligationsError}
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -69,9 +69,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "sequence contains one obligation" should {
 
       "return current obligation" in new Test {
-        val obligations = VatReturnObligations(Seq(currentObligation))
         lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-03-30"))
+          vatDetailsService.getNextObligation(Seq(currentObligation), LocalDate.parse("2017-03-30"))
 
         result shouldBe Some(currentObligation)
       }
@@ -89,25 +88,25 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       )
 
       "return the obligation which is due today" in new Test {
-        val obligations = VatReturnObligations(Seq(futureObligation, currentObligation))
+        val obligations = Seq(futureObligation, currentObligation)
         lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-04-30"))
+          vatDetailsService.getNextObligation(obligations, LocalDate.parse("2017-04-30"))
 
         result shouldBe Some(currentObligation)
       }
 
       "return the obligation which is due in the future" in new Test {
-        val obligations = VatReturnObligations(Seq(futureObligation, currentObligation))
+        val obligations = Seq(futureObligation, currentObligation)
         lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-05-30"))
+          vatDetailsService.getNextObligation(obligations, LocalDate.parse("2017-05-30"))
 
         result shouldBe Some(futureObligation)
       }
 
       "return the most recent overdue obligation" in new Test {
-        val obligations = VatReturnObligations(Seq(futureObligation, currentObligation))
+        val obligations = Seq(futureObligation, currentObligation)
         lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations.obligations, LocalDate.parse("2017-08-30"))
+          vatDetailsService.getNextObligation(obligations, LocalDate.parse("2017-08-30"))
 
         result shouldBe Some(futureObligation)
       }
@@ -125,10 +124,10 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
 
-        val result: ServiceResponse[Option[VatReturnObligation]] =
-          await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligations]] =
+          await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
 
-        result shouldBe Right(Some(currentObligation))
+        result shouldBe Right(Some(VatReturnObligations(Seq(currentObligation))))
       }
     }
 
@@ -141,8 +140,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
 
-        val result: ServiceResponse[Option[VatReturnObligation]] =
-          await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligations]] =
+          await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
 
         result shouldBe Right(None)
       }
@@ -158,10 +157,10 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: ServiceResponse[Option[VatReturnObligation]] =
-          await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligations]] =
+          await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
 
-        result shouldBe Left(NextObligationError)
+        result shouldBe Left(ObligationsError)
       }
 
     }
@@ -175,7 +174,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *, *, *, *)
           .returns(Future.failed(new RuntimeException("test")))
 
-        intercept[RuntimeException](await(vatDetailsService.getNextReturn(User("1111"), LocalDate.parse("2018-01-01"))))
+        intercept[RuntimeException](await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01"))))
       }
     }
   }
@@ -196,7 +195,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         result shouldBe Right(Some(payment))
       }
-
     }
 
     "the connector returns no payments" should {
@@ -213,7 +211,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         result shouldBe Right(None)
       }
-
     }
 
     "the connector returns an HttpError" should {
@@ -230,7 +227,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
         result shouldBe Left(NextPaymentError)
       }
-
     }
 
     "the connector returns an Exception" should {

@@ -50,27 +50,34 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
   private val user = User("123456789")
   val detailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2018-12-31")),
-    Some(LocalDate.parse("2018-12-31")),
+    Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2017-01-01")),
-    Some(LocalDate.parse("2017-01-01")),
+    Some("2017-01-01"),
     Some("Cheapo Clothing"),
     currentYear,
     returnObligationOverdue = true
   )
+  val multipleReturnsDetailsModel = VatDetailsViewModel(
+    Some(LocalDate.parse("2017-01-01")),
+    Some("2"),
+    Some("Cheapo Clothing"),
+    currentYear,
+    hasMultipleReturnObligations = true
+  )
   val overduePaymentDetailsModel = VatDetailsViewModel(
     Some(LocalDate.parse("2017-01-01")),
-    Some(LocalDate.parse("2018-12-31")),
+    Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear,
     paymentOverdue = true
   )
   val paymentErrorDetailsModel = VatDetailsViewModel(
     None,
-    Some(LocalDate.parse("2018-12-31")),
+    Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear,
     paymentError = true
@@ -337,6 +344,16 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
     "render the overdue label" in {
       elementText(Selectors.overdueLabel) shouldBe "overdue"
+    }
+  }
+
+  "Rendering the VAT details page with multiple return obligations" should {
+
+    lazy val view = views.html.vatDetails.details(user, multipleReturnsDetailsModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the correct message regarding the number of obligations due" in {
+      elementText(Selectors.nextReturn) shouldBe "You have 2 returns due"
     }
   }
 

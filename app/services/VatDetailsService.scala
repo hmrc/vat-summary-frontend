@@ -23,7 +23,7 @@ import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConne
 import javax.inject.{Inject, Singleton}
 
 import models._
-import models.errors.{NextObligationError, NextPaymentError, ObligationsError}
+import models.errors.{NextPaymentError, ObligationsError}
 import models.obligations.Obligation.Status._
 import models.obligations.{Obligation, VatReturnObligations}
 import models.payments.Payment
@@ -50,15 +50,17 @@ class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
     presetAndFuture orElse overdue
   }
 
-  def getReturns(user: User,
-                 date: LocalDate)
-                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] = {
+  def getReturnObligations(user: User,
+                           date: LocalDate)
+                          (implicit hc: HeaderCarrier,
+                           ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] = {
 
     val dateFrom = LocalDate.parse("2018-01-01")
     val dateTo = LocalDate.parse("2018-12-31")
 
     vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
-      case Right(nextReturns) => Right(Some(nextReturns))
+      case Right(nextReturns) if nextReturns.obligations.nonEmpty => Right(Some(nextReturns))
+      case Right(_) => Right(None)
       case Left(_) => Left(ObligationsError)
     }
   }
