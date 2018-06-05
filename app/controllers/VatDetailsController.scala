@@ -110,8 +110,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   private[controllers] def auditEvents(user: User, nextReturn: ServiceResponse[Option[VatReturnObligations]],
                                        nextPayment: ServiceResponse[Option[Payment]])(implicit hc: HeaderCarrier): Unit = {
-    val obligation: Option[VatReturnObligation] = nextReturn match {
-      case Right(data) => data.map(_.obligations.head) // TODO: Update this as part of the audit task BTAT-2777
+    val obligation: Option[VatReturnObligations] = nextReturn match {
+      case Right(data) => data
       case _ => None
     }
 

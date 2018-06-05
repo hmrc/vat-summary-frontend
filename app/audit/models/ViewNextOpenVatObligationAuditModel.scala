@@ -17,17 +17,20 @@
 package audit.models
 
 import models.User
-import models.obligations.VatReturnObligation
+import models.obligations.VatReturnObligations
 
 case class ViewNextOpenVatObligationAuditModel(user: User,
-                                               obligation: Option[VatReturnObligation]) extends AuditModel {
+                                               obligations: Option[VatReturnObligations]) extends AuditModel {
 
-  private val openObligation: Map[String, String] = obligation match {
-    case Some(data) => Map(
+  private val openObligation: Map[String, String] = obligations match {
+    case Some(obs) if obs.obligations.size > 1 => Map(
+      "numberOfObligations" -> obs.obligations.size.toString
+    )
+    case Some(obs) => Map(
       "obligationOpen" -> "yes",
-      "obligationDueBy" -> data.due.toString,
-      "obligationPeriodFrom" -> data.start.toString,
-      "obligationPeriodTo" -> data.end.toString
+      "obligationDueBy" -> obs.obligations.head.due.toString,
+      "obligationPeriodFrom" -> obs.obligations.head.start.toString,
+      "obligationPeriodTo" -> obs.obligations.head.end.toString
     )
     case _ => Map("obligationOpen" -> "no")
   }
@@ -37,5 +40,4 @@ case class ViewNextOpenVatObligationAuditModel(user: User,
   override val transactionName: String = "view-next-open-vat-obligation"
 
   override val detail: Map[String, String] = Map("vrn" -> user.vrn) ++ openObligation
-
 }
