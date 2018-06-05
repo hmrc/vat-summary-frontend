@@ -22,9 +22,9 @@
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
   <p @if(isError){data-metrics="error:recovered:next-return"}>
-    @(hasMultiple, isError) match {
-      case (_, true) => { @messages("vatDetails.error") }
-      case (true, _) if obligationData.isDefined => { @messages("vatDetails.returnsDue", obligationData.get)}
+    @(obligationData, hasMultiple, isError) match {
+      case (_, _, true) => { @messages("vatDetails.error") }
+      case (Some(numOfObligations), true, _) => { @messages("vatDetails.returnsDue", numOfObligations)}
       case _ => {
         @obligationData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("returnObligation.noReturn"))
         @if(isOverdue){

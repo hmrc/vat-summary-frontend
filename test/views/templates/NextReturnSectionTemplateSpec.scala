@@ -85,6 +85,24 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there are multiple obligations to display" should {
+
+      lazy val view = views.html.templates.nextReturnSection(Some("2"), hasMultiple = true, isOverdue = false, isError = false)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the 'Next return due' heading" in {
+        elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
+      }
+
+      "display the multiple returns message" in {
+        elementText(Selectors.nextReturnDate) shouldBe "You have 2 returns due"
+      }
+
+      "display the 'View return deadlines' link" in {
+        elementText(Selectors.viewReturnsButton) shouldBe "View return deadlines"
+      }
+    }
+
     "there is an error retrieving the return" should {
 
       lazy val view = views.html.templates.nextReturnSection(None, hasMultiple = false, isOverdue = false, isError = true)
