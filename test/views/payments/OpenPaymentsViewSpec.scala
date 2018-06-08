@@ -236,7 +236,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct check direct debit href" in {
-      element(Selectors.directDebitCheckLink).attr("href") shouldBe "#"
+      element(Selectors.directDebitCheckLink).attr("href") shouldBe "/vat-through-software/manage-direct-debit"
     }
 
     "render the correct help revealing link text" in {

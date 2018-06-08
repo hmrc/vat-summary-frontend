@@ -57,6 +57,9 @@ object ConfigKeys {
   val paymentsServiceBase: String = "pay-api"
   val setupPaymentsJourneyPath: String = "microservice.services.pay-api.endpoints.setupJourney"
 
+  val directDebitServiceBase: String = "/direct-debit-backend"
+  val setupDirectDebitJourneyPath: String = "microservice.services.direct-debit.endpoints.setupJourney"
+
   val paymentsReturnBase: String = "payments-frontend.returnHost"
   val paymentsReturnUrl: String = "payments-frontend.returnUrl"
   val paymentsBackUrl: String = "payments-frontend.backUrl"

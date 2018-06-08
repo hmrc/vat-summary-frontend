@@ -65,6 +65,8 @@ trait AppConfig extends ServicesConfig {
   val unauthorisedSignOutUrl: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
+  val directDebitServiceUrl: String
+  val setupDirectDebitJourneyPath: String
 }
 
 @Singleton
@@ -117,6 +119,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val paymentsServiceUrl: String = baseUrl(Keys.paymentsServiceBase)
   override lazy val setupPaymentsJourneyPath: String = getString(Keys.setupPaymentsJourneyPath)
+
+  override lazy val directDebitServiceUrl: String = baseUrl(Keys.directDebitServiceBase)
+  override lazy val setupDirectDebitJourneyPath: String = getString(Keys.setupDirectDebitJourneyPath)
 
   private lazy val paymentsReturnBase: String = getString(Keys.paymentsReturnBase)
   override lazy val paymentsReturnUrl: String = paymentsReturnBase + getString(Keys.paymentsReturnUrl)
