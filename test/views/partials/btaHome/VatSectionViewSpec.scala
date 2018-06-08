@@ -26,8 +26,7 @@ class VatSectionViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "h2"
-      val reportingMessage = "p:nth-of-type(1)"
-      val viewDeadlines = "p:nth-of-type(2)"
+      val viewDeadlines = "p:nth-of-type(1)"
       val viewVatLink = "a"
     }
 
@@ -38,12 +37,8 @@ class VatSectionViewSpec extends ViewBaseSpec {
       elementText(Selectors.pageHeading) shouldBe "VAT reporting through software"
     }
 
-    "have the correct reporting message on the page" in {
-      elementText(Selectors.reportingMessage) shouldBe "You've signed up to report your VAT through software."
-    }
-
     "have the correct service features message on the page" in {
-      elementText(Selectors.viewDeadlines) shouldBe "You can view what you owe, your return deadlines, your VAT certificate and previously submitted returns."
+      elementText(Selectors.viewDeadlines) shouldBe "You can view what you owe, your return deadlines, your payment history and previously submitted returns."
     }
 
     "have the correct link address" in {
