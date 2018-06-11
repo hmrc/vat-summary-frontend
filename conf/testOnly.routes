@@ -16,10 +16,10 @@ POST        /vat-through-software/test-only/feature-switch  @testOnly.controller
 
 
 # NOCSRF
-POST        /vat-through-software/test-only/populate-stub   @testOnly.controllers.DynamicStubController.populateStub
+POST        /vat-through-software/test-only/populate-stub/:serviceName   @testOnly.controllers.DynamicStubController.populateStub(serviceName: String)
 
 # NOCSRF
-DELETE      /vat-through-software/test-only/clear-stub      @testOnly.controllers.DynamicStubController.clearStub
+DELETE      /vat-through-software/test-only/clear-stub/:serviceName      @testOnly.controllers.DynamicStubController.clearStub(serviceName: String)
 
 GET         /vat-through-software/test-only/payments-stub   @testOnly.controllers.PaymentsStubController.stub
 
