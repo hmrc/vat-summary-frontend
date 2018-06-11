@@ -44,6 +44,7 @@ object ConfigKeys {
   val enableAuditingFeature: String = "features.auditing.enabled"
   val allowPaymentHistoryFeature: String = "features.allowPaymentHistory.enabled"
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
+  val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
@@ -71,6 +72,7 @@ object ConfigKeys {
   val directDebitReturnBase: String = "direct-debit-frontend.returnHost"
   val directDebitReturnUrl: String = "direct-debit-frontend.returnUrl"
   val directDebitBackUrl: String = "direct-debit-frontend.backUrl"
+  val directDebitRedirectUrl: String = "direct-debit-frontend.redirectUrl"
 
   val governmentGatewayHost: String = "government-gateway.host"
 
