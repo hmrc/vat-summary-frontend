@@ -37,6 +37,12 @@ trait MetricsService {
   val postSetupPaymentsJourneyTimer: Timer
   val postSetupPaymentsJourneyCounter: Counter
 
+  val getDirectDebitStatusTimer: Timer
+  val getDirectDebitStatusFailureCounter: Counter
+
+  val postSetupDirectDebitJourneyTimer: Timer
+  val postSetupDirectDebitJourneyCounter: Counter
+
 }
 
 @Singleton
@@ -57,4 +63,9 @@ class MetricsServiceImpl @Inject()(metrics: Metrics) extends MetricsService {
   val postSetupPaymentsJourneyTimer: Timer = metrics.defaultRegistry.timer("post-setup-payments-journey-payment-api-timer")
   val postSetupPaymentsJourneyCounter: Counter = metrics.defaultRegistry.counter("post-setup-payments-journey-payment-api-failure-counter")
 
+  val getDirectDebitStatusTimer: Timer = metrics.defaultRegistry.timer("get-direct-debit-status-from-financial-transactions-timer")
+  val getDirectDebitStatusFailureCounter: Counter = metrics.defaultRegistry.counter("get-open-payments-from-financial-transactions-failure-counter")
+
+  val postSetupDirectDebitJourneyTimer: Timer = metrics.defaultRegistry.timer("post-setup-direct-debit-journey-payment-api-timer")
+  val postSetupDirectDebitJourneyCounter: Counter = metrics.defaultRegistry.counter("post-setup-direct-debit-journey-payment-api-failure-counter")
 }
