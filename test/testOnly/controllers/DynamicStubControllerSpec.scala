@@ -20,12 +20,13 @@ import config.AppConfig
 import controllers.ControllerBaseSpec
 import play.api.http.Status._
 import play.api.libs.json.Json
+import play.api.mvc.Result
 import testOnly.TestOnlyAppConfig
 import testOnly.connectors.DynamicStubConnector
 import testOnly.models.DataModel
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class DynamicStubControllerSpec extends ControllerBaseSpec {
 
@@ -50,15 +51,13 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         val data = DataModel("/test", "GET", OK, None)
 
         override def setup(): Unit = {
-          (mockConnector.populateStub(_: DataModel)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(data,*,*)
+          (mockConnector.populateStub(_: DataModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(data,*,*,*)
             .returning(HttpResponse(OK))
         }
 
         setup()
-        val result = controller.populateStub(
-          fakeRequest.withBody(Json.toJson(data))
-        )
+        val result: Future[Result] = controller.populateStub("")(fakeRequest.withBody(Json.toJson(data)))
 
         status(result) shouldBe OK
       }
@@ -71,15 +70,13 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         val data = DataModel("/test", "GET", OK, None)
 
         override def setup(): Unit = {
-          (mockConnector.populateStub(_: DataModel)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(data,*,*)
+          (mockConnector.populateStub(_: DataModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(data,*,*,*)
             .returning(HttpResponse(BAD_REQUEST))
         }
 
         setup()
-        val result = controller.populateStub(
-          fakeRequest.withBody(Json.toJson(data))
-        )
+        val result: Future[Result] = controller.populateStub("")(fakeRequest.withBody(Json.toJson(data)))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
       }
@@ -90,13 +87,9 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
   "Calling populateStub with an invalid DataModel" should {
 
     "return a 400 BAD REQUEST response" in new Test {
-      override protected def setup(): Unit = {
+      override protected def setup(): Unit = {}
 
-      }
-
-      val result = controller.populateStub(
-        fakeRequest.withBody(Json.parse("""{"bad":"data"}"""))
-      )
+      val result: Future[Result] = controller.populateStub("")(fakeRequest.withBody(Json.parse("""{"bad":"data"}""")))
 
       status(result) shouldBe BAD_REQUEST
     }
@@ -108,13 +101,13 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
 
       "return a 200 OK response" in new Test {
         override protected def setup(): Unit = {
-          (mockConnector.clearStub()(_: HeaderCarrier, _:ExecutionContext))
-            .expects(*,*)
+          (mockConnector.clearStub(_: String)(_: HeaderCarrier, _:ExecutionContext))
+            .expects(*,*,*)
             .returning(HttpResponse(OK))
         }
 
         setup()
-        val result = controller.clearStub()(fakeRequest)
+        val result: Future[Result] = controller.clearStub("")(fakeRequest)
 
         status(result) shouldBe OK
       }
@@ -124,13 +117,13 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
 
       "return a 500 INTERNAL SERVER ERROR response" in new Test {
         override protected def setup(): Unit = {
-          (mockConnector.clearStub()(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*,*)
+          (mockConnector.clearStub(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*,*,*)
             .returning(HttpResponse(INTERNAL_SERVER_ERROR))
         }
 
         setup()
-        val result = controller.clearStub()(fakeRequest)
+        val result: Future[Result] = controller.clearStub("")(fakeRequest)
         status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }

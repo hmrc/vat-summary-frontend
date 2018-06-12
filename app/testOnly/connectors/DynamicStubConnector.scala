@@ -24,17 +24,15 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DynamicStubConnector @Inject()(val http: HttpClient,
-                                     val appConfig: TestOnlyAppConfig) {
+class DynamicStubConnector @Inject()(val http: HttpClient, val appConfig: TestOnlyAppConfig) {
 
-  def populateStub(dataModel: DataModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    lazy val url = s"${appConfig.dynamicStubUrl}/setup/data"
+  def populateStub(dataModel: DataModel, serviceName: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    lazy val url = s"${appConfig.dynamicStubUrl(serviceName)}/setup/data"
     http.POST[DataModel, HttpResponse](url, dataModel)
   }
 
-  def clearStub()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    lazy val url = s"${appConfig.dynamicStubUrl}/setup/all-data"
+  def clearStub(serviceName: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    lazy val url = s"${appConfig.dynamicStubUrl(serviceName)}/setup/all-data"
     http.DELETE[HttpResponse](url)
   }
-
 }

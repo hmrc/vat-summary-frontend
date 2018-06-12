@@ -26,27 +26,26 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 import scala.util.{Success, Try}
 
-class DynamicStubController @Inject()(dynamicStubConnector: DynamicStubConnector)
-  extends FrontendController {
+class DynamicStubController @Inject()(dynamicStubConnector: DynamicStubConnector) extends FrontendController {
 
-  val populateStub: Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
+  def populateStub(serviceName: String): Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
     Try(request.body.as[DataModel]) match {
       case Success(dataModel) =>
-        dynamicStubConnector.populateStub(dataModel).map { response =>
+        dynamicStubConnector.populateStub(dataModel, serviceName).map { response =>
           response.status match {
-            case OK => Ok(s"Successfully populated stub with $dataModel")
-            case _ => InternalServerError(s"Unable to populate stub with $dataModel")
+            case OK => Ok(s"Successfully populated $serviceName stub with $dataModel")
+            case _ => InternalServerError(s"Unable to populate $serviceName stub with $dataModel")
           }
         }
       case _ => Future.successful(BadRequest("Unable to convert json to model"))
     }
   }
 
-  val clearStub: Action[AnyContent] = Action.async { implicit request =>
-    dynamicStubConnector.clearStub().map(
+  def clearStub(serviceName: String): Action[AnyContent] = Action.async { implicit request =>
+    dynamicStubConnector.clearStub(serviceName).map(
       response => response.status match {
-        case OK => Ok(s"Successfully cleared all stub data")
-        case _ => InternalServerError(s"Unable to clear stub ${response.body}")
+        case OK => Ok(s"Successfully cleared all $serviceName stub data")
+        case _ => InternalServerError(s"Unable to clear $serviceName stub ${response.body}")
       }
     )
   }
