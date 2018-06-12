@@ -20,8 +20,8 @@ import java.time.LocalDate
 
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-import models.{DirectDebitDetailsModel, ServiceResponse, User}
-import models.errors.{PaymentSetupError, PaymentsError, VatLiabilitiesError, DirectDebitSetupError}
+import models.{DirectDebitDetailsModel, DirectDebitStatus, ServiceResponse, User}
+import models.errors._
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
 import uk.gov.hmrc.http.HeaderCarrier
@@ -63,6 +63,13 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     directDebitConnector.setupJourney(directDebitJourneyDetails) map {
       case Right(url) => Right(url)
       case Left(_) => Left(DirectDebitSetupError)
+    }
+  }
+
+  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[DirectDebitStatus]] = {
+    financialDataConnector.getDirectDebitStatus(vrn) map {
+      case Right(directDebitStatus) => Right(directDebitStatus)
+      case Left(_) => Left(DirectDebitStatusError)
     }
   }
 }
