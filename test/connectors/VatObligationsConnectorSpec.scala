@@ -20,12 +20,19 @@ import controllers.ControllerBaseSpec
 import mocks.MockMetricsService
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-class VatApiConnectorSpec extends ControllerBaseSpec {
+class VatObligationsConnectorSpec extends ControllerBaseSpec {
+
+  lazy val connector = new VatObligationsConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
 
   "VatApiConnector" should {
     "generate the correct obligations url" in {
-      val connector = new VatApiConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+      mockAppConfig.features.enableVatObligationsService(false)
       connector.obligationsUrl("111") shouldEqual "/111/obligations"
+    }
+
+    "generate the correct returns url with a period key when not using vat-obligations" in {
+      mockAppConfig.features.enableVatObligationsService(true)
+      connector.obligationsUrl("111") shouldBe "/obligations-api/111/obligations"
     }
   }
 

@@ -32,16 +32,24 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatApiConnector @Inject()(http: HttpClient,
-                                appConfig: AppConfig,
-                                metrics: MetricsService) {
+class VatObligationsConnector @Inject()(http: HttpClient,
+                                        appConfig: AppConfig,
+                                        metrics: MetricsService) {
 
-  private[connectors] def obligationsUrl(vrn: String): String = s"${appConfig.vatApiBaseUrl}/$vrn/obligations"
+  private[connectors] def obligationsUrl(vrn: String): String = {
+    val baseUrl: String = if (appConfig.features.enableVatObligationsService()) {
+      appConfig.vatObligationsBaseUrl
+    } else {
+      appConfig.vatApiBaseUrl
+    }
+    s"$baseUrl/$vrn/obligations"
+  }
 
   def getVatReturnObligations(vrn: String,
                               from: LocalDate,
                               to: LocalDate,
-                              status: Status.Value)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
+                              status: Status.Value)(implicit hc: HeaderCarrier,
+                              ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
 
     val timer = metrics.getObligationsTimer.time()
 

@@ -43,6 +43,7 @@ trait AppConfig extends ServicesConfig {
   val signInContinueBaseUrl: String
   val features: Features
   val vatApiBaseUrl: String
+  val vatObligationsBaseUrl: String
   val vatSubscriptionBaseUrl: String
   val financialDataBaseUrl: String
   val vatSummaryPartial: String
@@ -108,6 +109,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val vatSummaryPartial: String = baseUrl("selfLookup") + "/vat-summary-partials/bta-home"
 
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
+
+  override val vatObligationsBaseUrl: String = baseUrl("vat-obligations")
+
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
   override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")

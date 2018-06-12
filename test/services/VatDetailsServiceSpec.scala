@@ -18,7 +18,7 @@ package services
 
 import java.time.LocalDate
 
-import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
+import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
 import models._
 import models.errors.{BadRequestError, CustomerInformationError, NextPaymentError, ObligationsError}
@@ -50,7 +50,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     )
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockVatApiConnector: VatApiConnector = mock[VatApiConnector]
+    val mockVatApiConnector: VatObligationsConnector = mock[VatObligationsConnector]
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
     val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockDateService: DateService = mock[DateService]

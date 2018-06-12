@@ -19,7 +19,7 @@ package services
 import java.time.LocalDate
 
 import config.AppConfig
-import connectors.{FinancialDataConnector, VatApiConnector, VatSubscriptionConnector}
+import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import javax.inject.{Inject, Singleton}
 
 import models._
@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService @Inject()(vatApiConnector: VatApiConnector,
+class VatDetailsService @Inject()(vatApiConnector: VatObligationsConnector,
                                   financialDataConnector: FinancialDataConnector,
                                   subscriptionConnector: VatSubscriptionConnector,
                                   implicit val appConfig: AppConfig,
