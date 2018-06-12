@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object DirectDebitStatusHttpParser extends ResponseHttpParsers {
 
-  implicit object DirectDebitStatus extends HttpReads[HttpGetResult[DirectDebitStatus]] {
+  implicit object DirectDebitStatusReads extends HttpReads[HttpGetResult[DirectDebitStatus]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[DirectDebitStatus] = {
       response.status match {
         case OK => Right(response.json.as[DirectDebitStatus])

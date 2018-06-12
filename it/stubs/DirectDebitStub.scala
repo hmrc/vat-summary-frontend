@@ -37,9 +37,7 @@ object DirectDebitStub extends WireMockMethods {
 
   private val journeyInfo = Json.parse(
     """{
-      |  "links": {
       |   "nextUrl": "http://www.google.com"
-      |  }
       |}""".stripMargin
   )
 

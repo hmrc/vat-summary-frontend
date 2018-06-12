@@ -38,7 +38,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
   private[connectors] def directDebitUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions" +
-    s"/check-direct-debit-status/$vrn"
+    s"/has-direct-debit/$vrn"
 
   def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
 
@@ -78,7 +78,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
   def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[DirectDebitStatus]] = {
 
-    import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatus
+    import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 
     val timer = metrics.getDirectDebitStatusTimer.time()
 
