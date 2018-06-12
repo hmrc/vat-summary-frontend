@@ -36,7 +36,7 @@ class DirectDebitConnector @Inject()(http: HttpClient,
 
   def setupJourney(data: DirectDebitDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[String]] = {
 
-    import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitRedirectUrlReads
+    import connectors.httpParsers.DirectDebitRedirectUrlHttpParser.DirectDebitRedirectUrlReads
 
     val timer = metrics.postSetupDirectDebitJourneyTimer.time()
 

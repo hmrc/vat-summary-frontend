@@ -16,21 +16,21 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
-import models.errors.UnexpectedStatusError
-import play.api.http.Status.CREATED
-import play.api.libs.json.JsValue
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import models.DirectDebitStatus
+import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
+import play.api.http.Status.{BAD_REQUEST, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object DirectDebitStatusHttpParser extends ResponseHttpParsers {
 
-  private def extractRedirectUrl(json: JsValue): String = (json \ "links" \ "nextUrl").as[String]
-
-  implicit object DirectDebitRedirectUrlReads extends HttpReads[HttpPostResult[String]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpPostResult[String] = {
+  implicit object DirectDebitStatus extends HttpReads[HttpGetResult[DirectDebitStatus]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[DirectDebitStatus] = {
       response.status match {
-        case CREATED => Right(extractRedirectUrl(response.json))
-        case status => Left(UnexpectedStatusError(status.toString, response.body))
+        case OK => Right(response.json.as[DirectDebitStatus])
+        case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)
+        case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
+        case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
       }
     }
   }

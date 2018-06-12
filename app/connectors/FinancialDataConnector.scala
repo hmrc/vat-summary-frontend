@@ -21,6 +21,7 @@ import java.time.LocalDate
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
+import models.DirectDebitStatus
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
 import play.api.Logger
@@ -35,13 +36,13 @@ class FinancialDataConnector @Inject()(http: HttpClient,
                                        appConfig: AppConfig,
                                        metrics: MetricsService) {
 
-  import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
-
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
-  private[connectors] def checkDirectDebitUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions" +
+  private[connectors] def directDebitUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions" +
     s"/check-direct-debit-status/$vrn"
 
   def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+
+    import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 
     val timer = metrics.getOpenPaymentsTimer.time()
 
@@ -75,18 +76,20 @@ class FinancialDataConnector @Inject()(http: HttpClient,
     )))
   }
 
-//  def checkDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Boolean]] = {
-//
-//    val timer = metrics.getDirectDebitStatusTimer.time()
-//
-//    http.GET(checkDirectDebitUrl(vrn)).map{
-//      case directDebitStatus@Right(_) =>
-//        timer.stop()
-//        directDebitStatus
-//      case httpError@Left(error) =>
-//        metrics.getDirectDebitStatusFailureCounter.inc()
-//        Logger.warn("FinancialDataConnector received error: " + error.message)
-//        httpError
-//    }
-//  }
+  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[DirectDebitStatus]] = {
+
+    import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatus
+
+    val timer = metrics.getDirectDebitStatusTimer.time()
+
+    http.GET(directDebitUrl(vrn)).map{
+      case directDebitStatus@Right(_) =>
+        timer.stop()
+        directDebitStatus
+      case httpError@Left(error) =>
+        metrics.getDirectDebitStatusFailureCounter.inc()
+        Logger.warn("FinancialDataConnector received error: " + error.message)
+        httpError
+    }
+  }
 }
