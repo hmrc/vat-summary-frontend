@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsService @Inject()(vatApiConnector: VatObligationsConnector,
+class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnector,
                                   financialDataConnector: FinancialDataConnector,
                                   subscriptionConnector: VatSubscriptionConnector,
                                   implicit val appConfig: AppConfig,
@@ -58,7 +58,7 @@ class VatDetailsService @Inject()(vatApiConnector: VatObligationsConnector,
     val dateFrom = LocalDate.parse("2018-01-01")
     val dateTo = LocalDate.parse("2018-12-31")
 
-    vatApiConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
+    vatObligationsConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
       case Right(nextReturns) if nextReturns.obligations.nonEmpty => Right(Some(nextReturns))
       case Right(_) => Right(None)
       case Left(_) => Left(ObligationsError)

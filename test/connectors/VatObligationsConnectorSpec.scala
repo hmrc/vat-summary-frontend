@@ -24,7 +24,7 @@ class VatObligationsConnectorSpec extends ControllerBaseSpec {
 
   lazy val connector = new VatObligationsConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
 
-  "VatApiConnector" should {
+  "VatObligationsConnector" should {
     "generate the correct obligations url" in {
       mockAppConfig.features.enableVatObligationsService(false)
       connector.obligationsUrl("111") shouldEqual "/111/obligations"
