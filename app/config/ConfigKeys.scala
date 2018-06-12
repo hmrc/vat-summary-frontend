@@ -65,6 +65,10 @@ object ConfigKeys {
   val unauthenticatedPaymentsBase: String = "unauthenticatedPayments.host"
   val unauthenticatedPaymentsUrl: String = "unauthenticatedPayments.url"
 
+  val directDebitReturnBase: String = "direct-debit-frontend.returnHost"
+  val directDebitReturnUrl: String = "direct-debit-frontend.returnUrl"
+  val directDebitBackUrl: String = "direct-debit-frontend.backUrl"
+
   val governmentGatewayHost: String = "government-gateway.host"
 
   val surveyHost: String = "feedback-survey-frontend.host"
