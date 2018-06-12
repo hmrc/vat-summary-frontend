@@ -56,6 +56,8 @@ trait AppConfig extends ServicesConfig {
   val paymentsReturnUrl: String
   val paymentsBackUrl: String
   val unauthenticatedPaymentsUrl: String
+  val directDebitReturnUrl: String
+  val directDebitBackUrl: String
   val btaVatOverviewUrl: String
   val feedbackFormPartialUrl: String
   val contactFormServiceIdentifier: String
@@ -128,6 +130,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private lazy val unauthenticatedPaymentsBase: String = getString(Keys.unauthenticatedPaymentsBase)
   override lazy val unauthenticatedPaymentsUrl: String = unauthenticatedPaymentsBase + getString(Keys.unauthenticatedPaymentsUrl)
+
+  private lazy val directDebitReturnBase: String = getString(Keys.directDebitReturnBase)
+  override lazy val directDebitReturnUrl: String = directDebitReturnBase + getString(Keys.directDebitReturnUrl)
+  override lazy val directDebitBackUrl: String = directDebitReturnBase + getString(Keys.directDebitBackUrl)
 
   private lazy val btaVatOverviewUrlBase: String = getString(Keys.btaVatOverviewUrlBase)
   override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + getString(Keys.btaVatOverviewUrl)
