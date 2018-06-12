@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 class VatSubscriptionConnectorSpec extends ControllerBaseSpec {
 
-  "VatApiConnector" should {
+  "VatSubscriptionConnector" should {
     "generate the correct customer information url" in {
       val connector = new VatSubscriptionConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
       connector.customerInfoUrl("111") shouldEqual "/vat-subscription/111/customer-details"

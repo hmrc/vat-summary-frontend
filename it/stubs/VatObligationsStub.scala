@@ -25,7 +25,7 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import play.api.http.Status._
 import play.api.libs.json.{Json, Writes}
 
-object VatApiStub extends WireMockMethods {
+object VatObligationsStub extends WireMockMethods {
 
   private val obligationsUri = "/([0-9]+)/obligations"
   private val dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"

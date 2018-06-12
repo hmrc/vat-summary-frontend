@@ -32,5 +32,6 @@ class Features @Inject()(config: Configuration) {
   val allowNineBox = new Feature(ConfigKeys.allowNineBoxFeature, config)
   val enabledAuditing = new Feature(ConfigKeys.enableAuditingFeature, config)
   val allowPaymentHistory = new Feature(ConfigKeys.allowPaymentHistoryFeature, config)
+  val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
 
 }

@@ -40,7 +40,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          VatApiStub.stubOutstandingObligations
+          VatObligationsStub.stubOutstandingObligations
           CustomerInfoStub.stubCustomerInfo
           FinancialDataStub.stubAllOutstandingPayments
         }
