@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-package models.errors
+package models
 
-sealed trait ServiceError
+import play.api.libs.json.Json
+import uk.gov.hmrc.play.test.UnitSpec
 
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
-case object DirectDebitSetupError extends ServiceError
-case object DirectDebitStatusError extends ServiceError
+class DirectDebitStatusSpec extends UnitSpec {
+
+  "A DirectDebitStatus object" should {
+
+    val exampleDirectDebitStatus: DirectDebitStatus = DirectDebitStatus(true)
+
+    val exampleInputString =
+      """{
+        |"directDebitMandateFound":true
+        |}"""
+        .stripMargin.replace("\n", "")
+
+    "be parsed from appropriate JSON" in {
+      val result = Json.parse(exampleInputString).as[DirectDebitStatus]
+      result shouldBe exampleDirectDebitStatus
+    }
+  }
+
+}

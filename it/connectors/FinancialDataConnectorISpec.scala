@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
+import models.DirectDebitStatus
 import models.errors.BadRequestError
 import models.payments.{Payment, Payments}
 import models.viewModels.PaymentsHistoryModel
@@ -120,6 +121,36 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
         LocalDate.parse("2018-01-01"),
         LocalDate.parse("2018-12-31")
       ))
+
+      result shouldEqual expected
+    }
+  }
+
+  "calling getDirectDebitStatus with a valid VRN" should {
+    "return a DirectDebitStatus model" in new Test {
+      override def setupStubs(): StubMapping = FinancialDataStub.stubSuccessfulDirectDebit
+
+      val expected = Right(DirectDebitStatus(true))
+
+      setupStubs()
+      private val result = await(connector.getDirectDebitStatus("111111111"))
+
+      result shouldEqual expected
+    }
+  }
+
+  "calling getDirectDebitStatus with an invalid VRN" should {
+
+    "return an BadRequestError" in new Test {
+      override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidVrnDirectDebit
+
+      val expected = Left(BadRequestError(
+        code = "INVALID_VRN",
+        errorResponse = "VRN was invalid!"
+      ))
+
+      setupStubs()
+      private val result = await(connector.getDirectDebitStatus("111"))
 
       result shouldEqual expected
     }

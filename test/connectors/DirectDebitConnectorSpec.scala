@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package models.errors
+package connectors
 
-sealed trait ServiceError
+import controllers.ControllerBaseSpec
+import mocks.MockMetricsService
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
-case object DirectDebitSetupError extends ServiceError
-case object DirectDebitStatusError extends ServiceError
+
+class DirectDebitConnectorSpec extends ControllerBaseSpec{
+
+  "DirectDebitConnector" should {
+    "generate the correct check direct debit end point url" in {
+      val connector = new DirectDebitConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+      connector.setupUrl shouldEqual "direct-debits-url/direct-debit/start"
+    }
+  }
+}

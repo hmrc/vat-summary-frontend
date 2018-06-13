@@ -35,4 +35,8 @@ object MockMetricsService extends MetricsService with MockFactory {
   override val getVatReturnCallFailureCounter: Counter = counter
   override val postSetupPaymentsJourneyTimer: Timer = timer
   override val postSetupPaymentsJourneyCounter: Counter = counter
+  override val getDirectDebitStatusTimer: Timer = timer
+  override val getDirectDebitStatusFailureCounter: Counter = counter
+  override val postSetupDirectDebitJourneyTimer: Timer = timer
+  override val postSetupDirectDebitJourneyCounter: Counter = counter
 }

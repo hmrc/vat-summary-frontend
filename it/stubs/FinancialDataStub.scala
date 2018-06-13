@@ -24,6 +24,7 @@ import play.api.libs.json.Json
 object FinancialDataStub extends WireMockMethods {
 
   private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
+  private val financialDataDirectDebitUri = "/financial-transactions/has-direct-debit/([0-9]+)"
 
   def stubAllOutstandingPayments: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
@@ -43,6 +44,16 @@ object FinancialDataStub extends WireMockMethods {
   def stubApiError: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
       .thenReturn(INTERNAL_SERVER_ERROR, body = Json.toJson(""))
+  }
+
+  def stubSuccessfulDirectDebit: StubMapping = {
+    when(method = GET, uri = financialDataDirectDebitUri)
+      .thenReturn(status = OK, body = Map("directDebitMandateFound" -> true))
+  }
+
+  def stubInvalidVrnDirectDebit: StubMapping = {
+    when(method = GET, uri = financialDataDirectDebitUri)
+      .thenReturn(BAD_REQUEST, body = invalidVrn)
   }
 
   private val allOutStandingPayments = Json.parse(

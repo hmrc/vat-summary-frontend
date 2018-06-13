@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package models.errors
+package models
 
-sealed trait ServiceError
+import play.api.libs.json._
 
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
-case object DirectDebitSetupError extends ServiceError
-case object DirectDebitStatusError extends ServiceError
+case class DirectDebitStatus(hasDirectDebit: Boolean)
+
+object DirectDebitStatus {
+  implicit val directDebitStatusReads: Reads[DirectDebitStatus] =
+    (JsPath \ "directDebitMandateFound").read[Boolean].map(DirectDebitStatus(_))
+}

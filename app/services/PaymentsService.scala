@@ -18,11 +18,10 @@ package services
 
 import java.time.LocalDate
 
-import connectors.{FinancialDataConnector, PaymentsConnector}
+import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-
-import models.{ServiceResponse, User}
-import models.errors.{PaymentSetupError, PaymentsError, VatLiabilitiesError}
+import models.{DirectDebitDetailsModel, DirectDebitStatus, ServiceResponse, User}
+import models.errors._
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,7 +29,9 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, paymentsConnector: PaymentsConnector) {
+class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
+                                paymentsConnector: PaymentsConnector,
+                                directDebitConnector: DirectDebitConnector) {
 
   def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] =
     financialDataConnector.getOpenPayments(vrn).map {
@@ -56,4 +57,19 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector, 
       case Right(url) => Right(url)
       case Left(_) => Left(PaymentSetupError)
     }
+
+  def setupDirectDebitJourney(directDebitJourneyDetails: DirectDebitDetailsModel)
+                             (implicit  hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] = {
+    directDebitConnector.setupJourney(directDebitJourneyDetails) map {
+      case Right(url) => Right(url)
+      case Left(_) => Left(DirectDebitSetupError)
+    }
+  }
+
+  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[DirectDebitStatus]] = {
+    financialDataConnector.getDirectDebitStatus(vrn) map {
+      case Right(directDebitStatus) => Right(directDebitStatus)
+      case Left(_) => Left(DirectDebitStatusError)
+    }
+  }
 }

@@ -19,9 +19,9 @@ package services
 import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
-import connectors.{FinancialDataConnector, PaymentsConnector}
-import models.{ServiceResponse, User}
-import models.errors.{BadRequestError, PaymentSetupError, PaymentsError, ServerSideError, UnknownError, VatLiabilitiesError}
+import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
+import models.{DirectDebitDetailsModel, DirectDebitStatus, ServiceResponse, User}
+import models.errors._
 import models.payments.{Payment, PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
 import org.scalamock.matchers.Matchers
@@ -41,6 +41,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val mockDirectDebitConnector: DirectDebitConnector = mock[DirectDebitConnector]
       val responseFromFinancialDataConnector: HttpGetResult[Payments]
 
       def setup(): Any = {
@@ -51,7 +52,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       def target: PaymentsService = {
         setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector, mockDirectDebitConnector)
       }
     }
 
@@ -95,12 +96,13 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     }
   }
 
-  "Calling the .setupJourney method" when {
+  "Calling the .setupPaymentJourney method" when {
 
     trait Test {
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val mockDirectDebitConnector: DirectDebitConnector = mock[DirectDebitConnector]
       val connectorResponse: HttpPostResult[String]
 
       def setup(): Unit = {
@@ -111,7 +113,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       def target: PaymentsService = {
         setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector, mockDirectDebitConnector)
       }
     }
 
@@ -158,6 +160,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val mockDirectDebitConnector: DirectDebitConnector = mock[DirectDebitConnector]
       val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]]
 
       def setup(): Unit = {
@@ -168,7 +171,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       def target: PaymentsService = {
         setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector, mockDirectDebitConnector)
       }
     }
 
@@ -195,6 +198,102 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       private val result = await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
 
       result shouldBe Left(VatLiabilitiesError)
+    }
+  }
+
+  "Calling the .setupDirectDebitJourney method" when {
+
+
+    trait Test {
+      implicit val hc: HeaderCarrier = HeaderCarrier()
+      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val mockDirectDebitConnector: DirectDebitConnector = mock[DirectDebitConnector]
+      val connectorResponse: HttpPostResult[String]
+
+      def setup(): Unit = {
+        (mockDirectDebitConnector.setupJourney(_: DirectDebitDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(connectorResponse)
+      }
+
+      def target: PaymentsService = {
+        setup()
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector, mockDirectDebitConnector)
+      }
+    }
+
+    val directDebitDetails: DirectDebitDetailsModel = DirectDebitDetailsModel(
+      "111111111",
+      "VRN",
+      "http://domain/path",
+      "http://domain/return-path"
+    )
+
+    "setting up the direct debit journey is successful" should {
+
+      "return a redirect url" in new Test {
+        val redirectUrl = "http://www.google.com"
+        override val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
+        val expectedResult: ServiceResponse[String] = Right(redirectUrl)
+        private val result = await(target.setupDirectDebitJourney(directDebitDetails))
+
+        result shouldBe expectedResult
+      }
+    }
+
+    "setting up the payments journey is unsuccessful" should {
+
+      "return an error" in new Test {
+        override val connectorResponse: HttpPostResult[String] = Left(UnknownError)
+        val expectedResult: ServiceResponse[String] = Left(DirectDebitSetupError)
+        private val result = await(target.setupDirectDebitJourney(directDebitDetails))
+
+        result shouldBe expectedResult
+      }
+    }
+  }
+
+  "Calling the .getDirectDebitStatus function" when {
+
+    trait Test {
+      implicit val hc: HeaderCarrier = HeaderCarrier()
+      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+      val mockDirectDebitConnector: DirectDebitConnector = mock[DirectDebitConnector]
+      val responseFromFinancialDataConnector: HttpGetResult[DirectDebitStatus]
+
+      def setup(): Any = {
+        (mockFinancialDataConnector.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(responseFromFinancialDataConnector))
+      }
+
+      def target: PaymentsService = {
+        setup()
+        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector, mockDirectDebitConnector)
+      }
+    }
+
+    "the user has a direct debit setup" should {
+
+      "return a DirectDebitStatus with true" in new Test {
+        val directDebitStatus = DirectDebitStatus(true)
+        override val responseFromFinancialDataConnector = Right(directDebitStatus)
+        val paymentsResponse: ServiceResponse[DirectDebitStatus] = await(target.getDirectDebitStatus("123456789"))
+
+        paymentsResponse shouldBe Right(directDebitStatus)
+      }
+    }
+
+    "the connector call fails" should {
+
+      "return None" in new Test {
+        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
+        val paymentsResponse: ServiceResponse[DirectDebitStatus] = await(target.getDirectDebitStatus("123456789"))
+
+        paymentsResponse shouldBe Left(DirectDebitStatusError)
+      }
     }
   }
 }
