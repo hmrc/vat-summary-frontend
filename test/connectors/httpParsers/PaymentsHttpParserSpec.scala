@@ -30,7 +30,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
   "PaymentsReads" when {
 
-    "the http response status is 200 OK" should {
+    "the http response status is 200 OK and there are valid VAT Return Charges" should {
 
       val httpResponse = HttpResponse(Status.OK, responseJson = Some(
         Json.obj(
@@ -63,7 +63,29 @@ class PaymentsHttpParserSpec extends UnitSpec {
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a Payments instance" in {
-        result shouldEqual expected
+        result shouldBe expected
+      }
+    }
+
+    "the http response is 200 OK and there are no valid VAT Return Debit Charges" should {
+      val httpResponse = HttpResponse(Status.OK, responseJson = Some(
+        Json.obj(
+          "financialTransactions" -> Json.arr(
+            Json.obj(
+              "mainType" -> "VAT Return Charge",
+              "chargeType" -> "VAT Return Credit Charge",
+              "outstandingAmount" -> 99
+            )
+          )
+        )
+      ))
+
+      val expected = Right(Payments(Seq.empty))
+
+      val result = PaymentsReads.read("", "", httpResponse)
+
+      "return an empty Payments instance" in {
+        result shouldBe expected
       }
     }
 
@@ -76,7 +98,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return an empty Payments object" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 
@@ -97,7 +119,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a BadRequestError" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 
@@ -143,7 +165,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
       val result = PaymentsReads.read("", "", httpResponse)
 
       "return a UnknownError" in {
-        result shouldEqual expected
+        result shouldBe expected
       }
     }
 
@@ -168,7 +190,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val body: JsObject = Json.obj(
         "code" -> "Conflict",
-        "message" -> "CONFLCIT"
+        "message" -> "CONFlICT"
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
@@ -179,6 +201,5 @@ class PaymentsHttpParserSpec extends UnitSpec {
         result shouldBe expected
       }
     }
-
   }
 }
