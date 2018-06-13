@@ -42,8 +42,8 @@ object PaymentsHttpParser extends ResponseHttpParsers {
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
 
     val vatReturnCharges = charges.filter { charge =>
-      val chargeType: String = (charge \ "mainType").as[String]
-      chargeType == "VAT Return Charge"
+      val chargeType: String = (charge \ "chargeType").as[String]
+      chargeType == "VAT Return Debit Charge"
     }
 
     Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
