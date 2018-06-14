@@ -20,6 +20,7 @@ import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
 import javax.inject.Inject
+
 import models.User
 import models.payments.Payment
 import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
@@ -43,7 +44,7 @@ extends AuthorisedController with I18nSupport {
         paymentsService.getOpenPayments(user.vrn).map {
           case Right(Some(payments)) =>
             val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
-            auditEvent(user, model.payments)
+            auditEvent(user, model)
             Ok(views.html.payments.openPayments(user, model))
           case Right(_) =>
             auditEvent(user, Seq.empty)
@@ -60,7 +61,6 @@ extends AuthorisedController with I18nSupport {
 
   private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]): OpenPaymentsViewModel = {
     OpenPaymentsViewModel(
-      hasActiveDirectDebit,
       payments.map { payment =>
         OpenPaymentsModel(
           "Return",
@@ -70,7 +70,8 @@ extends AuthorisedController with I18nSupport {
           payment.end,
           payment.periodKey,
           payment.due.isBefore(dateService.now())
-        )
+        ),
+        hasActiveDirectDebit
       }
     )
   }
