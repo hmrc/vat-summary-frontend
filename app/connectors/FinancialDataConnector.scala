@@ -21,7 +21,6 @@ import java.time.LocalDate
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
-import models.DirectDebitStatus
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
 import play.api.Logger
@@ -76,7 +75,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
     )))
   }
 
-  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[DirectDebitStatus]] = {
+  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Boolean]] = {
 
     import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 

@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
-import models.{DirectDebitDetailsModel, DirectDebitStatus, ServiceResponse, User}
+import models.{DirectDebitDetailsModel, ServiceResponse, User}
 import models.errors._
 import models.payments.{Payment, PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
@@ -261,7 +261,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
       val mockDirectDebitConnector: DirectDebitConnector = mock[DirectDebitConnector]
-      val responseFromFinancialDataConnector: HttpGetResult[DirectDebitStatus]
+      val responseFromFinancialDataConnector: HttpGetResult[Boolean]
 
       def setup(): Any = {
         (mockFinancialDataConnector.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -278,11 +278,10 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "the user has a direct debit setup" should {
 
       "return a DirectDebitStatus with true" in new Test {
-        val directDebitStatus = DirectDebitStatus(true)
-        override val responseFromFinancialDataConnector = Right(directDebitStatus)
-        val paymentsResponse: ServiceResponse[DirectDebitStatus] = await(target.getDirectDebitStatus("123456789"))
+        override val responseFromFinancialDataConnector = Right(true)
+        val paymentsResponse: ServiceResponse[Boolean] = await(target.getDirectDebitStatus("123456789"))
 
-        paymentsResponse shouldBe Right(directDebitStatus)
+        paymentsResponse shouldBe Right(true)
       }
     }
 
@@ -290,7 +289,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       "return None" in new Test {
         override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
-        val paymentsResponse: ServiceResponse[DirectDebitStatus] = await(target.getDirectDebitStatus("123456789"))
+        val paymentsResponse: ServiceResponse[Boolean] = await(target.getDirectDebitStatus("123456789"))
 
         paymentsResponse shouldBe Left(DirectDebitStatusError)
       }
