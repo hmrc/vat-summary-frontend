@@ -18,10 +18,9 @@ package connectors.httpParsers
 
 
 import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
-import models.DirectDebitStatus
 import models.errors._
 import play.api.http.Status
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsObject, Json, JsValue}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -31,11 +30,9 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
 
     "the http response status is 200 OK" should {
 
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(
-        Json.obj("directDebitMandateFound" -> true)
-      ))
+      val httpResponse = HttpResponse(Status.OK, responseJson = Some(Json.parse("true")))
 
-      val expected = Right(DirectDebitStatus(true))
+      val expected = Right(true)
 
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 
@@ -75,34 +72,6 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
 
       "return a BadRequestError" in {
         result shouldEqual expected
-      }
-    }
-
-    "a http response of 400 BAD_REQUEST (multiple errors)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
-          "failures" -> Json.arr(
-            Json.obj(
-              "code" -> "INVALID DATE FROM",
-              "reason" -> "Bad date from"
-            ),
-            Json.obj(
-              "code" -> "INVALID DATE TO",
-              "reason" -> "Bad date to"
-            )
-          )
-        ))
-      )
-
-      val errors = Seq(ApiSingleError("INVALID DATE FROM", "Bad date from"), ApiSingleError("INVALID DATE TO", "Bad date to"))
-
-      val expected = Left(MultipleErrors(Status.BAD_REQUEST.toString, Json.toJson(errors).toString()))
-
-      val result = DirectDebitStatusReads.read("", "", httpResponse)
-
-      "return a MultipleErrors" in {
-        result shouldBe expected
       }
     }
 

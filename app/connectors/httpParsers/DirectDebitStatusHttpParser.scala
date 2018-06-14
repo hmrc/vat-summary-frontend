@@ -17,17 +17,16 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.DirectDebitStatus
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
-import play.api.http.Status.{BAD_REQUEST, OK}
+import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object DirectDebitStatusHttpParser extends ResponseHttpParsers {
 
-  implicit object DirectDebitStatusReads extends HttpReads[HttpGetResult[DirectDebitStatus]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[DirectDebitStatus] = {
+  implicit object DirectDebitStatusReads extends HttpReads[HttpGetResult[Boolean]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Boolean] = {
       response.status match {
-        case OK => Right(response.json.as[DirectDebitStatus])
+        case OK => Right(response.json.as[Boolean])
         case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
         case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
