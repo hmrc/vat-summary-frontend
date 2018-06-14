@@ -17,17 +17,20 @@
 package audit.models
 
 import models.User
-import models.payments.Payment
+import models.payments.Payments
 
 case class ViewNextOutstandingVatPaymentAuditModel(user: User,
-                                                   payment: Option[Payment]) extends AuditModel {
+                                                   payments: Option[Payments]) extends AuditModel {
 
-  private val paymentDetails: Map[String, String] = payment match {
-    case Some(data) => Map(
+  private val paymentDetails: Map[String, String] = payments match {
+    case Some(data) if data.financialTransactions.size == 1 => Map(
       "paymentOutstanding" -> "yes",
-      "paymentDueBy" -> data.due.toString,
-      "paymentPeriodFrom" -> data.start.toString,
-      "paymentPeriodTo" -> data.end.toString
+      "paymentDueBy" -> data.financialTransactions.head.due.toString,
+      "paymentPeriodFrom" -> data.financialTransactions.head.start.toString,
+      "paymentPeriodTo" -> data.financialTransactions.head.end.toString
+    )
+    case Some(data) if data.financialTransactions.size > 1 => Map(
+    "numberOfPayments" -> data.financialTransactions.size.toString
     )
     case _ => Map("paymentOutstanding" -> "no")
   }

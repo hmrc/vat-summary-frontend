@@ -16,14 +16,13 @@
 
 package models.viewModels
 
-import java.time.LocalDate
-
-case class VatDetailsViewModel(nextPaymentDueDate: Option[LocalDate],
+case class VatDetailsViewModel(paymentsData: Option[String],
                                obligationData: Option[String],
                                entityName: Option[String],
                                currentYear: Int,
                                hasMultipleReturnObligations: Boolean = false,
                                returnObligationOverdue: Boolean = false,
                                returnObligationError: Boolean = false,
+                               hasMultiplePayments: Boolean = false,
                                paymentOverdue: Boolean = false,
                                paymentError: Boolean = false)

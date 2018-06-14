@@ -45,7 +45,8 @@
 
             <div class="grid-row divider--bottom">
                 @views.html.templates.nextPaymentSection(
-                    detailsViewModel.nextPaymentDueDate,
+                    detailsViewModel.paymentsData,
+                    detailsViewModel.hasMultiplePayments,
                     detailsViewModel.paymentOverdue,
                     detailsViewModel.paymentError
                 )
