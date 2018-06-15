@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-import models.{DirectDebitDetailsModel, DirectDebitStatus, ServiceResponse, User}
+import models.{DirectDebitDetailsModel, ServiceResponse, User}
 import models.errors._
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
@@ -66,7 +66,7 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     }
   }
 
-  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[DirectDebitStatus]] = {
+  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Boolean]] = {
     financialDataConnector.getDirectDebitStatus(vrn) map {
       case Right(directDebitStatus) => Right(directDebitStatus)
       case Left(_) => Left(DirectDebitStatusError)

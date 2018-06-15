@@ -48,7 +48,7 @@ object FinancialDataStub extends WireMockMethods {
 
   def stubSuccessfulDirectDebit: StubMapping = {
     when(method = GET, uri = financialDataDirectDebitUri)
-      .thenReturn(status = OK, body = Map("directDebitMandateFound" -> true))
+      .thenReturn(status = OK, body = true)
   }
 
   def stubInvalidVrnDirectDebit: StubMapping = {
