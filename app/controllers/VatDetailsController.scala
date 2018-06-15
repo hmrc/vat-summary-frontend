@@ -83,7 +83,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
 
     val paymentModel: VatDetailsDataModel = payments match {
-      case Right(Some(payments)) => getObligationFlags(payments.financialTransactions)
+      case Right(Some(paymnts)) => getObligationFlags(paymnts.financialTransactions)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
       case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }

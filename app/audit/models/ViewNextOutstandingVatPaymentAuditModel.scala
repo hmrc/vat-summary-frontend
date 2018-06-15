@@ -23,14 +23,15 @@ case class ViewNextOutstandingVatPaymentAuditModel(user: User,
                                                    payments: Option[Payments]) extends AuditModel {
 
   private val paymentDetails: Map[String, String] = payments match {
-    case Some(data) if data.financialTransactions.size == 1 => Map(
+
+    case Some(data) if data.financialTransactions.size > 1 => Map(
+      "numberOfPayments" -> data.financialTransactions.size.toString
+    )
+    case Some(data) => Map(
       "paymentOutstanding" -> "yes",
       "paymentDueBy" -> data.financialTransactions.head.due.toString,
       "paymentPeriodFrom" -> data.financialTransactions.head.start.toString,
       "paymentPeriodTo" -> data.financialTransactions.head.end.toString
-    )
-    case Some(data) if data.financialTransactions.size > 1 => Map(
-    "numberOfPayments" -> data.financialTransactions.size.toString
     )
     case _ => Map("paymentOutstanding" -> "no")
   }
