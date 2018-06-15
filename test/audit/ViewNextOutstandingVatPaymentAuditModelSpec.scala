@@ -104,7 +104,5 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
 
       testData.detail shouldBe expected
     }
-
-
   }
 }
