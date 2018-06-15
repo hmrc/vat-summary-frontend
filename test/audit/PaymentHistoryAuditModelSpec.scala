@@ -70,5 +70,6 @@ class PaymentHistoryAuditModelSpec extends UnitSpec {
         testData.detail shouldBe expected
       }
     }
+
   }
 }
