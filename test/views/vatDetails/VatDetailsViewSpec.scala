@@ -49,27 +49,27 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
   val currentYear: Int = 2018
   private val user = User("123456789")
   val detailsModel = VatDetailsViewModel(
-    Some(LocalDate.parse("2018-12-31")),
+    Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
-    Some(LocalDate.parse("2017-01-01")),
+    Some("2017-01-01"),
     Some("2017-01-01"),
     Some("Cheapo Clothing"),
     currentYear,
     returnObligationOverdue = true
   )
   val multipleReturnsDetailsModel = VatDetailsViewModel(
-    Some(LocalDate.parse("2017-01-01")),
+    Some("2017-01-01"),
     Some("2"),
     Some("Cheapo Clothing"),
     currentYear,
     hasMultipleReturnObligations = true
   )
   val overduePaymentDetailsModel = VatDetailsViewModel(
-    Some(LocalDate.parse("2017-01-01")),
+    Some("2017-01-01"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear,
@@ -83,7 +83,7 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     paymentError = true
   )
   val returnErrorDetailsModel = VatDetailsViewModel(
-    Some(LocalDate.parse("2018-12-31")),
+    Some("2018-12-31"),
     None,
     Some("Cheapo Clothing"),
     currentYear,

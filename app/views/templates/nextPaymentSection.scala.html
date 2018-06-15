@@ -19,22 +19,24 @@
 @import views.html.templates.formatters.money._
 @import java.time.LocalDate
 
-@(paymentDueDate: Option[LocalDate], isOverdue: Boolean, isError: Boolean)(implicit messages: Messages)
+@(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages)
 
 <div class="column-one-half" id="payments">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
-  <p @if(isError){data-metrics="error:recovered:next-payment"}>
-    @if(isError){
-      @messages("vatDetails.error")
-    }else{
-      @paymentDueDate.map{date => @displayDate(date)}.getOrElse(messages("payment.noPayment"))
-      @if(isOverdue){
-        <span>
-          <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
-        </span>
-      }
-    }
-  </p>
+    <p @if(isError){data-metrics="error:recovered:next-payment"}>
+        @(paymentsData, hasMultiple, isError) match {
+        case (_, _, true) => { @messages("vatDetails.error") }
+        case (Some(numOfPayments), true, _) => { @messages("vatDetails.paymentsDue", numOfPayments)}
+        case _ => {
+            @paymentsData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("payment.noPayment"))
+            @if(isOverdue){
+                <span>
+                    <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+                </span>
+            }
+        }
+        }
+    </p>
 
   <p>
     <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}" data-journey-click="payment:check:vat-details">

@@ -41,13 +41,41 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "#001"
     )
 
-    val payment: Payment = Payment(
+    val payments: Payments = Payments(Seq(Payment(
       start = LocalDate.parse("2017-11-22"),
       end = LocalDate.parse("2017-12-22"),
       due = LocalDate.parse("2017-12-26"),
       outstandingAmount = BigDecimal(1000.00),
       periodKey = "#003"
-    )
+    ),
+      Payment(
+        start = LocalDate.parse("2016-11-22"),
+        end = LocalDate.parse("2016-12-22"),
+        due = LocalDate.parse("2016-12-26"),
+        outstandingAmount = BigDecimal(1000.00),
+        periodKey = "#003"
+      ),
+      Payment(
+        start = LocalDate.parse("2015-11-22"),
+        end = LocalDate.parse("2015-12-22"),
+        due = LocalDate.parse("2015-12-26"),
+        outstandingAmount = BigDecimal(1000.00),
+        periodKey = "#003"
+      ),
+      Payment(
+        start = LocalDate.parse("2011-11-22"),
+        end = LocalDate.parse("2011-12-22"),
+        due = LocalDate.parse("2011-12-26"),
+        outstandingAmount = BigDecimal(1000.00),
+        periodKey = "#003"
+      ),
+      Payment(
+        start = LocalDate.parse("2013-11-22"),
+        end = LocalDate.parse("2013-12-22"),
+        due = LocalDate.parse("2013-12-26"),
+        outstandingAmount = BigDecimal(1000.00),
+        periodKey = "#003"
+      )))
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
@@ -62,55 +90,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
                                                        mockAppConfig,
                                                        mockDateService)
     lazy val accountDetailsService = new AccountDetailsService(mockSubscriptionConnector)
-  }
-
-  "Calling .retrieveNextDetail" when {
-
-    "sequence contains one obligation" should {
-
-      "return current obligation" in new Test {
-        lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(Seq(currentObligation), LocalDate.parse("2017-03-30"))
-
-        result shouldBe Some(currentObligation)
-      }
-    }
-
-    "sequence contains more than one obligation" should {
-
-      val futureObligation: VatReturnObligation = VatReturnObligation(
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-03-30"),
-        due = LocalDate.parse("2017-07-30"),
-        "O",
-        None,
-        "#001"
-      )
-
-      "return the obligation which is due today" in new Test {
-        val obligations = Seq(futureObligation, currentObligation)
-        lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations, LocalDate.parse("2017-04-30"))
-
-        result shouldBe Some(currentObligation)
-      }
-
-      "return the obligation which is due in the future" in new Test {
-        val obligations = Seq(futureObligation, currentObligation)
-        lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations, LocalDate.parse("2017-05-30"))
-
-        result shouldBe Some(futureObligation)
-      }
-
-      "return the most recent overdue obligation" in new Test {
-        val obligations = Seq(futureObligation, currentObligation)
-        lazy val result: Option[VatReturnObligation] =
-          vatDetailsService.getNextObligation(obligations, LocalDate.parse("2017-08-30"))
-
-        result shouldBe Some(futureObligation)
-      }
-    }
   }
 
   "Calling .getNextReturn" when {
@@ -179,25 +158,25 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .getNextPayment" when {
+  "Calling .getPaymentObligations" when {
 
-    "the connector returns some payments" should {
+    "the connector returns some payment obligations" should {
 
-      "return the most recent outstanding payment" in new Test {
+      "return the most recent outstanding payment obligation" in new Test {
 
         (mockFinancialDataConnector.getOpenPayments(_: String)
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(Future.successful(Right(Payments(Seq(payment)))))
+          .returns(Future.successful(Right(payments)))
 
-        val result: ServiceResponse[Option[Payment]] =
-          await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[Payments]] =
+          await(vatDetailsService.getPaymentObligations(User("1111")))
 
-        result shouldBe Right(Some(payment))
+        result shouldBe Right(Some(payments))
       }
     }
 
-    "the connector returns no payments" should {
+    "the connector returns no obligations" should {
 
       "return nothing" in new Test {
 
@@ -206,11 +185,12 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Right(Payments(Seq.empty))))
 
-        val result: ServiceResponse[Option[Payment]] =
-          await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[Payments]] =
+          await(vatDetailsService.getPaymentObligations(User("1111")))
 
         result shouldBe Right(None)
       }
+
     }
 
     "the connector returns an HttpError" should {
@@ -222,11 +202,12 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
 
-        val result: ServiceResponse[Option[Payment]] =
-          await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[Payments]] =
+          await(vatDetailsService.getPaymentObligations(User("1111")))
 
         result shouldBe Left(NextPaymentError)
       }
+
     }
 
     "the connector returns an Exception" should {
@@ -238,7 +219,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Future.failed(new RuntimeException("test")))
 
-        intercept[RuntimeException](await(vatDetailsService.getNextPayment(User("1111"), LocalDate.parse("2018-01-01"))))
+        intercept[RuntimeException](await(vatDetailsService.getPaymentObligations(User("1111"))))
       }
     }
   }

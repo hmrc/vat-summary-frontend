@@ -16,16 +16,13 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-
 import models.{ServiceResponse, User, VatDetailsDataModel}
-import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
-import models.payments.Payment
+import models.obligations.{Obligation, VatReturnObligations}
+import models.payments.Payments
 import models.viewModels.VatDetailsViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -45,13 +42,14 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
       val entityNameCall = accountDetailsService.getEntityName(user.vrn)
-      val nextReturnCall = vatDetailsService.getReturnObligations(user, dateService.now())
-      val nextPaymentCall = vatDetailsService.getNextPayment(user, dateService.now())
+      val returnObligationsCall = vatDetailsService.getReturnObligations(user, dateService.now())
+      val paymentObligationsCall = vatDetailsService.getPaymentObligations(user)
 
       val viewModel = for {
-        nextReturn <- nextReturnCall
-        nextPayment <- nextPaymentCall
+        nextReturn <- returnObligationsCall
+        nextPayment <- paymentObligationsCall
         customerInfo <- entityNameCall
+
       } yield {
         auditEvents(user, nextReturn, nextPayment)
         constructViewModel(nextReturn, nextPayment, customerInfo)
@@ -75,7 +73,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   }
 
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
-                                              nextPayment: ServiceResponse[Option[Payment]],
+                                              payments: ServiceResponse[Option[Payments]],
                                               entityName: ServiceResponse[Option[String]]): VatDetailsViewModel = {
 
     val returnModel: VatDetailsDataModel = obligations match {
@@ -84,11 +82,11 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }
 
-    val getDueDate: ServiceResponse[Option[Obligation]] => Option[LocalDate] = _.fold(_ => None, _.map(_.due))
-    val getIsOverdue: Option[LocalDate] => Boolean = _.fold(false)(d => dateService.now().isAfter(d))
-    val payment: Option[LocalDate] = getDueDate(nextPayment)
-    val paymentIsOverdue = getIsOverdue(payment)
-    val paymentHasError = nextPayment.isLeft
+    val paymentModel: VatDetailsDataModel = payments match {
+      case Right(Some(paymnts)) => getObligationFlags(paymnts.financialTransactions)
+      case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
+      case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
+    }
 
     val displayedName = entityName match {
       case Right(name) => name
@@ -96,31 +94,34 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
 
     VatDetailsViewModel(
-      payment,
+      paymentModel.displayData,
       returnModel.displayData,
       displayedName,
       dateService.now().getYear,
       returnModel.hasMultiple,
       returnModel.isOverdue,
       returnModel.hasError,
-      paymentIsOverdue,
-      paymentHasError
+      paymentModel.hasMultiple,
+      paymentModel.isOverdue,
+      paymentModel.hasError
     )
   }
 
-  private[controllers] def auditEvents(user: User, nextReturn: ServiceResponse[Option[VatReturnObligations]],
-                                       nextPayment: ServiceResponse[Option[Payment]])(implicit hc: HeaderCarrier): Unit = {
-    val obligation: Option[VatReturnObligations] = nextReturn match {
-      case Right(data) => data
+  private[controllers] def auditEvents(user: User, returnObligations: ServiceResponse[Option[VatReturnObligations]],
+                                       paymentObligations: ServiceResponse[Option[Payments]])(implicit hc: HeaderCarrier): Unit = {
+
+    val returnObs: Option[VatReturnObligations] = returnObligations match {
+      case Right(returns) => returns
       case _ => None
     }
 
-    val payment: Option[Payment] = nextPayment match {
-      case Right(data) => data
+    val paymentObs: Option[Payments] = paymentObligations match {
+      case Right(payments) => payments
       case _ => None
     }
 
-    auditingService.audit(ViewNextOpenVatObligationAuditModel(user, obligation), routes.VatDetailsController.details().url)
-    auditingService.audit(ViewNextOutstandingVatPaymentAuditModel(user, payment), routes.VatDetailsController.details().url)
+    auditingService.audit(ViewNextOutstandingVatPaymentAuditModel(user, paymentObs), routes.VatDetailsController.details().url)
+    auditingService.audit(ViewNextOpenVatObligationAuditModel(user, returnObs), routes.VatDetailsController.details().url)
+
   }
 }
