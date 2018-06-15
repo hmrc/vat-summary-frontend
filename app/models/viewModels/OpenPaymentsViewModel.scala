@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages)
+package models.viewModels
 
-@contentHeader = {
-  <h1>@messages("paymentsError.heading")</h1>
-}
+import java.time.LocalDate
 
-@mainContent = {
-  <p class="lede">@messages("directDebitError.message")</p>
-}
-
-@govuk_wrapper(
-  appConfig = appConfig,
-  title = messages("directDebitError.title"),
-  contentHeader = Some(contentHeader),
-  mainContent = mainContent
-)
+case class OpenPaymentsViewModel(hasActiveDirectDebit: Option[Boolean],
+                                 payments: Seq[OpenPaymentsModel])

@@ -23,7 +23,7 @@ import audit.models.ExtendedAuditModel
 import models.User
 import models.errors.PaymentsError
 import models.payments.{Payment, Payments}
-import models.viewModels.OpenPaymentsModel
+import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
@@ -54,6 +54,11 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
         .returns({})
+
+      (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *)
+        .returns(Right(true))
+
     }
 
     val payment = Payment(
@@ -204,16 +209,19 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
       )
 
-      val expected = Seq(OpenPaymentsModel(
-        "Return",
-        payment.outstandingAmount,
-        payment.due,
-        payment.start,
-        payment.end,
-        payment.periodKey,
-        overdue = true
-      ))
-      val result: Seq[OpenPaymentsModel] = target.getModel(Seq(payment))
+      val expected = OpenPaymentsViewModel(
+        Some(true),
+        Seq(OpenPaymentsModel(
+          "Return",
+          payment.outstandingAmount,
+          payment.due,
+          payment.start,
+          payment.end,
+          payment.periodKey,
+          overdue = true
+        ))
+      )
+      val result: OpenPaymentsViewModel = target.getModel(Seq(payment), Some(true))
 
       result shouldBe expected
     }

@@ -24,7 +24,9 @@ import models.DirectDebitDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
-import views.html.errors.directDebitError
+import views.html.errors.standardError
+
+import scala.concurrent.Future
 
 @Singleton
 class DirectDebitController @Inject()(val messagesApi: MessagesApi,
@@ -34,22 +36,22 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
                                      auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 
-  def directDebits(): Action[AnyContent] = authorisedAction {
+  def directDebits(hasActiveDirectDebit: Option[Boolean] = None): Action[AnyContent] = authorisedAction {
     implicit request =>
       user =>
 
         val directDebitDetails = DirectDebitDetailsModel(
-            userId = user.vrn,
-            userIdType = "VRN",
-            returnUrl = appConfig.directDebitReturnUrl,
-            backUrl = appConfig.directDebitBackUrl
+          userId = user.vrn,
+          userIdType = "VRN",
+          returnUrl = appConfig.directDebitReturnUrl,
+          backUrl = appConfig.directDebitBackUrl
         )
 
         paymentsService.setupDirectDebitJourney(directDebitDetails).map {
           case Right(url) =>
             auditingService.audit(
-              DirectDebitAuditModel(directDebitDetails, url),
-              routes.DirectDebitController.directDebits().url
+              DirectDebitAuditModel(directDebitDetails, hasActiveDirectDebit, url),
+              routes.DirectDebitController.directDebits(hasActiveDirectDebit).url
             )
 
             if (appConfig.features.useDirectDebitDummyPage()) {
@@ -58,7 +60,7 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
               Redirect(url)
             }
 
-          case Left(_) => InternalServerError(directDebitError())
-        }
+          case Left(_) => InternalServerError(standardError(appConfig, "Direct Debit Error", "Error", ""))
+       }
   }
 }

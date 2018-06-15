@@ -22,7 +22,7 @@ import config.AppConfig
 import javax.inject.Inject
 import models.User
 import models.payments.Payment
-import models.viewModels.OpenPaymentsModel
+import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
@@ -38,27 +38,40 @@ extends AuthorisedController with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
-      paymentsService.getOpenPayments(user.vrn).map {
-        case Right(Some(payments)) =>
-          val model = getModel(payments.financialTransactions)
-          auditEvent(user, model)
-          Ok(views.html.payments.openPayments(user, model))
-        case Right(_) =>
-          auditEvent(user, Seq.empty)
-          Ok(views.html.payments.noPayments(user))
-        case Left(_) => InternalServerError(views.html.errors.paymentsError())
+
+      def something(hasActiveDirectDebit: Option[Boolean]) = {
+        paymentsService.getOpenPayments(user.vrn).map {
+          case Right(Some(payments)) =>
+            val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
+            auditEvent(user, model.payments)
+            Ok(views.html.payments.openPayments(user, model))
+          case Right(_) =>
+            auditEvent(user, Seq.empty)
+            Ok(views.html.payments.noPayments(user))
+          case Left(_) => InternalServerError(views.html.errors.paymentsError())
+        }
+      }
+
+      paymentsService.getDirectDebitStatus(user.vrn).flatMap {
+        case Right(status) => something(Some(status))
+        case Left(_) => something(None)
       }
   }
 
-  private[controllers] def getModel(payments: Seq[Payment]): Seq[OpenPaymentsModel] = payments.map { payment =>
-    OpenPaymentsModel(
-      "Return",
-      payment.outstandingAmount,
-      payment.due,
-      payment.start,
-      payment.end,
-      payment.periodKey,
-      payment.due.isBefore(dateService.now())
+  private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]): OpenPaymentsViewModel = {
+    OpenPaymentsViewModel(
+      hasActiveDirectDebit,
+      payments.map { payment =>
+        OpenPaymentsModel(
+          "Return",
+          payment.outstandingAmount,
+          payment.due,
+          payment.start,
+          payment.end,
+          payment.periodKey,
+          payment.due.isBefore(dateService.now())
+        )
+      }
     )
   }
 

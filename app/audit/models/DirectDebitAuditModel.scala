@@ -19,15 +19,22 @@ package audit.models
 import models.DirectDebitDetailsModel
 
 case class DirectDebitAuditModel(directDebit: DirectDebitDetailsModel,
+                                 hasActiveDirectDebit: Option[Boolean],
                                  description: String) extends AuditModel {
 
   override val transactionName: String = "direct-debits-handOff"
   override val auditType: String = "PaymentsHandOff"
 
+  val directDebitStatus: String = hasActiveDirectDebit match {
+    case Some(status) => status.toString
+    case None => "API Error"
+  }
+
   override val detail: Map[String, String] = Map(
-    "taxReference" -> directDebit.userId,
     "taxType" -> "vat",
     "returnUrl" -> directDebit.returnUrl,
-    "backUrl" -> directDebit.backUrl
+    "backUrl" -> directDebit.backUrl,
+    "vrn" -> directDebit.userId,
+    "hasActiveDirectDebit" -> directDebitStatus
   )
 }
