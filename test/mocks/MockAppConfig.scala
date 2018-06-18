@@ -54,6 +54,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val unauthenticatedPaymentsUrl: String = "unauthenticated-payments-url"
   override val directDebitReturnUrl: String = "direct-debit-return-url"
   override val directDebitBackUrl: String = "direct-debit-back-url"
+  override val directDebitRedirectUrl: String = "direct-debit-redirect-url"
   override val btaVatOverviewUrl: String = "mock-url"
   override val feedbackFormPartialUrl: String = "BasefeedbackUrl"
   override val contactFormServiceIdentifier: String = "VATVC"

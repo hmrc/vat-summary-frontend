@@ -33,5 +33,5 @@ class Features @Inject()(config: Configuration) {
   val enabledAuditing = new Feature(ConfigKeys.enableAuditingFeature, config)
   val allowPaymentHistory = new Feature(ConfigKeys.allowPaymentHistoryFeature, config)
   val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
-
+  val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
 }

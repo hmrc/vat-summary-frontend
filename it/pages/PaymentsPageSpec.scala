@@ -41,6 +41,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubAllOutstandingPayments
         }
 
@@ -52,6 +53,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubAllOutstandingPayments
         }
 
@@ -68,6 +70,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubNoPayments
         }
 
@@ -80,6 +83,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           FinancialDataStub.stubNoPayments
+          FinancialDataStub.stubSuccessfulDirectDebit
         }
 
         val response: WSResponse = await(request().get())

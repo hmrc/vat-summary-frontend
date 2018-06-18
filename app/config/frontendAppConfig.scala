@@ -70,6 +70,7 @@ trait AppConfig extends ServicesConfig {
   val timeoutCountdown: Int
   val directDebitServiceUrl: String
   val setupDirectDebitsJourneyPath: String
+  val directDebitRedirectUrl: String
 }
 
 @Singleton
@@ -114,7 +115,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
 
-  override val vatObligationsBaseUrl: String = baseUrl("vat-obligations")
+  override lazy val vatObligationsBaseUrl: String = baseUrl(Keys.vatObligations) + "/vat-obligations"
 
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
@@ -128,6 +129,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val directDebitServiceUrl: String = baseUrl(Keys.directDebitServiceBase)
   override lazy val setupDirectDebitsJourneyPath: String = getString(Keys.setupDirectDebitJourneyPath)
+  override lazy val directDebitRedirectUrl: String = getString(Keys.directDebitRedirectUrl)
 
   private lazy val paymentsReturnBase: String = getString(Keys.paymentsReturnBase)
   override lazy val paymentsReturnUrl: String = paymentsReturnBase + getString(Keys.paymentsReturnUrl)

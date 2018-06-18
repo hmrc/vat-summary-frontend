@@ -21,12 +21,11 @@ import java.time.LocalDate
 import config.AppConfig
 import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import javax.inject.{Inject, Singleton}
-
 import models._
 import models.errors.{NextPaymentError, ObligationsError}
 import models.obligations.Obligation.Status._
-import models.obligations.{Obligation, VatReturnObligations}
-import models.payments.Payment
+import models.obligations.VatReturnObligations
+import models.payments.Payments
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -37,18 +36,6 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
                                   subscriptionConnector: VatSubscriptionConnector,
                                   implicit val appConfig: AppConfig,
                                   dateService: DateService) {
-
-  private[services] def getNextObligation[T <: Obligation](obligations: Seq[T], date: LocalDate): Option[T] = {
-    val presetAndFuture = obligations
-      .filter(obligation => obligation.due == date || obligation.due.isAfter(date))
-      .sortWith(_.due isBefore _.due).headOption
-
-    val overdue = obligations
-      .filter(_.due.isBefore(date))
-      .sortWith(_.due isBefore _.due).lastOption
-
-    presetAndFuture orElse overdue
-  }
 
   def getReturnObligations(user: User,
                            date: LocalDate)
@@ -65,12 +52,12 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
     }
   }
 
-  def getNextPayment(user: User,
-                    date: LocalDate)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payment]]] = {
+  def getPaymentObligations(user: User)
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] = {
 
     financialDataConnector.getOpenPayments(user.vrn).map {
-      case Right(nextPayments) => Right(getNextObligation(nextPayments.financialTransactions, date))
+      case Right(nextPayments) if nextPayments.financialTransactions.nonEmpty=> Right(Some(nextPayments))
+      case Right(_) => Right(None)
       case Left(_) => Left(NextPaymentError)
     }
   }

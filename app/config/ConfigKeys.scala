@@ -37,18 +37,21 @@ object ConfigKeys {
   val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
   val allowPaymentsFeature: String = "features.allowPayments.enabled"
   val allowDirectDebitsFeature: String = "features.allowDirectDebits.enabled"
-  val staticDateEnabledFeature: String = "features.date-service.staticDate.enabled"
+  val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
   val accountDetailsFeature: String = "features.accountDetails.enabled"
   val allowNineBoxFeature: String = "features.allowNineBox.enabled"
   val enableAuditingFeature: String = "features.auditing.enabled"
   val allowPaymentHistoryFeature: String = "features.allowPaymentHistory.enabled"
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
+  val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
   val btaVatOverviewUrlBase: String = "business-tax-account.vatSummaryHost"
   val btaVatOverviewUrl: String = "business-tax-account.vatSummaryUrl"
+
+  val vatObligations: String = "vat-obligations"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"
@@ -71,6 +74,7 @@ object ConfigKeys {
   val directDebitReturnBase: String = "direct-debit-frontend.returnHost"
   val directDebitReturnUrl: String = "direct-debit-frontend.returnUrl"
   val directDebitBackUrl: String = "direct-debit-frontend.backUrl"
+  val directDebitRedirectUrl: String = "direct-debit-frontend.redirectUrl"
 
   val governmentGatewayHost: String = "government-gateway.host"
 

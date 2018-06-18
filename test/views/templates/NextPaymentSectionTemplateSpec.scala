@@ -16,8 +16,6 @@
 
 package views.templates
 
-import java.time.LocalDate
-
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -35,9 +33,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is a payment to display" should {
 
-      val paymentDueDate = LocalDate.parse("2017-03-08")
-
-      lazy val view = views.html.templates.nextPaymentSection(Some(paymentDueDate), isOverdue = false, isError = false)
+      lazy val view = views.html.templates.nextPaymentSection(Some("2017-03-08"), hasMultiple = false, isOverdue = false, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -55,9 +51,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is an overdue return" should {
 
-      val obligationDueDate = LocalDate.parse("2017-04-30")
-
-      lazy val view = views.html.templates.nextPaymentSection(Some(obligationDueDate), isOverdue = true, isError = false)
+      lazy val view = views.html.templates.nextPaymentSection(Some("2017-04-30"), hasMultiple = false, isOverdue = true, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the overdue label" in {
@@ -67,7 +61,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is no payment to display" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false, isError = false)
+      lazy val view = views.html.templates.nextPaymentSection(None, hasMultiple = false, isOverdue = false, isError = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -85,7 +79,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is an error retrieving the payment" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None, isOverdue = false, isError = true)
+      lazy val view = views.html.templates.nextPaymentSection(None, hasMultiple = false, isOverdue = false, isError = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -103,6 +97,25 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       "have the correct GA tag for the graceful error content" in {
         element(Selectors.nextPaymentDate).attr("data-metrics") shouldBe "error:recovered:next-payment"
       }
+    }
+
+    "there are multiple payments to display" should {
+
+      lazy val view = views.html.templates.nextPaymentSection(Some("2"), hasMultiple = true, isOverdue = false, isError = false)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the 'Next payment due' heading" in {
+        elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
+      }
+
+      "display the 'payments due' message" in {
+        elementText(Selectors.nextPaymentDate) shouldBe "You have 2 payments due"
+      }
+
+      "display the 'View payment details' button" in {
+        elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
+      }
+
     }
   }
 }
