@@ -20,7 +20,9 @@ import audit.AuditingService
 import audit.models.AuditModel
 import connectors.VatSubscriptionConnector
 import models.DirectDebitDetailsModel
-import models.errors.DirectDebitSetupError
+import models.errors.{DirectDebitSetupError, PaymentsError}
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -142,23 +144,39 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the PaymentsService returns a Left" should {
+    "an error occurs upstream" should {
 
-      "throw an error" in new DirectDebitDetailsTest {
-
-        val serviceResponse = Left(DirectDebitSetupError)
-
+      "return 500 (Internal server error)" in new DirectDebitDetailsTest {
         override def setup(): Any = {
           super.setup()
 
           (mockPaymentsService.setupDirectDebitJourney(_: DirectDebitDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(serviceResponse))
+            .returns(Future.successful(DirectDebitSetupError))
         }
 
-        lazy val result: Future[Result] = target.directDebits()(fakeRequestWithSession)
+        private val result = target.openPayments()(fakeRequest)
 
-        intercept[Exception](await(target.directDebits()(fakeRequestWithSession)))
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+
+      "return the payments error view" in new Test {
+        override def setupMocks(): Unit = {
+          super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Left(PaymentsError)))
+        }
+
+        val result: Result = await(target.openPayments()(fakeRequest))
+        val document: Document = Jsoup.parse(bodyOf(result))
+
+
+        document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
       }
     }
   }
