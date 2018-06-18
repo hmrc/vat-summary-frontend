@@ -115,7 +115,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
 
-  override lazy val vatObligationsBaseUrl: String = baseUrl(Keys.vatObligations) + "/vat-obligations"
+  override lazy val vatObligationsBaseUrl: String = baseUrl(Keys.vatObligations)
 
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
