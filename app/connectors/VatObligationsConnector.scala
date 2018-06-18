@@ -38,11 +38,11 @@ class VatObligationsConnector @Inject()(http: HttpClient,
 
   private[connectors] def obligationsUrl(vrn: String): String = {
     val baseUrl: String = if (appConfig.features.enableVatObligationsService()) {
-      appConfig.vatObligationsBaseUrl
+      appConfig.vatObligationsBaseUrl + "/vat-obligations"
     } else {
       appConfig.vatApiBaseUrl
     }
-    s"$baseUrl/vat-obligations/$vrn/obligations"
+    s"$baseUrl/$vrn/obligations"
   }
 
   def getVatReturnObligations(vrn: String,

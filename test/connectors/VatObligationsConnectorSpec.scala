@@ -27,7 +27,7 @@ class VatObligationsConnectorSpec extends ControllerBaseSpec {
   "VatObligationsConnector" should {
     "generate the correct obligations url when not using vat-obligations" in {
       mockAppConfig.features.enableVatObligationsService(false)
-      connector.obligationsUrl("111") shouldEqual "/vat-obligations/111/obligations"
+      connector.obligationsUrl("111") shouldEqual "/111/obligations"
     }
 
     "generate the correct returns url with a period key when using vat-obligations" in {
