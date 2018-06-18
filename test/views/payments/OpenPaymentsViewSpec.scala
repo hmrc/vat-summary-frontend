@@ -19,7 +19,7 @@ package views.payments
 import java.time.LocalDate
 
 import models.User
-import models.viewModels.OpenPaymentsModel
+import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -76,8 +76,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
   private val user = User("1111")
   val noPayment = Seq()
-  val payment = Seq(
-    OpenPaymentsModel(
+  val model: OpenPaymentsViewModel = OpenPaymentsViewModel(
+    Some(true),
+    Seq(OpenPaymentsModel(
       "Return",
       2000000000.01,
       LocalDate.parse("2001-04-08"),
@@ -93,12 +94,12 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2002-02-01"),
       LocalDate.parse("2002-03-28"),
       "#002"
-    )
+    ))
   )
 
   "Rendering the open payments page" should {
 
-    lazy val view = views.html.payments.openPayments(user, payment)
+    lazy val view = views.html.payments.openPayments(user, model)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -236,7 +237,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct check direct debit href" in {
-      element(Selectors.directDebitCheckLink).attr("href") shouldBe "#"
+      element(Selectors.directDebitCheckLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
     }
 
     "render the correct help revealing link text" in {

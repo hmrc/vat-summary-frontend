@@ -83,6 +83,10 @@ paymentsError.message = Try again later.
 paymentsError.payNowOne = If you know how much you owe, you can still
 paymentsError.payNowTwo = pay now
 
+directDebitError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+directDebitError.heading = Sorry, there is a problem with the service
+directDebitError.message = Try again later.
+
 paymentsHistory.title = Payment history
 paymentsHistory.paymentReceivedTitle = Payment date
 paymentsHistory.descriptionTitle = Description

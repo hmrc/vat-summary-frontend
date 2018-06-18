@@ -20,7 +20,7 @@
 @import views.html.templates.formatters.breadcrumbs._
 @import uk.gov.hmrc.play.views.html.helpers.form
 @(user: models.User,
-payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+model: models.viewModels.OpenPaymentsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @hiddenHelpTextContent = {
   <p>@Messages("openPayments.incorrect") <a target="_blank" href="#">@Messages("openPayments.correctErrors")</a>.</p>
@@ -41,7 +41,7 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
   <div id="paymentsSection" class="grid-row column-two-thirds payments">
-    @payments.zipWithIndex.map { case(payment, count) =>
+    @model.payments.zipWithIndex.map { case(payment, count) =>
       <div id="payment-section-@{count + 1}" class="section divider--bottom">
 
           <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
@@ -102,7 +102,9 @@ payments: Seq[models.viewModels.OpenPaymentsModel])(implicit request: Request[_]
 
         @if(appConfig.features.allowDirectDebits()) {
           @messages("openPayments.directDebitYouCan")
-          <a target="_blank" href="#">@messages("openPayments.directDebitLinkText")</a>
+          <a target="_blank" href="@controllers.routes.DirectDebitController.directDebits(model.hasActiveDirectDebit)">
+            @messages("openPayments.directDebitLinkText")
+          </a>
           @messages("openPayments.directDebitNotSure")
         }
       </p>
