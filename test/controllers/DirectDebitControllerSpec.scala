@@ -144,7 +144,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
     "the PaymentsService returns a Left" should {
 
-      "return 500 (Internal Server Error)" in new DirectDebitDetailsTest {
+      "throw an error" in new DirectDebitDetailsTest {
 
         val serviceResponse = Left(DirectDebitSetupError)
 
@@ -158,7 +158,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
         lazy val result: Future[Result] = target.directDebits()(fakeRequestWithSession)
 
-        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        intercept[Exception](await(target.directDebits()(fakeRequestWithSession)))
       }
     }
   }

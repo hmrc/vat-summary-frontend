@@ -21,7 +21,7 @@ import java.time.LocalDate
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import models.User
-import models.errors.PaymentsError
+import models.errors.{DirectDebitStatusError, PaymentsError}
 import models.payments.{Payment, Payments}
 import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
 import org.jsoup.Jsoup
@@ -54,11 +54,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
         .returns({})
-
-      (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *)
-        .returns(Right(true))
-
     }
 
     val payment = Payment(
@@ -97,6 +92,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return 200 (OK)" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
@@ -110,6 +109,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return the payments view" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
@@ -127,6 +130,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return 200 (OK)" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(None)))
@@ -140,6 +147,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return the payments view" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(None)))
@@ -170,11 +181,36 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "the paymentsService returns an error" should {
+
+      "return the payments view" in new Test {
+        override def setupMocks(): Unit = {
+           super.setupMocks()
+           (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+             .expects(*, *, *)
+             .returns(Left(DirectDebitStatusError))
+
+          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+         }
+ 
+         val result: Result = await(target.openPayments()(fakeRequest))
+         val document: Document = Jsoup.parse(bodyOf(result))
+ 
+         document.select("h1").first().text() shouldBe "What you owe"
+      }
+    }
+
     "an error occurs upstream" should {
 
       "return 500 (Internal server error)" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Left(PaymentsError)))
@@ -188,6 +224,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       "return the payments error view" in new Test {
         override def setupMocks(): Unit = {
           super.setupMocks()
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(Right(true))
+
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Left(PaymentsError)))

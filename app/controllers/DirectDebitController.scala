@@ -24,9 +24,6 @@ import models.DirectDebitDetailsModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
-import views.html.errors.standardError
-
-import scala.concurrent.Future
 
 @Singleton
 class DirectDebitController @Inject()(val messagesApi: MessagesApi,
@@ -60,7 +57,7 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
               Redirect(url)
             }
 
-          case Left(_) => InternalServerError(standardError(appConfig, "Direct Debit Error", "Error", ""))
+          case Left(error) => throw new Exception(error.toString)
        }
   }
 }

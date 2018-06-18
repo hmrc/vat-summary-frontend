@@ -16,7 +16,5 @@
 
 package models.viewModels
 
-import java.time.LocalDate
-
 case class OpenPaymentsViewModel(hasActiveDirectDebit: Option[Boolean],
                                  payments: Seq[OpenPaymentsModel])

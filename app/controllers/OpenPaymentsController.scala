@@ -39,7 +39,7 @@ extends AuthorisedController with I18nSupport {
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
 
-      def something(hasActiveDirectDebit: Option[Boolean]) = {
+      def getView(hasActiveDirectDebit: Option[Boolean]) = {
         paymentsService.getOpenPayments(user.vrn).map {
           case Right(Some(payments)) =>
             val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
@@ -53,8 +53,8 @@ extends AuthorisedController with I18nSupport {
       }
 
       paymentsService.getDirectDebitStatus(user.vrn).flatMap {
-        case Right(status) => something(Some(status))
-        case Left(_) => something(None)
+        case Right(status) => getView(Some(status))
+        case Left(_) => getView(None)
       }
   }
 

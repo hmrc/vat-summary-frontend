@@ -16,11 +16,8 @@
 
 package audit
 
-import java.time.LocalDate
-
-import audit.models.DirectDebitAuditModel
 import _root_.models.DirectDebitDetailsModel
-import _root_.models.obligations.{VatReturnObligation, VatReturnObligations}
+import audit.models.DirectDebitAuditModel
 import uk.gov.hmrc.play.test.UnitSpec
 
 class DirectDebitAuditModelSpec extends UnitSpec {
