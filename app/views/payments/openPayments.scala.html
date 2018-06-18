@@ -100,13 +100,12 @@
     }
 
     @model.hasDirectDebit match {
-      case Some(hasDD) if hasDD => {
-
-      }
-      case Some(noDD) => {
-        <div id="processing-time">
-          <p>@messages("openPayments.processingTime")</p>
-        </div>
+      case Some(hasDD) => {
+        @if(!hasDD) {
+          <div id="processing-time">
+            <p>@messages("openPayments.processingTime")</p>
+          </div>
+        }
       }
       case None => {
         <div id="processing-time-old">
@@ -120,14 +119,14 @@
       <p>
         @if(appConfig.features.allowDirectDebits()) {
           @model.hasDirectDebit match {
-            case Some(hasDD) if hasDD => {
+            case Some(hasDD) => {
               @messages("openPayments.directDebitYouCan")
-              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
-            }
-            case Some(noDD) => {
-              @messages("openPayments.directDebitYouCan")
-              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
-              @messages("openPayments.directDebitPayReturn")
+              @if(hasDD) {
+                <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
+              } else {
+                <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
+                @messages("openPayments.directDebitPayReturn")
+               }
             }
             case None => {
               @messages("openPayments.directDebitAlreadySetUp")
