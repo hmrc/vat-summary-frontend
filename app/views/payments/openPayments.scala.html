@@ -63,17 +63,21 @@
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
                   <div class="grid-row">
-                    <a data-journey-click="payment:make-payment:open-payments"
-                       href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
-                       class="float--right">
-                      <span>@messages("openPayments.makePayment")</span>
-                      <span class="visuallyhidden">
-                         @displayMoney(payment.amount)
-                         @if(payment.overdue) { @messages("common.overdue") }
-                         @messages("openPayments.forPeriod")
-                         @displayDateRange(payment.start, payment.end).toString().trim
-                    </span>
-                    </a>
+                    @if(model.hasDirectDebit.getOrElse(false)) {
+                      <span class="float--right">@messages("openPayments.youPayByDirectDebit")</span>
+                    } else {
+                      <a data-journey-click="payment:make-payment:open-payments"
+                         href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
+                         class="float--right">
+                        <span>@messages("openPayments.makePayment")</span>
+                        <span class="visuallyhidden">
+                           @displayMoney(payment.amount)
+                           @if(payment.overdue) { @messages("common.overdue") }
+                           @messages("openPayments.forPeriod")
+                           @displayDateRange(payment.start, payment.end).toString().trim
+                      </span>
+                      </a>
+                    }
                   </div>
 
                @if(appConfig.features.allowNineBox()) {
@@ -85,13 +89,13 @@
                           <span class="visuallyhidden">
                             @messages("openPayments.forPeriod")
                             @displayDateRange(payment.start, payment.end).toString().trim
-                        </span>
-                      </a>
-                    </div>
+                          </span>
+                  </a>
+                </div>
                }
               </div>
+            }
           </div>
-        }
       </div>
     }
 
