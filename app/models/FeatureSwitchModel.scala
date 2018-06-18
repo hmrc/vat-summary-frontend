@@ -25,4 +25,6 @@ case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
                               allowNineBoxEnabled: Boolean,
                               auditingEnabled: Boolean,
                               allowPaymentHistoryEnabled: Boolean,
-                              enableVatObligationsService: Boolean)
+                              enableVatObligationsService: Boolean,
+                              useDirectDebitDummyPage: Boolean
+                             )

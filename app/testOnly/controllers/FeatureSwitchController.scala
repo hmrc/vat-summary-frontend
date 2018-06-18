@@ -39,7 +39,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         allowNineBoxEnabled = appConfig.features.allowNineBox(),
         auditingEnabled = appConfig.features.enabledAuditing(),
         allowPaymentHistoryEnabled = appConfig.features.allowPaymentHistory(),
-        enableVatObligationsService = appConfig.features.enableVatObligationsService()
+        enableVatObligationsService = appConfig.features.enableVatObligationsService(),
+        useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage()
       )
     )))
   }
@@ -62,6 +63,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.enabledAuditing(model.auditingEnabled)
     appConfig.features.allowPaymentHistory(model.allowPaymentHistoryEnabled)
     appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
+    appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
