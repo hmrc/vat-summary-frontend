@@ -23,6 +23,7 @@ import javax.inject.{Inject, Singleton}
 import models.{ServiceResponse, User, VatDetailsDataModel}
 import models.obligations.{Obligation, VatReturnObligations}
 import models.payments.Payments
+import models.obligations.{Obligation, VatReturnObligations}
 import models.viewModels.VatDetailsViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -49,7 +50,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         nextReturn <- returnObligationsCall
         nextPayment <- paymentObligationsCall
         customerInfo <- entityNameCall
-
       } yield {
         auditEvents(user, nextReturn, nextPayment)
         constructViewModel(nextReturn, nextPayment, customerInfo)
@@ -122,6 +122,5 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
     auditingService.audit(ViewNextOutstandingVatPaymentAuditModel(user, paymentObs), routes.VatDetailsController.details().url)
     auditingService.audit(ViewNextOpenVatObligationAuditModel(user, returnObs), routes.VatDetailsController.details().url)
-
   }
 }

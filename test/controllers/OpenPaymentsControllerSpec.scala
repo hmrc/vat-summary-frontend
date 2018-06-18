@@ -250,7 +250,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       )
 
       val expected = OpenPaymentsViewModel(
-        Some(true),
         Seq(OpenPaymentsModel(
           "Return",
           payment.outstandingAmount,
@@ -259,7 +258,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           payment.end,
           payment.periodKey,
           overdue = true
-        ))
+        )),
+        Some(true)
       )
       val result: OpenPaymentsViewModel = target.getModel(Seq(payment), Some(true))
 

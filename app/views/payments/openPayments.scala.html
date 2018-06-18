@@ -14,18 +14,23 @@
  * limitations under the License.
  *@
 
+@import models.User
+@import models.viewModels.OpenPaymentsViewModel
 @import views.html.templates.formatters.dates.{displayDateRange, displayDate}
 @import views.html.templates.expandingHelpSection
 @import views.html.templates.formatters.money.displayMoney
 @import views.html.templates.formatters.breadcrumbs._
 @import uk.gov.hmrc.play.views.html.helpers.form
-@(user: models.User,
-model: models.viewModels.OpenPaymentsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
+@(user: User, model: OpenPaymentsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @hiddenHelpTextContent = {
-  <p>@Messages("openPayments.incorrect") <a target="_blank" href="#">@Messages("openPayments.correctErrors")</a>.</p>
+  <p>@Messages("openPayments.incorrect")
+    <a target="_blank" href="#">@Messages("openPayments.correctErrors")</a>.
+  </p>
   <p>@Messages("payment.afterSubmitted") @Messages("payment.stillMake")
-    <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">@messages("payment.stillMakeLink")<span class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
+    <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">
+      @messages("payment.stillMakeLink")<span class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
   </p>
 }
 
@@ -47,7 +52,7 @@ model: models.viewModels.OpenPaymentsViewModel)(implicit request: Request[_], me
           <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
           <div class="grid-row" id="payment-row-@{count + 1}">
             <div class="column-two-thirds">
-              <span data-due="@(payment.due.toString)">@Messages("openPayments.dueBy") @displayDate(payment.due)</span>
+              <span data-due="@(payment.due.toString)">@messages("openPayments.dueBy") @displayDate(payment.due)</span>
               @if(payment.overdue) {
                 <span class="inline">
                   <strong class="task-overdue">@messages("common.overdue")</strong>
@@ -58,17 +63,21 @@ model: models.viewModels.OpenPaymentsViewModel)(implicit request: Request[_], me
             @if(appConfig.features.allowPayments()) {
               <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
                   <div class="grid-row">
-                    <a data-journey-click="payment:make-payment:open-payments"
-                       href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
-                       class="float--right">
-                      <span>@messages("openPayments.makePayment")</span>
-                      <span class="visuallyhidden">
-                         @displayMoney(payment.amount)
-                         @if(payment.overdue) { @messages("common.overdue") }
-                         @messages("openPayments.forPeriod")
-                         @displayDateRange(payment.start, payment.end).toString().trim
-                    </span>
-                    </a>
+                    @if(model.hasDirectDebit.getOrElse(false)) {
+                      <span class="float--right">@messages("openPayments.youPayByDirectDebit")</span>
+                    } else {
+                      <a data-journey-click="payment:make-payment:open-payments"
+                         href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
+                         class="float--right">
+                        <span>@messages("openPayments.makePayment")</span>
+                        <span class="visuallyhidden">
+                           @displayMoney(payment.amount)
+                           @if(payment.overdue) { @messages("common.overdue") }
+                           @messages("openPayments.forPeriod")
+                           @displayDateRange(payment.start, payment.end).toString().trim
+                      </span>
+                      </a>
+                    }
                   </div>
 
                @if(appConfig.features.allowNineBox()) {
@@ -80,32 +89,52 @@ model: models.viewModels.OpenPaymentsViewModel)(implicit request: Request[_], me
                           <span class="visuallyhidden">
                             @messages("openPayments.forPeriod")
                             @displayDateRange(payment.start, payment.end).toString().trim
-                        </span>
-                      </a>
-                    </div>
+                          </span>
+                  </a>
+                </div>
                }
-
               </div>
+            }
           </div>
-        }
       </div>
     }
 
-    <div id="payments-information">
-      <p id="processing-time">@messages("openPayments.processingTime")</p>
-    </div>
+    @model.hasDirectDebit match {
+      case Some(hasDD) => {
+        @if(!hasDD) {
+          <div id="processing-time">
+            <p>@messages("openPayments.processingTime")</p>
+          </div>
+        }
+      }
+      case None => {
+        <div id="processing-time-old">
+          <p>@messages("openPayments.processingTimeOld")</p>
+        </div>
+      }
+    }
 
     <span id="direct-debits" class="heading-small">Direct debits</span>
     <div id="check-direct-debit" class="form-group">
       <p>
-        @messages("openPayments.directDebitLink")
-
         @if(appConfig.features.allowDirectDebits()) {
-          @messages("openPayments.directDebitYouCan")
-          <a target="_blank" href="@controllers.routes.DirectDebitController.directDebits(model.hasActiveDirectDebit)">
-            @messages("openPayments.directDebitLinkText")
-          </a>
-          @messages("openPayments.directDebitNotSure")
+          @model.hasDirectDebit match {
+            case Some(hasDD) => {
+              @messages("openPayments.directDebitYouCan")
+              @if(hasDD) {
+                <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
+              } else {
+                <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
+                @messages("openPayments.directDebitPayReturn")
+               }
+            }
+            case None => {
+              @messages("openPayments.directDebitAlreadySetUp")
+              @messages("openPayments.directDebitYouCan")
+              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitLinkText")</a>
+              @messages("openPayments.directDebitNotSure")
+            }
+          }
         }
       </p>
     </div>

@@ -37,7 +37,7 @@ object ConfigKeys {
   val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
   val allowPaymentsFeature: String = "features.allowPayments.enabled"
   val allowDirectDebitsFeature: String = "features.allowDirectDebits.enabled"
-  val staticDateEnabledFeature: String = "features.date-service.staticDate.enabled"
+  val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
   val accountDetailsFeature: String = "features.accountDetails.enabled"
   val allowNineBoxFeature: String = "features.allowNineBox.enabled"

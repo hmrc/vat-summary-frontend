@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-package models.viewModels
+package models.payments
 
-case class OpenPaymentsViewModel(payments: Seq[OpenPaymentsModel],
-                                 hasDirectDebit: Option[Boolean])
+import java.time.LocalDate
+
+case class OpenPaymentsModel(paymentType: String,
+                             amount: BigDecimal,
+                             due: LocalDate,
+                             start: LocalDate,
+                             end: LocalDate,
+                             periodKey: String,
+                             overdue: Boolean = false)

@@ -44,7 +44,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val firstPaymentDue = "#payment-row-1 span:nth-of-type(1)"
     val firstPaymentDueData = "#payment-row-1 span[data-due]"
     val firstPaymentPayLink = "#payment-row-1 a"
-    val firstPaymentPayContext = "#payment-row-1 a span"
+    val firstPaymentPayContext = "#payment-row-1 span.float--right"
     val firstPaymentPayNowLinkText = "#payment-row-1 div:nth-of-type(2) span:nth-of-type(1)"
     val firstPaymentPayNowContext = "#payment-row-1 div:nth-of-type(2) span:nth-of-type(2)"
     val paymentSectionSecond = "#payment-section-2"
@@ -63,10 +63,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val secondPaymentViewReturnText = "#links-section-2 div:nth-of-type(2) a span:nth-of-type(1)"
     val secondPaymentViewReturnContext = "#links-section-2 div:nth-of-type(2) a"
     val secondPaymentPeriod = "#payment-row-2 span:nth-of-type(2)"
-    val processingTime = "#payments-information p:nth-of-type(1)"
+    val processingTime = "#processing-time"
+    val processingTimeOld = "#processing-time-old"
     val directDebit = "#direct-debits"
-    val directDebitCheckFullText = "#check-direct-debit p:nth-of-type(1)"
-    val directDebitCheckLink = "#check-direct-debit a:nth-of-type(1)"
+    val directDebitText = "#check-direct-debit p:nth-of-type(1)"
+    val directDebitLink = "#check-direct-debit a:nth-of-type(1)"
     val helpText = "details p:nth-of-type(1)"
     val helpMakePayment = "details p:nth-of-type(2)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
@@ -76,9 +77,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
   private val user = User("1111")
   val noPayment = Seq()
-  val model: OpenPaymentsViewModel = OpenPaymentsViewModel(
-    Some(true),
-    Seq(OpenPaymentsModel(
+  val payments = Seq(
+    OpenPaymentsModel(
       "Return",
       2000000000.01,
       LocalDate.parse("2001-04-08"),
@@ -94,12 +94,14 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2002-02-01"),
       LocalDate.parse("2002-03-28"),
       "#002"
-    ))
+    )
   )
 
-  "Rendering the open payments page" should {
+  "Rendering the open payments page when a user has a direct debit" should {
 
-    lazy val view = views.html.payments.openPayments(user, model)
+    val hasDirectDebit = Some(true)
+    val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
+    lazy val view = views.html.payments.openPayments(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -149,17 +151,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       elementText(Selectors.firstPaymentDueData) shouldBe "due by 8 April 2001"
     }
 
-
-    "render the correct Pay now link text for the first payment" in {
-      elementText(Selectors.firstPaymentPayContext) shouldBe "Pay now"
-    }
-
-    "render the correct pay now href for the first payment" in {
-      element(Selectors.firstPaymentPayLink).attr("href") should endWith("200000000001/3/2001")
-    }
-
-    "render a hidden label for the button for the first payment" in {
-      elementText(Selectors.firstPaymentPayNowContext) shouldBe "£2,000,000,000.01 overdue for the period 1 January to 31 March 2001"
+    "render the Direct Debit text for the first payment" in {
+      elementText(Selectors.firstPaymentPayContext) shouldBe "You pay by direct debit"
     }
 
     "render the correct due period for the first payment period" in {
@@ -194,14 +187,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       elementText(Selectors.secondPaymentDueData) shouldBe "due by 10 May 2002"
     }
 
-    "render the correct pay now href for the second payment" in {
-      element(Selectors.secondPaymentPayLink).attr("href") should endWith("10000/3/2002")
-    }
-
-    "render a hidden text for the button for the second payment" in {
-      elementText(Selectors.secondPaymentPayContext) shouldBe "£100 for the period 1 February to 28 March 2002"
-    }
-
     "render the correct due period for the second payment period" in {
       elementText(Selectors.secondPaymentPeriod) shouldBe "for the period 1 February to 28 March 2002"
     }
@@ -218,26 +203,20 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       element(Selectors.secondPaymentViewReturnLink).attr("href") shouldBe "/submitted/%23002"
     }
 
-    "render the correct text for the processing time" in {
-      elementText(Selectors.processingTime) shouldBe "Your payment could take up to 5 days to process. You may be fined if it's late."
-    }
-
-    "render the correct text for the direct debits" in {
+    "render the correct heading for the direct debits" in {
       elementText(Selectors.directDebit) shouldBe "Direct debits"
     }
 
-    "render the correct text for the direct debit paragraph" in {
-      elementText(Selectors.directDebitCheckFullText) shouldBe
-        "If you've already set up a direct debit, you don't need to pay now." +
-          " You can view your direct debits (opens in a new tab) if you're not sure."
+    "render the correct text for the direct debits" in {
+      elementText(Selectors.directDebitText) shouldBe "You can view and update your direct debit details."
     }
 
-    "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitCheckLink) shouldBe "view your direct debits (opens in a new tab)"
+    "render the correct link text for the direct debits" in {
+      elementText(Selectors.directDebitLink) shouldBe "view and update your direct debit details"
     }
 
-    "render the correct check direct debit href" in {
-      element(Selectors.directDebitCheckLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
+    "have the correct link destination to the direct debits service" in {
+      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
     }
 
     "render the correct help revealing link text" in {
@@ -250,8 +229,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct make payment help text" in {
-      elementText(Selectors.helpMakePayment) shouldBe "After you've submitted a return, it can take 24 hours for what you owe to show here. " +
-        "You can still make a payment (opens in a new tab) even if a payment isn't shown."
+      elementText(Selectors.helpMakePayment) shouldBe
+        "After you've submitted a return, it can take 24 hours for what you owe to show here. " +
+          "You can still make a payment (opens in a new tab) even if a payment isn't shown."
     }
 
     "render the overdue label" in {
@@ -260,6 +240,83 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "have the correct destination for the make a payment link" in {
       element(Selectors.makePayment).attr("href") shouldBe "unauthenticated-payments-url"
+    }
+  }
+
+  "Rendering the open payments page when a user does not have a direct debit" should {
+
+    val hasDirectDebit = Some(false)
+    val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
+    lazy val view = views.html.payments.openPayments(user, viewModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the correct link text for the first payment" in {
+      elementText(Selectors.firstPaymentPayNowLinkText) shouldBe "Pay now"
+    }
+
+    "render the correct pay now href for the first payment" in {
+      element(Selectors.firstPaymentPayLink).attr("href") should endWith("200000000001/3/2001")
+    }
+
+    "render a hidden label for the button for the first payment" in {
+      elementText(Selectors.firstPaymentPayNowContext) shouldBe
+        "£2,000,000,000.01 overdue for the period 1 January to 31 March 2001"
+    }
+
+    "render the correct text for the processing time" in {
+      elementText(Selectors.processingTime) shouldBe "Payments can take up to 5 days to process."
+    }
+
+    "render the correct text for the direct debit paragraph" in {
+      elementText(Selectors.directDebitText) shouldBe
+        "You can set up a direct debit to pay your VAT Returns."
+    }
+
+    "render the correct check direct debit link text" in {
+      elementText(Selectors.directDebitLink) shouldBe "set up a direct debit"
+    }
+
+    "have the correct link destination to the direct debits service" in {
+      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=false"
+    }
+  }
+
+  "Rendering the open payments page when the direct debit service can not be reached" should {
+
+    val hasDirectDebit = None
+    val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
+    lazy val view = views.html.payments.openPayments(user, viewModel)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the correct link text for the first payment" in {
+      elementText(Selectors.firstPaymentPayNowLinkText) shouldBe "Pay now"
+    }
+
+    "render the correct pay now href for the first payment" in {
+      element(Selectors.firstPaymentPayLink).attr("href") should endWith("200000000001/3/2001")
+    }
+
+    "render a hidden label for the button for the first payment" in {
+      elementText(Selectors.firstPaymentPayNowContext) shouldBe
+        "£2,000,000,000.01 overdue for the period 1 January to 31 March 2001"
+    }
+
+    "render the correct text for the processing time" in {
+      elementText(Selectors.processingTimeOld) shouldBe
+        "Your payment could take up to 5 days to process. You may be fined if it's late."
+    }
+
+    "render the correct text for the direct debit paragraph" in {
+      elementText(Selectors.directDebitText) shouldBe
+        "If you've already set up a direct debit, you don't need to pay now. You can view your direct debits if you're not sure."
+    }
+
+    "render the correct check direct debit link text" in {
+      elementText(Selectors.directDebitLink) shouldBe "view your direct debits"
+    }
+
+    "have the correct link destination to the direct debits service" in {
+      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit"
     }
   }
 }
