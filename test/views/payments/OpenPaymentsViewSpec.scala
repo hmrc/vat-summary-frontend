@@ -234,7 +234,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct link destination to the direct debits service" in {
-      element(Selectors.directDebitLink).attr("href") shouldBe "#"
+      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
+    }
 
     "render the correct help revealing link text" in {
       elementText(Selectors.helpSummaryRevealLink) shouldBe "What I owe is incorrect or missing"
@@ -248,7 +249,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "render the correct make payment help text" in {
       elementText(Selectors.helpMakePayment) shouldBe
         "After you've submitted a return, it can take 24 hours for what you owe to show here. " +
-        "You can still make a payment (opens in a new tab) even if a payment isn't shown."
+          "You can still make a payment (opens in a new tab) even if a payment isn't shown."
     }
 
     "render the overdue label" in {
@@ -281,7 +282,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct link destination to the direct debits service" in {
-      element(Selectors.directDebitLink).attr("href") shouldBe "#"
+      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=false"
     }
   }
 
@@ -307,7 +308,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct link destination to the direct debits service" in {
-      element(Selectors.directDebitLink).attr("href") shouldBe "#"
+      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit"
     }
   }
 }

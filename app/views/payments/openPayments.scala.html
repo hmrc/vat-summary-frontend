@@ -118,17 +118,17 @@
           @model.hasDirectDebit match {
             case Some(hasDD) if hasDD => {
               @messages("openPayments.directDebitYouCan")
-              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasActiveDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
+              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
             }
             case Some(noDD) => {
               @messages("openPayments.directDebitYouCan")
-              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasActiveDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
+              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
               @messages("openPayments.directDebitPayReturn")
             }
             case None => {
               @messages("openPayments.directDebitAlreadySetUp")
               @messages("openPayments.directDebitYouCan")
-              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasActiveDirectDebit)">@messages("openPayments.directDebitLinkText")</a>
+              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitLinkText")</a>
               @messages("openPayments.directDebitNotSure")
             }
           }

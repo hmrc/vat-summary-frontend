@@ -44,7 +44,7 @@ extends AuthorisedController with I18nSupport {
         paymentsService.getOpenPayments(user.vrn).map {
           case Right(Some(payments)) =>
             val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
-            auditEvent(user, model)
+            auditEvent(user, model.payments)
             Ok(views.html.payments.openPayments(user, model))
           case Right(_) =>
             auditEvent(user, Seq.empty)
@@ -70,9 +70,9 @@ extends AuthorisedController with I18nSupport {
           payment.end,
           payment.periodKey,
           payment.due.isBefore(dateService.now())
-        ),
-        hasActiveDirectDebit
-      }
+        )
+      },
+      hasActiveDirectDebit
     )
   }
 
