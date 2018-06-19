@@ -22,6 +22,8 @@ import audit.AuditingService
 import audit.models.AuditModel
 import models.{ServiceResponse, User}
 import models.errors.VatLiabilitiesError
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import play.api.http.Status
 import play.api.mvc.Result
@@ -204,6 +206,27 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val serviceCall = false
         private val result = target.paymentHistory(targetYear)(fakeRequest)
         status(result) shouldBe Status.NOT_FOUND
+      }
+    }
+
+    "an error occurs upstream" should {
+
+      "return a 500" in new Test {
+        override val serviceResultYearOne = Left(VatLiabilitiesError)
+        override val serviceResultYearTwo = Left(VatLiabilitiesError)
+        private val result: Result = await(target.paymentHistory(targetYear)(fakeRequest))
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+
+      "return the standard error view" in new Test {
+        override val serviceResultYearOne = Left(VatLiabilitiesError)
+        override val serviceResultYearTwo = Left(VatLiabilitiesError)
+        private val result: Result = await(target.paymentHistory(targetYear)(fakeRequest))
+
+        val document: Document = Jsoup.parse(bodyOf(result))
+
+        document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
       }
     }
   }

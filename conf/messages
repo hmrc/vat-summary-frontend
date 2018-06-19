@@ -88,9 +88,9 @@ paymentsError.message = Try again later.
 paymentsError.payNowOne = If you know how much you owe, you can still
 paymentsError.payNowTwo = pay now
 
-directDebitError.title = There is a problem with the service - VAT reporting through software - GOV.UK
-directDebitError.heading = Sorry, there is a problem with the service
-directDebitError.message = Try again later.
+standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+standardError.heading = Sorry, there is a problem with the service
+standardError.message = Try again later.
 
 paymentsHistory.title = Payment history
 paymentsHistory.paymentReceivedTitle = Payment date
@@ -105,8 +105,6 @@ notFound.title = Page not found
 notFound.heading = This page can''t be found
 notFound.message = Please check that you have entered the correct web address.
 
-paymentHandOffErrorHeading = We''re experiencing technical problems
-paymentHandOffErrorMessage = Something has gone wrong with this service, it wasn''t your fault. Please try again later.
 
 accountDetails.title = Account details
 accountDetails.contactYou = HMRC will only use these to contact you.
