@@ -20,7 +20,7 @@ import audit.AuditingService
 import audit.models.AuditModel
 import connectors.VatSubscriptionConnector
 import models.DirectDebitDetailsModel
-import models.errors.{DirectDebitSetupError, PaymentsError}
+import models.errors.DirectDebitSetupError
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
@@ -160,7 +160,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
-      "return the standard  error view" in new DirectDebitDetailsTest {
+      "return the standard error view" in new DirectDebitDetailsTest {
         override def setup(): Unit = {
           super.setup()
           (mockPaymentsService.setupDirectDebitJourney(_: DirectDebitDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
