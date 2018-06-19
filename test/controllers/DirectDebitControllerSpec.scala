@@ -72,33 +72,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
   "Calling the directDebit action" when {
 
-    "the user is logged in and the useDirectDebitDummyPage feature is set to true" should {
-
-      "redirect to the direct debit dummy page" in new DirectDebitDetailsTest {
-
-        mockAppConfig.features.useDirectDebitDummyPage(true)
-
-        val redirectUrl = "http://google.com/"
-        val expectedRedirectLocation = Some("direct-debit-redirect-url")
-        val serviceResponse = Right(redirectUrl)
-
-        override def setup(): Any = {
-          super.setup()
-
-          (mockPaymentsService.setupDirectDebitJourney(_: DirectDebitDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returns(Future.successful(serviceResponse))
-        }
-
-        lazy val result: Future[Result] = target.directDebits()(fakeRequestWithSession)
-
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe expectedRedirectLocation
-      }
-
-    }
-
-    "the user is logged in and the useDirectDebitDummyPage feature is set to false" should {
+    "the user is logged in" should {
 
       "redirect to the correct redirect url" in new DirectDebitDetailsTest {
 
