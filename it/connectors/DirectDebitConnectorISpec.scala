@@ -29,7 +29,6 @@ class DirectDebitConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test {
     def setupStubs(): StubMapping
-
     val connector: DirectDebitConnector = app.injector.instanceOf[DirectDebitConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
   }
