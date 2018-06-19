@@ -32,7 +32,7 @@ class DirectDebitConnector @Inject()(http: HttpClient,
                                      appConfig: AppConfig,
                                      metrics: MetricsService) {
 
-  private[connectors] lazy val setupUrl: String = {
+  private[connectors] def setupUrl: String = {
       if (appConfig.features.useDirectDebitDummyPage()) {
         appConfig.selfLookup + testOnly.controllers.routes.DirectDebitStubController.startJourney().url
       } else {
