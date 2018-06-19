@@ -152,27 +152,23 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
           (mockPaymentsService.setupDirectDebitJourney(_: DirectDebitDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(DirectDebitSetupError))
+            .returns(Future.successful(Left(DirectDebitSetupError)))
         }
 
-        private val result = target.openPayments()(fakeRequest)
+        private val result = target.directDebits()(fakeRequest)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
-      "return the payments error view" in new Test {
-        override def setupMocks(): Unit = {
-          super.setupMocks()
-          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(Right(true))
-
-          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      "return the standard  error view" in new DirectDebitDetailsTest {
+        override def setup(): Unit = {
+          super.setup()
+          (mockPaymentsService.setupDirectDebitJourney(_: DirectDebitDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(Left(PaymentsError)))
+            .returns(Future.successful(Left(DirectDebitSetupError)))
         }
 
-        val result: Result = await(target.openPayments()(fakeRequest))
+        val result: Result = await(target.directDebits()(fakeRequest))
         val document: Document = Jsoup.parse(bodyOf(result))
 
 

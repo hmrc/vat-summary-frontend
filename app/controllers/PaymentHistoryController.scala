@@ -44,7 +44,11 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
       if (isValidSearchYear(year) && appConfig.features.allowPaymentHistory()) {
         getFinancialTransactions(user, year).map {
           case Right(model) => Ok(views.html.payments.paymentHistory(model))
-          case Left(_)      => InternalServerError(views.html.errors.paymentsError())
+          case Left(_) => InternalServerError(views.html.errors.standardError(appConfig,
+            messagesApi.apply("standardError.title"),
+            messagesApi.apply("standardError.heading"),
+            messagesApi.apply("standardError.message"))
+            )
         }
       } else {
         Future.successful(NotFound(views.html.errors.notFound()))
