@@ -51,11 +51,7 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
               routes.DirectDebitController.directDebits(hasActiveDirectDebit).url
             )
 
-            if (appConfig.features.useDirectDebitDummyPage()) {
-              Redirect(appConfig.directDebitRedirectUrl)
-            } else {
-              Redirect(url)
-            }
+            Redirect(url)
 
           case Left(_) => InternalServerError(views.html.errors.standardError(appConfig,
             messagesApi.apply("standardError.title"),

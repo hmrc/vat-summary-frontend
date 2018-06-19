@@ -67,4 +67,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val appName: String = "vat-summary-frontend"
   override val timeoutPeriod: Int = 1800
   override val timeoutCountdown: Int = 20
+  override val selfLookup: String = ""
 }
