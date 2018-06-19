@@ -23,7 +23,7 @@ import play.api.libs.json.Json
 
 object DirectDebitStub extends WireMockMethods {
 
-  private val setupJourneyUrl = "/direct-debits-backend/start-journey"
+  private val setupJourneyUrl = "/direct-debit-backend/start-journey"
 
   def stubDirectDebitJourneyInfo: StubMapping = {
     when(method = POST, uri = setupJourneyUrl)
