@@ -16,12 +16,16 @@ POST        /vat-through-software/test-only/feature-switch  @testOnly.controller
 
 
 # NOCSRF
-POST        /vat-through-software/test-only/populate-stub/:serviceName   @testOnly.controllers.DynamicStubController.populateStub(serviceName: String)
+POST        /vat-through-software/test-only/populate-stub/:serviceName                @testOnly.controllers.DynamicStubController.populateStub(serviceName: String)
 
 # NOCSRF
-DELETE      /vat-through-software/test-only/clear-stub/:serviceName      @testOnly.controllers.DynamicStubController.clearStub(serviceName: String)
+DELETE      /vat-through-software/test-only/clear-stub/:serviceName                   @testOnly.controllers.DynamicStubController.clearStub(serviceName: String)
 
-GET         /vat-through-software/test-only/payments-stub   @testOnly.controllers.PaymentsStubController.stub
+GET         /vat-through-software/test-only/payments-stub                             @testOnly.controllers.PaymentsStubController.stub
+GET         /vat-through-software/test-only/direct-debit-stub                         @testOnly.controllers.DirectDebitStubController.stub
+
+# NOCSRF
+POST        /vat-through-software/test-only/direct-debit-backend/start-journey        @testOnly.controllers.DirectDebitStubController.startJourney
 
 ->          /                                               prod.Routes
 

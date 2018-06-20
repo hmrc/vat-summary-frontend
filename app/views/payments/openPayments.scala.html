@@ -64,7 +64,7 @@
               <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
                   <div class="grid-row">
                     @if(model.hasDirectDebit.getOrElse(false)) {
-                      <span class="float--right">@messages("openPayments.youPayByDirectDebit")</span>
+                      <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">@messages("openPayments.youPayByDirectDebit")</span>
                     } else {
                       <a data-journey-click="payment:make-payment:open-payments"
                          href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"

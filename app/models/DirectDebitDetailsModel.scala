@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{JsObject, Json, Writes}
+import play.api.libs.json.{JsObject, Json, Reads, Writes}
 
 case class DirectDebitDetailsModel(userId: String,
                                    userIdType: String,
@@ -32,4 +32,6 @@ object DirectDebitDetailsModel {
       "backUrl" -> directDebitDetail.backUrl
     )
   }
+
+  implicit val reads: Reads[DirectDebitDetailsModel] = Json.reads[DirectDebitDetailsModel]
 }
