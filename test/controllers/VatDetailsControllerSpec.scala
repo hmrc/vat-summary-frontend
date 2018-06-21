@@ -40,6 +40,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   private trait DetailsTest {
     val payments = Payments(Seq(Payment(
+      "VAT Return Debit Charge",
       LocalDate.parse("2019-01-01"),
       LocalDate.parse("2019-02-02"),
       LocalDate.parse("2019-03-03"),
@@ -63,6 +64,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "#001"
     )))
     val overduePayment = Payments(Seq(Payment(
+      "VAT Return Debit Charge",
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-02-02"),
       LocalDate.parse("2017-03-03"),

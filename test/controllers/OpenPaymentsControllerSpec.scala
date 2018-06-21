@@ -57,6 +57,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     }
 
     val payment = Payment(
+      "VAT Return Debit Charge",
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
