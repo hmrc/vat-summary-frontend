@@ -74,7 +74,7 @@ openPayments.directDebitLinkText = view your direct debits
 openPayments.directDebitNotSure = if you''re not sure.
 openPayments.directDebitSetUp = set up a direct debit
 openPayments.directDebitPayReturn = to pay your VAT Returns.
-openPayments.directDebitViewAndUpdate = view and update your direct debit details
+openPayments.directDebitViewAndUpdate = view your direct debit details
 openPayments.youPayByDirectDebit = You pay by direct debit
 
 noPayments.title = Your VAT payment
