@@ -208,11 +208,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct text for the direct debits" in {
-      elementText(Selectors.directDebitText) shouldBe "You can view and update your direct debit details."
+      elementText(Selectors.directDebitText) shouldBe "You can view your direct debit details."
     }
 
     "render the correct link text for the direct debits" in {
-      elementText(Selectors.directDebitLink) shouldBe "view and update your direct debit details"
+      elementText(Selectors.directDebitLink) shouldBe "view your direct debit details"
     }
 
     "have the correct link destination to the direct debits service" in {
