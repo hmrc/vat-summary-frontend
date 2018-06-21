@@ -41,14 +41,17 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "#001"
     )
 
-    val payments: Payments = Payments(Seq(Payment(
-      start = LocalDate.parse("2017-11-22"),
-      end = LocalDate.parse("2017-12-22"),
-      due = LocalDate.parse("2017-12-26"),
-      outstandingAmount = BigDecimal(1000.00),
-      periodKey = "#003"
-    ),
+    val payments: Payments = Payments(Seq(
       Payment(
+        "VAT Return Debit Charge",
+        start = LocalDate.parse("2017-11-22"),
+        end = LocalDate.parse("2017-12-22"),
+        due = LocalDate.parse("2017-12-26"),
+        outstandingAmount = BigDecimal(1000.00),
+        periodKey = "#003"
+      ),
+      Payment(
+        "VAT Return Debit Charge",
         start = LocalDate.parse("2016-11-22"),
         end = LocalDate.parse("2016-12-22"),
         due = LocalDate.parse("2016-12-26"),
@@ -56,6 +59,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = "#003"
       ),
       Payment(
+        "VAT Return Debit Charge",
         start = LocalDate.parse("2015-11-22"),
         end = LocalDate.parse("2015-12-22"),
         due = LocalDate.parse("2015-12-26"),
@@ -63,6 +67,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = "#003"
       ),
       Payment(
+        "VAT Return Debit Charge",
         start = LocalDate.parse("2011-11-22"),
         end = LocalDate.parse("2011-12-22"),
         due = LocalDate.parse("2011-12-26"),
@@ -70,6 +75,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = "#003"
       ),
       Payment(
+        "VAT Return Debit Charge",
         start = LocalDate.parse("2013-11-22"),
         end = LocalDate.parse("2013-12-22"),
         due = LocalDate.parse("2013-12-26"),

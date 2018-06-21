@@ -30,7 +30,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
   "PaymentsReads" when {
 
-    "the http response status is 200 OK and there are valid VAT Return Charges" should {
+    "the http response status is 200 OK and there are valid charge types" should {
 
       val httpResponse = HttpResponse(Status.OK, responseJson = Some(
         Json.obj(
@@ -45,6 +45,17 @@ class PaymentsHttpParserSpec extends UnitSpec {
               ),
               "outstandingAmount" -> 1000,
               "periodKey" -> "#003"
+            ),
+            Json.obj(
+              "mainType" -> "VAT Return Charge",
+              "chargeType" -> "VAT Return Credit Charge",
+              "taxPeriodFrom" -> "2017-12-01",
+              "taxPeriodTo" -> "2018-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2018-10-25")
+              ),
+              "outstandingAmount" -> 1000,
+              "periodKey" -> "#004"
             )
           )
         )
@@ -52,11 +63,20 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val expected = Right(Payments(Seq(
         Payment(
+          "VAT Return Debit Charge",
           start = LocalDate.parse("2016-12-01"),
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.00),
           periodKey = "#003"
+        ),
+        Payment(
+          "VAT Return Credit Charge",
+          start = LocalDate.parse("2017-12-01"),
+          end = LocalDate.parse("2018-01-01"),
+          due = LocalDate.parse("2018-10-25"),
+          outstandingAmount = BigDecimal(1000.00),
+          periodKey = "#004"
         )
       )))
 
@@ -67,13 +87,13 @@ class PaymentsHttpParserSpec extends UnitSpec {
       }
     }
 
-    "the http response is 200 OK and there are no valid VAT Return Debit Charges" should {
+    "the http response is 200 OK and there are no valid charge types" should {
       val httpResponse = HttpResponse(Status.OK, responseJson = Some(
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
               "mainType" -> "VAT Return Charge",
-              "chargeType" -> "VAT Return Credit Charge",
+              "chargeType" -> "Other Charge Type",
               "outstandingAmount" -> 99
             )
           )
@@ -190,7 +210,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val body: JsObject = Json.obj(
         "code" -> "Conflict",
-        "message" -> "CONFlICT"
+        "message" -> "CONFLICT"
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
