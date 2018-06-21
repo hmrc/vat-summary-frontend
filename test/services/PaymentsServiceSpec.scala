@@ -61,6 +61,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       "return a list of payments" in new Test {
         val payments = Payments(Seq(Payment(
+          "VAT Return Debit Charge",
           LocalDate.parse("2008-12-06"),
           LocalDate.parse("2009-01-04"),
           LocalDate.parse("2008-12-06"),

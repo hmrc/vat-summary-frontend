@@ -28,6 +28,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
   val onePayment = Payments(
     Seq(
       Payment(
+        "VAT Return Debit Charge",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-03-01"),
         LocalDate.parse("2017-03-08"),
@@ -40,6 +41,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
   val twoPayments = Payments(
     Seq(
       Payment(
+        "VAT Return Debit Charge",
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-03-01"),
         LocalDate.parse("2017-03-08"),
@@ -47,6 +49,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         "#001"
       ),
       Payment(
+        "VAT Return Debit Charge",
         LocalDate.parse("2017-02-01"),
         LocalDate.parse("2017-04-01"),
         LocalDate.parse("2017-05-08"),

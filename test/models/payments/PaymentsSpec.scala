@@ -26,6 +26,7 @@ class PaymentsSpec extends UnitSpec {
   "A payment" should {
 
     val examplePayment = Payment(
+      "VAT Return Debit Charge",
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-03-01"),
       LocalDate.parse("2017-03-08"),
@@ -35,6 +36,7 @@ class PaymentsSpec extends UnitSpec {
 
     val exampleInputString =
       """{
+        |"chargeType":"VAT Return Debit Charge",
         |"taxPeriodFrom":"2017-01-01",
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
@@ -55,6 +57,7 @@ class PaymentsSpec extends UnitSpec {
     val examplePayments = Payments(
       Seq(
         Payment(
+          "VAT Return Debit Charge",
           LocalDate.parse("2017-01-01"),
           LocalDate.parse("2017-03-01"),
           LocalDate.parse("2017-03-08"),
@@ -62,6 +65,7 @@ class PaymentsSpec extends UnitSpec {
           "#001"
         ),
         Payment(
+          "VAT Return Credit Charge",
           LocalDate.parse("2017-02-01"),
           LocalDate.parse("2017-04-01"),
           LocalDate.parse("2017-05-08"),
@@ -74,12 +78,14 @@ class PaymentsSpec extends UnitSpec {
     val exampleInputString =
       """{
         |"financialTransactions":[{
+        |"chargeType":"VAT Return Debit Charge",
         |"taxPeriodFrom":"2017-01-01",
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
         |"periodKey":"#001"
         |},{
+        |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
         |"taxPeriodTo":"2017-04-01",
         |"items":[{"dueDate":"2017-05-08"}, {"dueDate":"2017-05-09"}],

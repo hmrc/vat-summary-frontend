@@ -23,7 +23,8 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
-case class Payment(start: LocalDate,
+case class Payment(chargeType: String,
+                   start: LocalDate,
                    end: LocalDate,
                    due: LocalDate,
                    outstandingAmount: BigDecimal,
@@ -31,15 +32,17 @@ case class Payment(start: LocalDate,
 
 object Payment {
 
-  private def createPayment(start: LocalDate,
+  private def createPayment(chargeType: String,
+                            start: LocalDate,
                             end: LocalDate,
                             due: LocalDate,
                             outstandingAmount: BigDecimal,
                             periodKey: Option[String]): Payment ={
-    Payment(start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
+    Payment(chargeType, start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
   }
 
   implicit val paymentReads: Reads[Payment] = (
+    (JsPath \ "chargeType").read[String] and
     (JsPath \ "taxPeriodFrom").read[LocalDate] and
     (JsPath \ "taxPeriodTo").read[LocalDate] and
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
