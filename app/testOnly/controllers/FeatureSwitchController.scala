@@ -35,7 +35,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         allowPaymentsEnabled = appConfig.features.allowPayments(),
         allowDirectDebitsEnabled = appConfig.features.allowDirectDebits(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        accountDetailsEnabled = appConfig.features.accountDetails(),
+        vatCertificateEnabled = appConfig.features.vatCertificateEnabled(),
         allowNineBoxEnabled = appConfig.features.allowNineBox(),
         auditingEnabled = appConfig.features.enabledAuditing(),
         allowPaymentHistoryEnabled = appConfig.features.allowPaymentHistory(),
@@ -58,7 +58,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.allowPayments(model.allowPaymentsEnabled)
     appConfig.features.allowDirectDebits(model.allowDirectDebitsEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
-    appConfig.features.accountDetails(model.accountDetailsEnabled)
+    appConfig.features.vatCertificateEnabled(model.vatCertificateEnabled)
     appConfig.features.allowNineBox(model.allowNineBoxEnabled)
     appConfig.features.enabledAuditing(model.auditingEnabled)
     appConfig.features.allowPaymentHistory(model.allowPaymentHistoryEnabled)

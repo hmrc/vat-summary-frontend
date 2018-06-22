@@ -22,35 +22,25 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
 
-class AccountDetailsSectionTemplateSpec extends ViewBaseSpec {
+class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
 
-  "The accountDetailsSection" when {
+  "The vatCertificateSection" when {
 
     object Selectors {
-      val accountDetailsHeading = "#account-details h2 a"
+      val vatCertificateHeading = "#vat-certificate h2 a"
     }
 
-    def view: HtmlFormat.Appendable = views.html.templates.accountDetailsSection(User("123456789"), mockConfig)
+    def view: HtmlFormat.Appendable = views.html.templates.vatCertificateSection(User("123456789"))
     implicit def document: Document = Jsoup.parse(view.body)
 
-    "the account details feature is disabled" should {
+    "the vat certificate feature" should {
 
       "have the correct heading" in {
-        mockConfig.features.accountDetails(false)
-        elementText(Selectors.accountDetailsHeading) shouldBe "View VAT certificate (opens in a new tab)"
+        elementText(Selectors.vatCertificateHeading) shouldBe "View VAT certificate (opens in a new tab)"
       }
 
       "have the correct portal link" in {
-        mockConfig.features.accountDetails(false)
-        elementAttributes(Selectors.accountDetailsHeading).get("href") shouldBe Some("/vat/trader/123456789/certificate")
-      }
-    }
-
-    "the account details feature is enabled" should {
-
-      "have the correct heading" in {
-        mockConfig.features.accountDetails(true)
-        elementText(Selectors.accountDetailsHeading) shouldBe "Account details"
+        elementAttributes(Selectors.vatCertificateHeading).get("href") shouldBe Some("/vat/trader/123456789/certificate")
       }
     }
   }

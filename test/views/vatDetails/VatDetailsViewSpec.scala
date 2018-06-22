@@ -16,16 +16,13 @@
 
 package views.vatDetails
 
-import java.time.LocalDate
-
 import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.scalatest.BeforeAndAfterEach
 import views.ViewBaseSpec
 
-class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
+class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
@@ -35,7 +32,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
     val nextReturn = "#next-return p"
-    val accountDetails = "#account-details"
+    val vatCertificate = "#vat-certificate"
+    val updateVatDetails = "#update-vat-details"
     val submittedReturns = "#submitted-returns"
     val vatRegNo = ".form-hint"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
@@ -98,12 +96,6 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     returnObligationError = true
   )
 
-  override protected def beforeEach(): Unit = {
-    super.beforeEach()
-    mockConfig.features.accountDetails(true)
-    mockConfig.features.allowPaymentHistory(true)
-  }
-
   "Rendering the VAT details page" should {
 
     lazy val view = views.html.vatDetails.details(user, detailsModel)
@@ -136,20 +128,17 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       elementText(Selectors.vatRegNo) shouldBe s"VAT registration number (VRN): ${user.vrn}"
     }
 
-    "have the account details section" should {
-
-      lazy val accountDetails = element(Selectors.accountDetails)
+    "have the vat certificate section" should {
 
       "have the heading" in {
-        accountDetails.select("h2").text() shouldBe "Account details"
-      }
 
-      s"have a link to ${controllers.routes.AccountDetailsController.accountDetails().url}" in {
-        accountDetails.select("a").attr("href") shouldBe controllers.routes.AccountDetailsController.accountDetails().url
-      }
+        mockConfig.features.vatCertificateEnabled(true)
+        lazy val view = views.html.vatDetails.details(user, detailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the text" in {
-        accountDetails.select("p").text() shouldBe "See your business information and other details."
+        lazy val vatCertificate = element(Selectors.vatCertificate)
+
+        vatCertificate.select("h2").text() shouldBe "View VAT certificate (opens in a new tab)"
       }
     }
 
@@ -172,97 +161,43 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
 
     "have the payment history section" should {
 
-      lazy val submittedReturns = element(Selectors.paymentHistory)
-
       "have the heading" in {
+
+        mockConfig.features.allowPaymentHistory(true)
+        lazy val view = views.html.vatDetails.details(user, detailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        lazy val submittedReturns = element(Selectors.paymentHistory)
+
         submittedReturns.select("h2").text() shouldBe "Payment history"
-      }
-
-      s"have a link to the payment history page" in {
-        submittedReturns.select("a").attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear).url
-      }
-
-      "have the text" in {
-        submittedReturns.select("p").text() shouldBe "Check the payments you've made."
       }
     }
   }
 
   "Rendering the VAT details page without the payment history section" should {
 
-    lazy val view = views.html.vatDetails.details(user, detailsModel)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "not render the payment history page" in {
 
-    "render breadcrumbs which" should {
+      mockConfig.features.allowPaymentHistory(false)
+      lazy val view = views.html.vatDetails.details(user, detailsModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the text 'Business tax account'" in {
-        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
-      }
-
-      "links to bta" in {
-        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
-      }
-
-      "have the text 'VAT'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
-      }
+      intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.paymentHistory))
     }
+  }
 
-    "have the correct document title" in {
-      document.title shouldBe "Your VAT details"
-    }
+  "Rendering the VAT details page without the vat certificate section" should {
 
-    "have the correct entity name" in {
-      elementText(Selectors.entityNameHeading) shouldBe detailsModel.entityName.getOrElse("Fail")
-    }
+    "have the update your VAT details section" in {
 
-    "have the correct VRN message" in {
-      elementText(Selectors.vatRegNo) shouldBe s"VAT registration number (VRN): ${user.vrn}"
-    }
+      mockConfig.features.vatCertificateEnabled(false)
+      lazy val view = views.html.vatDetails.details(user, detailsModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the account details section" should {
+      lazy val updateVatDetails = element(Selectors.updateVatDetails)
 
-      lazy val accountDetails = element(Selectors.accountDetails)
+      updateVatDetails.select("h2").text() shouldBe "Update your VAT details"
 
-      "have the heading" in {
-        accountDetails.select("h2").text() shouldBe "Account details"
-      }
-
-      s"have a link to ${controllers.routes.AccountDetailsController.accountDetails().url}" in {
-        accountDetails.select("a").attr("href") shouldBe controllers.routes.AccountDetailsController.accountDetails().url
-      }
-
-      "have the text" in {
-        accountDetails.select("p").text() shouldBe "See your business information and other details."
-      }
-    }
-
-    "have the submitted returns section" should {
-
-      lazy val submittedReturns = element(Selectors.submittedReturns)
-
-      "have the heading" in {
-        submittedReturns.select("h2").text() shouldBe "Submitted returns"
-      }
-
-      s"have a link to 'returns-url/$currentYear'" in {
-        submittedReturns.select("a").attr("href") shouldBe s"returns-url/$currentYear"
-      }
-
-      "have the text" in {
-        submittedReturns.select("p").text() shouldBe "Check the returns you've sent us."
-      }
-    }
-
-    "the payment history section" should {
-      "not be rendered" in {
-        mockConfig.features.allowPaymentHistory(false)
-
-        lazy val view = views.html.vatDetails.details(user, detailsModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.paymentHistory))
-      }
     }
   }
 
@@ -362,28 +297,12 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
     lazy val view = views.html.vatDetails.details(user, paymentErrorDetailsModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render the next return section heading" in {
-      elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
-    }
-
-    "render the next return section" in {
-      elementText(Selectors.nextReturn) shouldBe "31 December 2018"
-    }
-
     "render the next payment section heading" in {
       elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
     }
 
     "render the next payment section" in {
       elementText(Selectors.nextPayment) shouldBe "Sorry, there is a problem with the service. Try again later."
-    }
-
-    "render the next payment section vat returns link" in {
-      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
-    }
-
-    "have the correct next payment section vat returns link href" in {
-      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
   }
 
@@ -400,20 +319,8 @@ class VatDetailsViewSpec extends ViewBaseSpec with BeforeAndAfterEach {
       elementText(Selectors.nextReturn) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
 
-    "render the next payment section heading" in {
-      elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
-    }
-
-    "render the next payment section" in {
-      elementText(Selectors.nextPayment) shouldBe "31 December 2018"
-    }
-
     "render the next payment section vat returns link" in {
       elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
-    }
-
-    "have the correct next payment section vat returns link href" in {
-      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
   }
 

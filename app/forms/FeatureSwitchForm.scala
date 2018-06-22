@@ -29,7 +29,7 @@ object FeatureSwitchForm {
       ConfigKeys.allowPaymentsFeature -> boolean,
       ConfigKeys.allowDirectDebitsFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.accountDetailsFeature -> boolean,
+      ConfigKeys.vatCertificateFeature -> boolean,
       ConfigKeys.allowNineBoxFeature -> boolean,
       ConfigKeys.enableAuditingFeature -> boolean,
       ConfigKeys.allowPaymentHistoryFeature -> boolean,
