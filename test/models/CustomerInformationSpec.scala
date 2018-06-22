@@ -21,15 +21,18 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class CustomerInformationSpec extends UnitSpec {
 
-  "A CustomerInformation object" should {
+  private trait Test {
+    val firstName: Option[String] = Some("Pepsi")
+    val secondName: Option[String] = Some("Mac")
+    val tradingName: Option[String] = Some("Cheapo Clothing")
+    val organisationName: Option[String] = Some("Cheapo Clothing Ltd")
+    val dummyAddress = Address("","",None,None,None)
 
-    val dummyAddress =Address("","",None,None,None)
-
-    val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-      Some("Cheapo Clothing Ltd"),
-      Some("Betty"),
-      Some("Jones"),
-      Some("Cheapo Clothing"),
+    lazy val customerInfo: CustomerInformation = CustomerInformation(
+      organisationName,
+      firstName,
+      secondName,
+      tradingName,
       dummyAddress,
       None,
       None,
@@ -39,12 +42,15 @@ class CustomerInformationSpec extends UnitSpec {
       None,
       None
     )
+  }
+
+  "A CustomerInformation object" should {
 
     val exampleInputString =
       """{
         |"organisationName":"Cheapo Clothing Ltd",
-        |"firstName":"Betty",
-        |"lastName":"Jones",
+        |"firstName":"Pepsi",
+        |"lastName":"Mac",
         |"tradingName":"Cheapo Clothing",
         |"PPOB":{
         |  "address":{
@@ -77,9 +83,53 @@ class CustomerInformationSpec extends UnitSpec {
         |}"""
         .stripMargin.replace("\n", "")
 
-    "be parsed from appropriate JSON" in {
-      val result = Json.parse(exampleInputString).as[CustomerInformation]
-      result shouldBe exampleCustomerInfo
+    "be parsed from appropriate JSON" in new Test {
+      val result: CustomerInformation = Json.parse(exampleInputString).as[CustomerInformation]
+      result shouldBe customerInfo
+    }
+  }
+
+  "Calling .entityName" when {
+
+    "the model contains a trading name" should {
+
+      "return the trading name" in new Test {
+        val result: Option[String] = customerInfo.entityName
+        result shouldBe Some("Cheapo Clothing")
+      }
+    }
+
+    "the model does not contain a trading name or organisation name" should {
+
+      "return the first and last name" in new Test {
+        override val organisationName: Option[String] = None
+        override val tradingName: Option[String] = None
+        val result: Option[String] = customerInfo.entityName
+        result shouldBe Some("Pepsi Mac")
+      }
+    }
+
+    "the model does not contain a trading name, first name or last name" should {
+
+      "return the organisation name" in new Test {
+        override val firstName: Option[String] = None
+        override val secondName: Option[String] = None
+        override val tradingName: Option[String] = None
+        val result: Option[String] = customerInfo.entityName
+        result shouldBe Some("Cheapo Clothing Ltd")
+      }
+    }
+
+    "the model does not contains a trading name, organisation name, or individual names" should {
+
+      "return None" in new Test {
+        override val firstName: Option[String] = None
+        override val secondName: Option[String] = None
+        override val tradingName: Option[String] = None
+        override val organisationName: Option[String] = None
+        val result: Option[String] = customerInfo.entityName
+        result shouldBe None
+      }
     }
   }
 }
