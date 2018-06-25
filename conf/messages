@@ -103,6 +103,9 @@ paymentsHistory.activeTab = Currently viewing payment history from {0}
 paymentsHistory.inactiveTab = View payment history from {0}
 paymentsHistory.noHistory = You haven’t made or received any payments for {0} yet.
 
+paymentsHistory.vatReturnCreditChargeDescription = Repayment for {0} to {1} return
+paymentsHistory.vatReturnDebitChargeDescription = {0} to {1} return
+
 notFound.title = Page not found
 notFound.heading = This page can''t be found
 notFound.message = Please check that you have entered the correct web address.
