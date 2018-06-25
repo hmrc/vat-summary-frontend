@@ -42,7 +42,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           AuthStub.authorised()
           VatObligationsStub.stubOutstandingObligations
           CustomerInfoStub.stubCustomerInfo
-          FinancialDataStub.stubAllOutstandingPayments
+          FinancialDataStub.stubAllOutstandingOpenPayments
         }
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK

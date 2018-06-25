@@ -17,17 +17,25 @@
 package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.FinancialTransactionsConstants
 import helpers.WireMockMethods
 import play.api.http.Status._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 object FinancialDataStub extends WireMockMethods {
 
   private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
   private val financialDataDirectDebitUri = "/financial-transactions/has-direct-debit/([0-9]+)"
 
-  def stubAllOutstandingPayments: StubMapping = {
+  def stubAllOutstandingOpenPayments: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
+      .thenReturn(status = OK, body = allOutStandingOpenPayments)
+  }
+
+  def stubAllOutstandingPayments: StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map(
+      "dateFrom" -> "2018-01-01",
+      "dateTo" -> "2018-12-31"))
       .thenReturn(status = OK, body = allOutStandingPayments)
   }
 
@@ -56,7 +64,74 @@ object FinancialDataStub extends WireMockMethods {
       .thenReturn(BAD_REQUEST, body = invalidVrn)
   }
 
-  private val allOutStandingPayments = Json.parse(
+  private val allOutStandingPayments: JsValue = Json.parse(
+    s"""{
+       |    "idType" : "VRN",
+       |    "idNumber" : "555555555",
+       |    "regimeType" : "VATC",
+       |    "processingDate" : "2018-03-07T09:30:00.000Z",
+       |    "financialTransactions" : [
+       |      {
+       |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
+       |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "periodKey" : "17AA",
+       |        "periodKeyDescription" : "ABCD",
+       |        "taxPeriodFrom" : "2018-08-01",
+       |        "taxPeriodTo" : "2018-10-31",
+       |        "businessPartner" : "0",
+       |        "contractAccountCategory" : "99",
+       |        "contractAccount" : "X",
+       |        "contractObjectType" : "ABCD",
+       |        "contractObject" : "0",
+       |        "sapDocumentNumber" : "0",
+       |        "sapDocumentNumberItem" : "0",
+       |        "chargeReference" : "XD002750002155",
+       |        "mainTransaction" : "1234",
+       |        "subTransaction" : "5678",
+       |        "originalAmount" : 150,
+       |        "outstandingAmount" : 150,
+       |        "items" : [
+       |          {
+       |            "subItem" : "000",
+       |            "clearingDate" : "2018-01-10",
+       |            "dueDate" : "2018-12-07",
+       |            "amount" : 150
+       |          }
+       |        ]
+       |      },
+       |      {
+       |        "chargeType" : "${FinancialTransactionsConstants.vatReturnCreditCharge}",
+       |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "periodKey" : "17BB",
+       |        "periodKeyDescription" : "ABCD",
+       |        "taxPeriodFrom" : "2018-05-01",
+       |        "taxPeriodTo" : "2018-07-31",
+       |        "businessPartner" : "0",
+       |        "contractAccountCategory" : "99",
+       |        "contractAccount" : "X",
+       |        "contractObjectType" : "ABCD",
+       |        "contractObject" : "0",
+       |        "sapDocumentNumber" : "0",
+       |        "sapDocumentNumberItem" : "0",
+       |        "chargeReference" : "XD002750002155",
+       |        "mainTransaction" : "1234",
+       |        "subTransaction" : "5678",
+       |        "originalAmount" : 600,
+       |        "outstandingAmount" : 600,
+       |        "items" : [
+       |          {
+       |            "subItem" : "000",
+       |            "clearingDate" : "2018-03-10",
+       |            "dueDate" : "2018-09-07",
+       |            "amount" : 600
+       |          }
+       |        ]
+       |      }
+       |    ]
+       |  }""".stripMargin
+  )
+
+  private val allOutStandingOpenPayments = Json.parse(
     """{
       |    "idType" : "VRN",
       |    "idNumber" : 555555555,
@@ -122,6 +197,7 @@ object FinancialDataStub extends WireMockMethods {
       |    ]
       |  }""".stripMargin
   )
+
   private val noPayments = Json.parse(
     """{
       |    "idType" : "VRN",
