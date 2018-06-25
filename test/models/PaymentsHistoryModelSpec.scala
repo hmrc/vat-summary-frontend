@@ -462,9 +462,9 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
         "throw an IllegalStateException" when {
           "there is no financialTransactions block" in {
-            val testJson = Json.parse("""{ "abc" : "xyz" }""")
+            val testJson: JsValue = Json.parse("""{ "abc" : "xyz" }""")
 
-            val result = intercept[IllegalStateException](Json.fromJson(testJson)(reads))
+            val result: IllegalStateException = intercept[IllegalStateException](Json.fromJson(testJson)(reads))
             result.getMessage shouldBe """The data for key financialTransactions could not be found in the Json: {"abc":"xyz"}"""
           }
         }
