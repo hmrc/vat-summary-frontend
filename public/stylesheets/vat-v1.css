@@ -17,6 +17,14 @@
   padding-top: 3px;
 }
 
+.debit-charge {
+  background-color: #FFFFFF;
+}
+
+.credit-charge {
+  background-color: #BFE0CE;
+}
+
 @media (max-width: 640px) {
    #paymentsSection .payment-actions .float--right {
     float: left !important;
