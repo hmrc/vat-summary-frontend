@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package audit 
+package views.templates 
 
 sealed case class ChargeType(name: String, description: String, id: String)
 
