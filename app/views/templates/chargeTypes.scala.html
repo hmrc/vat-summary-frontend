@@ -23,21 +23,46 @@
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)
   
-@getDescriptionString(chargeTypeDescription: String, firstDate: LocalDate, secondDate: LocalDate) = @{
-  messages(
-    s"$chargeTypeDescription",
-    s"${firstDate.getDayOfMonth} ${firstDate.getMonth.toString.head}${firstDate.getMonth.toString.toLowerCase.substring(1, 3)}",
-    s"${secondDate.getDayOfMonth} ${secondDate.getMonth.toString.head}${secondDate.getMonth.toString.toLowerCase.substring(1, 3)} ${secondDate.getYear}"
-  )
+@getDescriptionString(chargeTypeDescription: String, firstDate: Option[LocalDate], secondDate: Option[LocalDate]) = @{
+  (firstDate, secondDate) match {
+    case (Some(fd), Some(sd)) => {
+      messages(
+        s"$chargeTypeDescription",
+        s"${fd.getDayOfMonth} ${fd.getMonth.toString.head}${fd.getMonth.toString.toLowerCase.substring(1, 3)}",
+        s"${sd.getDayOfMonth} ${sd.getMonth.toString.head}${sd.getMonth.toString.toLowerCase.substring(1, 3)} ${sd.getYear}"
+      )
+    }
+
+    case (Some(fd), None) => {
+      messages(
+        s"$chargeTypeDescription",
+        s"${fd.getDayOfMonth} ${fd.getMonth.toString.head}${fd.getMonth.toString.toLowerCase.substring(1, 3)}"
+      )
+    }
+
+    case (None, Some(sd)) => {
+      messages(
+        s"$chargeTypeDescription",
+        s"${sd.getDayOfMonth} ${sd.getMonth.toString.head}${sd.getMonth.toString.toLowerCase.substring(1, 3)} ${sd.getYear}"
+      )
+    }
+
+    case _ => {
+      messages(
+        s"$chargeTypeDescription"
+      )
+    }
+  }
 }
 
-@chargeType = @{ChargeType.getChargeType("")}
+@chargeType = @{ChargeType.getChargeType(transaction.chargeType)}
 
 @chargeType match {
 
   case Some(charge) => {
     <tr class="@charge.id">
-      <td scope="row">@displayDate(transaction.clearedDate)</td>
+      @transaction.clearedDate.map(date => <td scope="row">@displayDate(date)</td>)
+
       <td>@getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
       <td class="numeric">@displayMoney(transaction.amount)</td>
     </tr>

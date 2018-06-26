@@ -24,19 +24,6 @@
 
 @(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@getDescriptionString(firstDate: Option[LocalDate], secondDate: Option[LocalDate]) = @{
-    <!--Temp code fix to be worked on next -->
-    if (firstDate.isDefined && secondDate.isDefined) {
-        messages(
-        "paymentsHistory.description",
-        s"${firstDate.get.getDayOfMonth} ${firstDate.get.getMonth.toString.head}${firstDate.get.getMonth.toString.toLowerCase.substring(1, 3)}",
-        s"${secondDate.get.getDayOfMonth} ${secondDate.get.getMonth.toString.head}${secondDate.get.getMonth.toString.toLowerCase.substring(1, 3)} ${secondDate.get.getYear}"
-        )
-    } else {
-        "TODO: Get description matched on type"
-    }
-}
-
 @views.html.main_template(title = messages("paymentsHistory.title"), bodyClasses = None, appConfig = appConfig) {
 
   @navigationBreadcrumb(
