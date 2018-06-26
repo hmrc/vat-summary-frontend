@@ -59,16 +59,18 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         historyYears,
         historyYears.head,
         Seq(PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.parse(s"2018-01-01"),
-          taxPeriodTo = LocalDate.parse(s"2018-02-01"),
+          chargeType = "VAT Return charge",
+          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
           amount = 123456789,
-          clearedDate = LocalDate.parse(s"2018-03-01")
+          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
         ),
           PaymentsHistoryModel(
-            taxPeriodFrom = LocalDate.parse(s"2018-03-01"),
-            taxPeriodTo = LocalDate.parse(s"2018-04-01"),
+            chargeType = "VAT Return charge",
+            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
             amount = 987654321,
-            clearedDate = LocalDate.parse(s"2018-03-01")
+            clearedDate = Some(LocalDate.parse(s"2018-03-01"))
           ))
       )
 

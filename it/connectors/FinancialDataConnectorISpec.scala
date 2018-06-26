@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
 import models.payments.{Payment, Payments}
+import common.FinancialTransactionsConstants
 import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,7 +41,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
   "calling getOpenPayments with a status of 'O'" should {
 
     "return all outstanding payments for a given period" in new Test {
-      override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
+      override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingOpenPayments
 
       val expected = Right(Payments(Seq(
         Payment(
@@ -101,18 +102,21 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return a PaymentsHistoryModel" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
 
+
       val expected = Right(Seq(
         PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.parse("2018-01-01"),
-          taxPeriodTo   = LocalDate.parse("2018-02-01"),
-          amount        = 123456789,
-          clearedDate   = LocalDate.parse("2018-03-01")
+          chargeType    =  FinancialTransactionsConstants.vatReturnDebitCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-08-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2018-10-31")),
+          amount        = 150,
+          clearedDate   = Some(LocalDate.parse("2018-01-10"))
         ),
         PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.parse("2018-03-01"),
-          taxPeriodTo   = LocalDate.parse("2018-04-01"),
-          amount        = 987654321,
-          clearedDate   = LocalDate.parse("2018-03-01")
+          chargeType    =  FinancialTransactionsConstants.vatReturnCreditCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-05-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2018-07-31")),
+          amount        = 600,
+          clearedDate   = Some(LocalDate.parse("2018-03-10"))
         )
       ))
 

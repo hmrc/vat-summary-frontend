@@ -36,6 +36,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
                                        metrics: MetricsService) {
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
+
   private[connectors] def directDebitUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions" +
     s"/has-direct-debit/$vrn"
 
@@ -52,27 +53,31 @@ class FinancialDataConnector @Inject()(http: HttpClient,
           payments
         case httpError@Left(error) =>
           metrics.getOpenPaymentsCallFailureCounter.inc()
-          Logger.warn("FinancialDataConnector received error: " + error.message )
+          Logger.warn("FinancialDataConnector received error: " + error.message)
           httpError
       }
   }
 
   def getVatLiabilities(vrn: String, from: LocalDate, to: LocalDate)
                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
-    Future.successful(Right(Seq(
-      PaymentsHistoryModel(
-        taxPeriodFrom = LocalDate.parse(s"${from.getYear}-01-01"),
-        taxPeriodTo = LocalDate.parse(s"${from.getYear}-02-01"),
-        amount = 123456789,
-        clearedDate = LocalDate.parse(s"${from.getYear}-03-01")
-      ),
-      PaymentsHistoryModel(
-        taxPeriodFrom = LocalDate.parse(s"${from.getYear}-03-01"),
-        taxPeriodTo = LocalDate.parse(s"${from.getYear}-04-01"),
-        amount = 987654321,
-        clearedDate = LocalDate.parse(s"${from.getYear}-03-01")
-      )
-    )))
+
+    import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
+
+    val timer = metrics.getPaymentHistoryTimer.time()
+
+    http.GET(paymentsUrl(vrn), Seq(
+      "dateFrom" -> s"${from.getYear}-01-01",
+      "dateTo" -> s"${to.getYear}-12-31"
+    ))
+      .map {
+        case payments@Right(_) =>
+          timer.stop()
+          payments
+        case httpError@Left(error) =>
+          metrics.getPaymentHistoryFailureCounter.inc()
+          Logger.warn("[FinancialDataConnector][getVatLiabilities] received error: " + error.message)
+          httpError
+      }
   }
 
   def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Boolean]] = {
@@ -81,7 +86,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     val timer = metrics.getDirectDebitStatusTimer.time()
 
-    http.GET(directDebitUrl(vrn)).map{
+    http.GET(directDebitUrl(vrn)).map {
       case directDebitStatus@Right(_) =>
         timer.stop()
         directDebitStatus

@@ -43,7 +43,9 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
     user =>
       if (isValidSearchYear(year) && appConfig.features.allowPaymentHistory()) {
         getFinancialTransactions(user, year).map {
-          case Right(model) => Ok(views.html.payments.paymentHistory(model))
+          case Right(model) =>
+            //TODO: Need to audit here. The current model is not suitable for this as need to audit a list of payments history
+            Ok(views.html.payments.paymentHistory(model))
           case Left(_) => InternalServerError(views.html.errors.standardError(appConfig,
             messagesApi.apply("standardError.title"),
             messagesApi.apply("standardError.heading"),

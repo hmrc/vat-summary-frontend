@@ -188,10 +188,11 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "return a seq of payment history models" in new Test {
       val paymentSeq = Right(Seq(
         PaymentsHistoryModel(
-          taxPeriodFrom = LocalDate.parse("2018-01-01"),
-          taxPeriodTo = LocalDate.parse("2018-01-26"),
-          amount = exampleAmount,
-          clearedDate = LocalDate.parse("2018-01-13")
+          chargeType = "VAT Return charge",
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-01-26")),
+          amount = 10000,
+          clearedDate = Some(LocalDate.parse("2018-01-13"))
         )
       ))
 
@@ -210,7 +211,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
   }
 
   "Calling the .setupDirectDebitJourney method" when {
-
 
     trait Test {
       implicit val hc: HeaderCarrier = HeaderCarrier()

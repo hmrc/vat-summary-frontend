@@ -28,6 +28,9 @@ trait MetricsService {
   val getOpenPaymentsTimer: Timer
   val getOpenPaymentsCallFailureCounter: Counter
 
+  val getPaymentHistoryTimer: Timer
+  val getPaymentHistoryFailureCounter: Counter
+
   val getCustomerInfoTimer: Timer
   val getCustomerInfoCallFailureCounter: Counter
 
@@ -53,6 +56,9 @@ class MetricsServiceImpl @Inject()(metrics: Metrics) extends MetricsService {
 
   val getOpenPaymentsTimer: Timer = metrics.defaultRegistry.timer("get-open-payments-from-financial-transactions-timer")
   val getOpenPaymentsCallFailureCounter: Counter = metrics.defaultRegistry.counter("get-open-payments-from-financial-transactions-failure-counter")
+
+  val getPaymentHistoryTimer: Timer = metrics.defaultRegistry.timer("get-payment-history-from-financial-transactions-timer")
+  val getPaymentHistoryFailureCounter: Counter = metrics.defaultRegistry.counter("get-payments-history-from-financial-transactions-failure-counter")
 
   val getCustomerInfoTimer: Timer = metrics.defaultRegistry.timer("get-customer-info-from-vat-subscription-timer")
   val getCustomerInfoCallFailureCounter: Counter = metrics.defaultRegistry.counter("get-customer-info-from-vat-subscription-failure-counter")

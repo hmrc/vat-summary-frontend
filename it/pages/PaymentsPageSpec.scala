@@ -42,7 +42,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           FinancialDataStub.stubSuccessfulDirectDebit
-          FinancialDataStub.stubAllOutstandingPayments
+          FinancialDataStub.stubAllOutstandingOpenPayments
         }
 
         val response: WSResponse = await(request().get())
@@ -54,7 +54,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           FinancialDataStub.stubSuccessfulDirectDebit
-          FinancialDataStub.stubAllOutstandingPayments
+          FinancialDataStub.stubAllOutstandingOpenPayments
         }
 
         val response: WSResponse = await(request().get())
