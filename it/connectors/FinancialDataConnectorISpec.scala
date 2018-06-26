@@ -105,14 +105,14 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Right(Seq(
         PaymentsHistoryModel(
-          chargeType =  FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType    =  FinancialTransactionsConstants.vatReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-08-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-10-31")),
           amount        = 150,
           clearedDate   = Some(LocalDate.parse("2018-01-10"))
         ),
         PaymentsHistoryModel(
-          chargeType =  FinancialTransactionsConstants.vatReturnCreditCharge,
+          chargeType    =  FinancialTransactionsConstants.vatReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-05-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-07-31")),
           amount        = 600,

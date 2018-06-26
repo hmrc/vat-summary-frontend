@@ -30,5 +30,3 @@ object FinancialTransactionsConstants {
   val vatReturnCreditCharge = "VAT Return Credit Charge"
 
 }
-
-
