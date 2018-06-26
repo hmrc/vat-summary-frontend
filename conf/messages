@@ -29,9 +29,10 @@ partials.btaHome.vatSection.deadlines = You can view what you owe, your return d
 partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
 vatDetails.title = Your VAT details
-vatDetails.accountDetails.link = Account details
-vatDetails.accountDetails.view = See your business information and other details.
-vatDetails.accountDetails.portal.link = View VAT certificate (opens in a new tab)
+vatDetails.vatCertificate.view = See your business information and other details.
+vatDetails.vatCertificate.link = View VAT certificate (opens in a new tab)
+vatDetails.updateVatDetails.link = Update your VAT details
+vatDetails.updateVatDetails.view = Tell us about changes to your business or VAT Returns.
 vatDetails.paymentHistory.link = Payment history
 vatDetails.paymentHistory.view = Check the payments you''ve made.
 vatDetails.submittedReturns.link = Submitted returns
@@ -106,18 +107,6 @@ notFound.heading = This page can''t be found
 notFound.message = Please check that you have entered the correct web address.
 
 
-accountDetails.title = Account details
-accountDetails.contactYou = HMRC will only use these to contact you.
-accountDetails.businessDetails = Business details
-accountDetails.contactDetails = Contact details
-accountDetails.name = Name
-accountDetails.businessAddress = Business address
-accountDetails.businessPhone = Business phone
-accountDetails.correspondenceAddress = Correspondence address
-accountDetails.email = Email
-accountDetails.mobile = Mobile phone
-accountDetails.homePhone = Home phone
-
 featureSwitch.title = Feature switches
 featureSwitch.heading = Features
 featureSwitch.submit = Submit
@@ -126,7 +115,7 @@ features.userResearchBanner.enabled = User research banner
 features.allowPayments.enabled = Payments allowed
 features.allowDirectDebits.enabled = Direct debits allowed
 features.staticDate.enabled = Use static date (2018-05-01)
-features.accountDetails.enabled = Show account details
+features.vatCertificate.enabled = Show vat certificate
 features.allowNineBox.enabled = Nine box page allowed
 features.auditing.enabled = Auditing service enabled
 features.allowPaymentHistory.enabled = Payment history page enabled

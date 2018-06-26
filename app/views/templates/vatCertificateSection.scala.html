@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,11 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@(user: models.User)(implicit messages: Messages)
 
-object PostKeys {
-  val radioYes = "Yes"
-  val radioNo = "No"
-}
+<div class="column-one-half" id="vat-certificate">
+
+    <h2 class="heading-small"><a href="/vat/trader/@{user.vrn}/certificate"
+    data-journey-click="vat-certificate:view:vat-details"
+    target="_blank">@messages("vatDetails.vatCertificate.link")</a></h2>
+
+    <p>@messages("vatDetails.vatCertificate.view")</p>
+
+</div>
