@@ -18,7 +18,8 @@ package services
 
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.{Address, CustomerInformation}
+import models.errors.{BadRequestError, CustomerInformationError}
+import models.{Address, CustomerInformation, ServiceResponse}
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
@@ -30,47 +31,72 @@ import scala.concurrent.{ExecutionContext, Future}
 class AccountDetailsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
   private trait Test {
+    val customerInfo: CustomerInformation = CustomerInformation(
+      Some("Cheapo Clothing Ltd"),
+      Some("Betty"),
+      Some("Jones"),
+      Some("Cheapo Clothing"),
+      Address("Bedrock Quarry",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV2 4BB")
+      ),
+      Some("01632 982028"),
+      Some("07700 900018"),
+      Some("bettylucknexttime@gmail.com"),
+      Address("13 Pebble Lane",
+        "Bedrock",
+        Some("Graveldon"),
+        Some("Graveldon"),
+        Some("GV13 4BJ")
+      ),
+      Some("01632 960026"),
+      Some("07700 900018"),
+      Some("bettylucknexttime@gmail.com")
+    )
+    val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInfo)
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
-    lazy val service = new AccountDetailsService(mockVatSubscriptionConnector)
-  }
 
-  val responseFromConnector = Right(CustomerInformation(
-    Some("Cheapo Clothing Ltd"),
-    Some("Betty"),
-    Some("Jones"),
-    Some("Cheapo Clothing"),
-    Address("Bedrock Quarry",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV2 4BB")
-    ),
-    Some("01632 982028"),
-    Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com"),
-    Address("13 Pebble Lane",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV13 4BJ")
-    ),
-    Some("01632 960026"),
-    Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com")
-  ))
-
-  "getAccountDetails" should {
-    "retrieve the customer details" in new Test {
-      (mockVatSubscriptionConnector.getCustomerInfo(_: String)
-      (_: HeaderCarrier, _: ExecutionContext))
+    def setup(): Any = {
+      (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
-        .returns(Future.successful(responseFromConnector))
-
-      val details: HttpGetResult[CustomerInformation] = await(service.getAccountDetails("123456789"))
-      details shouldBe responseFromConnector
+        .returns(Future.successful(customerInfoResult))
     }
 
+    def target: AccountDetailsService = {
+      setup()
+      new AccountDetailsService(mockVatSubscriptionConnector)
+    }
+  }
+
+  "Calling .getAccountDetails" should {
+
+    "retrieve the customer details" in new Test {
+      val details: HttpGetResult[CustomerInformation] = await(target.getAccountDetails("123456789"))
+      details shouldBe customerInfoResult
+    }
+  }
+
+  "Calling .getEntityName" when {
+
+    "the connector retrieves a CustomerInformation model" should {
+
+      "return the appropriate name" in new Test {
+        lazy val result: ServiceResponse[Option[String]] = await(target.getEntityName("999999999"))
+        result shouldBe Right(Some("Cheapo Clothing"))
+      }
+    }
+
+    "the connector returns an error" should {
+
+      "return None" in new Test {
+        override val customerInfoResult: HttpGetResult[CustomerInformation] = Left(BadRequestError("", ""))
+        val result: ServiceResponse[Option[String]] = await(target.getEntityName("999999999"))
+        result shouldBe Left(CustomerInformationError)
+      }
+    }
   }
 }
