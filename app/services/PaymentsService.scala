@@ -35,8 +35,13 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
 
   def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] =
     financialDataConnector.getOpenPayments(vrn).map {
-      case Right(payments) if payments.financialTransactions.nonEmpty => Right(Some(payments))
-      case Right(_) => Right(None)
+      case Right(payments) =>
+        val outstandingPayments = payments.financialTransactions.filter(_.outstandingAmount > 0)
+        if(outstandingPayments.nonEmpty) {
+          Right(Some(Payments(outstandingPayments)))
+        } else {
+          Right(None)
+        }
       case Left(_) => Left(PaymentsError)
     }
 

@@ -18,10 +18,11 @@ package services
 
 import java.time.LocalDate
 
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
 import models._
-import models.errors.{BadRequestError, CustomerInformationError, NextPaymentError, ObligationsError}
+import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -32,14 +33,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class VatDetailsServiceSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val currentObligation: VatReturnObligation = VatReturnObligation(
-      LocalDate.parse("2017-01-01"),
-      LocalDate.parse("2017-03-30"),
+    val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
+      start = LocalDate.parse("2017-01-01"),
+      end = LocalDate.parse("2017-03-30"),
       due = LocalDate.parse("2017-04-30"),
-      "O",
-      None,
-      "#001"
-    )
+      status = "O",
+      received = None,
+      periodKey = "#001"
+    )))
+    lazy val obligationResult: HttpGetResult[VatReturnObligations] = Right(obligations)
+    val obligationsCall: Boolean = false
 
     val payments: Payments = Payments(Seq(
       Payment(
@@ -82,20 +85,36 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       )))
+    lazy val paymentsResult: HttpGetResult[Payments] = Right(payments)
+    val paymentsCall: Boolean = false
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
     val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
-    val mockDateService: DateService = mock[DateService]
-    (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
 
-    lazy val vatDetailsService = new VatDetailsService(mockObligationsConnector,
-                                                       mockFinancialDataConnector,
-                                                       mockSubscriptionConnector,
-                                                       mockAppConfig,
-                                                       mockDateService)
-    lazy val accountDetailsService = new AccountDetailsService(mockSubscriptionConnector)
+    def setup(obligationsCall: Boolean = false, paymentsCall: Boolean = false): Any = {
+      if(obligationsCall) {
+        (mockObligationsConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
+        (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *, *, *)
+          .returns(Future.successful(obligationResult))
+      }
+      if(paymentsCall) {
+        (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(paymentsResult))
+      }
+    }
+
+    def target: VatDetailsService = {
+      setup(obligationsCall, paymentsCall)
+      new VatDetailsService(
+        mockObligationsConnector,
+        mockFinancialDataConnector,
+        mockAppConfig
+      )
+    }
   }
 
   "Calling .getNextReturn" when {
@@ -103,297 +122,64 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns some obligations" should {
 
       "return the most recent outstanding obligation" in new Test {
-
-        (mockObligationsConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.successful(Right(VatReturnObligations(Seq(currentObligation)))))
-
+        override val obligationsCall = true
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
-
-        result shouldBe Right(Some(VatReturnObligations(Seq(currentObligation))))
+          await(target.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
+        result shouldBe Right(Some(obligations))
       }
     }
 
     "the connector returns no obligations" should {
 
       "return nothing" in new Test {
-
-        (mockObligationsConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.successful(Right(VatReturnObligations(Seq.empty))))
-
+        override val obligationsCall = true
+        override val obligations = VatReturnObligations(Seq.empty)
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
-
+          await(target.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
         result shouldBe Right(None)
       }
-
     }
 
     "the connector returns an HttpError" should {
 
       "return the error" in new Test {
-
-        (mockObligationsConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
-
+        override val obligationsCall = true
+        override lazy val obligationResult = Left(BadRequestError("TEST_FAIL", "this is a test"))
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
-
+          await(target.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
         result shouldBe Left(ObligationsError)
-      }
-
-    }
-
-    "the connector returns an Exception" should {
-
-      "return a failed Future containing the exception" in new Test {
-
-        (mockObligationsConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.failed(new RuntimeException("test")))
-
-        intercept[RuntimeException](await(vatDetailsService.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01"))))
       }
     }
   }
 
   "Calling .getPaymentObligations" when {
 
-    "the connector returns some payment obligations" should {
+    "the connector returns some outstanding payment obligations" should {
 
       "return the most recent outstanding payment obligation" in new Test {
-
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(payments)))
-
-        val result: ServiceResponse[Option[Payments]] =
-          await(vatDetailsService.getPaymentObligations(User("1111")))
-
+        override val paymentsCall = true
+        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations(User("1111")))
         result shouldBe Right(Some(payments))
       }
     }
 
-    "the connector returns no obligations" should {
+    "the connector returns no outstanding payment obligations" should {
 
       "return nothing" in new Test {
-
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(Payments(Seq.empty))))
-
-        val result: ServiceResponse[Option[Payments]] =
-          await(vatDetailsService.getPaymentObligations(User("1111")))
-
+        override val paymentsCall = true
+        override val payments = Payments(Seq.empty)
+        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations(User("1111")))
         result shouldBe Right(None)
       }
-
     }
 
     "the connector returns an HttpError" should {
 
       "return the error" in new Test {
-
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(BadRequestError("TEST_FAIL", "this is a test"))))
-
-        val result: ServiceResponse[Option[Payments]] =
-          await(vatDetailsService.getPaymentObligations(User("1111")))
-
+        override val paymentsCall = true
+        override lazy val paymentsResult = Left(BadRequestError("TEST_FAIL", "this is a test"))
+        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations(User("1111")))
         result shouldBe Left(NextPaymentError)
-      }
-
-    }
-
-    "the connector returns an Exception" should {
-
-      "return a failed Future containing the exception" in new Test {
-
-        (mockFinancialDataConnector.getOpenPayments(_: String)
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.failed(new RuntimeException("test")))
-
-        intercept[RuntimeException](await(vatDetailsService.getPaymentObligations(User("1111"))))
-      }
-    }
-  }
-
-  "Calling .getEntityName" when {
-
-    "the connector retrieves a trading name" should {
-
-      "return the trading name" in new Test {
-        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          Some("Cheapo Clothing Ltd"),
-          Some("Betty"),
-          Some("Jones"),
-          Some("Cheapo Clothing"),
-          Address("Bedrock Quarry",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV2 4BB")
-          ),
-          Some("01632 982028"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com"),
-          Address("13 Pebble Lane",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV13 4BJ")
-          ),
-          Some("01632 960026"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com")
-        )
-
-        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(exampleCustomerInfo)))
-
-        lazy val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
-
-        result shouldBe Right(Some("Cheapo Clothing"))
-      }
-    }
-
-    "the connector does not retrieve a trading name or organisation name" should {
-
-      "return the first and last name" in new Test {
-        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          None,
-          Some("Betty"),
-          Some("Jones"),
-          None,
-          Address("Bedrock Quarry",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV2 4BB")
-          ),
-          Some("01632 982028"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com"),
-          Address("13 Pebble Lane",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV13 4BJ")
-          ),
-          Some("01632 960026"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com")
-        )
-
-        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(exampleCustomerInfo)))
-
-        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
-
-        result shouldBe Right(Some("Betty Jones"))
-      }
-    }
-
-    "the connector does not retrieve a trading name or a first and last name" should {
-
-      "return the organisation name" in new Test {
-        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          Some("Cheapo Clothing Ltd"),
-          None,
-          None,
-          None,
-          Address("Bedrock Quarry",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV2 4BB")
-          ),
-          Some("01632 982028"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com"),
-          Address("13 Pebble Lane",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV13 4BJ")
-          ),
-          Some("01632 960026"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com")
-        )
-
-        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(exampleCustomerInfo)))
-
-        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
-
-        result shouldBe Right(Some("Cheapo Clothing Ltd"))
-      }
-    }
-
-    "the connector does not retrieve a trading name, organisation name, or individual names" should {
-
-      "return None" in new Test {
-        val exampleCustomerInfo: CustomerInformation = CustomerInformation(
-          None,
-          None,
-          None,
-          None,
-          Address("Bedrock Quarry",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV2 4BB")
-          ),
-          Some("01632 982028"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com"),
-          Address("13 Pebble Lane",
-            "Bedrock",
-            Some("Graveldon"),
-            Some("Graveldon"),
-            Some("GV13 4BJ")
-          ),
-          Some("01632 960026"),
-          Some("07700 900018"),
-          Some("bettylucknexttime@gmail.com")
-        )
-
-        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(exampleCustomerInfo)))
-
-        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
-
-        result shouldBe Right(None)
-      }
-    }
-
-    "the connector returns an error" should {
-
-      "return None" in new Test {
-        (mockSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(BadRequestError("", ""))))
-
-        val result: ServiceResponse[Option[String]] = await(accountDetailsService.getEntityName("999999999"))
-
-        result shouldBe Left(CustomerInformationError)
       }
     }
   }

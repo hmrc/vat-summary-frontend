@@ -56,7 +56,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       }
     }
 
-
     "the user has payments outstanding" should {
 
       "return a list of payments" in new Test {
@@ -66,7 +65,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           LocalDate.parse("2009-01-04"),
           LocalDate.parse("2008-12-06"),
           BigDecimal("21.22"),
-          "ABCD"
+          ""
         )))
         override val responseFromFinancialDataConnector = Right(payments)
         val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
@@ -78,7 +77,14 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "the user has no payments outstanding" should {
 
       "return an empty list of payments" in new Test {
-        val payments = Payments(Seq.empty)
+        val payments = Payments(Seq(Payment(
+          "VAT Return Credit Charge",
+          LocalDate.parse("2008-12-06"),
+          LocalDate.parse("2009-01-04"),
+          LocalDate.parse("2008-12-06"),
+          BigDecimal("-1000"),
+          ""
+        )))
         override val responseFromFinancialDataConnector = Right(payments)
         val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
@@ -158,6 +164,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
   "Calling the .getPaymentsHistory method" when {
 
     trait Test {
+      val exampleAmount = 1000L
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
       val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
@@ -183,7 +190,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
         PaymentsHistoryModel(
           taxPeriodFrom = LocalDate.parse("2018-01-01"),
           taxPeriodTo = LocalDate.parse("2018-01-26"),
-          amount = 10000,
+          amount = exampleAmount,
           clearedDate = LocalDate.parse("2018-01-13")
         )
       ))

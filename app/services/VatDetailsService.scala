@@ -19,7 +19,7 @@ package services
 import java.time.LocalDate
 
 import config.AppConfig
-import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
+import connectors.{FinancialDataConnector, VatObligationsConnector}
 import javax.inject.{Inject, Singleton}
 import models._
 import models.errors.{NextPaymentError, ObligationsError}
@@ -33,12 +33,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnector,
                                   financialDataConnector: FinancialDataConnector,
-                                  subscriptionConnector: VatSubscriptionConnector,
-                                  implicit val appConfig: AppConfig,
-                                  dateService: DateService) {
+                                  implicit val appConfig: AppConfig) {
 
-  def getReturnObligations(user: User,
-                           date: LocalDate)
+  def getReturnObligations(user: User, date: LocalDate)
                           (implicit hc: HeaderCarrier,
                            ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] = {
 
@@ -56,8 +53,13 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] = {
 
     financialDataConnector.getOpenPayments(user.vrn).map {
-      case Right(nextPayments) if nextPayments.financialTransactions.nonEmpty=> Right(Some(nextPayments))
-      case Right(_) => Right(None)
+      case Right(payments) =>
+        val outstandingPayments = payments.financialTransactions.filter(_.outstandingAmount > 0)
+        if(outstandingPayments.nonEmpty) {
+          Right(Some(Payments(outstandingPayments)))
+        } else {
+          Right(None)
+        }
       case Left(_) => Left(NextPaymentError)
     }
   }
