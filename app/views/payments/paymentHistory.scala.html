@@ -71,14 +71,13 @@
 
           <tbody>
             @for(transaction <- model.transactions) {
-
-            @if(transaction.clearedDate.isDefined) {
-            <tr>
-                <td scope="row">@displayDate(transaction.clearedDate.get)</td>
-                <td>@getDescriptionString(transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
-                <td class="numeric">@displayMoney(transaction.amount)</td>
-              </tr>
-            }
+                @if(transaction.clearedDate.isDefined) {
+                    <tr>
+                        <td scope="row">@displayDate(transaction.clearedDate.get)</td>
+                        <td>@getDescriptionString(transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
+                        <td class="numeric">@displayMoney(transaction.amount)</td>
+                    </tr>
+                }
             }
           </tbody>
 

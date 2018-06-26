@@ -212,7 +212,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
   "Calling the .setupDirectDebitJourney method" when {
 
-
     trait Test {
       implicit val hc: HeaderCarrier = HeaderCarrier()
       val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]

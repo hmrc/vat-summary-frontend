@@ -29,8 +29,7 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
   implicit object PaymentsHistoryReads extends HttpReads[HttpGetResult[Seq[PaymentsHistoryModel]]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Seq[PaymentsHistoryModel]] = {
       response.status match {
-        case OK =>
-          Right(removeNonVatReturnCharges(response.json).as[Seq[PaymentsHistoryModel]])
+        case OK => Right(removeNonVatReturnCharges(response.json).as[Seq[PaymentsHistoryModel]])
         case NOT_FOUND =>
           Right(Seq.empty[PaymentsHistoryModel])
         case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)

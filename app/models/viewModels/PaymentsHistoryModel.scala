@@ -21,6 +21,8 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants
 import play.api.libs.json._
 
+import scala.collection.immutable
+
 case class PaymentsHistoryModel(chargeType: String,
                                  taxPeriodFrom: Option[LocalDate],
                                  taxPeriodTo: Option[LocalDate],
@@ -58,7 +60,7 @@ object PaymentsHistoryModel {
 
       def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
 
-      val seq = transactionsList map { transaction =>
+      val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList map { transaction =>
         getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
           PaymentsHistoryModel(
             chargeType = transaction.get[String](FinancialTransactionsConstants.chargeType),
@@ -70,7 +72,7 @@ object PaymentsHistoryModel {
         }
       }
 
-      JsSuccess(seq.flatten)
+      JsSuccess(extractedItems.flatten)
     }
   }
 }
