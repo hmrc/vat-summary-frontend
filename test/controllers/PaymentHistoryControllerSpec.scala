@@ -42,14 +42,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val serviceResultYearOne: ServiceResponse[Seq[PaymentsHistoryModel]] =
       Right(Seq(
         PaymentsHistoryModel(
-          chargeType = "VAT Return charge",
+          chargeType    = "VAT Return charge",
           taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-02-01")),
           amount        = 123456789,
           clearedDate   = Some(LocalDate.parse("2018-03-01"))
         ),
         PaymentsHistoryModel(
-          chargeType = "VAT Return charge",
+          chargeType    = "VAT Return charge",
           taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
           amount        = 987654321,
@@ -59,14 +59,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] =
       Right(Seq(
         PaymentsHistoryModel(
-          chargeType = "VAT Return charge",
+          chargeType    = "VAT Return charge",
           taxPeriodFrom = Some(LocalDate.parse("2017-01-01")),
           taxPeriodTo   = Some(LocalDate.parse("2017-02-01")),
           amount        = 123456789,
           clearedDate   = Some(LocalDate.parse("2017-03-01"))
         ),
         PaymentsHistoryModel(
-          chargeType = "VAT Return charge",
+          chargeType    = "VAT Return charge",
           taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
           taxPeriodTo   = Some(LocalDate.parse("2017-04-01")),
           amount        = 987654321,
@@ -81,14 +81,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         2018,
         Seq(
           PaymentsHistoryModel(
-            chargeType = "VAT Return charge",
+            chargeType    = "VAT Return charge",
             taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
             taxPeriodTo   = Some(LocalDate.parse("2018-02-01")),
             amount        = 123456789,
             clearedDate   = Some(LocalDate.parse("2018-03-01"))
           ),
           PaymentsHistoryModel(
-            chargeType = "VAT Return charge",
+            chargeType    = "VAT Return charge",
             taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
             taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
             amount        = 987654321,

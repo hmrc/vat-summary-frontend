@@ -21,8 +21,6 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants
 import play.api.libs.json._
 
-import scala.collection.immutable
-
 case class PaymentsHistoryModel(chargeType: String,
                                  taxPeriodFrom: Option[LocalDate],
                                  taxPeriodTo: Option[LocalDate],
