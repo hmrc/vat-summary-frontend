@@ -57,12 +57,11 @@
 
 @chargeType = @{ChargeType.getChargeType(transaction.chargeType)}
 
-@chargeType match {
+@(chargeType, transaction.clearedDate) match {
 
-  case Some(charge) => {
+  case (Some(charge), Some(date)) => {
     <tr class="@charge.id">
-      @transaction.clearedDate.map(date => <td scope="row">@displayDate(date)</td>)
-
+      <td scope="row">@displayDate(date)</td>
       <td>@getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
       <td class="numeric">@displayMoney(transaction.amount)</td>
     </tr>
@@ -71,8 +70,8 @@
   case _ => {
     <tr class="error">
       <td scope="row">error</td>
-      <td>there has been an error</td>
-      <td class="numeric">1234</td>
+      <td>error</td>
+      <td class="numeric">0</td>
     </tr>
   }
 }

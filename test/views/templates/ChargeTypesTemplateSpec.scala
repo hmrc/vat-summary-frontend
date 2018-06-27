@@ -16,68 +16,84 @@
 
 package views.templates
 
+import org.jsoup.Jsoup
 import java.time.LocalDate
+import org.jsoup.nodes.Document
+import views.ViewBaseSpec
 import models.viewModels.PaymentsHistoryModel
-import views.templates.TemplateBaseSpec
-import play.twirl.api.Html
 
-class ChargeTypesTemplateSpec extends TemplateBaseSpec {
+class ChargeTypesTemplateSpec extends ViewBaseSpec {
+
+  object Selectors {
+    val tableRow = "tr"
+    val clearedDate = "tr td:nth-of-type(1)"
+    val description = "tr td:nth-of-type(2)"
+    val amount = "tr td:nth-of-type(3)"
+  }
 
   "The chargeTypes template" when {
 
     "there is a vat return debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        LocalDate.parse("2018-01-12"),
-        LocalDate.parse("2018-03-23"),
-        234556,
-        LocalDate.parse("2018-02-14")
+        "VAT Return Debit Charge",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        123456,
+        Some(LocalDate.parse("2018-02-14"))
       )
 
-      val expectedMarkup = Html(
-        s"""
-           |
-           | <tr class="error">
-           |   <td scope="row">error</td>
-           |   <td>there has been an error</td>
-           |   <td class="numeric">1234</td>
-           | </tr>
-           |
-         """.stripMargin
+      lazy val template = views.html.templates.chargeTypes(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
       )
 
-      val markup = views.html.templates.chargeTypes(model)
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "debit-charge"
+      }
 
-      "display the correct table row content" in {
-        formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+      "display the correct cleared date" in {
+        elementText(Selectors.clearedDate) shouldBe "14 February 2018"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "12 Jan to 23 Mar 2018 return"
+      }
+
+      "display the correct amount" in {
+        elementText(Selectors.amount) shouldBe "£123,456"
       }
     }
 
     "there is a vat return credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        LocalDate.parse("2018-01-12"),
-        LocalDate.parse("2018-03-23"),
-        234556,
-        LocalDate.parse("2018-02-14")
+        "VAT Return Credit Charge",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        123456,
+        Some(LocalDate.parse("2018-02-14"))
       )
 
-      val expectedMarkup = Html(
-        s"""
-           |
-           | <tr class="error">
-           |   <td scope="row">error</td>
-           |   <td>there has been an error</td>
-           |   <td class="numeric">1234</td>
-           | </tr>
-           |
-         """.stripMargin
+      lazy val template = views.html.templates.chargeTypes(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
       )
 
-      val markup = views.html.templates.chargeTypes(model)
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "credit-charge"
+      }
 
-      "display the correct table row content" in {
-        formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+      "display the correct cleared date" in {
+        elementText(Selectors.clearedDate) shouldBe "14 February 2018"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "Repayment for 12 Jan to 23 Mar 2018 return"
+      }
+
+      "display the correct amount" in {
+        elementText(Selectors.amount) shouldBe "£123,456"
       }
     }
   }

@@ -108,18 +108,6 @@ notFound.title = Page not found
 notFound.heading = This page can''t be found
 notFound.message = Please check that you have entered the correct web address.
 
-accountDetails.title = Account details
-accountDetails.contactYou = HMRC will only use these to contact you.
-accountDetails.businessDetails = Business details
-accountDetails.contactDetails = Contact details
-accountDetails.name = Name
-accountDetails.businessAddress = Business address
-accountDetails.businessPhone = Business phone
-accountDetails.correspondenceAddress = Correspondence address
-accountDetails.email = Email
-accountDetails.mobile = Mobile phone
-accountDetails.homePhone = Home phone
-
 featureSwitch.title = Feature switches
 featureSwitch.heading = Features
 featureSwitch.submit = Submit

@@ -32,7 +32,7 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("paymentsHistory.title")
   )
-
+  
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
@@ -43,7 +43,7 @@
 
       <h2>@model.selectedYear.toString</h2>
 
-      @if(model.transactions.isEmpty) {
+      @if(model.transactions.isEmpty || model.transactions.forall(_.clearedDate.isEmpty)) {
         <p>@messages("paymentsHistory.noHistory", model.selectedYear.toString)</p>
       } else {
         <table>
