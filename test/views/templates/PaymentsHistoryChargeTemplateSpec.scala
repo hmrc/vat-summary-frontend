@@ -22,7 +22,7 @@ import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import models.viewModels.PaymentsHistoryModel
 
-class ChargeTypesTemplateSpec extends ViewBaseSpec {
+class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val tableRow = "tr"
@@ -43,7 +43,7 @@ class ChargeTypesTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.chargeTypes(model)
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -75,7 +75,7 @@ class ChargeTypesTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.chargeTypes(model)
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )

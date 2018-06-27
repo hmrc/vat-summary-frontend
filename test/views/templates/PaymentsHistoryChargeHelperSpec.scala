@@ -15,28 +15,28 @@
  */
 
 import uk.gov.hmrc.play.test.UnitSpec
-import views.templates.ChargeType
+import views.templates.PaymentsHistoryChargeHelper
 
-class ChargeTypeSpec extends UnitSpec {
+class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 
   "Calling getChargeType" when {
 
-    "the lookup String is a valid ChargeType" should {
+    "the lookup string is a valid charge type" should {
 
-      "return the ChargeType accociated with the lookup String" in {
+      "return the charge type accociated with the lookup string" in {
 
-        val result = ChargeType.getChargeType("VAT Return Debit Charge")
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Return Debit Charge")
 
-        result shouldBe Some(ChargeType.VAT_RETURN_DEBIT_CHARGE)
+        result shouldBe Some(PaymentsHistoryChargeHelper.VAT_RETURN_DEBIT_CHARGE)
 
       }
     }
 
-    "the lookup String is an invalid ChargeType" should {
+    "the lookup String is an invalid charge type" should {
 
       "return a None" in {
         
-        val result = ChargeType.getChargeType("invalid")
+        val result = PaymentsHistoryChargeHelper.getChargeType("invalid")
 
         result shouldBe None
 

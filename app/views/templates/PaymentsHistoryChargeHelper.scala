@@ -16,15 +16,15 @@
 
 package views.templates
 
-sealed case class ChargeType(name: String, description: String, id: String)
+sealed case class PaymentsHistoryChargeHelper(name: String, description: String, id: String)
 
-object ChargeType {
-  object VAT_RETURN_CREDIT_CHARGE extends ChargeType("VAT Return Credit Charge", "paymentsHistory.vatReturnCreditChargeDescription", "credit-charge")
-  object VAT_RETURN_DEBIT_CHARGE extends ChargeType("VAT Return Debit Charge", "paymentsHistory.vatReturnDebitChargeDescription", "debit-charge")
+object PaymentsHistoryChargeHelper {
+  object VAT_RETURN_CREDIT_CHARGE extends PaymentsHistoryChargeHelper("VAT Return Credit Charge", "paymentsHistory.vatReturnCreditChargeDescription", "credit-charge")
+  object VAT_RETURN_DEBIT_CHARGE extends PaymentsHistoryChargeHelper("VAT Return Debit Charge", "paymentsHistory.vatReturnDebitChargeDescription", "debit-charge")
 
   val values = Seq(VAT_RETURN_CREDIT_CHARGE, VAT_RETURN_DEBIT_CHARGE)
 
-  def getChargeType(lookupName: String): Option[ChargeType] = {
+  def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
     values.find(_.name == lookupName)
   }
 }

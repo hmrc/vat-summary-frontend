@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import views.templates.ChargeType
+@import views.templates.PaymentsHistoryChargeHelper
 @import views.html.templates.formatters.dates._
 @import views.html.templates.formatters.money._
 @import views.html.templates.payments._
@@ -55,7 +55,7 @@
   }
 }
 
-@chargeType = @{ChargeType.getChargeType(transaction.chargeType)}
+@chargeType = @{PaymentsHistoryChargeHelper.getChargeType(transaction.chargeType)}
 
 @(chargeType, transaction.clearedDate) match {
 
