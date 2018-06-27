@@ -17,12 +17,12 @@
 package controllers
 
 import audit.AuditingService
+import audit.models.ViewVatPaymentHistoryAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-
 import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -44,36 +44,37 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
       if (isValidSearchYear(year) && appConfig.features.allowPaymentHistory()) {
         getFinancialTransactions(user, year).map {
           case Right(model) =>
-            //TODO: Need to audit here. The current model is not suitable for this as need to audit a list of payments history
+            auditEvent(user.vrn, model.transactions, year)
             Ok(views.html.payments.paymentHistory(model))
           case Left(_) => InternalServerError(views.html.errors.standardError(appConfig,
             messagesApi.apply("standardError.title"),
             messagesApi.apply("standardError.heading"),
             messagesApi.apply("standardError.message"))
-            )
+          )
         }
       } else {
         Future.successful(NotFound(views.html.errors.notFound()))
       }
   }
 
+
   private[controllers] def getFinancialTransactions(user: User, selectedYear: Int)
                                                    (implicit hc: HeaderCarrier): Future[ServiceResponse[PaymentsHistoryViewModel]] = {
-    val currentYear    = dateService.now().getYear
+    val currentYear = dateService.now().getYear
     val potentialYears = List(currentYear, currentYear - 1)
 
     def getPaymentHistory(year: Int): Future[(Int, ServiceResponse[Seq[PaymentsHistoryModel]])] = {
-      paymentsService.getPaymentsHistory(user, year) map(year -> _)
+      paymentsService.getPaymentsHistory(user, year) map (year -> _)
     }
 
-    def getYearsWithData = Future.sequence(potentialYears map getPaymentHistory) map(_.toMap)
+    def getYearsWithData = Future.sequence(potentialYears map getPaymentHistory) map (_.toMap)
 
     getYearsWithData map { map =>
       map(selectedYear).right map { transactions =>
         PaymentsHistoryViewModel(
           displayedYears = map.collect { case (year, data) if data.isRight => year }.toSeq,
-          selectedYear   = selectedYear,
-          transactions   = transactions
+          selectedYear = selectedYear,
+          transactions = transactions
         )
       }
     }
@@ -82,4 +83,10 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
   private[controllers] def isValidSearchYear(year: Int, upperBound: Int = dateService.now().getYear) = {
     year <= upperBound && year >= upperBound - 1
   }
+
+  private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel], year: Int)(implicit hc: HeaderCarrier): Unit = {
+    auditingService.extendedAudit(ViewVatPaymentHistoryAuditModel(vrn, payments),
+      routes.PaymentHistoryController.paymentHistory(year = year).url)
+  }
+
 }

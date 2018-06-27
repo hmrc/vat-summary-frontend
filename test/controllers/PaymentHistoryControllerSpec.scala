@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.AuditModel
+import audit.models.ExtendedAuditModel
 import models.{ServiceResponse, User}
 import models.errors.VatLiabilitiesError
 import org.jsoup.Jsoup
@@ -127,7 +128,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
 
       if (serviceCall) {
-        (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
           .stubs(*, *, *, *)
           .returns({})
 
