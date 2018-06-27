@@ -14,11 +14,14 @@
  * limitations under the License.
  *@
 
-@import models.viewModels.OpenPaymentsModel
+@import models.payments.OpenPaymentsModel
 @import views.html.templates.formatters.dates.{displayDateRange, displayDate}
 @import views.html.templates.formatters.money.displayMoney
+@import views.templates.payments.WhatYouOweChargeHelper
 
 @(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
+
+@chargeDetails = @{new WhatYouOweChargeHelper(payment.paymentType, payment, messages)}
 
 <div id="payment-section-@{count + 1}" class="section divider--bottom">
 
@@ -29,31 +32,34 @@
       @if(payment.overdue) {
         <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
       }
-      <span class="form-hint">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
+      <span class="form-hint">@chargeDetails.description</span>
     </div>
-    @if(appConfig.features.allowPayments()) {
-    <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
-      <div class="grid-row">
-        @if(hasDirectDebit.getOrElse(false)) {
-          <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
-            @messages("openPayments.youPayByDirectDebit")
-          </span>
-        } else {
-        <a data-journey-click="payment:make-payment:open-payments"
-           href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
-           class="float--right">
-          <span>@messages("openPayments.makePayment")</span>
-          <span class="visuallyhidden">
-                           @displayMoney(payment.amount)
-                           @if(payment.overdue) { @messages("common.overdue") }
-                           @messages("openPayments.forPeriod")
-                           @displayDateRange(payment.start, payment.end).toString().trim
-                      </span>
-        </a>
-        }
-      </div>
 
-      @if(appConfig.features.allowNineBox()) {
+    @if(appConfig.features.allowPayments()) {
+      <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
+        <div class="grid-row">
+          @hasDirectDebit match {
+            case Some(true) => {
+              <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
+                @messages("openPayments.youPayByDirectDebit")
+              </span>
+            }
+            case _ => {
+              <a data-journey-click="payment:make-payment:open-payments"
+                 href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
+                 class="float--right">
+                <span>@chargeDetails.payLinkText</span>
+                <span class="visuallyhidden">
+                                 @displayMoney(payment.amount)
+                                 @if(payment.overdue) { @messages("common.overdue") }
+                                 @chargeDetails.description
+                            </span>
+              </a>
+            }
+          }
+        </div>
+
+      @if(appConfig.features.allowNineBox() && chargeDetails.viewReturnEnabled) {
         <div class="grid-row">
           <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
              href="@appConfig.vatReturnUrl(payment.periodKey)"
@@ -66,7 +72,8 @@
           </a>
         </div>
       }
-    </div>
+
+      </div>
     }
   </div>
 </div>

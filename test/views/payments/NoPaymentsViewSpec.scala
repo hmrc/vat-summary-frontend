@@ -19,7 +19,7 @@ package views.payments
 import java.time.LocalDate
 
 import models.User
-import models.viewModels.OpenPaymentsModel
+import models.payments.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec

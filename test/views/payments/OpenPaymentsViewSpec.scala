@@ -18,8 +18,10 @@ package views.payments
 
 import java.time.LocalDate
 
+import common.FinancialTransactionsConstants._
 import models.User
-import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
+import models.payments.OpenPaymentsModel
+import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -79,7 +81,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   val noPayment = Seq()
   val payments = Seq(
     OpenPaymentsModel(
-      "Return",
+      vatReturnDebitCharge,
       2000000000.01,
       LocalDate.parse("2001-04-08"),
       LocalDate.parse("2001-01-01"),
@@ -88,7 +90,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModel(
-      "Return",
+      vatReturnDebitCharge,
       100.00,
       LocalDate.parse("2002-05-10"),
       LocalDate.parse("2002-02-01"),

@@ -20,10 +20,11 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
+import common.FinancialTransactionsConstants._
 import models.User
 import models.errors.{DirectDebitStatusError, PaymentsError}
-import models.payments.{Payment, Payments}
-import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
+import models.payments.{OpenPaymentsModel, Payment, Payments}
+import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
@@ -57,7 +58,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     }
 
     val payment = Payment(
-      "VAT Return Debit Charge",
+      vatReturnDebitCharge,
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
@@ -252,7 +253,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
       val expected = OpenPaymentsViewModel(
         Seq(OpenPaymentsModel(
-          "Return",
+          vatReturnDebitCharge,
           payment.outstandingAmount,
           payment.due,
           payment.start,

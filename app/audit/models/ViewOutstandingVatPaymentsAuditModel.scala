@@ -19,7 +19,7 @@ package audit.models
 import java.time.LocalDate
 
 import models.User
-import models.viewModels.OpenPaymentsModel
+import models.payments.OpenPaymentsModel
 import play.api.libs.json.{JsValue, Json, Writes}
 
 case class ViewOutstandingVatPaymentsAuditModel(user: User,
