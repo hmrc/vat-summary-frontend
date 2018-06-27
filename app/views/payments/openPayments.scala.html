@@ -114,10 +114,10 @@
       }
     }
 
-    <span id="direct-debits" class="heading-small">Direct debits</span>
-    <div id="check-direct-debit" class="form-group">
-      <p>
-        @if(appConfig.features.allowDirectDebits()) {
+    @if(appConfig.features.allowDirectDebits()) {
+        <span id="direct-debits" class="heading-small">@messages("openPayments.directDebit.heading")</span>
+        <div id="check-direct-debit" class="form-group">
+          <p>
           @model.hasDirectDebit match {
             case Some(hasDD) => {
               @messages("openPayments.directDebitYouCan")
@@ -135,9 +135,9 @@
               @messages("openPayments.directDebitNotSure")
             }
           }
-        }
-      </p>
-    </div>
+          </p>
+        </div>
+    }
 
     @expandingHelpSection(Messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
   </div>
