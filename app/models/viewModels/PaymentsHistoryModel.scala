@@ -70,7 +70,7 @@ object PaymentsHistoryModel {
         }
       }
 
-      JsSuccess(extractedItems.flatten)
+      JsSuccess(extractedItems.flatten.filter(_.clearedDate.isDefined))
     }
   }
 }
