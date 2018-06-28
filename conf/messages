@@ -103,6 +103,7 @@ paymentsHistory.inactiveTab = View payment history from {0}
 paymentsHistory.noHistory = You haven’t made or received any payments for {0} yet.
 paymentsHistory.vatReturnCreditChargeDescription = Repayment for {0} to {1} return
 paymentsHistory.vatReturnDebitChargeDescription = {0} to {1} return
+paymentsHistory.vatOfficerAssessmentDescription = for underpaying by this amount
 
 notFound.title = Page not found
 notFound.heading = This page can''t be found
