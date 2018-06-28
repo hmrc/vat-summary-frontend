@@ -95,9 +95,9 @@ standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 
 paymentsHistory.title = Payment history
-paymentsHistory.paymentReceivedTitle = Payment date
+paymentsHistory.paymentReceivedTitle = Payment received
 paymentsHistory.descriptionTitle = Description
-paymentsHistory.amountPaidTitle = Amount paid
+paymentsHistory.amountTitle = Amount
 paymentsHistory.activeTab = Currently viewing payment history from {0}
 paymentsHistory.inactiveTab = View payment history from {0}
 paymentsHistory.noHistory = You haven’t made or received any payments for {0} yet.

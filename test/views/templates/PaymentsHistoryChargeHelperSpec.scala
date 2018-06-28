@@ -27,7 +27,7 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 
         val result = PaymentsHistoryChargeHelper.getChargeType("VAT Return Debit Charge")
 
-        result shouldBe Some(PaymentsHistoryChargeHelper.VAT_RETURN_DEBIT_CHARGE)
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatReturnDebitCharge)
 
       }
     }

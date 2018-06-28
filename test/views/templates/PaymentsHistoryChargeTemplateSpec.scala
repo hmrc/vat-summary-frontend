@@ -49,11 +49,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "debit-charge"
+        element(Selectors.tableRow).attr("class") shouldBe ""
       }
 
       "display the correct cleared date" in {
-        elementText(Selectors.clearedDate) shouldBe "14 February 2018"
+        elementText(Selectors.clearedDate) shouldBe "14 Feb 2018"
       }
 
       "display the correct description" in {
@@ -85,7 +85,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct cleared date" in {
-        elementText(Selectors.clearedDate) shouldBe "14 February 2018"
+        elementText(Selectors.clearedDate) shouldBe "14 Feb 2018"
       }
 
       "display the correct description" in {

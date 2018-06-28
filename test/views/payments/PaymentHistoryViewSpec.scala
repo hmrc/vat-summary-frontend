@@ -144,7 +144,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "have the correct payment date table heading" in {
-        elementText(Selectors.paymentDateTableHeading) shouldBe "Payment date"
+        elementText(Selectors.paymentDateTableHeading) shouldBe "Payment received"
       }
 
       "have the correct description table heading" in {
@@ -152,11 +152,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "have the correct amount paid table heading" in {
-        elementText(Selectors.amountPaidTableHeading) shouldBe "Amount paid"
+        elementText(Selectors.amountPaidTableHeading) shouldBe "Amount"
       }
 
       "have the correct payment date table content" in {
-        elementText(Selectors.paymentDateTableContent) shouldBe "1 March 2018"
+        elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
       }
 
       "have the correct description table content" in {

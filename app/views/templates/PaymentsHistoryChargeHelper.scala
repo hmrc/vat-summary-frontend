@@ -16,13 +16,20 @@
 
 package views.templates
 
+import common.FinancialTransactionsConstants
+
 sealed case class PaymentsHistoryChargeHelper(name: String, description: String, id: String)
 
 object PaymentsHistoryChargeHelper {
-  object VAT_RETURN_CREDIT_CHARGE extends PaymentsHistoryChargeHelper("VAT Return Credit Charge", "paymentsHistory.vatReturnCreditChargeDescription", "credit-charge")
-  object VAT_RETURN_DEBIT_CHARGE extends PaymentsHistoryChargeHelper("VAT Return Debit Charge", "paymentsHistory.vatReturnDebitChargeDescription", "debit-charge")
+  object VatReturnCreditCharge extends PaymentsHistoryChargeHelper(
+    FinancialTransactionsConstants.vatReturnCreditCharge,
+    "paymentsHistory.vatReturnCreditChargeDescription", "credit-charge")
 
-  val values = Seq(VAT_RETURN_CREDIT_CHARGE, VAT_RETURN_DEBIT_CHARGE)
+  object VatReturnDebitCharge extends PaymentsHistoryChargeHelper(
+    FinancialTransactionsConstants.vatReturnDebitCharge,
+    "paymentsHistory.vatReturnDebitChargeDescription", "")
+
+  val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge)
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
     values.find(_.name == lookupName)
