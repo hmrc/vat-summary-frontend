@@ -71,7 +71,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         "VAT Return Credit Charge",
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
-        123456,
+        -123456,
         Some(LocalDate.parse("2018-02-14"))
       )
 

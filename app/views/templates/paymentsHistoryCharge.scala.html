@@ -57,7 +57,7 @@
     <tr class="@charge.id">
       <td scope="row">@formatDate(date, true)</td>
       <td>@getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
-      <td class="numeric">@displayMoney(transaction.amount)</td>
+      <td class="numeric">@displayMoney(transaction.amount.abs)</td>
     </tr>
   }
 
