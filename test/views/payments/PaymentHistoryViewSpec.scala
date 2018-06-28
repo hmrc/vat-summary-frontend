@@ -59,14 +59,14 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         historyYears,
         historyYears.head,
         Seq(PaymentsHistoryModel(
-          chargeType = "VAT Return charge",
+          chargeType = "VAT Return Debit Charge",
           taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
           taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
           amount = 123456789,
           clearedDate = Some(LocalDate.parse(s"2018-03-01"))
         ),
           PaymentsHistoryModel(
-            chargeType = "VAT Return charge",
+            chargeType = "VAT Return Debit Charge",
             taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
             taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
             amount = 987654321,
@@ -144,7 +144,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "have the correct payment date table heading" in {
-        elementText(Selectors.paymentDateTableHeading) shouldBe "Payment date"
+        elementText(Selectors.paymentDateTableHeading) shouldBe "Payment received"
       }
 
       "have the correct description table heading" in {
@@ -152,11 +152,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "have the correct amount paid table heading" in {
-        elementText(Selectors.amountPaidTableHeading) shouldBe "Amount paid"
+        elementText(Selectors.amountPaidTableHeading) shouldBe "Amount"
       }
 
       "have the correct payment date table content" in {
-        elementText(Selectors.paymentDateTableContent) shouldBe "1 March 2018"
+        elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
       }
 
       "have the correct description table content" in {

@@ -1,0 +1,71 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.templates.PaymentsHistoryChargeHelper
+@import views.html.templates.formatters.dates._
+@import views.html.templates.formatters.money._
+@import views.html.templates.payments._
+@import models.viewModels.PaymentsHistoryModel
+@import java.time.LocalDate
+
+@(transaction: PaymentsHistoryModel)(implicit messages: Messages)
+
+@formatDate(date: LocalDate, showYear: Boolean) = @{
+  if (showYear) {
+    s"${date.getDayOfMonth} ${date.getMonth.toString.head}${date.getMonth.toString.toLowerCase.substring(1, 3)} ${date.getYear}"
+  } else {
+    s"${date.getDayOfMonth} ${date.getMonth.toString.head}${date.getMonth.toString.toLowerCase.substring(1, 3)}"
+  }
+}
+
+@getDescriptionString(chargeTypeDescription: String, firstDate: Option[LocalDate], secondDate: Option[LocalDate]) = @{
+  (firstDate, secondDate) match {
+    case (Some(fd), Some(sd)) => {
+      messages(
+        s"$chargeTypeDescription",
+	formatDate(fd, false),
+        formatDate(sd, true)
+      )
+    }
+
+    case _ => {
+      messages(
+        s"$chargeTypeDescription"
+      )
+    }
+  }
+}
+
+@chargeType = @{PaymentsHistoryChargeHelper.getChargeType(transaction.chargeType)}
+
+@(chargeType, transaction.clearedDate) match {
+
+  case (Some(charge), Some(date)) => {
+    <tr class="@charge.id">
+      <td scope="row">@formatDate(date, true)</td>
+      <td>@getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
+      <td class="numeric">@displayMoney(transaction.amount.abs)</td>
+    </tr>
+  }
+
+  case _ => {
+    <tr class="error">
+      <td scope="row">error</td>
+      <td>error</td>
+      <td class="numeric">0</td>
+    </tr>
+  }
+}
