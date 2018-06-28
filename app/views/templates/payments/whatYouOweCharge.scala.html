@@ -21,7 +21,7 @@
 
 @(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
 
-@chargeDetails = @{new WhatYouOweChargeHelper(payment, messages)}
+@chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
 
 <div id="payment-section-@{count + 1}" class="section divider--bottom">
 
@@ -38,23 +38,23 @@
     @if(appConfig.features.allowPayments()) {
       <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
         <div class="grid-row">
-          @hasDirectDebit match {
-            case Some(true) => {
-              <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
-                @messages("openPayments.youPayByDirectDebit")
-              </span>
-            }
-            case _ => {
+          @chargeDetails.payLinkText match {
+            case Some(payLinkText) => {
               <a data-journey-click="payment:make-payment:open-payments"
                  href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
                  class="float--right">
-                <span>@chargeDetails.payLinkText</span>
+                <span>@payLinkText</span>
                 <span class="visuallyhidden">
-                                 @displayMoney(payment.amount)
-                                 @if(payment.overdue) { @messages("common.overdue") }
-                                 @chargeDetails.description
-                            </span>
+                                     @displayMoney(payment.amount)
+                                     @if(payment.overdue) { @messages("common.overdue") }
+                                     @chargeDetails.description
+                                </span>
               </a>
+            }
+            case None => {
+              <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
+                @messages("openPayments.youPayByDirectDebit")
+              </span>
             }
           }
         </div>
