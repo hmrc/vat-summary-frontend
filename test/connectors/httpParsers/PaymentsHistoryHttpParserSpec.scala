@@ -39,7 +39,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |    "financialTransactions" : [
        |      {
        |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-       |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -92,6 +92,62 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |            "amount" : 600
        |          }
        |        ]
+       |      },
+       |      {
+       |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentDebitCharge}",
+       |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+       |        "periodKey" : "17AA",
+       |        "periodKeyDescription" : "ABCD",
+       |        "taxPeriodFrom" : "2018-05-01",
+       |        "taxPeriodTo" : "2018-07-31",
+       |        "businessPartner" : "0",
+       |        "contractAccountCategory" : "99",
+       |        "contractAccount" : "X",
+       |        "contractObjectType" : "ABCD",
+       |        "contractObject" : "0",
+       |        "sapDocumentNumber" : "0",
+       |        "sapDocumentNumberItem" : "0",
+       |        "chargeReference" : "XD002750002155",
+       |        "mainTransaction" : "1234",
+       |        "subTransaction" : "5678",
+       |        "originalAmount" : 150,
+       |        "outstandingAmount" : 150,
+       |        "items" : [
+       |          {
+       |            "subItem" : "000",
+       |            "clearingDate" : "2018-04-14",
+       |            "dueDate" : "2018-09-07",
+       |            "amount" : 200
+       |          }
+       |        ]
+       |      },
+       |      {
+       |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentCreditCharge}",
+       |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+       |        "periodKey" : "17AA",
+       |        "periodKeyDescription" : "ABCD",
+       |        "taxPeriodFrom" : "2018-05-01",
+       |        "taxPeriodTo" : "2018-07-31",
+       |        "businessPartner" : "0",
+       |        "contractAccountCategory" : "99",
+       |        "contractAccount" : "X",
+       |        "contractObjectType" : "ABCD",
+       |        "contractObject" : "0",
+       |        "sapDocumentNumber" : "0",
+       |        "sapDocumentNumberItem" : "0",
+       |        "chargeReference" : "XD002750002155",
+       |        "mainTransaction" : "1234",
+       |        "subTransaction" : "5678",
+       |        "originalAmount" : 150,
+       |        "outstandingAmount" : 150,
+       |        "items" : [
+       |          {
+       |            "subItem" : "000",
+       |            "clearingDate" : "2018-06-28",
+       |            "dueDate" : "2018-09-07",
+       |            "amount" : 550
+       |          }
+       |        ]
        |      }
        |    ]
        |  }""".stripMargin
@@ -111,6 +167,20 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 600,
       clearedDate = Some(LocalDate.of(2018, 3, 10))
+    ),
+    PaymentsHistoryModel(
+      chargeType = FinancialTransactionsConstants.officerAssessmentDebitCharge,
+      taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
+      taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
+      amount = 200,
+      clearedDate = Some(LocalDate.of(2018, 4, 14))
+    ),
+    PaymentsHistoryModel(
+      chargeType = FinancialTransactionsConstants.officerAssessmentCreditCharge,
+      taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
+      taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
+      amount = 550,
+      clearedDate = Some(LocalDate.of(2018, 6, 28))
     )
   ))
 
@@ -131,6 +201,95 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |      {
          |        "chargeType" : "Some Other Charge Type",
          |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+         |        "periodKey" : "17AA",
+         |        "periodKeyDescription" : "ABCD",
+         |        "taxPeriodFrom" : "2018-08-01",
+         |        "taxPeriodTo" : "2018-10-31",
+         |        "businessPartner" : "0",
+         |        "contractAccountCategory" : "99",
+         |        "contractAccount" : "X",
+         |        "contractObjectType" : "ABCD",
+         |        "contractObject" : "0",
+         |        "sapDocumentNumber" : "0",
+         |        "sapDocumentNumberItem" : "0",
+         |        "chargeReference" : "XD002750002155",
+         |        "mainTransaction" : "1234",
+         |        "subTransaction" : "5678",
+         |        "originalAmount" : 150,
+         |        "outstandingAmount" : 150,
+         |        "items" : [
+         |          {
+         |            "subItem" : "000",
+         |            "clearingDate" : "2018-01-10",
+         |            "dueDate" : "2018-12-07",
+         |            "amount" : 150
+         |          },
+         |          {
+         |            "subItem" : "000",
+         |            "clearingDate" : "2018-03-10",
+         |            "dueDate" : "2018-12-07",
+         |            "amount" : 100
+         |          }
+         |        ]
+         |      },
+         |      {"chargeType" : "Some Other Charge Type",
+         |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+         |        "periodKey" : "17AA",
+         |        "periodKeyDescription" : "ABCD",
+         |        "taxPeriodFrom" : "2018-08-01",
+         |        "taxPeriodTo" : "2018-10-31",
+         |        "businessPartner" : "0",
+         |        "contractAccountCategory" : "99",
+         |        "contractAccount" : "X",
+         |        "contractObjectType" : "ABCD",
+         |        "contractObject" : "0",
+         |        "sapDocumentNumber" : "0",
+         |        "sapDocumentNumberItem" : "0",
+         |        "chargeReference" : "XD002750002155",
+         |        "mainTransaction" : "1234",
+         |        "subTransaction" : "5678",
+         |        "originalAmount" : 150,
+         |        "outstandingAmount" : 150,
+         |        "items" : [
+         |          {
+         |            "subItem" : "000",
+         |            "clearingDate" : "2018-01-10",
+         |            "dueDate" : "2018-12-07",
+         |            "amount" : 150
+         |          },
+         |          {
+         |            "subItem" : "000",
+         |            "clearingDate" : "2018-03-10",
+         |            "dueDate" : "2018-12-07",
+         |            "amount" : 100
+         |          }
+         |        ]
+         |      }
+         |    ]
+         |  }""".stripMargin
+
+    )))
+
+    val expected: Either[Nothing, Seq[Nothing]] = Right(Seq.empty)
+
+    val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
+
+    "return an empty Payments instance" in {
+      result shouldBe expected
+    }
+  }
+
+  "the http response is 200 OK and there are no valid main types" should {
+    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK, Some(Json.parse(
+      s"""{
+         |    "idType" : "VRN",
+         |    "idNumber" : 555555555,
+         |    "regimeType" : "VATC",
+         |    "processingDate" : "2018-03-07T09:30:00.000Z",
+         |    "financialTransactions" : [
+         |      {
+         |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentDebitCharge}",
+         |        "mainType" : "Some Other Main Type",
          |        "periodKey" : "17AA",
          |        "periodKeyDescription" : "ABCD",
          |        "taxPeriodFrom" : "2018-08-01",

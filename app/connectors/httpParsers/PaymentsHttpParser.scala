@@ -16,6 +16,7 @@
 
 package connectors.httpParsers
 
+import common.FinancialTransactionsConstants
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
 import models.payments.Payments
@@ -40,8 +41,9 @@ object PaymentsHttpParser extends ResponseHttpParsers {
   private def removeNonVatReturnCharges(json: JsValue): JsValue = {
 
     val validCharges: Set[String] = Set(
-      "VAT Return Debit Charge",
-      "VAT Return Credit Charge"
+      FinancialTransactionsConstants.vatReturnDebitCharge,
+      FinancialTransactionsConstants.vatReturnCreditCharge,
+      FinancialTransactionsConstants.officerAssessmentDebitCharge
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value

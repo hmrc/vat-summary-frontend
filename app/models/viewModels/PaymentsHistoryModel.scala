@@ -40,8 +40,17 @@ object PaymentsHistoryModel {
 
   implicit val reads: Reads[Seq[PaymentsHistoryModel]] = new Reads[Seq[PaymentsHistoryModel]] {
     override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
-      val transactionsList = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter {
-        _.get[String]("mainType") == FinancialTransactionsConstants.vatReturnCharge
+
+      val validTypes: Set[String] = Set(
+        FinancialTransactionsConstants.vatReturnCharge,
+        FinancialTransactionsConstants.officerAssessmentCharge
+      )
+
+      val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
+        val transactions = transaction.get[String]("mainType")
+
+        validTypes.contains(transactions)
+
       }
 
       def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate])] = {
@@ -58,7 +67,7 @@ object PaymentsHistoryModel {
 
       def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
 
-      val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList map { transaction =>
+      val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
         getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
           PaymentsHistoryModel(
             chargeType = transaction.get[String](FinancialTransactionsConstants.chargeType),

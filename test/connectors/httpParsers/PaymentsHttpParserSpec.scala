@@ -18,6 +18,7 @@ package connectors.httpParsers
 
 import java.time.LocalDate
 
+import common.FinancialTransactionsConstants
 import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 import models.errors._
 import models.payments.{Payment, Payments}
@@ -36,8 +37,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
-              "mainType" -> "VAT Return Charge",
-              "chargeType" -> "VAT Return Debit Charge",
+              "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
+              "chargeType" -> FinancialTransactionsConstants.vatReturnDebitCharge,
               "taxPeriodFrom" -> "2016-12-01",
               "taxPeriodTo" -> "2017-01-01",
               "items" -> Json.arr(
@@ -47,8 +48,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#003"
             ),
             Json.obj(
-              "mainType" -> "VAT Return Charge",
-              "chargeType" -> "VAT Return Credit Charge",
+              "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
+              "chargeType" -> FinancialTransactionsConstants.vatReturnCreditCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
               "items" -> Json.arr(
@@ -56,6 +57,16 @@ class PaymentsHttpParserSpec extends UnitSpec {
               ),
               "outstandingAmount" -> 1000,
               "periodKey" -> "#004"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.officerAssessmentCharge,
+              "chargeType" -> FinancialTransactionsConstants.officerAssessmentCreditCharge,
+              "taxPeriodFrom" -> "2017-12-01",
+              "taxPeriodTo" -> "2018-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2017-10-25")
+              ),
+              "outstandingAmount" -> 1000
             )
           )
         )
@@ -63,15 +74,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val expected = Right(Payments(Seq(
         Payment(
-          "VAT Return Debit Charge",
+          FinancialTransactionsConstants.vatReturnDebitCharge,
           start = LocalDate.parse("2016-12-01"),
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.00),
           periodKey = "#003"
         ),
-        Payment(
-          "VAT Return Credit Charge",
+        Payment(FinancialTransactionsConstants.vatReturnCreditCharge,
           start = LocalDate.parse("2017-12-01"),
           end = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2018-10-25"),
@@ -92,7 +102,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
-              "mainType" -> "VAT Return Charge",
+              "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
               "chargeType" -> "Other Charge Type",
               "outstandingAmount" -> 99
             )
