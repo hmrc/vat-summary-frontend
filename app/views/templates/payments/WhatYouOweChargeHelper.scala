@@ -23,21 +23,18 @@ import models.payments.OpenPaymentsModel
 import play.api.i18n.Messages
 import views.html.templates.formatters.dates.displayDateRange
 
-class WhatYouOweChargeHelper @Inject()(chargeType: String, payment: OpenPaymentsModel, implicit val messages: Messages) {
+class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, implicit val messages: Messages) {
 
-  val description: String = chargeType match {
+  val description: String = payment.paymentType match {
     case `vatReturnDebitCharge` =>
       s"${messages.apply("openPayments.forPeriod")} ${displayDateRange(payment.start, payment.end)}"
-    case _ => ""
   }
 
-  val payLinkText: String = chargeType match {
+  val payLinkText: String = payment.paymentType match {
     case `vatReturnDebitCharge` => messages.apply("openPayments.makePayment")
-    case _ => ""
   }
 
-  val viewReturnEnabled: Boolean = chargeType match {
+  val viewReturnEnabled: Boolean = payment.paymentType match {
     case `vatReturnDebitCharge` => true
-    case _ => false
   }
 }
