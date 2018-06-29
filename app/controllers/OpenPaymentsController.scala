@@ -22,8 +22,8 @@ import config.AppConfig
 import javax.inject.Inject
 
 import models.User
-import models.payments.Payment
-import models.viewModels.{OpenPaymentsModel, OpenPaymentsViewModel}
+import models.payments.{OpenPaymentsModel, Payment}
+import models.viewModels.OpenPaymentsViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
@@ -63,7 +63,7 @@ extends AuthorisedController with I18nSupport {
     OpenPaymentsViewModel(
       payments.map { payment =>
         OpenPaymentsModel(
-          "Return",
+          payment.chargeType,
           payment.outstandingAmount,
           payment.due,
           payment.start,

@@ -16,11 +16,9 @@
 
 @import models.User
 @import models.viewModels.OpenPaymentsViewModel
-@import views.html.templates.formatters.dates.{displayDateRange, displayDate}
-@import views.html.templates.expandingHelpSection
-@import views.html.templates.formatters.money.displayMoney
-@import views.html.templates.formatters.breadcrumbs._
 @import uk.gov.hmrc.play.views.html.helpers.form
+@import views.html.templates.expandingHelpSection
+@import views.html.templates.formatters.breadcrumbs._
 
 @(user: User, model: OpenPaymentsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -46,57 +44,9 @@
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
   <div id="paymentsSection" class="grid-row column-two-thirds payments">
+
     @model.payments.zipWithIndex.map { case(payment, count) =>
-      <div id="payment-section-@{count + 1}" class="section divider--bottom">
-
-          <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
-          <div class="grid-row" id="payment-row-@{count + 1}">
-            <div class="column-two-thirds">
-              <span data-due="@(payment.due.toString)">@messages("openPayments.dueBy") @displayDate(payment.due)</span>
-              @if(payment.overdue) {
-                <span class="inline">
-                  <strong class="task-overdue">@messages("common.overdue")</strong>
-                </span>
-              }
-              <span class="form-hint">@messages("openPayments.forPeriod") @displayDateRange(payment.start, payment.end).toString().trim</span>
-            </div>
-            @if(appConfig.features.allowPayments()) {
-              <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
-                  <div class="grid-row">
-                    @if(model.hasDirectDebit.getOrElse(false)) {
-                      <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">@messages("openPayments.youPayByDirectDebit")</span>
-                    } else {
-                      <a data-journey-click="payment:make-payment:open-payments"
-                         href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
-                         class="float--right">
-                        <span>@messages("openPayments.makePayment")</span>
-                        <span class="visuallyhidden">
-                           @displayMoney(payment.amount)
-                           @if(payment.overdue) { @messages("common.overdue") }
-                           @messages("openPayments.forPeriod")
-                           @displayDateRange(payment.start, payment.end).toString().trim
-                      </span>
-                      </a>
-                    }
-                  </div>
-
-               @if(appConfig.features.allowNineBox()) {
-                <div class="grid-row">
-                  <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
-                         href="@appConfig.vatReturnUrl(payment.periodKey)"
-                         class="float--right">
-                          <span>@messages("openPayments.viewReturnLink")</span>
-                          <span class="visuallyhidden">
-                            @messages("openPayments.forPeriod")
-                            @displayDateRange(payment.start, payment.end).toString().trim
-                          </span>
-                  </a>
-                </div>
-               }
-              </div>
-            }
-          </div>
-      </div>
+      @views.html.templates.payments.whatYouOweCharge(payment, count, model.hasDirectDebit)
     }
 
     @model.hasDirectDebit match {

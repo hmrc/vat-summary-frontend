@@ -1,0 +1,76 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.payments.OpenPaymentsModel
+@import views.html.templates.formatters.dates.{displayDateRange, displayDate}
+@import views.html.templates.formatters.money.displayMoney
+@import views.templates.payments.WhatYouOweChargeHelper
+
+@(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
+
+@chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
+
+<div id="payment-section-@{count + 1}" class="section divider--bottom">
+
+  <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
+  <div class="grid-row" id="payment-row-@{count + 1}">
+    <div class="column-two-thirds">
+      <span data-due="@(payment.due.toString)">@messages("openPayments.dueBy") @displayDate(payment.due)</span>
+      @if(payment.overdue) {
+        <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
+      }
+      <span class="form-hint">@chargeDetails.description</span>
+    </div>
+
+    @if(appConfig.features.allowPayments()) {
+      <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
+        <div class="grid-row">
+          @chargeDetails.payLinkText match {
+            case Some(payLinkText) => {
+              <a data-journey-click="payment:make-payment:open-payments"
+                 href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
+                 class="float--right">
+                <span>@payLinkText</span>
+                <span class="visuallyhidden">
+                                     @displayMoney(payment.amount)
+                                     @if(payment.overdue) { @messages("common.overdue") }
+                                     @chargeDetails.description
+                                </span>
+              </a>
+            }
+            case None => {
+              <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
+                @messages("openPayments.youPayByDirectDebit")
+              </span>
+            }
+          }
+        </div>
+
+      @if(appConfig.features.allowNineBox() && chargeDetails.viewReturnEnabled) {
+        <div class="grid-row">
+          <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
+             href="@appConfig.vatReturnUrl(payment.periodKey)"
+             class="float--right">
+            <span>@messages("openPayments.viewReturnLink")</span>
+            <span class="visuallyhidden">@chargeDetails.description</span>
+          </a>
+        </div>
+      }
+
+      </div>
+    }
+  </div>
+</div>
