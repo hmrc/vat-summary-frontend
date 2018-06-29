@@ -30,11 +30,11 @@ object PaymentsHistoryChargeHelper {
     "paymentsHistory.vatReturnDebitChargeDescription", "")
 
   object VatOfficerAssessmentCreditCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.officerAssessmentCreditCharge, 
+    FinancialTransactionsConstants.officerAssessmentCreditCharge,
     "paymentsHistory.officerAssessmentCreditChargeDescription", "")
 
   object VatOfficerAssessmentDebitCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.officerAssessmentDebitCharge, 
+    FinancialTransactionsConstants.officerAssessmentDebitCharge,
     "paymentsHistory.officerAssessmentDebitChargeDescription", "")
 
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge, VatOfficerAssessmentDebitCharge)

@@ -157,7 +157,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for underpaying by this amount"
+        elementText(Selectors.description) shouldBe "VAT officer's investigation for underpaying by this amount"
       }
     }
 
@@ -181,7 +181,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for underpaying by this amount"
+        elementText(Selectors.description) shouldBe "VAT officer's investigation for overpaying by this amount"
       }
     }
   }
