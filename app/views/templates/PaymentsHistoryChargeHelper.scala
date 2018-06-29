@@ -29,7 +29,15 @@ object PaymentsHistoryChargeHelper {
     FinancialTransactionsConstants.vatReturnDebitCharge,
     "paymentsHistory.vatReturnDebitChargeDescription", "")
 
-  val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge)
+  object VatOfficerAssessmentCreditCharge extends PaymentsHistoryChargeHelper(
+    FinancialTransactionsConstants.officerAssessmentCreditCharge,
+    "paymentsHistory.officerAssessmentCreditChargeDescription", "")
+
+  object VatOfficerAssessmentDebitCharge extends PaymentsHistoryChargeHelper(
+    FinancialTransactionsConstants.officerAssessmentDebitCharge,
+    "paymentsHistory.officerAssessmentDebitChargeDescription", "")
+
+  val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge, VatOfficerAssessmentDebitCharge)
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
     values.find(_.name == lookupName)
