@@ -42,4 +42,9 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatReturnDebitCharge` => true
     case `officerAssessmentDebitCharge` => false
   }
+
+  val overdueContext: String = payment.paymentType match {
+    case `vatReturnDebitCharge` => if(payment.overdue) messages.apply("common.overdue") else ""
+    case `officerAssessmentDebitCharge` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+  }
 }

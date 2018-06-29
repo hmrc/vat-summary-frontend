@@ -1,6 +1,7 @@
 common.dateRangeSeparator = to
 common.vat = VAT
 common.overdue = overdue
+common.isOverdue = is overdue,
 common.error.summary.heading = This page has errors
 base.back = Back
 base.signOut = Sign out
