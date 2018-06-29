@@ -132,29 +132,54 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering an Officer's Assessment charge" should {
+  "Rendering an Officer's Assessment charge" when {
 
-    val model = OpenPaymentsModel(
-      officerAssessmentDebitCharge,
-      BigDecimal(100.00),
-      LocalDate.parse("2018-03-03"),
-      LocalDate.parse("2018-01-01"),
-      LocalDate.parse("2018-02-02"),
-      "18AA"
-    )
-    lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(false))
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "display the correct description text" in {
-      elementText(Selectors.description) shouldBe "a VAT officer's investigation showed you underpaid by this amount"
+    def generateModel(overdue: Boolean): OpenPaymentsModel = {
+      OpenPaymentsModel(
+        officerAssessmentDebitCharge,
+        BigDecimal(100.00),
+        LocalDate.parse("2018-03-03"),
+        LocalDate.parse("2018-01-01"),
+        LocalDate.parse("2018-02-02"),
+        "18AA",
+        overdue
+      )
     }
 
-    "display the correct pay text" in {
-      elementText(Selectors.payText) shouldBe "Pay now"
+    "the payment is not overdue" should {
+
+      val model = generateModel(overdue = false)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct description text" in {
+        elementText(Selectors.description) shouldBe "a VAT officer's investigation showed you underpaid by this amount"
+      }
+
+      "display the correct pay text" in {
+        elementText(Selectors.payText) shouldBe "Pay now"
+      }
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£100 , a VAT officer's investigation showed you underpaid by this amount"
+      }
+
+      "not display the view return link" in {
+        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.viewReturnLink))
+      }
     }
 
-    "not display the view return link" in {
-      intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.viewReturnLink))
+    "the payment is overdue" should {
+
+      val model = generateModel(overdue = true)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£100 is overdue, a VAT officer's investigation showed you underpaid by this amount"
+      }
     }
   }
 }

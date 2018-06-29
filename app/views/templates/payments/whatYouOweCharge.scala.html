@@ -45,10 +45,10 @@
                  class="float--right">
                 <span>@payLinkText</span>
                 <span class="visuallyhidden">
-                                     @displayMoney(payment.amount)
-                                     @if(payment.overdue) { @messages("common.overdue") }
-                                     @chargeDetails.description
-                                </span>
+                  @displayMoney(payment.amount)
+                  @chargeDetails.overdueContext
+                  @chargeDetails.description
+                </span>
               </a>
             }
             case None => {
