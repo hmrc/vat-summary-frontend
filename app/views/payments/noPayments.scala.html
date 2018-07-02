@@ -37,7 +37,7 @@
                   @messages("payment.stillMake")
                   <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl">@messages("payment.stillMakeLink")</a>.
                 </p>
-                @if(hasDirectDebit.isDefined) {
+                @if(hasDirectDebit.isDefined && appConfig.features.allowDirectDebits()) {
                   @hasDirectDebit match {
                     case Some(true) => {
                       <p>

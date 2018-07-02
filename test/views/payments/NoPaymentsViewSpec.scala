@@ -23,6 +23,8 @@ import views.ViewBaseSpec
 
 class NoPaymentsViewSpec extends ViewBaseSpec {
 
+  mockConfig.features.allowDirectDebits(true)
+
   object Selectors {
     val pageHeading = "h1"
     val secondaryHeading = "h2"
