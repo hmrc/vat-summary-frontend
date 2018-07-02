@@ -49,7 +49,6 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
             Ok(views.html.payments.paymentHistory(model))
           case Left(error) =>
             Logger.warn("[PaymentHistoryController][paymentHistory] error: " + error.toString)
-
             InternalServerError(views.html.errors.standardError(appConfig,
               messagesApi.apply("standardError.title"),
               messagesApi.apply("standardError.heading"),
