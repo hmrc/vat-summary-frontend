@@ -35,6 +35,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val paymentLink = "#payments a"
+    val correctErrorLink = "details p:nth-of-type(1) a"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
@@ -130,6 +131,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       s"link to ${controllers.routes.VatDetailsController.details().url}" in {
         element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+      }
+
+      s"link to https://www.gov.uk/vat-corrections" in {
+        element(Selectors.correctErrorLink).attr("href") shouldBe "https://www.gov.uk/vat-corrections"
       }
 
       "have the text 'What you owe'" in {
