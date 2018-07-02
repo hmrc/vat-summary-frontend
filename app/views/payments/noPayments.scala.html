@@ -16,7 +16,7 @@
 
 @import views.html.templates.formatters.breadcrumbs._
 
-@(user: models.User)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: models.User, hasDirectDebit: Option[Boolean])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
   @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
 
@@ -29,13 +29,38 @@
 
     <div class="grid-row">
         <div class="column-two-thirds">
-            <h1 class="heading-xlarge">@Messages("noPayments.heading")</h1>
+            <h1 class="heading-xlarge">@messages("noPayments.heading")</h1>
             <div class="form-group" id="noPaymentsDetail">
                 <h2 class="lede">@messages("noPayments.oweNothing")</h2>
-                <p>@messages("noPayments.twentyFourHours")</p>
-                <p>@Messages("payment.stillMake")
-                  <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl">@Messages("payment.stillMakeLink")</a>
+                <p>
+                  @messages("noPayments.twentyFourHours")
+                  @messages("payment.stillMake")
+                  <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl">@messages("payment.stillMakeLink")</a>.
                 </p>
+                @if(hasDirectDebit.isDefined && appConfig.features.allowDirectDebits()) {
+                  @hasDirectDebit match {
+                    case Some(true) => {
+                      <p>
+                        @messages("noPayments.youCanAlso")
+                        <a target="_blank"
+                           href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)"
+                           data-metrics="direct-debit:direct-debit-handoff:no-open-payments">
+                          @messages("noPayments.viewDirectDebit")</a>.
+                      </p>
+                    }
+                    case Some(false) => {
+                      <p>
+                        @messages("noPayments.youCanAlso")
+                        <a target="_blank"
+                           href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)"
+                           data-metrics="direct-debit:direct-debit-handoff:no-open-payments">
+                          @messages("noPayments.setUpDirectDebit")
+                        </a>
+                        @messages("noPayments.forYourVatReturns")
+                      </p>
+                    }
+                  }
+                }
             </div>
         </div>
     </div>

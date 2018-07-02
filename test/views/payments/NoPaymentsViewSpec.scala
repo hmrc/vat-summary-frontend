@@ -16,22 +16,22 @@
 
 package views.payments
 
-import java.time.LocalDate
-
 import models.User
-import models.payments.OpenPaymentsModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
 class NoPaymentsViewSpec extends ViewBaseSpec {
 
+  mockConfig.features.allowDirectDebits(true)
+
   object Selectors {
     val pageHeading = "h1"
     val secondaryHeading = "h2"
-    val noPaymentsDetail = "#noPaymentsDetail"
-    val paymentWaitingMessage = "#noPaymentsDetail p:nth-of-type(1)"
-    val paymentLink = "#payments a"
+    val noPaymentsDetail = "#noPaymentsDetail p:nth-of-type(1)"
+    val paymentLink = "#noPaymentsDetail p:nth-of-type(1) a"
+    val directDebitMessage = "#noPaymentsDetail p:nth-of-type(2)"
+    val directDebitLink = "#noPaymentsDetail p:nth-of-type(2) a"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
@@ -39,71 +39,111 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
   }
 
-  private val user = User("1111")
-  val noPayment = Seq()
-  val payment = Seq(
-    OpenPaymentsModel(
-      "Return",
-      543.21,
-      LocalDate.parse("2000-04-08"),
-      LocalDate.parse("2000-01-01"),
-      LocalDate.parse("2000-03-31"),
-      "#001"
-    )
-  )
+  private val user = User("123456789")
 
-  "Rendering the no payments page" should {
+  "Rendering the no payments page" when {
 
-    lazy val view = views.html.payments.noPayments(user)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "the user has a direct debit" should {
 
-    "have the correct document title" in {
-      document.title shouldBe "What you owe"
-    }
+      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "What you owe"
-    }
-
-    "have the correct secondary heading" in {
-      elementText(Selectors.secondaryHeading) shouldBe "You don't owe anything right now."
-    }
-
-    "have the correct waiting information" in {
-      elementText(Selectors.paymentWaitingMessage) shouldBe
-        "If you've submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe."
-    }
-
-    lazy val noPaymentDetails = element(Selectors.noPaymentsDetail)
-
-    s"have the correct full link text" in {
-      noPaymentDetails.select("p:nth-of-type(2)").text shouldBe "You can still make a payment (opens in a new tab)"
-    }
-
-    s"have the correct href" in {
-      noPaymentDetails.select("p:nth-of-type(2) a").attr("href") shouldBe "unauthenticated-payments-url"
-    }
-
-    "render breadcrumbs which" should {
-
-      "have the text 'Business tax account'" in {
-        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+      "have the correct document title" in {
+        document.title shouldBe "What you owe"
       }
 
-      "link to bta" in {
-        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe "What you owe"
       }
 
-      "have the text 'VAT'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
+      "have the correct secondary heading" in {
+        elementText(Selectors.secondaryHeading) shouldBe "You don't owe anything right now."
       }
 
-      s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-        element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+      "have the correct context information" in {
+        elementText(Selectors.noPaymentsDetail) shouldBe
+          "If you've submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe." +
+          " You can still make a payment (opens in a new tab)."
       }
 
-      "have the text 'What you owe'" in {
-        elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
+      "have the correct make a payment link text" in {
+        elementText(Selectors.paymentLink) shouldBe "make a payment (opens in a new tab)"
+      }
+
+      "have the correct href" in {
+        element(Selectors.paymentLink).attr("href") shouldBe "unauthenticated-payments-url"
+      }
+
+      "have the correct message regarding viewing a direct debit" in {
+        elementText(Selectors.directDebitMessage) shouldBe "You can also view your direct debit details (opens in a new tab)."
+      }
+
+      "have the correct link text regarding viewing a direct debit" in {
+        elementText(Selectors.directDebitLink) shouldBe "view your direct debit details (opens in a new tab)"
+      }
+
+      "have the correct link destination regarding viewing a direct debit" in {
+        element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
+      }
+
+      "have the correct GA tag on the direct debit link" in {
+        element(Selectors.directDebitLink).attr("data-metrics") shouldBe "direct-debit:direct-debit-handoff:no-open-payments"
+      }
+
+      "render breadcrumbs which" should {
+
+        "have the text 'Business tax account'" in {
+          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+        }
+
+        "link to bta" in {
+          element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+        }
+
+        "have the text 'VAT'" in {
+          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
+        }
+
+        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        }
+
+        "have the text 'What you owe'" in {
+          elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
+        }
+      }
+    }
+
+    "the user does not have a direct debit" should {
+
+      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(false))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct message regarding setting up a direct debit" in {
+        elementText(Selectors.directDebitMessage) shouldBe
+          "You can also set up a direct debit (opens in a new tab) for your VAT Returns."
+      }
+
+      "have the correct link text regarding setting up a direct debit" in {
+        elementText(Selectors.directDebitLink) shouldBe "set up a direct debit (opens in a new tab)"
+      }
+
+      "have the correct link destination regarding setting up a direct debit" in {
+        element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=false"
+      }
+
+      "have the correct GA tag on the direct debit link" in {
+        element(Selectors.directDebitLink).attr("data-metrics") shouldBe "direct-debit:direct-debit-handoff:no-open-payments"
+      }
+    }
+
+    "the call to the direct debit service fails" should {
+
+      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = None)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display a direct debit message" in {
+        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.directDebitMessage))
       }
     }
   }
