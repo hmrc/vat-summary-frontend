@@ -48,7 +48,7 @@ extends AuthorisedController with I18nSupport {
             Ok(views.html.payments.openPayments(user, model))
           case Right(_) =>
             auditEvent(user, Seq.empty)
-            Ok(views.html.payments.noPayments(user))
+            Ok(views.html.payments.noPayments(user, hasActiveDirectDebit))
           case Left(_) => InternalServerError(views.html.errors.paymentsError())
         }
       }
