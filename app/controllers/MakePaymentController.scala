@@ -21,6 +21,7 @@ import audit.models.PayVatReturnChargeAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
@@ -56,7 +57,9 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
               routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear).url
             )
             Redirect(url)
-          case Left(_) => InternalServerError(paymentsError())
+          case Left(error) =>
+            Logger.warn("[MakePaymentController][makePayment] error: " + error.toString)
+            InternalServerError(paymentsError())
         }
     }
 }

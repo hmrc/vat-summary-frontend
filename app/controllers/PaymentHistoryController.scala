@@ -22,6 +22,7 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
@@ -46,11 +47,13 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
           case Right(model) =>
             auditEvent(user.vrn, model.transactions, year)
             Ok(views.html.payments.paymentHistory(model))
-          case Left(_) => InternalServerError(views.html.errors.standardError(appConfig,
-            messagesApi.apply("standardError.title"),
-            messagesApi.apply("standardError.heading"),
-            messagesApi.apply("standardError.message"))
-          )
+          case Left(error) =>
+            Logger.warn("[PaymentHistoryController][paymentHistory] error: " + error.toString)
+            InternalServerError(views.html.errors.standardError(appConfig,
+              messagesApi.apply("standardError.title"),
+              messagesApi.apply("standardError.heading"),
+              messagesApi.apply("standardError.message"))
+            )
         }
       } else {
         Future.successful(NotFound(views.html.errors.notFound()))

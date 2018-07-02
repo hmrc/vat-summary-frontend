@@ -25,6 +25,7 @@ import models.obligations.{Obligation, VatReturnObligations}
 import models.payments.Payments
 import models.obligations.{Obligation, VatReturnObligations}
 import models.viewModels.VatDetailsViewModel
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
@@ -79,18 +80,24 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val returnModel: VatDetailsDataModel = obligations match {
       case Right(Some(obs)) => getObligationFlags(obs.obligations)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
-      case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
+        VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }
 
     val paymentModel: VatDetailsDataModel = payments match {
       case Right(Some(paymnts)) => getObligationFlags(paymnts.financialTransactions)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
-      case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
+        VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }
 
     val displayedName = entityName match {
       case Right(name) => name
-      case Left(_) => None
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][displayedName] could not retrieve display name: " + error.toString)
+        None
     }
 
     VatDetailsViewModel(
