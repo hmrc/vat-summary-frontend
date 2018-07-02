@@ -21,6 +21,7 @@ import audit.models.DirectDebitAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
@@ -53,7 +54,9 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
 
             Redirect(url)
 
-          case Left(_) => InternalServerError(views.html.errors.standardError(appConfig,
+          case Left(error) =>
+            Logger.warn("[DirectDebitController][directDebits] error: " + error.toString)
+            InternalServerError(views.html.errors.standardError(appConfig,
             messagesApi.apply("standardError.title"),
             messagesApi.apply("standardError.heading"),
             messagesApi.apply("standardError.message"))

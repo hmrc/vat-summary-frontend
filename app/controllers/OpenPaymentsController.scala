@@ -20,10 +20,10 @@ import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
 import javax.inject.Inject
-
 import models.User
 import models.payments.{OpenPaymentsModel, Payment}
 import models.viewModels.OpenPaymentsViewModel
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
@@ -49,7 +49,9 @@ extends AuthorisedController with I18nSupport {
           case Right(_) =>
             auditEvent(user, Seq.empty)
             Ok(views.html.payments.noPayments(user))
-          case Left(_) => InternalServerError(views.html.errors.paymentsError())
+          case Left(error) =>
+            Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
+            InternalServerError(views.html.errors.paymentsError())
         }
       }
 
