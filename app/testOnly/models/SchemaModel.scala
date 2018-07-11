@@ -16,14 +16,17 @@
 
 package testOnly.models
 
-import play.api.libs.json.{Format, JsValue, Json}
+import play.api.libs.json.{Format, JsValue, Json, OFormat}
 
-case class DataModel(_id: String,
-                     schemaId: Option[String],
-                     method: String,
-                     status: Int,
-                     response: Option[JsValue])
+case class SchemaModel(
+                        _id: String,
+                        url: String,
+                        method: String,
+                        responseSchema: JsValue,
+                        requestSchema: Option[JsValue] = None
+                      )
 
-object DataModel {
-  implicit val formats: Format[DataModel] = Json.format[DataModel]
+object SchemaModel {
+  implicit val formats: OFormat[SchemaModel] = Json.format[SchemaModel]
 }
+
