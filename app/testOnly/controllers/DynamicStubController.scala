@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent}
 import testOnly.connectors.DynamicStubConnector
-import testOnly.models.DataModel
+import testOnly.models.{DataModel, SchemaModel}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -39,6 +39,28 @@ class DynamicStubController @Inject()(dynamicStubConnector: DynamicStubConnector
         }
       case _ => Future.successful(BadRequest("Unable to convert json to model"))
     }
+  }
+
+  def populateSchema(serviceName: String): Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
+    Try(request.body.as[SchemaModel]) match {
+      case Success(schemaModel) =>
+        dynamicStubConnector.populateSchema(schemaModel, serviceName).map { response =>
+          response.status match {
+            case OK => Ok(s"Successfully populated $serviceName schema with $schemaModel")
+            case _ => InternalServerError(s"Unable to populate $serviceName schema with $schemaModel")
+          }
+        }
+      case _ => Future.successful(BadRequest("Unable to convert json to model"))
+    }
+  }
+
+  def clearSchemas(serviceName: String): Action[AnyContent] = Action.async { implicit request =>
+    dynamicStubConnector.clearSchemas(serviceName).map(
+      response => response.status match {
+        case OK => Ok(s"Successfully cleared all $serviceName schemas")
+        case _ => InternalServerError(s"Unable to clear $serviceName schemas ${response.body}")
+      }
+    )
   }
 
   def clearStub(serviceName: String): Action[AnyContent] = Action.async { implicit request =>
