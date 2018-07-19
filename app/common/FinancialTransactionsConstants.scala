@@ -31,5 +31,7 @@ object FinancialTransactionsConstants {
   val officerAssessmentCharge= "VAT Officer's Assessment"
   val officerAssessmentCreditCharge = "VAT OA Credit Charge"
   val officerAssessmentDebitCharge = "VAT OA Debit Charge"
+  val vatDefaultSurcharge = "VAT Default Surcharge"
+  val vatCentralAssessment = "VAT Central Assessment"
 
 }
