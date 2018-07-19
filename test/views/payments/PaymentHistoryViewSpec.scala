@@ -47,7 +47,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
     val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
-    val noHistoryContent = "div.column-two-thirds p"
+    val noHistoryContent = "div.column-two-thirds p:nth-of-type(1)"
+    val noHistoryWillShowContent = "div.column-two-thirds p:nth-of-type(2)"
   }
 
   "Rendering the open payments page" when {
@@ -215,43 +216,37 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
 
-      "have tabs for each return year" should {
+      "have no tabs" should {
 
         "tab one" should {
 
-          "have the text '2018'" in {
-            elementText(Selectors.tabOne) should include("2018")
+          "not be visible" in {
+            val thrown = intercept[Exception] {
+              elementText(Selectors.tabOne)
+            }
+            thrown.getMessage should startWith("No element exists with the selector")
           }
 
-          "contain visually hidden text" in {
-            elementText(Selectors.tabOneHiddenText) shouldBe "Currently viewing payment history from 2018"
-          }
         }
 
         "tab two" should {
 
-          "have the text '2017'" in {
-            elementText(Selectors.tabTwo) should include("2017")
+          "not be visible" in {
+            val thrown = intercept[Exception] {
+              elementText(Selectors.tabTwo)
+            }
+            thrown.getMessage should startWith("No element exists with the selector")
           }
 
-          s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(2017).url}" in {
-            element(Selectors.tabTwo).select("a").attr("href") shouldBe
-              controllers.routes.PaymentHistoryController.paymentHistory(2017).url
-          }
-
-          "contain visually hidden text" in {
-            elementText(Selectors.tabTwoHiddenText) shouldBe "View payment history from 2017"
-          }
         }
       }
 
-
-      "have the correct tab heading" in {
-        elementText(Selectors.tabHeading) shouldBe "2018"
+      "show the no history lead content" in {
+        elementText(Selectors.noHistoryContent) shouldBe messages("paymentsHistory.noHistory")
       }
 
-      "have the correct content" in {
-        elementText(Selectors.noHistoryContent) shouldBe "You haven’t made or received any payments for 2018 yet."
+      "show the your history will show content" in {
+        elementText(Selectors.noHistoryWillShowContent) shouldBe messages("paymentsHistory.willShow")
       }
     }
   }
