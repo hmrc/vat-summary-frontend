@@ -18,24 +18,24 @@ package views.templates
 
 import common.FinancialTransactionsConstants
 
-sealed case class PaymentsHistoryChargeHelper(name: String, description: String, id: String)
+sealed case class PaymentsHistoryChargeHelper(name: String, description: String, id: String = "")
 
 object PaymentsHistoryChargeHelper {
   object VatReturnCreditCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.vatReturnCreditCharge,
-    "paymentsHistory.vatReturnCreditChargeDescription", "credit-charge")
+    "paymentsHistory.vatReturnCreditChargeDescription")
 
   object VatReturnDebitCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.vatReturnDebitCharge,
-    "paymentsHistory.vatReturnDebitChargeDescription", "")
+    "paymentsHistory.vatReturnDebitChargeDescription")
 
   object VatOfficerAssessmentCreditCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.officerAssessmentCreditCharge,
-    "paymentsHistory.officerAssessmentCreditChargeDescription", "")
+    "paymentsHistory.officerAssessmentCreditChargeDescription")
 
   object VatOfficerAssessmentDebitCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.officerAssessmentDebitCharge,
-    "paymentsHistory.officerAssessmentDebitChargeDescription", "")
+    "paymentsHistory.officerAssessmentDebitChargeDescription")
 
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge, VatOfficerAssessmentDebitCharge)
 

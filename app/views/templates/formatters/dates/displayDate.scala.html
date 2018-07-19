@@ -17,10 +17,10 @@
 @import java.time.LocalDate
 @import java.time.format.{DateTimeFormatter, ResolverStyle}
 
-@(date: LocalDate, showYear: Boolean = true)
+@(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false)
 
 @defining({
-  val format = "d MMMM" + (if (showYear) " uuuu" else "")
+  val format = (if (useShortDayFormat) "d MMM" else "d MMMM") + (if (showYear) " uuuu" else "")
   val formatter = DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT)
   formatter.format(date)
 }) { displayDate =>

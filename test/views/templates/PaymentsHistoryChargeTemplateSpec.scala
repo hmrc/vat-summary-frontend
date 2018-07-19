@@ -129,7 +129,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "credit-charge"
+        element(Selectors.tableRow).attr("class") shouldBe ""
       }
 
       "display the correct description" in {

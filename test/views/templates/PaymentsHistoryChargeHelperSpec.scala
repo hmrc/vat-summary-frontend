@@ -23,7 +23,7 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 
     "the lookup string is a valid charge type" should {
 
-      "return the charge type accociated with the lookup string" in {
+      "return the charge type associated with the lookup string" in {
 
         val result = PaymentsHistoryChargeHelper.getChargeType("VAT Return Debit Charge")
 
