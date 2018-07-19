@@ -111,6 +111,8 @@ paymentsHistory.vatReturnCreditChargeDescription = Repayment for {0} to {1} retu
 paymentsHistory.vatReturnDebitChargeDescription = {0} to {1} return
 paymentsHistory.officerAssessmentDebitChargeDescription = VAT officer''s investigation for underpaying by this amount
 paymentsHistory.officerAssessmentCreditChargeDescription = VAT officer''s investigation for overpaying by this amount
+paymentsHistory.vatCentralAssessmentDescription = Estimate for your {0} to {1} return
+paymentsHistory.vatDefaultSurchargeDescription = Surcharge for late payment of your {0} to {1} return
 
 notFound.title = Page not found
 notFound.heading = This page can''t be found
