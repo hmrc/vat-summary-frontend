@@ -18,24 +18,28 @@ package views.templates
 
 import common.FinancialTransactionsConstants
 
-sealed case class PaymentsHistoryChargeHelper(name: String, description: String, id: String)
+sealed case class PaymentsHistoryChargeHelper(name: String, title: String, description: String, id: String = "")
 
 object PaymentsHistoryChargeHelper {
   object VatReturnCreditCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.vatReturnCreditCharge,
-    "paymentsHistory.vatReturnCreditChargeDescription", "credit-charge")
+    "paymentsHistory.vatReturnCreditChargeTitle",
+    "paymentsHistory.vatReturnCreditChargeDescription")
 
   object VatReturnDebitCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.vatReturnDebitCharge,
-    "paymentsHistory.vatReturnDebitChargeDescription", "")
+    "paymentsHistory.vatReturnDebitChargeTitle",
+    "paymentsHistory.vatReturnDebitChargeDescription")
 
   object VatOfficerAssessmentCreditCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.officerAssessmentCreditCharge,
-    "paymentsHistory.officerAssessmentCreditChargeDescription", "")
+    "paymentsHistory.officerAssessmentChargeTitle",
+    "paymentsHistory.officerAssessmentCreditChargeDescription")
 
   object VatOfficerAssessmentDebitCharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.officerAssessmentDebitCharge,
-    "paymentsHistory.officerAssessmentDebitChargeDescription", "")
+    "paymentsHistory.officerAssessmentChargeTitle",
+    "paymentsHistory.officerAssessmentDebitChargeDescription")
 
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge, VatOfficerAssessmentDebitCharge)
 

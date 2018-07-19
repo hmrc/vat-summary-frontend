@@ -16,6 +16,6 @@
 
 @import java.time.LocalDate
 
-@(from: LocalDate, to: LocalDate)(implicit messages: Messages)
+@(from: LocalDate, to: LocalDate, useShortDayFormat: Boolean = false)(implicit messages: Messages)
 
-@displayDate(from, from.getYear != to.getYear) @messages("common.dateRangeSeparator") @displayDate(to)
+@displayDate(from, from.getYear != to.getYear, useShortDayFormat) @messages("common.dateRangeSeparator") @displayDate(to, true, useShortDayFormat)

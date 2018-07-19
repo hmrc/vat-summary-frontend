@@ -17,35 +17,16 @@
 @import views.templates.PaymentsHistoryChargeHelper
 @import views.html.templates.formatters.dates._
 @import views.html.templates.formatters.money._
-@import views.html.templates.payments._
 @import models.viewModels.PaymentsHistoryModel
 @import java.time.LocalDate
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)
 
-@formatDate(date: LocalDate, showYear: Boolean) = @{
-  if (showYear) {
-    s"${date.getDayOfMonth} ${date.getMonth.toString.head}${date.getMonth.toString.toLowerCase.substring(1, 3)} ${date.getYear}"
-  } else {
-    s"${date.getDayOfMonth} ${date.getMonth.toString.head}${date.getMonth.toString.toLowerCase.substring(1, 3)}"
-  }
-}
 
 @getDescriptionString(chargeTypeDescription: String, firstDate: Option[LocalDate], secondDate: Option[LocalDate]) = @{
   (firstDate, secondDate) match {
-    case (Some(fd), Some(sd)) => {
-      messages(
-        s"$chargeTypeDescription",
-	formatDate(fd, false),
-        formatDate(sd, true)
-      )
-    }
-
-    case _ => {
-      messages(
-        s"$chargeTypeDescription"
-      )
-    }
+    case (Some(fd), Some(sd)) => messages(s"$chargeTypeDescription", displayDateRange(fd, sd, useShortDayFormat = true))
+    case _ => messages(s"$chargeTypeDescription")
   }
 }
 
@@ -55,8 +36,12 @@
 
   case (Some(charge), Some(date)) => {
     <tr class="@charge.id">
-      <td scope="row">@formatDate(date, true)</td>
-      <td>@getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)</td>
+      <td scope="row">@displayDate(date, useShortDayFormat = true)</td>
+      <td><span class="bold">@messages(s"${charge.title}")</span>
+          <span class="form-hint">
+            @getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
+          </span>
+      </td>
       <td class="numeric">@displayMoney(transaction.amount.abs)</td>
     </tr>
   }

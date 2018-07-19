@@ -38,6 +38,16 @@ class DisplayDateTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "showYear is true and use short month format is true" should {
+
+      lazy val template = views.html.templates.formatters.dates.displayDate(date, useShortDayFormat = true)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "render the date with year" in {
+        document.body().text() shouldEqual "1 Jan 2017"
+      }
+    }
+
     "showYear is false" should {
 
       lazy val template = views.html.templates.formatters.dates.displayDate(date, showYear = false)
@@ -45,6 +55,16 @@ class DisplayDateTemplateSpec extends ViewBaseSpec {
 
       "render the date without year" in {
         document.body().text() shouldEqual "1 January"
+      }
+    }
+
+    "showYear is false and use short month format is true" should {
+
+      lazy val template = views.html.templates.formatters.dates.displayDate(date, showYear = false, useShortDayFormat = true)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "render the date without year" in {
+        document.body().text() shouldEqual "1 Jan"
       }
     }
   }

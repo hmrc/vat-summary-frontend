@@ -107,10 +107,13 @@ paymentsHistory.amountTitle = Amount
 paymentsHistory.activeTab = Currently viewing payment history from {0}
 paymentsHistory.inactiveTab = View payment history from {0}
 paymentsHistory.noHistory = You haven’t made or received any payments for {0} yet.
-paymentsHistory.vatReturnCreditChargeDescription = Repayment for {0} to {1} return
-paymentsHistory.vatReturnDebitChargeDescription = {0} to {1} return
-paymentsHistory.officerAssessmentDebitChargeDescription = VAT officer''s investigation for underpaying by this amount
-paymentsHistory.officerAssessmentCreditChargeDescription = VAT officer''s investigation for overpaying by this amount
+paymentsHistory.vatReturnCreditChargeTitle = Repayment from HMRC
+paymentsHistory.vatReturnCreditChargeDescription = for your {0} return
+paymentsHistory.vatReturnDebitChargeTitle = Return
+paymentsHistory.vatReturnDebitChargeDescription = for the period {0}
+paymentsHistory.officerAssessmentChargeTitle = VAT officer''s investigation
+paymentsHistory.officerAssessmentDebitChargeDescription = for underpaying by this amount
+paymentsHistory.officerAssessmentCreditChargeDescription = for overpaying by this amount
 
 notFound.title = Page not found
 notFound.heading = This page can''t be found

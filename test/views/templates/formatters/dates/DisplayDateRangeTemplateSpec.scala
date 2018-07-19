@@ -40,6 +40,18 @@ class DisplayDateRangeTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "start and end dates are in the same year with short month format" should {
+
+      val endDate: LocalDate = LocalDate.parse("2017-04-01")
+
+      lazy val template = views.html.templates.formatters.dates.displayDateRange(startDate, endDate, useShortDayFormat = true)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "render the correct text" in {
+        document.body().text() shouldEqual "1 Jan to 1 Apr 2017"
+      }
+    }
+
     "start and end dates are not in the same year" should {
 
       val endDate: LocalDate = LocalDate.parse("2018-04-01")
@@ -49,6 +61,18 @@ class DisplayDateRangeTemplateSpec extends ViewBaseSpec {
 
       "render the correct text" in {
         document.body().text() shouldEqual "1 January 2017 to 1 April 2018"
+      }
+    }
+
+    "start and end dates are not in the same year with short month format" should {
+
+      val endDate: LocalDate = LocalDate.parse("2018-04-01")
+
+      lazy val template = views.html.templates.formatters.dates.displayDateRange(startDate, endDate, useShortDayFormat = true)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "render the correct text" in {
+        document.body().text() shouldEqual "1 Jan 2017 to 1 Apr 2018"
       }
     }
   }

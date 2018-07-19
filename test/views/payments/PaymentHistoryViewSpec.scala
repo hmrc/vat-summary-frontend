@@ -44,7 +44,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableHeading = "tr th:nth-of-type(2)"
     val amountPaidTableHeading = "tr th:nth-of-type(3)"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
-    val descriptionTableContent = "tr td:nth-of-type(2)"
+    val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
+    val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
     val noHistoryContent = "div.column-two-thirds p"
   }
@@ -159,8 +160,12 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
       }
 
+      "have the correct description table charge type" in {
+        elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
+      }
+      
       "have the correct description table content" in {
-        elementText(Selectors.descriptionTableContent) shouldBe "1 Jan to 1 Feb 2018 return"
+        elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
       }
 
       "have the correct amount paid table content" in {
