@@ -57,12 +57,12 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "have the correct secondary heading" in {
-        elementText(Selectors.secondaryHeading) shouldBe "You don't owe anything right now."
+        elementText(Selectors.secondaryHeading) shouldBe "You do not owe anything right now."
       }
 
       "have the correct context information" in {
         elementText(Selectors.noPaymentsDetail) shouldBe
-          "If you've submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe." +
+          "If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe." +
           " You can still make a payment (opens in a new tab)."
       }
 

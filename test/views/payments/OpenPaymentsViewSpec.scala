@@ -237,8 +237,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct make payment help text" in {
       elementText(Selectors.helpMakePayment) shouldBe
-        "After you've submitted a return, it can take 24 hours for what you owe to show here. " +
-          "You can still make a payment (opens in a new tab) even if a payment isn't shown."
+        "After you have submitted a return, it can take 24 hours for what you owe to show here. " +
+          "You can still make a payment (opens in a new tab) even if a payment is not shown."
     }
 
     "render the overdue label" in {
@@ -310,12 +310,12 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct text for the processing time" in {
       elementText(Selectors.processingTimeOld) shouldBe
-        "Your payment could take up to 5 days to process. You may be fined if it's late."
+        "Your payment could take up to 5 days to process. You may be fined if it is late."
     }
 
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitText) shouldBe
-        "If you've already set up a direct debit, you don't need to pay now. You can view your direct debits if you're not sure."
+        "If you have already set up a direct debit, you do not need to pay now. You can view your direct debits if you are not sure."
     }
 
     "render the correct check direct debit link text" in {

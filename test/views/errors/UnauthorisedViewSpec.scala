@@ -37,11 +37,11 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "You're not authorised to use this service"
+      document.title shouldBe "You are not authorised to use this service"
     }
 
     "have a the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "You're not authorised to use this service"
+      elementText(Selectors.pageHeading) shouldBe "You are not authorised to use this service"
     }
 
     "have the correct instructions to sign up" in {
@@ -53,7 +53,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     }
 
     "have the correct instructions to sign in" in {
-      elementText(Selectors.signInCorrectCredentials) shouldBe "If you've already signed up, you need to sign in with the correct Government Gateway details."
+      elementText(Selectors.signInCorrectCredentials) shouldBe "If you have already signed up, you need to sign in with the correct Government Gateway details."
     }
 
     "have the correct sign out text" in {
