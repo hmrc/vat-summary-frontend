@@ -44,12 +44,12 @@ object PaymentsHistoryChargeHelper {
   object VatCentralAssessment extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.vatCentralAssessment,
     "paymentsHistory.vatCentralAssessmentTitle",
-    "paymentsHistory.vatCentralAssessmentDescription", "")
+    "paymentsHistory.vatCentralAssessmentDescription")
 
   object VatDefaultSurcharge extends PaymentsHistoryChargeHelper(
     FinancialTransactionsConstants.vatDefaultSurcharge,
     "paymentsHistory.vatDefaultSurchargeTitle",
-    "paymentsHistory.vatDefaultSurchargeDescription", "")
+    "paymentsHistory.vatDefaultSurchargeDescription")
 
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge,
     VatOfficerAssessmentDebitCharge, VatCentralAssessment, VatDefaultSurcharge)
