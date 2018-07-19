@@ -106,7 +106,9 @@ paymentsHistory.descriptionTitle = Description
 paymentsHistory.amountTitle = Amount
 paymentsHistory.activeTab = Currently viewing payment history from {0}
 paymentsHistory.inactiveTab = View payment history from {0}
-paymentsHistory.noHistory = You haven’t made or received any payments for {0} yet.
+paymentsHistory.noHistory = You have not made any payments yet.
+paymentsHistory.willShow = Your payment history will show here once you have paid a VAT Return or made any other VAT payments.
+
 paymentsHistory.vatReturnCreditChargeTitle = Repayment from HMRC
 paymentsHistory.vatReturnCreditChargeDescription = for your {0} return
 paymentsHistory.vatReturnDebitChargeTitle = Return
