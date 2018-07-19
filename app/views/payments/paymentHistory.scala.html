@@ -45,13 +45,22 @@
 
       @if(model.transactions.isEmpty || model.transactions.forall(_.clearedDate.isEmpty)) {
         <p>@messages("paymentsHistory.noHistory", model.selectedYear.toString)</p>
+
       } else {
         <table>
           <thead>
             <tr>
-              <th scope="col">@messages("paymentsHistory.paymentReceivedTitle")</th>
-              <th scope="col">@messages("paymentsHistory.descriptionTitle")</th>
-              <th class="numeric" scope="col">@messages("paymentsHistory.amountTitle")</th>
+              <th scope="col"> 
+                <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
+              </th>
+
+	            <th scope="col">
+                <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
+              </th>
+
+      	      <th class="numeric" scope="col">
+                <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
+              </th>
             </tr>
           </thead>
 

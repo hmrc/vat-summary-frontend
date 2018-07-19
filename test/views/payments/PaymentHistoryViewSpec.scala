@@ -40,9 +40,9 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val tabOneHiddenText = ".tabs-nav li:nth-of-type(1) span"
     val tabTwoHiddenText = ".tabs-nav li:nth-of-type(2) span"
     val tabHeading = "h2"
-    val paymentDateTableHeading = "tr th:nth-of-type(1)"
-    val descriptionTableHeading = "tr th:nth-of-type(2)"
-    val amountPaidTableHeading = "tr th:nth-of-type(3)"
+    val paymentDateTableHeading = "tr th:nth-of-type(1) div"
+    val descriptionTableHeading = "tr th:nth-of-type(2) div"
+    val amountPaidTableHeading = "tr th:nth-of-type(3) div"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
     val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
     val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
@@ -154,6 +154,18 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       "have the correct amount paid table heading" in {
         elementText(Selectors.amountPaidTableHeading) shouldBe "Amount"
+      }
+
+      "have the visuallyhidden attribute on the payment date table heading" in {
+        element(Selectors.paymentDateTableHeading).attr("class") shouldBe "visuallyhidden"
+      }
+
+      "have the visuallyhidden attribute on the description table heading" in {
+        element(Selectors.descriptionTableHeading).attr("class") shouldBe "visuallyhidden"
+      }
+
+      "have the visuallyhidden attribute on the amount paid table heading" in {
+        element(Selectors.amountPaidTableHeading).attr("class") shouldBe "visuallyhidden"
       }
 
       "have the correct payment date table content" in {
