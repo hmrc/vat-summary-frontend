@@ -43,7 +43,9 @@ object PaymentsHistoryModel {
 
       val validTypes: Set[String] = Set(
         FinancialTransactionsConstants.vatReturnCharge,
-        FinancialTransactionsConstants.officerAssessmentCharge
+        FinancialTransactionsConstants.officerAssessmentCharge,
+        FinancialTransactionsConstants.vatCentralAssessment,
+        FinancialTransactionsConstants.vatDefaultSurcharge
       )
 
       val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
