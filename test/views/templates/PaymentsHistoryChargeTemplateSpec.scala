@@ -191,7 +191,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe messages("paymentsHistory.vatCentralAssessmentTitle")
+        elementText(Selectors.chargeTitle) shouldBe "Estimate"
       }
 
       "display the correct description" in {
@@ -219,7 +219,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe messages("paymentsHistory.vatDefaultSurchargeTitle")
+        elementText(Selectors.chargeTitle) shouldBe "Surcharge"
       }
 
       "display the correct description" in {
