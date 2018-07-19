@@ -37,7 +37,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-        @if(model.transactions.size > 0){
+        @if(model.transactions.nonEmpty){
         <ul class="tabs-nav">
         @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
         </ul>
@@ -62,7 +62,7 @@
             </thead>
             <tbody>
             @for(transaction <- model.transactions) {
-            @views.html.templates.paymentsHistoryCharge(transaction)
+                @views.html.templates.paymentsHistoryCharge(transaction)
             }
             </tbody>
 
@@ -71,6 +71,11 @@
       } else {
         <p class="lede">@messages("paymentsHistory.noHistory")</p>
         <p>@messages("paymentsHistory.willShow")</p>
+        <ul class="list list-bullet">
+            <li>@messages("paymentsHistory.bullet1")</li>
+            <li>@messages("paymentsHistory.bullet2")</li>
+        </ul>
+
       }
 
     </div>

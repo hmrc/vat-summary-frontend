@@ -49,11 +49,14 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val amountPaidTableContent = "tr td:nth-of-type(3)"
     val noHistoryContent = "div.column-two-thirds p:nth-of-type(1)"
     val noHistoryWillShowContent = "div.column-two-thirds p:nth-of-type(2)"
+    val noHistoryBullet1 = "div.column-two-thirds li:nth-of-type(1)"
+    val noHistoryBullet2 = "div.column-two-thirds li:nth-of-type(2)"
   }
 
-  "Rendering the open payments page" when {
+  "Rendering the payments history page" when {
 
     val historyYears = Seq(2018, 2017)
+    val noHistoryYears = Seq.empty
 
     "there are multiple payment histories to display" should {
 
@@ -227,38 +230,53 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
         }
       }
+    }
 
-      "have no tabs" should {
+    "there is no payment history for any year" should {
 
-        "tab one" should {
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        noHistoryYears,
+        noHistoryYears.head,
+        Seq.empty
+      )
 
-          "not be visible" in {
-            val thrown = intercept[Exception] {
-              elementText(Selectors.tabOne)
-            }
-            thrown.getMessage should startWith("No element exists with the selector")
-          }
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
+      "display no first year tab" in {
+
+        val thrown = intercept[Exception] {
+          elementText(Selectors.tabOne)
         }
+        thrown.getMessage should startWith("No element exists with the selector")
+      }
 
-        "tab two" should {
+      "display no second year tab" in {
 
-          "not be visible" in {
-            val thrown = intercept[Exception] {
-              elementText(Selectors.tabTwo)
-            }
-            thrown.getMessage should startWith("No element exists with the selector")
-          }
-
+        val thrown = intercept[Exception] {
+          elementText(Selectors.tabTwo)
         }
+        thrown.getMessage should startWith("No element exists with the selector")
       }
 
       "show the no history lead content" in {
-        elementText(Selectors.noHistoryContent) shouldBe messages("paymentsHistory.noHistory")
+
+        elementText(Selectors.noHistoryContent) shouldBe "You have not made any payments yet."
       }
 
       "show the your history will show content" in {
-        elementText(Selectors.noHistoryWillShowContent) shouldBe messages("paymentsHistory.willShow")
+
+        elementText(Selectors.noHistoryWillShowContent) shouldBe "Your payment history will show here once you have:"
+      }
+
+      "show the your history will show content first bullet" in {
+
+        elementText(Selectors.noHistoryBullet1) shouldBe "paid a VAT Return or made any other VAT payments"
+      }
+
+      "show the your history will show content second bullet" in {
+
+        elementText(Selectors.noHistoryBullet2) shouldBe "received any VAT repayments"
       }
     }
   }
