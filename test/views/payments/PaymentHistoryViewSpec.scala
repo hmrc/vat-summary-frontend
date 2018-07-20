@@ -55,8 +55,9 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
   "Rendering the payments history page" when {
 
-    val historyYears = Seq(2018, 2017)
-    val noHistoryYears = Seq.empty
+    val currentYear = 2018
+    val previousYear = 2017
+    val historyYears = Seq(currentYear, previousYear)
 
     "there are multiple payment histories to display" should {
 
@@ -132,9 +133,9 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             elementText(Selectors.tabTwo) should include("2017")
           }
 
-          s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(2017).url}" in {
+          s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url}" in {
             element(Selectors.tabTwo).select("a").attr("href") shouldBe
-              controllers.routes.PaymentHistoryController.paymentHistory(2017).url
+              controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url
           }
 
           "contain visually hidden text" in {
@@ -235,8 +236,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "there is no payment history for any year" should {
 
       val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        noHistoryYears,
-        noHistoryYears.head,
+        Seq.empty,
+        currentYear,
         Seq.empty
       )
 
@@ -261,7 +262,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       "show the no history lead content" in {
 
-        elementText(Selectors.noHistoryContent) shouldBe "You have not made any payments yet."
+        elementText(Selectors.noHistoryContent) shouldBe "You have not made or received any payments yet."
       }
 
       "show the your history will show content" in {
