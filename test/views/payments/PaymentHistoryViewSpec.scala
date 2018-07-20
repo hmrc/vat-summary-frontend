@@ -47,12 +47,16 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
     val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
-    val noHistoryContent = "div.column-two-thirds p"
+    val noHistoryContent = "div.column-two-thirds p:nth-of-type(1)"
+    val noHistoryWillShowContent = "div.column-two-thirds p:nth-of-type(2)"
+    val noHistoryBullet1 = "div.column-two-thirds li:nth-of-type(1)"
+    val noHistoryBullet2 = "div.column-two-thirds li:nth-of-type(2)"
   }
 
-  "Rendering the open payments page" when {
+  "Rendering the payments history page" when {
 
     val historyYears = Seq(2018, 2017)
+    val noHistoryYears = Seq.empty
 
     "there are multiple payment histories to display" should {
 
@@ -226,44 +230,53 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
         }
       }
+    }
 
-      "have tabs for each return year" should {
+    "there is no payment history for any year" should {
 
-        "tab one" should {
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        noHistoryYears,
+        noHistoryYears.head,
+        Seq.empty
+      )
 
-          "have the text '2018'" in {
-            elementText(Selectors.tabOne) should include("2018")
-          }
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-          "contain visually hidden text" in {
-            elementText(Selectors.tabOneHiddenText) shouldBe "Currently viewing payment history from 2018"
-          }
+      "display no first year tab" in {
+
+        val thrown = intercept[Exception] {
+          elementText(Selectors.tabOne)
         }
-
-        "tab two" should {
-
-          "have the text '2017'" in {
-            elementText(Selectors.tabTwo) should include("2017")
-          }
-
-          s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(2017).url}" in {
-            element(Selectors.tabTwo).select("a").attr("href") shouldBe
-              controllers.routes.PaymentHistoryController.paymentHistory(2017).url
-          }
-
-          "contain visually hidden text" in {
-            elementText(Selectors.tabTwoHiddenText) shouldBe "View payment history from 2017"
-          }
-        }
+        thrown.getMessage should startWith("No element exists with the selector")
       }
 
+      "display no second year tab" in {
 
-      "have the correct tab heading" in {
-        elementText(Selectors.tabHeading) shouldBe "2018"
+        val thrown = intercept[Exception] {
+          elementText(Selectors.tabTwo)
+        }
+        thrown.getMessage should startWith("No element exists with the selector")
       }
 
-      "have the correct content" in {
-        elementText(Selectors.noHistoryContent) shouldBe "You haven’t made or received any payments for 2018 yet."
+      "show the no history lead content" in {
+
+        elementText(Selectors.noHistoryContent) shouldBe "You have not made any payments yet."
+      }
+
+      "show the your history will show content" in {
+
+        elementText(Selectors.noHistoryWillShowContent) shouldBe "Your payment history will show here once you have:"
+      }
+
+      "show the your history will show content first bullet" in {
+
+        elementText(Selectors.noHistoryBullet1) shouldBe "paid a VAT Return or made any other VAT payments"
+      }
+
+      "show the your history will show content second bullet" in {
+
+        elementText(Selectors.noHistoryBullet2) shouldBe "received any VAT repayments"
       }
     }
   }
