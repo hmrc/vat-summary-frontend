@@ -171,6 +171,62 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is a vat central assessment charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        "VAT Central Assessment",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        -123456,
+        Some(LocalDate.parse("2018-02-14"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Estimate"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for your 12 Jan to 23 Mar 2018 return"
+      }
+    }
+
+    "there is a vat default surcharge charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        "VAT Default Surcharge",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        -123456,
+        Some(LocalDate.parse("2018-02-14"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Surcharge"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for late payment of your 12 Jan to 23 Mar 2018 return"
+      }
+    }
+
     "there is an invalid charge type" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(

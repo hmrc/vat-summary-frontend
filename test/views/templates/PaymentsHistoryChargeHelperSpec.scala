@@ -30,6 +30,22 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
         result shouldBe Some(PaymentsHistoryChargeHelper.VatReturnDebitCharge)
 
       }
+
+      "return a central assessment charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Central Assessment")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatCentralAssessment)
+
+      }
+
+      "return a default surcharge charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Default Surcharge")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatDefaultSurcharge)
+
+      }
     }
 
     "the lookup String is an invalid charge type" should {
