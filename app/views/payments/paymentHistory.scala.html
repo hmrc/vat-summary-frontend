@@ -37,18 +37,14 @@
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-      <ul class="tabs-nav">
+        @if(model.transactions.nonEmpty){
+        <ul class="tabs-nav">
         @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
-      </ul>
+        </ul>
+        <h2>@model.selectedYear.toString</h2>
 
-      <h2>@model.selectedYear.toString</h2>
-
-      @if(model.transactions.isEmpty || model.transactions.forall(_.clearedDate.isEmpty)) {
-        <p>@messages("paymentsHistory.noHistory", model.selectedYear.toString)</p>
-
-      } else {
         <table>
-          <thead>
+            <thead>
             <tr>
               <th scope="col"> 
                 <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
@@ -61,16 +57,25 @@
       	      <th class="numeric" scope="col">
                 <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
               </th>
-            </tr>
-          </thead>
 
-          <tbody>
+            </tr>
+            </thead>
+            <tbody>
             @for(transaction <- model.transactions) {
-              @views.html.templates.paymentsHistoryCharge(transaction)
+                @views.html.templates.paymentsHistoryCharge(transaction)
             }
-          </tbody>
+            </tbody>
 
         </table>
+
+      } else {
+        <p class="lede">@messages("paymentsHistory.noHistory")</p>
+        <p>@messages("paymentsHistory.willShow")</p>
+        <ul class="list list-bullet">
+            <li>@messages("paymentsHistory.bullet1")</li>
+            <li>@messages("paymentsHistory.bullet2")</li>
+        </ul>
+
       }
 
     </div>
