@@ -155,7 +155,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "have the text" in {
-        submittedReturns.select("p").text() shouldBe "Check the returns you've sent us."
+        submittedReturns.select("p").text() shouldBe "Check the returns you have sent us."
       }
     }
 

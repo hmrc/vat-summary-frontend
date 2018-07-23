@@ -37,7 +37,7 @@ class NotFoundViewSpec extends ViewBaseSpec {
     }
 
     "have a the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "This page can't be found"
+      elementText(Selectors.pageHeading) shouldBe "This page cannot be found"
     }
 
     "have the correct message on the page" in {
