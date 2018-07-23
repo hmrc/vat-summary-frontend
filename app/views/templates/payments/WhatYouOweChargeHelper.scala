@@ -30,21 +30,31 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatReturnDebitCharge` =>
       s"${messages.apply("openPayments.forPeriod")} ${displayDateRange(payment.start, payment.end)}"
     case `officerAssessmentDebitCharge` => messages.apply("openPayments.officersAssessment")
-  }
+    case `vatDefaultSurcharge` =>
+      s"${messages.apply("openPayments.surcharge", {displayDateRange(payment.start, payment.end)})}"
+    case `vatCentralAssessment` =>
+      s"${messages.apply("openPayments.centralAssessment",
+        {displayDateRange(payment.start, payment.end)}).trim}${messages("openPayments.centralAssessmentSubmit")}"}
 
   val payLinkText: Option[String] = (payment.paymentType, hasDirectDebit) match {
     case (`vatReturnDebitCharge`, Some(true)) => None
     case (`vatReturnDebitCharge`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`officerAssessmentDebitCharge`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatDefaultSurcharge`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatCentralAssessment`, _) => Some(messages.apply("openPayments.payEstimate"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
     case `vatReturnDebitCharge` => true
     case `officerAssessmentDebitCharge` => false
+    case `vatDefaultSurcharge` => false
+    case `vatCentralAssessment` => false
   }
 
   val overdueContext: String = payment.paymentType match {
     case `vatReturnDebitCharge` => if(payment.overdue) messages.apply("common.overdue") else ""
     case `officerAssessmentDebitCharge` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatDefaultSurcharge` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatCentralAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 }
