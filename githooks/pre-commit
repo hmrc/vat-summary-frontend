@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+br="$(git rev-parse --abbrev-ref HEAD)"
+
+die() {
+  printf "fatal: ${1}\n" "${2}" >&2
+  printf "hint: use '--no-verify' to disable this check\n"
+
+  exit 1
+}
+
+verify_up_to_date() {
+  git fetch \
+    && cn="$(git log HEAD..origin/master --oneline | wc -l)"
+
+  [ "${cn}" = "0" ] \
+    || die "branch '${br}' is behind 'origin/master' by ${cn} commits.\
+           \nrun 'git rebase master' and try again\n"
+}
+
+verify_branch() {
+  [ "${br}" = "master" ] && [ -f "$(git rev-parse --git-dir)/MERGE_HEAD" ] \
+    && exit 0
+
+  [ "${br}" = "master" ] \
+    && die "refusing to commit directly to default branch 'master'\n"
+
+  [[ "${br}" =~ ^BTAT-[0\-9]{4}$ ]] \
+    || die "branch name '${br}' is incorrectly formatted \
+           \nhint: branch names should reflect their jira issue, eg. BTAT-1234\n"
+}
+
+main() {
+  verify_branch
+  verify_up_to_date
+}
+
+main

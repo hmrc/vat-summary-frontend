@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+fl=("VRN" "HMRC" "BTAT" "Intellij" "intellij")
+
+br="$(git rev-parse --abbrev-ref HEAD)"
+cf="${1}"
+
+die() {
+  printf "fatal: ${1}\n" "${2}" >&2
+  printf "hint: use '--no-verify' to disable this check\n"
+
+  exit 1
+}
+
+filter() {
+  local s="${1}"
+
+  for i in "${fl[@]}"; do
+    [ "${i}" = "${s}" ] && return 0
+  done
+
+  return 1
+}
+
+verify_no_merge_master() {
+  [ "$(cat "${cf}" | grep -ci "merge branch 'master'")" = "0" ] \
+    || die "refusing to merge 'origin/master' into local branch '${br}'\
+            \nuse 'git rebase master' instead\n"
+}
+
+verify_spelling() {
+  sp="$(cat "${cf}" | sed 's/\([A-Z]\)/ \1/g' | aspell --list)"
+
+  for w in ${sp}; do
+    filter "${w}" || wd+=" - ${w}\n"
+  done
+
+  cn="$(printf "${wd}" | wc -l)"
+  [ "${cn}" = "0" ] \
+    || die "commit message contains ${cn} mispelled words:\n${wd}"
+}
+
+main() {
+  verify_no_merge_master
+  verify_spelling
+}
+
+main
