@@ -29,6 +29,7 @@ DELETE      /vat-through-software/test-only/clear-schemas/:serviceName          
 
 GET         /vat-through-software/test-only/payments-stub                             @testOnly.controllers.PaymentsStubController.stub
 GET         /vat-through-software/test-only/direct-debit-stub                         @testOnly.controllers.DirectDebitStubController.stub
+GET         /vat-through-software/test-only/bta-stub                                  @testOnly.controllers.BtaStubController.landingPage
 
 # NOCSRF
 POST        /vat-through-software/test-only/direct-debit-backend/start-journey        @testOnly.controllers.DirectDebitStubController.startJourney

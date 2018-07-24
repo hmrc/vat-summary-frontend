@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package connectors
+package testOnly.connectors
+
+import javax.inject.Inject
 
 import config.{AppConfig, VatHeaderCarrierForPartialsConverter}
-import javax.inject.Inject
 import play.api.http.Status._
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.http.{HttpResponse, Upstream4xxResponse}

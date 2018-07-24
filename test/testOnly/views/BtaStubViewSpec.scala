@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views.btaStub
+package testOnly.views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 
-class LandingPageViewSpec extends ViewBaseSpec {
+class BtaStubViewSpec extends ViewBaseSpec {
 
   "Rendering the BTA landing page test harness" should {
 
@@ -31,7 +31,7 @@ class LandingPageViewSpec extends ViewBaseSpec {
     }
 
     val htmlPartial = Html("<h2>Partial</h2>")
-    lazy val view = views.html.btaStub.landingPage(htmlPartial)
+    lazy val view = testOnly.views.html.btaStub(htmlPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

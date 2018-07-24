@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package services
+package testOnly.services
 
-import connectors.BtaStubConnector
 import controllers.ControllerBaseSpec
 import play.api.http.Status._
 import play.api.mvc.{AnyContent, Request}
 import play.twirl.api.Html
+import testOnly.connectors.BtaStubConnector
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.partials.HtmlPartial
 

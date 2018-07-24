@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package testOnly.controllers
+
+import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{BtaStubService, EnrolmentsAuthService}
+import services.EnrolmentsAuthService
+import testOnly.services.BtaStubService
 import uk.gov.hmrc.auth.core.NoActiveSession
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -34,7 +36,7 @@ class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthSe
   def landingPage(): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised() {
       btaStubService.getPartial().map { partial =>
-        Ok(views.html.btaStub.landingPage(partial))
+        Ok(testOnly.views.html.btaStub(partial))
       }
     }.recoverWith {
       case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
