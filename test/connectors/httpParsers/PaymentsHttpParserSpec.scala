@@ -44,8 +44,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "items" -> Json.arr(
                 Json.obj("dueDate" -> "2017-10-25")
               ),
-              "outstandingAmount" -> 1000,
-              "periodKey" -> "#003"
+              "outstandingAmount" -> 1000.50,
+              "periodKey" -> "#001"
             ),
             Json.obj(
               "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
@@ -55,8 +55,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "items" -> Json.arr(
                 Json.obj("dueDate" -> "2018-10-25")
               ),
-              "outstandingAmount" -> 1000,
-              "periodKey" -> "#004"
+              "outstandingAmount" -> 1000.51,
+              "periodKey" -> "#002"
             ),
             Json.obj(
               "mainType" -> FinancialTransactionsConstants.officerAssessmentCharge,
@@ -66,8 +66,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "items" -> Json.arr(
                 Json.obj("dueDate" -> "2017-10-25")
               ),
-              "outstandingAmount" -> 1000,
-              "periodKey" -> "#004"
+              "outstandingAmount" -> 1000.52,
+              "periodKey" -> "#003"
             ),
             Json.obj(
               "mainType" -> FinancialTransactionsConstants.officerAssessmentCharge,
@@ -77,9 +77,32 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "items" -> Json.arr(
                 Json.obj("dueDate" -> "2017-10-25")
               ),
-              "outstandingAmount" -> 1000,
+              "outstandingAmount" -> 1000.53,
               "periodKey" -> "#004"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatCentralAssessment,
+              "chargeType" -> FinancialTransactionsConstants.vatCentralAssessment,
+              "taxPeriodFrom" -> "2016-12-01",
+              "taxPeriodTo" -> "2017-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2016-10-25")
+              ),
+              "outstandingAmount" -> 1000.25,
+              "periodKey" -> "#005"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatDefaultSurcharge,
+              "chargeType" -> FinancialTransactionsConstants.vatDefaultSurcharge,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.27,
+              "periodKey" -> "#006"
             )
+
           )
         )
       ))
@@ -90,18 +113,35 @@ class PaymentsHttpParserSpec extends UnitSpec {
           start = LocalDate.parse("2016-12-01"),
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
-          outstandingAmount = BigDecimal(1000.00),
-          periodKey = "#003"
+          outstandingAmount = BigDecimal(1000.50),
+          periodKey = "#001"
         ),
         Payment(
           FinancialTransactionsConstants.officerAssessmentDebitCharge,
           start = LocalDate.parse("2017-12-01"),
           end = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
-          outstandingAmount = BigDecimal(1000.00),
+          outstandingAmount = BigDecimal(1000.53),
           periodKey = "#004"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatCentralAssessment,
+          start = LocalDate.parse("2016-12-01"),
+          end = LocalDate.parse("2017-01-01"),
+          due = LocalDate.parse("2016-10-25"),
+          outstandingAmount = BigDecimal(1000.25),
+          periodKey = "#005"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatDefaultSurcharge,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.27),
+          periodKey = "#006"
         )
       )))
+
 
       val result = PaymentsReads.read("", "", httpResponse)
 

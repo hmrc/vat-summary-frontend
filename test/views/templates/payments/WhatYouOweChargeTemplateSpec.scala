@@ -182,4 +182,112 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
       }
     }
   }
+
+  "Rendering a default surcharge charge" when {
+
+    def generateModel(overdue: Boolean): OpenPaymentsModel = {
+      OpenPaymentsModel(
+        vatDefaultSurcharge,
+        BigDecimal(300.00),
+        LocalDate.parse("2000-05-10"),
+        LocalDate.parse("2000-02-01"),
+        LocalDate.parse("2000-03-28"),
+        "#004",
+        overdue
+      )
+    }
+
+    "the payment is not overdue" should {
+
+      val model = generateModel(overdue = false)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct description text" in {
+        elementText(Selectors.description) shouldBe
+          "this is a surcharge for late payment of your 1 February to 28 March 2000 return"
+      }
+
+      "display the correct pay text" in {
+        elementText(Selectors.payText) shouldBe "Pay now"
+      }
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£300 , this is a surcharge for late payment of your 1 February to 28 March 2000 return"
+      }
+
+      "not display the view return link" in {
+        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.viewReturnLink))
+      }
+    }
+
+    "the payment is overdue" should {
+
+      val model = generateModel(overdue = true)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£300 is overdue, this is a surcharge for late payment of your 1 February to 28 March 2000 return"
+      }
+    }
+  }
+
+  "Rendering a central assessment charge" when {
+
+    def generateModel(overdue: Boolean): OpenPaymentsModel = {
+      OpenPaymentsModel(
+        vatCentralAssessment,
+        BigDecimal(200.00),
+        LocalDate.parse("2001-05-10"),
+        LocalDate.parse("2001-02-01"),
+        LocalDate.parse("2001-03-28"),
+        "#005",
+        overdue
+      )
+    }
+
+    "the payment is not overdue" should {
+
+      val model = generateModel(overdue = false)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct description text" in {
+        elementText(Selectors.description) shouldBe
+          "this is our estimate for 1 February to 28 March 2001, " +
+        "submit your overdue return to update this amount"
+      }
+
+      "display the correct pay text" in {
+        elementText(Selectors.payText) shouldBe "Pay estimate"
+      }
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£200 , this is our estimate for 1 February to 28 March 2001, " +
+        "submit your overdue return to update this amount"
+      }
+
+      "not display the view return link" in {
+        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.viewReturnLink))
+      }
+    }
+
+    "the payment is overdue" should {
+
+      val model = generateModel(overdue = true)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£200 is overdue, this is our estimate for 1 February to 28 March 2001, " +
+            "submit your overdue return to update this amount"
+      }
+    }
+  }
+
 }

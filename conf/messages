@@ -80,6 +80,11 @@ openPayments.directDebitViewAndUpdate = view your direct debit details
 openPayments.youPayByDirectDebit = You pay by direct debit
 openPayments.directDebit.heading = Direct debits
 openPayments.officersAssessment = a VAT officer''s investigation showed you underpaid by this amount
+openPayments.officersAssessment = a VAT officer''s investigation showed you underpaid by this amount
+openPayments.payEstimate = Pay estimate
+openPayments.surcharge = this is a surcharge for late payment of your {0} return
+openPayments.centralAssessment = this is our estimate for {0}
+openPayments.centralAssessmentSubmit =, submit your overdue return to update this amount
 
 noPayments.title = Your VAT payment
 noPayments.heading = What you owe
