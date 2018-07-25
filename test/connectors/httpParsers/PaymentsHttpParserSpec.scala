@@ -101,8 +101,29 @@ class PaymentsHttpParserSpec extends UnitSpec {
               ),
               "outstandingAmount" -> 1000.27,
               "periodKey" -> "#006"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.errorCorrectionChargeType,
+              "chargeType" -> FinancialTransactionsConstants.errorCorrectionCreditCharge,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.29,
+              "periodKey" -> "#007"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.errorCorrectionChargeType,
+              "chargeType" -> FinancialTransactionsConstants.errorCorrectionDebitCharge,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#008"
             )
-
           )
         )
       ))
@@ -139,6 +160,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
           periodKey = "#006"
+        ),
+        Payment(
+          FinancialTransactionsConstants.errorCorrectionDebitCharge,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#008"
         )
       )))
 
