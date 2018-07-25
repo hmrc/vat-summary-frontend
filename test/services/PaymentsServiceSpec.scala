@@ -212,22 +212,46 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
     val taxPeriodYear: Int = 2018
 
-    "return a seq of payment history models" in new Test {
-      val paymentSeq = Right(Seq(
-        PaymentsHistoryModel(
-          chargeType = "VAT Return charge",
-          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse("2018-01-26")),
-          amount = exampleAmount,
-          clearedDate = Some(LocalDate.parse("2018-01-13"))
-        )
-      ))
+    "return a seq of payment history models sorted by clearing date in descending order" in new Test {
 
+      val paymentModel1 = PaymentsHistoryModel(
+        chargeType = "VAT Return charge",
+        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-01-30"))
+      )
+      val paymentModel2 = PaymentsHistoryModel(
+        chargeType = "VAT Return charge",
+        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-02-28"))
+      )
+      val paymentModel3 = PaymentsHistoryModel(
+        chargeType = "VAT Return charge",
+        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-03-01"))
+      )
+      val paymentModel4 = PaymentsHistoryModel(
+        chargeType = "VAT Return charge",
+        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-01-31"))
+      )
+
+      val paymentSeq: HttpGetResult[Seq[PaymentsHistoryModel]] =
+        Right(Seq(paymentModel1, paymentModel2, paymentModel3, paymentModel4))
+      val sortedPayments: ServiceResponse[Seq[PaymentsHistoryModel]] =
+        Right(Seq(paymentModel3, paymentModel2, paymentModel4, paymentModel1))
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
       private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
         await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
 
-      result shouldBe paymentSeq
+      result shouldBe sortedPayments
     }
 
     "return a http error" in new Test {
