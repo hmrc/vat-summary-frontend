@@ -127,6 +127,9 @@ paymentsHistory.vatCentralAssessmentTitle = Estimate
 paymentsHistory.vatCentralAssessmentDescription = for your {0} return
 paymentsHistory.vatDefaultSurchargeTitle = Surcharge
 paymentsHistory.vatDefaultSurchargeDescription = for late payment of your {0} return
+paymentsHistory.vatErrorCorrectionDebitChargeTitle = Error correction payment
+paymentsHistory.vatErrorCorrectionCreditChargeTitle =  Error correction repayment from HMRC
+paymentsHistory.vatErrorCorrectionChargeDescription = for correcting your {0} return
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
