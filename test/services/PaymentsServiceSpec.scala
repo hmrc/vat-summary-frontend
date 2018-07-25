@@ -58,19 +58,46 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
     "the user has payments outstanding" should {
 
-      "return a list of payments" in new Test {
-        val payments = Payments(Seq(Payment(
+      "return a list of payments sorted by due date in descending order" in new Test {
+        val payment1 = Payment(
           "VAT Return Debit Charge",
-          LocalDate.parse("2008-12-06"),
-          LocalDate.parse("2009-01-04"),
-          LocalDate.parse("2008-12-06"),
+          LocalDate.parse("2008-01-01"),
+          LocalDate.parse("2009-01-01"),
+          LocalDate.parse("2008-11-29"),
           BigDecimal("21.22"),
           ""
-        )))
+        )
+        val payment2 = Payment(
+          "VAT Return Debit Charge",
+          LocalDate.parse("2008-01-01"),
+          LocalDate.parse("2009-01-01"),
+          LocalDate.parse("2008-12-01"),
+          BigDecimal("21.22"),
+          ""
+        )
+        val payment3 = Payment(
+          "VAT Return Debit Charge",
+          LocalDate.parse("2008-01-01"),
+          LocalDate.parse("2009-01-01"),
+          LocalDate.parse("2009-01-01"),
+          BigDecimal("21.22"),
+          ""
+        )
+        val payment4 = Payment(
+          "VAT Return Debit Charge",
+          LocalDate.parse("2008-01-01"),
+          LocalDate.parse("2009-01-01"),
+          LocalDate.parse("2008-11-30"),
+          BigDecimal("21.22"),
+          ""
+        )
+
+        val payments = Payments(Seq(payment1, payment2, payment3, payment4))
+        val sortedPayments = Payments(Seq(payment3, payment2, payment4, payment1))
         override val responseFromFinancialDataConnector = Right(payments)
         val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
 
-        paymentsResponse shouldBe Right(Some(payments))
+        paymentsResponse shouldBe Right(Some(sortedPayments))
       }
     }
 
@@ -124,9 +151,9 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       }
     }
 
-    val amountInPence = 123456
-    val taxPeriodMonth = 2
-    val taxPeriodYear = 2018
+    val amountInPence: Int = 123456
+    val taxPeriodMonth: Int = 2
+    val taxPeriodYear: Int = 2018
 
     val paymentDetails = PaymentDetailsModel("vat",
       "123456789",
@@ -140,10 +167,10 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "setting up the payments journey is successful" should {
 
       "return a redirect url" in new Test {
-        val redirectUrl = "http://www.google.com"
+        val redirectUrl: String = "http://www.google.com"
         override val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
         val expectedResult: ServiceResponse[String] = Right(redirectUrl)
-        private val result = await(target.setupPaymentsJourney(paymentDetails))
+        private val result: ServiceResponse[String] = await(target.setupPaymentsJourney(paymentDetails))
 
         result shouldBe expectedResult
       }
@@ -154,7 +181,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       "return an error" in new Test {
         override val connectorResponse: HttpPostResult[String] = Left(UnknownError)
         val expectedResult: ServiceResponse[String] = Left(PaymentSetupError)
-        private val result = await(target.setupPaymentsJourney(paymentDetails))
+        private val result: ServiceResponse[String] = await(target.setupPaymentsJourney(paymentDetails))
 
         result shouldBe expectedResult
       }
@@ -183,7 +210,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       }
     }
 
-    val taxPeriodYear = 2018
+    val taxPeriodYear: Int = 2018
 
     "return a seq of payment history models" in new Test {
       val paymentSeq = Right(Seq(
@@ -191,20 +218,22 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           chargeType = "VAT Return charge",
           taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
           taxPeriodTo = Some(LocalDate.parse("2018-01-26")),
-          amount = 10000,
+          amount = exampleAmount,
           clearedDate = Some(LocalDate.parse("2018-01-13"))
         )
       ))
 
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
-      private val result = await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
+      private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
+        await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
 
       result shouldBe paymentSeq
     }
 
     "return a http error" in new Test {
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
-      private val result = await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
+      private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
+        await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
 
       result shouldBe Left(VatLiabilitiesError)
     }
@@ -241,10 +270,10 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "setting up the direct debit journey is successful" should {
 
       "return a redirect url" in new Test {
-        val redirectUrl = "http://www.google.com"
+        val redirectUrl: String = "http://www.google.com"
         override val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
         val expectedResult: ServiceResponse[String] = Right(redirectUrl)
-        private val result = await(target.setupDirectDebitJourney(directDebitDetails))
+        private val result: ServiceResponse[String] = await(target.setupDirectDebitJourney(directDebitDetails))
 
         result shouldBe expectedResult
       }
@@ -255,7 +284,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       "return an error" in new Test {
         override val connectorResponse: HttpPostResult[String] = Left(UnknownError)
         val expectedResult: ServiceResponse[String] = Left(DirectDebitSetupError)
-        private val result = await(target.setupDirectDebitJourney(directDebitDetails))
+        private val result: ServiceResponse[String] = await(target.setupDirectDebitJourney(directDebitDetails))
 
         result shouldBe expectedResult
       }
