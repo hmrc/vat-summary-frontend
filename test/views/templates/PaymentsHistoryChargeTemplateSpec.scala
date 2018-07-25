@@ -227,6 +227,62 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is an error correction credit charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        "VAT EC Credit Charge",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        1000,
+        Some(LocalDate.parse("2018-02-14"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Error correction repayment from HMRC"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for correcting your 12 Jan to 23 Mar 2018 return"
+      }
+    }
+
+    "there is an error correction debit charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        "VAT EC Debit Charge",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        2000,
+        Some(LocalDate.parse("2018-02-14"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Error correction payment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for correcting your 12 Jan to 23 Mar 2018 return"
+      }
+    }
+
     "there is an invalid charge type" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(

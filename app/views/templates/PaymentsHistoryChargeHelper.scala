@@ -51,8 +51,21 @@ object PaymentsHistoryChargeHelper {
     "paymentsHistory.vatDefaultSurchargeTitle",
     "paymentsHistory.vatDefaultSurchargeDescription")
 
+  object ErrorCorrectionDebitCharge extends PaymentsHistoryChargeHelper(
+    FinancialTransactionsConstants.errorCorrectionDebitCharge,
+    "paymentsHistory.vatErrorCorrectionDebitChargeTitle",
+    "paymentsHistory.vatErrorCorrectionChargeDescription"
+  )
+
+  object ErrorCorrectionCreditCharge extends PaymentsHistoryChargeHelper(
+    FinancialTransactionsConstants.errorCorrectionCreditCharge,
+    "paymentsHistory.vatErrorCorrectionCreditChargeTitle",
+    "paymentsHistory.vatErrorCorrectionChargeDescription"
+  )
+
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge,
-    VatOfficerAssessmentDebitCharge, VatCentralAssessment, VatDefaultSurcharge)
+    VatOfficerAssessmentDebitCharge, VatCentralAssessment, VatDefaultSurcharge,
+    ErrorCorrectionDebitCharge, ErrorCorrectionCreditCharge)
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
     values.find(_.name == lookupName)
