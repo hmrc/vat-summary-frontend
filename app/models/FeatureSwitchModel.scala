@@ -16,15 +16,10 @@
 
 package models
 
-case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
-                              userResearchBannerEnabled: Boolean,
-                              allowPaymentsEnabled: Boolean,
+case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               allowDirectDebitsEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               vatCertificateEnabled: Boolean,
-                              allowNineBoxEnabled: Boolean,
-                              auditingEnabled: Boolean,
-                              allowPaymentHistoryEnabled: Boolean,
                               enableVatObligationsService: Boolean,
                               useDirectDebitDummyPage: Boolean
                              )

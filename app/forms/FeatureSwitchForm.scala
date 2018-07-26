@@ -24,15 +24,10 @@ import play.api.data.Forms._
 object FeatureSwitchForm {
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
-      ConfigKeys.simpleAuthFeature -> boolean,
       ConfigKeys.userResearchBannerFeature -> boolean,
-      ConfigKeys.allowPaymentsFeature -> boolean,
       ConfigKeys.allowDirectDebitsFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.vatCertificateFeature -> boolean,
-      ConfigKeys.allowNineBoxFeature -> boolean,
-      ConfigKeys.enableAuditingFeature -> boolean,
-      ConfigKeys.allowPaymentHistoryFeature -> boolean,
       ConfigKeys.useVatObligationsService -> boolean,
       ConfigKeys.useDirectDebitDummyPageFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)

@@ -42,7 +42,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
 
   def paymentHistory(year: Int): Action[AnyContent] = authorisedAction { implicit request =>
     user =>
-      if (isValidSearchYear(year) && appConfig.features.allowPaymentHistory()) {
+      if (isValidSearchYear(year)) {
         getFinancialTransactions(user, year).map {
           case Right(model) =>
             auditEvent(user.vrn, model.transactions, year)

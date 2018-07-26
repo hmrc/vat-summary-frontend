@@ -28,9 +28,7 @@ import views.ViewBaseSpec
 
 class OpenPaymentsViewSpec extends ViewBaseSpec {
 
-  mockConfig.features.allowPayments(true)
   mockConfig.features.allowDirectDebits(true)
-  mockConfig.features.allowNineBox(true)
 
   object Selectors {
     val pageHeading = "h1"

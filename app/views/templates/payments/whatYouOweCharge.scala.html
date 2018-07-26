@@ -35,31 +35,30 @@
       <span class="form-hint">@chargeDetails.description</span>
     </div>
 
-    @if(appConfig.features.allowPayments()) {
-      <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
-        <div class="grid-row">
-          @chargeDetails.payLinkText match {
-            case Some(payLinkText) => {
-              <a data-journey-click="payment:make-payment:open-payments"
-                 href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
-                 class="float--right">
-                <span>@payLinkText</span>
-                <span class="visuallyhidden">
-                  @displayMoney(payment.amount)
-                  @chargeDetails.overdueContext
-                  @chargeDetails.description
-                </span>
-              </a>
-            }
-            case None => {
-              <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
-                @messages("openPayments.youPayByDirectDebit")
+    <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
+      <div class="grid-row">
+        @chargeDetails.payLinkText match {
+          case Some(payLinkText) => {
+            <a data-journey-click="payment:make-payment:open-payments"
+               href="@controllers.routes.MakePaymentController.makePayment((payment.amount * 100).toLong, payment.end.getMonthValue, payment.end.getYear).url"
+               class="float--right">
+              <span>@payLinkText</span>
+              <span class="visuallyhidden">
+                @displayMoney(payment.amount)
+                @chargeDetails.overdueContext
+                @chargeDetails.description
               </span>
-            }
+            </a>
           }
-        </div>
+          case None => {
+            <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
+              @messages("openPayments.youPayByDirectDebit")
+            </span>
+          }
+        }
+      </div>
 
-      @if(appConfig.features.allowNineBox() && chargeDetails.viewReturnEnabled) {
+      @if(chargeDetails.viewReturnEnabled) {
         <div class="grid-row">
           <a data-journey-click="returns:view-return @{payment.start}-to-@{payment.end}:open-payments"
              href="@appConfig.vatReturnUrl(payment.periodKey)"
@@ -71,6 +70,5 @@
       }
 
       </div>
-    }
   </div>
 </div>

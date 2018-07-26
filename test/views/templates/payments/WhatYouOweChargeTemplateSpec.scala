@@ -27,8 +27,6 @@ import views.ViewBaseSpec
 class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   mockConfig.features.allowDirectDebits(true)
-  mockConfig.features.allowNineBox(true)
-  mockConfig.features.allowPayments(true)
 
   object Selectors {
     val amount = "#payment-section-1 span:nth-of-type(1)"

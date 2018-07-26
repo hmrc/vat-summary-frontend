@@ -25,8 +25,6 @@ import views.ViewBaseSpec
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 
-  mockConfig.features.allowPaymentHistory(true)
-
   object Selectors {
     val pageHeading = "h1"
     val paymentLink = "#payments a"
