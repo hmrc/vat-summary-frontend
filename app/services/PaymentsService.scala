@@ -38,7 +38,7 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
       case Right(payments) =>
         val outstandingPayments = payments.financialTransactions.filter(_.outstandingAmount > 0)
         if(outstandingPayments.nonEmpty) {
-          Right(Some(Payments(outstandingPayments)))
+          Right(Some(Payments(outstandingPayments.sortBy(_.due.toString).reverse)))
         } else {
           Right(None)
         }
