@@ -51,7 +51,7 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     val to: LocalDate = LocalDate.parse(s"$searchYear-12-31")
 
     financialDataConnector.getVatLiabilities(user.vrn, from, to).map {
-      case Right(liabilities) => Right(liabilities)
+      case Right(liabilities) => Right(liabilities.sortBy(_.clearedDate.toString).reverse)
       case Left(_) => Left(VatLiabilitiesError)
     }
   }
