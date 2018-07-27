@@ -59,42 +59,26 @@
             </div>
 
             <div class="grid-row">
-                @if(appConfig.features.allowPaymentHistory()) {
-                    <div class="column-one-half" id="payment-history">
-                        <h2 class="heading-small">
-                            <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)"
-                            data-journey-click="payment-history:view:payment-history-details">
-                            @messages("vatDetails.paymentHistory.link")
-                            </a>
-                        </h2>
-                        <p>@messages("vatDetails.paymentHistory.view")</p>
-                    </div>
-                    <div class="column-one-half" id="submitted-returns">
-                        <h2 class="heading-small">
-                            <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
-                            @messages("vatDetails.submittedReturns.link")
-                            </a>
-                        </h2>
-                        <p>@messages("vatDetails.submittedReturns.view")</p>
-                    </div>
+              <div class="column-one-half" id="payment-history">
+                  <h2 class="heading-small">
+                      <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)"
+                      data-journey-click="payment-history:view:payment-history-details">
+                      @messages("vatDetails.paymentHistory.link")
+                      </a>
+                  </h2>
+                  <p>@messages("vatDetails.paymentHistory.view")</p>
+              </div>
+              <div class="column-one-half" id="submitted-returns">
+                  <h2 class="heading-small">
+                      <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
+                      @messages("vatDetails.submittedReturns.link")
+                      </a>
+                  </h2>
+                  <p>@messages("vatDetails.submittedReturns.view")</p>
+              </div>
 
-                    @if(appConfig.features.vatCertificateEnabled()) { @views.html.templates.vatCertificateSection(user)
-                    } else { @views.html.templates.updateVatDetailsSection() }
-
-                } else {
-
-                    @if(appConfig.features.vatCertificateEnabled()) { @views.html.templates.vatCertificateSection(user)
-                    } else { @views.html.templates.updateVatDetailsSection() }
-
-                    <div class="column-one-half" id="submitted-returns">
-                        <h2 class="heading-small">
-                            <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
-                            @messages("vatDetails.submittedReturns.link")
-                            </a>
-                        </h2>
-                        <p>@messages("vatDetails.submittedReturns.view")</p>
-                    </div>
-                }
+              @if(appConfig.features.vatCertificateEnabled()) { @views.html.templates.vatCertificateSection(user)
+              } else { @views.html.templates.updateVatDetailsSection() }
             </div>
         </div>
     </div>

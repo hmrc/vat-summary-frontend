@@ -22,7 +22,6 @@ import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.authorise.EmptyPredicate
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -38,16 +37,12 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async {
     implicit request =>
 
-      val predicate = if (appConfig.features.simpleAuth()) {
-        EmptyPredicate
-      } else {
-        ((Enrolment(vatDecEnrolmentKey) or Enrolment(vatVarEnrolmentKey)) and Enrolment(mtdVatEnrolmentKey))
-          .or(Enrolment(mtdVatEnrolmentKey))
-      }
+      val predicate = ((Enrolment(vatDecEnrolmentKey) or Enrolment(vatVarEnrolmentKey)) and Enrolment(mtdVatEnrolmentKey))
+        .or(Enrolment(mtdVatEnrolmentKey))
 
       enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments) {
         enrolments =>
-          val user = if (appConfig.features.simpleAuth()) User("123456789") else User(enrolments)
+          val user = User(enrolments)
           block(request)(user)
       } recoverWith {
         case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))

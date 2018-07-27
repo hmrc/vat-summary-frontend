@@ -138,15 +138,10 @@ notFound.message = Please check that you have entered the correct web address.
 featureSwitch.title = Feature switches
 featureSwitch.heading = Features
 featureSwitch.submit = Submit
-features.simpleAuth.enabled = Simple auth
 features.userResearchBanner.enabled = User research banner
-features.allowPayments.enabled = Payments allowed
 features.allowDirectDebits.enabled = Direct debits allowed
 features.staticDate.enabled = Use static date (2018-05-01)
 features.vatCertificate.enabled = Show vat certificate
-features.allowNineBox.enabled = Nine box page allowed
-features.auditing.enabled = Auditing service enabled
-features.allowPaymentHistory.enabled = Payment history page enabled
 features.useVatObligationsService.enabled = Use vat-obligations microservice
 features.useDirectDebitDummyPage.enabled = Use direct debit hand-off dummy page
 

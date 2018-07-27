@@ -30,15 +30,10 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
-        simpleAuthEnabled = appConfig.features.simpleAuth(),
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
-        allowPaymentsEnabled = appConfig.features.allowPayments(),
         allowDirectDebitsEnabled = appConfig.features.allowDirectDebits(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         vatCertificateEnabled = appConfig.features.vatCertificateEnabled(),
-        allowNineBoxEnabled = appConfig.features.allowNineBox(),
-        auditingEnabled = appConfig.features.enabledAuditing(),
-        allowPaymentHistoryEnabled = appConfig.features.allowPaymentHistory(),
         enableVatObligationsService = appConfig.features.enableVatObligationsService(),
         useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage()
       )
@@ -53,15 +48,10 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
   }
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
-    appConfig.features.simpleAuth(model.simpleAuthEnabled)
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
-    appConfig.features.allowPayments(model.allowPaymentsEnabled)
     appConfig.features.allowDirectDebits(model.allowDirectDebitsEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.vatCertificateEnabled(model.vatCertificateEnabled)
-    appConfig.features.allowNineBox(model.allowNineBoxEnabled)
-    appConfig.features.enabledAuditing(model.auditingEnabled)
-    appConfig.features.allowPaymentHistory(model.allowPaymentHistoryEnabled)
     appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
     appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)
     Redirect(routes.FeatureSwitchController.featureSwitch())

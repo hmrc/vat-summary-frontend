@@ -23,15 +23,10 @@ import play.api.Configuration
 @Singleton
 class Features @Inject()(config: Configuration) {
 
-  val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature, config)
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val allowPayments = new Feature(ConfigKeys.allowPaymentsFeature, config)
   val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
   val vatCertificateEnabled = new Feature(ConfigKeys.vatCertificateFeature, config)
-  val allowNineBox = new Feature(ConfigKeys.allowNineBoxFeature, config)
-  val enabledAuditing = new Feature(ConfigKeys.enableAuditingFeature, config)
-  val allowPaymentHistory = new Feature(ConfigKeys.allowPaymentHistoryFeature, config)
   val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
   val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
 }

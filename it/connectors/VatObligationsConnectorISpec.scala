@@ -31,6 +31,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
+  val obligationsStub: VatObligationsStub = new VatObligationsStub(
+    app.configuration.underlying.getBoolean("features.useVatObligationsService.enabled")
+  )
+
   private trait Test {
     def setupStubs(): StubMapping
 
@@ -41,7 +45,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with a status of 'A'" should {
 
     "return all obligations for a given period" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubAllObligations
+      override def setupStubs(): StubMapping = obligationsStub.stubAllObligations
 
       val expected = Right(VatReturnObligations(
         Seq(
@@ -78,7 +82,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with a status of 'O'" should {
 
     "return all obligations for a given period" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubOutstandingObligations
+      override def setupStubs(): StubMapping = obligationsStub.stubOutstandingObligations
 
       val expected = Right(VatReturnObligations(
         Seq(
@@ -107,7 +111,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with a status of 'F'" should {
 
     "return all obligations for a given period" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubFulfilledObligations
+      override def setupStubs(): StubMapping = obligationsStub.stubFulfilledObligations
 
       val expected = Right(VatReturnObligations(
         Seq(
@@ -136,7 +140,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with an invalid VRN" should {
 
     "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubInvalidVrn
+      override def setupStubs(): StubMapping = obligationsStub.stubInvalidVrn
 
       val expected = Left(BadRequestError(
         code = "VRN_INVALID",
@@ -157,7 +161,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with an invalid 'from' date" should {
 
     "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubInvalidFromDate
+      override def setupStubs(): StubMapping = obligationsStub.stubInvalidFromDate
 
       val expected = Left(BadRequestError(
         code = "INVALID_DATE_FROM",
@@ -178,7 +182,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with an invalid 'to' date" should {
 
     "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubInvalidToDate
+      override def setupStubs(): StubMapping = obligationsStub.stubInvalidToDate
 
       val expected = Left(BadRequestError(
         code = "INVALID_DATE_TO",
@@ -199,7 +203,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with an invalid date range" should {
 
     "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubInvalidDateRange
+      override def setupStubs(): StubMapping = obligationsStub.stubInvalidDateRange
 
       val expected = Left(BadRequestError(
         code = "INVALID_DATE_RANGE",
@@ -220,7 +224,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "calling getVatReturnObligations with an invalid obligation status" should {
 
     "return an BadRequestError" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubInvalidStatus
+      override def setupStubs(): StubMapping = obligationsStub.stubInvalidStatus
 
       val expected = Left(BadRequestError(
         code = "INVALID_STATUS",
@@ -241,7 +245,7 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
   "Calling getVatReturnObligations with multiple errors" should {
 
     "return a MultipleErrors" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubMultipleErrors
+      override def setupStubs(): StubMapping = obligationsStub.stubMultipleErrors
 
       val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
       val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
@@ -254,24 +258,4 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
       result shouldBe expected
     }
   }
-
-  "calling getVatReturnObligations with multiple errors" should {
-
-    "return an MultipleErrors" in new Test {
-      override def setupStubs(): StubMapping = VatObligationsStub.stubMultipleErrors
-
-      val errors = Seq(ApiSingleError("ERROR_1", "MESSAGE_1"), ApiSingleError("ERROR_2", "MESSAGE_2"))
-      val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
-
-      setupStubs()
-      private val result = await(connector.getVatReturnObligations("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
-
-      result shouldEqual expected
-    }
-
-  }
-
 }

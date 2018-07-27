@@ -163,7 +163,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "have the heading" in {
 
-        mockConfig.features.allowPaymentHistory(true)
         lazy val view = views.html.vatDetails.details(user, detailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -171,18 +170,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
         submittedReturns.select("h2").text() shouldBe "Payment history"
       }
-    }
-  }
-
-  "Rendering the VAT details page without the payment history section" should {
-
-    "not render the payment history page" in {
-
-      mockConfig.features.allowPaymentHistory(false)
-      lazy val view = views.html.vatDetails.details(user, detailsModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.paymentHistory))
     }
   }
 

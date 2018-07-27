@@ -24,6 +24,10 @@ import stubs._
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
 
+  val obligationsStub: VatObligationsStub = new VatObligationsStub(
+    app.configuration.underlying.getBoolean("features.useVatObligationsService.enabled")
+  )
+
   private trait Test {
     def setupStubs(): StubMapping
 
@@ -40,7 +44,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          VatObligationsStub.stubOutstandingObligations
+          obligationsStub.stubOutstandingObligations
           CustomerInfoStub.stubCustomerInfo
           FinancialDataStub.stubAllOutstandingOpenPayments
         }

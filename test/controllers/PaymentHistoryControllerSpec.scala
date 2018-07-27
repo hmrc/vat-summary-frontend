@@ -19,13 +19,12 @@ package controllers
 import java.time.LocalDate
 
 import audit.AuditingService
-import audit.models.AuditModel
 import audit.models.ExtendedAuditModel
-import models.{ServiceResponse, User}
 import models.errors.VatLiabilitiesError
+import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
+import models.{ServiceResponse, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -114,8 +113,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
 
-    mockAppConfig.features.allowPaymentHistory(true)
-
     def setup(): Any = {
       (mockDateService.now: () => LocalDate)
         .stubs()
@@ -201,16 +198,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       "return 404 (Not Found)" in new Test {
         override val serviceCall = false
         override val targetYear = 2021
-        private val result = target.paymentHistory(targetYear)(fakeRequest)
-        status(result) shouldBe Status.NOT_FOUND
-      }
-    }
-
-    "the allowPaymentHistory feature is disabled" should {
-
-      "return 404 (Not Found)" in new Test {
-        mockAppConfig.features.allowPaymentHistory(false)
-        override val serviceCall = false
         private val result = target.paymentHistory(targetYear)(fakeRequest)
         status(result) shouldBe Status.NOT_FOUND
       }
