@@ -19,13 +19,12 @@ package controllers
 import java.time.LocalDate
 
 import audit.AuditingService
-import audit.models.AuditModel
 import audit.models.ExtendedAuditModel
-import models.{ServiceResponse, User}
 import models.errors.VatLiabilitiesError
+import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
+import models.{ServiceResponse, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._

@@ -27,13 +27,7 @@ class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterE
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-
     features.userResearchBanner(true)
-    features.allowDirectDebits(true)
-    features.staticDateEnabled(true)
-    features.vatCertificateEnabled(true)
-    features.enableVatObligationsService(false)
-    features.useDirectDebitDummyPage(true)
   }
 
   "The User Research Banner Feature" should {
@@ -45,66 +39,6 @@ class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterE
     "switch to a new state" in {
       features.userResearchBanner(false)
       features.userResearchBanner() mustBe false
-    }
-  }
-
-  "The Direct Debits Feature" should {
-
-    "return its current state" in {
-      features.allowDirectDebits() mustBe true
-    }
-
-    "switch to a new state" in {
-      features.allowDirectDebits(false)
-      features.allowDirectDebits() mustBe false
-    }
-  }
-
-  "The Static Date Feature" should {
-
-    "return its current state" in {
-      features.staticDateEnabled() mustBe true
-    }
-
-    "switch to a new state" in {
-      features.staticDateEnabled(false)
-      features.staticDateEnabled() mustBe false
-    }
-  }
-
-  "The Vat Certificate Feature" should {
-
-    "return its current state" in {
-      features.vatCertificateEnabled() mustBe true
-    }
-
-    "switch to a new state" in {
-      features.vatCertificateEnabled(false)
-      features.vatCertificateEnabled() mustBe false
-    }
-  }
-
-  "The Enable Vat Obligations Service Feature" should {
-
-    "return its current state" in {
-      features.enableVatObligationsService() mustBe false
-    }
-
-    "switch to a new state" in {
-      features.enableVatObligationsService(true)
-      features.enableVatObligationsService() mustBe true
-    }
-  }
-
-  "The Direct Debit Dummy Page  Feature" should {
-
-    "return its current state" in {
-      features.useDirectDebitDummyPage() mustBe true
-    }
-
-    "switch to a new state" in {
-      features.useDirectDebitDummyPage(false)
-      features.useDirectDebitDummyPage() mustBe false
     }
   }
 }
