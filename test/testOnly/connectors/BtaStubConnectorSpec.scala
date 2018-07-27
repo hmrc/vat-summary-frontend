@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package connectors
+package testOnly.connectors
 
 import config.VatHeaderCarrierForPartialsConverter
 import controllers.ControllerBaseSpec

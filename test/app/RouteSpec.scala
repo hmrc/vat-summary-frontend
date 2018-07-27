@@ -27,12 +27,6 @@ class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
     }
   }
 
-  "The route for the BTA stub" should {
-    "be /vat-through-software/bta-stub" in {
-      controllers.routes.BtaStubController.landingPage().url shouldBe "/vat-through-software/bta-stub"
-    }
-  }
-
   "The route for the VAT details controller" should {
     "be /vat-through-software/vat-overview" in {
       controllers.routes.VatDetailsController.details().url shouldBe "/vat-through-software/vat-overview"
@@ -48,6 +42,14 @@ class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
   "The route for the Account details controller" should {
     "be /vat-through-software/account/details" in {
       controllers.routes.AccountDetailsController.accountDetails().url shouldBe "/vat-through-software/account/details"
+    }
+  }
+
+  "The route for the Payment History controller" should {
+    "be /vat-through-software/payment-history/{year}" in {
+      val currentYear = 2018
+      controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url shouldBe
+        s"/vat-through-software/payment-history/$currentYear"
     }
   }
 }
