@@ -288,4 +288,63 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
     }
   }
 
+  "Rendering a error correction charge" when {
+
+    def generateModel(overdue: Boolean): OpenPaymentsModel = {
+      OpenPaymentsModel(
+        errorCorrectionDebitCharge,
+        BigDecimal(200.00),
+        LocalDate.parse("2001-05-10"),
+        LocalDate.parse("2001-02-01"),
+        LocalDate.parse("2001-03-28"),
+        "#006",
+        overdue
+      )
+    }
+
+    "the payment is not overdue" should {
+
+      val model = generateModel(overdue = false)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the correct description text" in {
+        elementText(Selectors.description) shouldBe
+          "this is the correction you made to your 1 February to 28 March 2001 return"
+      }
+
+      "display the correct pay text" in {
+        elementText(Selectors.payText) shouldBe "Pay now"
+      }
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£200 , this is the correction you made to your 1 February to 28 March 2001 return"
+      }
+
+      "display the link to view the return" in {
+        elementText(Selectors.viewReturnText) shouldBe "View return"
+      }
+
+      "have the correct return location" in {
+        element(Selectors.viewReturnLink).attr("href") shouldBe "/submitted/%23006"
+      }
+
+      "have the correct return context" in {
+        elementText(Selectors.viewReturnLink) shouldBe "View return that you corrected for the period 1 February to 28 March 2001"
+      }
+    }
+
+    "the payment is overdue" should {
+
+      val model = generateModel(overdue = true)
+      lazy val view = views.html.templates.payments.whatYouOweCharge(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct pay link context" in {
+        elementText(Selectors.payContext) shouldBe
+          "£200 is overdue, this is the correction you made to your 1 February to 28 March 2001 return"
+      }
+    }
+  }
 }
