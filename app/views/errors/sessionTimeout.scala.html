@@ -16,11 +16,11 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = Messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
- <h1>@Messages("sessionTimeout.title")</h1>
+@views.html.main_template(title = messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
+ <h1>@messages("sessionTimeout.title")</h1>
 
- <p>@Messages("sessionTimeout.helpOne")
-   <a href=@appConfig.signInUrl>@Messages("sessionTimeout.helpTwo")</a>
-   @Messages("sessionTimeout.helpThree")
+ <p>@messages("sessionTimeout.helpOne")
+   <a href=@appConfig.signInUrl>@messages("sessionTimeout.helpTwo")</a>
+   @messages("sessionTimeout.helpThree")
  </p>
 }

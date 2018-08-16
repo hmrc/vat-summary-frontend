@@ -77,8 +77,11 @@
                   <p>@messages("vatDetails.submittedReturns.view")</p>
               </div>
 
-              @if(appConfig.features.vatCertificateEnabled()) { @views.html.templates.vatCertificateSection(user)
-              } else { @views.html.templates.updateVatDetailsSection() }
+              @if(appConfig.features.vatCertificateEnabled()) {
+                @views.html.templates.vatCertificateSection(user)
+              } else {
+                @views.html.templates.updateVatDetailsSection()
+              }
             </div>
         </div>
     </div>

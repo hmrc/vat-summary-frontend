@@ -16,10 +16,10 @@
 
 @import uk.gov.hmrc.play.partials.FormPartialRetriever
 @import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
-@import config.FrontendAppConfig
+@import config.AppConfig
 
 @(partialUrl: String, formBody: Option[Html])(implicit request: Request[_], formPartialRetriever: FormPartialRetriever,
-partialRetriever: CachedStaticHtmlPartialRetriever, messages: Messages, appConfig: FrontendAppConfig)
+partialRetriever: CachedStaticHtmlPartialRetriever, messages: Messages, appConfig: AppConfig)
 
 
 @views.html.main_template(title = messages("feedback.title"), bodyClasses = None, mainClass = None, appConfig = appConfig) {

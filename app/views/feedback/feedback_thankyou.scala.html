@@ -15,12 +15,12 @@
  *@
 
 @import uk.gov.hmrc.play.partials.CachedStaticHtmlPartialRetriever
-@import config.FrontendAppConfig
+@import config.AppConfig
 
 @(partialUrl: String, redirectUrl: String)(implicit request: Request[_], cachedStaticHtmlPartialRetriever: CachedStaticHtmlPartialRetriever,
-    messages: Messages, appConfig: FrontendAppConfig)
+    messages: Messages, appConfig: AppConfig)
 
 @views.html.main_template(title = messages("feedbackThanks.title"), bodyClasses = None, appConfig = appConfig) {
     @cachedStaticHtmlPartialRetriever.getPartialContent(partialUrl)
-    <a id="back" href='@redirectUrl' role="button" tabindex="0" class="button">@Messages("base.back")</a>
+    <a id="back" href='@redirectUrl' role="button" tabindex="0" class="button">@messages("base.back")</a>
 }
