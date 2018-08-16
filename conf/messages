@@ -1,12 +1,9 @@
 common.dateRangeSeparator = to
-common.vat = VAT
 common.overdue = overdue
 common.isOverdue = is overdue,
-common.error.summary.heading = This page has errors
+
 base.back = Back
 base.signOut = Sign out
-base.yes = Yes
-base.no = No
 
 breadcrumbs.bta = Business tax account
 
@@ -46,7 +43,6 @@ vatDetails.paymentsDue = You have {0} payments due
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.viewReturns = View return deadlines
-returnObligation.you = You
 
 payment.noPayment = No payments due right now
 payment.nextPayment = Next payment due
@@ -58,9 +54,6 @@ payment.evenIfNotShown = even if a payment is not shown
 
 openPayments.title = What you owe
 openPayments.heading = What you owe
-openPayments.type = Type
-openPayments.due = Due
-openPayments.check = Check {0} return
 openPayments.makePayment = Pay now
 openPayments.dueBy = due by
 openPayments.viewReturnLink = View return
@@ -80,7 +73,6 @@ openPayments.youPayByDirectDebit = You pay by direct debit
 openPayments.directDebit.heading = Direct debits
 openPayments.vatReturn = for the period {0}
 openPayments.officersAssessment = a VAT officer''s investigation showed you underpaid by this amount
-openPayments.officersAssessment = a VAT officer''s investigation showed you underpaid by this amount
 openPayments.payEstimate = Pay estimate
 openPayments.surcharge = this is a surcharge for late payment of your {0} return
 openPayments.centralAssessment = this is our estimate for {0}
@@ -88,7 +80,6 @@ openPayments.centralAssessmentSubmit =, submit your overdue return to update thi
 openPayments.errorCorrection = this is the correction you made to your {0} return
 openPayments.errorCorrectionReturnContext = that you corrected for the period {0}
 
-noPayments.title = Your VAT payment
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
@@ -117,7 +108,6 @@ paymentsHistory.noHistory = You have not made or received any payments yet.
 paymentsHistory.willShow = Your payment history will show here once you have:
 paymentsHistory.bullet1 = paid a VAT Return or made any other VAT payments
 paymentsHistory.bullet2 = received any VAT repayments
-
 paymentsHistory.vatReturnCreditChargeTitle = Repayment from HMRC
 paymentsHistory.vatReturnCreditChargeDescription = for your {0} return
 paymentsHistory.vatReturnDebitChargeTitle = Return
