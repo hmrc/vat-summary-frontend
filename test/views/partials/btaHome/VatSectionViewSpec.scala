@@ -27,6 +27,7 @@ class VatSectionViewSpec extends ViewBaseSpec {
     object Selectors {
       val pageHeading = "h2"
       val viewDeadlines = "p:nth-of-type(1)"
+      val updateDetails = "p:nth-of-type(2)"
       val viewVatLink = "a"
     }
 
@@ -39,6 +40,10 @@ class VatSectionViewSpec extends ViewBaseSpec {
 
     "have the correct service features message on the page" in {
       elementText(Selectors.viewDeadlines) shouldBe "You can view what you owe, your return deadlines, your payment history and previously submitted returns."
+    }
+
+    "have the correct update details message on the page" in {
+      elementText(Selectors.updateDetails) shouldBe "You can also update some of your VAT details."
     }
 
     "have the correct link address" in {
