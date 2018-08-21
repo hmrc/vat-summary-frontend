@@ -19,7 +19,7 @@
 
 @(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = messages("featureSwitch.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(title = "Feature switches", bodyClasses = None, appConfig = appConfig) {
 
   @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
     @CSRF.formField
@@ -27,18 +27,18 @@
     <div class="form-group">
       <fieldset>
         <legend>
-          <h1 class="heading-medium">@messages("featureSwitch.heading")</h1>
+          <h1 class="heading-medium">Features</h1>
         </legend>
 
-        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.userResearchBannerFeature), messages(ConfigKeys.userResearchBannerFeature))
-        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.allowDirectDebitsFeature), messages(ConfigKeys.allowDirectDebitsFeature))
-        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.staticDateEnabledFeature), messages(ConfigKeys.staticDateEnabledFeature))
-        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.vatCertificateFeature), messages(ConfigKeys.vatCertificateFeature))
-        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useVatObligationsService), messages(ConfigKeys.useVatObligationsService))
-        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useDirectDebitDummyPageFeature), messages(ConfigKeys.useDirectDebitDummyPageFeature))
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.userResearchBannerFeature), "User research banner")
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.allowDirectDebitsFeature), "Direct debits allowed")
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.staticDateEnabledFeature), "Use static date (2018-05-01)")
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.vatCertificateFeature), "Show vat certificate")
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useVatObligationsService), "Use vat-obligations microservice")
+        @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useDirectDebitDummyPageFeature), "Use direct debit hand-off dummy page")
       </fieldset>
     </div>
 
-    <button class="button" type="submit" id="continue-button">@messages("featureSwitch.submit")</button>
+    <button class="button" type="submit" id="continue-button">Submit</button>
   }
 }
