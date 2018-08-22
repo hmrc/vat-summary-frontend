@@ -23,10 +23,10 @@
 @(user: User, model: OpenPaymentsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @hiddenHelpTextContent = {
-  <p>@Messages("openPayments.incorrect")
-    <a target="_blank" href="https://www.gov.uk/vat-corrections">@Messages("openPayments.correctErrors")</a>.
+  <p>@messages("openPayments.incorrect")
+    <a target="_blank" href="https://www.gov.uk/vat-corrections">@messages("openPayments.correctErrors")</a>.
   </p>
-  <p>@Messages("payment.afterSubmitted") @Messages("payment.stillMake")
+  <p>@messages("payment.afterSubmitted") @Messages("payment.stillMake")
     <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">
       @messages("payment.stillMakeLink")<span class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
   </p>
@@ -89,6 +89,6 @@
         </div>
     }
 
-    @expandingHelpSection(Messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
+    @expandingHelpSection(messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
   </div>
 }

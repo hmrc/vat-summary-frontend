@@ -128,16 +128,6 @@ notFound.title = Page not found
 notFound.heading = This page cannot be found
 notFound.message = Please check that you have entered the correct web address.
 
-featureSwitch.title = Feature switches
-featureSwitch.heading = Features
-featureSwitch.submit = Submit
-features.userResearchBanner.enabled = User research banner
-features.allowDirectDebits.enabled = Direct debits allowed
-features.staticDate.enabled = Use static date (2018-05-01)
-features.vatCertificate.enabled = Show vat certificate
-features.useVatObligationsService.enabled = Use vat-obligations microservice
-features.useDirectDebitDummyPage.enabled = Use direct debit hand-off dummy page
-
 banner.newService = This is a new service – your
 banner.feedback = feedback
 banner.feedbackImprove = will help us to improve it.

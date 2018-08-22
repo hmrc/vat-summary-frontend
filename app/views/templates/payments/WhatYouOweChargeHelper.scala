@@ -37,7 +37,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
         {displayDateRange(payment.start, payment.end)}).trim}${messages("openPayments.centralAssessmentSubmit")}"
     case `errorCorrectionDebitCharge` =>
       s"${messages.apply("openPayments.errorCorrection", {displayDateRange(payment.start, payment.end)}).trim}"
-	}
+  }
 
 
   val payLinkText: Option[String] = (payment.paymentType, hasDirectDebit) match {
