@@ -36,7 +36,7 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
   extends AuthorisedController with I18nSupport {
 
 
-  def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int): Action[AnyContent] =
+  def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String): Action[AnyContent] =
     authorisedAction { implicit request =>
       user =>
 
@@ -47,14 +47,16 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           taxPeriodMonth = taxPeriodMonth,
           taxPeriodYear = taxPeriodYear,
           returnUrl = appConfig.paymentsReturnUrl,
-          backUrl = appConfig.paymentsBackUrl
+          backUrl = appConfig.paymentsBackUrl,
+          chargeType = chargeType,
+          dueDate = dueDate
         )
 
         paymentsService.setupPaymentsJourney(paymentDetails).map {
           case Right(url) =>
             auditingService.audit(
               PayVatReturnChargeAuditModel(user, paymentDetails, url),
-              routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear).url
+              routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear, chargeType, dueDate).url
             )
             Redirect(url)
           case Left(error) =>
