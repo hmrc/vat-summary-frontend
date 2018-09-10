@@ -21,7 +21,7 @@ import models.payments.PaymentDetailsModel
 
 case class PayVatReturnChargeAuditModel(user: User,
                                         payment: PaymentDetailsModel,
-                                        returnUrl: String) extends AuditModel {
+                                        paymentRedirectUrl: String) extends AuditModel {
 
   override val auditType: String = "PaymentsHandOff"
 
@@ -35,7 +35,9 @@ case class PayVatReturnChargeAuditModel(user: User,
     "taxPeriodMonth" -> payment.taxPeriodMonth.toString,
     "taxPeriodYear" -> payment.taxPeriodYear.toString,
     "returnUrl" -> payment.returnUrl,
-    "backUrl" -> payment.backUrl
+    "backUrl" -> payment.backUrl,
+    "paymentRedirectUrl" -> paymentRedirectUrl,
+    "chargeType" -> payment.chargeType,
+    "dueDate" -> payment.dueDate
   )
-
 }
