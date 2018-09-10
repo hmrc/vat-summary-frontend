@@ -1,20 +1,20 @@
 # microservice specific routes
 
-GET        /vat-overview                 controllers.VatDetailsController.details
-GET        /what-you-owe                 controllers.OpenPaymentsController.openPayments
-GET        /account/details              controllers.AccountDetailsController.accountDetails
-GET        /direct-debit                 controllers.DirectDebitController.directDebits(status: Option[Boolean])
-GET        /payment-history/:year        controllers.PaymentHistoryController.paymentHistory(year: Int)
-GET       /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear   controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int)
+GET        /vat-overview                controllers.VatDetailsController.details
+GET        /what-you-owe                controllers.OpenPaymentsController.openPayments
+GET        /account/details             controllers.AccountDetailsController.accountDetails
+GET        /direct-debit                controllers.DirectDebitController.directDebits(status: Option[Boolean])
+GET        /payment-history/:year       controllers.PaymentHistoryController.paymentHistory(year: Int)
+GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
 
 #Feedback link Routes
-GET         /feedback                    controllers.feedback.FeedbackController.show
-POST        /feedback                    controllers.feedback.FeedbackController.submit
-GET         /thankyou                    controllers.feedback.FeedbackController.thankyou
+GET        /feedback                    controllers.feedback.FeedbackController.show
+POST       /feedback                    controllers.feedback.FeedbackController.submit
+GET        /thankyou                    controllers.feedback.FeedbackController.thankyou
 
 #Sign Out Routes
-GET         /sign-out                    controllers.SignOutController.signOut(authorised: Boolean)
-GET         /time-out                    controllers.SignOutController.timeout
+GET        /sign-out                    controllers.SignOutController.signOut(authorised: Boolean)
+GET        /time-out                    controllers.SignOutController.timeout
 
 
-GET        /assets/*file                 controllers.Assets.at(path="/public", file)
+GET        /assets/*file                controllers.Assets.at(path="/public", file)

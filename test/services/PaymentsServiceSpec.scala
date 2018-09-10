@@ -154,6 +154,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     val amountInPence: Int = 123456
     val taxPeriodMonth: Int = 2
     val taxPeriodYear: Int = 2018
+    val chargeType: String = "VAT Return Debit Charge"
+    val dueDate: String = "2018-08-08"
 
     val paymentDetails = PaymentDetailsModel("vat",
       "123456789",
@@ -161,7 +163,9 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       taxPeriodMonth,
       taxPeriodYear,
       "http://domain/path",
-      "http://domain/return-path"
+      "http://domain/return-path",
+      chargeType,
+      dueDate
     )
 
     "setting up the payments journey is successful" should {

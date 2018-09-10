@@ -30,7 +30,9 @@ class PaymentDetailsModelSpec extends UnitSpec {
         3,
         2018,
         "https://www.tax.service.gov.uk/mtdfb-page",
-        "https://www.tax.service.gov.uk/mtdfb-page2"
+        "https://www.tax.service.gov.uk/mtdfb-page2",
+        "VAT Return Debit Charge",
+        "2018-08-08"
       )
 
       val expectedJson = Json.parse(
@@ -46,7 +48,9 @@ class PaymentDetailsModelSpec extends UnitSpec {
           |    }
           |  },
           |  "returnUrl": "https://www.tax.service.gov.uk/mtdfb-page",
-          |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
+          |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2",
+          |  "chargeType": "VAT Return Debit Charge",
+          |  "dueDate": "2018-08-08"
           |}
         """.stripMargin
       ).toString()

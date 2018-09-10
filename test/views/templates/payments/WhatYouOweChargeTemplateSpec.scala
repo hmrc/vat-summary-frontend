@@ -83,7 +83,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct pay link destination" in {
-        element(Selectors.payLink).attr("href") shouldBe "/vat-through-software/make-payment/10000/2/2018"
+        element(Selectors.payLink).attr("href") shouldBe 
+          "/vat-through-software/make-payment/10000/2/2018/VAT%20Return%20Debit%20Charge/2018-03-03"
       }
 
       "have the correct pay link context" in {

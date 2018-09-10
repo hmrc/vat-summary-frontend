@@ -260,7 +260,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct pay now href for the first payment" in {
-      element(Selectors.firstPaymentPayLink).attr("href") should endWith("200000000001/3/2001")
+      element(Selectors.firstPaymentPayLink).attr("href") should endWith(
+        "200000000001/3/2001/VAT%20Return%20Debit%20Charge/2001-04-08"
+      )
     }
 
     "render a hidden label for the button for the first payment" in {
@@ -298,7 +300,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct pay now href for the first payment" in {
-      element(Selectors.firstPaymentPayLink).attr("href") should endWith("200000000001/3/2001")
+      element(Selectors.firstPaymentPayLink).attr("href") should endWith(
+        "200000000001/3/2001/VAT%20Return%20Debit%20Charge/2001-04-08"
+      )
     }
 
     "render a hidden label for the button for the first payment" in {

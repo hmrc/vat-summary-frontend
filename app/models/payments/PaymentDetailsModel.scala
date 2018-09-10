@@ -24,7 +24,9 @@ case class PaymentDetailsModel(taxType: String,
                                taxPeriodMonth: Int,
                                taxPeriodYear: Int,
                                returnUrl: String,
-                               backUrl: String)
+                               backUrl: String,
+                               chargeType: String,
+                               dueDate: String)
 
 object PaymentDetailsModel {
 
@@ -38,7 +40,9 @@ object PaymentDetailsModel {
           "month" -> paymentDetail.taxPeriodMonth,
           "year" -> paymentDetail.taxPeriodYear)),
       "returnUrl" -> paymentDetail.returnUrl,
-      "backUrl" -> paymentDetail.backUrl
+      "backUrl" -> paymentDetail.backUrl,
+      "chargeType" -> paymentDetail.chargeType,
+      "dueDate" -> paymentDetail.dueDate
     )
   }
 }
