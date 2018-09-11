@@ -45,12 +45,12 @@ class PaymentDetailsModelSpec extends UnitSpec {
           |    "vatPeriod" : {
           |      "month" : 3,
           |      "year" : 2018
-          |    }
+          |    },
+          |    "chargeType": "VAT Return Debit Charge",
+          |    "dueDate": "2018-08-08"
           |  },
           |  "returnUrl": "https://www.tax.service.gov.uk/mtdfb-page",
-          |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2",
-          |  "chargeType": "VAT Return Debit Charge",
-          |  "dueDate": "2018-08-08"
+          |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
           |}
         """.stripMargin
       ).toString()

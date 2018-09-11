@@ -38,11 +38,13 @@ object PaymentDetailsModel {
       "extras" -> Json.obj(
         "vatPeriod" -> Json.obj(
           "month" -> paymentDetail.taxPeriodMonth,
-          "year" -> paymentDetail.taxPeriodYear)),
+          "year" -> paymentDetail.taxPeriodYear
+        ),
+        "chargeType" -> paymentDetail.chargeType,
+        "dueDate" -> paymentDetail.dueDate
+      ),
       "returnUrl" -> paymentDetail.returnUrl,
-      "backUrl" -> paymentDetail.backUrl,
-      "chargeType" -> paymentDetail.chargeType,
-      "dueDate" -> paymentDetail.dueDate
+      "backUrl" -> paymentDetail.backUrl
     )
   }
 }
