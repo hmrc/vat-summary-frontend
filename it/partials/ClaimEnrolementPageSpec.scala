@@ -22,7 +22,7 @@ import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.AuthStub
 
-class VatSectionPageSpec extends IntegrationBaseSpec {
+class ClaimEnrolmentPageSpec extends IntegrationBaseSpec {
 
   override val appRouteContext: String = "/vat-summary-partials"
 
@@ -31,11 +31,11 @@ class VatSectionPageSpec extends IntegrationBaseSpec {
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest("/bta-home")
+      buildRequest("/claim-enrolment")
     }
   }
 
-  "Calling the bta-home route" when {
+  "Calling the claim-enrolment route" when {
 
     "the user is authenticated" should {
 

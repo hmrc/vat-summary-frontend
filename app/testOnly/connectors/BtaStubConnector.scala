@@ -34,9 +34,7 @@ class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig, hc: Vat
 
   import hc._
 
-  lazy val partialUrl: String = appConfig.vatSummaryPartial
-
-  def getPartial()(implicit request: Request[AnyContent]): Future[HtmlPartial] = {
+  def getPartial(partialUrl: String)(implicit request: Request[AnyContent]): Future[HtmlPartial] = {
     val result: Future[HttpResponse] = http.GET[HttpResponse](partialUrl)
       .recover {
         case ex: Upstream4xxResponse

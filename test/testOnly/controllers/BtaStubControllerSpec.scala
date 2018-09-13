@@ -43,8 +43,8 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(authResult)
 
-      if(runMock) {(mockService.getPartial()(_: Request[AnyContent]))
-        .expects(*)
+      if(runMock) {(mockService.getPartial(_: String)(_: Request[AnyContent]))
+        .expects(*, *)
         .returns(Future.successful(Html("Some HTML")))
       }
     }
@@ -63,19 +63,19 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
 
       "return 200" in new Test {
         override val authResult: Future[Unit] = Future.successful(())
-        private val result = target.landingPage()(fakeRequest)
+        private val result = target.viewVat()(fakeRequest)
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
         override val authResult: Future[Unit] = Future.successful(())
-        private val result = target.landingPage()(fakeRequest)
+        private val result = target.viewVat()(fakeRequest)
         contentType(result) shouldBe Some("text/html")
       }
 
       "return charset utf-8" in new Test {
         override val authResult: Future[Unit] = Future.successful(())
-        private val result = target.landingPage()(fakeRequest)
+        private val result = target.viewVat()(fakeRequest)
         charset(result) shouldBe Some("utf-8")
       }
     }
@@ -85,7 +85,7 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
       "return 401 (Unauthorised)" in new Test {
         override val runMock: Boolean = false
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
-        val result: Future[Result] = target.landingPage()(fakeRequest)
+        val result: Future[Result] = target.viewVat()(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
