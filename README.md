@@ -10,7 +10,7 @@ This service provides end users with a mechanism to view their VAT Summary.
 
 ## Requirements
 
-This service is written in [Scala] (http://www.scala-lang.org/) and [Play](http://playframework.com/), so needs at least a [JRE] to run.
+This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), so needs at least a [JRE](https://www.java.com/en/download/) to run.
 
 ### Running the application
 
