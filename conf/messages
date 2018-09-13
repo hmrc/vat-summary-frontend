@@ -27,6 +27,10 @@ partials.btaHome.vatSection.deadlines = You can view what you owe, your return d
 partials.btaHome.vatSection.updateDetails = You can also update some of your VAT details.
 partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
+partials.btaHome.claimEnrolment.heading = Your agent has signed you up to Making Tax Digital for VAT
+partials.btaHome.claimEnrolment.mandationInfo = From April 2019, VAT registered businesses with a turnover of £85,000 or above must use relevant third party software to submit their VAT Returns.
+partials.btaHome.claimEnrolment.addEnrolment = Add Making Tax Digital for VAT to my account
+
 vatDetails.title = Your VAT details
 vatDetails.vatCertificate.view = See your business information and other details.
 vatDetails.vatCertificate.link = View VAT certificate (opens in a new tab)

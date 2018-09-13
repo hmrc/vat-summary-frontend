@@ -29,6 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class BtaStubConnectorSpec extends ControllerBaseSpec {
 
   lazy val hc: VatHeaderCarrierForPartialsConverter = injector.instanceOf[VatHeaderCarrierForPartialsConverter]
+  lazy val testPartial: String = mockAppConfig.viewVatPartial
 
   def setup(response: HttpResponse): BtaStubConnector = {
     val mockHttp = mock[HttpClient]
@@ -64,7 +65,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
       lazy val connector = setup(HttpResponse(OK, responseString = Some("content")))
 
-      lazy val result = connector.getPartial
+      lazy val result = connector.getPartial(testPartial)
 
       "return HtmlPartial Success with html content" in {
         await(result) shouldEqual HtmlPartial.Success(None, Html("content"))
@@ -75,7 +76,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
       lazy val connector = setup(HttpResponse(UNAUTHORIZED, responseString = Some("response")))
 
-      lazy val result = connector.getPartial
+      lazy val result = connector.getPartial(testPartial)
 
       "return HtmlPartial Failure" in {
         await(result) shouldEqual HtmlPartial.Failure(Some(UNAUTHORIZED), "response")
@@ -86,7 +87,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
       lazy val connector = setup(HttpResponse(FORBIDDEN, responseString = Some("response")))
 
-      lazy val result = connector.getPartial
+      lazy val result = connector.getPartial(testPartial)
 
       "return HtmlPartial Failure" in {
         await(result) shouldEqual HtmlPartial.Failure(Some(FORBIDDEN), "response")

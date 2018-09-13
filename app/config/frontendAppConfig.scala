@@ -47,7 +47,8 @@ trait AppConfig extends ServicesConfig {
   val vatSubscriptionBaseUrl: String
   val financialDataBaseUrl: String
   val selfLookup: String
-  val vatSummaryPartial: String
+  val viewVatPartial: String
+  val claimEnrolmentPartial: String
   val vatSubmittedReturnsUrl: String
   val vatReturnDeadlinesUrl: String
   def vatReturnUrl(periodKey: String): String
@@ -114,7 +115,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override lazy val selfLookup: String = baseUrl("selfLookup")
 
-  override lazy val vatSummaryPartial: String = selfLookup + "/vat-summary-partials/bta-home"
+  override lazy val viewVatPartial: String = selfLookup + "/vat-summary-partials/bta-home"
+  override lazy val claimEnrolmentPartial: String = selfLookup + "/vat-summary-partials/claim-enrolment"
 
   private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
 

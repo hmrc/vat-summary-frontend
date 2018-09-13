@@ -30,8 +30,8 @@ import scala.concurrent.Future
 
 class BtaStubService @Inject()(btaStubConnector: BtaStubConnector) {
 
-  def getPartial()(implicit request: Request[AnyContent]): Future[Html] = {
-    btaStubConnector.getPartial().flatMap { result =>
+  def getPartial(partialUrl: String)(implicit request: Request[AnyContent]): Future[Html] = {
+    btaStubConnector.getPartial(partialUrl).flatMap { result =>
       handlePartial(result)
     }
   }

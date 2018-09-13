@@ -33,9 +33,15 @@ class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthSe
                                   btaStubService: BtaStubService, implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  def landingPage(): Action[AnyContent] = Action.async { implicit request =>
+  val viewVatPartial: String = appConfig.viewVatPartial
+  val claimEnrolmentPartial: String = appConfig.claimEnrolmentPartial
+
+  def viewVat(): Action[AnyContent] = showPartial(viewVatPartial)
+  def claimEnrolment(): Action[AnyContent] = showPartial(claimEnrolmentPartial)
+
+  private def showPartial(partialUrl: String): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised() {
-      btaStubService.getPartial().map { partial =>
+      btaStubService.getPartial(partialUrl).map { partial =>
         Ok(testOnly.views.html.btaStub(partial))
       }
     }.recoverWith {

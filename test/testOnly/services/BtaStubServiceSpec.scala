@@ -29,14 +29,15 @@ import scala.concurrent.Future
 class BtaStubServiceSpec extends ControllerBaseSpec {
 
   implicit val hc: HeaderCarrier = mock[HeaderCarrier]
+  lazy val testPartial: String = mockAppConfig.viewVatPartial
 
   "Calling BtaStubService .getPartial" when {
 
     def setup(partial: HtmlPartial): BtaStubService = {
       val mockConnector = mock[BtaStubConnector]
 
-      (mockConnector.getPartial()(_: Request[AnyContent]))
-        .expects(*)
+      (mockConnector.getPartial(_: String)(_: Request[AnyContent]))
+        .expects(*, *)
         .returns(Future.successful(partial))
 
       new BtaStubService(mockConnector)
@@ -45,7 +46,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
     "request is successful" should {
 
       lazy val service = setup(HtmlPartial.Success(None, Html("some html")))
-      lazy val result = service.getPartial()
+      lazy val result = service.getPartial(testPartial)
 
       "return some html" in {
         await(result) shouldEqual Html("some html")
@@ -55,7 +56,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
     "request is unsuccessful with status 401" should {
 
       lazy val service = setup(HtmlPartial.Failure(Some(UNAUTHORIZED)))
-      lazy val result = service.getPartial()
+      lazy val result = service.getPartial(testPartial)
 
       "return some html" in {
         await(result) shouldEqual Html("User is unauthorised")
@@ -65,7 +66,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
     "request is unsuccessful with status 403" should {
 
       lazy val service = setup(HtmlPartial.Failure(Some(FORBIDDEN)))
-      lazy val result = service.getPartial()
+      lazy val result = service.getPartial(testPartial)
 
       "return some html" in {
         await(result) shouldEqual Html("User is forbidden")
@@ -75,7 +76,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
     "request is unsuccessful with other status code" should {
 
       lazy val service = setup(HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR)))
-      lazy val result = service.getPartial()
+      lazy val result = service.getPartial(testPartial)
 
       "return some html" in {
         await(result) shouldEqual Html("Alternative content")
