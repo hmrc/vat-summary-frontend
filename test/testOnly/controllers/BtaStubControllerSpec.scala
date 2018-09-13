@@ -57,7 +57,7 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling the landingPage action" when {
+  "Calling the viewVat action" when {
 
     "the user is logged in" should {
 
@@ -86,6 +86,40 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
         override val runMock: Boolean = false
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.viewVat()(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+  }
+
+  "Calling the claimEnrolment action" when {
+
+    "the user is logged in" should {
+
+      "return 200" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
+        private val result = target.claimEnrolment()(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
+        private val result = target.claimEnrolment()(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset utf-8" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
+        private val result = target.claimEnrolment()(fakeRequest)
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
+
+    "the user is not logged in" should {
+
+      "return 401 (Unauthorised)" in new Test {
+        override val runMock: Boolean = false
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        val result: Future[Result] = target.claimEnrolment()(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
