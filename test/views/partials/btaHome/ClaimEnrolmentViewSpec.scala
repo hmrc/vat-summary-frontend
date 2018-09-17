@@ -30,7 +30,9 @@ class ClaimEnrolmentViewSpec extends ViewBaseSpec {
       val addEnrolmentLink = "a"
     }
 
-    lazy val view = views.html.partials.btaHome.claimEnrolment()
+    val testVrn: String = "123456789"
+
+    lazy val view = views.html.partials.btaHome.claimEnrolment(testVrn)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {
@@ -43,7 +45,7 @@ class ClaimEnrolmentViewSpec extends ViewBaseSpec {
     }
 
     "have the correct link address" in {
-      element(Selectors.addEnrolmentLink).attr("href") shouldBe "#"
+      element(Selectors.addEnrolmentLink).attr("href") shouldBe "mtd-claim-subscription/123456789"
     }
   }
 }
