@@ -97,4 +97,55 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "Calling the .claimEnrolment action" when {
+
+    "A user is logged in and enrolled to HMCE-VATDEC-ORG" should {
+
+      val goodEnrolments: Enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "HMCE-VATDEC-ORG",
+            Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+            "Active")
+        )
+      )
+
+      "return 200" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+        private val result = target.claimEnrolment()(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+        private val result = target.claimEnrolment()(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset of utf-8" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+        private val result = target.claimEnrolment()(fakeRequest)
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
+
+    "A signed in user attempts see the claim enrolment partial but doesn't have an HMCE-VATDEC-ORG enrolment" should {
+
+      "return FORBIDDEN" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        private val result = target.claimEnrolment()(fakeRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "A user is not logged in" should {
+
+      "return UNAUTHORIZED" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        private val result = target.claimEnrolment()(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+  }
 }

@@ -38,13 +38,25 @@ class BtaHomeController @Inject()(val messagesApi: MessagesApi,
     Future.successful(Ok(views.html.partials.btaHome.vatSection()))
   }
 
-  def claimEnrolment(): Action[AnyContent] = enrolledAction { implicit request =>
+  def claimEnrolment(): Action[AnyContent] = enrolledActionNonMtd { implicit request =>
     user =>
       Future.successful(Ok(views.html.partials.btaHome.claimEnrolment(user.vrn)))
   }
 
   private def enrolledAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
+      enrolments => {
+        val user = User(enrolments)
+        block(request)(user)
+      }
+    }.recover {
+      case _: NoActiveSession => Unauthorized
+      case _: AuthorisationException => Forbidden
+    }
+  }
+
+  private def enrolledActionNonMtd(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
+    enrolmentsAuthService.authorised(Enrolment("HMCE-VATDEC-ORG")).retrieve(Retrievals.authorisedEnrolments) {
       enrolments => {
         val user = User(enrolments)
         block(request)(user)
