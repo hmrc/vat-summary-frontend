@@ -18,6 +18,7 @@ import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
+import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 import play.core.PlayVersion
 import sbt.Tests.{Group, SubProcess}
 
@@ -82,8 +83,9 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 }
 
 lazy val microservice: Project = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
   .settings(PlayKeys.playDefaultPort := 9152)
+  .settings(majorVersion := 0)
   .settings(coverageSettings: _*)
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
