@@ -27,7 +27,6 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     object Selectors {
       val pageHeading = "#content h1"
       val signUpWithSoftware = "#content p:nth-of-type(1)"
-      val signUpLink = "#content p:nth-of-type(1) > a"
       val signInCorrectCredentials = "#content p:nth-of-type(2)"
       val signOut = "#content p:nth-of-type(3)"
       val signOutLink = "#content p:nth-of-type(3) a"
@@ -48,10 +47,6 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       elementText(Selectors.signUpWithSoftware) shouldBe "You need to sign up to use software to submit your VAT Returns."
     }
 
-    "contain a link to sign up to MTD VAT" in {
-      element(Selectors.signUpLink).attr("href") shouldBe "mtd-sign-up"
-    }
-
     "have the correct instructions to sign in" in {
       elementText(Selectors.signInCorrectCredentials) shouldBe "If you have already signed up, you need to sign in with the correct Government Gateway details."
     }
@@ -64,8 +59,5 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/sign-out?authorised=false"
     }
 
-    "have the correct GA tag for the graceful error content" in {
-      element(Selectors.signUpWithSoftware).attr("data-metrics") shouldBe "error:help-text:sign-up"
-    }
   }
 }
