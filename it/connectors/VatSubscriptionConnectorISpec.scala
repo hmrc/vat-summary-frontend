@@ -55,7 +55,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           None,
           None,
           None,
-          isPartialMigration = true
+          isHybridUser = true
         )
       )
 

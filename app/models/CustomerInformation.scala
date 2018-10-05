@@ -31,7 +31,7 @@ case class CustomerInformation(organisationName: Option[String],
                                correspondencePrimaryPhoneNumber: Option[String],
                                correspondenceMobileNumber: Option[String],
                                correspondenceEmailAddress: Option[String],
-                               isPartialMigration: Boolean
+                               isHybridUser: Boolean
                               ) {
   def entityName: Option[String] = {
     (firstName, lastName, tradingName, organisationName) match {
@@ -65,7 +65,7 @@ object CustomerInformation {
       correspondencePrimaryPhoneNumber = None,
       correspondenceMobileNumber = None,
       correspondenceEmailAddress = None,
-      isPartialMigration = isPartialMigration.contains(true)
+      isHybridUser = isPartialMigration.contains(true)
     )
   }
 

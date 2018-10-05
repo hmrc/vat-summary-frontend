@@ -87,7 +87,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
           None,
           None,
           None,
-          isPartialMigration = true
+          isHybridUser = true
         )
       )
 

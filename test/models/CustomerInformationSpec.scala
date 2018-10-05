@@ -27,7 +27,7 @@ class CustomerInformationSpec extends UnitSpec {
     val tradingName: Option[String] = Some("Cheapo Clothing")
     val organisationName: Option[String] = Some("Cheapo Clothing Ltd")
     val dummyAddress = Address("","",None,None,None)
-    val isPartialMigration = true
+    val isHybridUser = true
 
     lazy val customerInfo: CustomerInformation = CustomerInformation(
       organisationName,
@@ -42,7 +42,7 @@ class CustomerInformationSpec extends UnitSpec {
       None,
       None,
       None,
-      isPartialMigration
+      isHybridUser
     )
   }
 
@@ -102,7 +102,7 @@ class CustomerInformationSpec extends UnitSpec {
     )
 
     "be parsed from appropriate JSON" in new Test {
-      override val isPartialMigration: Boolean = false
+      override val isHybridUser: Boolean = false
       exampleJson.as[CustomerInformation] shouldBe customerInfo
     }
   }
