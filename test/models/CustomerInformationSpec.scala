@@ -21,13 +21,12 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class CustomerInformationSpec extends UnitSpec {
 
-  private trait Test {
+  private case class Test(isPartialMigration: Boolean = true) {
     val firstName: Option[String] = Some("Pepsi")
     val secondName: Option[String] = Some("Mac")
     val tradingName: Option[String] = Some("Cheapo Clothing")
     val organisationName: Option[String] = Some("Cheapo Clothing Ltd")
     val dummyAddress = Address("","",None,None,None)
-    val isPartialMigration = true
 
     lazy val customerInfo: CustomerInformation = CustomerInformation(
       organisationName,
@@ -89,6 +88,20 @@ class CustomerInformationSpec extends UnitSpec {
     "be parsed from appropriate JSON" in new Test {
       val result: CustomerInformation = Json.parse(exampleInputString).as[CustomerInformation]
       result shouldBe customerInfo
+    }
+  }
+
+  "A CustomerInformation object with no isPartialMigration value" should {
+
+    val exampleJson = Json.obj(
+      "organisationName" -> "Cheapo Clothing Ltd",
+      "firstName" -> "Pepsi",
+      "lastName" -> "Mac",
+      "tradingName" -> "Cheapo Clothing"
+    )
+
+    "be parsed from appropriate JSON" in new Test(isPartialMigration = false) {
+      exampleJson.as[CustomerInformation] shouldBe customerInfo
     }
   }
 
