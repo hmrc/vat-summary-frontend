@@ -27,6 +27,7 @@ class CustomerInformationSpec extends UnitSpec {
     val tradingName: Option[String] = Some("Cheapo Clothing")
     val organisationName: Option[String] = Some("Cheapo Clothing Ltd")
     val dummyAddress = Address("","",None,None,None)
+    val isPartialMigration = true
 
     lazy val customerInfo: CustomerInformation = CustomerInformation(
       organisationName,
@@ -40,7 +41,8 @@ class CustomerInformationSpec extends UnitSpec {
       dummyAddress,
       None,
       None,
-      None
+      None,
+      isPartialMigration
     )
   }
 
@@ -52,6 +54,7 @@ class CustomerInformationSpec extends UnitSpec {
         |"firstName":"Pepsi",
         |"lastName":"Mac",
         |"tradingName":"Cheapo Clothing",
+        |"isPartialMigration": true,
         |"PPOB":{
         |  "address":{
         |    "line1":"Bedrock Quarry",

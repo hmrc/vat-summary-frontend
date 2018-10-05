@@ -38,6 +38,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
             "firstName" -> "Betty",
             "lastName" -> "Jones",
             "tradingName" -> "Cheapo Clothing",
+            "isPartialMigration" -> true,
             "PPOB" -> Json.obj(
               "address" -> Json.obj(
                 "line1" -> "Bedrock Quarry",
@@ -85,7 +86,8 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
           dummyAddress,
           None,
           None,
-          None
+          None,
+          isPartialMigration = true
         )
       )
 
