@@ -47,6 +47,7 @@ object CustomerInfoStub extends WireMockMethods {
       |  "registrationReason" : "0001",
       |  "effectiveRegistrationDate" : "2017-08-21",
       |  "businessStartDate" : "2017-01-01",
+      |  "isPartialMigration" : true,
       |  "PPOB":{
       |    "address":{
       |      "line1":"Bedrock Quarry",

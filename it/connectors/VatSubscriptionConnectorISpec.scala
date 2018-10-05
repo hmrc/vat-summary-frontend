@@ -54,7 +54,8 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           dummyAddress,
           None,
           None,
-          None
+          None,
+          isPartialMigration = true
         )
       )
 
