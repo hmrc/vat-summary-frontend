@@ -56,7 +56,8 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     ),
     Some("01632 960026"),
     Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com")
+    Some("bettylucknexttime@gmail.com"),
+    isHybridUser = true
   )
 
   private trait AccountDetailsTest {

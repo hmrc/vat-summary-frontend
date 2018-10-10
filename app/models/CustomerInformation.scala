@@ -30,7 +30,8 @@ case class CustomerInformation(organisationName: Option[String],
                                correspondenceAddress: Address,
                                correspondencePrimaryPhoneNumber: Option[String],
                                correspondenceMobileNumber: Option[String],
-                               correspondenceEmailAddress: Option[String]
+                               correspondenceEmailAddress: Option[String],
+                               isHybridUser: Boolean
                               ) {
   def entityName: Option[String] = {
     (firstName, lastName, tradingName, organisationName) match {
@@ -47,7 +48,8 @@ object CustomerInformation {
   private def createCustomerWithNameOnly(organisationName: Option[String],
                                          firstName: Option[String],
                                          lastName: Option[String],
-                                         tradingName: Option[String]): CustomerInformation = {
+                                         tradingName: Option[String],
+                                         isPartialMigration: Option[Boolean]): CustomerInformation = {
 
     val dummyAddress = Address("", "", None, None, None)
     CustomerInformation(
@@ -62,7 +64,8 @@ object CustomerInformation {
       correspondenceAddress = dummyAddress,
       correspondencePrimaryPhoneNumber = None,
       correspondenceMobileNumber = None,
-      correspondenceEmailAddress = None
+      correspondenceEmailAddress = None,
+      isHybridUser = isPartialMigration.contains(true)
     )
   }
 
@@ -70,6 +73,7 @@ object CustomerInformation {
     (JsPath \ "organisationName").readNullable[String] and
       (JsPath \ "firstName").readNullable[String] and
       (JsPath \ "lastName").readNullable[String] and
-      (JsPath \ "tradingName").readNullable[String]
+      (JsPath \ "tradingName").readNullable[String] and
+      (JsPath \ "isPartialMigration").readNullable[Boolean]
     ) (createCustomerWithNameOnly _)
 }
