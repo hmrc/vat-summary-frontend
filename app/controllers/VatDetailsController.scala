@@ -19,9 +19,9 @@ package controllers
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import config.AppConfig
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
-import models.{ServiceResponse, User, VatDetailsDataModel}
-import models.obligations.{Obligation, VatReturnObligations}
+import models.{CustomerInformation, ServiceResponse, User, VatDetailsDataModel}
 import models.payments.Payments
 import models.obligations.{Obligation, VatReturnObligations}
 import models.viewModels.VatDetailsViewModel
@@ -30,6 +30,8 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 @Singleton
 class VatDetailsController @Inject()(val messagesApi: MessagesApi,
@@ -42,22 +44,18 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   extends AuthorisedController with I18nSupport {
 
   def details(): Action[AnyContent] = authorisedAction { implicit request =>
-    user =>
-      val entityNameCall = accountDetailsService.getEntityName(user.vrn)
+    implicit user =>
+      val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
       val returnObligationsCall = vatDetailsService.getReturnObligations(user, dateService.now())
       val paymentObligationsCall = vatDetailsService.getPaymentObligations(user)
 
-      val viewModel = for {
+      for {
         nextReturn <- returnObligationsCall
         nextPayment <- paymentObligationsCall
-        customerInfo <- entityNameCall
+        customerInfo <- accountDetailsCall
       } yield {
         auditEvents(user, nextReturn, nextPayment)
-        constructViewModel(nextReturn, nextPayment, customerInfo)
-      }
-
-      viewModel.map { model =>
-        Ok(views.html.vatDetails.details(user, model))
+        Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo)))
       }
   }
 
@@ -75,30 +73,12 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               payments: ServiceResponse[Option[Payments]],
-                                              entityName: ServiceResponse[Option[String]]): VatDetailsViewModel = {
+                                              accountDetails: HttpGetResult[CustomerInformation]): VatDetailsViewModel = {
 
-    val returnModel: VatDetailsDataModel = obligations match {
-      case Right(Some(obs)) => getObligationFlags(obs.obligations)
-      case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
-      case Left(error) =>
-        Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
-        VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
-    }
-
-    val paymentModel: VatDetailsDataModel = payments match {
-      case Right(Some(paymnts)) => getObligationFlags(paymnts.financialTransactions)
-      case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
-      case Left(error) =>
-        Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
-        VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
-    }
-
-    val displayedName = entityName match {
-      case Right(name) => name
-      case Left(error) =>
-        Logger.warn("[VatDetailsController][displayedName] could not retrieve display name: " + error.toString)
-        None
-    }
+    val returnModel: VatDetailsDataModel = retrieveReturns(obligations)
+    val paymentModel: VatDetailsDataModel = retrievePayments(payments)
+    val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
+    val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -110,8 +90,47 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       returnModel.hasError,
       paymentModel.hasMultiple,
       paymentModel.isOverdue,
-      paymentModel.hasError
+      paymentModel.hasError,
+      isHybridUser
     )
+  }
+
+  private def retrieveHybridStatus(accountDetails: HttpGetResult[CustomerInformation]) = {
+    accountDetails match {
+      case Right(model) => model.isHybridUser
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][isHybridUser] could not retrieve hybrid status: " + error.toString)
+        false
+    }
+  }
+
+  private def retrieveDisplayedName(accountDetails: HttpGetResult[CustomerInformation]) = {
+    accountDetails match {
+      case Right(model) => model.entityName
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][displayedName] could not retrieve display name: " + error.toString)
+        None
+    }
+  }
+
+  private def retrievePayments(payments: ServiceResponse[Option[Payments]]) = {
+    payments match {
+      case Right(Some(model)) => getObligationFlags(model.financialTransactions)
+      case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
+        VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
+    }
+  }
+
+  private def retrieveReturns(obligations: ServiceResponse[Option[VatReturnObligations]]) = {
+    obligations match {
+      case Right(Some(obs)) => getObligationFlags(obs.obligations)
+      case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
+        VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
+    }
   }
 
   private[controllers] def auditEvents(user: User, returnObligations: ServiceResponse[Option[VatReturnObligations]],

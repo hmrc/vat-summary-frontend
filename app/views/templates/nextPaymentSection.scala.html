@@ -14,33 +14,38 @@
  * limitations under the License.
  *@
 
-@import models.payments.Payment
 @import views.html.templates.formatters.dates._
-@import views.html.templates.formatters.money._
 @import java.time.LocalDate
+@import config.AppConfig
 
-@(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages)
+@(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isHybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User)
 
 <div class="column-one-half" id="payments">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
-    <p @if(isError){data-metrics="error:recovered:next-payment"}>
+
+    @if(isHybridUser) {
+        <a href="@appConfig.portalMakePaymentUrl(user.vrn)">@messages("vatDetails.checkWhatYouOwe")</a>
+    } else {
+        <p @if(isError){data-metrics="error:recovered:next-payment"}>
         @(paymentsData, hasMultiple, isError) match {
-        case (_, _, true) => { @messages("vatDetails.error") }
-        case (Some(numOfPayments), true, _) => { @messages("vatDetails.paymentsDue", numOfPayments)}
-        case _ => {
-            @paymentsData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("payment.noPayment"))
-            @if(isOverdue){
-                <span>
-                    <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
-                </span>
+            case (_, _, true) => { @messages("vatDetails.error") }
+            case (Some(numOfPayments), true, _) => { @messages("vatDetails.paymentsDue", numOfPayments)}
+            case _ => {
+                @paymentsData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("payment.noPayment"))
+                @if(isOverdue){
+                    <span>
+                        <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+                    </span>
+                }
             }
         }
-        }
-    </p>
+        </p>
 
-  <p>
-    <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}" data-journey-click="payment:check:vat-details">
-      @messages("payment.check")
-    </a>
-  </p>
+        <p>
+            <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}" data-journey-click="payment:check:vat-details">
+            @messages("payment.check")
+            </a>
+        </p>
+    }
+
 </div>

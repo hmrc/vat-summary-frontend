@@ -43,6 +43,7 @@ vatDetails.vrn = VAT registration number (VRN): {0}
 vatDetails.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.returnsDue = You have {0} returns due
 vatDetails.paymentsDue = You have {0} payments due
+vatDetails.checkWhatYouOwe = Check what you owe and make a payment (opens in a new tab)
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due

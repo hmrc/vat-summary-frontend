@@ -62,7 +62,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val staticDateValue: String = "2018-05-01"
   override val surveyUrl: String = "/some-survey-url"
   override val mtdVatSignUpUrl: String = "mtd-sign-up"
-  override val mtdVatClaimSubcriptionUrl: String = "mtd-claim-subscription"
+  override val mtdVatClaimSubscriptionUrl: String = "mtd-claim-subscription"
   override val signOutUrl: String = "/some-gg-signout-url"
   override val unauthorisedSignOutUrl: String = ""
   override val vatSubscriptionBaseUrl: String = ""
@@ -70,4 +70,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val timeoutPeriod: Int = 1800
   override val timeoutCountdown: Int = 20
   override val selfLookup: String = ""
+  override val portalMakePaymentUrl: String => String = (vrn: String) => s"portal-url/$vrn/"
 }
