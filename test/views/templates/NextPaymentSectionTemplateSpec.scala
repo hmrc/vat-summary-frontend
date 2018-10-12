@@ -140,5 +140,27 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
 
     }
+
+    "the user is hybrid" should {
+
+      lazy val view = views.html.templates.nextPaymentSection(None,
+        hasMultiple = false,
+        isOverdue = false,
+        isError = false,
+        isHybridUser = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the section title" in {
+
+      }
+
+      "display a link to the portal" in {
+
+      }
+
+      "have the correct link text" in {
+
+      }
+    }
   }
 }

@@ -131,6 +131,42 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
+    "the user is hybrid" should {
+
+      "not attempt to retrieve payment obligations" in new DetailsTest {
+
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+          Future.successful(Right(customerInformationHybrid))
+
+        override def setup(): Unit = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *, *)
+            .returns(authResult)
+
+          (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(accountDetailsServiceResult)
+
+          (mockVatDetailsService.getReturnObligations(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *, *)
+            .returns(vatServiceReturnsResult)
+
+          (mockVatDetailsService.getPaymentObligations(_: User)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .never()
+
+          (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *, *)
+            .returns({})
+        }
+
+        val result: Future[Result] = target.details()(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+    }
   }
 
   "Calling .constructViewModel with a VatDetailsModel" when {

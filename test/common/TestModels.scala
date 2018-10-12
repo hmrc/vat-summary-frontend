@@ -83,6 +83,22 @@ object TestModels {
     isHybridUser = false
   )
 
+  val customerInformationHybrid: CustomerInformation = CustomerInformation(
+    Some("Cheapo Clothing Ltd"),
+    Some("Betty"),
+    Some("Jones"),
+    Some(entityName),
+    address,
+    None,
+    None,
+    None,
+    address,
+    None,
+    None,
+    None,
+    isHybridUser = true
+  )
+
   val customerInformationNoEntityName: CustomerInformation = CustomerInformation(
     None,
     None,

@@ -47,12 +47,12 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     implicit user =>
       val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
       val returnObligationsCall = vatDetailsService.getReturnObligations(user, dateService.now())
-      val paymentObligationsCall = vatDetailsService.getPaymentObligations(user)
+      lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user)
 
       for {
-        nextReturn <- returnObligationsCall
-        nextPayment <- paymentObligationsCall
         customerInfo <- accountDetailsCall
+        nextReturn <- returnObligationsCall
+        nextPayment <- if(retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
       } yield {
         auditEvents(user, nextReturn, nextPayment)
         Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo)))
@@ -95,7 +95,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
-  private def retrieveHybridStatus(accountDetails: HttpGetResult[CustomerInformation]) = {
+  private def retrieveHybridStatus(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
     accountDetails match {
       case Right(model) => model.isHybridUser
       case Left(error) =>
@@ -104,7 +104,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private def retrieveDisplayedName(accountDetails: HttpGetResult[CustomerInformation]) = {
+  private def retrieveDisplayedName(accountDetails: HttpGetResult[CustomerInformation]): Option[String] = {
     accountDetails match {
       case Right(model) => model.entityName
       case Left(error) =>
@@ -113,7 +113,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private def retrievePayments(payments: ServiceResponse[Option[Payments]]) = {
+  private def retrievePayments(payments: ServiceResponse[Option[Payments]]): VatDetailsDataModel = {
     payments match {
       case Right(Some(model)) => getObligationFlags(model.financialTransactions)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
@@ -123,7 +123,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private def retrieveReturns(obligations: ServiceResponse[Option[VatReturnObligations]]) = {
+  private def retrieveReturns(obligations: ServiceResponse[Option[VatReturnObligations]]): VatDetailsDataModel = {
     obligations match {
       case Right(Some(obs)) => getObligationFlags(obs.obligations)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
