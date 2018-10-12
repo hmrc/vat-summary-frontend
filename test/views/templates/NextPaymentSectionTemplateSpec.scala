@@ -25,13 +25,14 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
   "The nextPaymentSection template" when {
 
-    implicit val user: User = User("99999999")
+    implicit val user: User = User("999999999")
 
     object Selectors {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"
       val nextPaymentDate = "p:nth-of-type(1)"
       val viewPaymentButton = "a:nth-of-type(1)"
       val overdueLabel = "span strong"
+      val portalLink = "a"
     }
 
     "there is a payment to display" should {
@@ -150,16 +151,16 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         isHybridUser = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "display the section title" in {
-
+      "display the 'Next payment due' heading" in {
+        elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
       }
 
       "display a link to the portal" in {
-
+        element(Selectors.portalLink).attr("href") shouldBe "portal-url/999999999/"
       }
 
       "have the correct link text" in {
-
+        elementText(Selectors.portalLink) shouldBe "Check what you owe and make a payment (opens in a new tab)"
       }
     }
   }
