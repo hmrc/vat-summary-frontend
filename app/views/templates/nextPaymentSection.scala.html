@@ -15,6 +15,7 @@
  *@
 
 @import views.html.templates.formatters.dates._
+@import views.html.templates.formatters.links._
 @import java.time.LocalDate
 @import config.AppConfig
 
@@ -24,7 +25,7 @@
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
 
     @if(isHybridUser) {
-        <a href="@appConfig.portalMakePaymentUrl(user.vrn)">@messages("vatDetails.checkWhatYouOwe")</a>
+        @openInNewTab(appConfig.portalMakePaymentUrl(user.vrn), messages("vatDetails.checkWhatYouOwe"))
     } else {
         <p @if(isError){data-metrics="error:recovered:next-payment"}>
         @(paymentsData, hasMultiple, isError) match {

@@ -170,6 +170,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val timeoutCountdown: Int = getString(Keys.timeoutCountDown).toInt
 
   override val portalMakePaymentUrl: String => String = (vrn: String) => {
-    s"${getString(Keys.portalPrefix)}/$vrn${Keys.portalPostfix}"
+    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPostfix)}"
   }
 }
