@@ -82,4 +82,7 @@ object ConfigKeys {
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountDown: String = "timeout.countDown"
+
+  val portalPrefix: String = "portal.urlPrefix"
+  val portalPostfix: String = "portal.urlPostfix"
 }

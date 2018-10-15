@@ -169,6 +169,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val timeoutPeriod: Int = getString(Keys.timeoutPeriod).toInt
   override lazy val timeoutCountdown: Int = getString(Keys.timeoutCountDown).toInt
 
-  override val portalMakePaymentUrl: String => String = (vrn: String) => s"/vat/trader/$vrn/account"
-
+  override val portalMakePaymentUrl: String => String = (vrn: String) => {
+    s"${getString(Keys.portalPrefix)}/$vrn${Keys.portalPostfix}"
+  }
 }
