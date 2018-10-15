@@ -25,4 +25,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                returnObligationError: Boolean = false,
                                hasMultiplePayments: Boolean = false,
                                paymentOverdue: Boolean = false,
-                               paymentError: Boolean = false)
+                               paymentError: Boolean = false,
+                               isHybridUser: Boolean = false)

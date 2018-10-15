@@ -67,13 +67,14 @@ trait AppConfig extends ServicesConfig {
   val surveyUrl: String
   val signOutUrl: String
   val mtdVatSignUpUrl: String
-  val mtdVatClaimSubcriptionUrl: String
+  val mtdVatClaimSubscriptionUrl: String
   val unauthorisedSignOutUrl: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val directDebitServiceUrl: String
   val setupDirectDebitsJourneyPath: String
   val directDebitRedirectUrl: String
+  val portalMakePaymentUrl: String => String
 }
 
 @Singleton
@@ -163,9 +164,12 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   private val mtdVatSignUpBaseUrl: String = getString(Keys.mtdVatSignUpBaseUrl)
   override lazy val mtdVatSignUpUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatSignUpUrl)
-  override lazy val mtdVatClaimSubcriptionUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatClaimSubcriptionUrl)
+  override lazy val mtdVatClaimSubscriptionUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatClaimSubcriptionUrl)
 
   override lazy val timeoutPeriod: Int = getString(Keys.timeoutPeriod).toInt
   override lazy val timeoutCountdown: Int = getString(Keys.timeoutCountDown).toInt
 
+  override val portalMakePaymentUrl: String => String = (vrn: String) => {
+    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPostfix)}"
+  }
 }

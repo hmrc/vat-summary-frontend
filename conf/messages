@@ -1,6 +1,7 @@
 common.dateRangeSeparator = to
 common.overdue = overdue
 common.isOverdue = is overdue,
+common.newTab = (opens in a new tab)
 
 base.back = Back
 base.signOut = Sign out
@@ -43,6 +44,7 @@ vatDetails.vrn = VAT registration number (VRN): {0}
 vatDetails.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.returnsDue = You have {0} returns due
 vatDetails.paymentsDue = You have {0} payments due
+vatDetails.checkWhatYouOwe = Check what you owe and make a payment
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due

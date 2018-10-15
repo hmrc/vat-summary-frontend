@@ -18,7 +18,7 @@
 @import java.time.LocalDate
 @import views.html.templates.formatters.breadcrumbs._
 
-@(user: User, detailsViewModel: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(detailsViewModel: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
 
@@ -48,7 +48,8 @@
                     detailsViewModel.paymentsData,
                     detailsViewModel.hasMultiplePayments,
                     detailsViewModel.paymentOverdue,
-                    detailsViewModel.paymentError
+                    detailsViewModel.paymentError,
+                    detailsViewModel.isHybridUser
                 )
                 @views.html.templates.nextReturnSection(
                     detailsViewModel.obligationData,

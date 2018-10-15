@@ -14,15 +14,6 @@
  * limitations under the License.
  *@
 
-@(vrn: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(link: String, linkText: String)(implicit messages: Messages)
 
-<section id="section-vat" class="section divider--bottom">
-  <h2 id="vat-claim-enrolment-heading" class="heading-medium">@messages("partials.btaHome.claimEnrolment.heading")</h2>
-  <p>@messages("partials.btaHome.claimEnrolment.mandationInfo")</p>
-
-  <p>
-    <a data-journey-click="bta-partial:view:claim-enrolment" href="@{appConfig.mtdVatClaimSubscriptionUrl}/@{vrn}">
-      @messages("partials.btaHome.claimEnrolment.addEnrolment")
-    </a>
-  </p>
-</section>
+<a href="@link" target="_blank">@linkText @messages("common.newTab")</a>
