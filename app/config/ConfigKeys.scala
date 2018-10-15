@@ -84,5 +84,6 @@ object ConfigKeys {
   val timeoutCountDown: String = "timeout.countDown"
 
   val portalPrefix: String = "portal.urlPrefix"
-  val portalPostfix: String = "portal.urlPostfix"
+  val portalMakePaymentPostfix: String = "portal.makePaymentUrl"
+  val portalPaymentHistoryPostfix: String = "portal.paymentHistoryUrl"
 }

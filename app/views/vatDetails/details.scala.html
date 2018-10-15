@@ -17,6 +17,7 @@
 @import models.viewModels.VatDetailsViewModel
 @import java.time.LocalDate
 @import views.html.templates.formatters.breadcrumbs._
+@import views.html.templates.formatters.links._
 
 @(detailsViewModel: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
@@ -62,10 +63,18 @@
             <div class="grid-row">
               <div class="column-one-half" id="payment-history">
                   <h2 class="heading-small">
-                      <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)"
-                      data-journey-click="payment-history:view:payment-history-details">
-                      @messages("vatDetails.paymentHistory.link")
-                      </a>
+                      @if(detailsViewModel.isHybridUser) {
+                          @openInNewTab(
+                            appConfig.portalPaymentHistoryUrl(user.vrn),
+                            messages("vatDetails.paymentHistory.link"),
+                            Some("payment-history:view:portal-payment-history-details")
+                          )
+                      } else {
+                          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)"
+                          data-journey-click="payment-history:view:payment-history-details">
+                            @messages("vatDetails.paymentHistory.link")
+                          </a>
+                      }
                   </h2>
                   <p>@messages("vatDetails.paymentHistory.view")</p>
               </div>

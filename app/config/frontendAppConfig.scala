@@ -75,6 +75,7 @@ trait AppConfig extends ServicesConfig {
   val setupDirectDebitsJourneyPath: String
   val directDebitRedirectUrl: String
   val portalMakePaymentUrl: String => String
+  val portalPaymentHistoryUrl: String => String
 }
 
 @Singleton
@@ -170,6 +171,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val timeoutCountdown: Int = getString(Keys.timeoutCountDown).toInt
 
   override val portalMakePaymentUrl: String => String = (vrn: String) => {
-    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPostfix)}"
+    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalMakePaymentPostfix)}"
+  }
+
+  override val portalPaymentHistoryUrl: String => String = (vrn: String) => {
+    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPaymentHistoryPostfix)}"
   }
 }

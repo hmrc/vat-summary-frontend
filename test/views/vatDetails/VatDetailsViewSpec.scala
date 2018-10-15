@@ -16,6 +16,8 @@
 
 package views.vatDetails
 
+import java.time.LocalDate
+
 import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
@@ -51,6 +53,13 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear
+  )
+  val hybridDetailsModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentYear,
+    isHybridUser = true
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
@@ -161,14 +170,36 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "have the payment history section" should {
 
-      "have the heading" in {
+      "if the user is NOT Hybrid" should {
 
         lazy val view = views.html.vatDetails.details(detailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         lazy val submittedReturns = element(Selectors.paymentHistory)
 
-        submittedReturns.select("h2").text() shouldBe "Payment history"
+        "have the heading" in {
+          submittedReturns.select("h2").text() shouldBe "Payment history"
+        }
+
+        "have a link to the payment history" in {
+          submittedReturns.select("a").attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear).url
+        }
+      }
+
+      "if the user is Hybrid" should {
+
+        lazy val view = views.html.vatDetails.details(hybridDetailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        lazy val submittedReturns = element(Selectors.paymentHistory)
+
+        "have the heading" in {
+          submittedReturns.select("h2").text() shouldBe "Payment history (opens in a new tab)"
+        }
+
+        "have a link to the portal" in {
+          submittedReturns.select("a").attr("href") shouldBe mockConfig.portalPaymentHistoryUrl(user.vrn)
+        }
       }
     }
   }
