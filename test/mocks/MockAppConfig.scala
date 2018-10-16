@@ -70,5 +70,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val timeoutPeriod: Int = 1800
   override val timeoutCountdown: Int = 20
   override val selfLookup: String = ""
-  override val portalMakePaymentUrl: String => String = (vrn: String) => s"portal-url/$vrn/"
+  override val portalMakePaymentUrl: String => String = (vrn: String) => s"portal-url/$vrn/make-payment"
+  override val portalPaymentHistoryUrl: String => String = (vrn: String) => s"portal-url/$vrn/payment-history"
 }

@@ -156,7 +156,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display a link to the portal" in {
-        element(Selectors.portalLink).attr("href") shouldBe "portal-url/999999999/"
+        element(Selectors.portalLink).attr("href") shouldBe "portal-url/999999999/make-payment"
       }
 
       "have the correct link text" in {
