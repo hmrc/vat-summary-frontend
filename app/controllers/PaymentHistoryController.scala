@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewVatPaymentHistoryAuditModel
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
 import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
@@ -33,6 +34,7 @@ import scala.concurrent.Future
 @Singleton
 class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
                                          val paymentsService: PaymentsService,
+                                         val hybridPredicate: HybridUserPredicate,
                                          dateService: DateService,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
                                          implicit val appConfig: AppConfig,
@@ -41,22 +43,24 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
 
 
   def paymentHistory(year: Int): Action[AnyContent] = authorisedAction { implicit request =>
-    user =>
-      if (isValidSearchYear(year)) {
-        getFinancialTransactions(user, year).map {
-          case Right(model) =>
-            auditEvent(user.vrn, model.transactions, year)
-            Ok(views.html.payments.paymentHistory(model))
-          case Left(error) =>
-            Logger.warn("[PaymentHistoryController][paymentHistory] error: " + error.toString)
-            InternalServerError(views.html.errors.standardError(appConfig,
-              messagesApi.apply("standardError.title"),
-              messagesApi.apply("standardError.heading"),
-              messagesApi.apply("standardError.message"))
-            )
+    implicit user =>
+      hybridPredicate.bounceHybridUserToHome {
+        if (isValidSearchYear(year)) {
+          getFinancialTransactions(user, year).map {
+            case Right(model) =>
+              auditEvent(user.vrn, model.transactions, year)
+              Ok(views.html.payments.paymentHistory(model))
+            case Left(error) =>
+              Logger.warn("[PaymentHistoryController][paymentHistory] error: " + error.toString)
+              InternalServerError(views.html.errors.standardError(appConfig,
+                messagesApi.apply("standardError.title"),
+                messagesApi.apply("standardError.heading"),
+                messagesApi.apply("standardError.message"))
+              )
+          }
+        } else {
+          Future.successful(NotFound(views.html.errors.notFound()))
         }
-      } else {
-        Future.successful(NotFound(views.html.errors.notFound()))
       }
   }
 

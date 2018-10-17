@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import javax.inject.Inject
 import models.User
 import models.payments.{OpenPaymentsModel, Payment}
@@ -29,8 +30,11 @@ import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.ExecutionContext
+
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
+                                       val hybridPredicate: HybridUserPredicate,
                                        val paymentsService: PaymentsService,
                                        val dateService: DateService,
                                        implicit val appConfig: AppConfig,
@@ -38,27 +42,28 @@ class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
 extends AuthorisedController with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
-    user =>
-
-      def getView(hasActiveDirectDebit: Option[Boolean]) = {
-        paymentsService.getOpenPayments(user.vrn).map {
-          case Right(Some(payments)) =>
-            val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
-            auditEvent(user, model.payments)
-            Ok(views.html.payments.openPayments(user, model))
-          case Right(_) =>
-            auditEvent(user, Seq.empty)
-            Ok(views.html.payments.noPayments(user, hasActiveDirectDebit))
-          case Left(error) =>
-            Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
-            InternalServerError(views.html.errors.paymentsError())
+    implicit user =>
+      hybridPredicate.bounceHybridUserToHome {
+        paymentsService.getDirectDebitStatus(user.vrn).flatMap {
+          case Right(status) => getView(Some(status))
+          case Left(_) => getView(None)
         }
       }
+  }
 
-      paymentsService.getDirectDebitStatus(user.vrn).flatMap {
-        case Right(status) => getView(Some(status))
-        case Left(_) => getView(None)
-      }
+  private[controllers] def getView(hasActiveDirectDebit: Option[Boolean])(implicit request: Request, user: User, ec: ExecutionContext, hc: HeaderCarrier) = {
+    paymentsService.getOpenPayments(user.vrn).map {
+      case Right(Some(payments)) =>
+        val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
+        auditEvent(user, model.payments)
+        Ok(views.html.payments.openPayments(user, model))
+      case Right(_) =>
+        auditEvent(user, Seq.empty)
+        Ok(views.html.payments.noPayments(user, hasActiveDirectDebit))
+      case Left(error) =>
+        Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
+        InternalServerError(views.html.errors.paymentsError())
+    }
   }
 
   private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]): OpenPaymentsViewModel = {
