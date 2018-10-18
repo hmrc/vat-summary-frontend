@@ -123,10 +123,19 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the user is not authenticated" should {
+    "the user does not have sufficient enrolments" should {
 
       "return 403 (Forbidden)" in new DetailsTest {
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        val result: Future[Result] = target.details()(fakeRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is not authenticated" should {
+
+      "return 403 (Forbidden)" in new DetailsTest {
+        override val authResult: Future[Nothing] = Future.failed(InsufficientConfidenceLevel())
         val result: Future[Result] = target.details()(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }

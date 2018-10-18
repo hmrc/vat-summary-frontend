@@ -19,11 +19,12 @@ package controllers
 import common.EnrolmentKeys._
 import config.AppConfig
 import models.User
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, InsufficientEnrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -46,7 +47,14 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
           block(request)(user)
       } recoverWith {
         case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
-        case _: AuthorisationException => Future.successful(Forbidden(views.html.errors.unauthorised()))
+        case _: InsufficientEnrolments => {
+          Logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
+          Future.successful(Forbidden(views.html.errors.unauthorised()))
+        }
+        case _: AuthorisationException => {
+          Logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
+          Future.successful(Forbidden(views.html.errors.unauthorised()))
+        }
       }
   }
 }
