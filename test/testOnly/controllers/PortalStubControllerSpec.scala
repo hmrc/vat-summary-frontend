@@ -16,10 +16,10 @@
 
 package testOnly.controllers
 
-import controllers.ControllerBaseSpec
+import controllers.{AuthorisedController, ControllerBaseSpec}
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.EnrolmentsAuthService
+import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import common.TestModels._
 import controllers.predicates.HybridUserPredicate
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class PortalStubControllerSpec extends ControllerBaseSpec {
 
@@ -40,9 +40,16 @@ class PortalStubControllerSpec extends ControllerBaseSpec {
       .returns(successfulAuthResult)
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
+    val mockAccountDetailsService = mock[AccountDetailsService]
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    lazy val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
-    lazy val target = new PortalStubController(messages, mockEnrolmentsAuthService, mockHybridUserPredicate, mockAppConfig)
+    lazy val target = new PortalStubController(messages, mockEnrolmentsAuthService, mockAuthorisedController, mockAppConfig)
     lazy val result = target.show("999999999")(fakeRequest)
 
     "return 200" in {

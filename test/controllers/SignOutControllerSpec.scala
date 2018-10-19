@@ -28,8 +28,7 @@ class SignOutControllerSpec extends ControllerBaseSpec {
 
   private trait SignOutControllerTest {
     def target: SignOutController = {
-      val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
-      new SignOutController(messages, mockAppConfig, mockHybridUserPredicate)
+      new SignOutController(messages, mockAppConfig)
     }
   }
 

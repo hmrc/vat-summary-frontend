@@ -26,17 +26,18 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class DirectDebitController @Inject()(val messagesApi: MessagesApi,
                                       val enrolmentsAuthService: EnrolmentsAuthService,
                                       implicit val appConfig: AppConfig,
                                       paymentsService: PaymentsService,
-                                      val hybridUserPredicate: HybridUserPredicate,
+                                      authorisedController: AuthorisedController,
                                       auditingService: AuditingService)
-  extends AuthorisedController with I18nSupport {
+  extends FrontendController with I18nSupport {
 
-  def directDebits(hasActiveDirectDebit: Option[Boolean] = None): Action[AnyContent] = authorisedAction {
+  def directDebits(hasActiveDirectDebit: Option[Boolean] = None): Action[AnyContent] = authorisedController.authorisedAction {
     implicit request =>
       user =>
 

@@ -26,6 +26,7 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{EnrolmentsAuthService, PaymentsService}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.errors.paymentsError
 
 @Singleton
@@ -33,13 +34,12 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
                                       val enrolmentsAuthService: EnrolmentsAuthService,
                                       paymentsService: PaymentsService,
                                       implicit val appConfig: AppConfig,
-                                      val hybridUserPredicate: HybridUserPredicate,
+                                      authorisedController: AuthorisedController,
                                       auditingService: AuditingService)
-  extends AuthorisedController with I18nSupport {
-
+  extends FrontendController with I18nSupport {
 
   def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String): Action[AnyContent] =
-    authorisedAction { implicit request =>
+    authorisedController.authorisedAction { implicit request =>
       user =>
 
         val paymentDetails = PaymentDetailsModel(

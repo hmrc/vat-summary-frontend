@@ -27,27 +27,27 @@ import models.viewModels.OpenPaymentsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
+import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
-                                       val hybridUserPredicate: HybridUserPredicate,
+                                       authorisedController: AuthorisedController,
                                        val paymentsService: PaymentsService,
                                        val dateService: DateService,
                                        implicit val appConfig: AppConfig,
                                        auditingService: AuditingService)
-extends AuthorisedController with I18nSupport {
+extends FrontendController with I18nSupport {
 
-  def openPayments(): Action[AnyContent] = authorisedMigratedUserAction { implicit request =>
+  def openPayments(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
     implicit user =>
       paymentsService.getDirectDebitStatus(user.vrn).flatMap {
         result =>
           renderView(result.fold(_ => None, r => Some(r)))
       }
-
   }
 
   private[controllers] def renderView(hasActiveDirectDebit: Option[Boolean])

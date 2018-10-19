@@ -57,7 +57,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -83,7 +84,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .returns({})
     }
 
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
     def target: VatDetailsController = {
       setup()
@@ -91,7 +97,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockEnrolmentsAuthService,
         mockAppConfig,
         mockVatDetailsService,
-        mockHybridUserPredicate,
+        mockAuthorisedController,
         mockAccountDetailsService,
         mockDateService,
         mockAuditService)

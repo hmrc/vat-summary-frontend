@@ -77,6 +77,12 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -86,7 +92,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       new OpenPaymentsController(
         messages,
         mockEnrolmentsAuthService,
-        mockHybridUserPredicate,
+        mockAuthorisedController,
         mockPaymentsService,
         mockDateService,
         mockAppConfig,

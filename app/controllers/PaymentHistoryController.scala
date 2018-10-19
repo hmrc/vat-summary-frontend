@@ -28,21 +28,21 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
                                          val paymentsService: PaymentsService,
-                                         val hybridUserPredicate: HybridUserPredicate,
+                                         authorisedController: AuthorisedController,
                                          dateService: DateService,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
                                          implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
-  extends AuthorisedController with I18nSupport {
+  extends FrontendController with I18nSupport {
 
-
-  def paymentHistory(year: Int): Action[AnyContent] = authorisedMigratedUserAction { implicit request =>
+  def paymentHistory(year: Int): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
     implicit user =>
       if (isValidSearchYear(year)) {
         getFinancialTransactions(user, year).map {

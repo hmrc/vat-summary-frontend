@@ -32,7 +32,7 @@ class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsSer
                                  (implicit request: Request[AnyContent], user: User): Future[Result] = {
     accountDetailsService.getAccountDetails(user.vrn) flatMap {
       case Right(userDetails) if userDetails.isHybridUser =>
-        Logger.warn("[HybridCheckPredicate][bounceHybridToHome] User has a partial migration. Redirecting to Overview page")
+        Logger.debug("[HybridCheckPredicate][bounceHybridToHome] User has a partial migration. Redirecting to Overview page")
         Future.successful(Redirect(controllers.routes.VatDetailsController.details()))
       case Right(_) => f(request)(user)
       case Left(error) =>

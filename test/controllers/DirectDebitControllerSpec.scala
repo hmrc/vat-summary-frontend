@@ -27,7 +27,7 @@ import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -47,7 +47,15 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
+    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -59,7 +67,6 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         .returns({})
     }
 
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
     def target: DirectDebitController = {
       setup()
@@ -68,7 +75,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         mockEnrolmentsAuthService,
         mockAppConfig,
         mockPaymentsService,
-        mockHybridUserPredicate,
+        mockAuthorisedController,
         mockAuditService)
     }
   }

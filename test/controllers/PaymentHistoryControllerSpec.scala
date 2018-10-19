@@ -117,6 +117,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
     def setup(): Any = {
       (mockDateService.now: () => LocalDate)
@@ -127,6 +135,10 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *)
           .returns(authResult)
+
+        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(accountDetailsResponse)
       }
 
       if (serviceCall) {
@@ -141,22 +153,15 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
           .returns(serviceResultYearTwo)
-
-        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(accountDetailsResponse)
       }
     }
-
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
 
     def target: PaymentHistoryController = {
       setup()
       new PaymentHistoryController(
         messages,
         mockPaymentsService,
-        mockHybridUserPredicate,
+        mockAuthorisedController,
         mockDateService,
         mockEnrolmentsAuthService,
         mockAppConfig,
@@ -187,8 +192,11 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     "the user is not logged in" should {
 
       "return 401 (Unauthorised)" in new Test {
-        override val serviceCall = false
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        override def setup(): Unit = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.failed(MissingBearerToken()))
+        }
         val result: Future[Result] = target.paymentHistory(targetYear)(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
       }
@@ -197,8 +205,11 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     "the user is not authenticated" should {
 
       "return 403 (Forbidden)" in new Test {
-        override val serviceCall = false
-        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        override def setup(): Unit = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.failed(InsufficientEnrolments()))
+        }
         val result: Future[Result] = target.paymentHistory(targetYear)(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }

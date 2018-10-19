@@ -17,7 +17,6 @@
 package controllers
 
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
 import javax.inject.Inject
 import models.viewModels.AccountDetailsModel
 import models.{CustomerInformation, User}
@@ -25,17 +24,18 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
+                                         authorisedController: AuthorisedController,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
                                          val detailsService: AccountDetailsService,
-                                         val hybridUserPredicate: HybridUserPredicate,
                                          implicit val appConfig: AppConfig)
-  extends AuthorisedController with I18nSupport {
+  extends FrontendController with I18nSupport {
 
-  def accountDetails(): Action[AnyContent] = authorisedAction { implicit request => user =>
+  def accountDetails(): Action[AnyContent] = authorisedController.authorisedAction { implicit request => user =>
     handleAccountDetailsModel(user).map(accountModel => {
       Ok(views.html.account.accountDetails(user, accountModel))
     })

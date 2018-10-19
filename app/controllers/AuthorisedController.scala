@@ -19,8 +19,8 @@ package controllers
 import common.EnrolmentKeys._
 import config.AppConfig
 import controllers.predicates.HybridUserPredicate
+import javax.inject.Inject
 import models.User
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services._
@@ -30,12 +30,10 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
-abstract class AuthorisedController extends FrontendController with I18nSupport {
-
-  val messagesApi: MessagesApi
-  val enrolmentsAuthService: EnrolmentsAuthService
-  val hybridUserPredicate: HybridUserPredicate
-  implicit val appConfig: AppConfig
+class AuthorisedController @Inject()(val messagesApi: MessagesApi,
+                                     val enrolmentsAuthService: EnrolmentsAuthService,
+                                     val hybridUserPredicate: HybridUserPredicate,
+                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result], checkMigrationStatus: Boolean = false): Action[AnyContent] = Action.async {
     implicit request =>
