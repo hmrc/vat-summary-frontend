@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.AuditModel
 import connectors.VatSubscriptionConnector
+import controllers.predicates.HybridUserPredicate
 import models.DirectDebitDetailsModel
 import models.errors.DirectDebitSetupError
 import org.jsoup.Jsoup
@@ -46,6 +47,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
+    val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -66,6 +68,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         mockEnrolmentsAuthService,
         mockAppConfig,
         mockPaymentsService,
+        mockHybridUserPredicate,
         mockAuditService)
     }
   }

@@ -19,23 +19,25 @@ package controllers.predicates
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{AnyContent, Request, Result}
 import services.AccountDetailsService
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsService) extends FrontendController {
 
-  def bounceHybridUserToHome(f: Future[Result])(implicit request: Request[_], user: User, ec: ExecutionContext, hc: HeaderCarrier): Future[Result] =
+  def authoriseMigratedUserAction(f: Request[AnyContent] => User => Future[Result])
+                                 (implicit request: Request[AnyContent], user: User): Future[Result] = {
     accountDetailsService.getAccountDetails(user.vrn) flatMap {
-      case Right(info) if info.isHybridUser => Future.successful(Redirect(controllers.routes.VatDetailsController.details()))
-      case Right(_) => f
-      case Left(error) => {
+      case Right(userDetails) if userDetails.isHybridUser =>
+        Logger.warn("[HybridCheckPredicate][bounceHybridToHome] User has a partial migration. Redirecting to Overview page")
+        Future.successful(Redirect(controllers.routes.VatDetailsController.details()))
+      case Right(_) => f(request)(user)
+      case Left(error) =>
         Logger.debug(s"[HybridCheckPredicate][bounceHybridToHome] Error returned from accountDetailsService: $error")
         Future.successful(InternalServerError)
-      }
     }
+  }
 }

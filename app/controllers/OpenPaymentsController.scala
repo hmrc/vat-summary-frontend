@@ -27,31 +27,31 @@ import models.viewModels.OpenPaymentsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{DateService, EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
-                                       val hybridPredicate: HybridUserPredicate,
+                                       val hybridUserPredicate: HybridUserPredicate,
                                        val paymentsService: PaymentsService,
                                        val dateService: DateService,
                                        implicit val appConfig: AppConfig,
                                        auditingService: AuditingService)
 extends AuthorisedController with I18nSupport {
 
-  def openPayments(): Action[AnyContent] = authorisedAction { implicit request =>
+  def openPayments(): Action[AnyContent] = authorisedMigratedUserAction { implicit request =>
     implicit user =>
-      hybridPredicate.bounceHybridUserToHome {
-        paymentsService.getDirectDebitStatus(user.vrn).flatMap {
-          case Right(status) => getView(Some(status))
-          case Left(_) => getView(None)
-        }
+      paymentsService.getDirectDebitStatus(user.vrn).flatMap {
+        result =>
+          renderView(result.fold(_ => None, r => Some(r)))
       }
+
   }
 
-  private[controllers] def getView(hasActiveDirectDebit: Option[Boolean])(implicit request: Request, user: User, ec: ExecutionContext, hc: HeaderCarrier) = {
+  private[controllers] def renderView(hasActiveDirectDebit: Option[Boolean])
+                                     (implicit request: Request[_], user: User, hc: HeaderCarrier): Future[Result] = {
     paymentsService.getOpenPayments(user.vrn).map {
       case Right(Some(payments)) =>
         val model = getModel(payments.financialTransactions, hasActiveDirectDebit)

@@ -17,6 +17,7 @@
 package controllers
 
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import javax.inject.Inject
 import models.viewModels.AccountDetailsModel
 import models.{CustomerInformation, User}
@@ -30,6 +31,7 @@ import scala.concurrent.Future
 class AccountDetailsController @Inject()(val messagesApi: MessagesApi,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
                                          val detailsService: AccountDetailsService,
+                                         val hybridUserPredicate: HybridUserPredicate,
                                          implicit val appConfig: AppConfig)
   extends AuthorisedController with I18nSupport {
 

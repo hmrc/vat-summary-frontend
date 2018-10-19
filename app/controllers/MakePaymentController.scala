@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.PayVatReturnChargeAuditModel
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
 import play.api.Logger
@@ -32,6 +33,7 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
                                       val enrolmentsAuthService: EnrolmentsAuthService,
                                       paymentsService: PaymentsService,
                                       implicit val appConfig: AppConfig,
+                                      val hybridUserPredicate: HybridUserPredicate,
                                       auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 

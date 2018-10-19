@@ -18,11 +18,12 @@ package controllers
 
 import common.EnrolmentKeys._
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
-import services.EnrolmentsAuthService
+import services._
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, InsufficientEnrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -33,9 +34,10 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
 
   val messagesApi: MessagesApi
   val enrolmentsAuthService: EnrolmentsAuthService
+  val hybridUserPredicate: HybridUserPredicate
   implicit val appConfig: AppConfig
 
-  def authorisedAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async {
+  def authorisedAction(block: Request[AnyContent] => User => Future[Result], checkMigrationStatus: Boolean = false): Action[AnyContent] = Action.async {
     implicit request =>
 
       val predicate = ((Enrolment(vatDecEnrolmentKey) or Enrolment(vatVarEnrolmentKey)) and Enrolment(mtdVatEnrolmentKey))
@@ -44,7 +46,12 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
       enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments) {
         enrolments =>
           val user = User(enrolments)
-          block(request)(user)
+
+          if(checkMigrationStatus) {
+            hybridUserPredicate.authoriseMigratedUserAction(block)(request, user)
+          } else {
+            block(request)(user)
+          }
       } recoverWith {
         case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
         case _: InsufficientEnrolments => {
@@ -57,4 +64,9 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
         }
       }
   }
+
+  def authorisedMigratedUserAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
+    block,
+    checkMigrationStatus = true
+  )
 }

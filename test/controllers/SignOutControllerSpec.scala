@@ -16,6 +16,7 @@
 
 package controllers
 
+import controllers.predicates.HybridUserPredicate
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
@@ -27,7 +28,8 @@ class SignOutControllerSpec extends ControllerBaseSpec {
 
   private trait SignOutControllerTest {
     def target: SignOutController = {
-      new SignOutController(messages, mockAppConfig)
+      val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
+      new SignOutController(messages, mockAppConfig, mockHybridUserPredicate)
     }
   }
 

@@ -25,6 +25,7 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 import common.TestModels._
+import controllers.predicates.HybridUserPredicate
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,8 +40,9 @@ class PortalStubControllerSpec extends ControllerBaseSpec {
       .returns(successfulAuthResult)
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
 
-    lazy val target = new PortalStubController(messages, mockEnrolmentsAuthService, mockAppConfig)
+    lazy val target = new PortalStubController(messages, mockEnrolmentsAuthService, mockHybridUserPredicate, mockAppConfig)
     lazy val result = target.show("999999999")(fakeRequest)
 
     "return 200" in {

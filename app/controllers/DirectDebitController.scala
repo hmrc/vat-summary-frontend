@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.DirectDebitAuditModel
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
 import play.api.Logger
@@ -28,10 +29,11 @@ import services.{EnrolmentsAuthService, PaymentsService}
 
 @Singleton
 class DirectDebitController @Inject()(val messagesApi: MessagesApi,
-                                     val enrolmentsAuthService: EnrolmentsAuthService,
-                                     implicit val appConfig: AppConfig,
-                                     paymentsService: PaymentsService,
-                                     auditingService: AuditingService)
+                                      val enrolmentsAuthService: EnrolmentsAuthService,
+                                      implicit val appConfig: AppConfig,
+                                      paymentsService: PaymentsService,
+                                      val hybridUserPredicate: HybridUserPredicate,
+                                      auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {
 
   def directDebits(hasActiveDirectDebit: Option[Boolean] = None): Action[AnyContent] = authorisedAction {

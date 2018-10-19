@@ -18,15 +18,17 @@ package testOnly.controllers
 
 import config.AppConfig
 import controllers.AuthorisedController
+import controllers.predicates.HybridUserPredicate
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.EnrolmentsAuthService
+import services.{AccountDetailsService, EnrolmentsAuthService}
 
 import scala.concurrent.Future
 
 class PortalStubController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
+                                     val hybridUserPredicate: HybridUserPredicate,
                                      implicit val appConfig: AppConfig) extends AuthorisedController with I18nSupport {
 
   def show(vrn: String): Action[AnyContent] = authorisedAction { implicit request =>

@@ -20,6 +20,7 @@ import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
 import models.{CustomerInformation, ServiceResponse, User, VatDetailsDataModel}
 import models.payments.Payments
@@ -38,7 +39,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService,
-                                     accountDetailsService: AccountDetailsService,
+                                     val hybridUserPredicate: HybridUserPredicate,
+                                     val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
                                      auditingService: AuditingService)
   extends AuthorisedController with I18nSupport {

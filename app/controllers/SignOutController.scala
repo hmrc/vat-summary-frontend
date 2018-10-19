@@ -18,6 +18,7 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.AppConfig
+import controllers.predicates.HybridUserPredicate
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
@@ -26,8 +27,8 @@ import scala.concurrent.Future
 
 @Singleton
 class SignOutController @Inject()(val messagesApi: MessagesApi,
-                                  implicit val appConfig: AppConfig
-                                   ) extends BaseController with I18nSupport {
+                                  implicit val appConfig: AppConfig,
+                                  val hybridUserPredicate: HybridUserPredicate) extends BaseController with I18nSupport {
 
   def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
     val redirectUrl: String = if (authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl

@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.AuditModel
 import connectors.VatSubscriptionConnector
+import controllers.predicates.HybridUserPredicate
 import models.payments.PaymentDetailsModel
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
@@ -50,6 +51,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
+    val mockHybridUserPredicate: HybridUserPredicate = mock[HybridUserPredicate]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -70,6 +72,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         mockEnrolmentsAuthService,
         mockPaymentsService,
         mockAppConfig,
+        mockHybridUserPredicate,
         mockAuditService)
     }
   }

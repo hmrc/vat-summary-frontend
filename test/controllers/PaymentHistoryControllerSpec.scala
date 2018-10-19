@@ -20,15 +20,18 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
+import common.TestModels.customerInformation
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import controllers.predicates.HybridUserPredicate
 import models.errors.VatLiabilitiesError
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
-import models.{ServiceResponse, User}
+import models.{CustomerInformation, ServiceResponse, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{DateService, EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -107,6 +110,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val targetYear: Int = 2018
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
+    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformation)
+    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
@@ -136,16 +141,22 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         (mockPaymentsService.getPaymentsHistory(_: User, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
           .returns(serviceResultYearTwo)
+
+        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(accountDetailsResponse)
       }
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
 
     def target: PaymentHistoryController = {
       setup()
       new PaymentHistoryController(
         messages,
         mockPaymentsService,
+        mockHybridUserPredicate,
         mockDateService,
         mockEnrolmentsAuthService,
         mockAppConfig,

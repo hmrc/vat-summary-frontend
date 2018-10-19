@@ -17,11 +17,12 @@
 package controllers
 
 import java.time.LocalDate
-
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import common.FinancialTransactionsConstants._
-import models.User
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import controllers.predicates.HybridUserPredicate
+import models.{CustomerInformation, User}
 import models.errors.{DirectDebitStatusError, PaymentsError}
 import models.payments.{OpenPaymentsModel, Payment, Payments}
 import models.viewModels.OpenPaymentsViewModel
@@ -29,11 +30,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
-import services.{DateService, EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+import common.TestModels._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,6 +46,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       Future.successful(Enrolments(Set(
         Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
       )))
+
+    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformation)
+    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
 
     def setupMocks(): Unit = {
       (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
@@ -71,6 +76,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
 
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -80,6 +86,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       new OpenPaymentsController(
         messages,
         mockEnrolmentsAuthService,
+        mockHybridUserPredicate,
         mockPaymentsService,
         mockDateService,
         mockAppConfig,
@@ -89,41 +96,74 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
   "Calling the openPayments action" when {
 
-    "the user has open payments" should {
+    "user is hybrid" should {
 
-      "return 200 (OK)" in new Test {
+      "redirect to VAT overview page" in new Test {
+
+        override val accountDetailsResponse: Right[Nothing, CustomerInformation] = Right(customerInformationHybrid)
+
         override def setupMocks(): Unit = {
-          super.setupMocks()
-          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(Right(true))
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
 
-          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+            .returns(accountDetailsResponse)
         }
 
         private val result = target.openPayments()(fakeRequest)
 
-        status(result) shouldBe Status.OK
+        status(result) shouldBe Status.SEE_OTHER
       }
+    }
 
-      "return the payments view" in new Test {
-        override def setupMocks(): Unit = {
-          super.setupMocks()
-          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(Right(true))
+    "user is not hybrid" when {
 
-          (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+      "the user has open payments" should {
+
+        "return 200 (OK)" in new Test {
+          override def setupMocks(): Unit = {
+            super.setupMocks()
+            (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .stubs(*, *, *)
+              .returns(Right(true))
+
+            (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+
+            (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(accountDetailsResponse)
+          }
+
+          private val result = target.openPayments()(fakeRequest)
+
+          status(result) shouldBe Status.OK
         }
 
-        val result: Result = await(target.openPayments()(fakeRequest))
-        val document: Document = Jsoup.parse(bodyOf(result))
+        "return the payments view" in new Test {
+          override def setupMocks(): Unit = {
+            super.setupMocks()
+            (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .stubs(*, *, *)
+              .returns(Right(true))
 
-        document.select("h1").first().text() shouldBe "What you owe"
+            (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+
+            (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(accountDetailsResponse)
+          }
+
+          val result: Result = await(target.openPayments()(fakeRequest))
+          val document: Document = Jsoup.parse(bodyOf(result))
+
+          document.select("h1").first().text() shouldBe "What you owe"
+        }
       }
     }
 
@@ -139,6 +179,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(None)))
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(accountDetailsResponse)
         }
 
         private val result = target.openPayments()(fakeRequest)
@@ -156,6 +200,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(None)))
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(accountDetailsResponse)
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
@@ -195,6 +243,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(accountDetailsResponse)
          }
  
          val result: Result = await(target.openPayments()(fakeRequest))
@@ -216,6 +268,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Left(PaymentsError)))
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(accountDetailsResponse)
         }
 
         private val result = target.openPayments()(fakeRequest)
@@ -224,6 +280,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
 
       "return the payments error view" in new Test {
+
         override def setupMocks(): Unit = {
           super.setupMocks()
           (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -233,6 +290,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
             .returns(Future.successful(Left(PaymentsError)))
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(accountDetailsResponse)
         }
 
         val result: Result = await(target.openPayments()(fakeRequest))
