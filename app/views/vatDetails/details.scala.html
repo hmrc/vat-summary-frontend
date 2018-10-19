@@ -86,12 +86,14 @@
                   </h2>
                   <p>@messages("vatDetails.submittedReturns.view")</p>
               </div>
+            </div>
 
-              @if(appConfig.features.vatCertificateEnabled()) {
-                @views.html.templates.vatCertificateSection(user)
-              } else {
-                @views.html.templates.updateVatDetailsSection()
-              }
+            <div class="grid-row">
+                @if(appConfig.features.vatCertificateEnabled()) {
+                    @views.html.templates.vatCertificateSection(user)
+                } else {
+                    @views.html.templates.updateVatDetailsSection()
+                }
             </div>
         </div>
     </div>
