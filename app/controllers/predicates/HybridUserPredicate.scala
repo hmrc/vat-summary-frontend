@@ -36,7 +36,7 @@ class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsSer
         Future.successful(Redirect(controllers.routes.VatDetailsController.details()))
       case Right(_) => f(request)(user)
       case Left(error) =>
-        Logger.debug(s"[HybridCheckPredicate][bounceHybridToHome] Error returned from accountDetailsService: $error")
+        Logger.warn(s"[HybridCheckPredicate][bounceHybridToHome] Error returned from accountDetailsService: $error")
         Future.successful(InternalServerError)
     }
   }
