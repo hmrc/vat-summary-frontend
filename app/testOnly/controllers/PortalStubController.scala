@@ -22,14 +22,16 @@ import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.EnrolmentsAuthService
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class PortalStubController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
-                                     implicit val appConfig: AppConfig) extends AuthorisedController with I18nSupport {
+                                     val authorisedController: AuthorisedController,
+                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  def show(vrn: String): Action[AnyContent] = authorisedAction { implicit request =>
+  def show(vrn: String): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     _ =>
       Future.successful(Ok(testOnly.views.html.portalStub()))
   }

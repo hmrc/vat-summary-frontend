@@ -18,6 +18,7 @@ package controllers
 
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import controllers.predicates.HybridUserPredicate
 import models.errors.ServerSideError
 import models.viewModels.AccountDetailsModel
 import models.{Address, CustomerInformation, User}
@@ -84,10 +85,17 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
     def target: AccountDetailsController = {
       setup()
-      new AccountDetailsController(messages, mockEnrolmentsAuthService, mockAccountDetailsService, mockAppConfig)
+      new AccountDetailsController(messages, mockAuthorisedController, mockEnrolmentsAuthService, mockAccountDetailsService, mockAppConfig)
     }
   }
 
@@ -96,6 +104,13 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     val mockVatSubscriptionConnector: VatSubscriptionConnector= mock[VatSubscriptionConnector]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
     val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val connectorReturn: HttpGetResult[CustomerInformation]
@@ -108,7 +123,11 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
     def target: AccountDetailsController = {
       setup()
-      new AccountDetailsController(messages, mockEnrolmentsAuthService, mockAccountDetailsService, mockAppConfig)
+      new AccountDetailsController(messages,
+        mockAuthorisedController,
+        mockEnrolmentsAuthService,
+        mockAccountDetailsService,
+        mockAppConfig)
     }
   }
 

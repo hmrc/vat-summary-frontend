@@ -19,13 +19,13 @@ package stubs
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import play.api.http.Status._
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 
 object CustomerInfoStub extends WireMockMethods {
 
   private val customerInfoUri = "/vat-subscription/([0-9]+)/customer-details"
 
-  def stubCustomerInfo: StubMapping = {
+  def stubCustomerInfo(customerInfo: JsValue = customerInfo): StubMapping = {
     when(method = GET, uri = customerInfoUri)
       .thenReturn(status = OK, body = customerInfo)
   }
@@ -35,7 +35,51 @@ object CustomerInfoStub extends WireMockMethods {
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
   }
 
-  private val customerInfo = Json.parse(
+  private val customerInfo: JsValue = Json.parse(
+    """{
+      |  "organisationName" : "Cheapo Clothing Ltd",
+      |  "title" : "0001",
+      |  "firstName" : "Betty",
+      |  "middleName" : "Vatreturn",
+      |  "lastName" : "Jones",
+      |  "tradingName" : "Cheapo Clothing",
+      |  "mandationStatus" : "1",
+      |  "registrationReason" : "0001",
+      |  "effectiveRegistrationDate" : "2017-08-21",
+      |  "businessStartDate" : "2017-01-01",
+      |  "isPartialMigration" : false,
+      |  "PPOB":{
+      |    "address":{
+      |      "line1":"Bedrock Quarry",
+      |      "line2":"Bedrock",
+      |      "line3":"Graveldon",
+      |      "line4":"Graveldon",
+      |      "postCode":"GV2 4BB"
+      |    },
+      |    "contactDetails":{
+      |      "primaryPhoneNumber":"01632 982028",
+      |      "mobileNumber":"07700 900018",
+      |      "emailAddress":"bettylucknexttime@gmail.com"
+      |    }
+      |  },
+      |  "correspondenceContactDetails":{
+      |    "address":{
+      |      "line1":"13 Pebble Lane",
+      |      "line2":"Bedrock",
+      |      "line3":"Graveldon",
+      |      "line4":"Graveldon",
+      |      "postCode":"GV13 4BJ"
+      |    },
+      |    "contactDetails":{
+      |      "primaryPhoneNumber":"01632 960026",
+      |      "mobileNumber":"07700 900018",
+      |      "emailAddress":"bettylucknexttime@gmail.com"
+      |    }
+      |  }
+      |}""".stripMargin
+  )
+
+  val customerInfoHybridUser: JsValue = Json.parse(
     """{
       |  "organisationName" : "Cheapo Clothing Ltd",
       |  "title" : "0001",

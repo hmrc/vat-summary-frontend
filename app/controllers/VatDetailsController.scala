@@ -30,6 +30,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
@@ -38,12 +39,13 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService,
-                                     accountDetailsService: AccountDetailsService,
+                                     authorisedController: AuthorisedController,
+                                     val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
                                      auditingService: AuditingService)
-  extends AuthorisedController with I18nSupport {
+  extends FrontendController with I18nSupport {
 
-  def details(): Action[AnyContent] = authorisedAction { implicit request =>
+  def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
       val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
       val returnObligationsCall = vatDetailsService.getReturnObligations(user, dateService.now())

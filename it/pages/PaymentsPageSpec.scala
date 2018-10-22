@@ -22,7 +22,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AuthStub, FinancialDataStub}
+import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub}
+import stubs.CustomerInfoStub.customerInfoHybridUser
 
 class PaymentsPageSpec extends IntegrationBaseSpec {
 
@@ -41,6 +42,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubAllOutstandingOpenPayments
         }
@@ -53,6 +55,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubAllOutstandingOpenPayments
         }
@@ -70,6 +73,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubNoPayments
         }
@@ -82,6 +86,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
+          CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubNoPayments
           FinancialDataStub.stubSuccessfulDirectDebit
         }
@@ -93,5 +98,20 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         document.select(firstPaymentAmount) shouldBe empty
       }
     }
+    "the user has a partial migration" should {
+
+      "redirect to /vat-overview" in new Test {
+
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          CustomerInfoStub.stubCustomerInfo(customerInfoHybridUser)
+        }
+
+        val response: WSResponse = await(request().get())
+        response.status shouldBe Status.SEE_OTHER
+        response.header("Location").get shouldBe "/vat-through-software/vat-overview"
+      }
+    }
+
   }
 }

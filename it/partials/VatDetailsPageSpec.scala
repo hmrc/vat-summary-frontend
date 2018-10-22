@@ -45,7 +45,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           obligationsStub.stubOutstandingObligations
-          CustomerInfoStub.stubCustomerInfo
+          CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubAllOutstandingOpenPayments
         }
         val response: WSResponse = await(request().get())

@@ -17,6 +17,7 @@
 package controllers
 
 import java.time.LocalDate
+
 import audit.AuditingService
 import audit.models.AuditModel
 import common.TestModels
@@ -35,6 +36,7 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 import common.TestModels._
+import controllers.predicates.HybridUserPredicate
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -55,6 +57,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -80,7 +84,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .returns({})
     }
 
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
+      messages,
+      mockEnrolmentsAuthService,
+      mockHybridUserPredicate,
+      mockAppConfig
+    )
 
     def target: VatDetailsController = {
       setup()
@@ -88,6 +97,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockEnrolmentsAuthService,
         mockAppConfig,
         mockVatDetailsService,
+        mockAuthorisedController,
         mockAccountDetailsService,
         mockDateService,
         mockAuditService)
