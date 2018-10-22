@@ -37,7 +37,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
   "calling getCustomerInfo" should {
 
     "return a user's customer information" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo
+      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo()
 
       val dummyAddress = Address("", "", None, None, None)
 
@@ -55,7 +55,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           None,
           None,
           None,
-          isHybridUser = true
+          isHybridUser = false
         )
       )
 
