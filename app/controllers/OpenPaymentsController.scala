@@ -46,7 +46,7 @@ extends FrontendController with I18nSupport {
     implicit user =>
       paymentsService.getDirectDebitStatus(user.vrn).flatMap {
         result =>
-          renderView(result.fold(_ => None, r => Some(r)))
+          renderView(result.fold(_ => None, status => Some(status)))
       }
   }
 
