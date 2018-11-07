@@ -25,7 +25,7 @@
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
 
     @if(isHybridUser) {
-        @openInNewTab(appConfig.portalMakePaymentUrl(user.vrn), messages("vatDetails.checkWhatYouOwe"))
+        @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))
     } else {
         <p @if(isError){data-metrics="error:recovered:next-payment"}>
         @(paymentsData, hasMultiple, isError) match {

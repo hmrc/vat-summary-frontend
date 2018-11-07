@@ -197,8 +197,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
           submittedReturns.select("h2").text() shouldBe "Payment history (opens in a new tab)"
         }
 
-        "have a link to the portal" in {
-          submittedReturns.select("a").attr("href") shouldBe mockConfig.portalPaymentHistoryUrl(user.vrn)
+        "have a link to the portal via the PortalController" in {
+          submittedReturns.select("a").attr("href") shouldBe "/vat-through-software/portal-payment-history"
         }
       }
     }
