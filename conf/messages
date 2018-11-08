@@ -22,8 +22,8 @@ userResearch.enterSurvey = Enter our survey
 userResearch.close = No thanks
 userResearch.close.context = I do not want to enter the survey
 
-partials.btaHome.vatSection.reporting.heading = VAT reporting through software
-partials.btaHome.vatSection.deadlines = You can view what you owe, your return deadlines, your payment history and previously submitted returns.
+partials.btaHome.vatSection.reporting.heading = VAT - Making Tax Digital
+partials.btaHome.vatSection.deadlines = You can view what you owe, your return deadlines, your payment history, previously submitted returns and make VAT payments.
 partials.btaHome.vatSection.updateDetails = You can also update some of your VAT details.
 partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
