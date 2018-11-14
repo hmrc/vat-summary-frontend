@@ -42,7 +42,7 @@
             @getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
           </span>
       </td>
-      <td class="numeric">@displayMoney(transaction.amount.abs)</td>
+      <td class="numeric nowrap @if(transaction.amount < 0){repayment-money}" valign="top">@{positiveNegative(transaction.amount.abs)}</td>
     </tr>
   }
 

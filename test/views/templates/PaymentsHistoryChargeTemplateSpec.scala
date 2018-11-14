@@ -55,7 +55,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct amount" in {
-        elementText(Selectors.amount) shouldBe "£123,456"
+        elementText(Selectors.amount) shouldBe "- £123,456"
       }
     }
 
