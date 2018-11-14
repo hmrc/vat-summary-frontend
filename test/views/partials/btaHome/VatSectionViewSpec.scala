@@ -35,11 +35,12 @@ class VatSectionViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "VAT reporting through software"
+      elementText(Selectors.pageHeading) shouldBe "VAT - Making Tax Digital"
     }
 
     "have the correct service features message on the page" in {
-      elementText(Selectors.viewDeadlines) shouldBe "You can view what you owe, your return deadlines, your payment history and previously submitted returns."
+      elementText(Selectors.viewDeadlines) shouldBe
+      "You can view what you owe, your return deadlines, your payment history, previously submitted returns and make VAT payments."
     }
 
     "have the correct update details message on the page" in {
