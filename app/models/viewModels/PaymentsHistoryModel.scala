@@ -47,7 +47,7 @@ object PaymentsHistoryModel {
         FinancialTransactionsConstants.vatCentralAssessment,
         FinancialTransactionsConstants.vatDefaultSurcharge,
         FinancialTransactionsConstants.errorCorrectionChargeType,
-        FinancialTransactionsConstants.vatRepaymentSupplement
+        FinancialTransactionsConstants.vatRepaySupplement
       )
 
       val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
