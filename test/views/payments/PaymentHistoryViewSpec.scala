@@ -184,7 +184,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "have the correct amount paid table content" in {
-        elementText(Selectors.amountPaidTableContent) shouldBe "£123,456,789"
+        elementText(Selectors.amountPaidTableContent) shouldBe "- £123,456,789"
       }
     }
 
