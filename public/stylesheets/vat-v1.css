@@ -27,3 +27,15 @@
     padding: 0 15px;
    }
 }
+
+.repayment {
+    border-right: solid 6px #00823B;
+}
+
+.repayment-money {
+    color:#00823B;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

@@ -22,8 +22,8 @@ userResearch.enterSurvey = Enter our survey
 userResearch.close = No thanks
 userResearch.close.context = I do not want to enter the survey
 
-partials.btaHome.vatSection.reporting.heading = VAT reporting through software
-partials.btaHome.vatSection.deadlines = You can view what you owe, your return deadlines, your payment history and previously submitted returns.
+partials.btaHome.vatSection.reporting.heading = VAT - Making Tax Digital
+partials.btaHome.vatSection.deadlines = You can view what you owe, your return deadlines, your payment history, previously submitted returns and make VAT payments.
 partials.btaHome.vatSection.updateDetails = You can also update some of your VAT details.
 partials.btaHome.vatSection.viewVatDetails = View your VAT details
 
@@ -128,6 +128,8 @@ paymentsHistory.vatDefaultSurchargeDescription = for late payment of your {0} re
 paymentsHistory.vatErrorCorrectionDebitChargeTitle = Error correction payment
 paymentsHistory.vatErrorCorrectionCreditChargeTitle =  Error correction repayment from HMRC
 paymentsHistory.vatErrorCorrectionChargeDescription = for correcting your {0} return
+paymentsHistory.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
+paymentsHistory.vatRepaymentSupplementDescription = we took too long to repay your {0} return
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
