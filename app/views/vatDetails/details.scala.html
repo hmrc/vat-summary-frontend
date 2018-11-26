@@ -65,7 +65,7 @@
                   <h2 class="heading-small">
                       @if(detailsViewModel.isHybridUser) {
                           @openInNewTab(
-                            appConfig.portalPaymentHistoryUrl(user.vrn),
+                            controllers.routes.PortalController.hybridPH().url,
                             messages("vatDetails.paymentHistory.link"),
                             Some("payment-history:view:portal-payment-history-details")
                           )
