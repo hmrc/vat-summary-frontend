@@ -22,9 +22,9 @@ import play.api.libs.json.{JsValue, Json, Writes}
 
 case class HybridPHModel(user: User)(implicit appConfig: AppConfig) extends ExtendedAuditModel {
 
-  override val auditType: String = "PortalHandoff"
+  override val auditType: String = "HandoffToPortalPaymentHistory"
 
-  override val transactionName: String = "portal-payment-history"
+  override val transactionName: String = "handoff-to-portal-payment-history"
 
   override val detail: JsValue = Json.toJson(this)
 

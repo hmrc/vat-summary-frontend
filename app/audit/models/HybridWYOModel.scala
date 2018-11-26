@@ -22,9 +22,9 @@ import config.AppConfig
 
 case class HybridWYOModel(user: User)(implicit appConfig: AppConfig) extends ExtendedAuditModel {
 
-  override val auditType: String = "PortalHandoff"
+  override val auditType: String = "HandoffToPortalCheckWhatYouOwe"
 
-  override val transactionName: String = "portal-what-you-owe"
+  override val transactionName: String = "handoff-to-portal-check-what-you-owe"
 
   override val detail: JsValue = Json.toJson(this)
 
