@@ -19,15 +19,18 @@ package controllers
 import audit.AuditingService
 import audit.models.PayVatReturnChargeAuditModel
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
-import models.payments.PaymentDetailsModel
+import models.User
+import models.payments.{PaymentDetailsModel, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.{EnrolmentsAuthService, PaymentsService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.errors.paymentsError
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class MakePaymentController @Inject()(val messagesApi: MessagesApi,
@@ -40,9 +43,9 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
 
   def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String): Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>
-      user =>
+      implicit user =>
 
-        val paymentDetails = PaymentDetailsModel(
+        val paymentDetails = PaymentDetailsModelWithPeriod(
           taxType = "vat",
           taxReference = user.vrn,
           amountInPence = amountInPence,
@@ -54,16 +57,40 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           dueDate = dueDate
         )
 
-        paymentsService.setupPaymentsJourney(paymentDetails).map {
-          case Right(url) =>
-            auditingService.audit(
-              PayVatReturnChargeAuditModel(user, paymentDetails, url),
-              routes.MakePaymentController.makePayment(amountInPence, taxPeriodMonth, taxPeriodYear, chargeType, dueDate).url
-            )
-            Redirect(url)
-          case Left(error) =>
-            Logger.warn("[MakePaymentController][makePayment] error: " + error.toString)
-            InternalServerError(paymentsError())
-        }
+        makePaymentHandoff(paymentDetails)
     }
+
+  def makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String): Action[AnyContent] =
+    authorisedController.authorisedAction { implicit request =>
+      implicit user =>
+
+        val paymentDetails = PaymentDetailsModelNoPeriod(
+          taxType = "vat",
+          taxReference = user.vrn,
+          amountInPence = amountInPence,
+          returnUrl = appConfig.paymentsReturnUrl,
+          backUrl = appConfig.paymentsBackUrl,
+          chargeType = chargeType,
+          dueDate = dueDate
+        )
+
+        makePaymentHandoff(paymentDetails)
+
+    }
+
+  private def makePaymentHandoff(paymentDetails: PaymentDetailsModel)(implicit request: Request[_],
+                                                                      user: User,
+                                                                      hc: HeaderCarrier): Future[Result] = {
+    paymentsService.setupPaymentsJourney(paymentDetails).map {
+      case Right(url) =>
+        auditingService.audit(
+          PayVatReturnChargeAuditModel(user, paymentDetails, url),
+          request.uri
+        )
+        Redirect(url)
+      case Left(error) =>
+        Logger.warn("[MakePaymentController][makePayment] error: " + error.toString)
+        InternalServerError(paymentsError())
+    }
+  }
 }

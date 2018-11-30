@@ -50,6 +50,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       .map {
         case payments@Right(_) =>
           timer.stop()
+          Logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
           metrics.getOpenPaymentsCallFailureCounter.inc()
@@ -72,6 +73,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       .map {
         case payments@Right(_) =>
           timer.stop()
+          Logger.debug(s"[FinancialDataConnector][getVatLiabilities] Payments: \n\n $payments")
           payments
         case httpError@Left(error) =>
           metrics.getPaymentHistoryFailureCounter.inc()

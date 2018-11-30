@@ -85,6 +85,7 @@ openPayments.centralAssessment = this is our estimate for {0}
 openPayments.centralAssessmentSubmit =, submit your overdue return to update this amount
 openPayments.errorCorrection = this is the correction you made to your {0} return
 openPayments.errorCorrectionReturnContext = that you corrected for the period {0}
+openPayments.oaDefaultInterest = interest charged on the officer''s assessment
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
@@ -130,6 +131,8 @@ paymentsHistory.vatErrorCorrectionCreditChargeTitle =  Error correction repaymen
 paymentsHistory.vatErrorCorrectionChargeDescription = for correcting your {0} return
 paymentsHistory.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 paymentsHistory.vatRepaymentSupplementDescription = we took too long to repay your {0} return
+paymentsHistory.OADefaultInterestTitle = VAT officer''s assessment interest
+paymentsHistory.OADefaultInterestDescription = interest charged on the officer''s assessment
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

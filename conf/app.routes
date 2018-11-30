@@ -6,6 +6,7 @@ GET        /account/details             controllers.AccountDetailsController.acc
 GET        /direct-debit                controllers.DirectDebitController.directDebits(status: Option[Boolean])
 GET        /payment-history/:year       controllers.PaymentHistoryController.paymentHistory(year: Int)
 GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
+GET        /make-payment/:amountInPence/:chargeType/:dueDate controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)
 
 #Portal hand-off Routes
 GET        /portal-what-you-owe         controllers.PortalController.hybridWYO

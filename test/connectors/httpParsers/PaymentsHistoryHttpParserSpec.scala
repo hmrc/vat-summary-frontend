@@ -260,6 +260,34 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |            "amount" : 1000
        |          }
        |        ]
+       |      },
+       |      {
+       |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentDefaultInterest}",
+       |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentDefaultInterest}",
+       |        "periodKey" : "17AA",
+       |        "periodKeyDescription" : "ABCD",
+       |        "taxPeriodFrom" : "2018-10-12",
+       |        "taxPeriodTo" : "2018-12-12",
+       |        "businessPartner" : "0",
+       |        "contractAccountCategory" : "99",
+       |        "contractAccount" : "X",
+       |        "contractObjectType" : "ABCD",
+       |        "contractObject" : "0",
+       |        "sapDocumentNumber" : "0",
+       |        "sapDocumentNumberItem" : "0",
+       |        "chargeReference" : "XD002750002155",
+       |        "mainTransaction" : "1234",
+       |        "subTransaction" : "5678",
+       |        "originalAmount" : 150,
+       |        "outstandingAmount" : 150,
+       |        "items" : [
+       |          {
+       |            "subItem" : "000",
+       |            "clearingDate" : "2018-12-15",
+       |            "dueDate" : "2018-09-07",
+       |            "amount" : 1000
+       |          }
+       |        ]
        |      }
        |    ]
        |  }""".stripMargin
@@ -317,6 +345,13 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
     ),
     PaymentsHistoryModel(
       chargeType= FinancialTransactionsConstants.errorCorrectionDebitCharge,
+      taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
+      taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
+      amount = 1000,
+      clearedDate = Some(LocalDate.of(2018, 12, 15))
+    ),
+    PaymentsHistoryModel(
+      chargeType= FinancialTransactionsConstants.officerAssessmentDefaultInterest,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
       amount = 1000,

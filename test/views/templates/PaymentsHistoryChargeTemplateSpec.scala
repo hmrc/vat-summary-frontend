@@ -283,6 +283,34 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is a vat officer assessment default interest charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        "VAT OA Default Interest",
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        123456,
+        Some(LocalDate.parse("2018-02-14"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "VAT officer's assessment interest"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "interest charged on the officer's assessment"
+      }
+    }
+
     "there is an invalid charge type" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(

@@ -18,20 +18,37 @@ package models.payments
 
 import play.api.libs.json._
 
-case class PaymentDetailsModel(taxType: String,
-                               taxReference: String,
-                               amountInPence: Long,
-                               taxPeriodMonth: Int,
-                               taxPeriodYear: Int,
-                               returnUrl: String,
-                               backUrl: String,
-                               chargeType: String,
-                               dueDate: String)
+sealed trait PaymentDetailsModel {
+  val taxType: String
+  val taxReference: String
+  val amountInPence: Long
+  val returnUrl: String
+  val backUrl: String
+  val chargeType: String
+  val dueDate: String
+}
 
 object PaymentDetailsModel {
+  implicit val writes: Writes[PaymentDetailsModel] = Writes {
+    case model: PaymentDetailsModelWithPeriod => Json.toJson(model)
+    case model: PaymentDetailsModelNoPeriod => Json.toJson(model)
+  }
+}
 
-  implicit val writes = new Writes[PaymentDetailsModel] {
-    def writes(paymentDetail: PaymentDetailsModel): JsObject = Json.obj(
+case class PaymentDetailsModelWithPeriod(taxType: String,
+                                         taxReference: String,
+                                         amountInPence: Long,
+                                         taxPeriodMonth: Int,
+                                         taxPeriodYear: Int,
+                                         returnUrl: String,
+                                         backUrl: String,
+                                         chargeType: String,
+                                         dueDate: String) extends PaymentDetailsModel
+
+object PaymentDetailsModelWithPeriod {
+
+  implicit val writes: Writes[PaymentDetailsModelWithPeriod] = Writes { paymentDetail =>
+    Json.obj(
       "taxType" -> paymentDetail.taxType,
       "reference" -> paymentDetail.taxReference,
       "amountInPence" -> paymentDetail.amountInPence,
@@ -40,6 +57,31 @@ object PaymentDetailsModel {
           "month" -> paymentDetail.taxPeriodMonth,
           "year" -> paymentDetail.taxPeriodYear
         ),
+        "chargeType" -> paymentDetail.chargeType,
+        "dueDate" -> paymentDetail.dueDate
+      ),
+      "returnUrl" -> paymentDetail.returnUrl,
+      "backUrl" -> paymentDetail.backUrl
+    )
+  }
+}
+
+case class PaymentDetailsModelNoPeriod(taxType: String,
+                                         taxReference: String,
+                                         amountInPence: Long,
+                                         returnUrl: String,
+                                         backUrl: String,
+                                         chargeType: String,
+                                         dueDate: String) extends PaymentDetailsModel
+
+object PaymentDetailsModelNoPeriod {
+
+  implicit val writes: Writes[PaymentDetailsModelNoPeriod] = Writes { paymentDetail =>
+    Json.obj(
+      "taxType" -> paymentDetail.taxType,
+      "reference" -> paymentDetail.taxReference,
+      "amountInPence" -> paymentDetail.amountInPence,
+      "extras" -> Json.obj(
         "chargeType" -> paymentDetail.chargeType,
         "dueDate" -> paymentDetail.dueDate
       ),

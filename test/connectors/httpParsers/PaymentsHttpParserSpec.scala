@@ -123,6 +123,17 @@ class PaymentsHttpParserSpec extends UnitSpec {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#008"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+              "chargeType" -> FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#008"
             )
           )
         )

@@ -16,8 +16,6 @@
 
 package audit.models
 
-import java.time.LocalDate
-
 import models.User
 import models.payments.OpenPaymentsModel
 import play.api.libs.json.{JsValue, Json, Writes}
@@ -29,30 +27,10 @@ case class ViewOutstandingVatPaymentsAuditModel(user: User,
 
   override val transactionName: String = "view-outstanding-vat-payments"
 
-  private case class OutstandingPaymentDetails(paymentType: String,
-                                               amount: BigDecimal,
-                                               due: LocalDate,
-                                               start: LocalDate,
-                                               end: LocalDate,
-                                               periodKey: String,
-                                               overdue: Boolean)
-  private implicit val auditPaymentsWrites: Writes[OutstandingPaymentDetails] = Json.writes[OutstandingPaymentDetails]
-
-  private case class AuditDetail(vrn: String, outstandingPayments: Seq[OutstandingPaymentDetails])
+  private case class AuditDetail(vrn: String, outstandingPayments: Seq[OpenPaymentsModel])
   private implicit val auditDetailWrites: Writes[AuditDetail] = Json.writes[AuditDetail]
 
-  private val outstandingPayments = payments.map{ payment =>
-    OutstandingPaymentDetails(
-      payment.paymentType,
-      payment.amount,
-      payment.due,
-      payment.start,
-      payment.end,
-      payment.periodKey,
-      payment.overdue)
-  }
-
-  private val eventData = AuditDetail(user.vrn, outstandingPayments)
+  private val eventData = AuditDetail(user.vrn, payments)
   override val detail: JsValue = Json.toJson(eventData)
 
 }

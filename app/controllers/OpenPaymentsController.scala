@@ -19,7 +19,6 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
 import javax.inject.Inject
 import models.User
 import models.payments.{OpenPaymentsModel, Payment}
@@ -69,15 +68,7 @@ extends FrontendController with I18nSupport {
   private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]): OpenPaymentsViewModel = {
     OpenPaymentsViewModel(
       payments.map { payment =>
-        OpenPaymentsModel(
-          payment.chargeType,
-          payment.outstandingAmount,
-          payment.due,
-          payment.start,
-          payment.end,
-          payment.periodKey,
-          payment.due.isBefore(dateService.now())
-        )
+        OpenPaymentsModel(payment, payment.due.isBefore(dateService.now()))
       },
       hasActiveDirectDebit
     )

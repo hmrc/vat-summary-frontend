@@ -46,6 +46,14 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
         result shouldBe Some(PaymentsHistoryChargeHelper.VatDefaultSurcharge)
 
       }
+
+      "return a VAT OA default interest charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT OA Default Interest")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.OADefaultInterest)
+
+      }
     }
 
     "the lookup String is an invalid charge type" should {

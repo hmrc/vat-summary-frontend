@@ -23,28 +23,44 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
-case class Payment(chargeType: String,
-                   start: LocalDate,
-                   end: LocalDate,
-                   due: LocalDate,
-                   outstandingAmount: BigDecimal,
-                   periodKey: String) extends Obligation
+sealed trait Payment extends Obligation {
+  val chargeType: String
+  val due: LocalDate
+  val outstandingAmount: BigDecimal
+  val periodKey: String
+}
+
+case class PaymentWithPeriod(chargeType: String,
+                             start: LocalDate,
+                             end: LocalDate,
+                             due: LocalDate,
+                             outstandingAmount: BigDecimal,
+                             periodKey: String) extends Payment
+
+case class PaymentNoPeriod(chargeType: String,
+                           due: LocalDate,
+                           outstandingAmount: BigDecimal,
+                           periodKey: String) extends Payment
 
 object Payment {
 
   private def createPayment(chargeType: String,
-                            start: LocalDate,
-                            end: LocalDate,
+                            start: Option[LocalDate],
+                            end: Option[LocalDate],
                             due: LocalDate,
                             outstandingAmount: BigDecimal,
                             periodKey: Option[String]): Payment ={
-    Payment(chargeType, start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
+    (start, end) match {
+      case (Some(s), Some(e)) => PaymentWithPeriod(chargeType, s, e, due, outstandingAmount, periodKey.getOrElse("0000"))
+      case (None, None) => PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey.getOrElse("0000"))
+      case (s, e) => throw new RuntimeException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
+    }
   }
 
   implicit val paymentReads: Reads[Payment] = (
     (JsPath \ "chargeType").read[String] and
-    (JsPath \ "taxPeriodFrom").read[LocalDate] and
-    (JsPath \ "taxPeriodTo").read[LocalDate] and
+    (JsPath \ "taxPeriodFrom").readNullable[LocalDate] and
+    (JsPath \ "taxPeriodTo").readNullable[LocalDate] and
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "outstandingAmount").read[BigDecimal] and
     (JsPath \ "periodKey").readNullable[String]
