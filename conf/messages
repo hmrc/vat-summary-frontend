@@ -137,6 +137,7 @@ paymentsHistory.vatErrorCorrectionCreditChargeTitle =  Error correction repaymen
 paymentsHistory.vatErrorCorrectionChargeDescription = for correcting your {0} return
 paymentsHistory.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 paymentsHistory.vatRepaymentSupplementDescription = we took too long to repay your {0} return
+paymentsHistory.AADefaultInterestDescription = interest charged on additional tax assessed for the period {0} to {0}
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
