@@ -41,6 +41,9 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       s"${messages.apply("openPayments.vatAAFurtherInterest", {displayDateRange(payment.start, payment.end)}).trim}"
     case `vatAdditionalAssessment` =>
       s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(payment.start, payment.end)}).trim}"
+    case `vatAdditionalAssessmentInterest` =>
+      s"${messages.apply("paymentsHistory.AADefaultInterestDescription",{displayDateRange(payment.start, payment.end)}).trim}"
+
   }
 
 
@@ -53,6 +56,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case (`errorCorrectionDebitCharge`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessmentFurtherInterest`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatAdditionalAssessmentInterest`, _) => Some(messages.apply("openPayments.makePayment"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
@@ -63,6 +67,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `errorCorrectionDebitCharge` => true
     case `vatAdditionalAssessmentFurtherInterest` => false
     case `vatAdditionalAssessment` => false
+    case `vatAdditionalAssessmentInterest` => false
   }
 
   val overdueContext: String = payment.paymentType match {
@@ -73,6 +78,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `errorCorrectionDebitCharge` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessmentFurtherInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatAdditionalAssessmentInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment.paymentType match {
@@ -85,5 +91,6 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       messages.apply("openPayments.errorCorrectionReturnContext", {displayDateRange(payment.start, payment.end)}).trim
     case `vatAdditionalAssessmentFurtherInterest` => ""
     case `vatAdditionalAssessment` => ""
+    case `vatAdditionalAssessmentInterest` => ""
   }
 }
