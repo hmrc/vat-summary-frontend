@@ -44,6 +44,8 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessmentInterest` =>
       s"${messages.apply("paymentsHistory.AADefaultInterestDescription",{displayDateRange(payment.start, payment.end)}).trim}"
 
+    case `vatBNPofRegPre2010` =>
+      s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(payment.start, payment.end)}).trim}"
   }
 
 
@@ -57,6 +59,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case (`vatAdditionalAssessmentFurtherInterest`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessmentInterest`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatBNPofRegPre2010`, _) => Some(messages.apply("openPayments.makePayment"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
@@ -68,6 +71,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessmentFurtherInterest` => false
     case `vatAdditionalAssessment` => false
     case `vatAdditionalAssessmentInterest` => false
+    case `vatBNPofRegPre2010` => false
   }
 
   val overdueContext: String = payment.paymentType match {
@@ -79,6 +83,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessmentFurtherInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessmentInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatBNPofRegPre2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment.paymentType match {
@@ -92,5 +97,6 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessmentFurtherInterest` => ""
     case `vatAdditionalAssessment` => ""
     case `vatAdditionalAssessmentInterest` => ""
+    case `vatBNPofRegPre2010` => ""
   }
 }
