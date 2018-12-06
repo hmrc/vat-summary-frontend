@@ -35,9 +35,11 @@ class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthSe
 
   val viewVatPartial: String = appConfig.viewVatPartial
   val claimEnrolmentPartial: String = appConfig.claimEnrolmentPartial
+  val partialMigrationPartial: String = appConfig.partialMigrationPartial
 
   def viewVat(): Action[AnyContent] = showPartial(viewVatPartial)
   def claimEnrolment(): Action[AnyContent] = showPartial(claimEnrolmentPartial)
+  def partialMigration(): Action[AnyContent] = showPartial(partialMigrationPartial)
 
   private def showPartial(partialUrl: String): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised() {
