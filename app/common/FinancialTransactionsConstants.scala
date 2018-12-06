@@ -42,5 +42,6 @@ object FinancialTransactionsConstants {
   val vatAdditionalAssessmentFurtherInterest = "VAT AA Further Interest"
   val vatAdditionalAssessment  = "VAT Additional Assessment"
   val vatBNPofRegPre2010 = "VAT BNP of Reg Pre 2010"
+  val vatOfficersAssessment = "VAT OA Further Interest"
 
 }

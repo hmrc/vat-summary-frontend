@@ -43,9 +43,10 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(payment.start, payment.end)}).trim}"
     case `vatAdditionalAssessmentInterest` =>
       s"${messages.apply("paymentsHistory.AADefaultInterestDescription",{displayDateRange(payment.start, payment.end)}).trim}"
-
     case `vatBNPofRegPre2010` =>
       s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(payment.start, payment.end)}).trim}"
+    case `vatOfficersAssessment` =>
+      s"${messages.apply("openPayments.vatOfficersAssessment")}"
   }
 
 
@@ -60,6 +61,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case (`vatAdditionalAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessmentInterest`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatBNPofRegPre2010`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatOfficersAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
@@ -72,6 +74,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessment` => false
     case `vatAdditionalAssessmentInterest` => false
     case `vatBNPofRegPre2010` => false
+    case `vatOfficersAssessment` => false
   }
 
   val overdueContext: String = payment.paymentType match {
@@ -84,6 +87,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessmentInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatBNPofRegPre2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatOfficersAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment.paymentType match {
@@ -98,5 +102,6 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessment` => ""
     case `vatAdditionalAssessmentInterest` => ""
     case `vatBNPofRegPre2010` => ""
+    case `vatOfficersAssessment` => ""
   }
 }
