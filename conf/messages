@@ -95,6 +95,7 @@ openPayments.vatAdditionalAssessment = additional assessment based on further in
 openPayments.vatBNPofRegPre2010 = because you should have been registered for VAT earlier
 openPayments.vatOfficersAssessment = a VAT officer''s investigation showed you underpaid by this amount
 openPayments.vatBnpRegPost2010 = you should have been registered for VAT earlier
+openPayments.vatFtnMatPre2010 = you did not tell us you are no longer exempt from VAT registration
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
