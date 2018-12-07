@@ -124,4 +124,38 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "Calling the partialMigration action" when {
+
+    "the user is logged in" should {
+
+      "return 200" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
+        private val result = target.partialMigration()(fakeRequest)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
+        private val result = target.partialMigration()(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset utf-8" in new Test {
+        override val authResult: Future[Unit] = Future.successful(())
+        private val result = target.partialMigration()(fakeRequest)
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
+
+    "the user is not logged in" should {
+
+      "return 401 (Unauthorised)" in new Test {
+        override val runMock: Boolean = false
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        val result: Future[Result] = target.partialMigration()(fakeRequest)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+  }
 }
