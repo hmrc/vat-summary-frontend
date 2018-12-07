@@ -48,5 +48,6 @@ object FinancialTransactionsConstants {
   val vatFtnMatPost2010 = "VAT FTN Mat Change Post 2010"
   val vatMiscPenalty = "VAT Miscellaneous Penalty"
   val vatFtnEachpartner = "VAT FTN Each Partner"
+  val vatMpPre2009 = "VAT MP pre 2009"
 
 }
