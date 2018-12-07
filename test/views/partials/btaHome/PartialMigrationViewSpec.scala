@@ -35,16 +35,16 @@ class PartialMigrationViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Your Making Tax Digital for VAT user account is being set up"
+      elementText(Selectors.pageHeading) shouldBe "Your Making Tax Digital for VAT account is being set up"
     }
 
     "have the correct recently signed up message on the page" in {
       elementText(Selectors.paragraph1) shouldBe
-      "You were recently signed up to the new Making Tax Digital service so you can submit your VAT Returns to HMRC using compatible software."
+      "You were recently signed up to the new Making Tax Digital service. This is so you can submit your VAT Returns to HMRC using compatible software."
     }
 
     "have the correct setup time message on the page" in {
-      elementText(Selectors.paragraph2) shouldBe "It will take up to 72 hours for your account to be set up from the time you signed up."
+      elementText(Selectors.paragraph2) shouldBe "It will take up to 72 hours for your account to be set up."
     }
 
     "have the correct check again later message on the page" in {

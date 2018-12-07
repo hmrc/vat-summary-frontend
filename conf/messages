@@ -31,9 +31,9 @@ partials.btaHome.claimEnrolment.heading = Your agent has signed you up to Making
 partials.btaHome.claimEnrolment.mandationInfo = From April 2019, VAT registered businesses with a turnover of £85,000 or above must use relevant third party software to submit their VAT Returns.
 partials.btaHome.claimEnrolment.addEnrolment = Add Making Tax Digital for VAT to my account
 
-partials.btaHome.partialMigration.heading = Your Making Tax Digital for VAT user account is being set up
-partials.btaHome.partialMigration.line1 = You were recently signed up to the new Making Tax Digital service so you can submit your VAT Returns to HMRC using compatible software.
-partials.btaHome.partialMigration.line2 = It will take up to 72 hours for your account to be set up from the time you signed up.
+partials.btaHome.partialMigration.heading = Your Making Tax Digital for VAT account is being set up
+partials.btaHome.partialMigration.line1 = You were recently signed up to the new Making Tax Digital service. This is so you can submit your VAT Returns to HMRC using compatible software.
+partials.btaHome.partialMigration.line2 = It will take up to 72 hours for your account to be set up.
 partials.btaHome.partialMigration.line3 = Check back again later.
 
 vatDetails.title = Your VAT details
