@@ -98,6 +98,7 @@ openPayments.vatBnpRegPost2010 = you should have been registered for VAT earlier
 openPayments.vatFtnMatPre2010 = you did not tell us you are no longer exempt from VAT registration
 openPayments.vatFtnMatPost2010 = you did not tell us you are no longer exempt from VAT registration
 openPayments.vatMiscPenalty = VAT general penalty
+openPayments.vatFtnEachpartner = because you did not tell us about all the partners and changes in your partnership
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
