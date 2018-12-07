@@ -57,7 +57,8 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       FinancialTransactionsConstants.vatFtnMatPost2010,
       FinancialTransactionsConstants.vatMiscPenalty,
       FinancialTransactionsConstants.vatFtnEachpartner,
-      FinancialTransactionsConstants.vatMpPre2009
+      FinancialTransactionsConstants.vatMpPre2009,
+      FinancialTransactionsConstants.vatMpRPre2009
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value

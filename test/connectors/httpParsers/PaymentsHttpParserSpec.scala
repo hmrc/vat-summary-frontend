@@ -256,6 +256,21 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "amount" -> 50.00
                 )
               )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatMpRPre2009,
+              "chargeType" -> FinancialTransactionsConstants.vatMpRPre2009,
+              "periodKey" -> "#017",
+              "taxPeriodFrom" -> "2009-03-20",
+              "taxPeriodTo" -> "2009-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2009-09-27",
+                  "amount" -> 50.00
+                )
+              )
             )
           )
         )
@@ -365,6 +380,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2010-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#016"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatMpRPre2009,
+          start = LocalDate.parse("2009-03-20"),
+          end = LocalDate.parse("2009-06-21"),
+          due = LocalDate.parse("2009-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#017"
         )
       )))
 

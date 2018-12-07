@@ -100,6 +100,7 @@ openPayments.vatFtnMatPost2010 = you did not tell us you are no longer exempt fr
 openPayments.vatMiscPenalty = VAT general penalty
 openPayments.vatFtnEachpartner = because you did not tell us about all the partners and changes in your partnership
 openPayments.vatMpPre2009 = because you have made an incorrect declaration
+openPayments.vatMpRPre2009 = this is because you have repeatedly made incorrect declarations
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
