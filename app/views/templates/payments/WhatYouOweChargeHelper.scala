@@ -51,6 +51,8 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       s"${messages.apply("openPayments.vatBnpRegPost2010")}"
     case `vatFtnMatPre2010` =>
       s"${messages.apply("openPayments.vatFtnMatPre2010")}"
+    case `vatFtnMatPost2010` =>
+      s"${messages.apply("openPayments.vatFtnMatPost2010")}"
   }
 
 
@@ -68,6 +70,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case (`vatOfficersAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatBnpRegPost2010`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatFtnMatPre2010`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatFtnMatPost2010`, _) => Some(messages.apply("openPayments.makePayment"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
@@ -83,6 +86,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatOfficersAssessment` => false
     case `vatBnpRegPost2010` => false
     case `vatFtnMatPre2010` => false
+    case `vatFtnMatPost2010` => false
   }
 
   val overdueContext: String = payment.paymentType match {
@@ -98,6 +102,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatOfficersAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatBnpRegPost2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatFtnMatPre2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatFtnMatPost2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment.paymentType match {
@@ -115,5 +120,6 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatOfficersAssessment` => ""
     case `vatBnpRegPost2010` => ""
     case `vatFtnMatPre2010` => ""
+    case `vatFtnMatPost2010` => ""
   }
 }
