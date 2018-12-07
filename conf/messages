@@ -97,6 +97,7 @@ openPayments.vatOfficersAssessment = a VAT officer''s investigation showed you u
 openPayments.vatBnpRegPost2010 = you should have been registered for VAT earlier
 openPayments.vatFtnMatPre2010 = you did not tell us you are no longer exempt from VAT registration
 openPayments.vatFtnMatPost2010 = you did not tell us you are no longer exempt from VAT registration
+openPayments.vatMiscPenalty = VAT general penalty
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
