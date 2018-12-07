@@ -258,8 +258,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatMpRPre2009,
-              "chargeType" -> FinancialTransactionsConstants.vatMpRPre2009,
+              "mainType" -> FinancialTransactionsConstants.vatMpRepeatedPre2009,
+              "chargeType" -> FinancialTransactionsConstants.vatMpRepeatedPre2009,
               "periodKey" -> "#017",
               "taxPeriodFrom" -> "2009-03-20",
               "taxPeriodTo" -> "2009-06-21",
@@ -268,6 +268,21 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj(
                   "subItem" -> "000",
                   "dueDate" -> "2009-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatCivilEvasionPenalty,
+              "chargeType" -> FinancialTransactionsConstants.vatCivilEvasionPenalty,
+              "periodKey" -> "#018",
+              "taxPeriodFrom" -> "2008-03-20",
+              "taxPeriodTo" -> "2008-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
               )
@@ -382,12 +397,20 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#016"
         ),
         Payment(
-          FinancialTransactionsConstants.vatMpRPre2009,
+          FinancialTransactionsConstants.vatMpRepeatedPre2009,
           start = LocalDate.parse("2009-03-20"),
           end = LocalDate.parse("2009-06-21"),
           due = LocalDate.parse("2009-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#017"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatCivilEvasionPenalty,
+          start = LocalDate.parse("2008-03-20"),
+          end = LocalDate.parse("2008-06-21"),
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#018"
         )
       )))
 

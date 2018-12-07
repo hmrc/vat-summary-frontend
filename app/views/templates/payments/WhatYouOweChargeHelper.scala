@@ -59,8 +59,10 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       s"${messages.apply("openPayments.vatFtnEachpartner")}"
     case `vatMpPre2009` =>
       s"${messages.apply("openPayments.vatMpPre2009")}"
-    case `vatMpRPre2009` =>
-      s"${messages.apply("openPayments.vatMpRPre2009")}"
+    case `vatMpRepeatedPre2009` =>
+      s"${messages.apply("openPayments.vatMpRepeatedPre2009")}"
+    case `vatCivilEvasionPenalty` =>
+      s"${messages.apply("openPayments.vatCivilEvasionPenalty")}"
   }
 
 
@@ -82,7 +84,8 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case (`vatMiscPenalty`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatFtnEachpartner`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatMpPre2009`, _) => Some(messages.apply("openPayments.makePayment"))
-    case (`vatMpRPre2009`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatMpRepeatedPre2009`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatCivilEvasionPenalty`, _) => Some(messages.apply("openPayments.makePayment"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
@@ -102,7 +105,8 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatMiscPenalty` => false
     case `vatFtnEachpartner` => false
     case `vatMpPre2009` => false
-    case `vatMpRPre2009` => false
+    case `vatMpRepeatedPre2009` => false
+    case `vatCivilEvasionPenalty` => false
   }
 
   val overdueContext: String = payment.paymentType match {
@@ -122,7 +126,8 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatMiscPenalty` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatFtnEachpartner` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatMpPre2009` => if(payment.overdue) messages.apply("common.isOverdue") else ","
-    case `vatMpRPre2009` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatMpRepeatedPre2009` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatCivilEvasionPenalty` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment.paymentType match {
@@ -144,6 +149,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatMiscPenalty` => ""
     case `vatFtnEachpartner` => ""
     case `vatMpPre2009` => ""
-    case `vatMpRPre2009` => ""
+    case `vatMpRepeatedPre2009` => ""
+    case `vatCivilEvasionPenalty` => ""
   }
 }
