@@ -42,7 +42,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `vatAdditionalAssessment` =>
       s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(payment.start, payment.end)}).trim}"
     case `vatAdditionalAssessmentInterest` =>
-      s"${messages.apply("paymentsHistory.AADefaultInterestDescription",{displayDateRange(payment.start, payment.end)}).trim}"
+      s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(payment.start, payment.end)}).trim}"
 
   }
 
