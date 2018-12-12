@@ -122,9 +122,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#008"
+              "periodKey" -> "#007"
             ),
-
             Json.obj(
               "mainType" -> FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
               "chargeType" -> FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
@@ -136,7 +135,6 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#008"
             ),
-
             Json.obj(
               "mainType" -> FinancialTransactionsConstants.vatAdditionalAssessment,
               "chargeType" -> FinancialTransactionsConstants.vatAdditionalAssessment,
@@ -341,6 +339,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
         ),
         Payment(
           FinancialTransactionsConstants.errorCorrectionDebitCharge,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#007"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
           start = LocalDate.parse("2015-12-01"),
           end = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),

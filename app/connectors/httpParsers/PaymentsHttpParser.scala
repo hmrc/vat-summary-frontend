@@ -49,8 +49,6 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       FinancialTransactionsConstants.vatAdditionalAssessmentFurtherInterest,
       FinancialTransactionsConstants.vatAdditionalAssessment,
       FinancialTransactionsConstants.vatBNPofRegPre2010,
-      FinancialTransactionsConstants.vatAdditionalAssessment,
-      FinancialTransactionsConstants.vatOfficersAssessment,
       FinancialTransactionsConstants.vatOfficersAssessment,
       FinancialTransactionsConstants.vatBnpRegPost2010,
       FinancialTransactionsConstants.vatFtnMatPre2010,
@@ -60,7 +58,6 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       FinancialTransactionsConstants.vatMpPre2009,
       FinancialTransactionsConstants.vatMpRepeatedPre2009,
       FinancialTransactionsConstants.vatCivilEvasionPenalty,
-      FinancialTransactionsConstants.vatAdditionalAssessment,
       FinancialTransactionsConstants.vatAdditionalAssessmentInterest
     )
 
