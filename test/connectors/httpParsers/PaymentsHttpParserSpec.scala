@@ -122,6 +122,17 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#007"
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
+              "chargeType" -> FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
               "periodKey" -> "#008"
             ),
             Json.obj(
@@ -135,6 +146,156 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj(
                   "subItem" -> "000",
                   "dueDate" -> "2016-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatOfficersAssessment,
+              "chargeType" -> FinancialTransactionsConstants.vatOfficersAssessment,
+              "periodKey" -> "#010",
+              "taxPeriodFrom" -> "2016-03-20",
+              "taxPeriodTo" -> "2016-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2016-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatBNPofRegPre2010,
+              "chargeType" -> FinancialTransactionsConstants.vatBNPofRegPre2010,
+              "periodKey" -> "#019",
+              "taxPeriodFrom" -> "2015-03-20",
+              "taxPeriodTo" -> "2015-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2015-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatBnpRegPost2010,
+              "chargeType" -> FinancialTransactionsConstants.vatBnpRegPost2010,
+              "periodKey" -> "#011",
+              "taxPeriodFrom" -> "2015-03-20",
+              "taxPeriodTo" -> "2015-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2015-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatFtnMatPre2010,
+              "chargeType" -> FinancialTransactionsConstants.vatFtnMatPre2010,
+              "periodKey" -> "#012",
+              "taxPeriodFrom" -> "2014-03-20",
+              "taxPeriodTo" -> "2014-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2014-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatFtnMatPost2010,
+              "chargeType" -> FinancialTransactionsConstants.vatFtnMatPost2010,
+              "periodKey" -> "#013",
+              "taxPeriodFrom" -> "2013-03-20",
+              "taxPeriodTo" -> "2013-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2013-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatMiscPenalty,
+              "chargeType" -> FinancialTransactionsConstants.vatMiscPenalty,
+              "periodKey" -> "#014",
+              "taxPeriodFrom" -> "2012-03-20",
+              "taxPeriodTo" -> "2012-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2012-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatFtnEachpartner,
+              "chargeType" -> FinancialTransactionsConstants.vatFtnEachpartner,
+              "periodKey" -> "#015",
+              "taxPeriodFrom" -> "2011-03-20",
+              "taxPeriodTo" -> "2011-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2011-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatMpPre2009,
+              "chargeType" -> FinancialTransactionsConstants.vatMpPre2009,
+              "periodKey" -> "#016",
+              "taxPeriodFrom" -> "2010-03-20",
+              "taxPeriodTo" -> "2010-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2010-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatMpRepeatedPre2009,
+              "chargeType" -> FinancialTransactionsConstants.vatMpRepeatedPre2009,
+              "periodKey" -> "#017",
+              "taxPeriodFrom" -> "2009-03-20",
+              "taxPeriodTo" -> "2009-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2009-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FinancialTransactionsConstants.vatCivilEvasionPenalty,
+              "chargeType" -> FinancialTransactionsConstants.vatCivilEvasionPenalty,
+              "periodKey" -> "#018",
+              "taxPeriodFrom" -> "2008-03-20",
+              "taxPeriodTo" -> "2008-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
               )
@@ -182,6 +343,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
           end = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#007"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
           periodKey = "#008"
         ),
         Payment(
@@ -191,6 +360,86 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#009"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatOfficersAssessment,
+          start = LocalDate.parse("2016-03-20"),
+          end = LocalDate.parse("2016-06-21"),
+          due = LocalDate.parse("2016-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#010"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatBNPofRegPre2010,
+          start = LocalDate.parse("2015-03-20"),
+          end = LocalDate.parse("2015-06-21"),
+          due = LocalDate.parse("2015-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#019"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatBnpRegPost2010,
+          start = LocalDate.parse("2015-03-20"),
+          end = LocalDate.parse("2015-06-21"),
+          due = LocalDate.parse("2015-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#011"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatFtnMatPre2010,
+          start = LocalDate.parse("2014-03-20"),
+          end = LocalDate.parse("2014-06-21"),
+          due = LocalDate.parse("2014-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#012"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatFtnMatPost2010,
+          start = LocalDate.parse("2013-03-20"),
+          end = LocalDate.parse("2013-06-21"),
+          due = LocalDate.parse("2013-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#013"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatMiscPenalty,
+          start = LocalDate.parse("2012-03-20"),
+          end = LocalDate.parse("2012-06-21"),
+          due = LocalDate.parse("2012-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#014"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatFtnEachpartner,
+          start = LocalDate.parse("2011-03-20"),
+          end = LocalDate.parse("2011-06-21"),
+          due = LocalDate.parse("2011-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#015"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatMpPre2009,
+          start = LocalDate.parse("2010-03-20"),
+          end = LocalDate.parse("2010-06-21"),
+          due = LocalDate.parse("2010-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#016"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatMpRepeatedPre2009,
+          start = LocalDate.parse("2009-03-20"),
+          end = LocalDate.parse("2009-06-21"),
+          due = LocalDate.parse("2009-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#017"
+        ),
+        Payment(
+          FinancialTransactionsConstants.vatCivilEvasionPenalty,
+          start = LocalDate.parse("2008-03-20"),
+          end = LocalDate.parse("2008-06-21"),
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#018"
         )
       )))
 

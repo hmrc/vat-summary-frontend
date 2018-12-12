@@ -38,7 +38,18 @@ object FinancialTransactionsConstants {
   val errorCorrectionDebitCharge = "VAT EC Debit Charge"
   val vatRepaymentSupplement = "VAT Repayment Supplement"
   val vatRepaySupplement = "VAT Repay Supplement"
+  val vatAdditionalAssessmentInterest = "VAT AA Default Interest"
   val vatAdditionalAssessmentFurtherInterest = "VAT AA Further Interest"
   val vatAdditionalAssessment  = "VAT Additional Assessment"
+  val vatBNPofRegPre2010 = "VAT BNP of Reg Pre 2010"
+  val vatOfficersAssessment = "VAT OA Further Interest"
+  val vatBnpRegPost2010 = "VAT BNP of Reg Post 2010"
+  val vatFtnMatPre2010 = "VAT FTN Mat Change Pre 2010"
+  val vatFtnMatPost2010 = "VAT FTN Mat Change Post 2010"
+  val vatMiscPenalty = "VAT Miscellaneous Penalty"
+  val vatFtnEachpartner = "VAT FTN Each Partner"
+  val vatMpPre2009 = "VAT MP pre 2009"
+  val vatMpRepeatedPre2009 = "VAT MP (R) pre 2009"
+  val vatCivilEvasionPenalty = "VAT Civil Evasion Penalty"
 
 }

@@ -56,6 +56,14 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val secondPaymentPayLink = "#payment-row-2 a"
     val secondPaymentPayNowLinkText = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(1)"
     val secondPaymentPayContext = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(2)"
+    val thirdPaymentAmount = "#payment-section-3 span:nth-of-type(1)"
+    val thirdPaymentAmountData = "#payment-section-3 span[data-amount]"
+    val thirdPaymentDue = "#payment-row-3 span:nth-of-type(1)"
+    val thirdPaymentDueData = "#payment-row-3 span[data-due]"
+    val thirdPaymentPayLink = "#payment-row-3 a"
+    val thirdPaymentPayContext = "#payment-row-3 span.float--right"
+    val thirdPaymentPayNowLinkText = "#payment-row-3 div:nth-of-type(2) span:nth-of-type(1)"
+    val thirdPaymentPayNowContext = "#payment-row-3 div:nth-of-type(2) span:nth-of-type(2)"
     lazy val firstPaymentViewReturnLink = "#links-section-1 div:nth-of-type(2) a"
     val firstPaymentPeriod = "#payment-row-1 span:nth-of-type(3)"
     val firstPaymentViewReturnText = "#links-section-1 div:nth-of-type(2) a span:nth-of-type(1)"
@@ -64,6 +72,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val secondPaymentViewReturnText = "#links-section-2 div:nth-of-type(2) a span:nth-of-type(1)"
     val secondPaymentViewReturnContext = "#links-section-2 div:nth-of-type(2) a"
     val secondPaymentPeriod = "#payment-row-2 span:nth-of-type(2)"
+    lazy val thirdPaymentViewReturnLink = "#links-section-3 div:nth-of-type(2) a"
+    val thirdPaymentPeriod = "#payment-row-3 span:nth-of-type(3)"
+    val thirdPaymentViewReturnText = "#links-section-3 div:nth-of-type(2) a span:nth-of-type(1)"
+    val thirdPaymentViewReturnContext = "#links-section-3 div:nth-of-type(2) a"
     val processingTime = "#processing-time"
     val processingTimeOld = "#processing-time-old"
     val directDebit = "#direct-debits"
@@ -95,6 +107,14 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2002-02-01"),
       LocalDate.parse("2002-03-28"),
       "#002"
+    ),
+    OpenPaymentsModel(
+      vatBNPofRegPre2010,
+      250.00,
+      LocalDate.parse("2017-04-05"),
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-03-31"),
+      "#003"
     )
   )
 
@@ -206,6 +226,26 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct view return href for the second payment" in {
       element(Selectors.secondPaymentViewReturnLink).attr("href") shouldBe "/submitted/%23002"
+    }
+
+    "render the correct amount for the third payment" in {
+      elementText(Selectors.thirdPaymentAmount) shouldBe "£250"
+    }
+
+    "render the correct amount for the third payment amount data attribute" in {
+      elementText(Selectors.thirdPaymentAmountData) shouldBe "£250"
+    }
+
+    "render the correct due period for the third payment" in {
+      elementText(Selectors.thirdPaymentDue) shouldBe "due by 5 April 2017"
+    }
+
+    "render the correct due period for the third payment period data attribute" in {
+      elementText(Selectors.thirdPaymentDueData) shouldBe "due by 5 April 2017"
+    }
+
+    "not display a view return link text for the third payment" in {
+      document.select(Selectors.thirdPaymentViewReturnText).size shouldBe 0
     }
 
     "render the correct heading for the direct debits" in {

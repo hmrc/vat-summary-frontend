@@ -41,6 +41,28 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       s"${messages.apply("openPayments.vatAAFurtherInterest", {displayDateRange(payment.start, payment.end)}).trim}"
     case `vatAdditionalAssessment` =>
       s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(payment.start, payment.end)}).trim}"
+    case `vatAdditionalAssessmentInterest` =>
+      s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(payment.start, payment.end)}).trim}"
+    case `vatBNPofRegPre2010` =>
+      s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(payment.start, payment.end)}).trim}"
+    case `vatOfficersAssessment` =>
+      s"${messages.apply("openPayments.vatOfficersAssessment")}"
+    case `vatBnpRegPost2010` =>
+      s"${messages.apply("openPayments.vatBnpRegPost2010")}"
+    case `vatFtnMatPre2010` =>
+      s"${messages.apply("openPayments.vatFtnMatPre2010")}"
+    case `vatFtnMatPost2010` =>
+      s"${messages.apply("openPayments.vatFtnMatPost2010")}"
+    case `vatMiscPenalty` =>
+      s"${messages.apply("openPayments.vatMiscPenalty")}"
+    case `vatFtnEachpartner` =>
+      s"${messages.apply("openPayments.vatFtnEachpartner")}"
+    case `vatMpPre2009` =>
+      s"${messages.apply("openPayments.vatMpPre2009")}"
+    case `vatMpRepeatedPre2009` =>
+      s"${messages.apply("openPayments.vatMpRepeatedPre2009")}"
+    case `vatCivilEvasionPenalty` =>
+      s"${messages.apply("openPayments.vatCivilEvasionPenalty")}"
   }
 
 
@@ -53,6 +75,17 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case (`errorCorrectionDebitCharge`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessmentFurtherInterest`, _) => Some(messages.apply("openPayments.makePayment"))
     case (`vatAdditionalAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatAdditionalAssessmentInterest`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatBNPofRegPre2010`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatOfficersAssessment`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatBnpRegPost2010`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatFtnMatPre2010`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatFtnMatPost2010`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatMiscPenalty`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatFtnEachpartner`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatMpPre2009`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatMpRepeatedPre2009`, _) => Some(messages.apply("openPayments.makePayment"))
+    case (`vatCivilEvasionPenalty`, _) => Some(messages.apply("openPayments.makePayment"))
   }
 
   val viewReturnEnabled: Boolean = payment.paymentType match {
@@ -63,6 +96,17 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `errorCorrectionDebitCharge` => true
     case `vatAdditionalAssessmentFurtherInterest` => false
     case `vatAdditionalAssessment` => false
+    case `vatAdditionalAssessmentInterest` => false
+    case `vatBNPofRegPre2010` => false
+    case `vatOfficersAssessment` => false
+    case `vatBnpRegPost2010` => false
+    case `vatFtnMatPre2010` => false
+    case `vatFtnMatPost2010` => false
+    case `vatMiscPenalty` => false
+    case `vatFtnEachpartner` => false
+    case `vatMpPre2009` => false
+    case `vatMpRepeatedPre2009` => false
+    case `vatCivilEvasionPenalty` => false
   }
 
   val overdueContext: String = payment.paymentType match {
@@ -73,6 +117,17 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
     case `errorCorrectionDebitCharge` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessmentFurtherInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
     case `vatAdditionalAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatAdditionalAssessmentInterest` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatBNPofRegPre2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatOfficersAssessment` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatBnpRegPost2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatFtnMatPre2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatFtnMatPost2010` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatMiscPenalty` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatFtnEachpartner` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatMpPre2009` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatMpRepeatedPre2009` => if(payment.overdue) messages.apply("common.isOverdue") else ","
+    case `vatCivilEvasionPenalty` => if(payment.overdue) messages.apply("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment.paymentType match {
@@ -85,5 +140,16 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, hasDirectDebi
       messages.apply("openPayments.errorCorrectionReturnContext", {displayDateRange(payment.start, payment.end)}).trim
     case `vatAdditionalAssessmentFurtherInterest` => ""
     case `vatAdditionalAssessment` => ""
+    case `vatAdditionalAssessmentInterest` => ""
+    case `vatBNPofRegPre2010` => ""
+    case `vatOfficersAssessment` => ""
+    case `vatBnpRegPost2010` => ""
+    case `vatFtnMatPre2010` => ""
+    case `vatFtnMatPost2010` => ""
+    case `vatMiscPenalty` => ""
+    case `vatFtnEachpartner` => ""
+    case `vatMpPre2009` => ""
+    case `vatMpRepeatedPre2009` => ""
+    case `vatCivilEvasionPenalty` => ""
   }
 }
