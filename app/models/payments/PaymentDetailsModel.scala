@@ -26,6 +26,8 @@ sealed trait PaymentDetailsModel {
   val backUrl: String
   val chargeType: String
   val dueDate: String
+
+  val auditDetail: Map[String, String]
 }
 
 object PaymentDetailsModel {
@@ -43,7 +45,21 @@ case class PaymentDetailsModelWithPeriod(taxType: String,
                                          returnUrl: String,
                                          backUrl: String,
                                          chargeType: String,
-                                         dueDate: String) extends PaymentDetailsModel
+                                         dueDate: String) extends PaymentDetailsModel {
+
+  val auditDetail = Map(
+    "taxType" -> taxType,
+    "taxReference" -> taxReference,
+    "amountInPence" -> amountInPence.toString,
+    "taxPeriodMonth" -> taxPeriodMonth.toString,
+    "taxPeriodYear" -> taxPeriodYear.toString,
+    "returnUrl" -> returnUrl,
+    "backUrl" -> backUrl,
+    "chargeType" -> chargeType,
+    "dueDate" -> dueDate
+  )
+
+}
 
 object PaymentDetailsModelWithPeriod {
 
@@ -72,7 +88,19 @@ case class PaymentDetailsModelNoPeriod(taxType: String,
                                          returnUrl: String,
                                          backUrl: String,
                                          chargeType: String,
-                                         dueDate: String) extends PaymentDetailsModel
+                                         dueDate: String) extends PaymentDetailsModel {
+
+  val auditDetail = Map(
+    "taxType" -> taxType,
+    "taxReference" -> taxReference,
+    "amountInPence" -> amountInPence.toString,
+    "returnUrl" -> returnUrl,
+    "backUrl" -> backUrl,
+    "chargeType" -> chargeType,
+    "dueDate" -> dueDate
+  )
+
+}
 
 object PaymentDetailsModelNoPeriod {
 

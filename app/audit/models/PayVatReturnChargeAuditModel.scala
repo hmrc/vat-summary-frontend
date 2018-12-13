@@ -17,7 +17,7 @@
 package audit.models
 
 import models.User
-import models.payments.{PaymentDetailsModel, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod}
+import models.payments.PaymentDetailsModel
 
 case class PayVatReturnChargeAuditModel(user: User,
                                         payment: PaymentDetailsModel,
@@ -27,30 +27,9 @@ case class PayVatReturnChargeAuditModel(user: User,
 
   override val transactionName: String = "pay-vat-return-charge"
 
-  override val detail: Map[String, String] = payment match {
-    case payment: PaymentDetailsModelWithPeriod => Map(
-      "vrn" -> user.vrn,
-      "taxType" -> payment.taxType,
-      "taxReference" -> payment.taxReference,
-      "amountInPence" -> payment.amountInPence.toString,
-      "taxPeriodMonth" -> payment.taxPeriodMonth.toString,
-      "taxPeriodYear" -> payment.taxPeriodYear.toString,
-      "returnUrl" -> payment.returnUrl,
-      "backUrl" -> payment.backUrl,
-      "paymentRedirectUrl" -> paymentRedirectUrl,
-      "chargeType" -> payment.chargeType,
-      "dueDate" -> payment.dueDate
-    )
-    case payment: PaymentDetailsModelNoPeriod => Map(
-      "vrn" -> user.vrn,
-      "taxType" -> payment.taxType,
-      "taxReference" -> payment.taxReference,
-      "amountInPence" -> payment.amountInPence.toString,
-      "returnUrl" -> payment.returnUrl,
-      "backUrl" -> payment.backUrl,
-      "paymentRedirectUrl" -> paymentRedirectUrl,
-      "chargeType" -> payment.chargeType,
-      "dueDate" -> payment.dueDate
-    )
-  }
+  override val detail: Map[String, String] = Map(
+    "vrn" -> user.vrn,
+    "paymentRedirectUrl" -> paymentRedirectUrl
+  ) ++ payment.auditDetail
+
 }

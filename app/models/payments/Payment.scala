@@ -28,6 +28,8 @@ sealed trait Payment extends Obligation {
   val due: LocalDate
   val outstandingAmount: BigDecimal
   val periodKey: String
+
+  val auditDetails: Map[String, String]
 }
 
 case class PaymentWithPeriod(chargeType: String,
@@ -35,12 +37,28 @@ case class PaymentWithPeriod(chargeType: String,
                              end: LocalDate,
                              due: LocalDate,
                              outstandingAmount: BigDecimal,
-                             periodKey: String) extends Payment
+                             periodKey: String) extends Payment {
+
+  val auditDetails: Map[String, String] = Map(
+    "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
+    "paymentDueBy" -> due.toString,
+    "paymentPeriodFrom" -> start.toString,
+    "paymentPeriodTo" -> end.toString
+  )
+
+}
 
 case class PaymentNoPeriod(chargeType: String,
                            due: LocalDate,
                            outstandingAmount: BigDecimal,
-                           periodKey: String) extends Payment
+                           periodKey: String) extends Payment {
+
+  val auditDetails: Map[String, String] = Map(
+    "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
+    "paymentDueBy" -> due.toString
+  )
+
+}
 
 object Payment {
 

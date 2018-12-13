@@ -17,7 +17,7 @@
 package audit.models
 
 import models.User
-import models.payments.{PaymentNoPeriod, PaymentWithPeriod, Payments}
+import models.payments.Payments
 
 case class ViewNextOutstandingVatPaymentAuditModel(user: User,
                                                    payments: Option[Payments]) extends AuditModel {
@@ -27,18 +27,7 @@ case class ViewNextOutstandingVatPaymentAuditModel(user: User,
     case Some(data) if data.financialTransactions.size > 1 => Map(
       "numberOfPayments" -> data.financialTransactions.size.toString
     )
-    case Some(data) => data.financialTransactions.head match {
-      case payment: PaymentWithPeriod => Map(
-        "paymentOutstanding" -> "yes",
-        "paymentDueBy" -> payment.due.toString,
-        "paymentPeriodFrom" -> payment.start.toString,
-        "paymentPeriodTo" -> payment.end.toString
-      )
-      case payment: PaymentNoPeriod => Map(
-        "paymentOutstanding" -> "yes",
-        "paymentDueBy" -> payment.due.toString
-      )
-    }
+    case Some(data) => data.financialTransactions.head.auditDetails
     case _ => Map("paymentOutstanding" -> "no")
   }
 

@@ -61,7 +61,6 @@ case class OpenPaymentsModelWithPeriod(paymentType: String,
   ).url
 
 }
-
 object OpenPaymentsModelWithPeriod {
   implicit val writes: Writes[OpenPaymentsModelWithPeriod] = Json.writes[OpenPaymentsModelWithPeriod]
 }
