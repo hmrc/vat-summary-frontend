@@ -31,6 +31,43 @@ sealed trait PaymentDetailsModel {
 }
 
 object PaymentDetailsModel {
+
+  def apply(taxType: String,
+            taxReference: String,
+            amountInPence: Long,
+            taxPeriodMonth: Int,
+            taxPeriodYear: Int,
+            returnUrl: String,
+            backUrl: String,
+            chargeType: String,
+            dueDate: String): PaymentDetailsModel =
+    PaymentDetailsModelWithPeriod(taxType,
+    taxReference,
+    amountInPence,
+    taxPeriodMonth,
+    taxPeriodYear,
+    returnUrl,
+    backUrl,
+    chargeType,
+    dueDate
+    )
+
+  def apply(taxType: String,
+            taxReference: String,
+            amountInPence: Long,
+            returnUrl: String,
+            backUrl: String,
+            chargeType: String,
+            dueDate: String): PaymentDetailsModel =
+    PaymentDetailsModelNoPeriod(taxType,
+      taxReference,
+      amountInPence,
+      returnUrl,
+      backUrl,
+      chargeType,
+      dueDate
+    )
+
   implicit val writes: Writes[PaymentDetailsModel] = Writes {
     case model: PaymentDetailsModelWithPeriod => Json.toJson(model)
     case model: PaymentDetailsModelNoPeriod => Json.toJson(model)
@@ -83,12 +120,12 @@ object PaymentDetailsModelWithPeriod {
 }
 
 case class PaymentDetailsModelNoPeriod(taxType: String,
-                                         taxReference: String,
-                                         amountInPence: Long,
-                                         returnUrl: String,
-                                         backUrl: String,
-                                         chargeType: String,
-                                         dueDate: String) extends PaymentDetailsModel {
+                                       taxReference: String,
+                                       amountInPence: Long,
+                                       returnUrl: String,
+                                       backUrl: String,
+                                       chargeType: String,
+                                       dueDate: String) extends PaymentDetailsModel {
 
   val auditDetail = Map(
     "taxType" -> taxType,

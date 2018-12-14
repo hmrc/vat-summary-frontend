@@ -43,6 +43,10 @@ class BtaHomeController @Inject()(val messagesApi: MessagesApi,
       Future.successful(Ok(views.html.partials.btaHome.claimEnrolment(user.vrn)))
   }
 
+  def partialMigration(): Action[AnyContent] = enrolledActionNonMtd { implicit request => _ =>
+    Future.successful(Ok(views.html.partials.btaHome.partialMigration()))
+  }
+
   private def enrolledAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
       enrolments => {

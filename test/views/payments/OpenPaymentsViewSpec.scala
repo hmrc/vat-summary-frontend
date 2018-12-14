@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import common.FinancialTransactionsConstants._
 import models.User
-import models.payments.OpenPaymentsModel
+import models.payments.OpenPaymentsModelWithPeriod
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -39,31 +39,23 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-    val paymentSectionFirst = "#payment-section-1"
-    val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
-    val firstPaymentAmountData = "#payment-section-1 span[data-amount]"
-    val firstPaymentDue = "#payment-row-1 span:nth-of-type(1)"
-    val firstPaymentDueData = "#payment-row-1 span[data-due]"
-    val firstPaymentPayLink = "#payment-row-1 a"
-    val firstPaymentPayContext = "#payment-row-1 span.float--right"
-    val firstPaymentPayNowLinkText = "#payment-row-1 div:nth-of-type(2) span:nth-of-type(1)"
-    val firstPaymentPayNowContext = "#payment-row-1 div:nth-of-type(2) span:nth-of-type(2)"
-    val paymentSectionSecond = "#payment-section-2"
-    val secondPaymentAmount = "#payment-section-2 span:nth-of-type(1)"
-    val secondPaymentAmountData = "#payment-section-2 span[data-amount]"
-    val secondPaymentDue = "#payment-row-2 span:nth-of-type(1)"
-    val secondPaymentDueData = "#payment-row-2 span[data-due]"
-    val secondPaymentPayLink = "#payment-row-2 a"
-    val secondPaymentPayNowLinkText = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(1)"
-    val secondPaymentPayContext = "#payment-row-2 div:nth-of-type(2) span:nth-of-type(2)"
-    lazy val firstPaymentViewReturnLink = "#links-section-1 div:nth-of-type(2) a"
-    val firstPaymentPeriod = "#payment-row-1 span:nth-of-type(3)"
-    val firstPaymentViewReturnText = "#links-section-1 div:nth-of-type(2) a span:nth-of-type(1)"
-    val firstPaymentViewReturnContext = "#links-section-1 div:nth-of-type(2) a"
-    lazy val secondPaymentViewReturnLink = "#links-section-2 div:nth-of-type(2) a"
-    val secondPaymentViewReturnText = "#links-section-2 div:nth-of-type(2) a span:nth-of-type(1)"
-    val secondPaymentViewReturnContext = "#links-section-2 div:nth-of-type(2) a"
+
+    val paymentSection: Int => String = number => s"#payment-section-$number"
+    val paymentAmount: Int => String = number => s"#payment-section-$number span:nth-of-type(1)"
+    val paymentAmountData: Int => String = number => s"#payment-section-$number span[data-amount]"
+    val paymentDue: Int => String = number => s"#payment-row-$number span:nth-of-type(1)"
+    val paymentDueData: Int => String = number => s"#payment-row-$number span[data-due]"
+    val paymentPayLink: Int => String = number => s"#payment-row-$number a"
+    val paymentPayContext: Int => String = number => s"#payment-row-$number span.float--right"
+    val paymentPayNowLinkText: Int => String = number => s"#payment-row-$number div:nth-of-type(2) span:nth-of-type(1)"
+    val paymentPayNowContext: Int => String = number => s"#payment-row-$number div:nth-of-type(2) span:nth-of-type(2)"
+
+    lazy val paymentViewReturnLink: Int => String = number => s"#links-section-$number div:nth-of-type(2) a"
+    val paymentPeriod: Int => String = number => s"#payment-row-$number span:nth-of-type(3)"
+    val paymentViewReturnText: Int => String = number => s"#links-section-$number div:nth-of-type(2) a span:nth-of-type(1)"
+    val paymentViewReturnContext: Int => String = number => s"#links-section-$number div:nth-of-type(2) a"
     val secondPaymentPeriod = "#payment-row-2 span:nth-of-type(2)"
+
     val processingTime = "#processing-time"
     val processingTimeOld = "#processing-time-old"
     val directDebit = "#direct-debits"
@@ -79,7 +71,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   private val user = User("1111")
   val noPayment = Seq()
   val payments = Seq(
-    OpenPaymentsModel(
+    OpenPaymentsModelWithPeriod(
       vatReturnDebitCharge,
       2000000000.01,
       LocalDate.parse("2001-04-08"),
@@ -88,13 +80,130 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "#001",
       overdue = true
     ),
-    OpenPaymentsModel(
+    OpenPaymentsModelWithPeriod(
       vatReturnDebitCharge,
       100.00,
       LocalDate.parse("2002-05-10"),
       LocalDate.parse("2002-02-01"),
       LocalDate.parse("2002-03-28"),
       "#002"
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatAdditionalAssessmentInterest,
+      300.00,
+      LocalDate.parse("2003-04-05"),
+      LocalDate.parse("2003-01-01"),
+      LocalDate.parse("2003-03-31"),
+      "#003",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatAdditionalAssessmentFurtherInterest,
+      400.00,
+      LocalDate.parse("2004-04-05"),
+      LocalDate.parse("2004-01-01"),
+      LocalDate.parse("2004-03-31"),
+      "#004",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatAdditionalAssessment,
+      500.00,
+      LocalDate.parse("2005-04-05"),
+      LocalDate.parse("2005-01-01"),
+      LocalDate.parse("2005-03-31"),
+      "#005",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatOfficersAssessment,
+      600.00,
+      LocalDate.parse("2006-04-05"),
+      LocalDate.parse("2006-01-01"),
+      LocalDate.parse("2006-03-31"),
+      "#006",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatBNPofRegPre2010,
+      700.00,
+      LocalDate.parse("2007-04-05"),
+      LocalDate.parse("2007-01-01"),
+      LocalDate.parse("2007-03-31"),
+      "#007",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatBnpRegPost2010,
+      800.00,
+      LocalDate.parse("2008-04-05"),
+      LocalDate.parse("2008-01-01"),
+      LocalDate.parse("2008-03-31"),
+      "#008",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatFtnMatPre2010,
+      900.00,
+      LocalDate.parse("2009-04-05"),
+      LocalDate.parse("2009-01-01"),
+      LocalDate.parse("2009-03-31"),
+      "#009",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatFtnMatPost2010,
+      1000.00,
+      LocalDate.parse("2010-04-05"),
+      LocalDate.parse("2010-01-01"),
+      LocalDate.parse("2010-03-31"),
+      "#010",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatMiscPenalty,
+      1100.00,
+      LocalDate.parse("2011-04-05"),
+      LocalDate.parse("2011-01-01"),
+      LocalDate.parse("2011-03-31"),
+      "#011",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatFtnEachpartner,
+      1200.00,
+      LocalDate.parse("2012-04-05"),
+      LocalDate.parse("2012-01-01"),
+      LocalDate.parse("2012-03-31"),
+      "#012",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatMpPre2009,
+      1300.00,
+      LocalDate.parse("2013-04-05"),
+      LocalDate.parse("2013-01-01"),
+      LocalDate.parse("2013-03-31"),
+      "#013",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatMpRepeatedPre2009,
+      1400.00,
+      LocalDate.parse("2014-04-05"),
+      LocalDate.parse("2014-01-01"),
+      LocalDate.parse("2014-03-31"),
+      "#014",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      vatCivilEvasionPenalty,
+      1500.00,
+      LocalDate.parse("2015-04-05"),
+      LocalDate.parse("2015-01-01"),
+      LocalDate.parse("2015-03-31"),
+      "#015",
+      overdue = true
     )
   )
 
@@ -140,72 +249,377 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "render the correct amount for the first payment" in {
-      elementText(Selectors.firstPaymentAmount) shouldBe "£2,000,000,000.01"
+    "for the first payment" should {
+
+      "render the correct amount for the first payment" in {
+        elementText(Selectors.paymentAmount(1)) shouldBe "£2,000,000,000.01"
+      }
+
+      "render the correct amount for the first payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(1)) shouldBe "£2,000,000,000.01"
+      }
+
+      "render the correct due period for the first payment" in {
+        elementText(Selectors.paymentDue(1)) shouldBe "due by 8 April 2001"
+      }
+
+      "render the correct due period for the first payment period data attribute" in {
+        elementText(Selectors.paymentDueData(1)) shouldBe "due by 8 April 2001"
+      }
+
+      "render the Direct Debit text for the first payment" in {
+        elementText(Selectors.paymentPayContext(1)) shouldBe "You pay by direct debit"
+      }
+
+      "render the correct due period for the first payment period" in {
+        elementText(Selectors.paymentPeriod(1)) shouldBe "for the period 1 January to 31 March 2001"
+      }
+
+      "render the correct view return link text for the first payment" in {
+        elementText(Selectors.paymentViewReturnText(1)) shouldBe "View return"
+      }
+
+      "render the correct view return link text for the first payment with hidden text for context" in {
+        elementText(Selectors.paymentViewReturnContext(1)) shouldBe "View return for the period 1 January to 31 March 2001"
+      }
+
+      "render the correct view return href for the first payment" in {
+        element(Selectors.paymentViewReturnLink(1)).attr("href") shouldBe "/submitted/%23001"
+      }
     }
 
-    "render the correct amount for the first payment amount data attribute" in {
-      elementText(Selectors.firstPaymentAmountData) shouldBe "£2,000,000,000.01"
+    "for the second payment" should {
+
+      "render the correct amount for the second payment" in {
+        elementText(Selectors.paymentAmount(2)) shouldBe "£100"
+      }
+
+      "render the correct amount for the second payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(2)) shouldBe "£100"
+      }
+
+      "render the correct due period for the second payment" in {
+        elementText(Selectors.paymentDue(2)) shouldBe "due by 10 May 2002"
+      }
+
+      "render the correct due period for the second payment period data attribute" in {
+        elementText(Selectors.paymentDueData(2)) shouldBe "due by 10 May 2002"
+      }
+
+      "render the correct due period for the second payment period" in {
+        elementText(Selectors.secondPaymentPeriod) shouldBe "for the period 1 February to 28 March 2002"
+      }
+
+      "render the correct view return link text for the second payment" in {
+        elementText(Selectors.paymentViewReturnText(2)) shouldBe "View return"
+      }
+
+      "render the correct view return link text for the second payment with hidden text for context" in {
+        elementText(Selectors.paymentViewReturnContext(2)) shouldBe "View return for the period 1 February to 28 March 2002"
+      }
+
+      "render the correct view return href for the second payment" in {
+        element(Selectors.paymentViewReturnLink(2)).attr("href") shouldBe "/submitted/%23002"
+      }
     }
 
-    "render the correct due period for the first payment" in {
-      elementText(Selectors.firstPaymentDue) shouldBe "due by 8 April 2001"
+    "for the third payment" should {
+
+      "render the correct amount for the third payment" in {
+        elementText(Selectors.paymentAmount(3)) shouldBe "£300"
+      }
+
+      "render the correct amount for the third payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(3)) shouldBe "£300"
+      }
+
+      "render the correct due period for the third payment" in {
+        elementText(Selectors.paymentDue(3)) shouldBe "due by 5 April 2003"
+      }
+
+      "render the correct due period for the third payment period data attribute" in {
+        elementText(Selectors.paymentDueData(3)) shouldBe "due by 5 April 2003"
+      }
+
+      "not display a view return link text for the third payment" in {
+        document.select(Selectors.paymentViewReturnText(3)).size shouldBe 0
+      }
     }
 
-    "render the correct due period for the first payment period data attribute" in {
-      elementText(Selectors.firstPaymentDueData) shouldBe "due by 8 April 2001"
+    "for the 4th payment" should {
+
+      "render the correct amount for the 4th payment" in {
+        elementText(Selectors.paymentAmount(4)) shouldBe "£400"
+      }
+
+      "render the correct amount for the 4th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(4)) shouldBe "£400"
+      }
+
+      "render the correct due period for the 4th payment" in {
+        elementText(Selectors.paymentDue(4)) shouldBe "due by 5 April 2004"
+      }
+
+      "render the correct due period for the 4th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(4)) shouldBe "due by 5 April 2004"
+      }
+
+      "not display a view return link text for the 4th payment" in {
+        document.select(Selectors.paymentViewReturnText(4)).size shouldBe 0
+      }
     }
 
-    "render the Direct Debit text for the first payment" in {
-      elementText(Selectors.firstPaymentPayContext) shouldBe "You pay by direct debit"
+    "for the 5th payment" should {
+
+      "render the correct amount for the 5th payment" in {
+        elementText(Selectors.paymentAmount(5)) shouldBe "£500"
+      }
+
+      "render the correct amount for the 5th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(5)) shouldBe "£500"
+      }
+
+      "render the correct due period for the 5th payment" in {
+        elementText(Selectors.paymentDue(5)) shouldBe "due by 5 April 2005"
+      }
+
+      "render the correct due period for the 5th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(5)) shouldBe "due by 5 April 2005"
+      }
+
+      "not display a view return link text for the 5th payment" in {
+        document.select(Selectors.paymentViewReturnText(5)).size shouldBe 0
+      }
     }
 
-    "render the correct due period for the first payment period" in {
-      elementText(Selectors.firstPaymentPeriod) shouldBe "for the period 1 January to 31 March 2001"
+    "for the 6th payment" should {
+
+      "render the correct amount for the 6th payment" in {
+        elementText(Selectors.paymentAmount(6)) shouldBe "£600"
+      }
+
+      "render the correct amount for the 6th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(6)) shouldBe "£600"
+      }
+
+      "render the correct due period for the 6th payment" in {
+        elementText(Selectors.paymentDue(6)) shouldBe "due by 5 April 2006"
+      }
+
+      "render the correct due period for the 6th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(6)) shouldBe "due by 5 April 2006"
+      }
+
+      "not display a view return link text for the 6th payment" in {
+        document.select(Selectors.paymentViewReturnText(6)).size shouldBe 0
+      }
     }
 
-    "render the correct view return link text for the first payment" in {
-      elementText(Selectors.firstPaymentViewReturnText) shouldBe "View return"
+    "for the 7th payment" should {
+
+      "render the correct amount for the 7th payment" in {
+        elementText(Selectors.paymentAmount(7)) shouldBe "£700"
+      }
+
+      "render the correct amount for the 7th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(7)) shouldBe "£700"
+      }
+
+      "render the correct due period for the 7th payment" in {
+        elementText(Selectors.paymentDue(7)) shouldBe "due by 5 April 2007"
+      }
+
+      "render the correct due period for the 7th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(7)) shouldBe "due by 5 April 2007"
+      }
+
+      "not display a view return link text for the 7th payment" in {
+        document.select(Selectors.paymentViewReturnText(7)).size shouldBe 0
+      }
     }
 
-    "render the correct view return link text for the first payment with hidden text for context" in {
-      elementText(Selectors.firstPaymentViewReturnContext) shouldBe "View return for the period 1 January to 31 March 2001"
+    "for the 8th payment" should {
+
+      "render the correct amount for the 8th payment" in {
+        elementText(Selectors.paymentAmount(8)) shouldBe "£800"
+      }
+
+      "render the correct amount for the 8th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(8)) shouldBe "£800"
+      }
+
+      "render the correct due period for the 8th payment" in {
+        elementText(Selectors.paymentDue(8)) shouldBe "due by 5 April 2008"
+      }
+
+      "render the correct due period for the 8th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(8)) shouldBe "due by 5 April 2008"
+      }
+
+      "not display a view return link text for the 8th payment" in {
+        document.select(Selectors.paymentViewReturnText(8)).size shouldBe 0
+      }
     }
 
-    "render the correct view return href for the first payment" in {
-      element(Selectors.firstPaymentViewReturnLink).attr("href") shouldBe "/submitted/%23001"
+    "for the 9th payment" should {
+
+      "render the correct amount for the 9th payment" in {
+        elementText(Selectors.paymentAmount(9)) shouldBe "£900"
+      }
+
+      "render the correct amount for the 9th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(9)) shouldBe "£900"
+      }
+
+      "render the correct due period for the 9th payment" in {
+        elementText(Selectors.paymentDue(9)) shouldBe "due by 5 April 2009"
+      }
+
+      "render the correct due period for the 9th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(9)) shouldBe "due by 5 April 2009"
+      }
+
+      "not display a view return link text for the 9th payment" in {
+        document.select(Selectors.paymentViewReturnText(9)).size shouldBe 0
+      }
     }
 
-    "render the correct amount for the second payment" in {
-      elementText(Selectors.secondPaymentAmount) shouldBe "£100"
+    "for the 10th payment" should {
+
+      "render the correct amount for the 10th payment" in {
+        elementText(Selectors.paymentAmount(10)) shouldBe "£1,000"
+      }
+
+      "render the correct amount for the 10th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(10)) shouldBe "£1,000"
+      }
+
+      "render the correct due period for the 10th payment" in {
+        elementText(Selectors.paymentDue(10)) shouldBe "due by 5 April 2010"
+      }
+
+      "render the correct due period for the 10th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(10)) shouldBe "due by 5 April 2010"
+      }
+
+      "not display a view return link text for the 10th payment" in {
+        document.select(Selectors.paymentViewReturnText(10)).size shouldBe 0
+      }
     }
 
-    "render the correct amount for the second payment amount data attribute" in {
-      elementText(Selectors.secondPaymentAmountData) shouldBe "£100"
+    "for the 11th payment" should {
+
+      "render the correct amount for the 11th payment" in {
+        elementText(Selectors.paymentAmount(11)) shouldBe "£1,100"
+      }
+
+      "render the correct amount for the 11th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(11)) shouldBe "£1,100"
+      }
+
+      "render the correct due period for the 11th payment" in {
+        elementText(Selectors.paymentDue(11)) shouldBe "due by 5 April 2011"
+      }
+
+      "render the correct due period for the 11th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(11)) shouldBe "due by 5 April 2011"
+      }
+
+      "not display a view return link text for the 11th payment" in {
+        document.select(Selectors.paymentViewReturnText(11)).size shouldBe 0
+      }
     }
 
-    "render the correct due period for the second payment" in {
-      elementText(Selectors.secondPaymentDue) shouldBe "due by 10 May 2002"
+    "for the 12th payment" should {
+
+      "render the correct amount for the 12th payment" in {
+        elementText(Selectors.paymentAmount(12)) shouldBe "£1,200"
+      }
+
+      "render the correct amount for the 12th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(12)) shouldBe "£1,200"
+      }
+
+      "render the correct due period for the 12th payment" in {
+        elementText(Selectors.paymentDue(12)) shouldBe "due by 5 April 2012"
+      }
+
+      "render the correct due period for the 12th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(12)) shouldBe "due by 5 April 2012"
+      }
+
+      "not display a view return link text for the 12th payment" in {
+        document.select(Selectors.paymentViewReturnText(12)).size shouldBe 0
+      }
     }
 
-    "render the correct due period for the second payment period data attribute" in {
-      elementText(Selectors.secondPaymentDueData) shouldBe "due by 10 May 2002"
+    "for the 13th payment" should {
+
+      "render the correct amount for the 13th payment" in {
+        elementText(Selectors.paymentAmount(13)) shouldBe "£1,300"
+      }
+
+      "render the correct amount for the 13th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(13)) shouldBe "£1,300"
+      }
+
+      "render the correct due period for the 13th payment" in {
+        elementText(Selectors.paymentDue(13)) shouldBe "due by 5 April 2013"
+      }
+
+      "render the correct due period for the 13th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(13)) shouldBe "due by 5 April 2013"
+      }
+
+      "not display a view return link text for the 13th payment" in {
+        document.select(Selectors.paymentViewReturnText(13)).size shouldBe 0
+      }
     }
 
-    "render the correct due period for the second payment period" in {
-      elementText(Selectors.secondPaymentPeriod) shouldBe "for the period 1 February to 28 March 2002"
+    "for the 14th payment" should {
+
+      "render the correct amount for the 14th payment" in {
+        elementText(Selectors.paymentAmount(14)) shouldBe "£1,400"
+      }
+
+      "render the correct amount for the 14th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(14)) shouldBe "£1,400"
+      }
+
+      "render the correct due period for the 14th payment" in {
+        elementText(Selectors.paymentDue(14)) shouldBe "due by 5 April 2014"
+      }
+
+      "render the correct due period for the 14th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(14)) shouldBe "due by 5 April 2014"
+      }
+
+      "not display a view return link text for the 14th payment" in {
+        document.select(Selectors.paymentViewReturnText(14)).size shouldBe 0
+      }
     }
 
-    "render the correct view return link text for the second payment" in {
-      elementText(Selectors.secondPaymentViewReturnText) shouldBe "View return"
-    }
+    "for the 15th payment" should {
 
-    "render the correct view return link text for the second payment with hidden text for context" in {
-      elementText(Selectors.secondPaymentViewReturnContext) shouldBe "View return for the period 1 February to 28 March 2002"
-    }
+      "render the correct amount for the 15th payment" in {
+        elementText(Selectors.paymentAmount(15)) shouldBe "£1,500"
+      }
 
-    "render the correct view return href for the second payment" in {
-      element(Selectors.secondPaymentViewReturnLink).attr("href") shouldBe "/submitted/%23002"
+      "render the correct amount for the 15th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(15)) shouldBe "£1,500"
+      }
+
+      "render the correct due period for the 15th payment" in {
+        elementText(Selectors.paymentDue(15)) shouldBe "due by 5 April 2015"
+      }
+
+      "render the correct due period for the 15th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(15)) shouldBe "due by 5 April 2015"
+      }
+
+      "not display a view return link text for the 15th payment" in {
+        document.select(Selectors.paymentViewReturnText(15)).size shouldBe 0
+      }
     }
 
     "render the correct heading for the direct debits" in {
@@ -256,17 +670,17 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct link text for the first payment" in {
-      elementText(Selectors.firstPaymentPayNowLinkText) shouldBe "Pay now"
+      elementText(Selectors.paymentPayNowLinkText(1)) shouldBe "Pay now"
     }
 
     "render the correct pay now href for the first payment" in {
-      element(Selectors.firstPaymentPayLink).attr("href") should endWith(
+      element(Selectors.paymentPayLink(1)).attr("href") should endWith(
         "200000000001/3/2001/VAT%20Return%20Debit%20Charge/2001-04-08"
       )
     }
 
     "render a hidden label for the button for the first payment" in {
-      elementText(Selectors.firstPaymentPayNowContext) shouldBe
+      elementText(Selectors.paymentPayNowContext(1)) shouldBe
         "£2,000,000,000.01 overdue for the period 1 January to 31 March 2001"
     }
 
@@ -296,17 +710,17 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct link text for the first payment" in {
-      elementText(Selectors.firstPaymentPayNowLinkText) shouldBe "Pay now"
+      elementText(Selectors.paymentPayNowLinkText(1)) shouldBe "Pay now"
     }
 
     "render the correct pay now href for the first payment" in {
-      element(Selectors.firstPaymentPayLink).attr("href") should endWith(
+      element(Selectors.paymentPayLink(1)).attr("href") should endWith(
         "200000000001/3/2001/VAT%20Return%20Debit%20Charge/2001-04-08"
       )
     }
 
     "render a hidden label for the button for the first payment" in {
-      elementText(Selectors.firstPaymentPayNowContext) shouldBe
+      elementText(Selectors.paymentPayNowContext(1)) shouldBe
         "£2,000,000,000.01 overdue for the period 1 January to 31 March 2001"
     }
 

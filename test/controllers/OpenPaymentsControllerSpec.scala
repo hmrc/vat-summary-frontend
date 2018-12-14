@@ -17,6 +17,7 @@
 package controllers
 
 import java.time.LocalDate
+
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import common.FinancialTransactionsConstants._
@@ -24,7 +25,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
 import models.{CustomerInformation, User}
 import models.errors.{DirectDebitStatusError, PaymentsError}
-import models.payments.{OpenPaymentsModel, Payment, Payments}
+import models.payments.{OpenPaymentsModel, Payment, PaymentWithPeriod, Payments}
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -62,13 +63,13 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         .returns({})
     }
 
-    val payment = Payment(
+    val payment: PaymentWithPeriod = Payment(
       vatReturnDebitCharge,
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       BigDecimal("10000"),
-      "ABCD"
+      Some("ABCD")
     )
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]

@@ -40,6 +40,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val features: Features = new Features(runModeConfiguration)
   override val viewVatPartial: String = ""
   override val claimEnrolmentPartial: String = ""
+  override val partialMigrationPartial: String = ""
   override val vatSubmittedReturnsUrl: String = "returns-url"
   override val vatReturnDeadlinesUrl: String = ""
   override def vatReturnUrl(periodKey: String): String = s"/submitted/${URLEncoder.encode(periodKey, "UTF-8")}"

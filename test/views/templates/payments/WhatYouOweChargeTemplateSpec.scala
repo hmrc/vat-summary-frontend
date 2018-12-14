@@ -19,7 +19,7 @@ package views.templates.payments
 import java.time.LocalDate
 
 import common.FinancialTransactionsConstants._
-import models.payments.OpenPaymentsModel
+import models.payments.OpenPaymentsModelWithPeriod
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -44,8 +44,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering a VAT Return Debit Charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModel = {
-      OpenPaymentsModel(
+    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+      OpenPaymentsModelWithPeriod(
         vatReturnDebitCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
@@ -133,8 +133,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering an Officer's Assessment charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModel = {
-      OpenPaymentsModel(
+    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+      OpenPaymentsModelWithPeriod(
         officerAssessmentDebitCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
@@ -184,8 +184,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering a default surcharge charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModel = {
-      OpenPaymentsModel(
+    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+      OpenPaymentsModelWithPeriod(
         vatDefaultSurcharge,
         BigDecimal(300.00),
         LocalDate.parse("2000-05-10"),
@@ -236,8 +236,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering a central assessment charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModel = {
-      OpenPaymentsModel(
+    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+      OpenPaymentsModelWithPeriod(
         vatCentralAssessment,
         BigDecimal(200.00),
         LocalDate.parse("2001-05-10"),
@@ -291,8 +291,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering an VAT Officer's Assessment Default Interest charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModel = {
-      OpenPaymentsModel(
+    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+      OpenPaymentsModelWithPeriod(
         officerAssessmentDefaultInterest,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
@@ -342,8 +342,8 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering a error correction charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModel = {
-      OpenPaymentsModel(
+    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+      OpenPaymentsModelWithPeriod(
         errorCorrectionDebitCharge,
         BigDecimal(200.00),
         LocalDate.parse("2001-05-10"),

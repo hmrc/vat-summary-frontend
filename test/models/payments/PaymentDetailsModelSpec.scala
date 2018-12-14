@@ -23,7 +23,7 @@ class PaymentDetailsModelSpec extends UnitSpec {
 
   "Payment details when converted to JSON" should {
     "result in the correct JSON format" in {
-      val payment = PaymentDetailsModel(
+      val payment = PaymentDetailsModelWithPeriod(
         "vat",
         "123456789",
         123456,

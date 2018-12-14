@@ -24,7 +24,7 @@ import controllers.ControllerBaseSpec
 import models._
 import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
-import models.payments.{Payment, Payments}
+import models.payments.{Payment, PaymentWithPeriod, Payments}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits._
@@ -45,7 +45,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     val obligationsCall: Boolean = false
 
     val payments: Payments = Payments(Seq(
-      Payment(
+      PaymentWithPeriod(
         "VAT Return Debit Charge",
         start = LocalDate.parse("2017-11-22"),
         end = LocalDate.parse("2017-12-22"),
@@ -53,7 +53,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
-      Payment(
+      PaymentWithPeriod(
         "VAT Return Debit Charge",
         start = LocalDate.parse("2016-11-22"),
         end = LocalDate.parse("2016-12-22"),
@@ -61,7 +61,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
-      Payment(
+      PaymentWithPeriod(
         "VAT Return Debit Charge",
         start = LocalDate.parse("2015-11-22"),
         end = LocalDate.parse("2015-12-22"),
@@ -69,7 +69,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
-      Payment(
+      PaymentWithPeriod(
         "VAT Return Debit Charge",
         start = LocalDate.parse("2011-11-22"),
         end = LocalDate.parse("2011-12-22"),
@@ -77,7 +77,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
-      Payment(
+      PaymentWithPeriod(
         "VAT Return Debit Charge",
         start = LocalDate.parse("2013-11-22"),
         end = LocalDate.parse("2013-12-22"),

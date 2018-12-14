@@ -22,7 +22,7 @@ import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
 import models.{DirectDebitDetailsModel, ServiceResponse, User}
 import models.errors._
-import models.payments.{Payment, PaymentDetailsModel, Payments}
+import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
@@ -59,7 +59,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "the user has payments outstanding" should {
 
       "return a list of payments sorted by due date in descending order" in new Test {
-        val payment1 = Payment(
+        val payment1 = PaymentWithPeriod(
           "VAT Return Debit Charge",
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
@@ -67,7 +67,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           BigDecimal("21.22"),
           ""
         )
-        val payment2 = Payment(
+        val payment2 = PaymentWithPeriod(
           "VAT Return Debit Charge",
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
@@ -75,7 +75,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           BigDecimal("21.22"),
           ""
         )
-        val payment3 = Payment(
+        val payment3 = PaymentWithPeriod(
           "VAT Return Debit Charge",
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
@@ -83,7 +83,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           BigDecimal("21.22"),
           ""
         )
-        val payment4 = Payment(
+        val payment4 = PaymentWithPeriod(
           "VAT Return Debit Charge",
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
@@ -104,7 +104,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "the user has no payments outstanding" should {
 
       "return an empty list of payments" in new Test {
-        val payments = Payments(Seq(Payment(
+        val payments = Payments(Seq(PaymentWithPeriod(
           "VAT Return Credit Charge",
           LocalDate.parse("2008-12-06"),
           LocalDate.parse("2009-01-04"),
@@ -157,7 +157,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     val chargeType: String = "VAT Return Debit Charge"
     val dueDate: String = "2018-08-08"
 
-    val paymentDetails = PaymentDetailsModel("vat",
+    val paymentDetails = PaymentDetailsModelWithPeriod("vat",
       "123456789",
       amountInPence,
       taxPeriodMonth,

@@ -33,7 +33,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         LocalDate.parse("2017-03-01"),
         LocalDate.parse("2017-03-08"),
         9999,
-        "#001"
+        Some("#001")
       )
     )
   )
@@ -46,7 +46,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         LocalDate.parse("2017-03-01"),
         LocalDate.parse("2017-03-08"),
         9999,
-        "#001"
+        Some("#001")
       ),
       Payment(
         "VAT Return Debit Charge",
@@ -54,7 +54,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         LocalDate.parse("2017-04-01"),
         LocalDate.parse("2017-05-08"),
         7777,
-        "#002"
+        Some("#002")
       )
     )
   )

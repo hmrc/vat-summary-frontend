@@ -25,7 +25,7 @@ class PaymentsSpec extends UnitSpec {
 
   "A payment" should {
 
-    val examplePayment = Payment(
+    val examplePayment = PaymentWithPeriod(
       "VAT Return Debit Charge",
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-03-01"),
@@ -56,7 +56,7 @@ class PaymentsSpec extends UnitSpec {
 
     val examplePayments = Payments(
       Seq(
-        Payment(
+        PaymentWithPeriod(
           "VAT Return Debit Charge",
           LocalDate.parse("2017-01-01"),
           LocalDate.parse("2017-03-01"),
@@ -64,7 +64,7 @@ class PaymentsSpec extends UnitSpec {
           9999,
           "#001"
         ),
-        Payment(
+        PaymentWithPeriod(
           "VAT Return Credit Charge",
           LocalDate.parse("2017-02-01"),
           LocalDate.parse("2017-04-01"),

@@ -32,6 +32,7 @@ GET         /vat-through-software/test-only/direct-debit-stub                  @
 
 GET         /vat-through-software/test-only/bta-stub/view-vat-partial          @testOnly.controllers.BtaStubController.viewVat
 GET         /vat-through-software/test-only/bta-stub/claim-enrolment-partial   @testOnly.controllers.BtaStubController.claimEnrolment
+GET         /vat-through-software/test-only/bta-stub/partial-migration-partial @testOnly.controllers.BtaStubController.partialMigration
 
 GET         /vat-through-software/test-only/:vrn/portal-stub                   @testOnly.controllers.PortalStubController.show(vrn: String)
 

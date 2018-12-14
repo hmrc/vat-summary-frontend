@@ -33,7 +33,7 @@ object TestModels {
     LocalDate.parse("2019-02-02"),
     LocalDate.parse("2019-03-03"),
     1,
-    "#001"
+    Some("#001")
   )))
 
   val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
@@ -60,7 +60,7 @@ object TestModels {
     LocalDate.parse("2017-02-02"),
     LocalDate.parse("2017-03-03"),
     1,
-    "#001"
+    Some("#001")
   )))
 
   val address: Address = Address("", "", None, None, None)

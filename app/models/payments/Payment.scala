@@ -63,25 +63,37 @@ case class PaymentNoPeriod(chargeType: String,
 object Payment {
 
   private def createPayment(chargeType: String,
-                            start: Option[LocalDate],
-                            end: Option[LocalDate],
-                            due: LocalDate,
-                            outstandingAmount: BigDecimal,
-                            periodKey: Option[String]): Payment ={
-    (start, end) match {
-      case (Some(s), Some(e)) => PaymentWithPeriod(chargeType, s, e, due, outstandingAmount, periodKey.getOrElse("0000"))
-      case (None, None) => PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey.getOrElse("0000"))
-      case (s, e) => throw new RuntimeException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
-    }
+            start: Option[LocalDate],
+            end: Option[LocalDate],
+            due: LocalDate,
+            outstandingAmount: BigDecimal,
+            periodKey: Option[String]): Payment = (start, end) match {
+    case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey)
+    case (None, None) => apply(chargeType, due, outstandingAmount, periodKey)
+    case (s, e) => throw new RuntimeException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
   }
+
+  def apply(chargeType: String,
+            start: LocalDate,
+            end: LocalDate,
+            due: LocalDate,
+            outstandingAmount: BigDecimal,
+            periodKey: Option[String]): PaymentWithPeriod =
+    PaymentWithPeriod(chargeType, start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
+
+  def apply(chargeType: String,
+            due: LocalDate,
+            outstandingAmount: BigDecimal,
+            periodKey: Option[String]): PaymentNoPeriod =
+    PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey.getOrElse("0000"))
 
   implicit val paymentReads: Reads[Payment] = (
     (JsPath \ "chargeType").read[String] and
-    (JsPath \ "taxPeriodFrom").readNullable[LocalDate] and
-    (JsPath \ "taxPeriodTo").readNullable[LocalDate] and
-    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
-    (JsPath \ "outstandingAmount").read[BigDecimal] and
-    (JsPath \ "periodKey").readNullable[String]
-  )(Payment.createPayment _)
+      (JsPath \ "taxPeriodFrom").readNullable[LocalDate] and
+      (JsPath \ "taxPeriodTo").readNullable[LocalDate] and
+      (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
+      (JsPath \ "outstandingAmount").read[BigDecimal] and
+      (JsPath \ "periodKey").readNullable[String]
+    )(Payment.createPayment _)
 
 }

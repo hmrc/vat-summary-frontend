@@ -40,7 +40,7 @@ case class OpenPaymentsModelWithPeriod(paymentType: String,
                                        start: LocalDate,
                                        end: LocalDate,
                                        periodKey: String,
-                                       overdue: Boolean) extends OpenPaymentsModel {
+                                       overdue: Boolean = false) extends OpenPaymentsModel {
 
   override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
     case `vatReturnDebitCharge` => messages("openPayments.vatReturn", displayDateRange(start, end))
@@ -69,7 +69,7 @@ case class OpenPaymentsModelNoPeriod(paymentType: String,
                                      amount: BigDecimal,
                                      due: LocalDate,
                                      periodKey: String,
-                                     overdue: Boolean) extends OpenPaymentsModel {
+                                     overdue: Boolean = false) extends OpenPaymentsModel {
 
   override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
     case `officerAssessmentDebitCharge` => messages("openPayments.officersAssessment")
@@ -88,7 +88,22 @@ object OpenPaymentsModelNoPeriod {
 }
 
 object OpenPaymentsModel {
-  def apply(payment: Payment, overdue: Boolean = false)(implicit messages: Messages): OpenPaymentsModel = payment match {
+
+  def apply(paymentType: String,
+            amount: BigDecimal,
+            due: LocalDate,
+            start: LocalDate,
+            end: LocalDate,
+            periodKey: String,
+            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(paymentType, amount, due, start, end, periodKey, overdue)
+
+  def apply(paymentType: String,
+            amount: BigDecimal,
+            due: LocalDate,
+            periodKey: String,
+            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelNoPeriod(paymentType, amount, due, periodKey, overdue)
+
+  def apply(payment: Payment, overdue: Boolean)(implicit messages: Messages): OpenPaymentsModel = payment match {
     case payment: PaymentWithPeriod => OpenPaymentsModelWithPeriod(
       payment.chargeType,
       payment.outstandingAmount,
@@ -108,7 +123,7 @@ object OpenPaymentsModel {
   }
 
   implicit val writes: Writes[OpenPaymentsModel] = Writes {
-    case model: OpenPaymentsModelWithPeriod => Json.toJson(model)
-    case model: OpenPaymentsModelNoPeriod => Json.toJson(model)
+    case model: OpenPaymentsModelWithPeriod => Json.toJson(model)(OpenPaymentsModelWithPeriod.writes)
+    case model: OpenPaymentsModelNoPeriod => Json.toJson(model)(OpenPaymentsModelNoPeriod.writes)
   }
 }
