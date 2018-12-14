@@ -23,6 +23,7 @@ import config.features.Features
 import config.{ConfigKeys => Keys}
 import javax.inject.{Inject, Singleton}
 import play.api.Mode.Mode
+import play.api.i18n.Lang
 import play.api.mvc.Call
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.binders.ContinueUrl
@@ -179,4 +180,13 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override val portalPaymentHistoryUrl: String => String = (vrn: String) => {
     s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPaymentHistoryPostfix)}"
   }
+
+  //Translation
+  def languageMap: Map[String, Lang] = Map(
+    "english" -> Lang("en"),
+    "cymraeg" -> Lang("cy")
+  )
+
+  lazy val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+
 }
