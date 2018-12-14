@@ -19,7 +19,7 @@ package views.templates.payments
 import java.time.LocalDate
 
 import common.FinancialTransactionsConstants._
-import models.payments.OpenPaymentsModelWithPeriod
+import models.payments.{OpenPaymentsModelNoPeriod, OpenPaymentsModelWithPeriod}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -133,13 +133,11 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering an Officer's Assessment charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
-      OpenPaymentsModelWithPeriod(
+    def generateModel(overdue: Boolean): OpenPaymentsModelNoPeriod = {
+      OpenPaymentsModelNoPeriod(
         officerAssessmentDebitCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
-        LocalDate.parse("2018-01-01"),
-        LocalDate.parse("2018-02-02"),
         "18AA",
         overdue
       )
@@ -291,13 +289,11 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
   "Rendering an VAT Officer's Assessment Default Interest charge" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
-      OpenPaymentsModelWithPeriod(
+    def generateModel(overdue: Boolean): OpenPaymentsModelNoPeriod = {
+      OpenPaymentsModelNoPeriod(
         officerAssessmentDefaultInterest,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
-        LocalDate.parse("2018-01-01"),
-        LocalDate.parse("2018-02-02"),
         "18AA",
         overdue
       )

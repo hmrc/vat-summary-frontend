@@ -48,6 +48,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
     case payment: OpenPaymentsModelWithPeriod => payment.paymentType match {
       case `vatReturnDebitCharge` => messages("openPayments.vatReturn", displayDateRange(payment.start, payment.end)).trim
       case `errorCorrectionDebitCharge` => messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.start, payment.end)).trim
+      case _ => ""
     }
     case _ => ""
   }

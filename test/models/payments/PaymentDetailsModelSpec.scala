@@ -23,7 +23,7 @@ class PaymentDetailsModelSpec extends UnitSpec {
 
   "Payment details when converted to JSON" should {
     "result in the correct JSON format" in {
-      val payment = PaymentDetailsModelWithPeriod(
+      val payment = PaymentDetailsModel(
         "vat",
         "123456789",
         123456,
@@ -53,9 +53,9 @@ class PaymentDetailsModelSpec extends UnitSpec {
           |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
           |}
         """.stripMargin
-      ).toString()
+      )
 
-      val actualJson = PaymentDetailsModel.writes.writes(payment).toString()
+      val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
 
       actualJson shouldBe expectedJson
     }

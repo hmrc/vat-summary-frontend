@@ -50,6 +50,10 @@ case class OpenPaymentsModelWithPeriod(paymentType: String,
       messages("openPayments.centralAssessmentSubmit")
     }"
     case `errorCorrectionDebitCharge` => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
+    case `vatAdditionalAssessmentInterest` =>
+      s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(start, end)}).trim}"
+    case `vatBNPofRegPre2010` =>
+      s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(start, end)}).trim}"
   }
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
@@ -74,6 +78,15 @@ case class OpenPaymentsModelNoPeriod(paymentType: String,
   override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
     case `officerAssessmentDebitCharge` => messages("openPayments.officersAssessment")
     case `officerAssessmentDefaultInterest` => messages("openPayments.oaDefaultInterest")
+    case `vatOfficersAssessment` => messages("openPayments.vatOfficersAssessment")
+    case `vatBnpRegPost2010` => messages("openPayments.vatBnpRegPost2010")
+    case `vatFtnMatPre2010` => messages("openPayments.vatFtnMatPre2010")
+    case `vatFtnMatPost2010` => messages("openPayments.vatFtnMatPost2010")
+    case `vatMiscPenalty` => messages("openPayments.vatMiscPenalty")
+    case `vatFtnEachpartner` => messages("openPayments.vatFtnEachpartner")
+    case `vatMpPre2009` => messages("openPayments.vatMpPre2009")
+    case `vatMpRepeatedPre2009` => messages("openPayments.vatMpRepeatedPre2009")
+    case `vatCivilEvasionPenalty` => messages("openPayments.vatCivilEvasionPenalty")
   }
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePaymentNoPeriod(

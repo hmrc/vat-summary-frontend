@@ -69,8 +69,8 @@ object PaymentDetailsModel {
     )
 
   implicit val writes: Writes[PaymentDetailsModel] = Writes {
-    case model: PaymentDetailsModelWithPeriod => Json.toJson(model)
-    case model: PaymentDetailsModelNoPeriod => Json.toJson(model)
+    case model: PaymentDetailsModelWithPeriod => PaymentDetailsModelWithPeriod.writes.writes(model)
+    case model: PaymentDetailsModelNoPeriod => PaymentDetailsModelNoPeriod.writes.writes(model)
   }
 }
 
