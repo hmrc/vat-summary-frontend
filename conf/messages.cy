@@ -31,10 +31,10 @@ partials.btaHome.claimEnrolment.heading = Mae''ch asiant wedi''ch cofrestru ar g
 partials.btaHome.claimEnrolment.mandationInfo = O fis Ebrill 2019 ymlaen, bydd yn rhaid i fusnesau sydd wedi cofrestru ar gyfer TAW, ac sydd â throsiant gwerth £85,000 neu fwy, ddefnyddio meddalwedd trydydd parti berthnasol i gyflwyno''u Ffurflenni TAW.
 partials.btaHome.claimEnrolment.addEnrolment = Ychwanegu Troi Treth yn Ddigidol ar gyfer TAW at fy nghyfrif
 
-partials.btaHome.partialMigration.heading = Your Making Tax Digital for VAT account is being set up
-partials.btaHome.partialMigration.line1 = You were recently signed up to the new Making Tax Digital service. This is so you can submit your VAT Returns to HMRC using compatible software.
-partials.btaHome.partialMigration.line2 = It will take up to 72 hours for your account to be set up.
-partials.btaHome.partialMigration.line3 = Check back again later.
+partials.btaHome.partialMigration.heading = Mae''ch cyfrif Troi Treth yn Ddigidol ar gyfer TAW wrthi''n cael ei greu
+partials.btaHome.partialMigration.line1 = Cawsoch eich cofrestru''n ddiweddar ar gyfer y gwasanaeth newydd, Troi Treth yn Ddigidol. Mae hyn er mwyn sicrhau eich bod yn gallu cyflwyno''ch Ffurflenni TAW i CThEM gan ddefnyddio meddalwedd gydweddol.
+partials.btaHome.partialMigration.line2 = Bydd yn cymryd hyd at 72 awr i greu''ch cyfrif.
+partials.btaHome.partialMigration.line3 = Dewch yn ôl yn nes ymlaen.
 
 vatDetails.title = Your VAT details
 vatDetails.vatCertificate.view = See your business information and other details.
