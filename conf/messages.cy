@@ -23,12 +23,12 @@ userResearch.close = No thanks
 userResearch.close.context = I do not want to enter the survey
 
 partials.btaHome.vatSection.reporting.heading = TAW - Troi Treth yn Ddigidol
-partials.btaHome.vatSection.deadlines = Gallwch weld yr hyn sydd arnoch, dyddiadau cau’ch Ffurflenni TAW, hanes eich taliadau, Ffurflenni TAW a gyflwynwyd yn flaenorol, a gwneud taliadau TAW.
-partials.btaHome.vatSection.updateDetails = Gallwch hefyd ddiweddaru rhai o’ch manylion TAW.
+partials.btaHome.vatSection.deadlines = Gallwch weld yr hyn sydd arnoch, dyddiadau cau''ch Ffurflenni TAW, hanes eich taliadau, Ffurflenni TAW a gyflwynwyd yn flaenorol, a gwneud taliadau TAW.
+partials.btaHome.vatSection.updateDetails = Gallwch hefyd ddiweddaru rhai o''ch manylion TAW.
 partials.btaHome.vatSection.viewVatDetails = Gweld eich manylion TAW
 
-partials.btaHome.claimEnrolment.heading = Mae’ch asiant wedi’ch cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
-partials.btaHome.claimEnrolment.mandationInfo = O fis Ebrill 2019 ymlaen, bydd yn rhaid i fusnesau sydd wedi cofrestru ar gyfer TAW, ac sydd â throsiant gwerth £85,000 neu fwy, ddefnyddio meddalwedd trydydd parti berthnasol i gyflwyno’u Ffurflenni TAW.
+partials.btaHome.claimEnrolment.heading = Mae''ch asiant wedi''ch cofrestru ar gyfer Troi Treth yn Ddigidol ar gyfer TAW
+partials.btaHome.claimEnrolment.mandationInfo = O fis Ebrill 2019 ymlaen, bydd yn rhaid i fusnesau sydd wedi cofrestru ar gyfer TAW, ac sydd â throsiant gwerth £85,000 neu fwy, ddefnyddio meddalwedd trydydd parti berthnasol i gyflwyno''u Ffurflenni TAW.
 partials.btaHome.claimEnrolment.addEnrolment = Ychwanegu Troi Treth yn Ddigidol ar gyfer TAW at fy nghyfrif
 
 partials.btaHome.partialMigration.heading = Your Making Tax Digital for VAT account is being set up

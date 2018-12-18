@@ -181,7 +181,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
     s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPaymentHistoryPostfix)}"
   }
 
-  //Translation
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
