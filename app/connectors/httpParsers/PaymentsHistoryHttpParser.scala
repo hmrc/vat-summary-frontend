@@ -16,9 +16,9 @@
 
 package connectors.httpParsers
 
-import common.FinancialTransactionsConstants
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
+import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsArray, JsValue, Json}
@@ -41,23 +41,23 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
 
   private def removeNonVatReturnCharges(json: JsValue): JsValue = {
 
-    val validCharges: Set[String] = Set(
-      FinancialTransactionsConstants.vatReturnDebitCharge,
-      FinancialTransactionsConstants.vatReturnCreditCharge,
-      FinancialTransactionsConstants.officerAssessmentDebitCharge,
-      FinancialTransactionsConstants.officerAssessmentCreditCharge,
-      FinancialTransactionsConstants.vatCentralAssessment,
-      FinancialTransactionsConstants.vatDefaultSurcharge,
-      FinancialTransactionsConstants.errorCorrectionCreditCharge,
-      FinancialTransactionsConstants.errorCorrectionDebitCharge,
-      FinancialTransactionsConstants.vatRepaymentSupplement,
-      FinancialTransactionsConstants.officerAssessmentDefaultInterest
+    val validCharges: Set[ChargeType] = Set(
+      ReturnDebitCharge,
+      ReturnCreditCharge,
+      OADebitCharge,
+      OACreditCharge,
+      CentralAssessmentCharge,
+      DefaultSurcharge,
+      ErrorCorrectionCreditCharge,
+      ErrorCorrectionDebitCharge,
+      RepaymentSupplement,
+      OADefaultInterestCharge
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
 
     val vatReturnCharges = charges.filter { charge =>
-      val chargeType: String = (charge \ "chargeType").as[String]
+      val chargeType: ChargeType = (charge \ "chargeType").as[ChargeType]
       validCharges.contains(chargeType)
     }
     Json.obj("financialTransactions" -> JsArray(vatReturnCharges))

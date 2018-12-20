@@ -16,9 +16,8 @@
 
 package views.templates.payments
 
-import common.FinancialTransactionsConstants._
 import javax.inject.Inject
-import models.payments.{OpenPaymentsModel, OpenPaymentsModelWithPeriod}
+import models.payments._
 import play.api.i18n.Messages
 import views.html.templates.formatters.dates.displayDateRange
 
@@ -28,26 +27,26 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
 
   val description: String = payment.whatYouOweDescription
 
-  val payLinkText: Option[String] = (payment.paymentType, hasDirectDebit) match {
-    case (`vatReturnDebitCharge`, Some(true)) => None
-    case (`vatCentralAssessment`, _) => Some(messages("openPayments.payEstimate"))
+  val payLinkText: Option[String] = (payment.chargeType, hasDirectDebit) match {
+    case (ReturnDebitCharge, Some(true)) => None
+    case (CentralAssessmentCharge, _) => Some(messages("openPayments.payEstimate"))
     case (_, _) => Some(messages("openPayments.makePayment"))
   }
 
-  val viewReturnEnabled: Boolean = payment.paymentType match {
-    case `vatReturnDebitCharge` | `errorCorrectionDebitCharge` => true
+  val viewReturnEnabled: Boolean = payment.chargeType match {
+    case ReturnDebitCharge | ErrorCorrectionDebitCharge => true
     case _ => false
   }
 
-  val overdueContext: String = payment.paymentType match {
-    case `vatReturnDebitCharge` => if (payment.overdue) messages("common.overdue") else ""
+  val overdueContext: String = payment.chargeType match {
+    case ReturnDebitCharge => if (payment.overdue) messages("common.overdue") else ""
     case _ => if (payment.overdue) messages("common.isOverdue") else ","
   }
 
   val viewReturnContext: String = payment match {
-    case payment: OpenPaymentsModelWithPeriod => payment.paymentType match {
-      case `vatReturnDebitCharge` => messages("openPayments.vatReturn", displayDateRange(payment.start, payment.end)).trim
-      case `errorCorrectionDebitCharge` => messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.start, payment.end)).trim
+    case payment: OpenPaymentsModelWithPeriod => payment.chargeType match {
+      case ReturnDebitCharge => messages("openPayments.vatReturn", displayDateRange(payment.start, payment.end)).trim
+      case ErrorCorrectionDebitCharge => messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.start, payment.end)).trim
       case _ => ""
     }
     case _ => ""

@@ -24,7 +24,7 @@ sealed trait PaymentDetailsModel {
   val amountInPence: Long
   val returnUrl: String
   val backUrl: String
-  val chargeType: String
+  val chargeType: ChargeType
   val dueDate: String
 
   val auditDetail: Map[String, String]
@@ -39,7 +39,7 @@ object PaymentDetailsModel {
             taxPeriodYear: Int,
             returnUrl: String,
             backUrl: String,
-            chargeType: String,
+            chargeType: ChargeType,
             dueDate: String): PaymentDetailsModel =
     PaymentDetailsModelWithPeriod(taxType,
     taxReference,
@@ -57,7 +57,7 @@ object PaymentDetailsModel {
             amountInPence: Long,
             returnUrl: String,
             backUrl: String,
-            chargeType: String,
+            chargeType: ChargeType,
             dueDate: String): PaymentDetailsModel =
     PaymentDetailsModelNoPeriod(taxType,
       taxReference,
@@ -81,7 +81,7 @@ case class PaymentDetailsModelWithPeriod(taxType: String,
                                          taxPeriodYear: Int,
                                          returnUrl: String,
                                          backUrl: String,
-                                         chargeType: String,
+                                         chargeType: ChargeType,
                                          dueDate: String) extends PaymentDetailsModel {
 
   val auditDetail = Map(
@@ -92,7 +92,7 @@ case class PaymentDetailsModelWithPeriod(taxType: String,
     "taxPeriodYear" -> taxPeriodYear.toString,
     "returnUrl" -> returnUrl,
     "backUrl" -> backUrl,
-    "chargeType" -> chargeType,
+    "chargeType" -> chargeType.value,
     "dueDate" -> dueDate
   )
 
@@ -110,7 +110,7 @@ object PaymentDetailsModelWithPeriod {
           "month" -> paymentDetail.taxPeriodMonth,
           "year" -> paymentDetail.taxPeriodYear
         ),
-        "chargeType" -> paymentDetail.chargeType,
+        "chargeType" -> paymentDetail.chargeType.value,
         "dueDate" -> paymentDetail.dueDate
       ),
       "returnUrl" -> paymentDetail.returnUrl,
@@ -124,7 +124,7 @@ case class PaymentDetailsModelNoPeriod(taxType: String,
                                        amountInPence: Long,
                                        returnUrl: String,
                                        backUrl: String,
-                                       chargeType: String,
+                                       chargeType: ChargeType,
                                        dueDate: String) extends PaymentDetailsModel {
 
   val auditDetail = Map(
@@ -133,7 +133,7 @@ case class PaymentDetailsModelNoPeriod(taxType: String,
     "amountInPence" -> amountInPence.toString,
     "returnUrl" -> returnUrl,
     "backUrl" -> backUrl,
-    "chargeType" -> chargeType,
+    "chargeType" -> chargeType.value,
     "dueDate" -> dueDate
   )
 
@@ -147,7 +147,7 @@ object PaymentDetailsModelNoPeriod {
       "reference" -> paymentDetail.taxReference,
       "amountInPence" -> paymentDetail.amountInPence,
       "extras" -> Json.obj(
-        "chargeType" -> paymentDetail.chargeType,
+        "chargeType" -> paymentDetail.chargeType.value,
         "dueDate" -> paymentDetail.dueDate
       ),
       "returnUrl" -> paymentDetail.returnUrl,

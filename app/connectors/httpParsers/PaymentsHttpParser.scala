@@ -16,10 +16,9 @@
 
 package connectors.httpParsers
 
-import common.FinancialTransactionsConstants
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
-import models.payments.Payments
+import models.payments._
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsArray, JsValue, Json}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
@@ -40,33 +39,32 @@ object PaymentsHttpParser extends ResponseHttpParsers {
 
   private def removeNonVatReturnCharges(json: JsValue): JsValue = {
 
-    val validCharges: Set[String] = Set(
-      FinancialTransactionsConstants.vatReturnDebitCharge,
-      FinancialTransactionsConstants.officerAssessmentDebitCharge,
-      FinancialTransactionsConstants.vatDefaultSurcharge,
-      FinancialTransactionsConstants.vatCentralAssessment,
-      FinancialTransactionsConstants.errorCorrectionDebitCharge,
-      FinancialTransactionsConstants.officerAssessmentDefaultInterest,
-      FinancialTransactionsConstants.errorCorrectionDebitCharge,
-      FinancialTransactionsConstants.vatAdditionalAssessmentFurtherInterest,
-      FinancialTransactionsConstants.vatAdditionalAssessment,
-      FinancialTransactionsConstants.vatBNPofRegPre2010,
-      FinancialTransactionsConstants.vatOfficersAssessment,
-      FinancialTransactionsConstants.vatBnpRegPost2010,
-      FinancialTransactionsConstants.vatFtnMatPre2010,
-      FinancialTransactionsConstants.vatFtnMatPost2010,
-      FinancialTransactionsConstants.vatMiscPenalty,
-      FinancialTransactionsConstants.vatFtnEachpartner,
-      FinancialTransactionsConstants.vatMpPre2009,
-      FinancialTransactionsConstants.vatMpRepeatedPre2009,
-      FinancialTransactionsConstants.vatCivilEvasionPenalty,
-      FinancialTransactionsConstants.vatAdditionalAssessmentInterest
+    val validCharges: Set[ChargeType] = Set(
+      ReturnDebitCharge,
+      OADebitCharge,
+      DefaultSurcharge,
+      CentralAssessmentCharge,
+      ErrorCorrectionDebitCharge,
+      OADefaultInterestCharge,
+      AAFurtherInterestCharge,
+      AACharge,
+      BnpRegPre2010Charge,
+      OACharge,
+      BnpRegPost2010Charge,
+      FtnMatPre2010Charge,
+      FtnMatPost2010Charge,
+      MiscPenaltyCharge,
+      FtnEachPartnerCharge,
+      MpPre2009Charge,
+      MpRepeatedPre2009Charge,
+      CivilEvasionPenaltyCharge,
+      AAInterestCharge
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
 
     val vatReturnCharges = charges.filter { charge =>
-      val chargeType: String = (charge \ "chargeType").as[String]
+      val chargeType: ChargeType = (charge \ "chargeType").as[ChargeType]
       validCharges.contains(chargeType)
     }
 
