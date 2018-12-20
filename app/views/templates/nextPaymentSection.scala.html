@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.dates._
 @import views.html.templates.formatters.links._
 @import java.time.LocalDate
 @import config.AppConfig
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
 @(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isHybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User)
 

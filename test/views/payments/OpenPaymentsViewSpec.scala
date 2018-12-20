@@ -72,12 +72,12 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   val noPayment = Seq()
   val payments = Seq(
     OpenPaymentsModelWithPeriod(
-      vatReturnDebitCharge,
-      2000000000.01,
-      LocalDate.parse("2001-04-08"),
-      LocalDate.parse("2001-01-01"),
-      LocalDate.parse("2001-03-31"),
-      "#001",
+      paymentType = vatReturnDebitCharge,
+      amount = 2000000000.01,
+      due = LocalDate.parse("2001-04-08"),
+      start = LocalDate.parse("2001-01-01"),
+      end = LocalDate.parse("2001-03-31"),
+      periodKey = "#001",
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(

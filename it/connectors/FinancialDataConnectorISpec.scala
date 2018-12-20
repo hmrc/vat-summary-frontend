@@ -19,10 +19,10 @@ package connectors
 import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import common.FinancialTransactionsConstants
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
-import models.payments.{Payment, Payments}
-import common.FinancialTransactionsConstants
+import models.payments.{PaymentWithPeriod, Payments}
 import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -44,21 +44,21 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingOpenPayments
 
       val expected = Right(Payments(Seq(
-        Payment(
-          "VAT Return Debit Charge",
-          LocalDate.parse("2015-03-01"),
-          LocalDate.parse("2015-03-31"),
-          LocalDate.parse("2019-01-15"),
-          10000,
-          "15AC"
+        PaymentWithPeriod(
+          chargeType = "VAT Return Debit Charge",
+          start = LocalDate.parse("2015-03-01"),
+          end = LocalDate.parse("2015-03-31"),
+          due = LocalDate.parse("2019-01-15"),
+          outstandingAmount = 10000,
+          periodKey = "15AC"
         ),
-        Payment(
-          "VAT Return Debit Charge",
-          LocalDate.parse("2015-03-01"),
-          LocalDate.parse("2015-03-31"),
-          LocalDate.parse("2019-01-16"),
-          10000,
-          "15AC"
+        PaymentWithPeriod(
+          chargeType = "VAT Return Debit Charge",
+          start = LocalDate.parse("2015-03-01"),
+          end = LocalDate.parse("2015-03-31"),
+          due = LocalDate.parse("2019-01-16"),
+          outstandingAmount = 10000,
+          periodKey = "15AC"
         )
       )))
 

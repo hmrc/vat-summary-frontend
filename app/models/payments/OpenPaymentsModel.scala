@@ -21,7 +21,8 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants._
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, Writes}
-import views.html.templates.formatters.dates.displayDateRange
+import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
+
 
 sealed trait OpenPaymentsModel {
   val paymentType: String
@@ -30,52 +31,9 @@ sealed trait OpenPaymentsModel {
   val overdue: Boolean
   val periodKey: String
 
-  def whatYouOweDescription(implicit messages: Messages): String
   def makePaymentRedirect: String
-}
 
-case class OpenPaymentsModelWithPeriod(paymentType: String,
-                                       amount: BigDecimal,
-                                       due: LocalDate,
-                                       start: LocalDate,
-                                       end: LocalDate,
-                                       periodKey: String,
-                                       overdue: Boolean = false) extends OpenPaymentsModel {
-
-  override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
-    case `vatReturnDebitCharge` => messages("openPayments.vatReturn", displayDateRange(start, end))
-    case `vatDefaultSurcharge` => messages("openPayments.surcharge", displayDateRange(start, end))
-    case `vatCentralAssessment` => s"${
-      messages("openPayments.centralAssessment", displayDateRange(start, end)).trim}${
-      messages("openPayments.centralAssessmentSubmit")
-    }"
-    case `errorCorrectionDebitCharge` => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
-    case `vatAdditionalAssessmentInterest` =>
-      s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(start, end)}).trim}"
-    case `vatBNPofRegPre2010` =>
-      s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(start, end)}).trim}"
-  }
-
-  override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
-    amountInPence = (amount * 100).toLong,
-    taxPeriodMonth = end.getMonthValue,
-    taxPeriodYear = end.getYear,
-    paymentType,
-    dueDate = due.toString
-  ).url
-
-}
-object OpenPaymentsModelWithPeriod {
-  implicit val writes: Writes[OpenPaymentsModelWithPeriod] = Json.writes[OpenPaymentsModelWithPeriod]
-}
-
-case class OpenPaymentsModelNoPeriod(paymentType: String,
-                                     amount: BigDecimal,
-                                     due: LocalDate,
-                                     periodKey: String,
-                                     overdue: Boolean = false) extends OpenPaymentsModel {
-
-  override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
+  def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
     case `officerAssessmentDebitCharge` => messages("openPayments.officersAssessment")
     case `officerAssessmentDefaultInterest` => messages("openPayments.oaDefaultInterest")
     case `vatOfficersAssessment` => messages("openPayments.vatOfficersAssessment")
@@ -88,16 +46,6 @@ case class OpenPaymentsModelNoPeriod(paymentType: String,
     case `vatMpRepeatedPre2009` => messages("openPayments.vatMpRepeatedPre2009")
     case `vatCivilEvasionPenalty` => messages("openPayments.vatCivilEvasionPenalty")
   }
-
-  override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePaymentNoPeriod(
-    amountInPence = (amount * 100).toLong,
-    paymentType,
-    dueDate = due.toString
-  ).url
-
-}
-object OpenPaymentsModelNoPeriod {
-  implicit val writes: Writes[OpenPaymentsModelNoPeriod] = Json.writes[OpenPaymentsModelNoPeriod]
 }
 
 object OpenPaymentsModel {
@@ -139,4 +87,61 @@ object OpenPaymentsModel {
     case model: OpenPaymentsModelWithPeriod => Json.toJson(model)(OpenPaymentsModelWithPeriod.writes)
     case model: OpenPaymentsModelNoPeriod => Json.toJson(model)(OpenPaymentsModelNoPeriod.writes)
   }
+}
+
+case class OpenPaymentsModelWithPeriod(paymentType: String,
+                                       amount: BigDecimal,
+                                       due: LocalDate,
+                                       start: LocalDate,
+                                       end: LocalDate,
+                                       periodKey: String,
+                                       overdue: Boolean = false) extends OpenPaymentsModel {
+
+  override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
+    case `vatReturnDebitCharge` => messages("openPayments.vatReturn", displayDateRange(start, end))
+    case `vatDefaultSurcharge` => messages("openPayments.surcharge", displayDateRange(start, end))
+    case `vatCentralAssessment` => s"${
+      messages("openPayments.centralAssessment", displayDateRange(start, end)).trim}${
+      messages("openPayments.centralAssessmentSubmit")
+    }"
+    case `errorCorrectionDebitCharge` => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
+    case `vatAdditionalAssessmentInterest` =>
+      s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(start, end)}).trim}"
+    case `vatBNPofRegPre2010` =>
+      s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(start, end)}).trim}"
+    case `vatAdditionalAssessmentFurtherInterest` =>
+      s"${messages.apply("openPayments.vatAAFurtherInterest", {displayDateRange(start, end)}).trim}"
+    case `vatAdditionalAssessment` =>
+      s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(start, end)}).trim}"
+    case _ => super.whatYouOweDescription
+  }
+
+  override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
+    amountInPence = (amount * 100).toLong,
+    taxPeriodMonth = end.getMonthValue,
+    taxPeriodYear = end.getYear,
+    paymentType,
+    dueDate = due.toString
+  ).url
+
+}
+object OpenPaymentsModelWithPeriod {
+  implicit val writes: Writes[OpenPaymentsModelWithPeriod] = Json.writes[OpenPaymentsModelWithPeriod]
+}
+
+case class OpenPaymentsModelNoPeriod(paymentType: String,
+                                     amount: BigDecimal,
+                                     due: LocalDate,
+                                     periodKey: String,
+                                     overdue: Boolean = false) extends OpenPaymentsModel {
+
+  override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePaymentNoPeriod(
+    amountInPence = (amount * 100).toLong,
+    paymentType,
+    dueDate = due.toString
+  ).url
+
+}
+object OpenPaymentsModelNoPeriod {
+  implicit val writes: Writes[OpenPaymentsModelNoPeriod] = Json.writes[OpenPaymentsModelNoPeriod]
 }

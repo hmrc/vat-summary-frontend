@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.dates._
 @import java.time.LocalDate
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
 @(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 

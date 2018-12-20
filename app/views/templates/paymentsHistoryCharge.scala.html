@@ -15,10 +15,11 @@
  *@
 
 @import views.templates.PaymentsHistoryChargeHelper
-@import views.html.templates.formatters.dates._
 @import views.html.templates.formatters.money._
 @import models.viewModels.PaymentsHistoryModel
 @import java.time.LocalDate
+@import views.templates.formatters.dates.DisplayDateRangeHelper.{displayDateRange,displayDate}
+
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)
 

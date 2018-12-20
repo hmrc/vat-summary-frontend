@@ -20,7 +20,7 @@ import common.FinancialTransactionsConstants._
 import javax.inject.Inject
 import models.payments.{OpenPaymentsModel, OpenPaymentsModelWithPeriod}
 import play.api.i18n.Messages
-import views.html.templates.formatters.dates.displayDateRange
+import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
                                        hasDirectDebit: Option[Boolean],

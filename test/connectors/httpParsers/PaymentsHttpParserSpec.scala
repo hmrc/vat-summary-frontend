@@ -21,7 +21,7 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants
 import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 import models.errors._
-import models.payments.{Payment, PaymentWithPeriod, Payments}
+import models.payments.{PaymentWithPeriod, Payments}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -144,7 +144,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#008"
+              "periodKey" -> "#018"
             ),
             Json.obj(
               "mainType" -> FinancialTransactionsConstants.vatAdditionalAssessment,
@@ -363,6 +363,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#008"
+        ),
+        PaymentWithPeriod(
+          FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#018"
         ),
         PaymentWithPeriod(
           FinancialTransactionsConstants.vatAdditionalAssessment,
