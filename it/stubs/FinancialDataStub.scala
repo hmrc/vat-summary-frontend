@@ -17,8 +17,8 @@
 package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.FinancialTransactionsConstants
 import helpers.WireMockMethods
+import models.payments.{ReturnCharge, ReturnCreditCharge, ReturnDebitCharge}
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 
@@ -72,8 +72,8 @@ object FinancialDataStub extends WireMockMethods {
        |    "processingDate" : "2018-03-07T09:30:00.000Z",
        |    "financialTransactions" : [
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-       |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "chargeType" : "${ReturnDebitCharge}",
+       |       "mainType" : "${ReturnCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -100,8 +100,8 @@ object FinancialDataStub extends WireMockMethods {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.vatReturnCreditCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "chargeType" : "${ReturnCreditCharge}",
+       |        "mainType" : "${ReturnCharge}",
        |        "periodKey" : "17BB",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",

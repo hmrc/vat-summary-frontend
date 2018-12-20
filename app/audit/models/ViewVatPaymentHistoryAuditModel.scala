@@ -44,7 +44,7 @@ case class ViewVatPaymentHistoryAuditModel(vrn: String,
 
     PaymentHistoryDetails(
       vrn,
-      payment.chargeType,
+      payment.chargeType.value,
       payment.taxPeriodFrom,
       payment.taxPeriodTo,
       payment.clearedDate,

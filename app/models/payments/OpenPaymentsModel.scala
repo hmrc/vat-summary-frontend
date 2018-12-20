@@ -18,51 +18,51 @@ package models.payments
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants._
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, Writes}
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 
 sealed trait OpenPaymentsModel {
-  val paymentType: String
+  val chargeType: ChargeType
   val amount: BigDecimal
   val due: LocalDate
   val overdue: Boolean
   val periodKey: String
 
-  def makePaymentRedirect: String
-
-  def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
-    case `officerAssessmentDebitCharge` => messages("openPayments.officersAssessment")
-    case `officerAssessmentDefaultInterest` => messages("openPayments.oaDefaultInterest")
-    case `vatOfficersAssessment` => messages("openPayments.vatOfficersAssessment")
-    case `vatBnpRegPost2010` => messages("openPayments.vatBnpRegPost2010")
-    case `vatFtnMatPre2010` => messages("openPayments.vatFtnMatPre2010")
-    case `vatFtnMatPost2010` => messages("openPayments.vatFtnMatPost2010")
-    case `vatMiscPenalty` => messages("openPayments.vatMiscPenalty")
-    case `vatFtnEachpartner` => messages("openPayments.vatFtnEachpartner")
-    case `vatMpPre2009` => messages("openPayments.vatMpPre2009")
-    case `vatMpRepeatedPre2009` => messages("openPayments.vatMpRepeatedPre2009")
-    case `vatCivilEvasionPenalty` => messages("openPayments.vatCivilEvasionPenalty")
+  def whatYouOweDescription(implicit messages: Messages): String =  chargeType match {
+    case OADebitCharge => messages("openPayments.officersAssessment")
+    case OADefaultInterestCharge => messages("openPayments.oaDefaultInterest")
+    case OAFurtherInterestCharge => messages("openPayments.oaFurtherInterest")
+    case OACharge => messages("openPayments.vatOfficersAssessment")
+    case BnpRegPost2010Charge => messages("openPayments.vatBnpRegPost2010")
+    case FtnMatPre2010Charge => messages("openPayments.vatFtnMatPre2010")
+    case FtnMatPost2010Charge => messages("openPayments.vatFtnMatPost2010")
+    case MiscPenaltyCharge => messages("openPayments.vatMiscPenalty")
+    case FtnEachPartnerCharge => messages("openPayments.vatFtnEachpartner")
+    case MpPre2009Charge => messages("openPayments.vatMpPre2009")
+    case MpRepeatedPre2009Charge => messages("openPayments.vatMpRepeatedPre2009")
+    case CivilEvasionPenaltyCharge => messages("openPayments.vatCivilEvasionPenalty")
   }
+
+  def makePaymentRedirect: String
 }
 
 object OpenPaymentsModel {
 
-  def apply(paymentType: String,
+  def apply(chargeType: ChargeType,
             amount: BigDecimal,
             due: LocalDate,
             start: LocalDate,
             end: LocalDate,
             periodKey: String,
-            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(paymentType, amount, due, start, end, periodKey, overdue)
+            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(chargeType, amount, due, start, end, periodKey, overdue)
 
-  def apply(paymentType: String,
+  def apply(chargeType: ChargeType,
             amount: BigDecimal,
             due: LocalDate,
             periodKey: String,
-            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelNoPeriod(paymentType, amount, due, periodKey, overdue)
+            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelNoPeriod(chargeType, amount, due, periodKey, overdue)
 
   def apply(payment: Payment, overdue: Boolean)(implicit messages: Messages): OpenPaymentsModel = payment match {
     case payment: PaymentWithPeriod => OpenPaymentsModelWithPeriod(
@@ -89,7 +89,7 @@ object OpenPaymentsModel {
   }
 }
 
-case class OpenPaymentsModelWithPeriod(paymentType: String,
+case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        amount: BigDecimal,
                                        due: LocalDate,
                                        start: LocalDate,
@@ -97,21 +97,21 @@ case class OpenPaymentsModelWithPeriod(paymentType: String,
                                        periodKey: String,
                                        overdue: Boolean = false) extends OpenPaymentsModel {
 
-  override def whatYouOweDescription(implicit messages: Messages): String = paymentType match {
-    case `vatReturnDebitCharge` => messages("openPayments.vatReturn", displayDateRange(start, end))
-    case `vatDefaultSurcharge` => messages("openPayments.surcharge", displayDateRange(start, end))
-    case `vatCentralAssessment` => s"${
+  override def whatYouOweDescription(implicit messages: Messages): String = chargeType match {
+    case ReturnDebitCharge => messages("openPayments.vatReturn", displayDateRange(start, end))
+    case DefaultSurcharge => messages("openPayments.surcharge", displayDateRange(start, end))
+    case CentralAssessmentCharge => s"${
       messages("openPayments.centralAssessment", displayDateRange(start, end)).trim}${
       messages("openPayments.centralAssessmentSubmit")
     }"
-    case `errorCorrectionDebitCharge` => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
-    case `vatAdditionalAssessmentInterest` =>
+    case ErrorCorrectionDebitCharge => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
+    case AAInterestCharge =>
       s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(start, end)}).trim}"
-    case `vatBNPofRegPre2010` =>
+    case BnpRegPre2010Charge =>
       s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(start, end)}).trim}"
-    case `vatAdditionalAssessmentFurtherInterest` =>
+    case AAFurtherInterestCharge =>
       s"${messages.apply("openPayments.vatAAFurtherInterest", {displayDateRange(start, end)}).trim}"
-    case `vatAdditionalAssessment` =>
+    case AACharge =>
       s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(start, end)}).trim}"
     case _ => super.whatYouOweDescription
   }
@@ -120,16 +120,26 @@ case class OpenPaymentsModelWithPeriod(paymentType: String,
     amountInPence = (amount * 100).toLong,
     taxPeriodMonth = end.getMonthValue,
     taxPeriodYear = end.getYear,
-    paymentType,
+    chargeType.value,
     dueDate = due.toString
   ).url
 
 }
 object OpenPaymentsModelWithPeriod {
-  implicit val writes: Writes[OpenPaymentsModelWithPeriod] = Json.writes[OpenPaymentsModelWithPeriod]
+  implicit val writes: Writes[OpenPaymentsModelWithPeriod] = Writes { model =>
+    Json.obj(
+      "paymentType" -> model.chargeType,
+      "amount" -> model.amount,
+      "due" -> model.due,
+      "start" -> model.start,
+      "end" -> model.end,
+      "periodKey" -> model.periodKey,
+      "overdue" -> model.overdue
+    )
+  }
 }
 
-case class OpenPaymentsModelNoPeriod(paymentType: String,
+case class OpenPaymentsModelNoPeriod(chargeType: ChargeType,
                                      amount: BigDecimal,
                                      due: LocalDate,
                                      periodKey: String,
@@ -137,11 +147,19 @@ case class OpenPaymentsModelNoPeriod(paymentType: String,
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePaymentNoPeriod(
     amountInPence = (amount * 100).toLong,
-    paymentType,
+    chargeType.value,
     dueDate = due.toString
   ).url
 
 }
 object OpenPaymentsModelNoPeriod {
-  implicit val writes: Writes[OpenPaymentsModelNoPeriod] = Json.writes[OpenPaymentsModelNoPeriod]
+  implicit val writes: Writes[OpenPaymentsModelNoPeriod] = Writes { model =>
+    Json.obj(
+      "paymentType" -> model.chargeType,
+      "amount" -> model.amount,
+      "due" -> model.due,
+      "periodKey" -> model.periodKey,
+      "overdue" -> model.overdue
+    )
+  }
 }

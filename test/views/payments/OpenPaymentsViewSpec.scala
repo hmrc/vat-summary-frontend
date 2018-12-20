@@ -18,9 +18,8 @@ package views.payments
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants._
 import models.User
-import models.payments.OpenPaymentsModelWithPeriod
+import models.payments._
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -72,7 +71,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   val noPayment = Seq()
   val payments = Seq(
     OpenPaymentsModelWithPeriod(
-      paymentType = vatReturnDebitCharge,
+      chargeType = ReturnDebitCharge,
       amount = 2000000000.01,
       due = LocalDate.parse("2001-04-08"),
       start = LocalDate.parse("2001-01-01"),
@@ -81,7 +80,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatReturnDebitCharge,
+      ReturnDebitCharge,
       100.00,
       LocalDate.parse("2002-05-10"),
       LocalDate.parse("2002-02-01"),
@@ -89,7 +88,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "#002"
     ),
     OpenPaymentsModelWithPeriod(
-      vatAdditionalAssessmentInterest,
+      AAInterestCharge,
       300.00,
       LocalDate.parse("2003-04-05"),
       LocalDate.parse("2003-01-01"),
@@ -98,7 +97,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatAdditionalAssessmentFurtherInterest,
+      AAFurtherInterestCharge,
       400.00,
       LocalDate.parse("2004-04-05"),
       LocalDate.parse("2004-01-01"),
@@ -107,7 +106,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatAdditionalAssessment,
+      AACharge,
       500.00,
       LocalDate.parse("2005-04-05"),
       LocalDate.parse("2005-01-01"),
@@ -116,7 +115,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatOfficersAssessment,
+      OACharge,
       600.00,
       LocalDate.parse("2006-04-05"),
       LocalDate.parse("2006-01-01"),
@@ -125,7 +124,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatBNPofRegPre2010,
+      BnpRegPre2010Charge,
       700.00,
       LocalDate.parse("2007-04-05"),
       LocalDate.parse("2007-01-01"),
@@ -134,7 +133,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatBnpRegPost2010,
+      BnpRegPost2010Charge,
       800.00,
       LocalDate.parse("2008-04-05"),
       LocalDate.parse("2008-01-01"),
@@ -143,7 +142,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatFtnMatPre2010,
+      FtnMatPre2010Charge,
       900.00,
       LocalDate.parse("2009-04-05"),
       LocalDate.parse("2009-01-01"),
@@ -152,7 +151,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatFtnMatPost2010,
+      FtnMatPost2010Charge,
       1000.00,
       LocalDate.parse("2010-04-05"),
       LocalDate.parse("2010-01-01"),
@@ -161,7 +160,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatMiscPenalty,
+      MiscPenaltyCharge,
       1100.00,
       LocalDate.parse("2011-04-05"),
       LocalDate.parse("2011-01-01"),
@@ -170,7 +169,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatFtnEachpartner,
+      FtnEachPartnerCharge,
       1200.00,
       LocalDate.parse("2012-04-05"),
       LocalDate.parse("2012-01-01"),
@@ -179,7 +178,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatMpPre2009,
+      MpPre2009Charge,
       1300.00,
       LocalDate.parse("2013-04-05"),
       LocalDate.parse("2013-01-01"),
@@ -188,7 +187,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatMpRepeatedPre2009,
+      MpRepeatedPre2009Charge,
       1400.00,
       LocalDate.parse("2014-04-05"),
       LocalDate.parse("2014-01-01"),
@@ -197,7 +196,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       overdue = true
     ),
     OpenPaymentsModelWithPeriod(
-      vatCivilEvasionPenalty,
+      CivilEvasionPenaltyCharge,
       1500.00,
       LocalDate.parse("2015-04-05"),
       LocalDate.parse("2015-01-01"),

@@ -20,6 +20,7 @@ import audit.AuditingService
 import audit.models.AuditModel
 import connectors.VatSubscriptionConnector
 import controllers.predicates.HybridUserPredicate
+import models.errors.PaymentSetupError
 import models.payments.PaymentDetailsModel
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
@@ -86,7 +87,8 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   "Calling the makePayment action" when {
 
     "the user is logged in" should {
-      "redirected " in new MakePaymentDetailsTest {
+
+      "redirected when returned Right ServiceResponse" in new MakePaymentDetailsTest {
 
         val redirectUrl = "http://www.google.com"
         val expectedRedirectLocation = Some(redirectUrl)
@@ -100,12 +102,30 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(serviceResponse))
         }
 
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequestWithSession)
+        lazy val result: Future[Result] = target.makePaymentNoPeriod(testAmountInPence, testChargeType, testDueDate)(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe expectedRedirectLocation
       }
 
+      "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
+
+        val redirectUrl = "http://www.google.com"
+        val expectedRedirectLocation = Some(redirectUrl)
+        val serviceResponse = Right(redirectUrl)
+
+        override def setup(): Any = {
+          super.setup()
+
+          (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Left(PaymentSetupError)))
+        }
+
+        lazy val result: Future[Result] = target.makePaymentNoPeriod(testAmountInPence, testChargeType, testDueDate)(fakeRequestWithSession)
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
     }
 
     "the user is not logged in" should {
@@ -135,7 +155,79 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+  }
 
+  "Calling the makePaymentNoPeriod action" when {
+
+    "the user is logged in" should {
+
+      "redirected when returned Right ServiceResponse" in new MakePaymentDetailsTest {
+
+        val redirectUrl = "http://www.google.com"
+        val expectedRedirectLocation = Some(redirectUrl)
+        val serviceResponse = Right(redirectUrl)
+
+        override def setup(): Any = {
+          super.setup()
+
+          (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(serviceResponse))
+        }
+
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequestWithSession)
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe expectedRedirectLocation
+      }
+
+      "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
+
+        val redirectUrl = "http://www.google.com"
+        val expectedRedirectLocation = Some(redirectUrl)
+        val serviceResponse = Right(redirectUrl)
+
+        override def setup(): Any = {
+          super.setup()
+
+          (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(Left(PaymentSetupError)))
+        }
+
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequestWithSession)
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "the user is not logged in" should {
+      "return 401 (Unauthorised)" in new MakePaymentDetailsTest {
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
+          ("amountInPence", "10000"),
+          ("taxPeriodMonth", "02"),
+          ("taxPeriodYear", "2018"))
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(request)
+
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+
+    "the user is not authenticated" should {
+      "return 403 (Forbidden)" in new MakePaymentDetailsTest {
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
+          ("amountInPence", "10000"),
+          ("taxPeriodMonth", "02"),
+          ("taxPeriodYear", "2018"))
+        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(request)
+
+        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
   }
 }
 

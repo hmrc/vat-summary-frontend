@@ -16,7 +16,7 @@
 
 package audit
 
-import _root_.models.payments.PaymentDetailsModel
+import _root_.models.payments.{PaymentDetailsModel,ReturnDebitCharge}
 import _root_.models.User
 import _root_.audit.models.PayVatReturnChargeAuditModel
 import uk.gov.hmrc.play.test.UnitSpec
@@ -31,7 +31,7 @@ class PayVatReturnChargeAuditModelSpec extends UnitSpec {
     2018,
     "/homepage",
     "/vat-overview",
-    "ExampleCharge",
+    ReturnDebitCharge,
     "2018-01-01"
   )
 
@@ -54,7 +54,7 @@ class PayVatReturnChargeAuditModelSpec extends UnitSpec {
         "returnUrl" -> "/homepage",
         "backUrl" -> "/vat-overview",
         "paymentRedirectUrl" -> "/payment/pay-my-vat",
-        "chargeType" -> "ExampleCharge",
+        "chargeType" -> ReturnDebitCharge.value,
         "dueDate" -> "2018-01-01"
       )
 

@@ -18,6 +18,7 @@ package views.payments
 
 import java.time.LocalDate
 
+import models.payments.ReturnDebitCharge
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -63,14 +64,14 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         historyYears,
         historyYears.head,
         Seq(PaymentsHistoryModel(
-          chargeType = "VAT Return Debit Charge",
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
           taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
           amount = 123456789,
           clearedDate = Some(LocalDate.parse(s"2018-03-01"))
         ),
           PaymentsHistoryModel(
-            chargeType = "VAT Return Debit Charge",
+            chargeType = ReturnDebitCharge,
             taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
             taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
             amount = 987654321,

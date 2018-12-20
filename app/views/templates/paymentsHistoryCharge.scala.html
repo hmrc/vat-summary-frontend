@@ -31,7 +31,7 @@
   }
 }
 
-@chargeType = @{PaymentsHistoryChargeHelper.getChargeType(transaction.chargeType)}
+@chargeType = @{PaymentsHistoryChargeHelper.getChargeType(transaction.chargeType.value)}
 
 @(chargeType, transaction.clearedDate) match {
 

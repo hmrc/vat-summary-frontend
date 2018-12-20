@@ -25,7 +25,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
 import models.{CustomerInformation, User}
 import models.errors.{DirectDebitStatusError, PaymentsError}
-import models.payments.{OpenPaymentsModel, Payment, PaymentWithPeriod, Payments}
+import models.payments._
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -64,7 +64,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     }
 
     val payment: PaymentWithPeriod = Payment(
-      vatReturnDebitCharge,
+      ReturnDebitCharge,
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
@@ -321,7 +321,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
       val expected = OpenPaymentsViewModel(
         Seq(OpenPaymentsModel(
-          vatReturnDebitCharge,
+          ReturnDebitCharge,
           payment.outstandingAmount,
           payment.due,
           payment.start,

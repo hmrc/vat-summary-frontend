@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import models.{Address, CustomerInformation}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.payments.{Payment, Payments}
+import models.payments.{Payment, Payments, ReturnDebitCharge}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 import scala.concurrent.Future
@@ -28,7 +28,7 @@ import scala.concurrent.Future
 object TestModels {
 
   val payments: Payments = Payments(Seq(Payment(
-    "VAT Return Debit Charge",
+    ReturnDebitCharge,
     LocalDate.parse("2019-01-01"),
     LocalDate.parse("2019-02-02"),
     LocalDate.parse("2019-03-03"),
@@ -55,7 +55,7 @@ object TestModels {
   )))
 
   val overduePayment: Payments = Payments(Seq(Payment(
-    "VAT Return Debit Charge",
+    ReturnDebitCharge,
     LocalDate.parse("2017-01-01"),
     LocalDate.parse("2017-02-02"),
     LocalDate.parse("2017-03-03"),

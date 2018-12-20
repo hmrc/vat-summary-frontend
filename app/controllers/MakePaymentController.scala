@@ -21,7 +21,7 @@ import audit.models.PayVatReturnChargeAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
-import models.payments.{PaymentDetailsModel, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod}
+import models.payments.{ChargeType, PaymentDetailsModel, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
@@ -30,7 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.errors.paymentsError
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 @Singleton
 class MakePaymentController @Inject()(val messagesApi: MessagesApi,
@@ -53,7 +53,7 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           taxPeriodYear = taxPeriodYear,
           returnUrl = appConfig.paymentsReturnUrl,
           backUrl = appConfig.paymentsBackUrl,
-          chargeType = chargeType,
+          chargeType = ChargeType.apply(chargeType),
           dueDate = dueDate
         )
 
@@ -70,7 +70,7 @@ class MakePaymentController @Inject()(val messagesApi: MessagesApi,
           amountInPence = amountInPence,
           returnUrl = appConfig.paymentsReturnUrl,
           backUrl = appConfig.paymentsBackUrl,
-          chargeType = chargeType,
+          chargeType = ChargeType.apply(chargeType),
           dueDate = dueDate
         )
 

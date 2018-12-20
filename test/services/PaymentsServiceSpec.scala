@@ -60,7 +60,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       "return a list of payments sorted by due date in descending order" in new Test {
         val payment1 = PaymentWithPeriod(
-          "VAT Return Debit Charge",
+          ReturnDebitCharge,
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-11-29"),
@@ -68,7 +68,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           ""
         )
         val payment2 = PaymentWithPeriod(
-          "VAT Return Debit Charge",
+          ReturnDebitCharge,
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-12-01"),
@@ -76,7 +76,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           ""
         )
         val payment3 = PaymentWithPeriod(
-          "VAT Return Debit Charge",
+          ReturnDebitCharge,
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2009-01-01"),
@@ -84,7 +84,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           ""
         )
         val payment4 = PaymentWithPeriod(
-          "VAT Return Debit Charge",
+          ReturnDebitCharge,
           LocalDate.parse("2008-01-01"),
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-11-30"),
@@ -105,7 +105,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
       "return an empty list of payments" in new Test {
         val payments = Payments(Seq(PaymentWithPeriod(
-          "VAT Return Credit Charge",
+          ReturnCreditCharge,
           LocalDate.parse("2008-12-06"),
           LocalDate.parse("2009-01-04"),
           LocalDate.parse("2008-12-06"),
@@ -154,7 +154,6 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     val amountInPence: Int = 123456
     val taxPeriodMonth: Int = 2
     val taxPeriodYear: Int = 2018
-    val chargeType: String = "VAT Return Debit Charge"
     val dueDate: String = "2018-08-08"
 
     val paymentDetails = PaymentDetailsModelWithPeriod("vat",
@@ -164,7 +163,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
       taxPeriodYear,
       "http://domain/path",
       "http://domain/return-path",
-      chargeType,
+      ReturnDebitCharge,
       dueDate
     )
 
@@ -219,28 +218,28 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "return a seq of payment history models sorted by clearing date in descending order" in new Test {
 
       val paymentModel1 = PaymentsHistoryModel(
-        chargeType = "VAT Return charge",
+        chargeType = ReturnCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
         amount = exampleAmount,
         clearedDate = Some(LocalDate.parse("2018-01-30"))
       )
       val paymentModel2 = PaymentsHistoryModel(
-        chargeType = "VAT Return charge",
+        chargeType = ReturnCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
         amount = exampleAmount,
         clearedDate = Some(LocalDate.parse("2018-02-28"))
       )
       val paymentModel3 = PaymentsHistoryModel(
-        chargeType = "VAT Return charge",
+        chargeType = ReturnCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
         amount = exampleAmount,
         clearedDate = Some(LocalDate.parse("2018-03-01"))
       )
       val paymentModel4 = PaymentsHistoryModel(
-        chargeType = "VAT Return charge",
+        chargeType = ReturnCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
         amount = exampleAmount,

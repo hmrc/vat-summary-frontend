@@ -22,7 +22,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import common.FinancialTransactionsConstants
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
-import models.payments.{PaymentWithPeriod, Payments}
+import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnDebitCharge}
 import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -45,7 +45,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Right(Payments(Seq(
         PaymentWithPeriod(
-          chargeType = "VAT Return Debit Charge",
+          chargeType = ReturnDebitCharge,
           start = LocalDate.parse("2015-03-01"),
           end = LocalDate.parse("2015-03-31"),
           due = LocalDate.parse("2019-01-15"),
@@ -53,7 +53,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = "15AC"
         ),
         PaymentWithPeriod(
-          chargeType = "VAT Return Debit Charge",
+          chargeType = ReturnDebitCharge,
           start = LocalDate.parse("2015-03-01"),
           end = LocalDate.parse("2015-03-31"),
           due = LocalDate.parse("2019-01-16"),
@@ -105,14 +105,14 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Right(Seq(
         PaymentsHistoryModel(
-          chargeType    =  FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType    =  ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-08-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-10-31")),
           amount        = 150,
           clearedDate   = Some(LocalDate.parse("2018-01-10"))
         ),
         PaymentsHistoryModel(
-          chargeType    =  FinancialTransactionsConstants.vatReturnCreditCharge,
+          chargeType    =  ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-05-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-07-31")),
           amount        = 600,

@@ -19,7 +19,7 @@ package audit
 import java.time.LocalDate
 
 import _root_.models.User
-import _root_.models.payments.{Payment, Payments}
+import _root_.models.payments.{Payment, Payments, ReturnDebitCharge}
 import audit.models.ViewNextOutstandingVatPaymentAuditModel
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -28,7 +28,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
   val onePayment = Payments(
     Seq(
       Payment(
-        "VAT Return Debit Charge",
+        ReturnDebitCharge,
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-03-01"),
         LocalDate.parse("2017-03-08"),
@@ -41,7 +41,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
   val twoPayments = Payments(
     Seq(
       Payment(
-        "VAT Return Debit Charge",
+        ReturnDebitCharge,
         LocalDate.parse("2017-01-01"),
         LocalDate.parse("2017-03-01"),
         LocalDate.parse("2017-03-08"),
@@ -49,7 +49,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         Some("#001")
       ),
       Payment(
-        "VAT Return Debit Charge",
+        ReturnDebitCharge,
         LocalDate.parse("2017-02-01"),
         LocalDate.parse("2017-04-01"),
         LocalDate.parse("2017-05-08"),

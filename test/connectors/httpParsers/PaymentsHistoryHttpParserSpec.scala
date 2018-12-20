@@ -18,10 +18,10 @@ package connectors.httpParsers
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants
 import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors._
+import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
@@ -38,8 +38,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |    "processingDate" : "2018-03-07T09:30:00.000Z",
        |    "financialTransactions" : [
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "chargeType" : "${ReturnDebitCharge}",
+       |        "mainType" : "${ReturnCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -66,8 +66,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.vatReturnCreditCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+       |        "chargeType" : "${ReturnCreditCharge}",
+       |        "mainType" : "${ReturnCharge}",
        |        "periodKey" : "17BB",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",
@@ -94,8 +94,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentDebitCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+       |        "chargeType" : "${OADebitCharge}",
+       |        "mainType" : "${OACharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",
@@ -122,8 +122,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentCreditCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+       |        "chargeType" : "${OACreditCharge}",
+       |        "mainType" : "${OACharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",
@@ -150,8 +150,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.vatDefaultSurcharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.vatDefaultSurcharge}",
+       |        "chargeType" : "${DefaultSurcharge}",
+       |        "mainType" : "${DefaultSurcharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-06-10",
@@ -178,8 +178,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.vatCentralAssessment}",
-       |        "mainType" : "${FinancialTransactionsConstants.vatCentralAssessment}",
+       |        "chargeType" : "${CentralAssessmentCharge}",
+       |        "mainType" : "${CentralAssessmentCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -206,8 +206,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.errorCorrectionCreditCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.errorCorrectionChargeType}",
+       |        "chargeType" : "${ErrorCorrectionCreditCharge}",
+       |        "mainType" : "${ErrorCorrectionCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-02-01",
@@ -234,8 +234,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |       {
-       |        "chargeType" : "${FinancialTransactionsConstants.errorCorrectionDebitCharge}",
-       |        "mainType" : "${FinancialTransactionsConstants.errorCorrectionChargeType}",
+       |        "chargeType" : "${ErrorCorrectionDebitCharge}",
+       |        "mainType" : "${ErrorCorrectionCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-10-12",
@@ -262,8 +262,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentDefaultInterest}",
-       |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentDefaultInterest}",
+       |        "chargeType" : "${OADefaultInterestCharge}",
+       |        "mainType" : "${OADefaultInterestCharge}",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-10-12",
@@ -295,63 +295,63 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
 
   val expected: Either[Nothing, Seq[PaymentsHistoryModel]] = Right(Seq(
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+      chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
       amount = 150,
       clearedDate = Some(LocalDate.of(2018, 1, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+      chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 600,
       clearedDate = Some(LocalDate.of(2018, 3, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.officerAssessmentDebitCharge,
+      chargeType = OADebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 200,
       clearedDate = Some(LocalDate.of(2018, 4, 14))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.officerAssessmentCreditCharge,
+      chargeType = OACreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 550,
       clearedDate = Some(LocalDate.of(2018, 6, 28))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatDefaultSurcharge,
+      chargeType = DefaultSurcharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 6, 10)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
       amount = 150,
       clearedDate = Some(LocalDate.of(2018, 11, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatCentralAssessment,
+      chargeType = CentralAssessmentCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
       amount = 150,
       clearedDate = Some(LocalDate.of(2018, 11, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.errorCorrectionCreditCharge,
+      chargeType = ErrorCorrectionCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 2, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 5, 20)),
       amount = 150,
       clearedDate = Some(LocalDate.of(2018, 6, 10))
     ),
     PaymentsHistoryModel(
-      chargeType= FinancialTransactionsConstants.errorCorrectionDebitCharge,
+      chargeType= ErrorCorrectionDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
       amount = 1000,
       clearedDate = Some(LocalDate.of(2018, 12, 15))
     ),
     PaymentsHistoryModel(
-      chargeType= FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+      chargeType= OADefaultInterestCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
       amount = 1000,
@@ -375,7 +375,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |    "financialTransactions" : [
          |      {
          |        "chargeType" : "Some Other Charge Type",
-         |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+         |        "mainType" : "$ReturnCharge",
          |        "periodKey" : "17AA",
          |        "periodKeyDescription" : "ABCD",
          |        "taxPeriodFrom" : "2018-08-01",
@@ -408,7 +408,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |        ]
          |      },
          |      {"chargeType" : "Some Other Charge Type",
-         |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+         |        "mainType" : "${OACharge}",
          |        "periodKey" : "17AA",
          |        "periodKeyDescription" : "ABCD",
          |        "taxPeriodFrom" : "2018-08-01",
@@ -463,7 +463,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |    "processingDate" : "2018-03-07T09:30:00.000Z",
          |    "financialTransactions" : [
          |      {
-         |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentDebitCharge}",
+         |        "chargeType" : "${OADebitCharge}",
          |        "mainType" : "Some Other Main Type",
          |        "periodKey" : "17AA",
          |        "periodKeyDescription" : "ABCD",

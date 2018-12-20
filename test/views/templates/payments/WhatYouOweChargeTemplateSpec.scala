@@ -19,7 +19,7 @@ package views.templates.payments
 import java.time.LocalDate
 
 import common.FinancialTransactionsConstants._
-import models.payments.{OpenPaymentsModelNoPeriod, OpenPaymentsModelWithPeriod}
+import models.payments._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -46,7 +46,7 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
     def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
       OpenPaymentsModelWithPeriod(
-        vatReturnDebitCharge,
+        ReturnDebitCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
         LocalDate.parse("2018-01-01"),
@@ -135,7 +135,7 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
     def generateModel(overdue: Boolean): OpenPaymentsModelNoPeriod = {
       OpenPaymentsModelNoPeriod(
-        officerAssessmentDebitCharge,
+        OADebitCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
         "18AA",
@@ -184,7 +184,7 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
     def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
       OpenPaymentsModelWithPeriod(
-        vatDefaultSurcharge,
+        DefaultSurcharge,
         BigDecimal(300.00),
         LocalDate.parse("2000-05-10"),
         LocalDate.parse("2000-02-01"),
@@ -236,7 +236,7 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
     def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
       OpenPaymentsModelWithPeriod(
-        vatCentralAssessment,
+        CentralAssessmentCharge,
         BigDecimal(200.00),
         LocalDate.parse("2001-05-10"),
         LocalDate.parse("2001-02-01"),
@@ -291,7 +291,7 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
     def generateModel(overdue: Boolean): OpenPaymentsModelNoPeriod = {
       OpenPaymentsModelNoPeriod(
-        officerAssessmentDefaultInterest,
+        OADefaultInterestCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
         "18AA",
@@ -340,7 +340,7 @@ class WhatYouOweChargeTemplateSpec extends ViewBaseSpec {
 
     def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
       OpenPaymentsModelWithPeriod(
-        errorCorrectionDebitCharge,
+        ErrorCorrectionDebitCharge,
         BigDecimal(200.00),
         LocalDate.parse("2001-05-10"),
         LocalDate.parse("2001-02-01"),

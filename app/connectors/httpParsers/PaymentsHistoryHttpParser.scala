@@ -16,9 +16,9 @@
 
 package connectors.httpParsers
 
-import common.FinancialTransactionsConstants
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
+import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsArray, JsValue, Json}
@@ -42,16 +42,16 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
   private def removeNonVatReturnCharges(json: JsValue): JsValue = {
 
     val validCharges: Set[String] = Set(
-      FinancialTransactionsConstants.vatReturnDebitCharge,
-      FinancialTransactionsConstants.vatReturnCreditCharge,
-      FinancialTransactionsConstants.officerAssessmentDebitCharge,
-      FinancialTransactionsConstants.officerAssessmentCreditCharge,
-      FinancialTransactionsConstants.vatCentralAssessment,
-      FinancialTransactionsConstants.vatDefaultSurcharge,
-      FinancialTransactionsConstants.errorCorrectionCreditCharge,
-      FinancialTransactionsConstants.errorCorrectionDebitCharge,
-      FinancialTransactionsConstants.vatRepaymentSupplement,
-      FinancialTransactionsConstants.officerAssessmentDefaultInterest
+      ReturnDebitCharge.value,
+      ReturnCreditCharge.value,
+      OADebitCharge.value,
+      OACreditCharge.value,
+      CentralAssessmentCharge.value,
+      DefaultSurcharge.value,
+      ErrorCorrectionCreditCharge.value,
+      ErrorCorrectionDebitCharge.value,
+      RepaymentSupplement.value,
+      OADefaultInterestCharge.value
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value

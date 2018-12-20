@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.errors.UnexpectedStatusError
-import models.payments.PaymentDetailsModel
+import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
 import stubs.PaymentsStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -42,7 +42,19 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
       val expected = Right("http://www.google.com")
 
       setupStubs()
-      private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "", "", "", "")))
+      private val result = await(connector.setupJourney(
+        PaymentDetailsModel(
+          taxType = "",
+          taxReference = "",
+          amountInPence = 0,
+          taxPeriodMonth = 0,
+          taxPeriodYear = 0,
+          returnUrl = "",
+          backUrl = "",
+          chargeType = ReturnDebitCharge,
+          dueDate = ""
+        )
+      ))
 
       result shouldEqual expected
     }
@@ -53,7 +65,19 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
       val expected = Left(UnexpectedStatusError("500", "blah"))
 
       setupStubs()
-      private val result = await(connector.setupJourney(PaymentDetailsModel("", "", 0, 0, 0, "", "", "", "")))
+      private val result = await(connector.setupJourney(
+        PaymentDetailsModel(
+          "",
+          "",
+          0,
+          0,
+          0,
+          "",
+          "",
+          ReturnDebitCharge,
+          ""
+        )
+      ))
 
       result shouldEqual expected
     }

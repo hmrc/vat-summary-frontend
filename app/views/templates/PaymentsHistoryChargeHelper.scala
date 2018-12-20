@@ -16,69 +16,69 @@
 
 package views.templates
 
-import common.FinancialTransactionsConstants
+import models.payments._
 
 sealed case class PaymentsHistoryChargeHelper(name: String, title: String, description: String, id: String = "")
 
 object PaymentsHistoryChargeHelper {
   object VatReturnCreditCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.vatReturnCreditCharge,
+    ReturnCreditCharge.value,
     "paymentsHistory.vatReturnCreditChargeTitle",
     "paymentsHistory.vatReturnCreditChargeDescription")
 
   object VatReturnDebitCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.vatReturnDebitCharge,
+    ReturnDebitCharge.value,
     "paymentsHistory.vatReturnDebitChargeTitle",
     "paymentsHistory.vatReturnDebitChargeDescription")
 
   object VatOfficerAssessmentCreditCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.officerAssessmentCreditCharge,
+    OACreditCharge.value,
     "paymentsHistory.officerAssessmentChargeTitle",
     "paymentsHistory.officerAssessmentCreditChargeDescription")
 
   object VatOfficerAssessmentDebitCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.officerAssessmentDebitCharge,
+    OADebitCharge.value,
     "paymentsHistory.officerAssessmentChargeTitle",
     "paymentsHistory.officerAssessmentDebitChargeDescription")
 
   object VatCentralAssessment extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.vatCentralAssessment,
+    CentralAssessmentCharge.value,
     "paymentsHistory.vatCentralAssessmentTitle",
     "paymentsHistory.vatCentralAssessmentDescription")
 
   object VatDefaultSurcharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.vatDefaultSurcharge,
+    DefaultSurcharge.value,
     "paymentsHistory.vatDefaultSurchargeTitle",
     "paymentsHistory.vatDefaultSurchargeDescription")
 
-  object ErrorCorrectionDebitCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.errorCorrectionDebitCharge,
+  object VatErrorCorrectionDebitCharge extends PaymentsHistoryChargeHelper(
+    ErrorCorrectionDebitCharge.value,
     "paymentsHistory.vatErrorCorrectionDebitChargeTitle",
     "paymentsHistory.vatErrorCorrectionChargeDescription"
   )
 
-  object ErrorCorrectionCreditCharge extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.errorCorrectionCreditCharge,
+  object VatErrorCorrectionCreditCharge extends PaymentsHistoryChargeHelper(
+    ErrorCorrectionCreditCharge.value,
     "paymentsHistory.vatErrorCorrectionCreditChargeTitle",
     "paymentsHistory.vatErrorCorrectionChargeDescription"
   )
 
   object VatRepaymentSupplement extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.vatRepaymentSupplement,
+    RepaymentSupplement.value,
     "paymentsHistory.vatRepaymentSupplementTitle",
     "paymentsHistory.vatRepaymentSupplementDescription",
     "repayment"
   )
 
   object OADefaultInterest extends PaymentsHistoryChargeHelper(
-    FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+    OADefaultInterestCharge.value,
     "paymentsHistory.OADefaultInterestTitle",
     "paymentsHistory.OADefaultInterestDescription"
   )
 
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge,
     VatOfficerAssessmentDebitCharge, VatCentralAssessment, VatDefaultSurcharge,
-    ErrorCorrectionDebitCharge, ErrorCorrectionCreditCharge, VatRepaymentSupplement, OADefaultInterest)
+    VatErrorCorrectionDebitCharge, VatErrorCorrectionCreditCharge, VatRepaymentSupplement, OADefaultInterest)
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
     values.find(_.name == lookupName)

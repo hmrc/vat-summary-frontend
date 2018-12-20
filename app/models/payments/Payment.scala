@@ -24,7 +24,7 @@ import play.api.libs.json.Reads._
 import play.api.libs.json._
 
 sealed trait Payment extends Obligation {
-  val chargeType: String
+  val chargeType: ChargeType
   val due: LocalDate
   val outstandingAmount: BigDecimal
   val periodKey: String
@@ -32,7 +32,7 @@ sealed trait Payment extends Obligation {
   val auditDetails: Map[String, String]
 }
 
-case class PaymentWithPeriod(chargeType: String,
+case class PaymentWithPeriod(chargeType: ChargeType,
                              start: LocalDate,
                              end: LocalDate,
                              due: LocalDate,
@@ -48,7 +48,7 @@ case class PaymentWithPeriod(chargeType: String,
 
 }
 
-case class PaymentNoPeriod(chargeType: String,
+case class PaymentNoPeriod(chargeType: ChargeType,
                            due: LocalDate,
                            outstandingAmount: BigDecimal,
                            periodKey: String) extends Payment {
@@ -62,7 +62,7 @@ case class PaymentNoPeriod(chargeType: String,
 
 object Payment {
 
-  private def createPayment(chargeType: String,
+  private def createPayment(chargeType: ChargeType,
             start: Option[LocalDate],
             end: Option[LocalDate],
             due: LocalDate,
@@ -73,7 +73,7 @@ object Payment {
     case (s, e) => throw new RuntimeException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
   }
 
-  def apply(chargeType: String,
+  def apply(chargeType: ChargeType,
             start: LocalDate,
             end: LocalDate,
             due: LocalDate,
@@ -81,14 +81,14 @@ object Payment {
             periodKey: Option[String]): PaymentWithPeriod =
     PaymentWithPeriod(chargeType, start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
 
-  def apply(chargeType: String,
+  def apply(chargeType: ChargeType,
             due: LocalDate,
             outstandingAmount: BigDecimal,
             periodKey: Option[String]): PaymentNoPeriod =
     PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey.getOrElse("0000"))
 
   implicit val paymentReads: Reads[Payment] = (
-    (JsPath \ "chargeType").read[String] and
+    (JsPath \ "chargeType").read[ChargeType] and
       (JsPath \ "taxPeriodFrom").readNullable[LocalDate] and
       (JsPath \ "taxPeriodTo").readNullable[LocalDate] and
       (JsPath \ "items")(0).\("dueDate").read[LocalDate] and

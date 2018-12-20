@@ -16,10 +16,9 @@
 
 package connectors.httpParsers
 
-import common.FinancialTransactionsConstants
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
-import models.payments.Payments
+import models.payments._
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.{JsArray, JsValue, Json}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
@@ -41,26 +40,25 @@ object PaymentsHttpParser extends ResponseHttpParsers {
   private def removeNonVatReturnCharges(json: JsValue): JsValue = {
 
     val validCharges: Set[String] = Set(
-      FinancialTransactionsConstants.vatReturnDebitCharge,
-      FinancialTransactionsConstants.officerAssessmentDebitCharge,
-      FinancialTransactionsConstants.vatDefaultSurcharge,
-      FinancialTransactionsConstants.vatCentralAssessment,
-      FinancialTransactionsConstants.errorCorrectionDebitCharge,
-      FinancialTransactionsConstants.officerAssessmentDefaultInterest,
-      FinancialTransactionsConstants.errorCorrectionDebitCharge,
-      FinancialTransactionsConstants.vatAdditionalAssessmentFurtherInterest,
-      FinancialTransactionsConstants.vatAdditionalAssessment,
-      FinancialTransactionsConstants.vatBNPofRegPre2010,
-      FinancialTransactionsConstants.vatOfficersAssessment,
-      FinancialTransactionsConstants.vatBnpRegPost2010,
-      FinancialTransactionsConstants.vatFtnMatPre2010,
-      FinancialTransactionsConstants.vatFtnMatPost2010,
-      FinancialTransactionsConstants.vatMiscPenalty,
-      FinancialTransactionsConstants.vatFtnEachpartner,
-      FinancialTransactionsConstants.vatMpPre2009,
-      FinancialTransactionsConstants.vatMpRepeatedPre2009,
-      FinancialTransactionsConstants.vatCivilEvasionPenalty,
-      FinancialTransactionsConstants.vatAdditionalAssessmentInterest
+      ReturnDebitCharge.value,
+      OADebitCharge.value,
+      DefaultSurcharge.value,
+      CentralAssessmentCharge.value,
+      ErrorCorrectionDebitCharge.value,
+      OADefaultInterestCharge.value,
+      AAFurtherInterestCharge.value,
+      AACharge.value,
+      BnpRegPre2010Charge.value,
+      OACharge.value,
+      BnpRegPost2010Charge.value,
+      FtnMatPre2010Charge.value,
+      FtnMatPost2010Charge.value,
+      MiscPenaltyCharge.value,
+      FtnEachPartnerCharge.value,
+      MpPre2009Charge.value,
+      MpRepeatedPre2009Charge.value,
+      CivilEvasionPenaltyCharge.value,
+      AAInterestCharge.value
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value

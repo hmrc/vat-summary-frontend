@@ -19,13 +19,14 @@ package models.viewModels
 import java.time.LocalDate
 
 import common.FinancialTransactionsConstants
+import models.payments._
 import play.api.libs.json._
 
-case class PaymentsHistoryModel(chargeType: String,
-                                 taxPeriodFrom: Option[LocalDate],
-                                 taxPeriodTo: Option[LocalDate],
-                                 amount: BigDecimal,
-                                 clearedDate: Option[LocalDate] = None)
+case class PaymentsHistoryModel(chargeType: ChargeType,
+                                taxPeriodFrom: Option[LocalDate],
+                                taxPeriodTo: Option[LocalDate],
+                                amount: BigDecimal,
+                                clearedDate: Option[LocalDate] = None)
 
 object PaymentsHistoryModel {
 
@@ -42,13 +43,13 @@ object PaymentsHistoryModel {
     override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
 
       val validTypes: Set[String] = Set(
-        FinancialTransactionsConstants.vatReturnCharge,
-        FinancialTransactionsConstants.officerAssessmentCharge,
-        FinancialTransactionsConstants.vatCentralAssessment,
-        FinancialTransactionsConstants.vatDefaultSurcharge,
-        FinancialTransactionsConstants.errorCorrectionChargeType,
-        FinancialTransactionsConstants.vatRepaySupplement,
-        FinancialTransactionsConstants.officerAssessmentDefaultInterest
+        ReturnCharge.value,
+        OACharge.value,
+        CentralAssessmentCharge.value,
+        DefaultSurcharge.value,
+        ErrorCorrectionCharge.value,
+        RepaySupplement.value,
+        OADefaultInterestCharge.value
       )
 
       val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
@@ -75,7 +76,7 @@ object PaymentsHistoryModel {
       val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
         getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
           PaymentsHistoryModel(
-            chargeType = transaction.get[String](FinancialTransactionsConstants.chargeType),
+            chargeType = transaction.get[ChargeType](FinancialTransactionsConstants.chargeType),
             taxPeriodFrom = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodFrom),
             taxPeriodTo = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodTo),
             amount = amount,

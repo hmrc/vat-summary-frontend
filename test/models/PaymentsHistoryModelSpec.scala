@@ -19,6 +19,7 @@ package models
 import java.time.LocalDate
 
 import common.FinancialTransactionsConstants
+import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import play.api.libs.json._
 import uk.gov.hmrc.play.test.UnitSpec
@@ -39,8 +40,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -67,8 +68,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnCreditCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnCreditCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -100,14 +101,14 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+          chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
           amount = 600,
@@ -127,8 +128,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -155,8 +156,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatDefaultSurcharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatDefaultSurcharge}",
+           |        "chargeType" : "$DefaultSurcharge",
+           |       "mainType" : "$DefaultSurcharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -183,8 +184,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatCentralAssessment}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatCentralAssessment}",
+           |        "chargeType" : "$CentralAssessmentCharge",
+           |       "mainType" : "$CentralAssessmentCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -211,8 +212,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnCreditCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "${ReturnCreditCharge}",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -239,8 +240,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.errorCorrectionCreditCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.errorCorrectionChargeType}",
+           |        "chargeType" : "$ErrorCorrectionCreditCharge",
+           |        "mainType" : "$ErrorCorrectionCharge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -267,8 +268,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.errorCorrectionDebitCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.errorCorrectionChargeType}",
+           |        "chargeType" : "$ErrorCorrectionDebitCharge",
+           |        "mainType" : "$ErrorCorrectionCharge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -300,42 +301,42 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatDefaultSurcharge,
+          chargeType = DefaultSurcharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatCentralAssessment,
+          chargeType = CentralAssessmentCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+          chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
           amount = 600,
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.errorCorrectionCreditCharge,
+          chargeType = ErrorCorrectionCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
           amount = 600,
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.errorCorrectionDebitCharge,
+          chargeType = ErrorCorrectionDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
           amount = 600,
@@ -355,8 +356,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -383,8 +384,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnCreditCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnCreditCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -417,14 +418,14 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+          chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
           amount = 600,
@@ -444,8 +445,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -472,8 +473,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.officerAssessmentCreditCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.officerAssessmentCharge}",
+           |        "chargeType" : "$OACreditCharge",
+           |        "mainType" : "$OACharge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -506,14 +507,14 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.officerAssessmentCreditCharge,
+          chargeType = OACreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
           amount = 600,
@@ -533,8 +534,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -573,14 +574,14 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 100,
@@ -600,8 +601,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -634,7 +635,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
@@ -680,8 +681,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -716,8 +717,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -754,8 +755,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -798,8 +799,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -842,8 +843,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |        "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |        "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodTo" : "2018-10-31",
@@ -874,7 +875,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = None,
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,
@@ -893,8 +894,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "processingDate" : "2018-03-07T09:30:00.000Z",
            |    "financialTransactions" : [
            |      {
-           |        "chargeType" : "${FinancialTransactionsConstants.vatReturnDebitCharge}",
-           |       "mainType" : "${FinancialTransactionsConstants.vatReturnCharge}",
+           |        "chargeType" : "$ReturnDebitCharge",
+           |       "mainType" : "$ReturnCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -925,7 +926,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
-          chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+          chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = None,
           amount = 150,

@@ -29,7 +29,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $officerAssessmentDebitCharge" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = officerAssessmentDebitCharge,
+        chargeType = OADebitCharge,
         amount = 300.00,
         due = LocalDate.parse("2003-04-05"),
         start = LocalDate.parse("2001-01-01"),
@@ -60,7 +60,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $officerAssessmentDefaultInterest" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = officerAssessmentDefaultInterest,
+        chargeType = OADefaultInterestCharge,
         amount = 400.00,
         due = LocalDate.parse("2004-04-05"),
         start = LocalDate.parse("2001-01-01"),
@@ -91,7 +91,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatReturnDebitCharge" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatReturnDebitCharge,
+        chargeType = ReturnDebitCharge,
         amount = 2000000000.01,
         due = LocalDate.parse("2001-04-08"),
         start = LocalDate.parse("2001-01-01"),
@@ -122,7 +122,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatCentralAssessment" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatCentralAssessment,
+        chargeType = CentralAssessmentCharge,
         amount = 1600,
         due = LocalDate.parse("2016-04-08"),
         start = LocalDate.parse("2016-01-01"),
@@ -155,7 +155,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatAdditionalAssessmentInterest" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatAdditionalAssessmentInterest,
+        chargeType = AAInterestCharge,
         amount = 300.00,
         due = LocalDate.parse("2003-04-05"),
         start = LocalDate.parse("2003-01-01"),
@@ -186,7 +186,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $errorCorrectionDebitCharge" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = errorCorrectionDebitCharge,
+        chargeType = ErrorCorrectionDebitCharge,
         amount = 1700.00,
         due = LocalDate.parse("2017-04-05"),
         start = LocalDate.parse("2017-01-01"),
@@ -217,7 +217,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatAdditionalAssessmentFurtherInterest" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatAdditionalAssessmentFurtherInterest,
+        chargeType = AAFurtherInterestCharge,
         amount = 400.00,
         due = LocalDate.parse("2004-04-05"),
         start = LocalDate.parse("2004-01-01"),
@@ -248,7 +248,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatAdditionalAssessment" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatAdditionalAssessment,
+        chargeType = AACharge,
         amount = 500.00,
         due = LocalDate.parse("2005-04-05"),
         start = LocalDate.parse("2005-01-01"),
@@ -276,10 +276,10 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatOfficersAssessment" should {
+    s"charge type is $vatOfficersAssessmentFurtherInterest" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatOfficersAssessment,
+        chargeType = OAFurtherInterestCharge,
         amount = 600.00,
         due = LocalDate.parse("2006-04-05"),
         start = LocalDate.parse("2006-01-01"),
@@ -289,7 +289,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatOfficersAssessment,
+        "paymentType" -> vatOfficersAssessmentFurtherInterest,
         "amount" -> 600.00,
         "due" -> "2006-04-05",
         "start" -> "2006-01-01",
@@ -299,7 +299,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       "return the correct message" in {
-        testModel.whatYouOweDescription shouldBe "a VAT officer's investigation showed you underpaid by this amount"
+        testModel.whatYouOweDescription shouldBe "further interest charged on the officer's assessment"
       }
 
       "correctly write to Json" in {
@@ -310,7 +310,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatBNPofRegPre2010" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatBNPofRegPre2010,
+        chargeType = BnpRegPre2010Charge,
         amount = 700.00,
         due = LocalDate.parse("2007-04-05"),
         start = LocalDate.parse("2007-01-01"),
@@ -341,7 +341,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatBnpRegPost2010" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatBnpRegPost2010,
+        chargeType = BnpRegPost2010Charge,
         amount = 800.00,
         due = LocalDate.parse("2008-04-05"),
         start = LocalDate.parse("2008-01-01"),
@@ -372,7 +372,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatFtnMatPre2010" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatFtnMatPre2010,
+        chargeType = FtnMatPre2010Charge,
         amount = 900.00,
         due = LocalDate.parse("2009-04-05"),
         start = LocalDate.parse("2009-01-01"),
@@ -403,7 +403,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatFtnMatPost2010" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatFtnMatPost2010,
+        chargeType = FtnMatPost2010Charge,
         amount = 1000.00,
         due = LocalDate.parse("2010-04-05"),
         start = LocalDate.parse("2010-01-01"),
@@ -434,7 +434,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatMiscPenalty" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatMiscPenalty,
+        chargeType = MiscPenaltyCharge,
         amount = 1100.00,
         due = LocalDate.parse("2011-04-05"),
         start = LocalDate.parse("2011-01-01"),
@@ -465,7 +465,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatFtnEachpartner" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatFtnEachpartner,
+        chargeType = FtnEachPartnerCharge,
         amount = 1200.00,
         due = LocalDate.parse("2012-04-05"),
         start = LocalDate.parse("2012-01-01"),
@@ -496,7 +496,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatMpPre2009" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatMpPre2009,
+        chargeType = MpPre2009Charge,
         amount = 1300.00,
         due = LocalDate.parse("2013-04-05"),
         start = LocalDate.parse("2013-01-01"),
@@ -527,7 +527,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatMpRepeatedPre2009" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatMpRepeatedPre2009,
+        chargeType = MpRepeatedPre2009Charge,
         amount = 1400.00,
         due = LocalDate.parse("2014-04-05"),
         start = LocalDate.parse("2014-01-01"),
@@ -558,7 +558,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatCivilEvasionPenalty" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatCivilEvasionPenalty,
+        chargeType = CivilEvasionPenaltyCharge,
         amount = 1500.00,
         due = LocalDate.parse("2015-04-05"),
         start = LocalDate.parse("2015-01-01"),
@@ -592,7 +592,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $officerAssessmentDebitCharge" should {
 
       val testModel = OpenPaymentsModel(
-        paymentType = officerAssessmentDebitCharge,
+        chargeType = OADebitCharge,
         amount = 300.00,
         due = LocalDate.parse("2003-04-05"),
         periodKey = "#003",
@@ -619,7 +619,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $officerAssessmentDefaultInterest" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = officerAssessmentDefaultInterest,
+        chargeType = OADefaultInterestCharge,
         amount = 400.00,
         due = LocalDate.parse("2004-04-05"),
         periodKey = "#004",
@@ -643,10 +643,10 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatOfficersAssessment" should{
+    s"charge type is $officerAssessmentCharge" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatOfficersAssessment,
+        chargeType = OACharge,
         amount = 500.00,
         due = LocalDate.parse("2005-04-05"),
         periodKey = "#005",
@@ -654,7 +654,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatOfficersAssessment,
+        "paymentType" -> officerAssessmentCharge,
         "amount" -> 500.00,
         "due" -> "2005-04-05",
         "periodKey" -> "#005",
@@ -673,7 +673,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatBnpRegPost2010" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatBnpRegPost2010,
+        chargeType = BnpRegPost2010Charge,
         amount = 600.00,
         due = LocalDate.parse("2006-04-05"),
         periodKey = "#006",
@@ -700,7 +700,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatFtnMatPre2010" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatFtnMatPre2010,
+        chargeType = FtnMatPre2010Charge,
         amount = 700.00,
         due = LocalDate.parse("2007-04-05"),
         periodKey = "#007",
@@ -727,7 +727,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatFtnMatPost2010" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatFtnMatPost2010,
+        chargeType = FtnMatPost2010Charge,
         amount = 800.00,
         due = LocalDate.parse("2008-04-05"),
         periodKey = "#008",
@@ -754,7 +754,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatMiscPenalty" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatMiscPenalty,
+        chargeType = MiscPenaltyCharge,
         amount = 900.00,
         due = LocalDate.parse("2009-04-05"),
         periodKey = "#009",
@@ -781,7 +781,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatFtnEachpartner" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatFtnEachpartner,
+        chargeType = FtnEachPartnerCharge,
         amount = 1000.00,
         due = LocalDate.parse("2010-04-05"),
         periodKey = "#010",
@@ -808,7 +808,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatMpPre2009" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatMpPre2009,
+        chargeType = MpPre2009Charge,
         amount = 1100.00,
         due = LocalDate.parse("2011-04-05"),
         periodKey = "#011",
@@ -835,7 +835,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatMpRepeatedPre2009" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatMpRepeatedPre2009,
+        chargeType = MpRepeatedPre2009Charge,
         amount = 1200.00,
         due = LocalDate.parse("2012-04-05"),
         periodKey = "#012",
@@ -862,7 +862,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
     s"charge type is $vatCivilEvasionPenalty" should{
 
       val testModel = OpenPaymentsModel(
-        paymentType = vatCivilEvasionPenalty,
+        chargeType = CivilEvasionPenaltyCharge,
         amount = 1300.00,
         due = LocalDate.parse("2013-04-05"),
         periodKey = "#013",
@@ -883,6 +883,64 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
 
       "correctly write to Json" in {
         Json.toJson(testModel) shouldBe testJson
+      }
+    }
+  }
+
+  "Apply method" when {
+
+    "given a Payment with a start and end date" should {
+
+      "create an OpenPaymentsModelWithPeriod" in {
+        val applyWithPaymentModel = OpenPaymentsModel(
+          payment = Payment(
+            chargeType = OADebitCharge,
+            start = LocalDate.parse("2001-01-01"),
+            end = LocalDate.parse("2001-03-31"),
+            due = LocalDate.parse("2003-04-05"),
+            outstandingAmount = 300.00,
+            periodKey = Some("#003")
+          ),
+          overdue = true
+        )
+
+        val regularApply = OpenPaymentsModel(
+          chargeType = OADebitCharge,
+          amount = 300.00,
+          due = LocalDate.parse("2003-04-05"),
+          start = LocalDate.parse("2001-01-01"),
+          end = LocalDate.parse("2001-03-31"),
+          periodKey = "#003",
+          overdue = true
+        )
+
+        applyWithPaymentModel shouldBe regularApply
+
+      }
+    }
+
+    "given a Payment without a start and end date" should {
+
+      "create an OpenPaymentsModelNoPeriod" in {
+        val applyWithPaymentModel = OpenPaymentsModel(
+          payment = Payment(
+            chargeType = OADebitCharge,
+            due = LocalDate.parse("2003-04-05"),
+            outstandingAmount = 300.00,
+            periodKey = Some("#003")
+          ),
+          overdue = true
+        )
+
+        val regularApply = OpenPaymentsModel(
+          chargeType = OADebitCharge,
+          amount = 300.00,
+          due = LocalDate.parse("2003-04-05"),
+          periodKey = "#003",
+          overdue = true
+        )
+
+        applyWithPaymentModel shouldBe regularApply
       }
     }
   }

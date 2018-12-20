@@ -91,6 +91,7 @@ openPayments.centralAssessmentSubmit =, submit your overdue return to update thi
 openPayments.errorCorrection = this is the correction you made to your {0} return
 openPayments.errorCorrectionReturnContext = that you corrected for the period {0}
 openPayments.oaDefaultInterest = interest charged on the officer''s assessment
+openPayments.oaFurtherInterest = further interest charged on the officer''s assessment
 openPayments.vatAAFurtherInterest = further interest charged on additional tax assessed for the period {0}
 openPayments.vatAdditionalAssessment = additional assessment based on further information for the period {0}
 openPayments.vatBNPofRegPre2010 = because you should have been registered for VAT earlier

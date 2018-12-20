@@ -18,9 +18,9 @@ package audit
 
 import java.time.LocalDate
 
+import _root_.models.payments._
 import _root_.models.viewModels.PaymentsHistoryModel
 import audit.models.ViewVatPaymentHistoryAuditModel
-import common.FinancialTransactionsConstants
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -29,7 +29,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends UnitSpec {
   val onePayment: Seq[PaymentsHistoryModel] =
     Seq(
       PaymentsHistoryModel(
-        chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+        chargeType = ReturnDebitCharge,
         taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
         taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
         amount = 150,
@@ -39,14 +39,14 @@ class ViewVatPaymentHistoryAuditModelSpec extends UnitSpec {
 
   val onePaymentPerPeriod: Seq[PaymentsHistoryModel] = Seq(
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+      chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
       amount = 150,
       clearedDate = Some(LocalDate.of(2018, 1, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+      chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 600,
@@ -55,28 +55,28 @@ class ViewVatPaymentHistoryAuditModelSpec extends UnitSpec {
 
   val multiplesPaymentsPerPeriod: Seq[PaymentsHistoryModel] = Seq(
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+      chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
       amount = 150,
       clearedDate = Some(LocalDate.of(2018, 1, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnDebitCharge,
+      chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
       amount = 100,
       clearedDate = Some(LocalDate.of(2018, 3, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+      chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 600,
       clearedDate = Some(LocalDate.of(2018, 4, 10))
     ),
     PaymentsHistoryModel(
-      chargeType = FinancialTransactionsConstants.vatReturnCreditCharge,
+      chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
       amount = 500,

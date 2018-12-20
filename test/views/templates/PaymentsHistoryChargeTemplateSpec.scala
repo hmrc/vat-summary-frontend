@@ -18,6 +18,8 @@ package views.templates
 
 import org.jsoup.Jsoup
 import java.time.LocalDate
+
+import models.payments._
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import models.viewModels.PaymentsHistoryModel
@@ -38,7 +40,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a valid charge type" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT Return Debit Charge",
+        ReturnDebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         123456,
@@ -62,7 +64,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat return debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT Return Debit Charge",
+        ReturnDebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         123456,
@@ -90,7 +92,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat return credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT Return Credit Charge",
+        ReturnCreditCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         -123456,
@@ -118,7 +120,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat officer assessment debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT OA Debit Charge",
+        OADebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         123456,
@@ -146,7 +148,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat officer assessment credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT OA Credit Charge",
+        OACreditCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         123456,
@@ -174,7 +176,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat central assessment charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT Central Assessment",
+        CentralAssessmentCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         -123456,
@@ -202,7 +204,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat default surcharge charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT Default Surcharge",
+        DefaultSurcharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         -123456,
@@ -230,7 +232,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is an error correction credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT EC Credit Charge",
+        ErrorCorrectionCreditCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         1000,
@@ -258,7 +260,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is an error correction debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT EC Debit Charge",
+        ErrorCorrectionDebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         2000,
@@ -286,7 +288,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a vat officer assessment default interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "VAT OA Default Interest",
+        OADefaultInterestCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         123456,
@@ -308,38 +310,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "interest charged on the officer's assessment"
-      }
-    }
-
-    "there is an invalid charge type" should {
-
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        "Invalid Charge",
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the error table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "error"
-      }
-
-      "display the error text" in {
-        elementText(Selectors.clearedDate) shouldBe "error"
-      }
-
-      "display the error description" in {
-        elementText(Selectors.errorText) shouldBe "error"
-      }
-
-      "display a zero" in {
-        elementText(Selectors.amount) shouldBe "0"
       }
     }
   }

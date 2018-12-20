@@ -18,10 +18,9 @@ package connectors.httpParsers
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants
 import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 import models.errors._
-import models.payments.{PaymentWithPeriod, Payments}
+import models.payments._
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -37,8 +36,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
-              "chargeType" -> FinancialTransactionsConstants.vatReturnDebitCharge,
+              "mainType" -> ReturnCharge,
+              "chargeType" -> ReturnDebitCharge,
               "taxPeriodFrom" -> "2016-12-01",
               "taxPeriodTo" -> "2017-01-01",
               "items" -> Json.arr(
@@ -48,8 +47,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#001"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
-              "chargeType" -> FinancialTransactionsConstants.vatReturnCreditCharge,
+              "mainType" -> ReturnCharge,
+              "chargeType" -> ReturnCreditCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
               "items" -> Json.arr(
@@ -59,8 +58,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#002"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.officerAssessmentCharge,
-              "chargeType" -> FinancialTransactionsConstants.officerAssessmentCreditCharge,
+              "mainType" -> OACharge,
+              "chargeType" -> OACreditCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
               "items" -> Json.arr(
@@ -70,8 +69,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#003"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.officerAssessmentCharge,
-              "chargeType" -> FinancialTransactionsConstants.officerAssessmentDebitCharge,
+              "mainType" -> OACharge,
+              "chargeType" -> OADebitCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
               "items" -> Json.arr(
@@ -81,8 +80,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#004"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatCentralAssessment,
-              "chargeType" -> FinancialTransactionsConstants.vatCentralAssessment,
+              "mainType" -> CentralAssessmentCharge,
+              "chargeType" -> CentralAssessmentCharge,
               "taxPeriodFrom" -> "2016-12-01",
               "taxPeriodTo" -> "2017-01-01",
               "items" -> Json.arr(
@@ -92,8 +91,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#005"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatDefaultSurcharge,
-              "chargeType" -> FinancialTransactionsConstants.vatDefaultSurcharge,
+              "mainType" -> DefaultSurcharge,
+              "chargeType" -> DefaultSurcharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
               "items" -> Json.arr(
@@ -103,8 +102,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#006"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.errorCorrectionChargeType,
-              "chargeType" -> FinancialTransactionsConstants.errorCorrectionCreditCharge,
+              "mainType" -> ErrorCorrectionCharge,
+              "chargeType" -> ErrorCorrectionCreditCharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
               "items" -> Json.arr(
@@ -114,8 +113,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#007"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.errorCorrectionChargeType,
-              "chargeType" -> FinancialTransactionsConstants.errorCorrectionDebitCharge,
+              "mainType" -> ErrorCorrectionCharge,
+              "chargeType" -> ErrorCorrectionDebitCharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
               "items" -> Json.arr(
@@ -125,8 +124,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#007"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
-              "chargeType" -> FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
+              "mainType" -> AAInterestCharge,
+              "chargeType" -> AAInterestCharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
               "items" -> Json.arr(
@@ -136,8 +135,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#008"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.officerAssessmentDefaultInterest,
-              "chargeType" -> FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+              "mainType" -> OADefaultInterestCharge,
+              "chargeType" -> OADefaultInterestCharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
               "items" -> Json.arr(
@@ -147,8 +146,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#018"
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatAdditionalAssessment,
-              "chargeType" -> FinancialTransactionsConstants.vatAdditionalAssessment,
+              "mainType" -> AACharge,
+              "chargeType" -> AACharge,
               "periodKey" -> "#009",
               "taxPeriodFrom" -> "2016-03-20",
               "taxPeriodTo" -> "2016-06-21",
@@ -162,8 +161,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatOfficersAssessment,
-              "chargeType" -> FinancialTransactionsConstants.vatOfficersAssessment,
+              "mainType" -> OAFurtherInterestCharge,
+              "chargeType" -> OAFurtherInterestCharge,
               "periodKey" -> "#010",
               "taxPeriodFrom" -> "2016-03-20",
               "taxPeriodTo" -> "2016-06-21",
@@ -177,8 +176,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatBNPofRegPre2010,
-              "chargeType" -> FinancialTransactionsConstants.vatBNPofRegPre2010,
+              "mainType" -> BnpRegPre2010Charge,
+              "chargeType" -> BnpRegPre2010Charge,
               "periodKey" -> "#019",
               "taxPeriodFrom" -> "2015-03-20",
               "taxPeriodTo" -> "2015-06-21",
@@ -192,8 +191,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatBnpRegPost2010,
-              "chargeType" -> FinancialTransactionsConstants.vatBnpRegPost2010,
+              "mainType" -> BnpRegPost2010Charge,
+              "chargeType" -> BnpRegPost2010Charge,
               "periodKey" -> "#011",
               "taxPeriodFrom" -> "2015-03-20",
               "taxPeriodTo" -> "2015-06-21",
@@ -207,8 +206,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatFtnMatPre2010,
-              "chargeType" -> FinancialTransactionsConstants.vatFtnMatPre2010,
+              "mainType" -> FtnMatPre2010Charge,
+              "chargeType" -> FtnMatPre2010Charge,
               "periodKey" -> "#012",
               "taxPeriodFrom" -> "2014-03-20",
               "taxPeriodTo" -> "2014-06-21",
@@ -222,8 +221,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatFtnMatPost2010,
-              "chargeType" -> FinancialTransactionsConstants.vatFtnMatPost2010,
+              "mainType" -> FtnMatPost2010Charge,
+              "chargeType" -> FtnMatPost2010Charge,
               "periodKey" -> "#013",
               "taxPeriodFrom" -> "2013-03-20",
               "taxPeriodTo" -> "2013-06-21",
@@ -237,8 +236,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatMiscPenalty,
-              "chargeType" -> FinancialTransactionsConstants.vatMiscPenalty,
+              "mainType" -> MiscPenaltyCharge,
+              "chargeType" -> MiscPenaltyCharge,
               "periodKey" -> "#014",
               "taxPeriodFrom" -> "2012-03-20",
               "taxPeriodTo" -> "2012-06-21",
@@ -252,8 +251,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatFtnEachpartner,
-              "chargeType" -> FinancialTransactionsConstants.vatFtnEachpartner,
+              "mainType" -> FtnEachPartnerCharge,
+              "chargeType" -> FtnEachPartnerCharge,
               "periodKey" -> "#015",
               "taxPeriodFrom" -> "2011-03-20",
               "taxPeriodTo" -> "2011-06-21",
@@ -267,8 +266,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatMpPre2009,
-              "chargeType" -> FinancialTransactionsConstants.vatMpPre2009,
+              "mainType" -> MpPre2009Charge,
+              "chargeType" -> MpPre2009Charge,
               "periodKey" -> "#016",
               "taxPeriodFrom" -> "2010-03-20",
               "taxPeriodTo" -> "2010-06-21",
@@ -282,8 +281,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatMpRepeatedPre2009,
-              "chargeType" -> FinancialTransactionsConstants.vatMpRepeatedPre2009,
+              "mainType" -> MpRepeatedPre2009Charge,
+              "chargeType" -> MpRepeatedPre2009Charge,
               "periodKey" -> "#017",
               "taxPeriodFrom" -> "2009-03-20",
               "taxPeriodTo" -> "2009-06-21",
@@ -297,8 +296,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatCivilEvasionPenalty,
-              "chargeType" -> FinancialTransactionsConstants.vatCivilEvasionPenalty,
+              "mainType" -> CivilEvasionPenaltyCharge,
+              "chargeType" -> CivilEvasionPenaltyCharge,
               "periodKey" -> "#018",
               "taxPeriodFrom" -> "2008-03-20",
               "taxPeriodTo" -> "2008-06-21",
@@ -317,7 +316,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
       val expected = Right(Payments(Seq(
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatReturnDebitCharge,
+          ReturnDebitCharge,
           start = LocalDate.parse("2016-12-01"),
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
@@ -325,7 +324,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#001"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.officerAssessmentDebitCharge,
+          OADebitCharge,
           start = LocalDate.parse("2017-12-01"),
           end = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
@@ -333,7 +332,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#004"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatCentralAssessment,
+          CentralAssessmentCharge,
           start = LocalDate.parse("2016-12-01"),
           end = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2016-10-25"),
@@ -341,7 +340,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#005"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatDefaultSurcharge,
+          DefaultSurcharge,
           start = LocalDate.parse("2015-12-01"),
           end = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
@@ -349,7 +348,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#006"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.errorCorrectionDebitCharge,
+          ErrorCorrectionDebitCharge,
           start = LocalDate.parse("2015-12-01"),
           end = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
@@ -357,7 +356,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#007"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatAdditionalAssessmentInterest,
+          AAInterestCharge,
           start = LocalDate.parse("2015-12-01"),
           end = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
@@ -365,7 +364,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#008"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.officerAssessmentDefaultInterest,
+          OADefaultInterestCharge,
           start = LocalDate.parse("2015-12-01"),
           end = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
@@ -373,7 +372,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#018"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatAdditionalAssessment,
+          AACharge,
           start = LocalDate.parse("2016-03-20"),
           end = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
@@ -381,15 +380,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#009"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatOfficersAssessment,
-          start = LocalDate.parse("2016-03-20"),
-          end = LocalDate.parse("2016-06-21"),
-          due = LocalDate.parse("2016-09-27"),
-          outstandingAmount = BigDecimal(50.00),
-          periodKey = "#010"
-        ),
-        PaymentWithPeriod(
-          FinancialTransactionsConstants.vatBNPofRegPre2010,
+          BnpRegPre2010Charge,
           start = LocalDate.parse("2015-03-20"),
           end = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
@@ -397,7 +388,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#019"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatBnpRegPost2010,
+          BnpRegPost2010Charge,
           start = LocalDate.parse("2015-03-20"),
           end = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
@@ -405,7 +396,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#011"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatFtnMatPre2010,
+          FtnMatPre2010Charge,
           start = LocalDate.parse("2014-03-20"),
           end = LocalDate.parse("2014-06-21"),
           due = LocalDate.parse("2014-09-27"),
@@ -413,7 +404,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#012"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatFtnMatPost2010,
+          FtnMatPost2010Charge,
           start = LocalDate.parse("2013-03-20"),
           end = LocalDate.parse("2013-06-21"),
           due = LocalDate.parse("2013-09-27"),
@@ -421,7 +412,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#013"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatMiscPenalty,
+          MiscPenaltyCharge,
           start = LocalDate.parse("2012-03-20"),
           end = LocalDate.parse("2012-06-21"),
           due = LocalDate.parse("2012-09-27"),
@@ -429,7 +420,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#014"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatFtnEachpartner,
+          FtnEachPartnerCharge,
           start = LocalDate.parse("2011-03-20"),
           end = LocalDate.parse("2011-06-21"),
           due = LocalDate.parse("2011-09-27"),
@@ -437,7 +428,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#015"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatMpPre2009,
+          MpPre2009Charge,
           start = LocalDate.parse("2010-03-20"),
           end = LocalDate.parse("2010-06-21"),
           due = LocalDate.parse("2010-09-27"),
@@ -445,7 +436,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#016"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatMpRepeatedPre2009,
+          MpRepeatedPre2009Charge,
           start = LocalDate.parse("2009-03-20"),
           end = LocalDate.parse("2009-06-21"),
           due = LocalDate.parse("2009-09-27"),
@@ -453,7 +444,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#017"
         ),
         PaymentWithPeriod(
-          FinancialTransactionsConstants.vatCivilEvasionPenalty,
+          CivilEvasionPenaltyCharge,
           start = LocalDate.parse("2008-03-20"),
           end = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
@@ -475,7 +466,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
-              "mainType" -> FinancialTransactionsConstants.vatReturnCharge,
+              "mainType" -> ReturnCharge,
               "chargeType" -> "Other Charge Type",
               "outstandingAmount" -> 99
             )
