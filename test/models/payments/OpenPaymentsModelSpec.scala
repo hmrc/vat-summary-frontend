@@ -26,7 +26,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
 
   "An OpenPaymentsModel with a start and end date" when {
 
-    s"charge type is $officerAssessmentDebitCharge" should {
+    s"charge type is $OADebitCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = OADebitCharge,
@@ -39,7 +39,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> officerAssessmentDebitCharge,
+        "paymentType" -> OADebitCharge.value,
         "amount" -> 300.00,
         "due" -> "2003-04-05",
         "start" -> "2001-01-01",
@@ -57,7 +57,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $officerAssessmentDefaultInterest" should{
+    s"charge type is $OADefaultInterestCharge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = OADefaultInterestCharge,
@@ -70,7 +70,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> officerAssessmentDefaultInterest,
+        "paymentType" -> OADefaultInterestCharge.value,
         "amount" -> 400.00,
         "due" -> "2004-04-05",
         "start" -> "2001-01-01",
@@ -88,7 +88,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatReturnDebitCharge" should {
+    s"charge type is $ReturnDebitCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = ReturnDebitCharge,
@@ -101,7 +101,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatReturnDebitCharge,
+        "paymentType" -> ReturnDebitCharge.value,
         "amount" -> 2000000000.01,
         "due" -> "2001-04-08",
         "start" -> "2001-01-01",
@@ -119,7 +119,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatCentralAssessment" should {
+    s"charge type is $CentralAssessmentCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = CentralAssessmentCharge,
@@ -132,7 +132,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatCentralAssessment,
+        "paymentType" -> CentralAssessmentCharge.value,
         "amount" -> 1600,
         "due" -> "2016-04-08",
         "start" -> "2016-01-01",
@@ -152,7 +152,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
 
     }
 
-    s"charge type is $vatAdditionalAssessmentInterest" should {
+    s"charge type is $AAInterestCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = AAInterestCharge,
@@ -165,7 +165,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatAdditionalAssessmentInterest,
+        "paymentType" -> AAInterestCharge.value,
         "amount" -> 300.00,
         "due" -> "2003-04-05",
         "start" -> "2003-01-01",
@@ -183,7 +183,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $errorCorrectionDebitCharge" should {
+    s"charge type is $ErrorCorrectionDebitCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = ErrorCorrectionDebitCharge,
@@ -196,7 +196,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> errorCorrectionDebitCharge,
+        "paymentType" -> ErrorCorrectionDebitCharge.value,
         "amount" -> 1700.00,
         "due" -> "2017-04-05",
         "start" -> "2017-01-01",
@@ -214,7 +214,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatAdditionalAssessmentFurtherInterest" should {
+    s"charge type is $AAFurtherInterestCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = AAFurtherInterestCharge,
@@ -227,7 +227,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatAdditionalAssessmentFurtherInterest,
+        "paymentType" -> AAFurtherInterestCharge.value,
         "amount" -> 400.00,
         "due" -> "2004-04-05",
         "start" -> "2004-01-01",
@@ -245,7 +245,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatAdditionalAssessment" should {
+    s"charge type is $AACharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = AACharge,
@@ -258,7 +258,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatAdditionalAssessment,
+        "paymentType" -> AACharge.value,
         "amount" -> 500.00,
         "due" -> "2005-04-05",
         "start" -> "2005-01-01",
@@ -276,7 +276,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatOfficersAssessmentFurtherInterest" should {
+    s"charge type is $OAFurtherInterestCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = OAFurtherInterestCharge,
@@ -289,7 +289,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatOfficersAssessmentFurtherInterest,
+        "paymentType" -> OAFurtherInterestCharge.value,
         "amount" -> 600.00,
         "due" -> "2006-04-05",
         "start" -> "2006-01-01",
@@ -307,7 +307,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatBNPofRegPre2010" should {
+    s"charge type is $BnpRegPre2010Charge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = BnpRegPre2010Charge,
@@ -320,7 +320,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatBNPofRegPre2010,
+        "paymentType" -> BnpRegPre2010Charge.value,
         "amount" -> 700.00,
         "due" -> "2007-04-05",
         "start" -> "2007-01-01",
@@ -338,7 +338,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatBnpRegPost2010" should {
+    s"charge type is $BnpRegPost2010Charge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = BnpRegPost2010Charge,
@@ -351,7 +351,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatBnpRegPost2010,
+        "paymentType" -> BnpRegPost2010Charge.value,
         "amount" -> 800.00,
         "due" -> "2008-04-05",
         "start" -> "2008-01-01",
@@ -369,7 +369,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatFtnMatPre2010" should {
+    s"charge type is $FtnMatPre2010Charge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = FtnMatPre2010Charge,
@@ -382,7 +382,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatFtnMatPre2010,
+        "paymentType" -> FtnMatPre2010Charge.value,
         "amount" -> 900.00,
         "due" -> "2009-04-05",
         "start" -> "2009-01-01",
@@ -400,7 +400,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatFtnMatPost2010" should {
+    s"charge type is $FtnMatPost2010Charge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = FtnMatPost2010Charge,
@@ -413,7 +413,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatFtnMatPost2010,
+        "paymentType" -> FtnMatPost2010Charge.value,
         "amount" -> 1000.00,
         "due" -> "2010-04-05",
         "start" -> "2010-01-01",
@@ -431,7 +431,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatMiscPenalty" should {
+    s"charge type is $MiscPenaltyCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = MiscPenaltyCharge,
@@ -444,7 +444,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatMiscPenalty,
+        "paymentType" -> MiscPenaltyCharge.value,
         "amount" -> 1100.00,
         "due" -> "2011-04-05",
         "start" -> "2011-01-01",
@@ -462,7 +462,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatFtnEachpartner" should {
+    s"charge type is $FtnEachPartnerCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = FtnEachPartnerCharge,
@@ -475,7 +475,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatFtnEachpartner,
+        "paymentType" -> FtnEachPartnerCharge.value,
         "amount" -> 1200.00,
         "due" -> "2012-04-05",
         "start" -> "2012-01-01",
@@ -493,7 +493,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatMpPre2009" should {
+    s"charge type is $MpPre2009Charge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = MpPre2009Charge,
@@ -506,7 +506,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatMpPre2009,
+        "paymentType" -> MpPre2009Charge.value,
         "amount" -> 1300.00,
         "due" -> "2013-04-05",
         "start" -> "2013-01-01",
@@ -524,7 +524,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatMpRepeatedPre2009" should {
+    s"charge type is $MpRepeatedPre2009Charge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = MpRepeatedPre2009Charge,
@@ -537,7 +537,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatMpRepeatedPre2009,
+        "paymentType" -> MpRepeatedPre2009Charge.value,
         "amount" -> 1400.00,
         "due" -> "2014-04-05",
         "start" -> "2014-01-01",
@@ -555,7 +555,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatCivilEvasionPenalty" should {
+    s"charge type is $CivilEvasionPenaltyCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = CivilEvasionPenaltyCharge,
@@ -568,7 +568,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatCivilEvasionPenalty,
+        "paymentType" -> CivilEvasionPenaltyCharge.value,
         "amount" -> 1500.00,
         "due" -> "2015-04-05",
         "start" -> "2015-01-01",
@@ -589,7 +589,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
 
   "An OpenPaymentsModel without a start and end date" when {
 
-    s"charge type is $officerAssessmentDebitCharge" should {
+    s"charge type is $OADebitCharge" should {
 
       val testModel = OpenPaymentsModel(
         chargeType = OADebitCharge,
@@ -600,7 +600,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> officerAssessmentDebitCharge,
+        "paymentType" -> OADebitCharge.value,
         "amount" -> 300.00,
         "due" -> "2003-04-05",
         "periodKey" -> "#003",
@@ -616,7 +616,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $officerAssessmentDefaultInterest" should{
+    s"charge type is $OADefaultInterestCharge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = OADefaultInterestCharge,
@@ -627,7 +627,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> officerAssessmentDefaultInterest,
+        "paymentType" -> OADefaultInterestCharge.value,
         "amount" -> 400.00,
         "due" -> "2004-04-05",
         "periodKey" -> "#004",
@@ -643,7 +643,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $officerAssessmentCharge" should{
+    s"charge type is $OACharge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = OACharge,
@@ -654,7 +654,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> officerAssessmentCharge,
+        "paymentType" -> OACharge.value,
         "amount" -> 500.00,
         "due" -> "2005-04-05",
         "periodKey" -> "#005",
@@ -670,7 +670,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatBnpRegPost2010" should{
+    s"charge type is $BnpRegPost2010Charge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = BnpRegPost2010Charge,
@@ -681,7 +681,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatBnpRegPost2010,
+        "paymentType" -> BnpRegPost2010Charge.value,
         "amount" -> 600.00,
         "due" -> "2006-04-05",
         "periodKey" -> "#006",
@@ -697,7 +697,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatFtnMatPre2010" should{
+    s"charge type is $FtnMatPre2010Charge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = FtnMatPre2010Charge,
@@ -708,7 +708,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatFtnMatPre2010,
+        "paymentType" -> FtnMatPre2010Charge.value,
         "amount" -> 700.00,
         "due" -> "2007-04-05",
         "periodKey" -> "#007",
@@ -724,7 +724,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatFtnMatPost2010" should{
+    s"charge type is $FtnMatPost2010Charge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = FtnMatPost2010Charge,
@@ -735,7 +735,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatFtnMatPost2010,
+        "paymentType" -> FtnMatPost2010Charge.value,
         "amount" -> 800.00,
         "due" -> "2008-04-05",
         "periodKey" -> "#008",
@@ -751,7 +751,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatMiscPenalty" should{
+    s"charge type is $MiscPenaltyCharge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = MiscPenaltyCharge,
@@ -762,7 +762,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatMiscPenalty,
+        "paymentType" -> MiscPenaltyCharge.value,
         "amount" -> 900.00,
         "due" -> "2009-04-05",
         "periodKey" -> "#009",
@@ -778,7 +778,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatFtnEachpartner" should{
+    s"charge type is $FtnEachPartnerCharge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = FtnEachPartnerCharge,
@@ -789,7 +789,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatFtnEachpartner,
+        "paymentType" -> FtnEachPartnerCharge.value,
         "amount" -> 1000.00,
         "due" -> "2010-04-05",
         "periodKey" -> "#010",
@@ -805,7 +805,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatMpPre2009" should{
+    s"charge type is $MpPre2009Charge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = MpPre2009Charge,
@@ -816,7 +816,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatMpPre2009,
+        "paymentType" -> MpPre2009Charge.value,
         "amount" -> 1100.00,
         "due" -> "2011-04-05",
         "periodKey" -> "#011",
@@ -832,7 +832,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatMpRepeatedPre2009" should{
+    s"charge type is $MpRepeatedPre2009Charge." should{
 
       val testModel = OpenPaymentsModel(
         chargeType = MpRepeatedPre2009Charge,
@@ -843,7 +843,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatMpRepeatedPre2009,
+        "paymentType" -> MpRepeatedPre2009Charge.value,
         "amount" -> 1200.00,
         "due" -> "2012-04-05",
         "periodKey" -> "#012",
@@ -859,7 +859,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $vatCivilEvasionPenalty" should{
+    s"charge type is $CivilEvasionPenaltyCharge" should{
 
       val testModel = OpenPaymentsModel(
         chargeType = CivilEvasionPenaltyCharge,
@@ -870,7 +870,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> vatCivilEvasionPenalty,
+        "paymentType" -> CivilEvasionPenaltyCharge.value,
         "amount" -> 1300.00,
         "due" -> "2013-04-05",
         "periodKey" -> "#013",
