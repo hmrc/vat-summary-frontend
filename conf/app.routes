@@ -21,5 +21,8 @@ GET        /thankyou                    controllers.feedback.FeedbackController.
 GET        /sign-out                    controllers.SignOutController.signOut(authorised: Boolean)
 GET        /time-out                    controllers.SignOutController.timeout
 
+#Language Controller
+GET        /language/:lang              controllers.LanguageController.switchToLanguage(lang: String)
+
 
 GET        /assets/*file                controllers.Assets.at(path="/public", file)
