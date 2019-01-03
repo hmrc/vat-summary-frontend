@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ sealed trait OpenPaymentsModel {
   val overdue: Boolean
   val periodKey: String
 
+  //noinspection ScalaStyle
   def whatYouOweDescription(implicit messages: Messages): String =  chargeType match {
     case OADebitCharge => messages("openPayments.officersAssessment")
     case OADefaultInterestCharge => messages("openPayments.oaDefaultInterest")
@@ -43,6 +44,7 @@ sealed trait OpenPaymentsModel {
     case MpPre2009Charge => messages("openPayments.vatMpPre2009")
     case MpRepeatedPre2009Charge => messages("openPayments.vatMpRepeatedPre2009")
     case CivilEvasionPenaltyCharge => messages("openPayments.vatCivilEvasionPenalty")
+    case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
   def makePaymentRedirect: String
@@ -105,14 +107,10 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
       messages("openPayments.centralAssessmentSubmit")
     }"
     case ErrorCorrectionDebitCharge => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
-    case AAInterestCharge =>
-      s"${messages.apply("openPayments.AADefaultInterestDescription",{displayDateRange(start, end)}).trim}"
-    case BnpRegPre2010Charge =>
-      s"${messages.apply("openPayments.vatBNPofRegPre2010", {displayDateRange(start, end)}).trim}"
-    case AAFurtherInterestCharge =>
-      s"${messages.apply("openPayments.vatAAFurtherInterest", {displayDateRange(start, end)}).trim}"
-    case AACharge =>
-      s"${messages.apply("openPayments.vatAdditionalAssessment", {displayDateRange(start, end)}).trim}"
+    case AAInterestCharge => messages("openPayments.AADefaultInterestDescription",displayDateRange(start, end))
+    case BnpRegPre2010Charge => messages("openPayments.vatBNPofRegPre2010", displayDateRange(start, end))
+    case AAFurtherInterestCharge => messages("openPayments.vatAAFurtherInterest", displayDateRange(start, end))
+    case AACharge => messages("openPayments.vatAdditionalAssessment", displayDateRange(start, end))
     case _ => super.whatYouOweDescription
   }
 

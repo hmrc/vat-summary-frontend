@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ object Payment {
             periodKey: Option[String]): Payment = (start, end) match {
     case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey)
     case (None, None) => apply(chargeType, due, outstandingAmount, periodKey)
-    case (s, e) => throw new RuntimeException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
+    case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
   }
 
   def apply(chargeType: ChargeType,

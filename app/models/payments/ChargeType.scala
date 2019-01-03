@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,6 +107,7 @@ case object CivilEvasionPenaltyCharge extends ChargeType {
 
 object ChargeType {
 
+  //noinspection ScalaStyle
   def apply: String => ChargeType = {
     case ReturnCharge.value => ReturnCharge
     case ReturnDebitCharge.value => ReturnDebitCharge
@@ -134,7 +135,7 @@ object ChargeType {
     case MpPre2009Charge.value => MpPre2009Charge
     case MpRepeatedPre2009Charge.value => MpRepeatedPre2009Charge
     case CivilEvasionPenaltyCharge.value => CivilEvasionPenaltyCharge
-    case _ => throw new RuntimeException("Invalid Charge Type")
+    case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
   def unapply(arg: ChargeType): String = arg.value
