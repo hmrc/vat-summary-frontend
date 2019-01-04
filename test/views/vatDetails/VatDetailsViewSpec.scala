@@ -182,7 +182,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         }
 
         "have a link to the payment history" in {
-          submittedReturns.select("a").attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear).url
+          submittedReturns.select("a").attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url
         }
       }
 
