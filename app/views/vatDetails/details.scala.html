@@ -70,7 +70,7 @@
                             Some("payment-history:view:portal-payment-history-details")
                           )
                       } else {
-                          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(LocalDate.now.getYear)"
+                          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(detailsViewModel.currentYear)"
                           data-journey-click="payment-history:view:payment-history-details">
                             @messages("vatDetails.paymentHistory.link")
                           </a>
