@@ -70,9 +70,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
-        LocalDate.parse("2018-01-01"),
-        LocalDate.parse("2018-12-31"),
-        Status.All))
+        Status.All,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -99,9 +100,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
-        LocalDate.parse("2018-01-01"),
-        LocalDate.parse("2018-12-31"),
-        Status.Outstanding))
+        Status.Outstanding,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -128,9 +130,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
+        Status.Fulfilled,
+        Some(LocalDate.parse("2017-01-01")),
+        Some(LocalDate.parse("2017-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -149,9 +152,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Outstanding))
+        Status.Outstanding,
+        Some(LocalDate.parse("2017-01-01")),
+        Some(LocalDate.parse("2017-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -170,9 +174,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
+        Status.Fulfilled,
+        Some(LocalDate.parse("2017-01-01")),
+        Some(LocalDate.parse("2017-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -191,9 +196,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
+        Status.Fulfilled,
+        Some(LocalDate.parse("2017-01-01")),
+        Some(LocalDate.parse("2017-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -212,9 +218,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",
-        LocalDate.parse("2017-12-31"),
-        LocalDate.parse("2017-01-01"),
-        Status.Fulfilled))
+        Status.Fulfilled,
+        Some(LocalDate.parse("2017-12-31")),
+        Some(LocalDate.parse("2017-01-01"))
+      ))
 
       result shouldEqual expected
     }
@@ -233,9 +240,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getVatReturnObligations("111",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
+        Status.Fulfilled,
+        Some(LocalDate.parse("2017-01-01")),
+        Some(LocalDate.parse("2017-12-31"))
+      ))
 
       result shouldEqual expected
     }
@@ -251,9 +259,10 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
       val expected = Left(MultipleErrors("BAD_REQUEST", Json.toJson(errors).toString()))
       setupStubs()
       private val result = await(connector.getVatReturnObligations("123456789",
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-12-31"),
-        Status.Fulfilled))
+        Status.Fulfilled,
+        Some(LocalDate.parse("2017-01-01")),
+        Some(LocalDate.parse("2017-12-31"))
+      ))
 
       result shouldBe expected
     }

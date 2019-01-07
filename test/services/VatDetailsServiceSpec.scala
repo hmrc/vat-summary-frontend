@@ -95,7 +95,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
     def setup(obligationsCall: Boolean = false, paymentsCall: Boolean = false): Any = {
       if(obligationsCall) {
-        (mockObligationsConnector.getVatReturnObligations(_: String, _: LocalDate, _: LocalDate, _: Obligation.Status.Value)
+        (mockObligationsConnector.getVatReturnObligations(_: String, _: Obligation.Status.Value, _: Option[LocalDate], _: Option[LocalDate])
         (_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *, *)
           .returns(Future.successful(obligationResult))
