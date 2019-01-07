@@ -38,8 +38,9 @@
 
 @scriptElement = {
   <script type="text/javascript" src='@routes.Assets.at("javascript/vat-v1.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.at("javascript/ga-tag-manager.js")'></script>
 
-<script>
+  <script>
     @if(showLogout) {
         $.timeoutDialog({
           timeout: @appConfig.timeoutPeriod,
