@@ -44,6 +44,9 @@ sealed trait OpenPaymentsModel {
     case MpPre2009Charge => messages("openPayments.vatMpPre2009")
     case MpRepeatedPre2009Charge => messages("openPayments.vatMpRepeatedPre2009")
     case CivilEvasionPenaltyCharge => messages("openPayments.vatCivilEvasionPenalty")
+    case VatInaccuraciesInECSalesCharge => messages("openPayments.vatInaccuraciesECSales")
+    case VatFailureToSubmitECSalesCharge => messages("openPayments.vatFailureToSubmitECSales")
+
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
@@ -111,6 +114,8 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
     case BnpRegPre2010Charge => messages("openPayments.vatBNPofRegPre2010", displayDateRange(start, end))
     case AAFurtherInterestCharge => messages("openPayments.vatAAFurtherInterest", displayDateRange(start, end))
     case AACharge => messages("openPayments.vatAdditionalAssessment", displayDateRange(start, end))
+    case VatInaccuraciesInECSalesCharge=> messages("openPayments.vatInaccuraciesECSales",displayDateRange(start, end))
+    case VatFailureToSubmitECSalesCharge=> messages("openPayments.vatFailureToSubmitECSales",displayDateRange(start, end))
     case _ => super.whatYouOweDescription
   }
 

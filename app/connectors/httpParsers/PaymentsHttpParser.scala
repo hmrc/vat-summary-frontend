@@ -58,6 +58,8 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       MpPre2009Charge.value,
       MpRepeatedPre2009Charge.value,
       CivilEvasionPenaltyCharge.value,
+      VatInaccuraciesInECSalesCharge.value,
+      VatFailureToSubmitECSalesCharge.value,
       AAInterestCharge.value
     )
 
