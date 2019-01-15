@@ -122,7 +122,12 @@ case object FailureToNotifyRSCLCharge extends ChargeType {
 case object FailureToSubmitRSCLCharge extends ChargeType {
   override val value: String = "VAT Failure to submit RSCL"
 }
-
+case object VatInaccuraciesInECSalesCharge extends ChargeType {
+  override val value: String = "VAT Inaccuracies in EC Sales"
+}
+case object VatFailureToSubmitECSalesCharge extends ChargeType {
+  override val value: String = "VAT Failure to Submit EC Sales"
+}
 
 object ChargeType {
 
@@ -160,6 +165,8 @@ object ChargeType {
     case CarterPenaltyCharge.value => CarterPenaltyCharge
     case FailureToNotifyRSCLCharge.value => FailureToNotifyRSCLCharge
     case FailureToSubmitRSCLCharge.value => FailureToSubmitRSCLCharge
+    case VatInaccuraciesInECSalesCharge.value => VatInaccuraciesInECSalesCharge
+    case VatFailureToSubmitECSalesCharge.value => VatFailureToSubmitECSalesCharge
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 

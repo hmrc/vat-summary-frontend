@@ -111,6 +111,8 @@ openPayments.vatCarterPenalty = because you did not use the correct digital chan
 openPayments.vatWrongDoingPenalty = because you charged VAT when you should not have done
 openPayments.vatFailureToNotifyRSCL = because you failed to notify us of the date you made a reverse charge sale or stopped making supplies
 openPayments.vatFailureToSubmitRSCL = because you have failed to submit a Reverse Charge sales list
+openPayments.vatInaccuraciesECSales = because you have provided inaccurate information in your EC sales list
+openPayments.vatFailureToSubmitECSales = because you have not submitted an EC sales list or you have submitted it late
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.

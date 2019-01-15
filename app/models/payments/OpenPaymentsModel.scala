@@ -47,6 +47,8 @@ sealed trait OpenPaymentsModel {
     case WrongDoingPenaltyCharge => messages("openPayments.vatWrongDoingPenalty")
     case FailureToNotifyRSCLCharge => messages("openPayments.vatFailureToNotifyRSCL")
     case FailureToSubmitRSCLCharge => messages("openPayments.vatFailureToSubmitRSCL")
+    case VatInaccuraciesInECSalesCharge => messages("openPayments.vatInaccuraciesECSales")
+    case VatFailureToSubmitECSalesCharge => messages("openPayments.vatFailureToSubmitECSales")
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
