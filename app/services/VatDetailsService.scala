@@ -39,10 +39,7 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
                           (implicit hc: HeaderCarrier,
                            ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] = {
 
-    val dateFrom = LocalDate.parse("2018-01-01")
-    val dateTo = LocalDate.parse("2018-12-31")
-
-    vatObligationsConnector.getVatReturnObligations(user.vrn, dateFrom, dateTo, Outstanding).map {
+    vatObligationsConnector.getVatReturnObligations(user.vrn, Outstanding).map {
       case Right(nextReturns) if nextReturns.obligations.nonEmpty => Right(Some(nextReturns))
       case Right(_) => Right(None)
       case Left(_) => Left(ObligationsError)

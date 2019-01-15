@@ -46,9 +46,9 @@ class VatObligationsConnector @Inject()(http: HttpClient,
   }
 
   def getVatReturnObligations(vrn: String,
-                              from: LocalDate,
-                              to: LocalDate,
-                              status: Status.Value)(implicit hc: HeaderCarrier,
+                              status: Status.Value,
+                              from: Option[LocalDate] = None,
+                              to: Option[LocalDate] = None)(implicit hc: HeaderCarrier,
                               ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
 
     val timer = metrics.getObligationsTimer.time()
@@ -62,7 +62,10 @@ class VatObligationsConnector @Inject()(http: HttpClient,
 
     val httpRequest = http.GET(
       obligationsUrl(vrn),
-      Seq("from" -> from.toString, "to" -> to.toString, "status" -> status.toString)
+      (from, to) match {
+        case (Some(f), Some(t)) => Seq("from" -> f.toString, "to" -> t.toString, "status" -> status.toString)
+        case _ => Seq("status" -> status.toString)
+      }
     )(implicitly[HttpReads[HttpGetResult[VatReturnObligations]]],
       headerCarrier,
       implicitly[ExecutionContext]
