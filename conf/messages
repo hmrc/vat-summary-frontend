@@ -105,6 +105,8 @@ openPayments.vatMpPre2009 = because you have made an incorrect declaration
 openPayments.vatMpRepeatedPre2009 = this is because you have repeatedly made incorrect declarations
 openPayments.vatCivilEvasionPenalty = because we have identified irregularities involving dishonesty
 openPayments.AADefaultInterestDescription = interest charged on additional tax assessed for the period {0}
+openPayments.vatInaccuraciesECSales = because you have provided inaccurate information in your EC sales list
+openPayments.vatFailureToSubmitECSales = because you have not submitted an EC sales list or you have submitted it late
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.

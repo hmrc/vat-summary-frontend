@@ -104,6 +104,12 @@ case object MpRepeatedPre2009Charge extends ChargeType {
 case object CivilEvasionPenaltyCharge extends ChargeType {
   override val value: String = "VAT Civil Evasion Penalty"
 }
+case object VatInaccuraciesInECSalesCharge extends ChargeType {
+  override val value: String = "VAT Inaccuracies in EC Sales"
+}
+case object VatFailureToSubmitECSalesCharge extends ChargeType {
+  override val value: String = "VAT Failure to Submit EC Sales"
+}
 
 object ChargeType {
 
@@ -135,6 +141,8 @@ object ChargeType {
     case MpPre2009Charge.value => MpPre2009Charge
     case MpRepeatedPre2009Charge.value => MpRepeatedPre2009Charge
     case CivilEvasionPenaltyCharge.value => CivilEvasionPenaltyCharge
+    case VatInaccuraciesInECSalesCharge.value => VatInaccuraciesInECSalesCharge
+    case VatFailureToSubmitECSalesCharge.value => VatFailureToSubmitECSalesCharge
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
