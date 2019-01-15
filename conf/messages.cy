@@ -103,6 +103,7 @@ openPayments.vatMpPre2009 = because you have made an incorrect declaration
 openPayments.vatMpRepeatedPre2009 = this is because you have repeatedly made incorrect declarations
 openPayments.vatCivilEvasionPenalty = because we have identified irregularities involving dishonesty
 openPayments.AADefaultInterestDescription = interest charged on additional tax assessed for the period {0}
+openPayments.vatInaccuracyAssessmentsPen = because you submitted an inaccurate document for the period {0}
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.

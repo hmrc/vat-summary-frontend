@@ -221,6 +221,15 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2017-03-31"),
       "#017",
       overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      VatInaccuracyAssessmentsPen,
+      1800.00,
+      LocalDate.parse("2018-04-05"),
+      LocalDate.parse("2018-01-01"),
+      LocalDate.parse("2018-03-31"),
+      "#015",
+      overdue = true
     )
   )
 
@@ -682,6 +691,29 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       "not display a view return link text for the 16th payment" in {
         document.select(Selectors.paymentViewReturnText(17)).size shouldBe 0
+      }
+    }
+
+    "for the 18th payment" should {
+
+      "render the correct amount for the 18th payment" in {
+        elementText(Selectors.paymentAmount(18)) shouldBe "£1,800"
+      }
+
+      "render the correct amount for the 18th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(18)) shouldBe "£1,800"
+      }
+
+      "render the correct due period for the 18th payment" in {
+        elementText(Selectors.paymentDue(18)) shouldBe "due by 5 April 2018"
+      }
+
+      "render the correct due period for the 18th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(18)) shouldBe "due by 5 April 2018"
+      }
+
+      "not display a view return link text for the 18th payment" in {
+        document.select(Selectors.paymentViewReturnText(18)).size shouldBe 0
       }
     }
 

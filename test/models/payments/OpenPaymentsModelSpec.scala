@@ -585,6 +585,37 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         Json.toJson(testModel) shouldBe testJson
       }
     }
+
+    s"charge type is $VatInaccuracyAssessmentsPen" should {
+
+      val testModel = OpenPaymentsModel(
+        chargeType = VatInaccuracyAssessmentsPen,
+        amount = 1600.00,
+        due = LocalDate.parse("2016-04-05"),
+        start = LocalDate.parse("2016-01-01"),
+        end = LocalDate.parse("2016-03-31"),
+        periodKey = "#016",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> VatInaccuracyAssessmentsPen.value,
+        "amount" -> 1600.00,
+        "due" -> "2016-04-05",
+        "start" -> "2016-01-01",
+        "end" -> "2016-03-31",
+        "periodKey" -> "#016",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you submitted an inaccurate document for the period 1 January to 31 March 2016"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
   }
 
   "An OpenPaymentsModel without a start and end date" when {

@@ -102,6 +102,7 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        periodKey: String,
                                        overdue: Boolean = false) extends OpenPaymentsModel {
 
+  //noinspection ScalaStyle
   override def whatYouOweDescription(implicit messages: Messages): String = chargeType match {
     case ReturnDebitCharge => messages("openPayments.vatReturn", displayDateRange(start, end))
     case DefaultSurcharge => messages("openPayments.surcharge", displayDateRange(start, end))
@@ -116,6 +117,7 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
     case AACharge => messages("openPayments.vatAdditionalAssessment", displayDateRange(start, end))
     case VatInaccuraciesInECSalesCharge=> messages("openPayments.vatInaccuraciesECSales",displayDateRange(start, end))
     case VatFailureToSubmitECSalesCharge=> messages("openPayments.vatFailureToSubmitECSales",displayDateRange(start, end))
+    case VatInaccuracyAssessmentsPen => messages("openPayments.vatInaccuracyAssessmentsPen", displayDateRange(start, end))
     case _ => super.whatYouOweDescription
   }
 

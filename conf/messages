@@ -107,6 +107,7 @@ openPayments.vatCivilEvasionPenalty = because we have identified irregularities 
 openPayments.AADefaultInterestDescription = interest charged on additional tax assessed for the period {0}
 openPayments.vatInaccuraciesECSales = because you have provided inaccurate information in your EC sales list
 openPayments.vatFailureToSubmitECSales = because you have not submitted an EC sales list or you have submitted it late
+openPayments.vatInaccuracyAssessmentsPen = because you submitted an inaccurate document for the period {0}
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
