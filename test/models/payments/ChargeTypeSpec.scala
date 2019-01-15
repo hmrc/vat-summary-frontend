@@ -50,6 +50,12 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(MpRepeatedPre2009Charge.value) shouldBe MpRepeatedPre2009Charge
         ChargeType.apply(CivilEvasionPenaltyCharge.value) shouldBe CivilEvasionPenaltyCharge
         ChargeType.apply(VatOAInaccuraciesFrom2009.value) shouldBe VatOAInaccuraciesFrom2009
+        ChargeType.apply(InaccuraciesAssessmentsPenCharge.value) shouldBe InaccuraciesAssessmentsPenCharge
+        ChargeType.apply(InaccuraciesReturnReplacedCharge.value) shouldBe InaccuraciesReturnReplacedCharge
+        ChargeType.apply(WrongDoingPenaltyCharge.value) shouldBe WrongDoingPenaltyCharge
+        ChargeType.apply(FailureToNotifyRCSLCharge.value) shouldBe FailureToNotifyRCSLCharge
+        ChargeType.apply(FailureToSubmitRCSLCharge.value) shouldBe FailureToSubmitRCSLCharge
+        ChargeType.apply(CarterPenaltyCharge.value) shouldBe CarterPenaltyCharge
       }
     }
 
@@ -91,6 +97,12 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(MpRepeatedPre2009Charge) shouldBe MpRepeatedPre2009Charge.value
       ChargeType.unapply(CivilEvasionPenaltyCharge) shouldBe CivilEvasionPenaltyCharge.value
       ChargeType.unapply(VatOAInaccuraciesFrom2009) shouldBe VatOAInaccuraciesFrom2009.value
+      ChargeType.unapply(InaccuraciesReturnReplacedCharge) shouldBe InaccuraciesReturnReplacedCharge.value
+      ChargeType.unapply(InaccuraciesAssessmentsPenCharge) shouldBe InaccuraciesAssessmentsPenCharge.value
+      ChargeType.unapply(WrongDoingPenaltyCharge) shouldBe WrongDoingPenaltyCharge.value
+      ChargeType.unapply(CarterPenaltyCharge) shouldBe CarterPenaltyCharge.value
+      ChargeType.unapply(FailureToSubmitRCSLCharge) shouldBe FailureToSubmitRCSLCharge.value
+      ChargeType.unapply(FailureToNotifyRCSLCharge) shouldBe FailureToNotifyRCSLCharge.value
     }
   }
 }

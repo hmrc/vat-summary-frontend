@@ -107,6 +107,24 @@ case object CivilEvasionPenaltyCharge extends ChargeType {
 case object VatOAInaccuraciesFrom2009 extends ChargeType {
   override val value: String = "VAT OA Inaccuracies from 2009"
 }
+case object InaccuraciesAssessmentsPenCharge extends ChargeType {
+  override val value: String = "VAT Inaccuracy Assessments pen"
+}
+case object InaccuraciesReturnReplacedCharge extends ChargeType {
+  override val value: String = "VAT Inaccuracy rturn replaced"
+}
+case object WrongDoingPenaltyCharge extends ChargeType {
+  override val value: String = "VAT Wrong Doing Penalty"
+}
+case object CarterPenaltyCharge extends ChargeType {
+  override val value: String = "VAT Carter Penalty"
+}
+case object FailureToNotifyRCSLCharge extends ChargeType {
+  override val value: String = "VAT FTN RCSL"
+}
+case object FailureToSubmitRCSLCharge extends ChargeType {
+  override val value: String = "VAT Failure to submit RCSL"
+}
 case object VatInaccuraciesInECSalesCharge extends ChargeType {
   override val value: String = "VAT Inaccuracies in EC Sales"
 }
@@ -145,6 +163,12 @@ object ChargeType {
     case MpRepeatedPre2009Charge.value => MpRepeatedPre2009Charge
     case CivilEvasionPenaltyCharge.value => CivilEvasionPenaltyCharge
     case VatOAInaccuraciesFrom2009.value => VatOAInaccuraciesFrom2009
+    case InaccuraciesAssessmentsPenCharge.value => InaccuraciesAssessmentsPenCharge
+    case InaccuraciesReturnReplacedCharge.value => InaccuraciesReturnReplacedCharge
+    case WrongDoingPenaltyCharge.value => WrongDoingPenaltyCharge
+    case CarterPenaltyCharge.value => CarterPenaltyCharge
+    case FailureToNotifyRCSLCharge.value => FailureToNotifyRCSLCharge
+    case FailureToSubmitRCSLCharge.value => FailureToSubmitRCSLCharge
     case VatInaccuraciesInECSalesCharge.value => VatInaccuraciesInECSalesCharge
     case VatFailureToSubmitECSalesCharge.value => VatFailureToSubmitECSalesCharge
     case _ => throw new IllegalArgumentException("Invalid Charge Type")

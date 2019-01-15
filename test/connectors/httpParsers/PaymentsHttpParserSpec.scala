@@ -324,6 +324,90 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "amount" -> 50.00
                 )
               )
+            ),
+            Json.obj(
+              "mainType" -> InaccuraciesAssessmentsPenCharge,
+              "chargeType" -> InaccuraciesAssessmentsPenCharge,
+              "periodKey" -> "#018",
+              "taxPeriodFrom" -> "2008-03-20",
+              "taxPeriodTo" -> "2008-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> InaccuraciesReturnReplacedCharge,
+              "chargeType" -> InaccuraciesReturnReplacedCharge,
+              "periodKey" -> "#018",
+              "taxPeriodFrom" -> "2008-03-20",
+              "taxPeriodTo" -> "2008-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> CarterPenaltyCharge,
+              "chargeType" -> CarterPenaltyCharge,
+              "periodKey" -> "#018",
+              "taxPeriodFrom" -> "2008-03-20",
+              "taxPeriodTo" -> "2008-06-21",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> WrongDoingPenaltyCharge,
+              "chargeType" -> WrongDoingPenaltyCharge,
+              "periodKey" -> "#018",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FailureToSubmitRCSLCharge,
+              "chargeType" -> FailureToSubmitRCSLCharge,
+              "periodKey" -> "#018",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> FailureToNotifyRCSLCharge,
+              "chargeType" -> FailureToNotifyRCSLCharge,
+              "periodKey" -> "#018",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
             )
           )
         )
@@ -473,6 +557,48 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2017-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#020")
+        ),
+        Payment(
+          InaccuraciesAssessmentsPenCharge,
+          start = LocalDate.parse("2008-03-20"),
+          end = LocalDate.parse("2008-06-21"),
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          InaccuraciesReturnReplacedCharge,
+          start = LocalDate.parse("2008-03-20"),
+          end = LocalDate.parse("2008-06-21"),
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          CarterPenaltyCharge,
+          start = LocalDate.parse("2008-03-20"),
+          end = LocalDate.parse("2008-06-21"),
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          WrongDoingPenaltyCharge,
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          FailureToSubmitRCSLCharge,
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          FailureToNotifyRCSLCharge,
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
         )
       )))
 

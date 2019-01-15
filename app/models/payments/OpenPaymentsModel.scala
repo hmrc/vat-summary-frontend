@@ -44,9 +44,11 @@ sealed trait OpenPaymentsModel {
     case MpPre2009Charge => messages("openPayments.vatMpPre2009")
     case MpRepeatedPre2009Charge => messages("openPayments.vatMpRepeatedPre2009")
     case CivilEvasionPenaltyCharge => messages("openPayments.vatCivilEvasionPenalty")
+    case WrongDoingPenaltyCharge => messages("openPayments.vatWrongDoingPenalty")
+    case FailureToNotifyRCSLCharge => messages("openPayments.vatFailureToNotifyRCSL")
+    case FailureToSubmitRCSLCharge => messages("openPayments.vatFailureToSubmitRCSL")
     case VatInaccuraciesInECSalesCharge => messages("openPayments.vatInaccuraciesECSales")
     case VatFailureToSubmitECSalesCharge => messages("openPayments.vatFailureToSubmitECSales")
-
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
@@ -118,6 +120,9 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
     case VatOAInaccuraciesFrom2009 => messages("openPayments.vatOAInaccuraciesFrom2009", displayDateRange(start, end))
     case VatInaccuraciesInECSalesCharge=> messages("openPayments.vatInaccuraciesECSales",displayDateRange(start, end))
     case VatFailureToSubmitECSalesCharge=> messages("openPayments.vatFailureToSubmitECSales",displayDateRange(start, end))
+    case InaccuraciesAssessmentsPenCharge => messages("openPayments.vatInaccuraciesAssessmentsPen", displayDateRange(start, end))
+    case InaccuraciesReturnReplacedCharge => messages("openPayments.vatInaccuraciesReturnReplaced", displayDateRange(start, end))
+    case CarterPenaltyCharge => messages("openPayments.vatCarterPenalty", displayDateRange(start, end))
     case _ => super.whatYouOweDescription
   }
 

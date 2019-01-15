@@ -911,6 +911,179 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       "return the correct message" in {
         testModel.whatYouOweDescription shouldBe "because you submitted an inaccurate document for the period 20 March to 21 June 2017"
       }
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $InaccuraciesAssessmentsPenCharge" should{
+
+      val testModel = OpenPaymentsModel(
+        chargeType = InaccuraciesAssessmentsPenCharge,
+        amount = 1300.00,
+        due = LocalDate.parse("2013-04-05"),
+        start = LocalDate.parse("2013-01-01"),
+        end = LocalDate.parse("2013-03-31"),
+        periodKey = "#013",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> InaccuraciesAssessmentsPenCharge.value,
+        "amount" -> 1300.00,
+        "due" -> "2013-04-05",
+        "start" -> "2013-01-01",
+        "end" -> "2013-03-31",
+        "periodKey" -> "#013",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you submitted an inaccurate document for the period 1 January to 31 March 2013"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $InaccuraciesReturnReplacedCharge" should{
+
+      val testModel = OpenPaymentsModel(
+        chargeType = InaccuraciesReturnReplacedCharge,
+        amount = 1300.00,
+        due = LocalDate.parse("2013-04-05"),
+        start = LocalDate.parse("2013-01-01"),
+        end = LocalDate.parse("2013-03-31"),
+        periodKey = "#013",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> InaccuraciesReturnReplacedCharge.value,
+        "amount" -> 1300.00,
+        "due" -> "2013-04-05",
+        "start" -> "2013-01-01",
+        "end" -> "2013-03-31",
+        "periodKey" -> "#013",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "this is because you have submitted inaccurate information for the period 1 January to 31 March 2013"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $CarterPenaltyCharge" should{
+
+      val testModel = OpenPaymentsModel(
+        chargeType = CarterPenaltyCharge,
+        amount = 1300.00,
+        due = LocalDate.parse("2013-04-05"),
+        start = LocalDate.parse("2013-01-01"),
+        end = LocalDate.parse("2013-03-31"),
+        periodKey = "#013",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> CarterPenaltyCharge.value,
+        "amount" -> 1300.00,
+        "due" -> "2013-04-05",
+        "start" -> "2013-01-01",
+        "end" -> "2013-03-31",
+        "periodKey" -> "#013",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you did not use the correct digital channel for the period 1 January to 31 March 2013"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $WrongDoingPenaltyCharge" should{
+
+      val testModel = OpenPaymentsModel(
+        chargeType = WrongDoingPenaltyCharge,
+        amount = 1300.00,
+        due = LocalDate.parse("2013-04-05"),
+        periodKey = "#013",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> WrongDoingPenaltyCharge.value,
+        "amount" -> 1300.00,
+        "due" -> "2013-04-05",
+        "periodKey" -> "#013",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you charged VAT when you should not have done"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $FailureToSubmitRCSLCharge" should{
+
+      val testModel = OpenPaymentsModel(
+        chargeType = FailureToSubmitRCSLCharge,
+        amount = 1300.00,
+        due = LocalDate.parse("2013-04-05"),
+        periodKey = "#013",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> FailureToSubmitRCSLCharge.value,
+        "amount" -> 1300.00,
+        "due" -> "2013-04-05",
+        "periodKey" -> "#013",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you have failed to submit a Reverse Charge sales list"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $FailureToNotifyRCSLCharge" should{
+
+      val testModel = OpenPaymentsModel(
+        chargeType = FailureToNotifyRCSLCharge,
+        amount = 1300.00,
+        due = LocalDate.parse("2013-04-05"),
+        periodKey = "#013",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> FailureToNotifyRCSLCharge.value,
+        "amount" -> 1300.00,
+        "due" -> "2013-04-05",
+        "periodKey" -> "#013",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you failed to notify us of the date you made a reverse charge sale or stopped making supplies"
+      }
 
       "correctly write to Json" in {
         Json.toJson(testModel) shouldBe testJson
