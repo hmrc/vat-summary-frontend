@@ -49,12 +49,12 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(MpPre2009Charge.value) shouldBe MpPre2009Charge
         ChargeType.apply(MpRepeatedPre2009Charge.value) shouldBe MpRepeatedPre2009Charge
         ChargeType.apply(CivilEvasionPenaltyCharge.value) shouldBe CivilEvasionPenaltyCharge
-        ChargeType.apply(InaccuraciesAssessmentsPen.value) shouldBe InaccuraciesAssessmentsPen
-        ChargeType.apply(InaccuraciesReturnReplaced.value) shouldBe InaccuraciesReturnReplaced
-        ChargeType.apply(WrongDoingPenalty.value) shouldBe WrongDoingPenalty
-        ChargeType.apply(FailureToNotifyRSCL.value) shouldBe FailureToNotifyRSCL
-        ChargeType.apply(FailureToSubmitRSCL.value) shouldBe FailureToSubmitRSCL
-        ChargeType.apply(CarterPenalty.value) shouldBe CarterPenalty
+        ChargeType.apply(InaccuraciesAssessmentsPenCharge.value) shouldBe InaccuraciesAssessmentsPenCharge
+        ChargeType.apply(InaccuraciesReturnReplacedCharge.value) shouldBe InaccuraciesReturnReplacedCharge
+        ChargeType.apply(WrongDoingPenaltyCharge.value) shouldBe WrongDoingPenaltyCharge
+        ChargeType.apply(FailureToNotifyRSCLCharge.value) shouldBe FailureToNotifyRSCLCharge
+        ChargeType.apply(FailureToSubmitRSCLCharge.value) shouldBe FailureToSubmitRSCLCharge
+        ChargeType.apply(CarterPenaltyCharge.value) shouldBe CarterPenaltyCharge
       }
     }
 
@@ -95,12 +95,12 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(MpPre2009Charge) shouldBe MpPre2009Charge.value
       ChargeType.unapply(MpRepeatedPre2009Charge) shouldBe MpRepeatedPre2009Charge.value
       ChargeType.unapply(CivilEvasionPenaltyCharge) shouldBe CivilEvasionPenaltyCharge.value
-      ChargeType.unapply(InaccuraciesReturnReplaced) shouldBe InaccuraciesReturnReplaced.value
-      ChargeType.unapply(InaccuraciesAssessmentsPen) shouldBe InaccuraciesAssessmentsPen.value
-      ChargeType.unapply(WrongDoingPenalty) shouldBe WrongDoingPenalty.value
-      ChargeType.unapply(CarterPenalty) shouldBe CarterPenalty.value
-      ChargeType.unapply(FailureToSubmitRSCL) shouldBe FailureToSubmitRSCL.value
-      ChargeType.unapply(FailureToNotifyRSCL) shouldBe FailureToNotifyRSCL.value
+      ChargeType.unapply(InaccuraciesReturnReplacedCharge) shouldBe InaccuraciesReturnReplacedCharge.value
+      ChargeType.unapply(InaccuraciesAssessmentsPenCharge) shouldBe InaccuraciesAssessmentsPenCharge.value
+      ChargeType.unapply(WrongDoingPenaltyCharge) shouldBe WrongDoingPenaltyCharge.value
+      ChargeType.unapply(CarterPenaltyCharge) shouldBe CarterPenaltyCharge.value
+      ChargeType.unapply(FailureToSubmitRSCLCharge) shouldBe FailureToSubmitRSCLCharge.value
+      ChargeType.unapply(FailureToNotifyRSCLCharge) shouldBe FailureToNotifyRSCLCharge.value
     }
   }
 }
