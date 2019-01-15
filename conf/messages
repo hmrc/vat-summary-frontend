@@ -109,8 +109,8 @@ openPayments.vatInaccuraciesAssessmentsPen = because you submitted an inaccurate
 openPayments.vatInaccuraciesReturnReplaced = this is because you have submitted inaccurate information for the period {0}
 openPayments.vatCarterPenalty = because you did not use the correct digital channel for the period {0}
 openPayments.vatWrongDoingPenalty = because you charged VAT when you should not have done
-openPayments.vatFailureToNotifyRSCL = because you failed to notify us of the date you made a reverse charge sale or stopped making supplies
-openPayments.vatFailureToSubmitRSCL = because you have failed to submit a Reverse Charge sales list
+openPayments.vatFailureToNotifyRCSL = because you failed to notify us of the date you made a reverse charge sale or stopped making supplies
+openPayments.vatFailureToSubmitRCSL = because you have failed to submit a Reverse Charge sales list
 openPayments.vatInaccuraciesECSales = because you have provided inaccurate information in your EC sales list
 openPayments.vatFailureToSubmitECSales = because you have not submitted an EC sales list or you have submitted it late
 

@@ -52,8 +52,8 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(InaccuraciesAssessmentsPenCharge.value) shouldBe InaccuraciesAssessmentsPenCharge
         ChargeType.apply(InaccuraciesReturnReplacedCharge.value) shouldBe InaccuraciesReturnReplacedCharge
         ChargeType.apply(WrongDoingPenaltyCharge.value) shouldBe WrongDoingPenaltyCharge
-        ChargeType.apply(FailureToNotifyRSCLCharge.value) shouldBe FailureToNotifyRSCLCharge
-        ChargeType.apply(FailureToSubmitRSCLCharge.value) shouldBe FailureToSubmitRSCLCharge
+        ChargeType.apply(FailureToNotifyRCSLCharge.value) shouldBe FailureToNotifyRCSLCharge
+        ChargeType.apply(FailureToSubmitRCSLCharge.value) shouldBe FailureToSubmitRCSLCharge
         ChargeType.apply(CarterPenaltyCharge.value) shouldBe CarterPenaltyCharge
       }
     }
@@ -99,8 +99,8 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(InaccuraciesAssessmentsPenCharge) shouldBe InaccuraciesAssessmentsPenCharge.value
       ChargeType.unapply(WrongDoingPenaltyCharge) shouldBe WrongDoingPenaltyCharge.value
       ChargeType.unapply(CarterPenaltyCharge) shouldBe CarterPenaltyCharge.value
-      ChargeType.unapply(FailureToSubmitRSCLCharge) shouldBe FailureToSubmitRSCLCharge.value
-      ChargeType.unapply(FailureToNotifyRSCLCharge) shouldBe FailureToNotifyRSCLCharge.value
+      ChargeType.unapply(FailureToSubmitRCSLCharge) shouldBe FailureToSubmitRCSLCharge.value
+      ChargeType.unapply(FailureToNotifyRCSLCharge) shouldBe FailureToNotifyRCSLCharge.value
     }
   }
 }

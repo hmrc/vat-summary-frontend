@@ -62,8 +62,8 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       InaccuraciesReturnReplacedCharge.value,
       InaccuraciesAssessmentsPenCharge.value,
       WrongDoingPenaltyCharge.value,
-      FailureToNotifyRSCLCharge.value,
-      FailureToSubmitRSCLCharge.value,
+      FailureToNotifyRCSLCharge.value,
+      FailureToSubmitRCSLCharge.value,
       CarterPenaltyCharge.value,
       VatInaccuraciesInECSalesCharge.value,
       VatFailureToSubmitECSalesCharge.value

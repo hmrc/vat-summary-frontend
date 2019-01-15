@@ -1006,10 +1006,10 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $FailureToSubmitRSCLCharge" should{
+    s"charge type is $FailureToSubmitRCSLCharge" should{
 
       val testModel = OpenPaymentsModel(
-        chargeType = FailureToSubmitRSCLCharge,
+        chargeType = FailureToSubmitRCSLCharge,
         amount = 1300.00,
         due = LocalDate.parse("2013-04-05"),
         periodKey = "#013",
@@ -1017,7 +1017,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> FailureToSubmitRSCLCharge.value,
+        "paymentType" -> FailureToSubmitRCSLCharge.value,
         "amount" -> 1300.00,
         "due" -> "2013-04-05",
         "periodKey" -> "#013",
@@ -1033,10 +1033,10 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       }
     }
 
-    s"charge type is $FailureToNotifyRSCLCharge" should{
+    s"charge type is $FailureToNotifyRCSLCharge" should{
 
       val testModel = OpenPaymentsModel(
-        chargeType = FailureToNotifyRSCLCharge,
+        chargeType = FailureToNotifyRCSLCharge,
         amount = 1300.00,
         due = LocalDate.parse("2013-04-05"),
         periodKey = "#013",
@@ -1044,7 +1044,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       val testJson = Json.obj(
-        "paymentType" -> FailureToNotifyRSCLCharge.value,
+        "paymentType" -> FailureToNotifyRCSLCharge.value,
         "amount" -> 1300.00,
         "due" -> "2013-04-05",
         "periodKey" -> "#013",

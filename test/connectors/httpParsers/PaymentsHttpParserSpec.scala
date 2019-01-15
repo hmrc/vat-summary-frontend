@@ -369,8 +369,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FailureToSubmitRSCLCharge,
-              "chargeType" -> FailureToSubmitRSCLCharge,
+              "mainType" -> FailureToSubmitRCSLCharge,
+              "chargeType" -> FailureToSubmitRCSLCharge,
               "periodKey" -> "#018",
               "outstandingAmount" -> 50.00,
               "items" -> Json.arr(
@@ -382,8 +382,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             ),
             Json.obj(
-              "mainType" -> FailureToNotifyRSCLCharge,
-              "chargeType" -> FailureToNotifyRSCLCharge,
+              "mainType" -> FailureToNotifyRCSLCharge,
+              "chargeType" -> FailureToNotifyRCSLCharge,
               "periodKey" -> "#018",
               "outstandingAmount" -> 50.00,
               "items" -> Json.arr(
@@ -566,13 +566,13 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = Some("#018")
         ),
         Payment(
-          FailureToSubmitRSCLCharge,
+          FailureToSubmitRCSLCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018")
         ),
         Payment(
-          FailureToNotifyRSCLCharge,
+          FailureToNotifyRCSLCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018")
