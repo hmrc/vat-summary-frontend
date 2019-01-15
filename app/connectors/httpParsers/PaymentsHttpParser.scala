@@ -58,7 +58,8 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       MpPre2009Charge.value,
       MpRepeatedPre2009Charge.value,
       CivilEvasionPenaltyCharge.value,
-      AAInterestCharge.value
+      AAInterestCharge.value,
+      VatOAInaccuraciesFrom2009.value
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value

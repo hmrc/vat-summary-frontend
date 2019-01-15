@@ -49,6 +49,7 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(MpPre2009Charge.value) shouldBe MpPre2009Charge
         ChargeType.apply(MpRepeatedPre2009Charge.value) shouldBe MpRepeatedPre2009Charge
         ChargeType.apply(CivilEvasionPenaltyCharge.value) shouldBe CivilEvasionPenaltyCharge
+        ChargeType.apply(VatOAInaccuraciesFrom2009.value) shouldBe VatOAInaccuraciesFrom2009
       }
     }
 
@@ -89,6 +90,7 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(MpPre2009Charge) shouldBe MpPre2009Charge.value
       ChargeType.unapply(MpRepeatedPre2009Charge) shouldBe MpRepeatedPre2009Charge.value
       ChargeType.unapply(CivilEvasionPenaltyCharge) shouldBe CivilEvasionPenaltyCharge.value
+      ChargeType.unapply(VatOAInaccuraciesFrom2009) shouldBe VatOAInaccuraciesFrom2009.value
     }
   }
 }
