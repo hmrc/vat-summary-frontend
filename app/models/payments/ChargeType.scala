@@ -137,44 +137,51 @@ object ChargeType {
 
   val logger = Logger(getClass.getSimpleName)
 
+  val allChargeTypes: Set[ChargeType] = Set(
+    ReturnCharge,
+    ReturnDebitCharge,
+    ReturnCreditCharge,
+    OACharge,
+    OACreditCharge,
+    OADebitCharge,
+    DefaultSurcharge,
+    CentralAssessmentCharge,
+    ErrorCorrectionCharge,
+    ErrorCorrectionCreditCharge,
+    ErrorCorrectionDebitCharge,
+    RepaymentSupplement,
+    RepaySupplement,
+    OADefaultInterestCharge,
+    AACharge,
+    AAInterestCharge,
+    AAFurtherInterestCharge,
+    BnpRegPre2010Charge,
+    BnpRegPost2010Charge,
+    FtnEachPartnerCharge,
+    FtnMatPost2010Charge,
+    FtnMatPre2010Charge,
+    MiscPenaltyCharge,
+    MpPre2009Charge,
+    MpRepeatedPre2009Charge,
+    CivilEvasionPenaltyCharge,
+    VatOAInaccuraciesFrom2009,
+    InaccuraciesAssessmentsPenCharge,
+    InaccuraciesReturnReplacedCharge,
+    WrongDoingPenaltyCharge,
+    CarterPenaltyCharge,
+    FailureToNotifyRCSLCharge,
+    FailureToSubmitRCSLCharge,
+    VatInaccuraciesInECSalesCharge,
+    VatFailureToSubmitECSalesCharge
+  )
+
   //noinspection ScalaStyle
-  def apply: String => ChargeType = {
-    case ReturnCharge.value => ReturnCharge
-    case ReturnDebitCharge.value => ReturnDebitCharge
-    case ReturnCreditCharge.value => ReturnCreditCharge
-    case OACharge.value => OACharge
-    case OACreditCharge.value => OACreditCharge
-    case OADebitCharge.value => OADebitCharge
-    case DefaultSurcharge.value => DefaultSurcharge
-    case CentralAssessmentCharge.value => CentralAssessmentCharge
-    case ErrorCorrectionCharge.value => ErrorCorrectionCharge
-    case ErrorCorrectionCreditCharge.value => ErrorCorrectionCreditCharge
-    case ErrorCorrectionDebitCharge.value => ErrorCorrectionDebitCharge
-    case RepaymentSupplement.value => RepaymentSupplement
-    case RepaySupplement.value => RepaySupplement
-    case OADefaultInterestCharge.value => OADefaultInterestCharge
-    case AACharge.value => AACharge
-    case AAInterestCharge.value => AAInterestCharge
-    case AAFurtherInterestCharge.value => AAFurtherInterestCharge
-    case BnpRegPre2010Charge.value => BnpRegPre2010Charge
-    case BnpRegPost2010Charge.value => BnpRegPost2010Charge
-    case FtnEachPartnerCharge.value => FtnEachPartnerCharge
-    case FtnMatPost2010Charge.value => FtnMatPost2010Charge
-    case FtnMatPre2010Charge.value => FtnMatPre2010Charge
-    case MiscPenaltyCharge.value => MiscPenaltyCharge
-    case MpPre2009Charge.value => MpPre2009Charge
-    case MpRepeatedPre2009Charge.value => MpRepeatedPre2009Charge
-    case CivilEvasionPenaltyCharge.value => CivilEvasionPenaltyCharge
-    case VatOAInaccuraciesFrom2009.value => VatOAInaccuraciesFrom2009
-    case InaccuraciesAssessmentsPenCharge.value => InaccuraciesAssessmentsPenCharge
-    case InaccuraciesReturnReplacedCharge.value => InaccuraciesReturnReplacedCharge
-    case WrongDoingPenaltyCharge.value => WrongDoingPenaltyCharge
-    case CarterPenaltyCharge.value => CarterPenaltyCharge
-    case FailureToNotifyRCSLCharge.value => FailureToNotifyRCSLCharge
-    case FailureToSubmitRCSLCharge.value => FailureToSubmitRCSLCharge
-    case VatInaccuraciesInECSalesCharge.value => VatInaccuraciesInECSalesCharge
-    case VatFailureToSubmitECSalesCharge.value => VatFailureToSubmitECSalesCharge
-    case _ => throw new IllegalArgumentException("Invalid Charge Type")
+  def apply: String => ChargeType = input => {
+
+    allChargeTypes.find { chargeType =>
+      chargeType.value.toUpperCase.equals(input.trim.toUpperCase)
+    }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type"))
+
   }
 
   def unapply(arg: ChargeType): String = arg.value

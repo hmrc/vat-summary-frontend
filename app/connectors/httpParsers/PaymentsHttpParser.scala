@@ -74,7 +74,7 @@ object PaymentsHttpParser extends ResponseHttpParsers {
 
     val vatReturnCharges = charges.filter { charge =>
       val chargeType: String = (charge \ "chargeType").as[String]
-      validCharges.contains(chargeType)
+      validCharges.map(_.toUpperCase).contains(chargeType.toUpperCase)
     }
 
     Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
