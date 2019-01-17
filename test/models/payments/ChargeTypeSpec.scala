@@ -22,7 +22,7 @@ class ChargeTypeSpec extends UnitSpec {
 
   "Charge type apply method" when {
 
-    s"given a valid charge type" should {
+    "given a valid charge type" should {
       "return the correct ChargeType model" in {
         ChargeType.apply(ReturnDebitCharge.value) shouldBe ReturnDebitCharge
         ChargeType.apply(ReturnCreditCharge.value) shouldBe ReturnCreditCharge
@@ -56,6 +56,7 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(FailureToNotifyRCSLCharge.value) shouldBe FailureToNotifyRCSLCharge
         ChargeType.apply(FailureToSubmitRCSLCharge.value) shouldBe FailureToSubmitRCSLCharge
         ChargeType.apply(CarterPenaltyCharge.value) shouldBe CarterPenaltyCharge
+        ChargeType.apply(VatOfficersAssessmentFurtherInterestCharge.value) shouldBe VatOfficersAssessmentFurtherInterestCharge
       }
     }
 
@@ -109,6 +110,7 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(CarterPenaltyCharge) shouldBe CarterPenaltyCharge.value
       ChargeType.unapply(FailureToSubmitRCSLCharge) shouldBe FailureToSubmitRCSLCharge.value
       ChargeType.unapply(FailureToNotifyRCSLCharge) shouldBe FailureToNotifyRCSLCharge.value
+      ChargeType.unapply(VatOfficersAssessmentFurtherInterestCharge) shouldBe VatOfficersAssessmentFurtherInterestCharge.value
     }
   }
 

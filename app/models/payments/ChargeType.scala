@@ -132,6 +132,9 @@ case object VatInaccuraciesInECSalesCharge extends ChargeType {
 case object VatFailureToSubmitECSalesCharge extends ChargeType {
   override val value: String = "VAT Failure to Submit EC Sales"
 }
+case object VatOfficersAssessmentFurtherInterestCharge extends ChargeType {
+  override val value: String = "VAT OA Further Interest"
+}
 
 object ChargeType {
 
@@ -172,13 +175,15 @@ object ChargeType {
     FailureToNotifyRCSLCharge,
     FailureToSubmitRCSLCharge,
     VatInaccuraciesInECSalesCharge,
-    VatFailureToSubmitECSalesCharge
+    VatFailureToSubmitECSalesCharge,
+    VatOfficersAssessmentFurtherInterestCharge
   )
 
   def apply: String => ChargeType = input => {
     allChargeTypes.find { chargeType =>
       chargeType.value.toUpperCase.equals(input.trim.toUpperCase)
     }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type"))
+
   }
 
   def unapply(arg: ChargeType): String = arg.value
