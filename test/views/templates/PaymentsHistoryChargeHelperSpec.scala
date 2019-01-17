@@ -89,12 +89,20 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 
         result shouldBe Some(PaymentsHistoryChargeHelper.VatStatutoryInterestCharge)
       }
+
+      "return a VAT Security Deposit Request charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Security Deposit Request")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatSecurityDepositRequest)
+
+      }
     }
 
     "the lookup String is an invalid charge type" should {
 
       "return a None" in {
-        
+
         val result = PaymentsHistoryChargeHelper.getChargeType("invalid")
 
         result shouldBe None

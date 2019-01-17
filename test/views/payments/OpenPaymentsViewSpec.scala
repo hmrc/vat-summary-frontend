@@ -266,6 +266,15 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2018-03-31"),
       "#022",
       overdue = true
+    ),
+    OpenPaymentsModel(
+      VatPaFurtherInterestCharge,
+      1800.00,
+      LocalDate.parse("2018-04-05"),
+      LocalDate.parse("2018-01-01"),
+      LocalDate.parse("2018-03-31"),
+      "#018",
+      overdue = true
     )
   )
 

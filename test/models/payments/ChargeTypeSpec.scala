@@ -64,6 +64,8 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(VatECDefaultInterestCharge.value) shouldBe VatECDefaultInterestCharge
         ChargeType.apply(VatInaccuraciesInECSalesCharge.value) shouldBe VatInaccuraciesInECSalesCharge
         ChargeType.apply(VatPADefaultInterestCharge.value) shouldBe VatPADefaultInterestCharge
+        ChargeType.apply(VatPaFurtherInterestCharge.value) shouldBe VatPaFurtherInterestCharge
+        ChargeType.apply(VatSecurityDepositRequestCharge.value) shouldBe VatSecurityDepositRequestCharge
       }
     }
 
@@ -125,6 +127,7 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(VatECDefaultInterestCharge) shouldBe VatECDefaultInterestCharge.value
       ChargeType.unapply(VatInaccuraciesInECSalesCharge) shouldBe VatInaccuraciesInECSalesCharge.value
       ChargeType.unapply(VatPADefaultInterestCharge) shouldBe VatPADefaultInterestCharge.value
+      ChargeType.unapply(VatPaFurtherInterestCharge) shouldBe VatPaFurtherInterestCharge.value
     }
   }
 
