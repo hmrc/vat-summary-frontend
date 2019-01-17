@@ -67,6 +67,11 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       FailureToSubmitRCSLCharge.value,
       CarterPenaltyCharge.value,
       VatInaccuraciesInECSalesCharge.value,
+      VatECDefaultInterestCharge.value,
+      VatECFurtherInterestCharge.value,
+      VatSecurityDepositRequestCharge.value,
+      VatProtectiveAssessmentCharge.value,
+      VatPADefaultInterestCharge.value,
       VatFailureToSubmitECSalesCharge.value
     )
 

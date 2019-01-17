@@ -129,6 +129,22 @@ case object FailureToSubmitRCSLCharge extends ChargeType {
 case object VatInaccuraciesInECSalesCharge extends ChargeType {
   override val value: String = "VAT Inaccuracies in EC Sales"
 }
+case object VatECDefaultInterestCharge extends ChargeType {
+  override val value: String = "VAT EC Default Interest"
+}
+case object VatECFurtherInterestCharge extends ChargeType {
+  override val value: String = "VAT EC Further Interest"
+}
+case object VatSecurityDepositRequestCharge extends ChargeType {
+  override val value: String = "VAT Security Deposit Request"
+}
+case object VatProtectiveAssessmentCharge extends ChargeType {
+  override val value: String = "VAT Protective Assessment"
+}
+case object VatPADefaultInterestCharge extends ChargeType {
+  override val value: String = "VAT PA Default Interest"
+}
+
 case object VatFailureToSubmitECSalesCharge extends ChargeType {
   override val value: String = "VAT Failure to Submit EC Sales"
 }
@@ -180,7 +196,12 @@ object ChargeType {
     VatInaccuraciesInECSalesCharge,
     VatFailureToSubmitECSalesCharge,
     VatOfficersAssessmentFurtherInterestCharge,
-    StatutoryInterestCharge
+    StatutoryInterestCharge,
+    VatPADefaultInterestCharge,
+    VatProtectiveAssessmentCharge,
+    VatSecurityDepositRequestCharge,
+    VatECFurtherInterestCharge,
+    VatECDefaultInterestCharge
   )
 
   def apply: String => ChargeType = input => {
