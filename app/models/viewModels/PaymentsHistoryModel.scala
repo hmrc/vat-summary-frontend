@@ -42,7 +42,6 @@ object PaymentsHistoryModel {
   implicit val reads: Reads[Seq[PaymentsHistoryModel]] = new Reads[Seq[PaymentsHistoryModel]] {
     override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
 
-
       val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
         val transactions = transaction.get[String]("chargeType")
         ChargeType.isValidChargeType(transactions)
