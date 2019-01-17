@@ -114,6 +114,12 @@ openPayments.vatFailureToNotifyRCSL = because you failed to notify us of the dat
 openPayments.vatFailureToSubmitRCSL = because you have failed to submit a Reverse Charge sales list
 openPayments.vatInaccuraciesECSales = because you have provided inaccurate information in your EC sales list
 openPayments.vatFailureToSubmitECSales = because you have not submitted an EC sales list or you have submitted it late
+openPayments.VatECDefaultInterest = interest charged on assessed amount
+openPayments.VatECFurtherInterest = Further interest charged on assessed amount
+openPayments.VatSecurityDepositRequest = because you have not paid VAT in your current or previous business(es)
+openPayments.VatProtectiveAssessment = Assessment raised to protect HMRC''s position during an appeal
+openPayments.VatPADefaultInterest = interest charged on the protective assessment
+
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
