@@ -16,6 +16,7 @@
 
 package models.payments
 
+import play.api.Logger
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 
@@ -134,6 +135,8 @@ case object VatFailureToSubmitECSalesCharge extends ChargeType {
 
 object ChargeType {
 
+  val logger = Logger(getClass.getSimpleName)
+
   //noinspection ScalaStyle
   def apply: String => ChargeType = {
     case ReturnCharge.value => ReturnCharge
@@ -175,6 +178,17 @@ object ChargeType {
   }
 
   def unapply(arg: ChargeType): String = arg.value
+
+  def isValidChargeType(input: String): Boolean = {
+    try {
+      ChargeType.apply(input)
+      true
+    } catch {
+      case t: Throwable =>
+        logger.error(s"""Invalid Charge Type - Received "$input"""", t)
+        false
+    }
+  }
 
   implicit val reads: Reads[ChargeType] = __.read[String].map(apply)
 

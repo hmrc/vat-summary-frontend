@@ -454,62 +454,6 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
     }
   }
 
-  "the http response is 200 OK and there are no valid main types" should {
-    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK, Some(Json.parse(
-      s"""{
-         |    "idType" : "VRN",
-         |    "idNumber" : 555555555,
-         |    "regimeType" : "VATC",
-         |    "processingDate" : "2018-03-07T09:30:00.000Z",
-         |    "financialTransactions" : [
-         |      {
-         |        "chargeType" : "${OADebitCharge}",
-         |        "mainType" : "Some Other Main Type",
-         |        "periodKey" : "17AA",
-         |        "periodKeyDescription" : "ABCD",
-         |        "taxPeriodFrom" : "2018-08-01",
-         |        "taxPeriodTo" : "2018-10-31",
-         |        "businessPartner" : "0",
-         |        "contractAccountCategory" : "99",
-         |        "contractAccount" : "X",
-         |        "contractObjectType" : "ABCD",
-         |        "contractObject" : "0",
-         |        "sapDocumentNumber" : "0",
-         |        "sapDocumentNumberItem" : "0",
-         |        "chargeReference" : "XD002750002155",
-         |        "mainTransaction" : "1234",
-         |        "subTransaction" : "5678",
-         |        "originalAmount" : 150,
-         |        "outstandingAmount" : 150,
-         |        "items" : [
-         |          {
-         |            "subItem" : "000",
-         |            "clearingDate" : "2018-01-10",
-         |            "dueDate" : "2018-12-07",
-         |            "amount" : 150
-         |          },
-         |          {
-         |            "subItem" : "000",
-         |            "clearingDate" : "2018-03-10",
-         |            "dueDate" : "2018-12-07",
-         |            "amount" : 100
-         |          }
-         |        ]
-         |      }
-         |    ]
-         |  }""".stripMargin
-
-    )))
-
-    val expected: Either[Nothing, Seq[Nothing]] = Right(Seq.empty)
-
-    val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
-
-    "return an empty Payments instance" in {
-      result shouldBe expected
-    }
-  }
-
   "the http response status is 404 NOT_FOUND" should {
 
     val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.NOT_FOUND, None)

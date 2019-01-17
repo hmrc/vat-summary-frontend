@@ -41,24 +41,11 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
 
   private def removeNonVatReturnCharges(json: JsValue): JsValue = {
 
-    val validCharges: Set[String] = Set(
-      ReturnDebitCharge.value,
-      ReturnCreditCharge.value,
-      OADebitCharge.value,
-      OACreditCharge.value,
-      CentralAssessmentCharge.value,
-      DefaultSurcharge.value,
-      ErrorCorrectionCreditCharge.value,
-      ErrorCorrectionDebitCharge.value,
-      RepaymentSupplement.value,
-      OADefaultInterestCharge.value
-    )
-
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
 
     val vatReturnCharges = charges.filter { charge =>
       val chargeType: String = (charge \ "chargeType").as[String]
-      validCharges.contains(chargeType)
+      ChargeType.isValidChargeType(chargeType)
     }
     Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
   }
