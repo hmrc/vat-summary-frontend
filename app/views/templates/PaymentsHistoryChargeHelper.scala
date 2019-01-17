@@ -76,6 +76,36 @@ object PaymentsHistoryChargeHelper {
     "paymentsHistory.OADefaultInterestDescription"
   )
 
+  object VatBnpRegPre2010Charge extends PaymentsHistoryChargeHelper(
+    BnpRegPre2010Charge.value,
+    "paymentsHistory.bnpRegPre2010ChargeTitle",
+    "paymentsHistory.bnpRegPre2010ChargeDescription"
+  )
+
+  object VatBnpRegPost2010Charge extends PaymentsHistoryChargeHelper(
+    BnpRegPost2010Charge.value,
+    "paymentsHistory.bnpRegPost2010ChargeTitle",
+    "paymentsHistory.bnpRegPost2010ChargeDescription"
+  )
+
+  object VatFtnMatPre2010Charge extends PaymentsHistoryChargeHelper(
+    FtnMatPre2010Charge.value,
+    "paymentsHistory.ftnMatPre2010ChargeTitle",
+    "paymentsHistory.ftnMatPre2010ChargeDescription"
+  )
+
+  object VatFtnMatPost2010Charge extends PaymentsHistoryChargeHelper(
+    FtnMatPost2010Charge.value,
+    "paymentsHistory.ftnMatPost2010ChargeTitle",
+    "paymentsHistory.ftnMatPost2010ChargeDescription"
+  )
+
+  object VatMiscPenaltyCharge extends PaymentsHistoryChargeHelper(
+    MiscPenaltyCharge.value,
+    "paymentsHistory.miscPenaltyCharge",
+    ""
+  )
+
   val values = Seq(VatReturnDebitCharge, VatReturnCreditCharge, VatOfficerAssessmentCreditCharge,
     VatOfficerAssessmentDebitCharge, VatCentralAssessment, VatDefaultSurcharge,
     VatErrorCorrectionDebitCharge, VatErrorCorrectionCreditCharge, VatRepaymentSupplement, OADefaultInterest)

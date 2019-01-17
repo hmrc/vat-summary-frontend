@@ -161,7 +161,15 @@ paymentsHistory.vatRepaymentSupplementTitle = Late repayment compensation from H
 paymentsHistory.vatRepaymentSupplementDescription = we took too long to repay your {0} return
 paymentsHistory.OADefaultInterestTitle = VAT officer''s assessment interest
 paymentsHistory.OADefaultInterestDescription = interest charged on the officer''s assessment
-
+paymentsHistory.bnpRegPre2010ChargeTitle = Penalty for late registration
+paymentsHistory.bnpRegPre2010ChargeDescription = you should have been registered for VAT earlier
+paymentsHistory.bnpRegPost2010ChargeTitle = Penalty for late registration
+paymentsHistory.bnpRegPost2010ChargeDescription = you should have been registered for VAT earlier
+paymentsHistory.ftnMatPre2010ChargeTitle = Failure to notify penalty
+paymentsHistory.ftnMatPre2010ChargeDescription = you did not tell us you are no longer exempt from VAT registration
+paymentsHistory.ftnMatPost2010ChargeTitle = Failure to notify penalty
+paymentsHistory.ftnMatPost2010ChargeDescription = you did not tell us you are no longer exempt from VAT registration
+paymentsHistory.miscPenaltyCharge = VAT general penalty
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

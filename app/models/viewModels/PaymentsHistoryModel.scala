@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import common.FinancialTransactionsConstants
 import models.payments._
+import play.api.i18n.Messages
 import play.api.libs.json._
 
 case class PaymentsHistoryModel(chargeType: ChargeType,
@@ -42,36 +43,36 @@ object PaymentsHistoryModel {
   implicit val reads: Reads[Seq[PaymentsHistoryModel]] = new Reads[Seq[PaymentsHistoryModel]] {
     override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
 
-      val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
-        val transactions = transaction.get[String]("chargeType")
-        ChargeType.isValidChargeType(transactions)
-      }
+    val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
+      val transactions = transaction.get[String]("chargeType")
+      ChargeType.isValidChargeType(transactions)
+    }
 
-      def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate])] = {
-        transaction.\("items").validate[List[JsValue]].fold(
-          _ => throw new IllegalStateException(s"The data for key items could not be found in the Json"),
-          list => if (list.nonEmpty) {
-            list.map(item => item.get[BigDecimal]("amount") ->
-              getOptionDate(item, FinancialTransactionsConstants.clearingDate))
-          } else {
-            throw new IllegalStateException("The items list was found but the list was empty")
-          }
+    def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate])] = {
+      transaction.\("items").validate[List[JsValue]].fold(
+        _ => throw new IllegalStateException(s"The data for key items could not be found in the Json"),
+        list => if (list.nonEmpty) {
+          list.map(item => item.get[BigDecimal]("amount") ->
+            getOptionDate(item, FinancialTransactionsConstants.clearingDate))
+        } else {
+          throw new IllegalStateException("The items list was found but the list was empty")
+        }
+      )
+    }
+
+    def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
+
+    val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
+      getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
+        PaymentsHistoryModel(
+          chargeType = transaction.get[ChargeType](FinancialTransactionsConstants.chargeType),
+          taxPeriodFrom = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodFrom),
+          taxPeriodTo = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodTo),
+          amount = amount,
+          clearedDate = clearedDate
         )
       }
-
-      def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
-
-      val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
-        getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
-          PaymentsHistoryModel(
-            chargeType = transaction.get[ChargeType](FinancialTransactionsConstants.chargeType),
-            taxPeriodFrom = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodFrom),
-            taxPeriodTo = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodTo),
-            amount = amount,
-            clearedDate = clearedDate
-          )
-        }
-      }
+    }
 
       JsSuccess(extractedItems.flatten.filter(_.clearedDate.isDefined))
     }
