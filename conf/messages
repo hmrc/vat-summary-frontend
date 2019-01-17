@@ -172,6 +172,8 @@ paymentsHistory.ftnMatPost2010ChargeDescription = you did not tell us you are no
 paymentsHistory.miscPenaltyCharge = VAT general penalty
 paymentsHistory.VatOfficersAssessmentFurtherInterestTitle = VAT officer''s assessment further interest
 paymentsHistory.VatOfficersAssessmentFurtherInterestDescription = further interest charged on the officer''s assessment
+paymentsHistory.VatAdditionalAssessmentTitle = Additional assessment
+paymentsHistory.VatAdditionalAssessmentDescription = additional assessment based on further information for the period {0}
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
