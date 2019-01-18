@@ -170,12 +170,14 @@ paymentsHistory.ftnMatPre2010ChargeDescription = you did not tell us you are no 
 paymentsHistory.ftnMatPost2010ChargeTitle = Failure to notify penalty
 paymentsHistory.ftnMatPost2010ChargeDescription = you did not tell us you are no longer exempt from VAT registration
 paymentsHistory.miscPenaltyCharge = VAT general penalty
-paymentsHistory.VatOfficersAssessmentFurtherInterestTitle = VAT officer''s assessment further interest
-paymentsHistory.VatOfficersAssessmentFurtherInterestDescription = further interest charged on the officer''s assessment
+paymentsHistory.VatOfficersAssessmentFurtherInterestTitle = VAT officer’s assessment further interest
+paymentsHistory.VatOfficersAssessmentFurtherInterestDescription = further interest charged on the officer’s assessment
 paymentsHistory.VatAdditionalAssessmentTitle = Additional assessment
 paymentsHistory.VatAdditionalAssessmentDescription = additional assessment based on further information for the period {0}
 paymentsHistory.VatAdditionalAssessmentDefaultInterestTitle = Additional assessment interest
 paymentsHistory.VatAdditionalAssessmentDefaultInterestDescription = interest charged on additional tax assessed for the period {0}
+paymentsHistory.VatAdditionalAssessmentFurtherInterestTitle = Additional assessment further interest
+paymentsHistory.VatAdditionalAssessmentFurtherInterestDescription = further interest charged on additional tax assessed for the period {0}
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

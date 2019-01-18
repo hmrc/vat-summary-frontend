@@ -448,7 +448,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
     }
 
-    "there are VAT AA Default Interest Charge and a VAT Additional Assessment charge to display" should {
+    "there are VAT AA Default Interest Charge, VAT Additional Assessment charge and a VAT AA Further Interest" +
+      " charge to display" should {
 
       val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
         historyYears,
@@ -465,6 +466,13 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
             taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
             amount = 9876.00,
+            clearedDate = Some(LocalDate.parse("2018-03-01"))
+          ),
+          PaymentsHistoryModel(
+            chargeType = AAFurtherInterestCharge,
+            taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
+            amount = 6789.00,
             clearedDate = Some(LocalDate.parse("2018-03-01"))
           ))
       )
@@ -508,7 +516,27 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "contain the correct date" in {
-          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+          elementText(Selectors.paymentDateTableContent(2)) shouldBe "1 Mar 2018"
+        }
+      }
+
+      "contains a VAT Additional Assessment Further Interest charge" should {
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(3)) shouldBe "Additional assessment further interest"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(3)) shouldBe "further interest charged on additional tax" +
+            " assessed for the period 1 Mar to 1 Apr 2018"
+        }
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(3)) shouldBe "- £6,789"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(3)) shouldBe "1 Mar 2018"
         }
 
       }
@@ -535,11 +563,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "contain a MiscPenaltyCharge" should {
 
         "contain the correct title" in {
-          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "VAT officer's assessment further interest"
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "VAT officer’s assessment further interest"
         }
 
         "contain the correct description" in {
-          elementText(Selectors.descriptionTableContent(1)) shouldBe "further interest charged on the officer's assessment"
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "further interest charged on the officer’s assessment"
         }
 
         "contain the correct amount" in {

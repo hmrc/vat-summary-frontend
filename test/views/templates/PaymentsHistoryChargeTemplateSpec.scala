@@ -334,11 +334,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "VAT officer's assessment further interest"
+        elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment further interest"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "further interest charged on the officer's assessment"
+        elementText(Selectors.description) shouldBe "further interest charged on the officer’s assessment"
       }
     }
 
@@ -397,6 +397,35 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "interest charged on additional tax assessed" +
+          " for the period 1 Jan to 1 Apr 2018"
+      }
+    }
+
+    "there is a VAT AA Further Interest charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAFurtherInterestCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-04-01")),
+        2000.00,
+        Some(LocalDate.parse("2018-05-01"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Additional assessment further interest"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "further interest charged on additional tax assessed" +
           " for the period 1 Jan to 1 Apr 2018"
       }
     }
