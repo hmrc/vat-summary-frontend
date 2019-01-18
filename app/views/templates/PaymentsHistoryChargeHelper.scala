@@ -118,6 +118,12 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.VatAdditionalAssessmentDescription")
   )
 
+  object VatAADefaultInterest extends PaymentsHistoryChargeHelper(
+    AAInterestCharge.value,
+    "paymentsHistory.VatAdditionalAssessmentDefaultInterestTitle",
+    Some("paymentsHistory.VatAdditionalAssessmentDefaultInterestDescription")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -135,7 +141,8 @@ object PaymentsHistoryChargeHelper {
     VatFtnMatPost2010Charge,
     VatMiscPenaltyCharge,
     VatOfficersAssessmentFurtherInterest,
-    VatAdditionalAssessment
+    VatAdditionalAssessment,
+    VatAADefaultInterest
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {

@@ -23,6 +23,7 @@ import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.templates.PaymentsHistoryChargeHelper._
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 
@@ -191,6 +192,29 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "have the correct amount paid table content" in {
         elementText(Selectors.amountPaidTableContent) shouldBe "- £123,456,789"
       }
+    }
+
+    "there are VAT AA Default Interest Charge and a VAT Additonal Assessment charge to display" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = VatAADefaultInterest,
+          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          amount = 123456789.00,
+          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+        ),
+          PaymentsHistoryModel(
+            chargeType = ReturnDebitCharge,
+            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
+            amount = 987654321,
+            clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+          ))
+      )
+
     }
 
     "there are no payment histories for the selected year" should {
