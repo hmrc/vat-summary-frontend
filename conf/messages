@@ -178,6 +178,8 @@ paymentsHistory.VatAdditionalAssessmentDefaultInterestTitle = Additional assessm
 paymentsHistory.VatAdditionalAssessmentDefaultInterestDescription = interest charged on additional tax assessed for the period {0}
 paymentsHistory.VatAdditionalAssessmentFurtherInterestTitle = Additional assessment further interest
 paymentsHistory.VatAdditionalAssessmentFurtherInterestDescription = further interest charged on additional tax assessed for the period {0}
+paymentsHistory.VatStatutoryInterestTitle = Statutory interest
+paymentsHistory.VatStatutoryInterestDescription = interest paid because of an error by HMRC
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

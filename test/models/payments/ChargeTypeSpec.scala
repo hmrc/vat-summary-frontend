@@ -57,6 +57,7 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(FailureToSubmitRCSLCharge.value) shouldBe FailureToSubmitRCSLCharge
         ChargeType.apply(CarterPenaltyCharge.value) shouldBe CarterPenaltyCharge
         ChargeType.apply(VatOfficersAssessmentFurtherInterestCharge.value) shouldBe VatOfficersAssessmentFurtherInterestCharge
+        ChargeType.apply(StatutoryInterestCharge.value) shouldBe StatutoryInterestCharge
       }
     }
 
@@ -111,6 +112,7 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(FailureToSubmitRCSLCharge) shouldBe FailureToSubmitRCSLCharge.value
       ChargeType.unapply(FailureToNotifyRCSLCharge) shouldBe FailureToNotifyRCSLCharge.value
       ChargeType.unapply(VatOfficersAssessmentFurtherInterestCharge) shouldBe VatOfficersAssessmentFurtherInterestCharge.value
+      ChargeType.unapply(StatutoryInterestCharge) shouldBe StatutoryInterestCharge.value
     }
   }
 

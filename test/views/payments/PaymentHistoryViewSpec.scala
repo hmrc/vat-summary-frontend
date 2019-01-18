@@ -560,7 +560,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "contain a MiscPenaltyCharge" should {
+      "contain a VatOAFurtherInterest charge" should {
 
         "contain the correct title" in {
           elementText(Selectors.descriptionTableChargeType(1)) shouldBe "VAT officer’s assessment further interest"
@@ -572,6 +572,43 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
         "contain the correct amount" in {
           elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £111"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+      }
+    }
+
+    "supplying with a Vat Statutory Interest charge type" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = StatutoryInterestCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+          amount = -111.00,
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
+        ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a VatStatutoryInterest charge" should {
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "Statutory interest"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "interest paid because of an error by HMRC"
+        }
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "+ £111"
         }
 
         "contain the correct date" in {
