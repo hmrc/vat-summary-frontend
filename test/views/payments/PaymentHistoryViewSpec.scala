@@ -382,7 +382,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "contain the correct description" in {
-          elementText(Selectors.descriptionTableContent(1)) shouldBe "you should have been registered for VAT earlier"
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "because you should have been registered for VAT earlier"
         }
 
         "contain the correct date" in {
@@ -401,7 +401,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "contain the correct description" in {
-          elementText(Selectors.descriptionTableContent(2)) shouldBe "you should have been registered for VAT earlier"
+          elementText(Selectors.descriptionTableContent(2)) shouldBe "because you should have been registered for VAT earlier"
         }
 
         "contain the correct date" in {

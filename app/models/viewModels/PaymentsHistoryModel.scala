@@ -49,7 +49,7 @@ object PaymentsHistoryModel {
 
     def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate])] = {
       transaction.\("items").validate[List[JsValue]].fold(
-        _ => throw new IllegalStateException(s"The data for key items could not be found in the Json"),
+        _ => throw new IllegalStateException("The data for key items could not be found in the Json"),
         list => if (list.nonEmpty) {
           list.map(item => item.get[BigDecimal]("amount") ->
             getOptionDate(item, FinancialTransactionsConstants.clearingDate))
