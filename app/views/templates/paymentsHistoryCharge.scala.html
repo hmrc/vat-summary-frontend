@@ -39,9 +39,11 @@
     <tr class="@charge.id">
       <td scope="row">@displayDate(date, useShortDayFormat = true)</td>
       <td><span class="bold">@messages(s"${charge.title}")</span>
+        @charge.description.map { description =>
           <span class="form-hint">
-            @getDescriptionString(charge.description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
+            @getDescriptionString(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
           </span>
+        }
       </td>
       <td class="numeric nowrap @if(transaction.amount < 0){repayment-money}" valign="top">@{positiveNegative(transaction.amount)}</td>
     </tr>

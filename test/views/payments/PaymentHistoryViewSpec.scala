@@ -18,7 +18,7 @@ package views.payments
 
 import java.time.LocalDate
 
-import models.payments.ReturnDebitCharge
+import models.payments._
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -43,9 +43,13 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableHeading = "tr th:nth-of-type(2) div"
     val amountPaidTableHeading = "tr th:nth-of-type(3) div"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
+    def paymentDateTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(1)"
     val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
+    def descriptionTableChargeType(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(2) span.bold"
     val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
+    def descriptionTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(2) span:nth-of-type(2)"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
+    def amountPaidTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(3)"
     val noHistoryContent = "div.column-two-thirds p:nth-of-type(1)"
     val noHistoryWillShowContent = "div.column-two-thirds p:nth-of-type(2)"
     val noHistoryBullet1 = "div.column-two-thirds li:nth-of-type(1)"
@@ -277,6 +281,170 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "show the your history will show content second bullet" in {
 
         elementText(Selectors.noHistoryBullet2) shouldBe "received any VAT repayments"
+      }
+    }
+
+    "supplying with FTN charge types" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = FtnMatPre2010Charge,
+          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          amount = 1000.00,
+          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+        ),
+          PaymentsHistoryModel(
+            chargeType = FtnMatPost2010Charge,
+            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
+            amount = 100.00,
+            clearedDate = Some(LocalDate.parse(s"2018-04-01"))
+          ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain an FtnMatPre2010Charge" should {
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"
+        }
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "Failure to notify penalty"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "you did not tell us you are no longer exempt from VAT registration"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+      }
+
+      "contain an FtnMatPost2010Charge" should {
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(2)) shouldBe "- £100"
+        }
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(2)) shouldBe "Failure to notify penalty"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(2)) shouldBe "you did not tell us you are no longer exempt from VAT registration"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(2)) shouldBe "1 Apr 2018"
+        }
+      }
+    }
+
+    "supplying with BNP charge types" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = BnpRegPre2010Charge,
+          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          amount = 1000.00,
+          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+        ),
+          PaymentsHistoryModel(
+            chargeType = BnpRegPost2010Charge,
+            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
+            amount = 100.00,
+            clearedDate = Some(LocalDate.parse(s"2018-04-01"))
+          ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a BnpRegPre2010Charge" should {
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"
+        }
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "Penalty for late registration"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "because you should have been registered for VAT earlier"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+      }
+
+      "contain a BnpRegPost2010Charge" should {
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(2)) shouldBe "- £100"
+        }
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(2)) shouldBe "Penalty for late registration"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(2)) shouldBe "because you should have been registered for VAT earlier"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(2)) shouldBe "1 Apr 2018"
+        }
+      }
+
+    }
+
+    "supplying with a miscellaneous charge type" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = MiscPenaltyCharge,
+          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          amount = 1000.00,
+          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+        ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a MiscPenaltyCharge" should {
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"
+        }
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "VAT general penalty"
+        }
+
+        "not contain a description" in {
+          document.select(Selectors.descriptionTableContent(1)).size() shouldBe 0
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
       }
     }
   }
