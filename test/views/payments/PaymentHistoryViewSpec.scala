@@ -23,7 +23,6 @@ import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.templates.PaymentsHistoryChargeHelper._
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 
@@ -194,29 +193,6 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
     }
 
-    "there are VAT AA Default Interest Charge and a VAT Additonal Assessment charge to display" should {
-
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        historyYears,
-        historyYears.head,
-        Seq(PaymentsHistoryModel(
-          chargeType = VatAADefaultInterest,
-          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
-          amount = 123456789.00,
-          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-        ),
-          PaymentsHistoryModel(
-            chargeType = ReturnDebitCharge,
-            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
-            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
-            amount = 987654321,
-            clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-          ))
-      )
-
-    }
-
     "there are no payment histories for the selected year" should {
 
       val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
@@ -315,17 +291,17 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         historyYears.head,
         Seq(PaymentsHistoryModel(
           chargeType = FtnMatPre2010Charge,
-          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
           amount = 1000.00,
-          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
         ),
           PaymentsHistoryModel(
             chargeType = FtnMatPost2010Charge,
-            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
-            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
+            taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
             amount = 100.00,
-            clearedDate = Some(LocalDate.parse(s"2018-04-01"))
+            clearedDate = Some(LocalDate.parse("2018-04-01"))
           ))
       )
 
@@ -378,17 +354,17 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         historyYears.head,
         Seq(PaymentsHistoryModel(
           chargeType = BnpRegPre2010Charge,
-          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
           amount = 1000.00,
-          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
         ),
           PaymentsHistoryModel(
             chargeType = BnpRegPost2010Charge,
-            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
-            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
+            taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
             amount = 100.00,
-            clearedDate = Some(LocalDate.parse(s"2018-04-01"))
+            clearedDate = Some(LocalDate.parse("2018-04-01"))
           ))
       )
 
@@ -442,10 +418,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         historyYears.head,
         Seq(PaymentsHistoryModel(
           chargeType = MiscPenaltyCharge,
-          taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
           amount = 1000.00,
-          clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
         ))
       )
 
@@ -464,6 +440,110 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
         "not contain a description" in {
           document.select(Selectors.descriptionTableContent(1)).size() shouldBe 0
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+      }
+    }
+
+    "there are VAT AA Default Interest Charge and a VAT Additional Assessment charge to display" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = AAInterestCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+          amount = 1234.00,
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
+        ),
+          PaymentsHistoryModel(
+            chargeType = AACharge,
+            taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
+            taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
+            amount = 9876.00,
+            clearedDate = Some(LocalDate.parse("2018-03-01"))
+          ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val doc: Document = Jsoup.parse(view.body)
+
+      "contains a VAT AA Default Interest charge" should {
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "Additional assessment interest"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "interest charged on additional tax" +
+            " assessed for the period 1 Jan to 1 Feb 2018"
+        }
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,234"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+      }
+
+      "contains a VAT Additional Assessment charge" should {
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(2)) shouldBe "Additional assessment"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(2)) shouldBe "additional assessment based on further" +
+            " information for the period 1 Mar to 1 Apr 2018"
+        }
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(2)) shouldBe "- £9,876"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+
+      }
+
+    }
+
+    "supplying with a Vat Officers Assessment Further Interest charge type" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = VatOfficersAssessmentFurtherInterestCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+          amount = 111.00,
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
+        ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a MiscPenaltyCharge" should {
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "VAT officer's assessment further interest"
+        }
+
+        "contain the correct description" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "further interest charged on the officer's assessment"
+        }
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £111"
         }
 
         "contain the correct date" in {
