@@ -59,9 +59,15 @@ class ChargeTypeSpec extends UnitSpec {
       }
     }
 
+    "given a valid charge type in all lowercase" should {
+      "return the correct ChargeType model" in {
+        ChargeType.apply("vat carter penalty") shouldBe CarterPenaltyCharge
+      }
+    }
+
     s"given an invalid charge type" should {
-      "throw RuntimeException(Invalid Charge Type)" in {
-        val exception = intercept[Exception] {
+      "throw IllegalArgumentException(Invalid Charge Type)" in {
+        val exception = intercept[IllegalArgumentException] {
           ChargeType.apply("Bad Charge Type")
         }
         exception.getMessage shouldBe "Invalid Charge Type"
@@ -69,7 +75,7 @@ class ChargeTypeSpec extends UnitSpec {
     }
   }
 
-  "ChargeType unnaply method" should {
+  "ChargeType unapply method" should {
     "return the correct value for each chargeType" in {
       ChargeType.unapply(ReturnDebitCharge) shouldBe ReturnDebitCharge.value
       ChargeType.unapply(ReturnCreditCharge) shouldBe ReturnCreditCharge.value
@@ -103,6 +109,23 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(CarterPenaltyCharge) shouldBe CarterPenaltyCharge.value
       ChargeType.unapply(FailureToSubmitRCSLCharge) shouldBe FailureToSubmitRCSLCharge.value
       ChargeType.unapply(FailureToNotifyRCSLCharge) shouldBe FailureToNotifyRCSLCharge.value
+    }
+  }
+
+  "ChargeType .isValidChargeType" when {
+
+    "given an invalid charge type" should {
+
+      "return false" in {
+        ChargeType.isValidChargeType("VAAAAAAAT") shouldBe false
+      }
+    }
+
+    "given a valid charge type" should {
+
+      "return true" in {
+        ChargeType.isValidChargeType("VAT FTN RCSL") shouldBe true
+      }
     }
   }
 }

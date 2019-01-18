@@ -175,13 +175,10 @@ object ChargeType {
     VatFailureToSubmitECSalesCharge
   )
 
-  //noinspection ScalaStyle
   def apply: String => ChargeType = input => {
-
     allChargeTypes.find { chargeType =>
       chargeType.value.toUpperCase.equals(input.trim.toUpperCase)
     }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type"))
-
   }
 
   def unapply(arg: ChargeType): String = arg.value
@@ -191,7 +188,7 @@ object ChargeType {
       ChargeType.apply(input)
       true
     } catch {
-      case t: Throwable =>
+      case t: IllegalArgumentException =>
         logger.info(s"""Invalid Charge Type - Received "$input"""", t)
         false
     }
