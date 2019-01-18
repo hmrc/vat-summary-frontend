@@ -734,7 +734,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         elementText(Selectors.paymentDueData(17)) shouldBe "due by 5 April 2017"
       }
 
-      "not display a view return link text for the 16th payment" in {
+      "not display a view return link text for the 17th payment" in {
         document.select(Selectors.paymentViewReturnText(17)).size shouldBe 0
       }
     }
@@ -832,6 +832,29 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       "not display a view return link text for the 22nd payment" in {
         document.select(Selectors.paymentViewReturnText(22)).size shouldBe 0
+      }
+    }
+
+    "for the 23rd payment" should {
+
+      "render the correct amount for the 23rd payment" in {
+        elementText(Selectors.paymentAmount(23)) shouldBe "£1,800"
+      }
+
+      "render the correct amount for the 23rd payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(23)) shouldBe "£1,800"
+      }
+
+      "render the correct due period for the 23rd payment" in {
+        elementText(Selectors.paymentDue(23)) shouldBe "due by 5 April 2018"
+      }
+
+      "render the correct due period for the 23rd payment period data attribute" in {
+        elementText(Selectors.paymentDueData(23)) shouldBe "due by 5 April 2018"
+      }
+
+      "not display a view return link text for the 23rd payment" in {
+        document.select(Selectors.paymentViewReturnText(23)).size shouldBe 0
       }
     }
 
