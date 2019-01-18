@@ -221,6 +221,51 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2017-03-31"),
       "#017",
       overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      VatECDefaultInterestCharge,
+      1800.00,
+      LocalDate.parse("2017-04-05"),
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-03-31"),
+      "#018",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      VatECFurtherInterestCharge,
+      1900.00,
+      LocalDate.parse("2017-04-05"),
+      LocalDate.parse("2017-01-01"),
+      LocalDate.parse("2017-03-31"),
+      "#019",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      VatSecurityDepositRequestCharge,
+      2000.00,
+      LocalDate.parse("2018-04-05"),
+      LocalDate.parse("2018-01-01"),
+      LocalDate.parse("2018-03-31"),
+      "#020",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      VatProtectiveAssessmentCharge,
+      2100.00,
+      LocalDate.parse("2018-04-05"),
+      LocalDate.parse("2018-01-01"),
+      LocalDate.parse("2018-03-31"),
+      "#021",
+      overdue = true
+    ),
+    OpenPaymentsModelWithPeriod(
+      VatPADefaultInterestCharge,
+      2200.00,
+      LocalDate.parse("2018-04-05"),
+      LocalDate.parse("2018-01-01"),
+      LocalDate.parse("2018-03-31"),
+      "#022",
+      overdue = true
     )
   )
 
@@ -682,6 +727,101 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       "not display a view return link text for the 16th payment" in {
         document.select(Selectors.paymentViewReturnText(17)).size shouldBe 0
+      }
+    }
+    "for the 18th payment" should {
+
+    "render the correct amount for the 18th payment amount data attribute" in {
+      elementText(Selectors.paymentAmountData(18)) shouldBe "£1,800"
+    }
+
+    "render the correct due period for the 17th payment" in {
+      elementText(Selectors.paymentDue(18)) shouldBe "due by 5 April 2017"
+    }
+
+    "render the correct due period for the 17th payment period data attribute" in {
+      elementText(Selectors.paymentDueData(18)) shouldBe "due by 5 April 2017"
+    }
+
+    "not display a view return link text for the 16th payment" in {
+      document.select(Selectors.paymentViewReturnText(18)).size shouldBe 0
+    }
+  }
+
+    "for the 19th payment" should {
+
+      "render the correct amount for the 19th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(19)) shouldBe "£1,900"
+      }
+
+      "render the correct due period for the 19th payment" in {
+        elementText(Selectors.paymentDue(19)) shouldBe "due by 5 April 2017"
+      }
+
+      "render the correct due period for the 19th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(19)) shouldBe "due by 5 April 2017"
+      }
+
+      "not display a view return link text for the 19th payment" in {
+        document.select(Selectors.paymentViewReturnText(19)).size shouldBe 0
+      }
+    }
+
+    "for the 20th payment" should {
+
+      "render the correct amount for the 20th payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(20)) shouldBe "£2,000"
+      }
+
+      "render the correct due period for the 20th payment" in {
+        elementText(Selectors.paymentDue(20)) shouldBe "due by 5 April 2018"
+      }
+
+      "render the correct due period for the 20th payment period data attribute" in {
+        elementText(Selectors.paymentDueData(20)) shouldBe "due by 5 April 2018"
+      }
+
+      "not display a view return link text for the 20th payment" in {
+        document.select(Selectors.paymentViewReturnText(20)).size shouldBe 0
+      }
+    }
+
+    "for the 21st payment" should {
+
+      "render the correct amount for the 21st payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(21)) shouldBe "£2,100"
+      }
+
+      "render the correct due period for the 21st payment" in {
+        elementText(Selectors.paymentDue(21)) shouldBe "due by 5 April 2018"
+      }
+
+      "render the correct due period for the 21st payment period data attribute" in {
+        elementText(Selectors.paymentDueData(21)) shouldBe "due by 5 April 2018"
+      }
+
+      "not display a view return link text for the 21st payment" in {
+        document.select(Selectors.paymentViewReturnText(21)).size shouldBe 0
+      }
+    }
+
+
+    "for the 22nd payment" should {
+
+      "render the correct amount for the 22nd payment amount data attribute" in {
+        elementText(Selectors.paymentAmountData(22)) shouldBe "£2,200"
+      }
+
+      "render the correct due period for the 22nd payment" in {
+        elementText(Selectors.paymentDue(22)) shouldBe "due by 5 April 2018"
+      }
+
+      "render the correct due period for the 22nd payment period data attribute" in {
+        elementText(Selectors.paymentDueData(22)) shouldBe "due by 5 April 2018"
+      }
+
+      "not display a view return link text for the 22nd payment" in {
+        document.select(Selectors.paymentViewReturnText(22)).size shouldBe 0
       }
     }
 
