@@ -144,7 +144,6 @@ case object VatProtectiveAssessmentCharge extends ChargeType {
 case object VatPADefaultInterestCharge extends ChargeType {
   override val value: String = "VAT PA Default Interest"
 }
-
 case object VatFailureToSubmitECSalesCharge extends ChargeType {
   override val value: String = "VAT Failure to Submit EC Sales"
 }

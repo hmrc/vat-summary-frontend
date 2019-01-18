@@ -58,6 +58,12 @@ class ChargeTypeSpec extends UnitSpec {
         ChargeType.apply(CarterPenaltyCharge.value) shouldBe CarterPenaltyCharge
         ChargeType.apply(VatOfficersAssessmentFurtherInterestCharge.value) shouldBe VatOfficersAssessmentFurtherInterestCharge
         ChargeType.apply(StatutoryInterestCharge.value) shouldBe StatutoryInterestCharge
+        ChargeType.apply(VatProtectiveAssessmentCharge.value) shouldBe VatProtectiveAssessmentCharge
+        ChargeType.apply(VatSecurityDepositRequestCharge.value) shouldBe VatSecurityDepositRequestCharge
+        ChargeType.apply(VatECFurtherInterestCharge.value) shouldBe VatECFurtherInterestCharge
+        ChargeType.apply(VatECDefaultInterestCharge.value) shouldBe VatECDefaultInterestCharge
+        ChargeType.apply(VatInaccuraciesInECSalesCharge.value) shouldBe VatInaccuraciesInECSalesCharge
+        ChargeType.apply(VatPADefaultInterestCharge.value) shouldBe VatPADefaultInterestCharge
       }
     }
 
@@ -113,6 +119,12 @@ class ChargeTypeSpec extends UnitSpec {
       ChargeType.unapply(FailureToNotifyRCSLCharge) shouldBe FailureToNotifyRCSLCharge.value
       ChargeType.unapply(VatOfficersAssessmentFurtherInterestCharge) shouldBe VatOfficersAssessmentFurtherInterestCharge.value
       ChargeType.unapply(StatutoryInterestCharge) shouldBe StatutoryInterestCharge.value
+      ChargeType.unapply(VatProtectiveAssessmentCharge) shouldBe VatProtectiveAssessmentCharge.value
+      ChargeType.unapply(VatSecurityDepositRequestCharge) shouldBe VatSecurityDepositRequestCharge.value
+      ChargeType.unapply(VatECFurtherInterestCharge) shouldBe VatECFurtherInterestCharge.value
+      ChargeType.unapply(VatECDefaultInterestCharge) shouldBe VatECDefaultInterestCharge.value
+      ChargeType.unapply(VatInaccuraciesInECSalesCharge) shouldBe VatInaccuraciesInECSalesCharge.value
+      ChargeType.unapply(VatPADefaultInterestCharge) shouldBe VatPADefaultInterestCharge.value
     }
   }
 
