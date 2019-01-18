@@ -20,7 +20,6 @@ import java.time.LocalDate
 
 import common.FinancialTransactionsConstants
 import models.payments._
-import play.api.i18n.Messages
 import play.api.libs.json._
 
 case class PaymentsHistoryModel(chargeType: ChargeType,
