@@ -185,7 +185,7 @@ object ChargeType {
       true
     } catch {
       case t: Throwable =>
-        logger.error(s"""Invalid Charge Type - Received "$input"""", t)
+        logger.info(s"""Invalid Charge Type - Received "$input"""", t)
         false
     }
   }
