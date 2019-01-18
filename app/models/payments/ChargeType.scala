@@ -85,10 +85,10 @@ case object BnpRegPost2010Charge extends ChargeType {
   override val value: String = "VAT BNP of Reg Post 2010"
 }
 case object FtnMatPre2010Charge extends ChargeType {
-  override val value: String = "VAT FTN mat change pre 2010"
+  override val value: String = "VAT FTN Mat Change Pre 2010"
 }
 case object FtnMatPost2010Charge extends ChargeType {
-  override val value: String = "VAT FTN mat change post 2010"
+  override val value: String = "VAT FTN Mat Change Post 2010"
 }
 case object FtnEachPartnerCharge extends ChargeType {
   override val value: String = "VAT FTN Each Partner"
