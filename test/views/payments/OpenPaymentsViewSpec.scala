@@ -856,6 +856,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "not display a view return link text for the 23rd payment" in {
         document.select(Selectors.paymentViewReturnText(23)).size shouldBe 0
       }
+
+      "display the correct description for the 18th payment" in {
+        elementText(Selectors.paymentPayNowContext(18)) shouldBe "£1,800 is overdue, " + messages("openPayments.vatPaFurtherInterest")
+      }
     }
 
     "render the correct heading for the direct debits" in {

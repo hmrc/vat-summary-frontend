@@ -192,8 +192,6 @@ paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction 
 paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
 paymentsHistory.vatEcNoticeFurtherInterestTitle = Error correction further interest
 paymentsHistory.vatEcNoticeFurtherInterestDescription = further interest charged on assessed amount
-paymentsHistory.vatOfficersAssessmentDefaultInterestTitle = VAT officer''s assessment interest
-paymentsHistory.vatOfficersAssessmentDefaultInterestDescription = interest charged on the officer''s assessment
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
