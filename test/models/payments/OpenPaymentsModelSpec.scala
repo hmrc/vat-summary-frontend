@@ -585,6 +585,161 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         Json.toJson(testModel) shouldBe testJson
       }
     }
+
+    s"charge type is $VatECDefaultInterestCharge" should {
+
+      val testModel = OpenPaymentsModel(
+        chargeType = VatECDefaultInterestCharge,
+        amount = 1500.00,
+        due = LocalDate.parse("2015-04-05"),
+        start = LocalDate.parse("2015-01-01"),
+        end = LocalDate.parse("2015-03-31"),
+        periodKey = "#015",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> VatECDefaultInterestCharge.value,
+        "amount" -> 1500.00,
+        "due" -> "2015-04-05",
+        "start" -> "2015-01-01",
+        "end" -> "2015-03-31",
+        "periodKey" -> "#015",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "interest charged on assessed amount"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $VatECFurtherInterestCharge" should {
+
+      val testModel = OpenPaymentsModel(
+        chargeType = VatECFurtherInterestCharge,
+        amount = 1500.00,
+        due = LocalDate.parse("2015-04-05"),
+        start = LocalDate.parse("2015-01-01"),
+        end = LocalDate.parse("2015-03-31"),
+        periodKey = "#015",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> VatECFurtherInterestCharge.value,
+        "amount" -> 1500.00,
+        "due" -> "2015-04-05",
+        "start" -> "2015-01-01",
+        "end" -> "2015-03-31",
+        "periodKey" -> "#015",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "further interest charged on assessed amount"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $VatPADefaultInterestCharge" should {
+
+      val testModel = OpenPaymentsModel(
+        chargeType = VatPADefaultInterestCharge,
+        amount = 1500.00,
+        due = LocalDate.parse("2015-04-05"),
+        start = LocalDate.parse("2015-01-01"),
+        end = LocalDate.parse("2015-03-31"),
+        periodKey = "#015",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> VatPADefaultInterestCharge.value,
+        "amount" -> 1500.00,
+        "due" -> "2015-04-05",
+        "start" -> "2015-01-01",
+        "end" -> "2015-03-31",
+        "periodKey" -> "#015",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "interest charged on the protective assessment"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $VatProtectiveAssessmentCharge" should {
+
+      val testModel = OpenPaymentsModel(
+        chargeType = VatProtectiveAssessmentCharge,
+        amount = 1500.00,
+        due = LocalDate.parse("2015-04-05"),
+        start = LocalDate.parse("2015-01-01"),
+        end = LocalDate.parse("2015-03-31"),
+        periodKey = "#015",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> VatProtectiveAssessmentCharge.value,
+        "amount" -> 1500.00,
+        "due" -> "2015-04-05",
+        "start" -> "2015-01-01",
+        "end" -> "2015-03-31",
+        "periodKey" -> "#015",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "Assessment raised to protect HMRC's position during an appeal"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
+
+    s"charge type is $VatSecurityDepositRequestCharge" should {
+
+      val testModel = OpenPaymentsModel(
+        chargeType = VatSecurityDepositRequestCharge,
+        amount = 1500.00,
+        due = LocalDate.parse("2015-04-05"),
+        start = LocalDate.parse("2015-01-01"),
+        end = LocalDate.parse("2015-03-31"),
+        periodKey = "#015",
+        overdue = true
+      )
+
+      val testJson = Json.obj(
+        "paymentType" -> VatSecurityDepositRequestCharge.value,
+        "amount" -> 1500.00,
+        "due" -> "2015-04-05",
+        "start" -> "2015-01-01",
+        "end" -> "2015-03-31",
+        "periodKey" -> "#015",
+        "overdue" -> true
+      )
+
+      "return the correct message" in {
+        testModel.whatYouOweDescription shouldBe "because you have not paid VAT in your current or previous business(es)"
+      }
+
+      "correctly write to Json" in {
+        Json.toJson(testModel) shouldBe testJson
+      }
+    }
   }
 
   "An OpenPaymentsModel without a start and end date" when {

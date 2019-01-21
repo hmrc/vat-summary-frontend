@@ -729,6 +729,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         document.select(Selectors.paymentViewReturnText(17)).size shouldBe 0
       }
     }
+
     "for the 18th payment" should {
 
     "render the correct amount for the 18th payment amount data attribute" in {
