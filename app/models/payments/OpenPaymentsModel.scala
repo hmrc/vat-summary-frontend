@@ -48,7 +48,13 @@ sealed trait OpenPaymentsModel {
     case FailureToNotifyRCSLCharge => messages("openPayments.vatFailureToNotifyRCSL")
     case FailureToSubmitRCSLCharge => messages("openPayments.vatFailureToSubmitRCSL")
     case VatInaccuraciesInECSalesCharge => messages("openPayments.vatInaccuraciesECSales")
+    case VatECDefaultInterestCharge => messages("openPayments.VatECDefaultInterest")
+    case VatECFurtherInterestCharge => messages("openPayments.VatECFurtherInterest")
+    case VatSecurityDepositRequestCharge => messages("openPayments.VatSecurityDepositRequest")
+    case VatProtectiveAssessmentCharge => messages("openPayments.VatProtectiveAssessment")
+    case VatPADefaultInterestCharge => messages("openPayments.VatPADefaultInterest")
     case VatFailureToSubmitECSalesCharge => messages("openPayments.vatFailureToSubmitECSales")
+
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }
 
