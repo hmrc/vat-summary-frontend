@@ -54,6 +54,41 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
         result shouldBe Some(PaymentsHistoryChargeHelper.OADefaultInterest)
 
       }
+
+      "return a VAT Officers Assessment Further Interest charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT OA Further Interest")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatOfficersAssessmentFurtherInterest)
+      }
+
+      "return a VAT Additional Assessment charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Additional Assessment")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatAdditionalAssessment)
+      }
+
+      "return a VAT AA Default Interest charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT AA Default Interest")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatAADefaultInterest)
+      }
+
+      "return a VAT AA Further Interest charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT AA Further Interest")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatAAFurtherInterest)
+      }
+
+      "return a VAT Statutory Interest charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Statutory Interest")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatStatutoryInterestCharge)
+      }
     }
 
     "the lookup String is an invalid charge type" should {

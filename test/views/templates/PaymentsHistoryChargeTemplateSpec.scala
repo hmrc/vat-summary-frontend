@@ -312,5 +312,149 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "interest charged on the officer's assessment"
       }
     }
+
+    "there is a VAT Officer Assessment Further Interest charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        VatOfficersAssessmentFurtherInterestCharge,
+        Some(LocalDate.parse("2018-02-12")),
+        Some(LocalDate.parse("2018-03-24")),
+        1500.00,
+        Some(LocalDate.parse("2018-04-18"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment further interest"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "further interest charged on the officer’s assessment"
+      }
+    }
+
+    "there is a VAT Additional Assessment charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AACharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-04-01")),
+        2000.00,
+        Some(LocalDate.parse("2018-05-01"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Additional assessment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "additional assessment based on further information" +
+          " for the period 1 Jan to 1 Apr 2018"
+      }
+    }
+
+
+    "there is a VAT AA Default Interest charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAInterestCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-04-01")),
+        2000.00,
+        Some(LocalDate.parse("2018-05-01"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Additional assessment interest"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "interest charged on additional tax assessed" +
+          " for the period 1 Jan to 1 Apr 2018"
+      }
+    }
+
+    "there is a VAT AA Further Interest charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAFurtherInterestCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-04-01")),
+        2000.00,
+        Some(LocalDate.parse("2018-05-01"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Additional assessment further interest"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "further interest charged on additional tax assessed" +
+          " for the period 1 Jan to 1 Apr 2018"
+      }
+    }
+
+    "there is a VAT Statutory Interest charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        StatutoryInterestCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-04-01")),
+        -1500.00,
+        Some(LocalDate.parse("2018-05-01"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Statutory interest"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "interest paid because of an error by HMRC"
+      }
+    }
   }
 }

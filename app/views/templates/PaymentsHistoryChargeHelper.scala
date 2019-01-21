@@ -106,6 +106,37 @@ object PaymentsHistoryChargeHelper {
     None
   )
 
+  object VatOfficersAssessmentFurtherInterest extends PaymentsHistoryChargeHelper(
+    VatOfficersAssessmentFurtherInterestCharge.value,
+    "paymentsHistory.VatOfficersAssessmentFurtherInterestTitle",
+    Some("paymentsHistory.VatOfficersAssessmentFurtherInterestDescription")
+  )
+
+  object VatAdditionalAssessment extends PaymentsHistoryChargeHelper(
+    AACharge.value,
+    "paymentsHistory.VatAdditionalAssessmentTitle",
+    Some("paymentsHistory.VatAdditionalAssessmentDescription")
+  )
+
+  object VatAADefaultInterest extends PaymentsHistoryChargeHelper(
+    AAInterestCharge.value,
+    "paymentsHistory.VatAdditionalAssessmentDefaultInterestTitle",
+    Some("paymentsHistory.VatAdditionalAssessmentDefaultInterestDescription")
+  )
+
+  object VatAAFurtherInterest extends PaymentsHistoryChargeHelper(
+    AAFurtherInterestCharge.value,
+    "paymentsHistory.VatAdditionalAssessmentFurtherInterestTitle",
+    Some("paymentsHistory.VatAdditionalAssessmentFurtherInterestDescription")
+  )
+
+  object VatStatutoryInterestCharge extends PaymentsHistoryChargeHelper(
+    StatutoryInterestCharge.value,
+    "paymentsHistory.VatStatutoryInterestTitle",
+    Some("paymentsHistory.VatStatutoryInterestDescription"),
+    "repayment"
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -121,7 +152,12 @@ object PaymentsHistoryChargeHelper {
     VatBnpRegPost2010Charge,
     VatFtnMatPre2010Charge,
     VatFtnMatPost2010Charge,
-    VatMiscPenaltyCharge
+    VatMiscPenaltyCharge,
+    VatOfficersAssessmentFurtherInterest,
+    VatAdditionalAssessment,
+    VatAADefaultInterest,
+    VatAAFurtherInterest,
+    VatStatutoryInterestCharge
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
