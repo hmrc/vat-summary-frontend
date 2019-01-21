@@ -60,7 +60,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatFailureToSubmitECSales.name -> (("EC sales list penalty", "because you have not submitted an EC sales list or you have submitted it late")),
     FtnEachPartner.name -> (("Failure to notify penalty", "because you did not tell us about all the partners and changes in your partnership")),
     VatOAInaccuracies2009.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
-    VatInaccuracyAssessmentsPenCharge.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString"))
+    VatInaccuracyAssessmentsPenCharge.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
+    VatMpPre2009Charge.name -> (("Misdeclaration penalty", "because you have made an incorrect declaration"))
   )
 
   object Selectors {

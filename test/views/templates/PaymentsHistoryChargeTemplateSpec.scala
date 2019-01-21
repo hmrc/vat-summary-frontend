@@ -486,5 +486,34 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "because you submitted an inaccurate document for the period 10 Sep to 11 Oct 2018"
       }
     }
+
+    "there is a Vat Mp Pre 2009 Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        MpPre2009Charge,
+        Some(LocalDate.parse("2018-09-10")),
+        Some(LocalDate.parse("2018-10-11")),
+        1100.00,
+        Some(LocalDate.parse("2018-10-15"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Misdeclaration penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because you have made an incorrect declaration"
+      }
+
+    }
   }
 }

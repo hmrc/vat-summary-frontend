@@ -200,6 +200,8 @@ paymentsHistory.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 paymentsHistory.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
 paymentsHistory.vatInaccuracyAssessmentsPenChargeTitle = Inaccuracies penalty
 paymentsHistory.vatInaccuracyAssessmentsPenChargeDescription = because you submitted an inaccurate document for the period {0}
+paymentsHistory.vatMpPre2009ChargeTitle = Misdeclaration penalty
+paymentsHistory.vatMpPre2009ChargeDescription = because you have made an incorrect declaration
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
