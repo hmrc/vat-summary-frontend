@@ -183,7 +183,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "have the correct description table charge type" in {
         elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
       }
-      
+
       "have the correct description table content" in {
         elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
       }
@@ -409,6 +409,62 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
 
+    }
+
+    "supplying with the following charge types" should {
+      case class testModel(chargeType: ChargeType, expectedTitle: String, expectedDescription: String)
+
+      Seq (
+        testModel(
+          VatSecurityDepositRequestCharge,
+          messages("paymentsHistory.vatSecurityDepositRequestTitle"),
+          messages("paymentsHistory.vatSecurityDepositRequestDescription")
+        ),
+        testModel(
+          VatEcDefaultInterestCharge,
+          messages("paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle"),
+          messages("paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription")
+        ),
+        testModel(
+          VatEcNoticeFurtherInterestCharge,
+          messages("paymentsHistory.vatEcNoticeFurtherInterestTitle"),
+          messages("paymentsHistory.vatEcNoticeFurtherInterestDescription")
+        )
+      ).map { testModel =>
+        (PaymentsHistoryViewModel(
+          historyYears,
+          historyYears.head,
+          Seq(PaymentsHistoryModel(
+            chargeType = testModel.chargeType,
+            taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
+            taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
+            amount = 1000.00,
+            clearedDate = Some(LocalDate.parse(s"2018-03-01"))
+          ))
+        ), testModel.expectedTitle, testModel.expectedDescription, testModel.chargeType.value)
+      }.foreach { case (paymentHistoryModel, expectedTitle, expectedDescription, chargeTypeTitle) =>
+        lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        s"contain a $chargeTypeTitle" should {
+
+          "contain the correct amount" in {
+            elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"
+          }
+
+          "contain the correct title" in {
+            elementText(Selectors.descriptionTableChargeType(1)) shouldBe expectedTitle
+          }
+
+          "contain the correct description" in {
+            elementText(Selectors.descriptionTableContent(1)) shouldBe expectedDescription
+          }
+
+          "contain the correct date" in {
+            elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+          }
+        }
+      }
     }
 
     "supplying with a miscellaneous charge type" should {
