@@ -172,15 +172,12 @@ object PaymentsHistoryChargeHelper {
     VatFtnMatPost2010Charge,
     VatMiscPenaltyCharge,
     VatSecurityDepositRequest,
-    VatEcDefaultInterest,
     VatEcNoticeFurtherInterest,
-    VatMiscPenaltyCharge,
     VatOfficersAssessmentFurtherInterest,
     VatAdditionalAssessment,
     VatAADefaultInterest,
     VatAAFurtherInterest,
     VatStatutoryInterestCharge,
-    VatSecurityDepositRequest,
     VatEcDefaultInterest
   )
 
