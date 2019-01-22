@@ -143,12 +143,6 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.vatSecurityDepositRequestDescription")
   )
 
-  object VatEcDefaultInterest extends PaymentsHistoryChargeHelper(
-    VatEcDefaultInterestCharge.value,
-    "paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle",
-    Some("paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription")
-  )
-
   object VatEcNoticeFurtherInterest extends PaymentsHistoryChargeHelper(
     VatECFurtherInterestCharge.value,
     "paymentsHistory.vatEcNoticeFurtherInterestTitle",
@@ -177,8 +171,7 @@ object PaymentsHistoryChargeHelper {
     VatAdditionalAssessment,
     VatAADefaultInterest,
     VatAAFurtherInterest,
-    VatStatutoryInterestCharge,
-    VatEcDefaultInterest
+    VatStatutoryInterestCharge
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
