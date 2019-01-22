@@ -54,7 +54,6 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       s"further interest charged on additional tax assessed for the period $datePeriodString")),
     VatStatutoryInterestCharge.name -> (("Statutory interest", "interest paid because of an error by HMRC")),
     VatSecurityDepositRequest.name -> (("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)")),
-    VatEcDefaultInterest.name -> (("Error correction default interest", "interest charged on assessed amount")),
     VatEcNoticeFurtherInterest.name -> (("Error correction further interest", "further interest charged on assessed amount"))
   )
 
