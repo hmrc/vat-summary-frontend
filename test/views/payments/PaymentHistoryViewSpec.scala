@@ -62,7 +62,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatOAInaccuracies2009.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
     VatInaccuracyAssessmentsPenCharge.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
     VatMpPre2009Charge.name -> (("Misdeclaration penalty", "because you have made an incorrect declaration")),
-    VatMpRepeatedPre2009Charge.name -> (("Misdeclaration repeat penalty", "because you have repeatedly made incorrect declarations"))
+    VatMpRepeatedPre2009Charge.name -> (("Misdeclaration repeat penalty", "because you have repeatedly made incorrect declarations")),
+    VatInaccuraciesReturnReplacedCharge.name -> ((
+      "Inaccuracies penalty",
+      s"this is because you have submitted inaccurate information for the period $datePeriodString"))
   )
 
   object Selectors {
