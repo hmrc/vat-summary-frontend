@@ -24,8 +24,39 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.templates.PaymentsHistoryChargeHelper
+import views.templates.PaymentsHistoryChargeHelper._
+import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
+
+  lazy val datePeriodString: String = displayDateRange(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-02-01"), useShortDayFormat = true)
+  lazy val chargeDetailsForTest: Map[String, (String, String)] = Map(
+    VatReturnCreditCharge.name -> ("Repayment from HMRC", s"for your $datePeriodString return"),
+    VatReturnDebitCharge.name -> ("Return", s"for the period $datePeriodString"),
+    VatOfficerAssessmentCreditCharge.name -> ("VAT officer's investigation", "for overpaying by this amount"),
+    VatOfficerAssessmentDebitCharge.name -> ("VAT officer's investigation", "for underpaying by this amount"),
+    VatCentralAssessment.name -> ("Estimate", s"for your $datePeriodString return"),
+    VatDefaultSurcharge.name -> ("Surcharge", s"for late payment of your $datePeriodString return"),
+    VatErrorCorrectionDebitCharge.name -> ("Error correction payment", s"for correcting your $datePeriodString return"),
+    VatErrorCorrectionCreditCharge.name -> ("Error correction repayment from HMRC", s"for correcting your $datePeriodString return"),
+    VatRepaymentSupplement.name -> ("Late repayment compensation from HMRC", s"we took too long to repay your $datePeriodString return"),
+    OADefaultInterest.name -> ("VAT officer's assessment interest", s"interest charged on the officer's assessment"),
+    VatBnpRegPre2010Charge.name -> ("Penalty for late registration", "because you should have been registered for VAT earlier"),
+    VatBnpRegPost2010Charge.name -> ("Penalty for late registration", "because you should have been registered for VAT earlier"),
+    VatFtnMatPre2010Charge.name -> ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration"),
+    VatFtnMatPost2010Charge.name -> ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration"),
+    VatMiscPenaltyCharge.name -> ("VAT general penalty", ""),
+    VatOfficersAssessmentFurtherInterest.name -> ("VAT officer’s assessment further interest", "further interest charged on the officer’s assessment"),
+    VatAdditionalAssessment.name -> ("Additional assessment", s"additional assessment based on further information for the period $datePeriodString"),
+    VatAADefaultInterest.name -> ("Additional assessment interest", s"interest charged on additional tax assessed for the period $datePeriodString"),
+    VatAAFurtherInterest.name -> (
+      "Additional assessment further interest",
+      s"further interest charged on additional tax assessed for the period $datePeriodString"),
+    VatStatutoryInterestCharge.name -> ("Statutory interest", "interest paid because of an error by HMRC"),
+    VatSecurityDepositRequest.name -> ("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)"),
+    VatEcDefaultInterest.name -> ("Error correction default interest", "interest charged on assessed amount"),
+    VatEcNoticeFurtherInterest.name -> ("Error correction further interest", "further interest charged on assessed amount")
+  )
 
   object Selectors {
     val pageHeading = "h1"
@@ -297,35 +328,6 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       case class testModel(chargeType: ChargeType, expectedTitle: String, expectedDescription: String)
       import views.templates.formatters.dates.DisplayDateRangeHelper._
       import views.templates.PaymentsHistoryChargeHelper._
-
-      val datePeriodString: String = displayDateRange(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-02-01"), useShortDayFormat = true)
-      lazy val chargeDetailsForTest: Map[String, (String, String)] = Map(
-        VatReturnCreditCharge.name -> ("Repayment from HMRC", s"for your $datePeriodString return"),
-        VatReturnDebitCharge.name -> ("Return", s"for the period $datePeriodString"),
-        VatOfficerAssessmentCreditCharge.name -> ("VAT officer's investigation", "for overpaying by this amount"),
-        VatOfficerAssessmentDebitCharge.name -> ("VAT officer's investigation", "for underpaying by this amount"),
-        VatCentralAssessment.name -> ("Estimate", s"for your $datePeriodString return"),
-        VatDefaultSurcharge.name -> ("Surcharge", s"for late payment of your $datePeriodString return"),
-        VatErrorCorrectionDebitCharge.name -> ("Error correction payment", s"for correcting your $datePeriodString return"),
-        VatErrorCorrectionCreditCharge.name -> ("Error correction repayment from HMRC", s"for correcting your $datePeriodString return"),
-        VatRepaymentSupplement.name -> ("Late repayment compensation from HMRC", s"we took too long to repay your $datePeriodString return"),
-        OADefaultInterest.name -> ("VAT officer's assessment interest", s"interest charged on the officer's assessment"),
-        VatBnpRegPre2010Charge.name -> ("Penalty for late registration", "because you should have been registered for VAT earlier"),
-        VatBnpRegPost2010Charge.name -> ("Penalty for late registration", "because you should have been registered for VAT earlier"),
-        VatFtnMatPre2010Charge.name -> ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration"),
-        VatFtnMatPost2010Charge.name -> ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration"),
-        VatMiscPenaltyCharge.name -> ("VAT general penalty", ""),
-        VatOfficersAssessmentFurtherInterest.name -> ("VAT officer’s assessment further interest", "further interest charged on the officer’s assessment"),
-        VatAdditionalAssessment.name -> ("Additional assessment", s"additional assessment based on further information for the period $datePeriodString"),
-        VatAADefaultInterest.name -> ("Additional assessment interest", s"interest charged on additional tax assessed for the period $datePeriodString"),
-        VatAAFurtherInterest.name -> (
-          "Additional assessment further interest",
-          s"further interest charged on additional tax assessed for the period $datePeriodString"),
-        VatStatutoryInterestCharge.name -> ("Statutory interest", "interest paid because of an error by HMRC"),
-        VatSecurityDepositRequest.name -> ("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)"),
-        VatEcDefaultInterest.name -> ("Error correction default interest", "interest charged on assessed amount"),
-        VatEcNoticeFurtherInterest.name -> ("Error correction further interest", "further interest charged on assessed amount")
-      )
 
       PaymentsHistoryChargeHelper.values.map { case historyChargeHelper =>
         (PaymentsHistoryViewModel(

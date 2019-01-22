@@ -858,7 +858,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "display the correct description for the 18th payment" in {
-        elementText(Selectors.paymentPayNowContext(18)) shouldBe "£1,800 is overdue, " + messages("openPayments.vatPaFurtherInterest")
+        elementText(Selectors.paymentPayNowContext(23)) shouldBe "£1,800 is overdue, " + messages("openPayments.vatPaFurtherInterest")
       }
     }
 

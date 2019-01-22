@@ -150,7 +150,7 @@ object PaymentsHistoryChargeHelper {
   )
 
   object VatEcNoticeFurtherInterest extends PaymentsHistoryChargeHelper(
-    VatEcNoticeFurtherInterestCharge.value,
+    VatECFurtherInterestCharge.value,
     "paymentsHistory.vatEcNoticeFurtherInterestTitle",
     Some("paymentsHistory.vatEcNoticeFurtherInterestDescription")
   )
