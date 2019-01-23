@@ -55,7 +55,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatStatutoryInterestCharge.name -> (("Statutory interest", "interest paid because of an error by HMRC")),
     VatSecurityDepositRequest.name -> (("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)")),
     VatEcNoticeFurtherInterest.name -> (("Error correction further interest", "further interest charged on assessed amount")),
-    CivilEvasionPenalty.name -> (("VAT civil evasion penalty", "because we have identified irregularities involving dishonesty"))
+    CivilEvasionPenalty.name -> (("VAT civil evasion penalty", "because we have identified irregularities involving dishonesty")),
+    VatInaccuraciesInECSales.name -> (("Inaccuracies penalty", "because you have provided inaccurate information in your EC sales list"))
   )
 
   object Selectors {

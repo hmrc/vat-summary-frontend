@@ -192,6 +192,8 @@ paymentsHistory.vatEcNoticeFurtherInterestTitle = Error correction further inter
 paymentsHistory.vatEcNoticeFurtherInterestDescription = further interest charged on assessed amount
 paymentsHistory.civilEvasionPenaltyTitle = VAT civil evasion penalty
 paymentsHistory.civilEvasionPenaltyDescription = because we have identified irregularities involving dishonesty
+paymentsHistory.vatInaccuraciesInECSalesTitle = Inaccuracies penalty
+paymentsHistory.vatInaccuraciesInECSalesDescription = because you have provided inaccurate information in your EC sales list
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
