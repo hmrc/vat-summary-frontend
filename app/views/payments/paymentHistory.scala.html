@@ -36,12 +36,13 @@
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-        @if(model.transactions.nonEmpty){
         <ul class="tabs-nav">
-        @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
+            @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
         </ul>
+
         <h2>@model.selectedYear.toString</h2>
 
+      @if(model.transactions.nonEmpty){
         <table>
             <thead>
             <tr>
@@ -68,15 +69,14 @@
         </table>
 
       } else {
-        <p class="lede">@messages("paymentsHistory.noHistory")</p>
-        <p>@messages("paymentsHistory.willShow")</p>
-        <ul class="list list-bullet">
-            <li>@messages("paymentsHistory.bullet1")</li>
-            <li>@messages("paymentsHistory.bullet2")</li>
-        </ul>
-
+        <p class="lede">
+          @if(model.selectedYear == model.displayedYears.head) {
+              @messages("paymentsHistory.noCurrentYearHistory")
+          } else {
+              @messages("paymentsHistory.noPreviousYearHistory")
+          }
+        </p>
       }
-
     </div>
   </div>
 
