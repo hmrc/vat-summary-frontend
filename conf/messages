@@ -188,10 +188,10 @@ paymentsHistory.VatStatutoryInterestTitle = Statutory interest
 paymentsHistory.VatStatutoryInterestDescription = interest paid because of an error by HMRC
 paymentsHistory.vatSecurityDepositRequestTitle = Security deposit requirement
 paymentsHistory.vatSecurityDepositRequestDescription = because you have not paid VAT in your current or previous business(es)
-paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
-paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
 paymentsHistory.vatEcNoticeFurtherInterestTitle = Error correction further interest
 paymentsHistory.vatEcNoticeFurtherInterestDescription = further interest charged on assessed amount
+paymentsHistory.civilEvasionPenaltyTitle = VAT civil evasion penalty
+paymentsHistory.civilEvasionPenaltyDescription = because we have identified irregularities involving dishonesty
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
