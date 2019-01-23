@@ -23,79 +23,12 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 
     "the lookup string is a valid charge type" should {
 
-      "return the charge type associated with the lookup string" in {
+      PaymentsHistoryChargeHelper.values.foreach { paymentHistoryChargeType =>
+        lazy val result = PaymentsHistoryChargeHelper.getChargeType(paymentHistoryChargeType.name)
 
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Return Debit Charge")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatReturnDebitCharge)
-
-      }
-
-      "return a central assessment charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Central Assessment")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatCentralAssessment)
-
-      }
-
-      "return a default surcharge charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Default Surcharge")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatDefaultSurcharge)
-
-      }
-
-      "return a VAT OA default interest charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT OA Default Interest")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.OADefaultInterest)
-
-      }
-
-      "return a VAT Officers Assessment Further Interest charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT OA Further Interest")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatOfficersAssessmentFurtherInterest)
-      }
-
-      "return a VAT Additional Assessment charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Additional Assessment")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatAdditionalAssessment)
-      }
-
-      "return a VAT AA Default Interest charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT AA Default Interest")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatAADefaultInterest)
-      }
-
-      "return a VAT AA Further Interest charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT AA Further Interest")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatAAFurtherInterest)
-      }
-
-      "return a VAT Statutory Interest charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Statutory Interest")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatStatutoryInterestCharge)
-      }
-
-      "return a VAT Security Deposit Request charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Security Deposit Request")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatSecurityDepositRequest)
-
+        s"return the charge type associated with ${paymentHistoryChargeType.name}" in {
+          result shouldBe Some(paymentHistoryChargeType)
+        }
       }
     }
 
