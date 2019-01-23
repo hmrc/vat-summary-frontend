@@ -54,6 +54,7 @@ sealed trait OpenPaymentsModel {
     case VatProtectiveAssessmentCharge => messages("openPayments.VatProtectiveAssessment")
     case VatPADefaultInterestCharge => messages("openPayments.VatPADefaultInterest")
     case VatFailureToSubmitECSalesCharge => messages("openPayments.vatFailureToSubmitECSales")
+    case VatPaFurtherInterestCharge => messages("openPayments.vatPaFurtherInterest")
 
     case _ => throw new IllegalArgumentException("Invalid Charge Type")
   }

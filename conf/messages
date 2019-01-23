@@ -119,7 +119,7 @@ openPayments.VatECFurtherInterest = further interest charged on assessed amount
 openPayments.VatSecurityDepositRequest = because you have not paid VAT in your current or previous business(es)
 openPayments.VatProtectiveAssessment = Assessment raised to protect HMRC''s position during an appeal
 openPayments.VatPADefaultInterest = interest charged on the protective assessment
-
+openPayments.vatPaFurtherInterest = further interest due on the protective assessment as this was not paid on time
 
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
@@ -186,6 +186,12 @@ paymentsHistory.VatAdditionalAssessmentFurtherInterestTitle = Additional assessm
 paymentsHistory.VatAdditionalAssessmentFurtherInterestDescription = further interest charged on additional tax assessed for the period {0}
 paymentsHistory.VatStatutoryInterestTitle = Statutory interest
 paymentsHistory.VatStatutoryInterestDescription = interest paid because of an error by HMRC
+paymentsHistory.vatSecurityDepositRequestTitle = Security deposit requirement
+paymentsHistory.vatSecurityDepositRequestDescription = because you have not paid VAT in your current or previous business(es)
+paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
+paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
+paymentsHistory.vatEcNoticeFurtherInterestTitle = Error correction further interest
+paymentsHistory.vatEcNoticeFurtherInterestDescription = further interest charged on assessed amount
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

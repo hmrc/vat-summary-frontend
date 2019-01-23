@@ -138,6 +138,18 @@ object PaymentsHistoryChargeHelper {
     "repayment"
   )
 
+  object VatSecurityDepositRequest extends PaymentsHistoryChargeHelper(
+    VatSecurityDepositRequestCharge.value,
+    "paymentsHistory.vatSecurityDepositRequestTitle",
+    Some("paymentsHistory.vatSecurityDepositRequestDescription")
+  )
+
+  object VatEcNoticeFurtherInterest extends PaymentsHistoryChargeHelper(
+    VatECFurtherInterestCharge.value,
+    "paymentsHistory.vatEcNoticeFurtherInterestTitle",
+    Some("paymentsHistory.vatEcNoticeFurtherInterestDescription")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -154,6 +166,8 @@ object PaymentsHistoryChargeHelper {
     VatFtnMatPre2010Charge,
     VatFtnMatPost2010Charge,
     VatMiscPenaltyCharge,
+    VatSecurityDepositRequest,
+    VatEcNoticeFurtherInterest,
     VatOfficersAssessmentFurtherInterest,
     VatAdditionalAssessment,
     VatAADefaultInterest,

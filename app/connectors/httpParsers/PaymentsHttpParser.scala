@@ -72,7 +72,11 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       VatSecurityDepositRequestCharge.value,
       VatProtectiveAssessmentCharge.value,
       VatPADefaultInterestCharge.value,
-      VatFailureToSubmitECSalesCharge.value
+      VatFailureToSubmitECSalesCharge.value,
+      VatFailureToSubmitECSalesCharge.value,
+      VatFailureToSubmitECSalesCharge.value,
+      AAInterestCharge.value,
+      VatPaFurtherInterestCharge.value
     )
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
