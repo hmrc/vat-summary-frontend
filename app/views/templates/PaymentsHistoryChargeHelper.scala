@@ -168,6 +168,12 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.vatFailureToSubmitECSalesDescription")
   )
 
+  object FtnEachPartner extends PaymentsHistoryChargeHelper(
+    FtnEachPartnerCharge.value,
+    "paymentsHistory.ftnEachPartnerTitle",
+    Some("paymentsHistory.ftnEachPartnerDescription")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -193,7 +199,8 @@ object PaymentsHistoryChargeHelper {
     VatStatutoryInterestCharge,
     CivilEvasionPenalty,
     VatInaccuraciesInECSales,
-    VatFailureToSubmitECSales
+    VatFailureToSubmitECSales,
+    FtnEachPartner
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
