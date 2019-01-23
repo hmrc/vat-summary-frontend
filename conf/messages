@@ -198,6 +198,8 @@ paymentsHistory.vatFailureToSubmitECSalesTitle = EC sales list penalty
 paymentsHistory.vatFailureToSubmitECSalesDescription = because you have not submitted an EC sales list or you have submitted it late
 paymentsHistory.ftnEachPartnerTitle = Failure to notify penalty
 paymentsHistory.ftnEachPartnerDescription = because you did not tell us about all the partners and changes in your partnership
+paymentsHistory.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
+paymentsHistory.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
