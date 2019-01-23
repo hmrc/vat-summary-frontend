@@ -17,6 +17,7 @@
 package views.templates
 
 import models.payments._
+import play.api.Logger
 
 sealed case class PaymentsHistoryChargeHelper(name: String, title: String, description: Option[String], id: String = "")
 
@@ -161,6 +162,8 @@ object PaymentsHistoryChargeHelper {
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
-    values.find(_.name == lookupName)
+    val chargeType = values.find(_.name == lookupName)
+    if(chargeType.isEmpty) Logger.warn("[PaymentsHistoryChargeHelper][getChargeType] Valid charge type received, but not valid on Payment History page")
+    chargeType
   }
 }
