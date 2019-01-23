@@ -56,7 +56,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatSecurityDepositRequest.name -> (("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)")),
     VatEcNoticeFurtherInterest.name -> (("Error correction further interest", "further interest charged on assessed amount")),
     CivilEvasionPenalty.name -> (("VAT civil evasion penalty", "because we have identified irregularities involving dishonesty")),
-    VatInaccuraciesInECSales.name -> (("Inaccuracies penalty", "because you have provided inaccurate information in your EC sales list"))
+    VatInaccuraciesInECSales.name -> (("Inaccuracies penalty", "because you have provided inaccurate information in your EC sales list")),
+    VatFailureToSubmitECSales.name -> (("EC sales list penalty", "because you have not submitted an EC sales list or you have submitted it late"))
   )
 
   object Selectors {

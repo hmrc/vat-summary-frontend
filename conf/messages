@@ -194,6 +194,8 @@ paymentsHistory.civilEvasionPenaltyTitle = VAT civil evasion penalty
 paymentsHistory.civilEvasionPenaltyDescription = because we have identified irregularities involving dishonesty
 paymentsHistory.vatInaccuraciesInECSalesTitle = Inaccuracies penalty
 paymentsHistory.vatInaccuraciesInECSalesDescription = because you have provided inaccurate information in your EC sales list
+paymentsHistory.vatFailureToSubmitECSalesTitle = EC sales list penalty
+paymentsHistory.vatFailureToSubmitECSalesDescription = because you have not submitted an EC sales list or you have submitted it late
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
