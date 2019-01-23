@@ -484,5 +484,42 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
     }
+
+    "supplying with a Vat Wrong Doing Penalty Charge type" should {
+
+      val paymentsHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = WrongDoingPenaltyCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-10-09")),
+          taxPeriodTo = Some(LocalDate.parse("2018-11-10")),
+          amount = 510.00,
+          clearedDate = Some(LocalDate.parse("2018-11-11"))
+        ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentsHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a Vat Inaccuracies Return Replaced Charge type" should {
+
+        "contain the correct amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £510"
+        }
+
+        "contain the correct title" in {
+          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "Wrongdoing penalty"
+        }
+
+        "not contain a description" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "because you charged VAT when you should not have done"
+        }
+
+        "contain the correct date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "11 Nov 2018"
+        }
+      }
+    }
   }
 }

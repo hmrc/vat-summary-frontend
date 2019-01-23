@@ -61,6 +61,14 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
         result shouldBe Some(PaymentsHistoryChargeHelper.VatInaccuraciesReturnReplacedCharge)
 
       }
+
+      "return a Vat Wrong Doing Penalty Charge type" in {
+
+        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Wrong Doing Penalty")
+
+        result shouldBe Some(PaymentsHistoryChargeHelper.VatWrongDoingPenaltyCharge)
+
+      }
     }
 
     "the lookup String is an invalid charge type" should {
