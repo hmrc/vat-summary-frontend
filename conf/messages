@@ -212,6 +212,8 @@ paymentsHistory.vatPADefaultInterestTitle = Protective assessment default intere
 paymentsHistory.vatPADefaultInterestDescription = interest charged on the protective assessment
 paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
 paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
+paymentsHistory.vatPaFurtherInterestTitle = Protective assessment further interest
+paymentsHistory.vatPaFurtherInterestDescription = further interest due on the protective assessment as this was not paid on time
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
