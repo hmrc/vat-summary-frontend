@@ -30,45 +30,6 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
           result shouldBe Some(paymentHistoryChargeType)
         }
       }
-
-      "return a Vat Inaccuracy Assessments Pen charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Inaccuracy Assessments pen")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatInaccuracyAssessmentsPenCharge)
-      }
-
-      "return a Vat Mp Pre 2009 Charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT MP pre 2009")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatMpPre2009Charge)
-
-      }
-
-      "return a Vat Mp Repeated Pre 2009 Charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT MP (R) pre 2009")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatMpRepeatedPre2009Charge)
-
-      }
-
-      "return a Vat Inaccuracies Return Replaced Charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Inaccuracy rturn replaced")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatInaccuraciesReturnReplacedCharge)
-
-      }
-
-      "return a Vat Wrong Doing Penalty Charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Wrong Doing Penalty")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatWrongDoingPenaltyCharge)
-
-      }
     }
 
     "the lookup String is an invalid charge type" should {
