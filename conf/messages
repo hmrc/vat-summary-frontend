@@ -217,6 +217,7 @@ paymentsHistory.vatPaFurtherInterestDescription = further interest due on the pr
 paymentsHistory.vatCarterPenaltyChargeTitle = Penalty for not filing correctly
 paymentsHistory.vatCarterPenaltyChargeDescription = because you did not use the correct digital channel for the period {0}
 
+
 notFound.title = Page not found
 notFound.heading = This page cannot be found
 notFound.message = Please check that you have entered the correct web address.
