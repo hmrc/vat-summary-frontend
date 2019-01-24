@@ -198,6 +198,16 @@ paymentsHistory.ftnEachPartnerTitle = Failure to notify penalty
 paymentsHistory.ftnEachPartnerDescription = because you did not tell us about all the partners and changes in your partnership
 paymentsHistory.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 paymentsHistory.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
+paymentsHistory.vatInaccuracyAssessmentsPenChargeTitle = Inaccuracies penalty
+paymentsHistory.vatInaccuracyAssessmentsPenChargeDescription = because you submitted an inaccurate document for the period {0}
+paymentsHistory.vatMpPre2009ChargeTitle = Misdeclaration penalty
+paymentsHistory.vatMpPre2009ChargeDescription = because you have made an incorrect declaration
+paymentsHistory.vatMpRepeatedPre2009ChargeTitle = Misdeclaration repeat penalty
+paymentsHistory.vatMpRepeatedPre2009ChargeDescription = because you have repeatedly made incorrect declarations
+paymentsHistory.vatInaccuraciesReturnReplacedChargeTitle = Inaccuracies penalty
+paymentsHistory.vatInaccuraciesReturnReplacedChargeDescription = this is because you have submitted inaccurate information for the period {0}
+paymentsHistory.vatWrongDoingPenaltyChargeTitle = Wrongdoing penalty
+paymentsHistory.vatWrongDoingPenaltyChargeDescription = because you charged VAT when you should not have done
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

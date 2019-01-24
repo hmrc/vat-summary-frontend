@@ -137,7 +137,6 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.VatStatutoryInterestDescription"),
     "repayment"
   )
-
   object VatSecurityDepositRequest extends PaymentsHistoryChargeHelper(
     VatSecurityDepositRequestCharge.value,
     "paymentsHistory.vatSecurityDepositRequestTitle",
@@ -180,6 +179,36 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.vatOAInaccuraciesFrom2009Description")
   )
 
+  object VatInaccuracyAssessmentsPenCharge extends PaymentsHistoryChargeHelper(
+    InaccuraciesAssessmentsPenCharge.value,
+    "paymentsHistory.vatInaccuracyAssessmentsPenChargeTitle",
+    Some("paymentsHistory.vatInaccuracyAssessmentsPenChargeDescription")
+  )
+
+  object VatMpPre2009Charge extends PaymentsHistoryChargeHelper(
+    MpPre2009Charge.value,
+    "paymentsHistory.vatMpPre2009ChargeTitle",
+    Some("paymentsHistory.vatMpPre2009ChargeDescription")
+  )
+
+  object VatMpRepeatedPre2009Charge extends PaymentsHistoryChargeHelper(
+    MpRepeatedPre2009Charge.value,
+    "paymentsHistory.vatMpRepeatedPre2009ChargeTitle",
+    Some("paymentsHistory.vatMpRepeatedPre2009ChargeDescription")
+  )
+
+  object VatInaccuraciesReturnReplacedCharge extends PaymentsHistoryChargeHelper(
+    InaccuraciesReturnReplacedCharge.value,
+    "paymentsHistory.vatInaccuraciesReturnReplacedChargeTitle",
+    Some("paymentsHistory.vatInaccuraciesReturnReplacedChargeDescription")
+  )
+
+  object VatWrongDoingPenaltyCharge extends PaymentsHistoryChargeHelper(
+    WrongDoingPenaltyCharge.value,
+    "paymentsHistory.vatWrongDoingPenaltyChargeTitle",
+    Some("paymentsHistory.vatWrongDoingPenaltyChargeDescription")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -207,7 +236,12 @@ object PaymentsHistoryChargeHelper {
     VatInaccuraciesInECSales,
     VatFailureToSubmitECSales,
     FtnEachPartner,
-    VatOAInaccuracies2009
+    VatOAInaccuracies2009,
+    VatInaccuracyAssessmentsPenCharge,
+    VatMpPre2009Charge,
+    VatMpRepeatedPre2009Charge,
+    VatInaccuraciesReturnReplacedCharge,
+    VatWrongDoingPenaltyCharge
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {

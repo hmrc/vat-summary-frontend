@@ -59,7 +59,14 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatInaccuraciesInECSales.name -> (("Inaccuracies penalty", "because you have provided inaccurate information in your EC sales list")),
     VatFailureToSubmitECSales.name -> (("EC sales list penalty", "because you have not submitted an EC sales list or you have submitted it late")),
     FtnEachPartner.name -> (("Failure to notify penalty", "because you did not tell us about all the partners and changes in your partnership")),
-    VatOAInaccuracies2009.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString"))
+    VatOAInaccuracies2009.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
+    VatInaccuracyAssessmentsPenCharge.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
+    VatMpPre2009Charge.name -> (("Misdeclaration penalty", "because you have made an incorrect declaration")),
+    VatMpRepeatedPre2009Charge.name -> (("Misdeclaration repeat penalty", "because you have repeatedly made incorrect declarations")),
+    VatInaccuraciesReturnReplacedCharge.name -> ((
+      "Inaccuracies penalty",
+      s"this is because you have submitted inaccurate information for the period $datePeriodString")),
+    VatWrongDoingPenaltyCharge.name -> (("Wrongdoing penalty", "because you charged VAT when you should not have done"))
   )
 
   object Selectors {
@@ -344,7 +351,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "supplying with the following charge types" should {
       case class testModel(chargeType: ChargeType, expectedTitle: String, expectedDescription: String)
 
-      PaymentsHistoryChargeHelper.values.map { case historyChargeHelper =>
+      PaymentsHistoryChargeHelper.values.map { historyChargeHelper =>
         (PaymentsHistoryViewModel(
           historyYears,
           historyYears.head,
@@ -370,7 +377,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        s"contain a ${chargeTypeTitle} that" should {
+        s"contain a $chargeTypeTitle that" should {
 
           "contain the correct amount in row 1" in {
             elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"

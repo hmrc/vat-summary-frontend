@@ -321,6 +321,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-03-24")),
         1500.00,
         Some(LocalDate.parse("2018-04-18"))
+
+
       )
 
       lazy val template = views.html.templates.paymentsHistoryCharge(model)
@@ -454,6 +456,149 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "interest paid because of an error by HMRC"
+      }
+    }
+
+    "there is a Vat Inaccuracy Assessments Pen charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        InaccuraciesAssessmentsPenCharge,
+        Some(LocalDate.parse("2018-09-10")),
+        Some(LocalDate.parse("2018-10-11")),
+        1000.00,
+        Some(LocalDate.parse("2018-10-15"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Inaccuracies penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because you submitted an inaccurate document for the period 10 Sep to 11 Oct 2018"
+      }
+    }
+
+    "there is a Vat Mp Pre 2009 Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        MpPre2009Charge,
+        Some(LocalDate.parse("2018-09-10")),
+        Some(LocalDate.parse("2018-10-11")),
+        1100.00,
+        Some(LocalDate.parse("2018-10-15"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Misdeclaration penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because you have made an incorrect declaration"
+      }
+
+    }
+
+    "there is a Vat Mp Repeated Pre 2009 Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        MpRepeatedPre2009Charge,
+        Some(LocalDate.parse("2018-09-10")),
+        Some(LocalDate.parse("2018-10-11")),
+        1100.00,
+        Some(LocalDate.parse("2018-10-15"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Misdeclaration repeat penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because you have repeatedly made incorrect declarations"
+      }
+
+    }
+
+    "there is a Vat Inaccuracies Return Replaced Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        InaccuraciesReturnReplacedCharge,
+        Some(LocalDate.parse("2018-09-12")),
+        Some(LocalDate.parse("2018-10-13")),
+        390.00,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Inaccuracies penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "this is because you have submitted inaccurate information for" +
+          " the period 12 Sep to 13 Oct 2018"
+      }
+    }
+
+    "there is a Vat Wrong Doing Penalty Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        WrongDoingPenaltyCharge,
+        Some(LocalDate.parse("2018-09-12")),
+        Some(LocalDate.parse("2018-10-13")),
+        390.00,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Wrongdoing penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because you charged VAT when you should not have done"
       }
     }
   }
