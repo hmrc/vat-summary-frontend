@@ -236,7 +236,6 @@ object PaymentsHistoryChargeHelper {
     VatAdditionalAssessment,
     VatAADefaultInterest,
     VatAAFurtherInterest,
-    VatStatutoryInterestCharge,
     CivilEvasionPenalty,
     VatInaccuraciesInECSales,
     VatFailureToSubmitECSales,
