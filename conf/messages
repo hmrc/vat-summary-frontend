@@ -210,6 +210,8 @@ paymentsHistory.vatWrongDoingPenaltyChargeTitle = Wrongdoing penalty
 paymentsHistory.vatWrongDoingPenaltyChargeDescription = because you charged VAT when you should not have done
 paymentsHistory.vatPADefaultInterestTitle = Protective assessment default interest
 paymentsHistory.vatPADefaultInterestDescription = interest charged on the protective assessment
+paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
+paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
