@@ -31,12 +31,6 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
         }
       }
 
-      "return a VAT Carter Penalty charge type" in {
-
-        val result = PaymentsHistoryChargeHelper.getChargeType("VAT Carter Penalty")
-
-        result shouldBe Some(PaymentsHistoryChargeHelper.VatCarterPenaltyCharge)
-      }
     }
   }
 
