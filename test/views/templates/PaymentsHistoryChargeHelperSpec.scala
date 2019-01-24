@@ -31,6 +31,7 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
         }
       }
     }
+  }
 
     "the lookup String is an invalid charge type" should {
 
@@ -42,5 +43,4 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 
       }
     }
-  }
 }

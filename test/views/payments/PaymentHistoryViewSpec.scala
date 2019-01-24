@@ -66,7 +66,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatInaccuraciesReturnReplacedCharge.name -> ((
       "Inaccuracies penalty",
       s"this is because you have submitted inaccurate information for the period $datePeriodString")),
-    VatWrongDoingPenaltyCharge.name -> (("Wrongdoing penalty", "because you charged VAT when you should not have done"))
+    VatWrongDoingPenaltyCharge.name -> (("Wrongdoing penalty", "because you charged VAT when you should not have done")),
+    VatPADefaultInterest.name -> (("Protective assessment default interest", "interest charged on the protective assessment"))
   )
 
   object Selectors {
