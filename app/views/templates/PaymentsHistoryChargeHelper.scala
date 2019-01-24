@@ -137,6 +137,7 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.VatStatutoryInterestDescription"),
     "repayment"
   )
+
   object VatSecurityDepositRequest extends PaymentsHistoryChargeHelper(
     VatSecurityDepositRequestCharge.value,
     "paymentsHistory.vatSecurityDepositRequestTitle",
@@ -148,6 +149,7 @@ object PaymentsHistoryChargeHelper {
     "paymentsHistory.vatEcNoticeFurtherInterestTitle",
     Some("paymentsHistory.vatEcNoticeFurtherInterestDescription")
   )
+
   object VatPADefaultInterest extends PaymentsHistoryChargeHelper(
     VatPADefaultInterestCharge.value,
     "paymentsHistory.vatPADefaultInterestTitle",
@@ -214,6 +216,12 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.vatWrongDoingPenaltyChargeDescription")
   )
 
+  object VatECDefaultInterest extends PaymentsHistoryChargeHelper(
+    VatECDefaultInterestCharge.value,
+    "paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle",
+    Some("paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -247,7 +255,8 @@ object PaymentsHistoryChargeHelper {
     VatInaccuraciesReturnReplacedCharge,
     VatWrongDoingPenaltyCharge,
     VatPADefaultInterest,
-    VatStatutoryInterestCharge
+    VatStatutoryInterestCharge,
+    VatECDefaultInterest
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
