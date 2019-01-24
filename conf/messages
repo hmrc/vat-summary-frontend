@@ -208,6 +208,8 @@ paymentsHistory.vatInaccuraciesReturnReplacedChargeTitle = Inaccuracies penalty
 paymentsHistory.vatInaccuraciesReturnReplacedChargeDescription = this is because you have submitted inaccurate information for the period {0}
 paymentsHistory.vatWrongDoingPenaltyChargeTitle = Wrongdoing penalty
 paymentsHistory.vatWrongDoingPenaltyChargeDescription = because you charged VAT when you should not have done
+paymentsHistory.vatPADefaultInterestTitle = Protective assessment default interest
+paymentsHistory.vatPADefaultInterestDescription = interest charged on the protective assessment
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
