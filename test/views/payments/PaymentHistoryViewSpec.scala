@@ -74,6 +74,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableHeading = "tr th:nth-of-type(2) div"
     val amountPaidTableHeading = "tr th:nth-of-type(3) div"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
+    val noPaymentsText = ".column-two-thirds > p"
 
     def paymentDateTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(1)"
 
@@ -232,96 +233,108 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
     }
 
-    "there are no payment histories for the selected year" should {
+    "there are no payments" when {
 
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        historyYears,
-        historyYears.head,
-        Seq.empty
-      )
+      "the previous year tab is selected" should {
+        val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+          historyYears,
+          previousYear,
+          Seq.empty
+        )
 
-      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+        lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct document title" in {
-        document.title shouldBe "Payment history"
+        "have tabs for each return year" should {
+
+          "tab one" should {
+
+            "have the text '2018'" in {
+              elementText(Selectors.tabOne) should include("2018")
+            }
+
+            s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url}" in {
+              element(Selectors.tabOne).select("a").attr("href") shouldBe
+                controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url
+            }
+
+            "contain visually hidden text" in {
+              elementText(Selectors.tabOneHiddenText) shouldBe "View payment history from 2018"
+            }
+          }
+
+          "tab two" should {
+
+            "have the text '2017'" in {
+              elementText(Selectors.tabTwo) should include("2017")
+            }
+
+            "contain visually hidden text" in {
+              elementText(Selectors.tabTwoHiddenText) shouldBe "Currently viewing payment history from 2017"
+            }
+          }
+        }
+
+        "have the correct tab heading" in {
+          elementText(Selectors.tabHeading) shouldBe "2017"
+        }
+
+        "have the correct text in past tense" in {
+          elementText(Selectors.noPaymentsText) shouldBe "You did not make or receive any payments this year."
+        }
       }
 
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe "Payment history"
-      }
+      "the current year tab is selected" should {
 
-      "render breadcrumbs which" should {
+        val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+          historyYears,
+          currentYear,
+          Seq.empty
+        )
 
-        "have the text 'Business tax account'" in {
-          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+        lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have tabs for each return year" should {
+
+          "tab one" should {
+
+            "have the text '2018'" in {
+              elementText(Selectors.tabOne) should include("2018")
+            }
+
+            "contain visually hidden text" in {
+              elementText(Selectors.tabOneHiddenText) shouldBe "Currently viewing payment history from 2018"
+            }
+          }
+
+          "tab two" should {
+
+            "have the text '2017'" in {
+              elementText(Selectors.tabTwo) should include("2017")
+            }
+
+            s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url}" in {
+              element(Selectors.tabTwo).select("a").attr("href") shouldBe
+                controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url
+            }
+
+            "contain visually hidden text" in {
+              elementText(Selectors.tabTwoHiddenText) shouldBe "View payment history from 2017"
+            }
+          }
         }
 
-        "link to bta" in {
-          element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+        "have the correct tab heading" in {
+          elementText(Selectors.tabHeading) shouldBe "2018"
         }
 
-        "have the text 'Your VAT details'" in {
-          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
-        }
-
-        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
-        }
-
-        "have the text 'Payment history'" in {
-          elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
+        "have the correct text in present tense" in {
+          elementText(Selectors.noPaymentsText) shouldBe "You have not yet made or received any payments this year."
         }
       }
     }
 
-    "there is no payment history for any year" should {
-
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        Seq.empty,
-        currentYear,
-        Seq.empty
-      )
-
-      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "display no first year tab" in {
-
-        val thrown = intercept[Exception] {
-          elementText(Selectors.tabOne)
-        }
-        thrown.getMessage should startWith("No element exists with the selector")
-      }
-
-      "display no second year tab" in {
-
-        val thrown = intercept[Exception] {
-          elementText(Selectors.tabTwo)
-        }
-        thrown.getMessage should startWith("No element exists with the selector")
-      }
-
-      "show the no history lead content" in {
-
-        elementText(Selectors.noHistoryContent) shouldBe "You have not made or received any payments yet."
-      }
-
-      "show the your history will show content" in {
-
-        elementText(Selectors.noHistoryWillShowContent) shouldBe "Your payment history will show here once you have:"
-      }
-
-      "show the your history will show content first bullet" in {
-
-        elementText(Selectors.noHistoryBullet1) shouldBe "paid a VAT Return or made any other VAT payments"
-      }
-
-      "show the your history will show content second bullet" in {
-
-        elementText(Selectors.noHistoryBullet2) shouldBe "received any VAT repayments"
-      }
-    }
 
     "supplying with the following charge types" should {
       case class testModel(chargeType: ChargeType, expectedTitle: String, expectedDescription: String)
