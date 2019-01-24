@@ -150,6 +150,36 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.vatEcNoticeFurtherInterestDescription")
   )
 
+  object CivilEvasionPenalty extends PaymentsHistoryChargeHelper(
+    CivilEvasionPenaltyCharge.value,
+    "paymentsHistory.civilEvasionPenaltyTitle",
+    Some("paymentsHistory.civilEvasionPenaltyDescription")
+  )
+
+  object VatInaccuraciesInECSales extends PaymentsHistoryChargeHelper(
+    VatInaccuraciesInECSalesCharge.value,
+    "paymentsHistory.vatInaccuraciesInECSalesTitle",
+    Some("paymentsHistory.vatInaccuraciesInECSalesDescription")
+  )
+
+  object VatFailureToSubmitECSales extends PaymentsHistoryChargeHelper(
+    VatFailureToSubmitECSalesCharge.value,
+    "paymentsHistory.vatFailureToSubmitECSalesTitle",
+    Some("paymentsHistory.vatFailureToSubmitECSalesDescription")
+  )
+
+  object FtnEachPartner extends PaymentsHistoryChargeHelper(
+    FtnEachPartnerCharge.value,
+    "paymentsHistory.ftnEachPartnerTitle",
+    Some("paymentsHistory.ftnEachPartnerDescription")
+  )
+
+  object VatOAInaccuracies2009 extends PaymentsHistoryChargeHelper(
+    VatOAInaccuraciesFrom2009.value,
+    "paymentsHistory.vatOAInaccuraciesFrom2009Title",
+    Some("paymentsHistory.vatOAInaccuraciesFrom2009Description")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -172,7 +202,12 @@ object PaymentsHistoryChargeHelper {
     VatAdditionalAssessment,
     VatAADefaultInterest,
     VatAAFurtherInterest,
-    VatStatutoryInterestCharge
+    VatStatutoryInterestCharge,
+    CivilEvasionPenalty,
+    VatInaccuraciesInECSales,
+    VatFailureToSubmitECSales,
+    FtnEachPartner,
+    VatOAInaccuracies2009
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
