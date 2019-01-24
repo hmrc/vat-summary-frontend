@@ -491,5 +491,40 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
     }
+
+    "supplying with a Carter Penalty Charge charge type" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = CarterPenaltyCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+          amount = 111.00,
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
+        ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a CarterPenaltyCharge charge" should {
+
+        "contains the correct form hint" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "because you did not use the correct digital channel for the period 1 Jan to 1 Feb 2018"
+        }
+
+        "contains the correct payment date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+
+        "contains the correct payment amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £111"
+        }
+
+      }
+    }
+
   }
 }
