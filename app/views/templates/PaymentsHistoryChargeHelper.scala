@@ -21,6 +21,7 @@ import play.api.Logger
 
 sealed case class PaymentsHistoryChargeHelper(name: String, title: String, description: Option[String], id: String = "")
 
+//scalastyle:off
 object PaymentsHistoryChargeHelper {
   object VatReturnCreditCharge extends PaymentsHistoryChargeHelper(
     ReturnCreditCharge.value,
@@ -228,6 +229,12 @@ object PaymentsHistoryChargeHelper {
     Some("paymentsHistory.vatPaFurtherInterestDescription")
   )
 
+  object VatCarterPenaltyCharge extends PaymentsHistoryChargeHelper(
+    CarterPenaltyCharge.value,
+    "paymentsHistory.vatCarterPenaltyChargeTitle",
+    Some("paymentsHistory.vatCarterPenaltyChargeDescription")
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -263,7 +270,8 @@ object PaymentsHistoryChargeHelper {
     VatPADefaultInterest,
     VatStatutoryInterestCharge,
     VatECDefaultInterest,
-    VatPaFurtherInterest
+    VatPaFurtherInterest,
+    VatCarterPenaltyCharge
   )
 
   def getChargeType(lookupName: String): Option[PaymentsHistoryChargeHelper] = {
