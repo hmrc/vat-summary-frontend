@@ -214,6 +214,9 @@ paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction 
 paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
 paymentsHistory.vatPaFurtherInterestTitle = Protective assessment further interest
 paymentsHistory.vatPaFurtherInterestDescription = further interest due on the protective assessment as this was not paid on time
+paymentsHistory.vatCarterPenaltyChargeTitle = Penalty for not filing correctly
+paymentsHistory.vatCarterPenaltyChargeDescription = because you did not use the correct digital channel for the period {0}
+
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

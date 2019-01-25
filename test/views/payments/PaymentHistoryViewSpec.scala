@@ -69,7 +69,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatWrongDoingPenaltyCharge.name -> (("Wrongdoing penalty", "because you charged VAT when you should not have done")),
     VatPADefaultInterest.name -> (("Protective assessment default interest", "interest charged on the protective assessment")),
     VatECDefaultInterest.name -> (("Error correction default interest", "interest charged on assessed amount")),
-    VatPaFurtherInterest.name -> (("Protective assessment further interest", "further interest due on the protective assessment as this was not paid on time"))
+    VatPaFurtherInterest.name -> (("Protective assessment further interest", "further interest due on the protective assessment as this was not paid on time")),
+    VatCarterPenaltyCharge.name -> ((
+      "Penalty for not filing correctly",
+      s"because you did not use the correct digital channel for the period $datePeriodString"))
   )
 
   object Selectors {
@@ -488,5 +491,40 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
     }
+
+    "supplying with a Carter Penalty Charge charge type" should {
+
+      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+        historyYears,
+        historyYears.head,
+        Seq(PaymentsHistoryModel(
+          chargeType = CarterPenaltyCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+          amount = 111.00,
+          clearedDate = Some(LocalDate.parse("2018-03-01"))
+        ))
+      )
+
+      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a CarterPenaltyCharge charge" should {
+
+        "contains the correct form hint" in {
+          elementText(Selectors.descriptionTableContent(1)) shouldBe "because you did not use the correct digital channel for the period 1 Jan to 1 Feb 2018"
+        }
+
+        "contains the correct payment date" in {
+          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+        }
+
+        "contains the correct payment amount" in {
+          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £111"
+        }
+
+      }
+    }
+
   }
 }

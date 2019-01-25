@@ -30,6 +30,7 @@ class PaymentsHistoryChargeHelperSpec extends UnitSpec {
           result shouldBe Some(paymentHistoryChargeType)
         }
       }
+
     }
   }
 
