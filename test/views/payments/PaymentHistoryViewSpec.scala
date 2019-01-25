@@ -72,7 +72,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     VatPaFurtherInterest.name -> (("Protective assessment further interest", "further interest due on the protective assessment as this was not paid on time")),
     VatCarterPenaltyCharge.name -> ((
       "Penalty for not filing correctly",
-      s"because you did not use the correct digital channel for the period $datePeriodString"))
+      s"because you did not use the correct digital channel for the period $datePeriodString")),
+    VatFailureToNotifyRCSL.name -> ((
+      "Failure to notify penalty",
+      "because you failed to notify us of the date you made a reverse charge sale or stopped making supplies")),
+    VatFailureToSubmitRCSL.name -> (("Reverse Charge sales list penalty", "because you have failed to submit a Reverse Charge sales list"))
   )
 
   object Selectors {
