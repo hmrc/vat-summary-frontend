@@ -16,11 +16,13 @@
 
 package views.partials.btaHome
 
+import com.google.inject.Inject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 
-class ClaimEnrolmentViewSpec extends ViewBaseSpec {
+
+class  ClaimEnrolmentViewSpec extends ViewBaseSpec {
 
   "Rendering the claim enrolment partial" should {
 
