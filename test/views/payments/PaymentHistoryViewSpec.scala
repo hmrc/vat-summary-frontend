@@ -77,7 +77,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "Failure to notify penalty",
       "because you failed to notify us of the date you made a reverse charge sale or stopped making supplies")),
     VatFailureToSubmitRCSL.name -> (("Reverse Charge sales list penalty", "because you have failed to submit a Reverse Charge sales list")),
-    VatCreditReturnOffsetCharge.name -> (("Overpayment partial refund", s"partial repayment for period $datePeriodString"))
+    VatCreditReturnOffsetCharge.name -> (("Overpayment partial refund", s"partial repayment for period $datePeriodString")),
+    ProtectiveAssessmentCharge.name -> (("Protective assessment", "assessment raised to protect HMRC’s position during an appeal"))
   )
 
   object Selectors {

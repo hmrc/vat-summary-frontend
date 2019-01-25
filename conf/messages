@@ -222,6 +222,8 @@ paymentsHistory.vatFailureToSubmitRCSLTitle = Reverse Charge sales list penalty
 paymentsHistory.vatFailureToSubmitRCSLDescription = because you have failed to submit a Reverse Charge sales list
 paymentsHistory.vatCreditReturnOffsetChargeTitle = Overpayment partial refund
 paymentsHistory.vatCreditReturnOffsetChargeDescription = partial repayment for period {0}
+paymentsHistory.vatProtectiveAssessmentChargeTitle = Protective assessment
+paymentsHistory.vatProtectiveAssessmentChargeDescription = assessment raised to protect HMRC’s position during an appeal
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
