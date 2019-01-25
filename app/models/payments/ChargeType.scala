@@ -157,6 +157,7 @@ case object VatPaFurtherInterestCharge extends ChargeType {
   override val value: String = "VAT PA Further Interest"
 }
 
+
 object ChargeType {
 
   val logger = Logger(getClass.getSimpleName)
@@ -204,10 +205,8 @@ object ChargeType {
     VatSecurityDepositRequestCharge,
     VatECFurtherInterestCharge,
     VatECDefaultInterestCharge,
-    StatutoryInterestCharge,
     VatFailureToSubmitECSalesCharge,
-    VatPaFurtherInterestCharge,
-    VatSecurityDepositRequestCharge
+    VatPaFurtherInterestCharge
   )
 
   def apply: String => ChargeType = input => {
