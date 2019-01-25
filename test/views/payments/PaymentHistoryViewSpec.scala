@@ -33,8 +33,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
   lazy val chargeDetailsForTest: Map[String, (String, String)] = Map(
     VatReturnCreditCharge.name -> (("Repayment from HMRC", s"for your $datePeriodString return")),
     VatReturnDebitCharge.name -> (("Return", s"for the period $datePeriodString")),
-    VatOfficerAssessmentCreditCharge.name -> (("VAT officer's assessment", "for overpaying by this amount")),
-    VatOfficerAssessmentDebitCharge.name -> (("VAT officer's assessment", "for underpaying by this amount")),
+    VatOfficerAssessmentCreditCharge.name -> (("VAT officer’s assessment", "for overpaying by this amount")),
+    VatOfficerAssessmentDebitCharge.name -> (("VAT officer’s assessment", "for underpaying by this amount")),
     VatCentralAssessment.name -> (("Estimate", s"for your $datePeriodString return")),
     VatDefaultSurcharge.name -> (("Surcharge", s"for late payment of your $datePeriodString return")),
     VatErrorCorrectionDebitCharge.name -> (("Error correction payment", s"for correcting your $datePeriodString return")),
