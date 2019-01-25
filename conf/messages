@@ -220,6 +220,8 @@ paymentsHistory.vatFailureToNotifyRCSLTitle = Failure to notify penalty
 paymentsHistory.vatFailureToNotifyRCSLDescription = because you failed to notify us of the date you made a reverse charge sale or stopped making supplies
 paymentsHistory.vatFailureToSubmitRCSLTitle = Reverse Charge sales list penalty
 paymentsHistory.vatFailureToSubmitRCSLDescription = because you have failed to submit a Reverse Charge sales list
+paymentsHistory.vatCreditReturnOffsetChargeTitle = Overpayment partial refund
+paymentsHistory.vatCreditReturnOffsetChargeDescription = partial repayment for period {0}
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

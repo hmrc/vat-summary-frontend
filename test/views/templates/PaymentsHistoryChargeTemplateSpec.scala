@@ -601,5 +601,25 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "because you charged VAT when you should not have done"
       }
     }
+
+    "there is a Vat Credit Return Offset Charge Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        CreditReturnOffsetCharge,
+        Some(LocalDate.parse("2018-09-12")),
+        Some(LocalDate.parse("2018-10-13")),
+        390.00,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+      }
+    }
   }
 }
