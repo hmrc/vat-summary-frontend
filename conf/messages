@@ -151,7 +151,7 @@ paymentsHistory.vatReturnCreditChargeTitle = Repayment from HMRC
 paymentsHistory.vatReturnCreditChargeDescription = for your {0} return
 paymentsHistory.vatReturnDebitChargeTitle = Return
 paymentsHistory.vatReturnDebitChargeDescription = for the period {0}
-paymentsHistory.officerAssessmentChargeTitle = VAT officer''s investigation
+paymentsHistory.officerAssessmentChargeTitle = VAT officer’s assessment
 paymentsHistory.officerAssessmentDebitChargeDescription = for underpaying by this amount
 paymentsHistory.officerAssessmentCreditChargeDescription = for overpaying by this amount
 paymentsHistory.vatCentralAssessmentTitle = Estimate
@@ -212,6 +212,8 @@ paymentsHistory.vatPADefaultInterestTitle = Protective assessment default intere
 paymentsHistory.vatPADefaultInterestDescription = interest charged on the protective assessment
 paymentsHistory.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
 paymentsHistory.vatErrorCorrectionNoticeDefaultInterestDescription = interest charged on assessed amount
+paymentsHistory.vatPaFurtherInterestTitle = Protective assessment further interest
+paymentsHistory.vatPaFurtherInterestDescription = further interest due on the protective assessment as this was not paid on time
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

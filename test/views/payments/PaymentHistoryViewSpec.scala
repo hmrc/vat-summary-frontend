@@ -33,8 +33,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
   lazy val chargeDetailsForTest: Map[String, (String, String)] = Map(
     VatReturnCreditCharge.name -> (("Repayment from HMRC", s"for your $datePeriodString return")),
     VatReturnDebitCharge.name -> (("Return", s"for the period $datePeriodString")),
-    VatOfficerAssessmentCreditCharge.name -> (("VAT officer's investigation", "for overpaying by this amount")),
-    VatOfficerAssessmentDebitCharge.name -> (("VAT officer's investigation", "for underpaying by this amount")),
+    VatOfficerAssessmentCreditCharge.name -> (("VAT officer’s assessment", "for overpaying by this amount")),
+    VatOfficerAssessmentDebitCharge.name -> (("VAT officer’s assessment", "for underpaying by this amount")),
     VatCentralAssessment.name -> (("Estimate", s"for your $datePeriodString return")),
     VatDefaultSurcharge.name -> (("Surcharge", s"for late payment of your $datePeriodString return")),
     VatErrorCorrectionDebitCharge.name -> (("Error correction payment", s"for correcting your $datePeriodString return")),
@@ -68,7 +68,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       s"this is because you have submitted inaccurate information for the period $datePeriodString")),
     VatWrongDoingPenaltyCharge.name -> (("Wrongdoing penalty", "because you charged VAT when you should not have done")),
     VatPADefaultInterest.name -> (("Protective assessment default interest", "interest charged on the protective assessment")),
-    VatECDefaultInterest.name -> (("Error correction default interest", "interest charged on assessed amount"))
+    VatECDefaultInterest.name -> (("Error correction default interest", "interest charged on assessed amount")),
+    VatPaFurtherInterest.name -> (("Protective assessment further interest", "further interest due on the protective assessment as this was not paid on time"))
   )
 
   object Selectors {
