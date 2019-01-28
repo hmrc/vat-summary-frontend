@@ -702,7 +702,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       )
 
       "return the correct message" in {
-        testModel.whatYouOweDescription shouldBe "Assessment raised to protect HMRC's position during an appeal"
+        testModel.whatYouOweDescription shouldBe "assessment raised to protect HMRC’s position during an appeal"
       }
 
       "correctly write to Json" in {
