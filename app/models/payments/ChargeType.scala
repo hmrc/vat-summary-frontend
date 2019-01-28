@@ -156,6 +156,9 @@ case object StatutoryInterestCharge extends ChargeType {
 case object VatPaFurtherInterestCharge extends ChargeType {
   override val value: String = "VAT PA Further Interest"
 }
+case object CreditReturnOffsetCharge extends ChargeType {
+  override val value: String = "Credit Return Offset"
+}
 
 
 object ChargeType {
@@ -206,7 +209,8 @@ object ChargeType {
     VatECFurtherInterestCharge,
     VatECDefaultInterestCharge,
     VatFailureToSubmitECSalesCharge,
-    VatPaFurtherInterestCharge
+    VatPaFurtherInterestCharge,
+    CreditReturnOffsetCharge
   )
 
   def apply: String => ChargeType = input => {
