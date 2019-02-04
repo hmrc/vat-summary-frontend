@@ -15,60 +15,58 @@
  *@
 
 @import models.payments.OpenPaymentsModel
-@import views.templates.formatters.dates.DisplayDateRangeHelper.{displayDateRange,displayDate}
-@import views.html.templates.formatters.money.displayMoney
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.html.templates.formatters.money.{displayMoney, positiveNegative}
 @import views.templates.payments.WhatYouOweChargeHelper
+@import views.templates.PaymentsHistoryChargeHelper
 
 @(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
 
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
+@chargeTitle = @{PaymentsHistoryChargeHelper.getChargeType(payment.chargeType.value)}
 
-<div id="payment-section-@{count + 1}" class="section divider--bottom">
-
-  <span data-amount="@(payment.amount)" class="heading-medium">@displayMoney(payment.amount)</span>
-  <div class="grid-row" id="payment-row-@{count + 1}">
-    <div class="column-two-thirds">
-      <span data-due="@(payment.due.toString)">@messages("openPayments.dueBy") @displayDate(payment.due)</span>
-      @if(payment.overdue) {
-        <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
-      }
-      <span class="form-hint">@chargeDetails.description</span>
-    </div>
-
-    <div class="column-one-third payment-actions"  id="links-section-@{count + 1}">
-      <div class="grid-row">
-        @chargeDetails.payLinkText match {
-          case Some(payLinkText) => {
-            <a data-journey-click="payment:make-payment:open-payments"
-               href="@payment.makePaymentRedirect"
-               class="float--right">
-              <span>@payLinkText</span>
-              <span class="visuallyhidden">
-                @displayMoney(payment.amount)
-                @chargeDetails.overdueContext
-                @chargeDetails.description
-              </span>
-            </a>
-          }
-          case None => {
-            <span class="float--right" data-journey-click="direct-debit:direct-debit-handoff:open-payments">
-              @messages("openPayments.youPayByDirectDebit")
-            </span>
-          }
-        }
-      </div>
-
-      @if(chargeDetails.viewReturnEnabled) {
-        <div class="grid-row">
-          <a data-journey-click="@chargeDetails.viewReturnGAEvent"
-             href="@appConfig.vatReturnUrl(payment.periodKey)"
-             class="float--right">
-            <span>@messages("openPayments.viewReturnLink")</span>
-            <span class="visuallyhidden">@chargeDetails.viewReturnContext</span>
-          </a>
+<tr id="payment-section-@{count + 1}">
+    <td scope="row">
+        @chargeTitle.map { title => <h3 class="bold">@messages(s"${title.title}")</h3> }
+        @chargeDetails.description
+        <div data-due="@(payment.due.toString)" class="form-hint">
+            @messages("openPayments.dueBy") @displayDate(payment.due)
+            @if(payment.overdue) {
+                <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
+            }
         </div>
-      }
+    </td>
 
-      </div>
-  </div>
-</div>
+    <td scope="row" class="nowrap">
+        <span data-amount="@(payment.amount)">@positiveNegative(payment.amount)</span>
+    </td>
+
+    <td scope="row" class="nowrap">
+        <div>
+            @chargeDetails.payLinkText match {
+                case Some(payLinkText) => {
+                    <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
+                        <span>@payLinkText</span>
+                        <span class="visuallyhidden">
+                            @displayMoney(payment.amount)
+                            @chargeDetails.overdueContext
+                            @chargeDetails.description
+                        </span>
+                    </a>
+                }
+                case None => {
+                    <span data-journey-click="direct-debit:direct-debit-handoff:open-payments">
+                    @messages("openPayments.youPayByDirectDebit")
+                    </span>
+                }
+            }
+        </div>
+
+        @if(chargeDetails.viewReturnEnabled) {
+            <a data-journey-click="@chargeDetails.viewReturnGAEvent" href="@appConfig.vatReturnUrl(payment.periodKey)">
+                <span>@messages("openPayments.viewReturnLink")</span>
+                <span class="visuallyhidden">@chargeDetails.viewReturnContext</span>
+            </a>
+        }
+    </td>
+</tr>

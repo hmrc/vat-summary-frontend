@@ -43,52 +43,73 @@
 
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
-  <div id="paymentsSection" class="grid-row column-two-thirds payments">
+  <div class="column-two-thirds payments">
+      <div class="section">
+          <table>
+              <thead>
+                  <tr>
+                      <th scope="col">
+                          <div class="visuallyhidden">@messages("openPayments.action")</div>
+                      </th>
 
-    @model.payments.zipWithIndex.map { case(payment, count) =>
-      @views.html.templates.payments.whatYouOweCharge(payment, count, model.hasDirectDebit)
-    }
+                      <th scope="col" class="numeric">
+                          <div class="visuallyhidden">@messages("openPayments.amount")</div>
+                      </th>
 
-    @model.hasDirectDebit match {
-      case Some(hasDD) => {
-        @if(!hasDD) {
-          <div id="processing-time">
-            <p>@messages("openPayments.processingTime")</p>
+                      <th scope="col">
+                          <div class="visuallyhidden">@messages("openPayments.description")</div>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @model.payments.zipWithIndex.map { case(payment, count) =>
+                      @views.html.templates.payments.whatYouOweCharge(payment, count, model.hasDirectDebit)
+                  }
+              </tbody>
+          </table>
+      </div>
+
+      @model.hasDirectDebit match {
+          case Some(hasDD) => {
+              @if(!hasDD) {
+                  <div id="processing-time">
+                      <p>@messages("openPayments.processingTime")</p>
+                  </div>
+              }
+          }
+          case None => {
+              <div id="processing-time-old">
+                  <p>@messages("openPayments.processingTimeOld")</p>
+              </div>
+          }
+      }
+
+      @if(appConfig.features.allowDirectDebits()) {
+          <span id="direct-debits" class="heading-small">@messages("openPayments.directDebit.heading")</span>
+          <div id="check-direct-debit" class="form-group">
+              <p>
+                  @model.hasDirectDebit match {
+                      case Some(hasDD) => {
+                          @messages("openPayments.directDebitYouCan")
+                          @if(hasDD) {
+                              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
+                            } else {
+                              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
+                              @messages("openPayments.directDebitPayReturn")
+                             }
+                          }
+                      case None => {
+                          @messages("openPayments.directDebitAlreadySetUp")
+                          @messages("openPayments.directDebitYouCan")
+                          <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitLinkText")</a>
+                          @messages("openPayments.directDebitNotSure")
+                      }
+                  }
+              </p>
           </div>
         }
-      }
-      case None => {
-        <div id="processing-time-old">
-          <p>@messages("openPayments.processingTimeOld")</p>
-        </div>
-      }
-    }
-
-    @if(appConfig.features.allowDirectDebits()) {
-        <span id="direct-debits" class="heading-small">@messages("openPayments.directDebit.heading")</span>
-        <div id="check-direct-debit" class="form-group">
-          <p>
-          @model.hasDirectDebit match {
-            case Some(hasDD) => {
-              @messages("openPayments.directDebitYouCan")
-              @if(hasDD) {
-                <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
-              } else {
-                <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
-                @messages("openPayments.directDebitPayReturn")
-               }
-            }
-            case None => {
-              @messages("openPayments.directDebitAlreadySetUp")
-              @messages("openPayments.directDebitYouCan")
-              <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitLinkText")</a>
-              @messages("openPayments.directDebitNotSure")
-            }
-          }
-          </p>
-        </div>
-    }
 
     @expandingHelpSection(messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
+
   </div>
 }

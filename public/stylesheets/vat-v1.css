@@ -37,5 +37,14 @@
 }
 
 .nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
+}
+
+table td:last-child {
+    padding-right: 1em;
+    text-align: right;
+}
+
+table td {
+    padding-bottom: 1em;
 }
