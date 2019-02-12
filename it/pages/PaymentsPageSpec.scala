@@ -62,7 +62,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().get())
         lazy implicit val document: Document = Jsoup.parse(response.body)
-        val firstPaymentAmount = "#payment-section-1 span:nth-of-type(1)"
+        val firstPaymentAmount = "#payment-1 span:nth-of-type(1)"
 
         document.select(firstPaymentAmount).text().length > 0 shouldBe true
       }

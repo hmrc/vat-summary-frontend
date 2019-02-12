@@ -43,6 +43,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
     private val columnThree = "td:nth-of-type(3)"
     val payLink = s"$columnThree div > a:nth-of-type(1)"
     val payText = s"$payLink > span:nth-of-type(1)"
+    val directDebitText = s"$columnThree span"
     val payHiddenContent = s"$payLink > span:nth-of-type(2)"
     val viewReturnLink = s"$columnThree > a"
     val viewReturnText = s"$viewReturnLink > span:nth-of-type(1)"
@@ -138,6 +139,19 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         "not show a link to View Return" in {
           document.select(Selectors.viewReturnLink) shouldBe empty
         }
+      }
+    }
+
+    "user has a direct debit" should {
+
+      val model = generateModel(overdue = false)
+      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0, Some(true))
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${view.body}</table>"
+      )
+
+      "render the correct direct debit message" in {
+        elementText(Selectors.directDebitText) shouldBe "You pay by direct debit"
       }
     }
 
