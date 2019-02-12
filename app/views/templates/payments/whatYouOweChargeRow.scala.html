@@ -25,10 +25,12 @@
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
 @chargeTitle = @{PaymentsHistoryChargeHelper.getChargeType(payment.chargeType.value)}
 
-<tr id="payment-section-@{count + 1}">
+<tr id="payment-@{count + 1}">
     <td scope="row">
         @chargeTitle.map { title => <h3 class="bold">@messages(s"${title.title}")</h3> }
-        @chargeDetails.description
+
+        <div>@chargeDetails.description</div>
+
         <div data-due="@(payment.due.toString)" class="form-hint">
             @messages("openPayments.dueBy") @displayDate(payment.due)
             @if(payment.overdue) {

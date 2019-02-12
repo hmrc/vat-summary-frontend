@@ -63,7 +63,7 @@
               </thead>
               <tbody>
                   @model.payments.zipWithIndex.map { case(payment, count) =>
-                      @views.html.templates.payments.whatYouOweCharge(payment, count, model.hasDirectDebit)
+                      @views.html.templates.payments.whatYouOweChargeRow(payment, count, model.hasDirectDebit)
                   }
               </tbody>
           </table>
