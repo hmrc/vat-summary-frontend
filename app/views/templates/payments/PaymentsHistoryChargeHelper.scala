@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.templates
+package views.templates.payments
 
 import models.payments._
 import play.api.Logger

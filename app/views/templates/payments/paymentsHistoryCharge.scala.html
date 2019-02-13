@@ -14,11 +14,12 @@
  * limitations under the License.
  *@
 
-@import views.templates.PaymentsHistoryChargeHelper
 @import views.html.templates.formatters.money._
 @import models.viewModels.PaymentsHistoryModel
 @import java.time.LocalDate
-@import views.templates.formatters.dates.DisplayDateRangeHelper.{displayDateRange,displayDate}
+
+@import views.templates.formatters.dates.DisplayDateRangeHelper.{displayDate, displayDateRange}
+@import views.templates.payments.PaymentsHistoryChargeHelper
 
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)

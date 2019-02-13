@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
+package views.templates.payments
+
 import uk.gov.hmrc.play.test.UnitSpec
-import views.templates.PaymentsHistoryChargeHelper
 
 class PaymentsHistoryChargeHelperSpec extends UnitSpec {
 

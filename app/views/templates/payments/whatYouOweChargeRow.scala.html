@@ -17,8 +17,7 @@
 @import models.payments.OpenPaymentsModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.html.templates.formatters.money.{displayMoney, positiveNegative}
-@import views.templates.payments.WhatYouOweChargeHelper
-@import views.templates.PaymentsHistoryChargeHelper
+@import views.templates.payments.{PaymentsHistoryChargeHelper, WhatYouOweChargeHelper}
 
 @(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
 

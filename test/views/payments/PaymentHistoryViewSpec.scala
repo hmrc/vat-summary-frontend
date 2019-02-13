@@ -23,9 +23,9 @@ import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.templates.PaymentsHistoryChargeHelper
-import views.templates.PaymentsHistoryChargeHelper._
+import views.templates.payments.PaymentsHistoryChargeHelper._
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
+import views.templates.payments.PaymentsHistoryChargeHelper
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 
