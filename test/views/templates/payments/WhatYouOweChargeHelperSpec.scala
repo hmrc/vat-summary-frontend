@@ -1,0 +1,221 @@
+/*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package views.templates.payments
+
+import java.time.LocalDate
+
+import models.payments._
+import views.ViewBaseSpec
+
+class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
+
+  def paymentModel(chargeType: ChargeType, overdue: Boolean = false): OpenPaymentsModel = OpenPaymentsModel(
+    chargeType,
+    BigDecimal(100.00),
+    LocalDate.parse("2018-03-03"),
+    LocalDate.parse("2018-01-01"),
+    LocalDate.parse("2018-02-02"),
+    "18AA",
+    overdue
+  )
+
+  "WhatYouOweChargeHelper .description" should {
+
+    val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(false), messages)
+
+    "return the description of the payment" in {
+      helper.description shouldBe "for the period 1 January to 2 February 2018"
+    }
+  }
+
+  "WhatYouOweChargeHelper .payLinkText" when {
+
+
+    "charge type is Return Debit charge and has a direct debit" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+
+      "return no Pay text" in {
+        helper.payLinkText shouldBe None
+      }
+    }
+
+    "charge type is Central Assessment charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(CentralAssessmentCharge), Some(true), messages)
+
+      "return 'Pay estimate'" in {
+        helper.payLinkText shouldBe Some("Pay estimate")
+      }
+    }
+
+    "charge type is a different type of charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+
+      "return Pay now" in {
+        helper.payLinkText shouldBe Some("Pay now")
+      }
+    }
+  }
+
+  "WhatYouOweChargeHelper .viewReturnEnabled" when {
+
+    "charge type is Return Debit Charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+
+      "return true" in {
+        helper.viewReturnEnabled shouldBe true
+      }
+    }
+
+    "charge type is Error Correction Debit Charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), Some(true), messages)
+
+      "return true" in {
+        helper.viewReturnEnabled shouldBe true
+      }
+    }
+
+    "charge type is a different type of charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+
+      "return Pay now" in {
+        helper.viewReturnEnabled shouldBe false
+      }
+    }
+  }
+
+  "WhatYouOweChargeHelper .overdueContext" when {
+
+    "charge type is Return Debit Charge and overdue" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge, overdue = true), Some(true), messages)
+
+      "return overdue" in {
+        helper.overdueContext shouldBe "overdue"
+      }
+    }
+
+    "charge type is Return Debit Charge and not overdue" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+
+      "return empty string" in {
+        helper.overdueContext shouldBe ""
+      }
+    }
+
+    "charge type is a different type of charge and overdue" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge, overdue = true), Some(true), messages)
+
+      "return 'is overdue'" in {
+        helper.overdueContext shouldBe "is overdue,"
+      }
+    }
+
+    "charge type is a different type of charge and not overdue" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+
+      "return ','" in {
+        helper.overdueContext shouldBe ","
+      }
+    }
+  }
+
+  "WhatYouOweChargeHelper .viewReturnContext" when {
+
+    "payment has a to and from period" when {
+
+      "charge type is Return Debit Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+
+        "return 'that you corrected for the period 1 January to 2 February 2018'" in {
+          helper.viewReturnContext shouldBe "for the period 1 January to 2 February 2018"
+        }
+      }
+
+      "charge type is Error Correction Debit Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), Some(true), messages)
+
+        "return 'for the period 1 January to 2 February 2018'" in {
+          helper.viewReturnContext shouldBe "that you corrected for the period 1 January to 2 February 2018"
+        }
+      }
+
+      "charge type is different type of charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+
+        "return empty string" in {
+          helper.viewReturnContext shouldBe ""
+        }
+      }
+    }
+
+    "payment is has no to or from period" should {
+
+      val model = OpenPaymentsModelNoPeriod(
+        MpRepeatedPre2009Charge,
+        BigDecimal(100.00),
+        LocalDate.parse("2018-03-03"),
+        "18AA"
+      )
+
+      val helper = new WhatYouOweChargeHelper(model, Some(true), messages)
+
+      "return empty string" in {
+        helper.viewReturnContext shouldBe ""
+      }
+    }
+  }
+
+  "WhatYouOweChargeHelper .viewReturnGAEvent" when {
+
+    "payment has a to and from period" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+
+      "return 'returns:view-return 2018-01-01-to-2018-02-02:open-payments'" in {
+        helper.viewReturnGAEvent shouldBe "returns:view-return 2018-01-01-to-2018-02-02:open-payments"
+      }
+    }
+
+    "payment has no to and from period" should {
+
+      val model = OpenPaymentsModelNoPeriod(
+        MpRepeatedPre2009Charge,
+        BigDecimal(100.00),
+        LocalDate.parse("2018-03-03"),
+        "18AA"
+      )
+
+      val helper = new WhatYouOweChargeHelper(model, Some(true), messages)
+
+      "return 'returns:view-return:open-payments'" in {
+        helper.viewReturnGAEvent shouldBe "returns:view-return:open-payments"
+      }
+    }
+  }
+}
