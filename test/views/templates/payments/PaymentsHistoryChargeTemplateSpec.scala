@@ -621,5 +621,4 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     }
   }
 
-  "Calling .get"
 }
