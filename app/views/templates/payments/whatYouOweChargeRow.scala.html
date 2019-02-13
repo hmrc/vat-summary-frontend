@@ -17,18 +17,17 @@
 @import models.payments.OpenPaymentsModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.html.templates.formatters.money.{displayMoney, positiveNegative}
-@import views.templates.payments.{PaymentsHistoryChargeHelper, WhatYouOweChargeHelper}
+@import views.templates.payments.WhatYouOweChargeHelper
 
 @(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
 
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
-@chargeTitle = @{PaymentsHistoryChargeHelper.getChargeType(payment.chargeType.value)}
 
 <tr id="payment-@{count + 1}">
     <td scope="row">
-        @chargeTitle.map { title => <h3 class="bold">@messages(s"${title.title}")</h3> }
 
-        <div>@chargeDetails.description</div>
+        <h3 class="bold">@chargeDetails.title</h3>
+        @chargeDetails.description.map { description => <div>@description</div> }
 
         <div data-due="@(payment.due.toString)" class="form-hint">
             @messages("openPayments.dueBy") @displayDate(payment.due)
@@ -51,7 +50,7 @@
                         <span class="visuallyhidden">
                             @displayMoney(payment.amount)
                             @chargeDetails.overdueContext
-                            @chargeDetails.description
+                            @chargeDetails.description.getOrElse("")
                         </span>
                     </a>
                 }

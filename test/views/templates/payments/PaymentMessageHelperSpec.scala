@@ -18,31 +18,28 @@ package views.templates.payments
 
 import uk.gov.hmrc.play.test.UnitSpec
 
-class PaymentsHistoryChargeHelperSpec extends UnitSpec {
+class PaymentMessageHelperSpec extends UnitSpec {
 
   "Calling getChargeType" when {
 
     "the lookup string is a valid charge type" should {
 
-      PaymentsHistoryChargeHelper.values.foreach { paymentHistoryChargeType =>
-        lazy val result = PaymentsHistoryChargeHelper.getChargeType(paymentHistoryChargeType.name)
+      PaymentMessageHelper.values.foreach { paymentHistoryChargeType =>
+        lazy val result = PaymentMessageHelper.getChargeType(paymentHistoryChargeType.name)
 
         s"return the charge type associated with ${paymentHistoryChargeType.name}" in {
-          result shouldBe Some(paymentHistoryChargeType)
+          result shouldBe paymentHistoryChargeType
         }
       }
-
     }
-  }
 
     "the lookup String is an invalid charge type" should {
 
-      "return a None" in {
+      "throw an exception" in {
 
-        val result = PaymentsHistoryChargeHelper.getChargeType("invalid")
-
-        result shouldBe None
+        intercept[IllegalArgumentException](PaymentMessageHelper.getChargeType("invalid"))
 
       }
     }
+  }
 }

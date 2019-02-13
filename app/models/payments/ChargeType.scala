@@ -24,17 +24,11 @@ sealed trait ChargeType {
   val value: String
   override def toString: String = value
 }
-case object ReturnCharge extends ChargeType {
-  override val value = "VAT Return Charge"
-}
 case object ReturnDebitCharge extends ChargeType {
   override val value: String = "VAT Return Debit Charge"
 }
 case object ReturnCreditCharge extends ChargeType {
   override val value: String = "VAT Return Credit Charge"
-}
-case object OACharge extends ChargeType {
-  override val value: String = "VAT Officer's Assessment"
 }
 case object OACreditCharge extends ChargeType {
   override val value: String = "VAT OA Credit Charge"
@@ -54,9 +48,6 @@ case object DefaultSurcharge extends ChargeType {
 case object CentralAssessmentCharge extends ChargeType {
   override val value: String = "VAT Central Assessment"
 }
-case object ErrorCorrectionCharge extends ChargeType {
-  override val value: String = "VAT Error Correction"
-}
 case object ErrorCorrectionCreditCharge extends ChargeType {
   override val value: String = "VAT EC Credit Charge"
 }
@@ -65,9 +56,6 @@ case object ErrorCorrectionDebitCharge extends ChargeType {
 }
 case object RepaymentSupplement extends ChargeType {
   override val value: String = "VAT Repayment Supplement"
-}
-case object RepaySupplement extends ChargeType {
-  override val value: String = "VAT Repay Supplement"
 }
 case object AAInterestCharge extends ChargeType {
   override val value: String = "VAT AA Default Interest"
@@ -147,9 +135,6 @@ case object VatPADefaultInterestCharge extends ChargeType {
 case object VatFailureToSubmitECSalesCharge extends ChargeType {
   override val value: String = "VAT Failure to Submit EC Sales"
 }
-case object VatOfficersAssessmentFurtherInterestCharge extends ChargeType {
-  override val value: String = "VAT OA Further Interest"
-}
 case object StatutoryInterestCharge extends ChargeType {
   override val value: String = "VAT Statutory Interest"
 }
@@ -160,26 +145,22 @@ case object CreditReturnOffsetCharge extends ChargeType {
   override val value: String = "Credit Return Offset"
 }
 
-
 object ChargeType {
 
   val logger = Logger(getClass.getSimpleName)
 
   val allChargeTypes: Set[ChargeType] = Set(
-    ReturnCharge,
     ReturnDebitCharge,
     ReturnCreditCharge,
-    OACharge,
     OACreditCharge,
     OADebitCharge,
     DefaultSurcharge,
     CentralAssessmentCharge,
-    ErrorCorrectionCharge,
     ErrorCorrectionCreditCharge,
     ErrorCorrectionDebitCharge,
     RepaymentSupplement,
-    RepaySupplement,
     OADefaultInterestCharge,
+    OAFurtherInterestCharge,
     AACharge,
     AAInterestCharge,
     AAFurtherInterestCharge,
@@ -201,7 +182,6 @@ object ChargeType {
     FailureToSubmitRCSLCharge,
     VatInaccuraciesInECSalesCharge,
     VatFailureToSubmitECSalesCharge,
-    VatOfficersAssessmentFurtherInterestCharge,
     StatutoryInterestCharge,
     VatPADefaultInterestCharge,
     VatProtectiveAssessmentCharge,

@@ -29,36 +29,6 @@ sealed trait OpenPaymentsModel {
   val due: LocalDate
   val overdue: Boolean
   val periodKey: String
-
-  //noinspection ScalaStyle
-  def whatYouOweDescription(implicit messages: Messages): String =  chargeType match {
-    case OADebitCharge => messages("openPayments.officersAssessment")
-    case OADefaultInterestCharge => messages("openPayments.oaDefaultInterest")
-    case OAFurtherInterestCharge => messages("openPayments.oaFurtherInterest")
-    case OACharge => messages("openPayments.vatOfficersAssessment")
-    case BnpRegPost2010Charge => messages("openPayments.vatBnpRegPost2010")
-    case FtnMatPre2010Charge => messages("openPayments.vatFtnMatPre2010")
-    case FtnMatPost2010Charge => messages("openPayments.vatFtnMatPost2010")
-    case MiscPenaltyCharge => messages("openPayments.vatMiscPenalty")
-    case FtnEachPartnerCharge => messages("openPayments.vatFtnEachpartner")
-    case MpPre2009Charge => messages("openPayments.vatMpPre2009")
-    case MpRepeatedPre2009Charge => messages("openPayments.vatMpRepeatedPre2009")
-    case CivilEvasionPenaltyCharge => messages("openPayments.vatCivilEvasionPenalty")
-    case WrongDoingPenaltyCharge => messages("openPayments.vatWrongDoingPenalty")
-    case FailureToNotifyRCSLCharge => messages("openPayments.vatFailureToNotifyRCSL")
-    case FailureToSubmitRCSLCharge => messages("openPayments.vatFailureToSubmitRCSL")
-    case VatInaccuraciesInECSalesCharge => messages("openPayments.vatInaccuraciesECSales")
-    case VatECDefaultInterestCharge => messages("openPayments.VatECDefaultInterest")
-    case VatECFurtherInterestCharge => messages("openPayments.VatECFurtherInterest")
-    case VatSecurityDepositRequestCharge => messages("openPayments.VatSecurityDepositRequest")
-    case VatProtectiveAssessmentCharge => messages("openPayments.VatProtectiveAssessment")
-    case VatPADefaultInterestCharge => messages("openPayments.VatPADefaultInterest")
-    case VatFailureToSubmitECSalesCharge => messages("openPayments.vatFailureToSubmitECSales")
-    case VatPaFurtherInterestCharge => messages("openPayments.vatPaFurtherInterest")
-
-    case _ => throw new IllegalArgumentException("Invalid Charge Type")
-  }
-
   def makePaymentRedirect: String
 }
 
@@ -110,28 +80,6 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        end: LocalDate,
                                        periodKey: String,
                                        overdue: Boolean = false) extends OpenPaymentsModel {
-
-  //noinspection ScalaStyle
-  override def whatYouOweDescription(implicit messages: Messages): String = chargeType match {
-    case ReturnDebitCharge => messages("openPayments.vatReturn", displayDateRange(start, end))
-    case DefaultSurcharge => messages("openPayments.surcharge", displayDateRange(start, end))
-    case CentralAssessmentCharge => s"${
-      messages("openPayments.centralAssessment", displayDateRange(start, end)).trim}${
-      messages("openPayments.centralAssessmentSubmit")
-    }"
-    case ErrorCorrectionDebitCharge => messages("openPayments.errorCorrection", displayDateRange(start, end)).trim
-    case AAInterestCharge => messages("openPayments.AADefaultInterestDescription",displayDateRange(start, end))
-    case BnpRegPre2010Charge => messages("openPayments.vatBNPofRegPre2010", displayDateRange(start, end))
-    case AAFurtherInterestCharge => messages("openPayments.vatAAFurtherInterest", displayDateRange(start, end))
-    case AACharge => messages("openPayments.vatAdditionalAssessment", displayDateRange(start, end))
-    case VatOAInaccuraciesFrom2009 => messages("openPayments.vatOAInaccuraciesFrom2009", displayDateRange(start, end))
-    case VatInaccuraciesInECSalesCharge=> messages("openPayments.vatInaccuraciesECSales",displayDateRange(start, end))
-    case VatFailureToSubmitECSalesCharge=> messages("openPayments.vatFailureToSubmitECSales",displayDateRange(start, end))
-    case InaccuraciesAssessmentsPenCharge => messages("openPayments.vatInaccuraciesAssessmentsPen", displayDateRange(start, end))
-    case InaccuraciesReturnReplacedCharge => messages("openPayments.vatInaccuraciesReturnReplaced", displayDateRange(start, end))
-    case CarterPenaltyCharge => messages("openPayments.vatCarterPenalty", displayDateRange(start, end))
-    case _ => super.whatYouOweDescription
-  }
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (amount * 100).toLong,

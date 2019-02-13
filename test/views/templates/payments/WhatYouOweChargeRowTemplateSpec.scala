@@ -33,7 +33,6 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
     val title = s"$columnOne > h3"
     val description = s"$columnOne div:nth-of-type(1)"
     val due = s"$columnOne > div:nth-of-type(2)"
-    val dueData = s"$columnOne > div:nth-of-type(2) span[data-due]"
     val overdueLabel = s"$due .task-overdue"
 
     private val columnTwo = "td:nth-of-type(2)"

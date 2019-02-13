@@ -39,7 +39,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |    "financialTransactions" : [
        |      {
        |        "chargeType" : "${ReturnDebitCharge}",
-       |        "mainType" : "${ReturnCharge}",
+       |        "mainType" : "VAT Return Charge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -67,7 +67,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |      },
        |      {
        |        "chargeType" : "${ReturnCreditCharge}",
-       |        "mainType" : "${ReturnCharge}",
+       |        "mainType" : "VAT Return Charge",
        |        "periodKey" : "17BB",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",
@@ -95,7 +95,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |      },
        |      {
        |        "chargeType" : "${OADebitCharge}",
-       |        "mainType" : "${OACharge}",
+       |        "mainType" : "VAT Officer's Assessment",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",
@@ -123,7 +123,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |      },
        |      {
        |        "chargeType" : "${OACreditCharge}",
-       |        "mainType" : "${OACharge}",
+       |        "mainType" : "VAT Officer's Assessment",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-05-01",
@@ -207,7 +207,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |      },
        |      {
        |        "chargeType" : "${ErrorCorrectionCreditCharge}",
-       |        "mainType" : "${ErrorCorrectionCharge}",
+       |        "mainType" : "VAT Error Correction",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-02-01",
@@ -235,7 +235,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |      },
        |       {
        |        "chargeType" : "${ErrorCorrectionDebitCharge}",
-       |        "mainType" : "${ErrorCorrectionCharge}",
+       |        "mainType" : "VAT Error Correction",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-10-12",
@@ -290,8 +290,8 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        ]
        |      },
        |      {
-       |        "chargeType" : "$VatOfficersAssessmentFurtherInterestCharge",
-       |        "mainType" : "$VatOfficersAssessmentFurtherInterestCharge",
+       |        "chargeType" : "$OAFurtherInterestCharge",
+       |        "mainType" : "$OAFurtherInterestCharge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-10-12",
@@ -470,7 +470,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       clearedDate = Some(LocalDate.of(2018, 12, 15))
     ),
     PaymentsHistoryModel(
-      chargeType = VatOfficersAssessmentFurtherInterestCharge,
+      chargeType = OAFurtherInterestCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
       amount = 150,
@@ -515,7 +515,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |    "financialTransactions" : [
          |      {
          |        "chargeType" : "Some Other Charge Type",
-         |        "mainType" : "$ReturnCharge",
+         |        "mainType" : "VAT Return Charge",
          |        "periodKey" : "17AA",
          |        "periodKeyDescription" : "ABCD",
          |        "taxPeriodFrom" : "2018-08-01",
@@ -548,7 +548,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |        ]
          |      },
          |      {"chargeType" : "Some Other Charge Type",
-         |        "mainType" : "${OACharge}",
+         |        "mainType" : "VAT Officer's Assessment",
          |        "periodKey" : "17AA",
          |        "periodKeyDescription" : "ABCD",
          |        "taxPeriodFrom" : "2018-08-01",

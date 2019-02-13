@@ -33,12 +33,42 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     overdue
   )
 
-  "WhatYouOweChargeHelper .description" should {
+  "WhatYouOweChargeHelper .description" when {
 
-    val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(false), messages)
+    "payment has a to and from date" should {
 
-    "return the description of the payment" in {
-      helper.description shouldBe "for the period 1 January to 2 February 2018"
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(false), messages)
+
+      "return the description of the payment" in {
+        helper.description shouldBe Some("for the period 1 January to 2 February 2018")
+      }
+    }
+
+    "payment has a no to and from date" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), Some(false), messages)
+
+      "return the description of the payment" in {
+        helper.description shouldBe Some("interest charged on the officer's assessment")
+      }
+    }
+
+    "payment has no description" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(MiscPenaltyCharge), Some(false), messages)
+
+      "return no description" in {
+        helper.description shouldBe None
+      }
+    }
+  }
+
+  "WhatYouOweChargeHelper .title" should {
+
+    val helper = new WhatYouOweChargeHelper(paymentModel(VatOAInaccuraciesFrom2009), Some(false), messages)
+
+    "return the title" in {
+      helper.title shouldBe "Inaccuracies penalty"
     }
   }
 

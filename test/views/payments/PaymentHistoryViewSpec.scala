@@ -23,15 +23,15 @@ import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.templates.payments.PaymentsHistoryChargeHelper._
+import views.templates.payments.PaymentMessageHelper._
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
-import views.templates.payments.PaymentsHistoryChargeHelper
+import views.templates.payments.PaymentMessageHelper
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 
   lazy val datePeriodString: String = displayDateRange(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-02-01"), useShortDayFormat = true)
   lazy val chargeDetailsForTest: Map[String, (String, String)] = Map(
-    VatReturnCreditCharge.name -> (("Repayment from HMRC", s"for your $datePeriodString return")),
+    VatReturnCreditCharge.name -> (("Repayment supplement", s"for the period $datePeriodString")),
     VatReturnDebitCharge.name -> (("Return", s"for the period $datePeriodString")),
     VatOfficerAssessmentCreditCharge.name -> (("VAT officer’s assessment", "for overpaying by this amount")),
     VatOfficerAssessmentDebitCharge.name -> (("VAT officer’s assessment", "for underpaying by this amount")),
@@ -363,7 +363,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "supplying with the following charge types" should {
       case class testModel(chargeType: ChargeType, expectedTitle: String, expectedDescription: String)
 
-      PaymentsHistoryChargeHelper.values.map { historyChargeHelper =>
+      PaymentMessageHelper.values.map { historyChargeHelper =>
         (PaymentsHistoryViewModel(
           historyYears,
           historyYears.head,

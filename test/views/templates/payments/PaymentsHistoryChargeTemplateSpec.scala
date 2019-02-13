@@ -110,11 +110,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Repayment from HMRC"
+        elementText(Selectors.chargeTitle) shouldBe "Repayment supplement"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -317,13 +317,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a VAT Officer Assessment Further Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        VatOfficersAssessmentFurtherInterestCharge,
+        OAFurtherInterestCharge,
         Some(LocalDate.parse("2018-02-12")),
         Some(LocalDate.parse("2018-03-24")),
         1500.00,
         Some(LocalDate.parse("2018-04-18"))
-
-
       )
 
       lazy val template = paymentsHistoryCharge(model)
@@ -372,7 +370,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
           " for the period 1 Jan to 1 Apr 2018"
       }
     }
-
 
     "there is a VAT AA Default Interest charge" should {
 
@@ -623,4 +620,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
   }
+
+  "Calling .get"
 }
