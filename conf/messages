@@ -117,8 +117,8 @@ paymentsHistory.noPreviousYearHistory = You did not make or receive any payments
 paymentsHistory.noCurrentYearHistory = You have not yet made or received any payments this year.
 
 # Charge types
-chargeType.vatReturnCreditChargeTitle = Repayment supplement
-chargeType.vatReturnCreditChargeDescription = for the period {0}
+chargeType.vatReturnCreditChargeTitle = Repayment from HMRC
+chargeType.vatReturnCreditChargeDescription = for your {0} return
 chargeType.vatReturnDebitChargeTitle = Return
 chargeType.vatReturnDebitChargeDescription = for the period {0}
 chargeType.officerAssessmentChargeTitle = VAT officer’s assessment

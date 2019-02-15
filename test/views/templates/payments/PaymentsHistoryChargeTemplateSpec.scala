@@ -110,11 +110,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Repayment supplement"
+        elementText(Selectors.chargeTitle) shouldBe "Repayment from HMRC"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for your 12 Jan to 23 Mar 2018 return"
       }
     }
 

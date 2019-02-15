@@ -18,68 +18,15 @@ package views.payments
 
 import java.time.LocalDate
 
+import common.MessageLookup.PaymentMessages
 import models.payments._
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.templates.payments.PaymentMessageHelper._
-import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 import views.templates.payments.PaymentMessageHelper
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
-
-  lazy val datePeriodString: String = displayDateRange(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-02-01"), useShortDayFormat = true)
-  lazy val chargeDetailsForTest: Map[String, (String, String)] = Map(
-    VatReturnCreditCharge.name -> (("Repayment supplement", s"for the period $datePeriodString")),
-    VatReturnDebitCharge.name -> (("Return", s"for the period $datePeriodString")),
-    VatOfficerAssessmentCreditCharge.name -> (("VAT officer’s assessment", "for overpaying by this amount")),
-    VatOfficerAssessmentDebitCharge.name -> (("VAT officer’s assessment", "for underpaying by this amount")),
-    VatCentralAssessment.name -> (("Estimate", s"for your $datePeriodString return")),
-    VatDefaultSurcharge.name -> (("Surcharge", s"for late payment of your $datePeriodString return")),
-    VatErrorCorrectionDebitCharge.name -> (("Error correction payment", s"for correcting your $datePeriodString return")),
-    VatErrorCorrectionCreditCharge.name -> (("Error correction repayment from HMRC", s"for correcting your $datePeriodString return")),
-    VatRepaymentSupplement.name -> (("Late repayment compensation from HMRC", s"we took too long to repay your $datePeriodString return")),
-    OADefaultInterest.name -> (("VAT officer's assessment interest", s"interest charged on the officer's assessment")),
-    VatBnpRegPre2010Charge.name -> (("Penalty for late registration", "because you should have been registered for VAT earlier")),
-    VatBnpRegPost2010Charge.name -> (("Penalty for late registration", "because you should have been registered for VAT earlier")),
-    VatFtnMatPre2010Charge.name -> (("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration")),
-    VatFtnMatPost2010Charge.name -> (("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration")),
-    VatMiscPenaltyCharge.name -> (("VAT general penalty", "")),
-    VatOfficersAssessmentFurtherInterest.name -> (("VAT officer’s assessment further interest", "further interest charged on the officer’s assessment")),
-    VatAdditionalAssessment.name -> (("Additional assessment", s"additional assessment based on further information for the period $datePeriodString")),
-    VatAADefaultInterest.name -> (("Additional assessment interest", s"interest charged on additional tax assessed for the period $datePeriodString")),
-    VatAAFurtherInterest.name -> ((
-      "Additional assessment further interest",
-      s"further interest charged on additional tax assessed for the period $datePeriodString")),
-    VatStatutoryInterestCharge.name -> (("Statutory interest", "interest paid because of an error by HMRC")),
-    VatSecurityDepositRequest.name -> (("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)")),
-    VatEcNoticeFurtherInterest.name -> (("Error correction further interest", "further interest charged on assessed amount")),
-    CivilEvasionPenalty.name -> (("VAT civil evasion penalty", "because we have identified irregularities involving dishonesty")),
-    VatInaccuraciesInECSales.name -> (("Inaccuracies penalty", "because you have provided inaccurate information in your EC sales list")),
-    VatFailureToSubmitECSales.name -> (("EC sales list penalty", "because you have not submitted an EC sales list or you have submitted it late")),
-    FtnEachPartner.name -> (("Failure to notify penalty", "because you did not tell us about all the partners and changes in your partnership")),
-    VatOAInaccuracies2009.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
-    VatInaccuracyAssessmentsPenCharge.name -> (("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriodString")),
-    VatMpPre2009Charge.name -> (("Misdeclaration penalty", "because you have made an incorrect declaration")),
-    VatMpRepeatedPre2009Charge.name -> (("Misdeclaration repeat penalty", "because you have repeatedly made incorrect declarations")),
-    VatInaccuraciesReturnReplacedCharge.name -> ((
-      "Inaccuracies penalty",
-      s"this is because you have submitted inaccurate information for the period $datePeriodString")),
-    VatWrongDoingPenaltyCharge.name -> (("Wrongdoing penalty", "because you charged VAT when you should not have done")),
-    VatPADefaultInterest.name -> (("Protective assessment default interest", "interest charged on the protective assessment")),
-    VatECDefaultInterest.name -> (("Error correction default interest", "interest charged on assessed amount")),
-    VatPaFurtherInterest.name -> (("Protective assessment further interest", "further interest due on the protective assessment as this was not paid on time")),
-    VatCarterPenaltyCharge.name -> ((
-      "Penalty for not filing correctly",
-      s"because you did not use the correct digital channel for the period $datePeriodString")),
-    VatFailureToNotifyRCSL.name -> ((
-      "Failure to notify penalty",
-      "because you failed to notify us of the date you made a reverse charge sale or stopped making supplies")),
-    VatFailureToSubmitRCSL.name -> (("Reverse Charge sales list penalty", "because you have failed to submit a Reverse Charge sales list")),
-    VatCreditReturnOffsetCharge.name -> (("Overpayment partial refund", s"partial repayment for period $datePeriodString")),
-    ProtectiveAssessmentCharge.name -> (("Protective assessment", "assessment raised to protect HMRC’s position during an appeal"))
-  )
 
   object Selectors {
     val pageHeading = "h1"
@@ -359,9 +306,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
     }
 
-
     "supplying with the following charge types" should {
-      case class testModel(chargeType: ChargeType, expectedTitle: String, expectedDescription: String)
 
       PaymentMessageHelper.values.map { historyChargeHelper =>
         (PaymentsHistoryViewModel(
@@ -383,8 +328,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             ))
         ),
           ChargeType.apply(historyChargeHelper.name).value,
-          chargeDetailsForTest(historyChargeHelper.name)._1,
-          chargeDetailsForTest(historyChargeHelper.name)._2)
+          PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,
+          PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._2)
       }.foreach { case (paymentHistoryModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
         lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -423,114 +368,5 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
     }
-
-    "supplying with a miscellaneous charge type" should {
-
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        historyYears,
-        historyYears.head,
-        Seq(PaymentsHistoryModel(
-          chargeType = MiscPenaltyCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
-          amount = 1000.00,
-          clearedDate = Some(LocalDate.parse("2018-03-01"))
-        ))
-      )
-
-      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "contain a MiscPenaltyCharge" should {
-
-        "contain the correct amount" in {
-          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"
-        }
-
-        "contain the correct title" in {
-          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "VAT general penalty"
-        }
-
-        "not contain a description" in {
-          document.select(Selectors.descriptionTableContent(1)).size() shouldBe 0
-        }
-
-        "contain the correct date" in {
-          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
-        }
-      }
-    }
-
-    "supplying with a Vat Statutory Interest charge type" should {
-
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        historyYears,
-        historyYears.head,
-        Seq(PaymentsHistoryModel(
-          chargeType = StatutoryInterestCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
-          amount = -111.00,
-          clearedDate = Some(LocalDate.parse("2018-03-01"))
-        ))
-      )
-
-      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "contain a VatStatutoryInterest charge" should {
-
-        "contain the correct title" in {
-          elementText(Selectors.descriptionTableChargeType(1)) shouldBe "Statutory interest"
-        }
-
-        "contain the correct description" in {
-          elementText(Selectors.descriptionTableContent(1)) shouldBe "interest paid because of an error by HMRC"
-        }
-
-        "contain the correct amount" in {
-          elementText(Selectors.amountPaidTableContent(1)) shouldBe "+ £111"
-        }
-
-        "contain the correct date" in {
-          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
-        }
-      }
-    }
-
-    "supplying with a Carter Penalty Charge charge type" should {
-
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        historyYears,
-        historyYears.head,
-        Seq(PaymentsHistoryModel(
-          chargeType = CarterPenaltyCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-          taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
-          amount = 111.00,
-          clearedDate = Some(LocalDate.parse("2018-03-01"))
-        ))
-      )
-
-      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "contain a CarterPenaltyCharge charge" should {
-
-        "contains the correct form hint" in {
-          elementText(Selectors.descriptionTableContent(1)) shouldBe "because you did not use the correct digital channel for the period 1 Jan to 1 Feb 2018"
-        }
-
-        "contains the correct payment date" in {
-          elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
-        }
-
-        "contains the correct payment amount" in {
-          elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £111"
-        }
-
-      }
-    }
-
   }
 }

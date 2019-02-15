@@ -18,12 +18,14 @@ package views.payments
 
 import java.time.LocalDate
 
+import common.MessageLookup.PaymentMessages
 import models.User
 import models.payments._
-import models.viewModels.OpenPaymentsViewModel
+import models.viewModels.{OpenPaymentsViewModel, PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.templates.payments.PaymentMessageHelper
 
 class OpenPaymentsViewSpec extends ViewBaseSpec {
 
@@ -288,6 +290,45 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "have the correct link destination to the direct debits service" in {
       element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit"
+    }
+  }
+
+  "Supplying with the following charge types" should {
+
+    PaymentMessageHelper.values.map { historyChargeHelper =>
+      (
+        OpenPaymentsViewModel(Seq(
+          OpenPaymentsModelWithPeriod(
+            chargeType = ChargeType.apply(historyChargeHelper.name),
+            amount = 2000000000.01,
+            due = LocalDate.parse("2008-04-08"),
+            start = LocalDate.parse("2018-01-01"),
+            end = LocalDate.parse("2018-02-01"),
+            periodKey = "#001"
+          )),
+          hasDirectDebit = Some(false)
+        ),
+        ChargeType.apply(historyChargeHelper.name).value,
+        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name, useLongDateFormat = true)._1,
+        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name, useLongDateFormat = true)._2
+      )
+    }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
+
+      lazy val view = views.html.payments.openPayments(user, openPaymentsViewModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"contain a $chargeTypeTitle which" should {
+
+        "render the correct title" in {
+          elementText(Selectors.title(1)) shouldBe expectedTitle
+        }
+
+        if (expectedDescription.nonEmpty) {
+          "render the correct description" in {
+            elementText(Selectors.description(1)) shouldBe expectedDescription
+          }
+        }
+      }
     }
   }
 }
