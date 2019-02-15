@@ -26,7 +26,7 @@
 <tr id="payment-@{count + 1}">
     <td scope="row">
 
-        <h3 class="bold">@chargeDetails.title</h3>
+        <h2 class="bold heading-small">@chargeDetails.title</h2>
         @chargeDetails.description.map { description => <div>@description</div> }
 
         <div data-due="@(payment.due.toString)" class="form-hint">

@@ -21,7 +21,7 @@ import java.time.LocalDate
 import common.MessageLookup.PaymentMessages
 import models.User
 import models.payments._
-import models.viewModels.{OpenPaymentsViewModel, PaymentsHistoryModel, PaymentsHistoryViewModel}
+import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -42,7 +42,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
 
     private val columnOne: Int => String = row => s"#payment-$row td:nth-of-type(1)"
-    val title: Int => String = row => s"${columnOne(row)} > h3"
+    val title: Int => String = row => s"${columnOne(row)} > h2"
     val description: Int => String = row => s"${columnOne(row)} div:nth-of-type(1)"
     val due: Int => String = row =>s"${columnOne(row)} > div:nth-of-type(2)"
     val overdueLabel: Int => String = row => s"${due(row)} .task-overdue"
