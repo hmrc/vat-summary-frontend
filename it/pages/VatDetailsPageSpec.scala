@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package partials
+package pages
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec

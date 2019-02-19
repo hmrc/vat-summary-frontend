@@ -46,7 +46,7 @@ class VatObligationsStub(vatObligationsServiceEnabled: Boolean) extends WireMock
 
   def stubOutstandingObligations: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(
-      "from" -> dateRegex, "to" -> dateRegex, "status" -> "O"
+      "status" -> "O"
     ))
       .thenReturn(status = OK, body = Json.toJson(outstandingObligations))
   }

@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package views.templates
+package views.templates.payments
 
-import org.jsoup.Jsoup
 import java.time.LocalDate
 
 import models.payments._
+import models.viewModels.PaymentsHistoryModel
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import models.viewModels.PaymentsHistoryModel
+import views.html.templates.payments.paymentsHistoryCharge
 
 class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
@@ -47,7 +48,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -71,7 +72,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -99,7 +100,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -127,7 +128,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -155,7 +156,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -183,7 +184,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -211,7 +212,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -239,7 +240,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -267,7 +268,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -295,7 +296,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -316,16 +317,14 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     "there is a VAT Officer Assessment Further Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        VatOfficersAssessmentFurtherInterestCharge,
+        OAFurtherInterestCharge,
         Some(LocalDate.parse("2018-02-12")),
         Some(LocalDate.parse("2018-03-24")),
         1500.00,
         Some(LocalDate.parse("2018-04-18"))
-
-
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -353,7 +352,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -372,7 +371,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
 
-
     "there is a VAT AA Default Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
@@ -383,7 +381,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -412,7 +410,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -441,7 +439,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -469,7 +467,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-15"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -497,7 +495,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-15"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -526,7 +524,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-15"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -555,7 +553,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -584,7 +582,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -612,7 +610,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = views.html.templates.paymentsHistoryCharge(model)
+      lazy val template = paymentsHistoryCharge(model)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${template.body}</table>"
       )
@@ -622,4 +620,5 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
   }
+
 }

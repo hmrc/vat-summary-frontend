@@ -14,34 +14,24 @@
  * limitations under the License.
  *@
 
-@import views.templates.PaymentsHistoryChargeHelper
 @import views.html.templates.formatters.money._
 @import models.viewModels.PaymentsHistoryModel
-@import java.time.LocalDate
-@import views.templates.formatters.dates.DisplayDateRangeHelper.{displayDateRange,displayDate}
-
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.templates.payments.PaymentMessageHelper
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)
 
+@chargeType = @{PaymentMessageHelper.getChargeType(transaction.chargeType.value)}
 
-@getDescriptionString(chargeTypeDescription: String, firstDate: Option[LocalDate], secondDate: Option[LocalDate]) = @{
-  (firstDate, secondDate) match {
-    case (Some(fd), Some(sd)) => messages(s"$chargeTypeDescription", displayDateRange(fd, sd, useShortDayFormat = true))
-    case _ => messages(s"$chargeTypeDescription")
-  }
-}
+@transaction.clearedDate match {
 
-@chargeType = @{PaymentsHistoryChargeHelper.getChargeType(transaction.chargeType.value)}
-
-@(chargeType, transaction.clearedDate) match {
-
-  case (Some(charge), Some(date)) => {
-    <tr class="@charge.id">
+  case Some(date) => {
+    <tr class="@chargeType.id">
       <td scope="row">@displayDate(date, useShortDayFormat = true)</td>
-      <td><span class="bold">@messages(s"${charge.title}")</span>
-        @charge.description.map { description =>
+      <td><span class="bold">@messages(s"${chargeType.title}")</span>
+        @chargeType.description.map { description =>
           <span class="form-hint">
-            @getDescriptionString(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
+            @PaymentMessageHelper.getFullDescription(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
           </span>
         }
       </td>

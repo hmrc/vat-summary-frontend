@@ -28,7 +28,7 @@ object PaymentsHttpParser extends ResponseHttpParsers {
   implicit object PaymentsReads extends HttpReads[HttpGetResult[Payments]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Payments] = {
       response.status match {
-        case OK => Right(removeNonVatReturnCharges(response.json).as[Payments])
+        case OK => Right(removeInvalidCharges(response.json).as[Payments])
         case NOT_FOUND => Right(Payments(Seq.empty))
         case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
@@ -37,47 +37,9 @@ object PaymentsHttpParser extends ResponseHttpParsers {
     }
   }
 
-  private def removeNonVatReturnCharges(json: JsValue): JsValue = {
+  private def removeInvalidCharges(json: JsValue): JsValue = {
 
-    val validCharges: Set[String] = Set(
-      ReturnDebitCharge.value,
-      OADebitCharge.value,
-      DefaultSurcharge.value,
-      CentralAssessmentCharge.value,
-      ErrorCorrectionDebitCharge.value,
-      OADefaultInterestCharge.value,
-      AAFurtherInterestCharge.value,
-      AACharge.value,
-      BnpRegPre2010Charge.value,
-      OACharge.value,
-      BnpRegPost2010Charge.value,
-      FtnMatPre2010Charge.value,
-      FtnMatPost2010Charge.value,
-      MiscPenaltyCharge.value,
-      FtnEachPartnerCharge.value,
-      MpPre2009Charge.value,
-      MpRepeatedPre2009Charge.value,
-      CivilEvasionPenaltyCharge.value,
-      AAInterestCharge.value,
-      VatOAInaccuraciesFrom2009.value,
-      InaccuraciesReturnReplacedCharge.value,
-      InaccuraciesAssessmentsPenCharge.value,
-      WrongDoingPenaltyCharge.value,
-      FailureToNotifyRCSLCharge.value,
-      FailureToSubmitRCSLCharge.value,
-      CarterPenaltyCharge.value,
-      VatInaccuraciesInECSalesCharge.value,
-      VatECDefaultInterestCharge.value,
-      VatECFurtherInterestCharge.value,
-      VatSecurityDepositRequestCharge.value,
-      VatProtectiveAssessmentCharge.value,
-      VatPADefaultInterestCharge.value,
-      VatFailureToSubmitECSalesCharge.value,
-      VatFailureToSubmitECSalesCharge.value,
-      VatFailureToSubmitECSalesCharge.value,
-      AAInterestCharge.value,
-      VatPaFurtherInterestCharge.value
-    )
+    val validCharges: Set[String] = ChargeType.allChargeTypes.map(_.value)
 
     val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
 

@@ -36,7 +36,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
-              "mainType" -> ReturnCharge,
+              "mainType" -> "VAT Return Charge",
               "chargeType" -> ReturnDebitCharge,
               "taxPeriodFrom" -> "2016-12-01",
               "taxPeriodTo" -> "2017-01-01",
@@ -47,7 +47,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#001"
             ),
             Json.obj(
-              "mainType" -> ReturnCharge,
+              "mainType" -> "VAT Return Charge",
               "chargeType" -> ReturnCreditCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
@@ -58,7 +58,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#002"
             ),
             Json.obj(
-              "mainType" -> OACharge,
+              "mainType" -> "VAT Officer's Assessment",
               "chargeType" -> OACreditCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
@@ -69,7 +69,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#003"
             ),
             Json.obj(
-              "mainType" -> OACharge,
+              "mainType" -> "VAT Officer's Assessment",
               "chargeType" -> OADebitCharge,
               "taxPeriodFrom" -> "2017-12-01",
               "taxPeriodTo" -> "2018-01-01",
@@ -102,7 +102,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#006"
             ),
             Json.obj(
-              "mainType" -> ErrorCorrectionCharge,
+              "mainType" -> "VAT Error Correction",
               "chargeType" -> ErrorCorrectionCreditCharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
@@ -113,7 +113,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#007"
             ),
             Json.obj(
-              "mainType" -> ErrorCorrectionCharge,
+              "mainType" -> "VAT Error Correction",
               "chargeType" -> ErrorCorrectionDebitCharge,
               "taxPeriodFrom" -> "2015-12-01",
               "taxPeriodTo" -> "2014-01-01",
@@ -423,6 +423,22 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodKey = "#001"
         ),
         PaymentWithPeriod(
+          ReturnCreditCharge,
+          start = LocalDate.parse("2017-12-01"),
+          end = LocalDate.parse("2018-01-01"),
+          due = LocalDate.parse("2018-10-25"),
+          outstandingAmount = BigDecimal(1000.51),
+          periodKey = "#002"
+        ),
+        PaymentWithPeriod(
+          OACreditCharge,
+          start = LocalDate.parse("2017-12-01"),
+          end = LocalDate.parse("2018-01-01"),
+          due = LocalDate.parse("2017-10-25"),
+          outstandingAmount = BigDecimal(1000.52),
+          periodKey = "#003"
+        ),
+        PaymentWithPeriod(
           OADebitCharge,
           start = LocalDate.parse("2017-12-01"),
           end = LocalDate.parse("2018-01-01"),
@@ -445,6 +461,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
           periodKey = "#006"
+        ),
+        PaymentWithPeriod(
+          ErrorCorrectionCreditCharge,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.29),
+          periodKey = "#007"
         ),
         PaymentWithPeriod(
           ErrorCorrectionDebitCharge,
@@ -477,6 +501,14 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#009"
+        ),
+        PaymentWithPeriod(
+          OAFurtherInterestCharge,
+          start = LocalDate.parse("2016-03-20"),
+          end = LocalDate.parse("2016-06-21"),
+          due = LocalDate.parse("2016-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = "#010"
         ),
         PaymentWithPeriod(
           BnpRegPre2010Charge,
@@ -615,7 +647,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
-              "mainType" -> ReturnCharge,
+              "mainType" -> "VAT Return Charge",
               "chargeType" -> "Other Charge Type",
               "outstandingAmount" -> 99
             )

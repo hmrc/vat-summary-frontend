@@ -41,7 +41,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -69,7 +69,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |      },
            |      {
            |        "chargeType" : "$ReturnCreditCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -129,7 +129,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |       "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -213,7 +213,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |      },
            |      {
            |        "chargeType" : "${ReturnCreditCharge}",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -241,7 +241,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |      },
            |      {
            |        "chargeType" : "$ErrorCorrectionCreditCharge",
-           |        "mainType" : "$ErrorCorrectionCharge",
+           |        "mainType" : "VAT Error Correction",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -269,7 +269,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |      },
            |      {
            |        "chargeType" : "$ErrorCorrectionDebitCharge",
-           |        "mainType" : "$ErrorCorrectionCharge",
+           |        "mainType" : "VAT Error Correction",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -357,7 +357,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -385,7 +385,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |      },
            |      {
            |        "chargeType" : "$ReturnCreditCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -446,7 +446,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -474,7 +474,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |      },
            |      {
            |        "chargeType" : "$OACreditCharge",
-           |        "mainType" : "$OACharge",
+           |        "mainType" : "VAT Officer's Assessment",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-05-01",
@@ -535,7 +535,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -602,7 +602,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -682,7 +682,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |       "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -718,7 +718,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |       "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -756,7 +756,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |       "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -800,7 +800,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |       "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -844,7 +844,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |        "mainType" : "$ReturnCharge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodTo" : "2018-10-31",
@@ -895,7 +895,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "$ReturnCharge",
+           |       "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",

@@ -16,6 +16,11 @@
 
 package common
 
+import java.time.LocalDate
+
+import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
+import views.templates.payments.PaymentMessageHelper._
+
 object MessageLookup {
 
   object SessionTimeout {
@@ -26,5 +31,62 @@ object MessageLookup {
   object Unauthorised {
     val title: String = "Unauthorised access"
     val instructions: String = "Here are some instructions about what you should do next."
+  }
+
+  object PaymentMessages {
+
+    private val datePeriodShort: String = "1 Jan to 1 Feb 2018"
+    private val datePeriodLong: String = "1 January to 1 February 2018"
+
+    //scalastyle:off
+    def getMessagesForChargeType(chargeType: String, useLongDateFormat: Boolean = false): (String, String) = {
+
+      val datePeriod = if(useLongDateFormat) datePeriodLong else datePeriodShort
+
+      chargeType match {
+        case VatReturnCreditCharge.name => ("Repayment from HMRC", s"for your $datePeriod return")
+        case VatReturnDebitCharge.name => ("Return", s"for the period $datePeriod")
+        case VatOfficerAssessmentCreditCharge.name => ("VAT officer’s assessment", "for overpaying by this amount")
+        case VatOfficerAssessmentDebitCharge.name => ("VAT officer’s assessment", "for underpaying by this amount")
+        case VatCentralAssessment.name => ("Estimate", s"for your $datePeriod return")
+        case VatDefaultSurcharge.name => ("Surcharge", s"for late payment of your $datePeriod return")
+        case VatErrorCorrectionDebitCharge.name => ("Error correction payment", s"for correcting your $datePeriod return")
+        case VatErrorCorrectionCreditCharge.name => ("Error correction repayment from HMRC", s"for correcting your $datePeriod return")
+        case VatRepaymentSupplement.name => ("Late repayment compensation from HMRC", s"we took too long to repay your $datePeriod return")
+        case OADefaultInterest.name => ("VAT officer's assessment interest", s"interest charged on the officer's assessment")
+        case VatBnpRegPre2010Charge.name => ("Penalty for late registration", "because you should have been registered for VAT earlier")
+        case VatBnpRegPost2010Charge.name => ("Penalty for late registration", "because you should have been registered for VAT earlier")
+        case VatFtnMatPre2010Charge.name => ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration")
+        case VatFtnMatPost2010Charge.name => ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration")
+        case VatMiscPenaltyCharge.name => ("VAT general penalty", "")
+        case VatOfficersAssessmentFurtherInterest.name => ("VAT officer’s assessment further interest", "further interest charged on the officer’s assessment")
+        case VatAdditionalAssessment.name => ("Additional assessment", s"additional assessment based on further information for the period $datePeriod")
+        case VatAADefaultInterest.name => ("Additional assessment interest", s"interest charged on additional tax assessed for the period $datePeriod")
+        case VatAAFurtherInterest.name => ("Additional assessment further interest", s"further interest charged on additional tax assessed for the period $datePeriod")
+        case VatStatutoryInterestCharge.name => ("Statutory interest", "interest paid because of an error by HMRC")
+        case VatSecurityDepositRequest.name => ("Security deposit requirement", "because you have not paid VAT in your current or previous business(es)")
+        case VatEcNoticeFurtherInterest.name => ("Error correction further interest", "further interest charged on assessed amount")
+        case CivilEvasionPenalty.name => ("VAT civil evasion penalty", "because we have identified irregularities involving dishonesty")
+        case VatInaccuraciesInECSales.name => ("Inaccuracies penalty", "because you have provided inaccurate information in your EC sales list")
+        case VatFailureToSubmitECSales.name => ("EC sales list penalty", "because you have not submitted an EC sales list or you have submitted it late")
+        case FtnEachPartner.name => ("Failure to notify penalty", "because you did not tell us about all the partners and changes in your partnership")
+        case VatOAInaccuracies2009.name => ("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriod")
+        case VatInaccuracyAssessmentsPenCharge.name => ("Inaccuracies penalty", s"because you submitted an inaccurate document for the period $datePeriod")
+        case VatMpPre2009Charge.name => ("Misdeclaration penalty", "because you have made an incorrect declaration")
+        case VatMpRepeatedPre2009Charge.name => ("Misdeclaration repeat penalty", "because you have repeatedly made incorrect declarations")
+        case VatInaccuraciesReturnReplacedCharge.name => ("Inaccuracies penalty", s"this is because you have submitted inaccurate information for the period $datePeriod")
+        case VatWrongDoingPenaltyCharge.name => ("Wrongdoing penalty", "because you charged VAT when you should not have done")
+        case VatPADefaultInterest.name => ("Protective assessment default interest", "interest charged on the protective assessment")
+        case VatECDefaultInterest.name => ("Error correction default interest", "interest charged on assessed amount")
+        case VatPaFurtherInterest.name => ("Protective assessment further interest", "further interest due on the protective assessment as this was not paid on time")
+        case VatCarterPenaltyCharge.name => ("Penalty for not filing correctly", s"because you did not use the correct digital channel for the period $datePeriod")
+        case VatFailureToNotifyRCSL.name => ("Failure to notify penalty", "because you failed to notify us of the date you made a reverse charge sale or stopped making supplies")
+        case VatFailureToSubmitRCSL.name => ("Reverse Charge sales list penalty", "because you have failed to submit a Reverse Charge sales list")
+        case VatCreditReturnOffsetCharge.name => ("Overpayment partial refund", s"partial repayment for period $datePeriod")
+        case ProtectiveAssessmentCharge.name => ("Protective assessment", "assessment raised to protect HMRC’s position during an appeal")
+        case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
+      }
+    }
+    //scalastyle:on
   }
 }
