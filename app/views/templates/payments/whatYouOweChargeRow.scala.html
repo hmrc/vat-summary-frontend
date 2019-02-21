@@ -64,8 +64,8 @@
 
         @if(chargeDetails.viewReturnEnabled) {
             <a data-journey-click="@chargeDetails.viewReturnGAEvent" href="@appConfig.vatReturnUrl(payment.periodKey)">
-                <span>@messages("openPayments.viewReturnLink")</span>
                 <span class="visuallyhidden">@chargeDetails.viewReturnContext</span>
+                <span>@messages("openPayments.viewReturnLink")</span>
             </a>
         }
     </td>

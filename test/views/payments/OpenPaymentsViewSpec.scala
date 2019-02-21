@@ -55,7 +55,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val payText: Int => String = row => s"${payLink(row)} > span:nth-of-type(1)"
     val payByDirectDebit: Int => String = row => s"${columnThree(row)} span"
     val viewReturnLink: Int => String = row => s"${columnThree(row)} > a"
-    val viewReturnText: Int => String = row => s"${viewReturnLink(row)} > span:nth-of-type(1)"
+    val viewReturnText: Int => String = row => s"${viewReturnLink(row)} > span:nth-of-type(2)"
 
     val processingTime = "#processing-time"
     val processingTimeOld = "#processing-time-old"
