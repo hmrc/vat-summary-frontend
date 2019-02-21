@@ -45,8 +45,8 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
     val directDebitText = s"$columnThree span"
     val payHiddenContent = s"$payLink > span:nth-of-type(2)"
     val viewReturnLink = s"$columnThree > a"
-    val viewReturnText = s"$viewReturnLink > span:nth-of-type(1)"
-    val viewReturnHiddenContent = s"$viewReturnLink span:nth-of-type(2)"
+    val viewReturnText = s"$viewReturnLink > span:nth-of-type(2)"
+    val viewReturnHiddenContent = s"$viewReturnLink span:nth-of-type(1)"
   }
 
   "Rendering the view" when {
