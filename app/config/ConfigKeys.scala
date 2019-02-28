@@ -40,6 +40,7 @@ object ConfigKeys {
   val vatCertificateFeature: String = "features.vatCertificate.enabled"
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
+  val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
