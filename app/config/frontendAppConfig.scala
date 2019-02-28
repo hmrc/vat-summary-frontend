@@ -78,6 +78,8 @@ trait AppConfig extends ServicesConfig {
   val directDebitRedirectUrl: String
   val portalMakePaymentUrl: String => String
   val portalPaymentHistoryUrl: String => String
+  def languageMap:Map[String,Lang]
+  val routeToSwitchLanguage :String => Call
 }
 
 @Singleton
@@ -181,11 +183,11 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
     s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPaymentHistoryPostfix)}"
   }
 
-  def languageMap: Map[String, Lang] = Map(
+  override def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )
 
-  lazy val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+  override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
 
 }
