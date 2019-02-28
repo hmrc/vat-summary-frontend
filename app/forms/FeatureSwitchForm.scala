@@ -29,7 +29,8 @@ object FeatureSwitchForm {
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.vatCertificateFeature -> boolean,
       ConfigKeys.useVatObligationsService -> boolean,
-      ConfigKeys.useDirectDebitDummyPageFeature -> boolean
+      ConfigKeys.useDirectDebitDummyPageFeature -> boolean,
+      ConfigKeys.useLanguageSelectorFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
