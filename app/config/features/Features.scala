@@ -29,4 +29,5 @@ class Features @Inject()(config: Configuration) {
   val vatCertificateEnabled = new Feature(ConfigKeys.vatCertificateFeature, config)
   val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
   val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
+  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
 }
