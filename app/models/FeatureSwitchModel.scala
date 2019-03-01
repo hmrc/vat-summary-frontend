@@ -21,5 +21,6 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               vatCertificateEnabled: Boolean,
                               enableVatObligationsService: Boolean,
-                              useDirectDebitDummyPage: Boolean
+                              useDirectDebitDummyPage: Boolean,
+                              useLanguageSelector: Boolean
                              )
