@@ -144,6 +144,9 @@ case object VatPaFurtherInterestCharge extends ChargeType {
 case object CreditReturnOffsetCharge extends ChargeType {
   override val value: String = "Credit Return Offset"
 }
+case object PaymentOnAccount extends ChargeType {
+  override val value: String = "Payment on account"
+}
 
 object ChargeType {
 
@@ -190,7 +193,8 @@ object ChargeType {
     VatECDefaultInterestCharge,
     VatFailureToSubmitECSalesCharge,
     VatPaFurtherInterestCharge,
-    CreditReturnOffsetCharge
+    CreditReturnOffsetCharge,
+    PaymentOnAccount
   )
 
   def apply: String => ChargeType = input => {
@@ -207,8 +211,8 @@ object ChargeType {
       ChargeType.apply(input)
       true
     } catch {
-      case t: IllegalArgumentException =>
-        logger.info(s"""Invalid Charge Type - Received "$input"""", t)
+      case ex: IllegalArgumentException =>
+        logger.info(s"Invalid Charge Type - Received $input", ex)
         false
     }
   }

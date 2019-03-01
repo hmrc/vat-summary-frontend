@@ -26,7 +26,8 @@ case class PaymentsHistoryModel(chargeType: ChargeType,
                                 taxPeriodFrom: Option[LocalDate],
                                 taxPeriodTo: Option[LocalDate],
                                 amount: BigDecimal,
-                                clearedDate: Option[LocalDate] = None)
+                                clearedDate: Option[LocalDate] = None,
+                                clearingReason: Option[String] = None)
 
 object PaymentsHistoryModel {
 
@@ -47,12 +48,15 @@ object PaymentsHistoryModel {
       ChargeType.isValidChargeType(transactions)
     }
 
-    def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate])] = {
+    def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate], Option[String])] = {
       transaction.\("items").validate[List[JsValue]].fold(
         _ => throw new IllegalStateException("The data for key items could not be found in the Json"),
         list => if (list.nonEmpty) {
-          list.map(item => item.get[BigDecimal]("amount") ->
-            getOptionDate(item, FinancialTransactionsConstants.clearingDate))
+          list.map(item =>
+            (item.get[BigDecimal]("amount"),
+            getOptionDate(item, FinancialTransactionsConstants.clearingDate),
+            (item \ FinancialTransactionsConstants.clearingReason).asOpt[String])
+          )
         } else {
           throw new IllegalStateException("The items list was found but the list was empty")
         }
@@ -62,13 +66,14 @@ object PaymentsHistoryModel {
     def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
 
     val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
-      getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
+      getItemsForPeriod(transaction) map { case (amount, clearedDate, clearingReason) =>
         PaymentsHistoryModel(
           chargeType = transaction.get[ChargeType](FinancialTransactionsConstants.chargeType),
           taxPeriodFrom = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodFrom),
           taxPeriodTo = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodTo),
           amount = amount,
-          clearedDate = clearedDate
+          clearedDate = clearedDate,
+          clearingReason = clearingReason
         )
       }
     }
