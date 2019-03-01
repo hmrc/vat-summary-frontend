@@ -22,6 +22,9 @@ import common.FinancialTransactionsConstants
 import models.payments._
 import play.api.libs.json._
 
+import scala.collection.immutable
+import scala.util.Try
+
 case class PaymentsHistoryModel(chargeType: ChargeType,
                                 taxPeriodFrom: Option[LocalDate],
                                 taxPeriodTo: Option[LocalDate],
@@ -31,54 +34,39 @@ case class PaymentsHistoryModel(chargeType: ChargeType,
 
 object PaymentsHistoryModel {
 
-  implicit class JsonOps(json: JsValue) {
-    def get[T](key: String)(implicit reads: Reads[T]): T = json.\(key).validate[T].fold(
-      _ => throw new IllegalStateException(s"The data for key $key could not be found in the Json: ${json.toString}"),
-      identity
-    )
-  }
-
   implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
 
   implicit val reads: Reads[Seq[PaymentsHistoryModel]] = new Reads[Seq[PaymentsHistoryModel]] {
+
     override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
 
-    val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
-      val transactions = transaction.get[String]("chargeType")
-      ChargeType.isValidChargeType(transactions)
-    }
-
-    def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate], Option[String])] = {
-      transaction.\("items").validate[List[JsValue]].fold(
-        _ => throw new IllegalStateException("The data for key items could not be found in the Json"),
-        list => if (list.nonEmpty) {
-          list.map(item =>
-            (item.get[BigDecimal]("amount"),
-            getOptionDate(item, FinancialTransactionsConstants.clearingDate),
-            (item \ FinancialTransactionsConstants.clearingReason).asOpt[String])
-          )
-        } else {
-          throw new IllegalStateException("The items list was found but the list was empty")
-        }
-      )
-    }
-
-    def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
-
-    val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
-      getItemsForPeriod(transaction) map { case (amount, clearedDate, clearingReason) =>
-        PaymentsHistoryModel(
-          chargeType = transaction.get[ChargeType](FinancialTransactionsConstants.chargeType),
-          taxPeriodFrom = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodFrom),
-          taxPeriodTo = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodTo),
-          amount = amount,
-          clearedDate = clearedDate,
-          clearingReason = clearingReason
-        )
+      val transactions: Seq[JsValue] = (json \ FinancialTransactionsConstants.financialTransactions).as[Seq[JsValue]]
+      val filteredTransactions: Seq[JsValue] = transactions.filter { transaction =>
+        ChargeType.isValidChargeType((transaction \ FinancialTransactionsConstants.chargeType).as[String])
       }
-    }
 
-      JsSuccess(extractedItems.flatten.filter(_.clearedDate.isDefined))
+      def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] = {
+        val subItems = (transaction \ FinancialTransactionsConstants.items).as[Seq[TransactionSubItem]]
+        if(subItems.isEmpty) throw new IllegalStateException("No sub items found for transaction") else subItems
+      }
+
+      val paymentHistoryCharges: Seq[PaymentsHistoryModel] = filteredTransactions flatMap { transaction =>
+
+        val chargeType: String = (transaction \ FinancialTransactionsConstants.chargeType).as[String]
+
+        getSubItemsForTransaction(transaction) map { subItem =>
+          PaymentsHistoryModel(
+            chargeType = ChargeType.apply(chargeType),
+            taxPeriodFrom = (transaction \ FinancialTransactionsConstants.taxPeriodFrom).asOpt[LocalDate],
+            taxPeriodTo = (transaction \ FinancialTransactionsConstants.taxPeriodTo).asOpt[LocalDate],
+            amount = subItem.amount,
+            clearedDate = subItem.clearingDate,
+            clearingReason = subItem.clearingReason
+          )
+        }
+      }
+
+      JsSuccess(paymentHistoryCharges.filter(_.clearedDate.isDefined))
     }
   }
 }

@@ -31,6 +31,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
   implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
 
   "reads" should {
+
     "read json containing one item per period into a sequence" in {
       val testJson: JsValue = Json.parse(
         s"""{
@@ -662,50 +663,91 @@ class PaymentsHistoryModelSpec extends UnitSpec {
       Json.fromJson(testJson)(reads) shouldBe JsSuccess(expectedSeq)
     }
 
-    "throw an IllegalStateException" when {
+    "throw a JsResultException" when {
+
       "there is no financialTransactions block" in {
         val testJson: JsValue = Json.parse("""{ "abc" : "xyz" }""")
 
-        val result: IllegalStateException = intercept[IllegalStateException](Json.fromJson(testJson)(reads))
-        result.getMessage shouldBe """The data for key financialTransactions could not be found in the Json: {"abc":"xyz"}"""
+        intercept[JsResultException](Json.fromJson(testJson)(reads))
       }
-    }
 
-    "there is no items block" in {
+      "there is no items block" in {
 
-      val testJson: JsValue = Json.parse(
-        s"""{
-           |    "idType" : "VRN",
-           |    "idNumber" : 555555555,
-           |    "regimeType" : "VATC",
-           |    "processingDate" : "2018-03-07T09:30:00.000Z",
-           |    "financialTransactions" : [
-           |      {
-           |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "VAT Return Charge",
-           |        "periodKey" : "17AA",
-           |        "periodKeyDescription" : "ABCD",
-           |        "taxPeriodFrom" : "2018-08-01",
-           |        "taxPeriodTo" : "2018-10-31",
-           |        "businessPartner" : "0",
-           |        "contractAccountCategory" : "99",
-           |        "contractAccount" : "X",
-           |        "contractObjectType" : "ABCD",
-           |        "contractObject" : "0",
-           |        "sapDocumentNumber" : "0",
-           |        "sapDocumentNumberItem" : "0",
-           |        "chargeReference" : "XD002750002155",
-           |        "mainTransaction" : "1234",
-           |        "subTransaction" : "5678",
-           |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150
-           |      }
-           |    ]
-           |  }""".stripMargin
-      )
+        val testJson: JsValue = Json.parse(
+          s"""{
+             |    "idType" : "VRN",
+             |    "idNumber" : 555555555,
+             |    "regimeType" : "VATC",
+             |    "processingDate" : "2018-03-07T09:30:00.000Z",
+             |    "financialTransactions" : [
+             |      {
+             |        "chargeType" : "$ReturnDebitCharge",
+             |        "mainType" : "VAT Return Charge",
+             |        "periodKey" : "17AA",
+             |        "periodKeyDescription" : "ABCD",
+             |        "taxPeriodFrom" : "2018-08-01",
+             |        "taxPeriodTo" : "2018-10-31",
+             |        "businessPartner" : "0",
+             |        "contractAccountCategory" : "99",
+             |        "contractAccount" : "X",
+             |        "contractObjectType" : "ABCD",
+             |        "contractObject" : "0",
+             |        "sapDocumentNumber" : "0",
+             |        "sapDocumentNumberItem" : "0",
+             |        "chargeReference" : "XD002750002155",
+             |        "mainTransaction" : "1234",
+             |        "subTransaction" : "5678",
+             |        "originalAmount" : 150,
+             |        "outstandingAmount" : 150
+             |      }
+             |    ]
+             |  }""".stripMargin
+        )
 
-      val result: IllegalStateException = intercept[IllegalStateException](Json.fromJson(testJson)(reads))
-      result.getMessage shouldBe s"The data for key items could not be found in the Json"
+        intercept[JsResultException](Json.fromJson(testJson)(reads))
+      }
+
+      "there is no amount" in {
+        val testJson = Json.parse(
+          s"""{
+             |    "idType" : "VRN",
+             |    "idNumber" : 555555555,
+             |    "regimeType" : "VATC",
+             |    "processingDate" : "2018-03-07T09:30:00.000Z",
+             |    "financialTransactions" : [
+             |      {
+             |        "chargeType" : "$ReturnDebitCharge",
+             |       "mainType" : "VAT Return Charge",
+             |        "periodKey" : "17AA",
+             |        "periodKeyDescription" : "ABCD",
+             |        "taxPeriodFrom" : "2018-08-01",
+             |        "taxPeriodTo" : "2018-10-31",
+             |        "businessPartner" : "0",
+             |        "contractAccountCategory" : "99",
+             |        "contractAccount" : "X",
+             |        "contractObjectType" : "ABCD",
+             |        "contractObject" : "0",
+             |        "sapDocumentNumber" : "0",
+             |        "sapDocumentNumberItem" : "0",
+             |        "chargeReference" : "XD002750002155",
+             |        "mainTransaction" : "1234",
+             |        "subTransaction" : "5678",
+             |        "originalAmount" : 150,
+             |        "outstandingAmount" : 150,
+             |        "items" : [
+             |          {
+             |            "subItem" : "000",
+             |            "clearingDate" : "2018-01-10",
+             |            "dueDate" : "2018-12-07"
+             |          }
+             |        ]
+             |      }
+             |    ]
+             |  }""".stripMargin
+        )
+
+        intercept[JsResultException](Json.fromJson(testJson)(reads))
+      }
     }
 
     "the items list is empty" in {
@@ -743,51 +785,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
       )
 
       val result = intercept[IllegalStateException](Json.fromJson(testJson)(reads))
-      result.getMessage shouldBe "The items list was found but the list was empty"
-    }
-
-    "there is no amount" in {
-      val testJson = Json.parse(
-        s"""{
-           |    "idType" : "VRN",
-           |    "idNumber" : 555555555,
-           |    "regimeType" : "VATC",
-           |    "processingDate" : "2018-03-07T09:30:00.000Z",
-           |    "financialTransactions" : [
-           |      {
-           |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "VAT Return Charge",
-           |        "periodKey" : "17AA",
-           |        "periodKeyDescription" : "ABCD",
-           |        "taxPeriodFrom" : "2018-08-01",
-           |        "taxPeriodTo" : "2018-10-31",
-           |        "businessPartner" : "0",
-           |        "contractAccountCategory" : "99",
-           |        "contractAccount" : "X",
-           |        "contractObjectType" : "ABCD",
-           |        "contractObject" : "0",
-           |        "sapDocumentNumber" : "0",
-           |        "sapDocumentNumberItem" : "0",
-           |        "chargeReference" : "XD002750002155",
-           |        "mainTransaction" : "1234",
-           |        "subTransaction" : "5678",
-           |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
-           |        "items" : [
-           |          {
-           |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
-           |            "dueDate" : "2018-12-07"
-           |          }
-           |        ]
-           |      }
-           |    ]
-           |  }""".stripMargin
-      )
-
-      val expectedMessageJson = """{"subItem":"000","clearingDate":"2018-01-10","dueDate":"2018-12-07"}"""
-      val result = intercept[IllegalStateException](Json.fromJson(testJson)(reads))
-      result.getMessage shouldEqual s"The data for key amount could not be found in the Json: $expectedMessageJson"
+      result.getMessage shouldBe "No sub items found for transaction"
     }
 
     "there is no clearingDate should parse successfully" in {
