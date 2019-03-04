@@ -21,6 +21,7 @@ import java.net.URLEncoder
 import config.AppConfig
 import config.features.Features
 import play.api.Mode.Mode
+import play.api.i18n.Lang
 import play.api.mvc.Call
 import play.api.{Configuration, Mode}
 
@@ -73,4 +74,9 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val selfLookup: String = ""
   override val portalMakePaymentUrl: String => String = (vrn: String) => "/whatYouOwePortal"
   override val portalPaymentHistoryUrl: String => String = (vrn: String) => "/paymentHistoryPortal"
+  override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+  override def languageMap: Map[String, Lang] = Map(
+    "english" -> Lang("en"),
+    "cymraeg" -> Lang("cy")
+  )
 }
