@@ -26,7 +26,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
-      val signUpWithSoftware = "#content p:nth-of-type(1)"
+      val signUpWithSoftware = "#content > article > p:nth-child(3)"
       val signInCorrectCredentials = "#content p:nth-of-type(2)"
       val signOut = "#content p:nth-of-type(3)"
       val signOutLink = "#content p:nth-of-type(3) a"
