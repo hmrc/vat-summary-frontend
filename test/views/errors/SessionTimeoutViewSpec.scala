@@ -26,7 +26,7 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
-      val instructions = "#content p"
+      val instructions = "#content > article > p"
     }
 
     lazy val view = views.html.errors.sessionTimeout()
