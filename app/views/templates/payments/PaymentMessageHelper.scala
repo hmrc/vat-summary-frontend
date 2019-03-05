@@ -310,7 +310,8 @@ object PaymentMessageHelper {
     VatFailureToNotifyRCSL,
     VatFailureToSubmitRCSL,
     VatCreditReturnOffsetCharge,
-    ProtectiveAssessmentCharge
+    ProtectiveAssessmentCharge,
+    UnallocatedPaymentCharge
   )
 
   def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate], useShortDayFormat: Boolean = true)
