@@ -26,5 +26,7 @@ object FinancialTransactionsConstants {
   val clearingReason = "clearingReason"
   val items = "items"
   val taxPeriodTo = "taxPeriodTo"
+  val dueDate = "dueDate"
+  val outstandingAmount = "outstandingAmount"
 
 }

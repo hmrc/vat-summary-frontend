@@ -21,16 +21,13 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants
 import models.payments._
 import play.api.libs.json._
-
-import scala.collection.immutable
-import scala.util.Try
+import models.payments.PaymentOnAccount
 
 case class PaymentsHistoryModel(chargeType: ChargeType,
                                 taxPeriodFrom: Option[LocalDate],
                                 taxPeriodTo: Option[LocalDate],
                                 amount: BigDecimal,
-                                clearedDate: Option[LocalDate] = None,
-                                clearingReason: Option[String] = None)
+                                clearedDate: Option[LocalDate] = None)
 
 object PaymentsHistoryModel {
 
@@ -45,28 +42,49 @@ object PaymentsHistoryModel {
         ChargeType.isValidChargeType((transaction \ FinancialTransactionsConstants.chargeType).as[String])
       }
 
-      def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] = {
-        val subItems = (transaction \ FinancialTransactionsConstants.items).as[Seq[TransactionSubItem]]
-        if(subItems.isEmpty) throw new IllegalStateException("No sub items found for transaction") else subItems
-      }
+      JsSuccess(
+        filteredTransactions flatMap { transaction =>
 
-      val paymentHistoryCharges: Seq[PaymentsHistoryModel] = filteredTransactions flatMap { transaction =>
+          val chargeType: ChargeType =  ChargeType.apply((transaction \ FinancialTransactionsConstants.chargeType).as[String])
 
-        val chargeType: String = (transaction \ FinancialTransactionsConstants.chargeType).as[String]
+          val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction) map {
+            subItem => generatePaymentModel(chargeType, subItem, transaction)
+          }
 
-        getSubItemsForTransaction(transaction) map { subItem =>
-          PaymentsHistoryModel(
-            chargeType = ChargeType.apply(chargeType),
-            taxPeriodFrom = (transaction \ FinancialTransactionsConstants.taxPeriodFrom).asOpt[LocalDate],
-            taxPeriodTo = (transaction \ FinancialTransactionsConstants.taxPeriodTo).asOpt[LocalDate],
-            amount = subItem.amount,
-            clearedDate = subItem.clearingDate,
-            clearingReason = subItem.clearingReason
-          )
+          transactions.flatten
         }
-      }
-
-      JsSuccess(paymentHistoryCharges.filter(_.clearedDate.isDefined))
+      )
     }
+  }
+
+  private[models] def generatePaymentModel(chargeType: ChargeType,
+                                           subItem: TransactionSubItem,
+                                           transaction: JsValue): Option[PaymentsHistoryModel] = {
+    chargeType.value match {
+      case PaymentOnAccount.value if subItem.clearingReason.isEmpty =>
+        Some(PaymentsHistoryModel(
+          chargeType = UnallocatedPayment,
+          taxPeriodFrom = None,
+          taxPeriodTo = None,
+          amount = (transaction \ FinancialTransactionsConstants.outstandingAmount).as[BigDecimal],
+          clearedDate = subItem.dueDate
+        ))
+      case PaymentOnAccount.value =>
+        //TODO: other Payment on account charge types will be rendered as 'Refunds' - see BTAT-5162
+        None
+      case _ =>
+        Some(PaymentsHistoryModel(
+          chargeType = chargeType,
+          taxPeriodFrom = (transaction \ FinancialTransactionsConstants.taxPeriodFrom).asOpt[LocalDate],
+          taxPeriodTo = (transaction \ FinancialTransactionsConstants.taxPeriodTo).asOpt[LocalDate],
+          amount = subItem.amount,
+          clearedDate = subItem.clearingDate
+        ))
+    }
+  }
+
+  private[models] def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] = {
+    val subItems = (transaction \ FinancialTransactionsConstants.items).as[Seq[TransactionSubItem]]
+    if(subItems.isEmpty) throw new IllegalStateException("No sub items found for transaction") else subItems
   }
 }

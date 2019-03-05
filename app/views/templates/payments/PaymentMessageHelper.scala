@@ -263,6 +263,13 @@ object PaymentMessageHelper {
     Some("chargeType.vatProtectiveAssessmentChargeDescription")
   )
 
+  object UnallocatedPaymentCharge extends PaymentMessageHelper(
+    UnallocatedPayment.value,
+    "chargeType.unallocatedPaymentTitle",
+    Some("chargeType.unallocatedPaymentDescription"),
+    "unallocated"
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
