@@ -29,10 +29,14 @@ object DisplayDateRangeHelper {
       s"${displayDate(to, true, useShortDayFormat)}"
   }
 
-  def displayDate(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false): String = {
-    val format = (if (useShortDayFormat) "d MMM" else "d MMMM") + (if (showYear) " uuuu" else "")
+  def displayDate(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false)
+                 (implicit lang: play.api.i18n.Lang, messages: Messages): String = {
+    println(s"\n\n${lang}\n\n")
+    val englishFormat = (if (useShortDayFormat) "d MMM" else "d MMMM") + (if (showYear) " uuuu" else "")
+    val welshFormat = s"""d '${messages(s"month.${date.getMonthValue}")}'""" + (if (showYear) " uuuu" else "")
+    val format = if(lang.language == "cy") welshFormat else englishFormat
     val formatter = DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT)
-    formatter.format(date)
+    date.format(formatter)
   }
 
 }

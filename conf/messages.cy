@@ -6,6 +6,19 @@ common.newTab = (yn agor mewn tab newydd)
 base.back = Yn ôl
 base.signOut = Allgofnodi
 
+month.1 = Ionawr
+month.2 = Chwefror
+month.3 = Mawrth
+month.4 = Ebrill
+month.5 = Mai
+month.6 = Mehefin
+month.7 = Gorffennaf
+month.8 = Awst
+month.9 = Medi
+month.10 = Hydref
+month.11 = Tachwedd
+month.12 = Rhagfyr
+
 breadcrumbs.bta = Cyfrif Treth Busnes
 
 sessionTimeout.title = Mae’ch sesiwn wedi’i therfynu
