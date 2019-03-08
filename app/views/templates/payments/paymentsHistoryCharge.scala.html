@@ -19,7 +19,7 @@
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.templates.payments.PaymentMessageHelper
 
-@(transaction: PaymentsHistoryModel)(implicit messages: Messages)
+@(transaction: PaymentsHistoryModel)(implicit messages: Messages, lang: Lang)
 
 @chargeType = @{PaymentMessageHelper.getChargeType(transaction.chargeType.value)}
 

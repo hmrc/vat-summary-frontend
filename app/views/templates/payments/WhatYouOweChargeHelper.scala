@@ -25,9 +25,9 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
                                        hasDirectDebit: Option[Boolean],
                                        implicit val messages: Messages) {
 
-  private val paymentMessageHelper: PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
+  private def paymentMessageHelper()(implicit lang: play.api.i18n.Lang): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
 
-  val description: Option[String] = {
+  def description()(implicit lang: play.api.i18n.Lang): Option[String] = {
     (payment, paymentMessageHelper.description) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
         Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.start), Some(payment.end), useShortDayFormat = false))

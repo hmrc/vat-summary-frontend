@@ -19,7 +19,7 @@
 @import config.AppConfig
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
-@(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isHybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User)
+@(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isHybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User, lang: Lang)
 
 <div class="column-one-half" id="payments">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("payment.nextPayment")</h2>
