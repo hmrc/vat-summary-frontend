@@ -274,7 +274,7 @@ object PaymentMessageHelper {
     Refund.value,
     "chargeType.refundTitle",
     Some("chargeType.refundDescription"),
-    "unallocated"
+    "repayment"
   )
 
   val values = Seq(

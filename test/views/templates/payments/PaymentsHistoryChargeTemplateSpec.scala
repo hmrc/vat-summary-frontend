@@ -673,7 +673,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "unallocated"
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
       }
 
       "display the correct charge title" in {
@@ -685,7 +685,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct CSS applied" in {
-        element(Selectors.thirdTableElement).attr("class") should include("unallocated-payment")
+        element(Selectors.thirdTableElement).attr("class") should include("repayment-money")
       }
     }
   }
