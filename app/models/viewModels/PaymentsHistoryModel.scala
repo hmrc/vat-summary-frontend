@@ -21,6 +21,7 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants
 import models.payments._
 import play.api.libs.json._
+import models.payments.PaymentOnAccount
 
 case class PaymentsHistoryModel(chargeType: ChargeType,
                                 taxPeriodFrom: Option[LocalDate],
@@ -30,50 +31,60 @@ case class PaymentsHistoryModel(chargeType: ChargeType,
 
 object PaymentsHistoryModel {
 
-  implicit class JsonOps(json: JsValue) {
-    def get[T](key: String)(implicit reads: Reads[T]): T = json.\(key).validate[T].fold(
-      _ => throw new IllegalStateException(s"The data for key $key could not be found in the Json: ${json.toString}"),
-      identity
-    )
-  }
-
   implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
 
   implicit val reads: Reads[Seq[PaymentsHistoryModel]] = new Reads[Seq[PaymentsHistoryModel]] {
+
     override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
 
-    val transactionsList: List[JsValue] = json.get[List[JsValue]](FinancialTransactionsConstants.financialTransactions).filter { transaction =>
-      val transactions = transaction.get[String]("chargeType")
-      ChargeType.isValidChargeType(transactions)
-    }
+      val transactions: Seq[JsValue] = (json \ FinancialTransactionsConstants.financialTransactions).as[Seq[JsValue]]
+      val filteredTransactions: Seq[JsValue] = transactions.filter { transaction =>
+        ChargeType.isValidChargeType((transaction \ FinancialTransactionsConstants.chargeType).as[String])
+      }
 
-    def getItemsForPeriod(transaction: JsValue): List[(BigDecimal, Option[LocalDate])] = {
-      transaction.\("items").validate[List[JsValue]].fold(
-        _ => throw new IllegalStateException("The data for key items could not be found in the Json"),
-        list => if (list.nonEmpty) {
-          list.map(item => item.get[BigDecimal]("amount") ->
-            getOptionDate(item, FinancialTransactionsConstants.clearingDate))
-        } else {
-          throw new IllegalStateException("The items list was found but the list was empty")
+      JsSuccess(
+        filteredTransactions flatMap { transaction =>
+
+          val chargeType: ChargeType =  ChargeType.apply((transaction \ FinancialTransactionsConstants.chargeType).as[String])
+
+          val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction) map {
+            subItem => generatePaymentModel(chargeType, subItem, transaction)
+          }
+
+          transactions.flatten.filter(_.clearedDate.isDefined)
         }
       )
     }
+  }
 
-    def getOptionDate(js: JsValue, key: String) = (js \ s"$key").asOpt[LocalDate]
-
-    val extractedItems: Seq[List[PaymentsHistoryModel]] = transactionsList.map { transaction =>
-      getItemsForPeriod(transaction) map { case (amount, clearedDate) =>
-        PaymentsHistoryModel(
-          chargeType = transaction.get[ChargeType](FinancialTransactionsConstants.chargeType),
-          taxPeriodFrom = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodFrom),
-          taxPeriodTo = getOptionDate(transaction, FinancialTransactionsConstants.taxPeriodTo),
-          amount = amount,
-          clearedDate = clearedDate
-        )
-      }
+  private[models] def generatePaymentModel(chargeType: ChargeType,
+                                           subItem: TransactionSubItem,
+                                           transaction: JsValue): Option[PaymentsHistoryModel] = {
+    chargeType.value match {
+      case PaymentOnAccount.value if subItem.clearingReason.isEmpty =>
+        Some(PaymentsHistoryModel(
+          chargeType = UnallocatedPayment,
+          taxPeriodFrom = None,
+          taxPeriodTo = None,
+          amount = (transaction \ FinancialTransactionsConstants.outstandingAmount).as[BigDecimal],
+          clearedDate = subItem.dueDate
+        ))
+      case PaymentOnAccount.value =>
+        //TODO: other Payment on account charge types will be rendered as 'Refunds' - see BTAT-5162
+        None
+      case _ =>
+        Some(PaymentsHistoryModel(
+          chargeType = chargeType,
+          taxPeriodFrom = (transaction \ FinancialTransactionsConstants.taxPeriodFrom).asOpt[LocalDate],
+          taxPeriodTo = (transaction \ FinancialTransactionsConstants.taxPeriodTo).asOpt[LocalDate],
+          amount = subItem.amount,
+          clearedDate = subItem.clearingDate
+        ))
     }
+  }
 
-      JsSuccess(extractedItems.flatten.filter(_.clearedDate.isDefined))
-    }
+  private[models] def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] = {
+    val subItems = (transaction \ FinancialTransactionsConstants.items).as[Seq[TransactionSubItem]]
+    if(subItems.isEmpty) throw new IllegalStateException("No sub items found for transaction") else subItems
   }
 }

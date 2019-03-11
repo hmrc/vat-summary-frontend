@@ -194,6 +194,8 @@ chargeType.vatCreditReturnOffsetChargeTitle = Overpayment partial refund
 chargeType.vatCreditReturnOffsetChargeDescription = partial repayment for period {0}
 chargeType.vatProtectiveAssessmentChargeTitle = Protective assessment
 chargeType.vatProtectiveAssessmentChargeDescription = assessment raised to protect HMRC’s position during an appeal
+chargeType.unallocatedPaymentTitle = Unallocated payment
+chargeType.unallocatedPaymentDescription = you made an overpayment, you can have this refunded or leave it on account
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found

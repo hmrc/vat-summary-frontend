@@ -84,6 +84,7 @@ object MessageLookup {
         case VatFailureToSubmitRCSL.name => ("Reverse Charge sales list penalty", "because you have failed to submit a Reverse Charge sales list")
         case VatCreditReturnOffsetCharge.name => ("Overpayment partial refund", s"partial repayment for period $datePeriod")
         case ProtectiveAssessmentCharge.name => ("Protective assessment", "assessment raised to protect HMRC’s position during an appeal")
+        case UnallocatedPaymentCharge.name => ("Unallocated payment", "you made an overpayment, you can have this refunded or leave it on account")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }

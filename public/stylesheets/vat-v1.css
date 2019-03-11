@@ -32,8 +32,18 @@
     border-right: solid 6px #00823B;
 }
 
-.repayment-money {
+table td:last-child.repayment-money {
     color:#00823B;
+    padding-right: 16px;
+}
+
+.unallocated {
+    border-right: solid 6px #005ea5;
+}
+
+table td:last-child.unallocated-payment {
+    color: #005ea5;
+    padding-right: 16px;
 }
 
 .nowrap {

@@ -18,10 +18,13 @@
 @import models.viewModels.PaymentsHistoryModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.templates.payments.PaymentMessageHelper
+@import models.payments.UnallocatedPayment
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)
 
-@chargeType = @{PaymentMessageHelper.getChargeType(transaction.chargeType.value)}
+@chargeType = @{
+  PaymentMessageHelper.getChargeType(transaction.chargeType.value)
+}
 
 @transaction.clearedDate match {
 
@@ -35,9 +38,16 @@
           </span>
         }
       </td>
-      <td class="numeric nowrap @if(transaction.amount < 0){repayment-money}" valign="top">@{positiveNegative(transaction.amount)}</td>
+      <td class="numeric nowrap
+        @if(transaction.amount < 0 && !chargeType.name.equals(UnallocatedPayment.value)) {repayment-money}
+        @if(chargeType.name.equals(UnallocatedPayment.value)) {unallocated-payment}"
+        valign="top">
+          @{
+            positiveNegative(transaction.amount)
+          }
+      </td>
     </tr>
   }
 
-  case _ => { }
+  case _ => {}
 }

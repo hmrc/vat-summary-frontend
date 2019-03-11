@@ -263,6 +263,13 @@ object PaymentMessageHelper {
     Some("chargeType.vatProtectiveAssessmentChargeDescription")
   )
 
+  object UnallocatedPaymentCharge extends PaymentMessageHelper(
+    UnallocatedPayment.value,
+    "chargeType.unallocatedPaymentTitle",
+    Some("chargeType.unallocatedPaymentDescription"),
+    "unallocated"
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -303,7 +310,8 @@ object PaymentMessageHelper {
     VatFailureToNotifyRCSL,
     VatFailureToSubmitRCSL,
     VatCreditReturnOffsetCharge,
-    ProtectiveAssessmentCharge
+    ProtectiveAssessmentCharge,
+    UnallocatedPaymentCharge
   )
 
   def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate], useShortDayFormat: Boolean = true)

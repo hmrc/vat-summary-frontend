@@ -34,6 +34,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
     val description = "tr td:nth-of-type(2) span:nth-of-type(2)"
     val amount = "tr td:nth-of-type(3)"
     val errorText = "tr td:nth-of-type(2)"
+    val thirdTableElement = "tr td:nth-of-type(3)"
   }
 
   "The chargeTypes template" when {
@@ -617,6 +618,39 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "display the correct table row class" in {
         element(Selectors.tableRow).attr("class") shouldBe "repayment"
+      }
+    }
+
+    "there is an Unallocated Payment Charge Type" should {
+
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        UnallocatedPayment,
+        None,
+        None,
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "unallocated"
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Unallocated payment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "you made an overpayment, you can have this refunded or leave it on account"
+      }
+
+      "have the correct CSS applied" in {
+        element(Selectors.thirdTableElement).attr("class") should include("unallocated-payment")
       }
     }
   }
