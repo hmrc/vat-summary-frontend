@@ -19,7 +19,7 @@
 @import views.html.templates.formatters.money.{displayMoney, positiveNegative}
 @import views.templates.payments.WhatYouOweChargeHelper
 
-@(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
+@(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
 

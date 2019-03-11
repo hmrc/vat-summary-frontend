@@ -20,7 +20,7 @@
 @import views.templates.payments.PaymentMessageHelper
 @import models.payments.UnallocatedPayment
 
-@(transaction: PaymentsHistoryModel)(implicit messages: Messages)
+@(transaction: PaymentsHistoryModel)(implicit messages: Messages, lang: Lang)
 
 @chargeType = @{
   PaymentMessageHelper.getChargeType(transaction.chargeType.value)

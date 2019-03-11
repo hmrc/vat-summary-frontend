@@ -21,7 +21,7 @@
 @import models.viewModels.PaymentsHistoryViewModel
 @import java.time.LocalDate
 
-@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 @views.html.main_template(title = messages("paymentsHistory.title"), bodyClasses = None, appConfig = appConfig) {
 

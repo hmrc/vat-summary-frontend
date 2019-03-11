@@ -17,7 +17,7 @@
 @import java.time.LocalDate
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
-@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
+@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
