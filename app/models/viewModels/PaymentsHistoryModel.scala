@@ -51,7 +51,7 @@ object PaymentsHistoryModel {
             subItem => generatePaymentModel(chargeType, subItem, transaction)
           }
 
-          transactions.flatten
+          transactions.flatten.filter(_.clearedDate.isDefined)
         }
       )
     }
