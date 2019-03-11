@@ -29,6 +29,7 @@ import play.api.mvc._
 import services.{DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import models.payments.PaymentOnAccount
 
 import scala.concurrent.Future
 
@@ -53,7 +54,7 @@ extends FrontendController with I18nSupport {
                                      (implicit request: Request[_], user: User, hc: HeaderCarrier): Future[Result] = {
     paymentsService.getOpenPayments(user.vrn).map {
       case Right(Some(payments)) =>
-        val model = getModel(payments.financialTransactions, hasActiveDirectDebit)
+        val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), hasActiveDirectDebit)
         auditEvent(user, model.payments)
         Ok(views.html.payments.openPayments(user, model))
       case Right(_) =>
