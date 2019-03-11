@@ -32,7 +32,13 @@ object DisplayDateRangeHelper {
   def displayDate(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false)
                  (implicit lang: play.api.i18n.Lang, messages: Messages): String = {
     val englishFormat = (if (useShortDayFormat) "d MMM" else "d MMMM") + (if (showYear) " uuuu" else "")
-    val welshFormat = s"""d '${messages(s"month.${date.getMonthValue}")}'""" + (if (showYear) " uuuu" else "")
+    val welshFormat = {
+      (if (useShortDayFormat){
+        s"""d '${messages(s"month.short.${date.getMonthValue}")}'"""
+      } else {
+        s"""d '${messages(s"month.${date.getMonthValue}")}'"""
+      }) + (if (showYear) " uuuu" else "")
+    }
     val format = if(lang.language == "cy") welshFormat else englishFormat
     val formatter = DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT)
     date.format(formatter)
