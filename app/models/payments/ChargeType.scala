@@ -150,7 +150,9 @@ case object PaymentOnAccount extends ChargeType {
 case object UnallocatedPayment extends ChargeType {
   override val value: String = "Unallocated payment"
 }
-
+case object Refund extends ChargeType {
+  override val value: String = "Refund"
+}
 object ChargeType {
 
   val logger = Logger(getClass.getSimpleName)
@@ -198,7 +200,8 @@ object ChargeType {
     VatPaFurtherInterestCharge,
     CreditReturnOffsetCharge,
     PaymentOnAccount,
-    UnallocatedPayment
+    UnallocatedPayment,
+    Refund
   )
 
   def apply: String => ChargeType = input => {

@@ -85,6 +85,7 @@ object MessageLookup {
         case VatCreditReturnOffsetCharge.name => ("Overpayment partial refund", s"partial repayment for period $datePeriod")
         case ProtectiveAssessmentCharge.name => ("Protective assessment", "assessment raised to protect HMRC’s position during an appeal")
         case UnallocatedPaymentCharge.name => ("Unallocated payment", "you made an overpayment, you can have this refunded or leave it on account")
+        case RefundsCharge.name => ("Refund payment from HMRC", "as you requested a refund on an overpayment you made")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }

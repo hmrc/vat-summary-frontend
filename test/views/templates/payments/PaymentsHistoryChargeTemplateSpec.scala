@@ -656,5 +656,37 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         element(Selectors.thirdTableElement).attr("class") should include("unallocated-payment")
       }
     }
+
+    "there is an Refund Charge Type" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        Refund,
+        None,
+        None,
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "unallocated"
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Refund payment from HMRC"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "as you requested a refund on an overpayment you made"
+      }
+
+      "have the correct CSS applied" in {
+        element(Selectors.thirdTableElement).attr("class") should include("unallocated-payment")
+      }
+    }
   }
 }

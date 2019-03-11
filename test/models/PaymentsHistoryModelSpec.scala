@@ -829,9 +829,16 @@ class PaymentsHistoryModelSpec extends UnitSpec {
              |  }""".stripMargin
         )
 
-        val expectedSeq: Seq[PaymentsHistoryModel] = Seq()
+        val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
+          PaymentsHistoryModel(
+            Refund,
+            None,
+            None,
+            -5050,
+            Some(LocalDate.of(2018, 5, 4)))
+        )
 
-        "return an empty sequence" in {
+        s"return $Refund as the charge type " in {
           Json.fromJson(testJson)(reads) shouldBe JsSuccess(expectedSeq)
         }
       }
@@ -890,10 +897,26 @@ class PaymentsHistoryModelSpec extends UnitSpec {
           """.stripMargin
         )
 
-        val result = PaymentsHistoryModel.generatePaymentModel(chargeType, subItem, transaction)
+        val result = PaymentsHistoryModel.generatePaymentModel(chargeType, subItem, transaction).get
 
-        "return None" in {
-          result shouldBe None
+        "return a Refund" in {
+          result.chargeType shouldBe Refund
+        }
+
+        "not return a from date" in {
+          result.taxPeriodFrom shouldBe None
+        }
+
+        "not return a to date" in {
+          result.taxPeriodTo shouldBe None
+        }
+
+        "return the correct amount" in {
+          result.amount shouldBe subItem.amount
+        }
+
+        "return a clearing date" in {
+          result.clearedDate shouldBe subItem.clearingDate
         }
       }
 
