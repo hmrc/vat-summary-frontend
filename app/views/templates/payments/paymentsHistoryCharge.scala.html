@@ -39,11 +39,13 @@
         }
       </td>
       <td class="numeric nowrap
-        @if(transaction.amount < 0 && !chargeType.name.equals(UnallocatedPayment.value)) {repayment-money}
+        @if(transaction.amount < 0 && !(chargeType.name equals UnallocatedPayment.value)) {repayment-money}
         @if(chargeType.name.equals(UnallocatedPayment.value)) {unallocated-payment}"
         valign="top">
-          @{
-            positiveNegative(transaction.amount)
+          @if(chargeType.name equals UnallocatedPayment.value) {
+              @positiveNegative(transaction.amount.abs)
+          } else {
+              @positiveNegative(transaction.amount)
           }
       </td>
     </tr>
