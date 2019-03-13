@@ -623,12 +623,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
     "there is an Unallocated Payment Charge Type" should {
 
-
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
         UnallocatedPayment,
         None,
         None,
-        500,
+        -500,
         Some(LocalDate.parse("2018-10-16"))
       )
 
@@ -649,10 +648,13 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "you made an overpayment, you can have this refunded or leave it on account"
       }
 
+      "display the correct amount as a negative" in {
+        elementText(Selectors.amount) shouldBe "- £500"
+      }
+
       "have the correct CSS applied" in {
         element(Selectors.thirdTableElement).attr("class") should include("unallocated-payment")
       }
     }
   }
-
 }
