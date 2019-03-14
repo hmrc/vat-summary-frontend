@@ -70,8 +70,13 @@ object PaymentsHistoryModel {
           clearedDate = subItem.dueDate
         ))
       case PaymentOnAccount.value =>
-        //TODO: other Payment on account charge types will be rendered as 'Refunds' - see BTAT-5162
-        None
+        Some(PaymentsHistoryModel(
+          chargeType = Refund,
+          taxPeriodFrom = None,
+          taxPeriodTo = None,
+          amount = subItem.amount,
+          clearedDate = subItem.clearingDate
+        ))
       case _ =>
         Some(PaymentsHistoryModel(
           chargeType = chargeType,

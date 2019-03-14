@@ -18,7 +18,7 @@
 @import models.viewModels.PaymentsHistoryModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.templates.payments.PaymentMessageHelper
-@import models.payments.UnallocatedPayment
+@import models.payments.{UnallocatedPayment, Refund}
 
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages, lang: Lang)
 
@@ -39,7 +39,7 @@
         }
       </td>
       <td class="numeric nowrap
-        @if(transaction.amount < 0 && !(chargeType.name equals UnallocatedPayment.value)) {repayment-money}
+        @if(transaction.amount < 0 && !chargeType.name.equals(UnallocatedPayment.value) || chargeType.name.equals(Refund.value))  {repayment-money}
         @if(chargeType.name.equals(UnallocatedPayment.value)) {unallocated-payment}"
         valign="top">
           @if(chargeType.name equals UnallocatedPayment.value) {
