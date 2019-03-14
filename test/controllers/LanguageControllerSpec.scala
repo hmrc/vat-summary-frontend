@@ -71,7 +71,14 @@ class LanguageControllerSpec extends ControllerBaseSpec {
           Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = false))
       }
     }
-
   }
 
+  "Calling .langToCall" should {
+
+    val result = controller.langToCall("en")
+
+    "return the correct app config route with language supplied as parameter" in {
+      result shouldBe controllers.routes.LanguageController.switchToLanguage("en")
+    }
+  }
 }

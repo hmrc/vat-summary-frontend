@@ -220,6 +220,10 @@ chargeType.vatCreditReturnOffsetChargeTitle = Ad-daliad rhannol o ordaliad
 chargeType.vatCreditReturnOffsetChargeDescription = ad-daliad rhannol ar gyfer y cyfnod {0}
 chargeType.vatProtectiveAssessmentChargeTitle = Asesiad i ddiogelu
 chargeType.vatProtectiveAssessmentChargeDescription = asesiad a godir er mwyn diogelu sefyllfa CThEM yn ystod apêl
+chargeType.unallocatedPaymentTitle = Taliad heb ei osod
+chargeType.unallocatedPaymentDescription = gwnaethoch ordaliad, gallwch gael ad-daliad ohono neu ei adael ar eich cyfrif
+chargeType.refundTitle = Ad-daliad oddi wrth CThEM
+chargeType.refundDescription = gan i chi ofyn am ad-daliad o ordaliad a wnaethoch
 
 notFound.title = Heb ddod o hyd i’r dudalen
 notFound.heading = Ni ellir dod o hyd i’r dudalen hon
