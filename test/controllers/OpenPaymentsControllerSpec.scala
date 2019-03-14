@@ -23,19 +23,21 @@ import audit.models.ExtendedAuditModel
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
 import models.{CustomerInformation, User}
-import models.errors.{DirectDebitStatusError, PaymentsError}
+import models.errors.{DirectDebitStatusError, PaymentsError, UnknownError}
 import models.payments._
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
+import play.api.test.Helpers._
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 import common.TestModels._
+import play.api.test.Helpers.redirectLocation
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -128,6 +130,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         private val result = target.openPayments()(fakeRequest)
 
         status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
     }
 
@@ -341,6 +344,27 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
           document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
         }
+      }
+    }
+
+    "the call to retrieve hybrid status fails" should {
+
+      "return Internal Server Error" in new Test {
+
+        override def setupMocks(): Unit = {
+
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Left(UnknownError))
+        }
+
+        private val result = target.openPayments()(fakeRequest)
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
 
