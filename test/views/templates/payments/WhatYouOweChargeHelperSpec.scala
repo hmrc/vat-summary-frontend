@@ -33,6 +33,13 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     overdue
   )
 
+  def paymentModelNoPeriod(chargeType: ChargeType): OpenPaymentsModel = OpenPaymentsModelNoPeriod(
+    chargeType,
+    BigDecimal(100.00),
+    LocalDate.parse("2018-03-03"),
+    "18AA"
+  )
+
   "WhatYouOweChargeHelper .description" when {
 
     "payment has a to and from date" should {
@@ -41,6 +48,16 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
       "return the description of the payment" in {
         helper.description shouldBe Some("for the period 1 January to 2 February 2018")
+      }
+    }
+
+    "payment should have a no to and from date to form the description, but doesn't" should {
+
+      val model = paymentModelNoPeriod(ReturnDebitCharge)
+      val helper = new WhatYouOweChargeHelper(model, Some(false), messages)
+
+      "omit the description of the payment" in {
+        helper.description shouldBe None
       }
     }
 
@@ -206,14 +223,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "payment is has no to or from period" should {
 
-      val model = OpenPaymentsModelNoPeriod(
-        MpRepeatedPre2009Charge,
-        BigDecimal(100.00),
-        LocalDate.parse("2018-03-03"),
-        "18AA"
-      )
-
-      val helper = new WhatYouOweChargeHelper(model, Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), Some(true), messages)
 
       "return empty string" in {
         helper.viewReturnContext shouldBe ""
@@ -234,14 +244,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "payment has no to and from period" should {
 
-      val model = OpenPaymentsModelNoPeriod(
-        MpRepeatedPre2009Charge,
-        BigDecimal(100.00),
-        LocalDate.parse("2018-03-03"),
-        "18AA"
-      )
-
-      val helper = new WhatYouOweChargeHelper(model, Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), Some(true), messages)
 
       "return 'returns:view-return:open-payments'" in {
         helper.viewReturnGAEvent shouldBe "returns:view-return:open-payments"
