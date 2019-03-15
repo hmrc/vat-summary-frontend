@@ -57,3 +57,7 @@ table td:last-child {
 table td {
     padding-bottom: 1em;
 }
+
+table thead {
+    border-bottom: hidden;
+}
