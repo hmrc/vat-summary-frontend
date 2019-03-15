@@ -20,10 +20,10 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.customerInformation
+import common.TestModels.{customerInformation, customerInformationHybrid}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
-import models.errors.VatLiabilitiesError
+import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse, User}
@@ -213,6 +213,50 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         }
         val result: Future[Result] = target.paymentHistory(targetYear)(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "user is hybrid" should {
+
+      "redirect to VAT overview page" in new Test {
+
+        override val accountDetailsResponse: Right[Nothing, CustomerInformation] = Right(customerInformationHybrid)
+
+        override def setup(): Unit = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(accountDetailsResponse)
+        }
+
+        private val result = target.paymentHistory(targetYear)(fakeRequest)
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
+      }
+    }
+
+    "the call to retrieve hybrid status fails" should {
+
+      "return Internal Server Error" in new Test {
+
+        override def setup(): Unit = {
+
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+
+          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Left(UnknownError))
+        }
+
+        private val result = target.paymentHistory(targetYear)(fakeRequest)
+
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
 

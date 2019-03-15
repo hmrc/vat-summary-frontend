@@ -17,67 +17,196 @@
 package models.payments
 
 import java.time.LocalDate
-
-import common.FinancialTransactionsConstants._
 import play.api.libs.json.Json
 import views.ViewBaseSpec
 
 class OpenPaymentsModelSpec extends ViewBaseSpec {
 
-  "Apply method" when {
+  val openPaymentsModelWithPeriod: OpenPaymentsModel = OpenPaymentsModel(
+    payment = Payment(
+      chargeType = OADebitCharge,
+      start = LocalDate.parse("2001-01-01"),
+      end = LocalDate.parse("2001-03-31"),
+      due = LocalDate.parse("2003-04-05"),
+      outstandingAmount = 300.00,
+      periodKey = Some("#003")
+    ),
+    overdue = true
+  )
 
-    "given a Payment with a start and end date" should {
+  val openPaymentsModelNoPeriod: OpenPaymentsModel = OpenPaymentsModel(
+    payment = Payment(
+      chargeType = OADebitCharge,
+      due = LocalDate.parse("2003-04-05"),
+      outstandingAmount = 300.00,
+      periodKey = Some("#003")
+    ),
+    overdue = true
+  )
 
-      "create an OpenPaymentsModelWithPeriod" in {
-        val applyWithPaymentModel = OpenPaymentsModel(
-          payment = Payment(
+  "OpenPaymentsModel" when {
+
+    "calling .apply method" when {
+
+      "given a Payment with a start and end date" should {
+
+        "create an OpenPaymentsModelWithPeriod" in {
+
+          val regularApply = OpenPaymentsModel(
             chargeType = OADebitCharge,
+            amount = 300.00,
+            due = LocalDate.parse("2003-04-05"),
             start = LocalDate.parse("2001-01-01"),
             end = LocalDate.parse("2001-03-31"),
+            periodKey = "#003",
+            overdue = true
+          )
+
+          openPaymentsModelWithPeriod shouldBe regularApply
+        }
+      }
+
+      "given a Payment without a start and end date" should {
+
+        "create an OpenPaymentsModelNoPeriod" in {
+
+          val regularApply = OpenPaymentsModel(
+            chargeType = OADebitCharge,
+            amount = 300.00,
             due = LocalDate.parse("2003-04-05"),
-            outstandingAmount = 300.00,
-            periodKey = Some("#003")
-          ),
-          overdue = true
-        )
+            periodKey = "#003",
+            overdue = true
+          )
 
-        val regularApply = OpenPaymentsModel(
-          chargeType = OADebitCharge,
-          amount = 300.00,
-          due = LocalDate.parse("2003-04-05"),
-          start = LocalDate.parse("2001-01-01"),
-          end = LocalDate.parse("2001-03-31"),
-          periodKey = "#003",
-          overdue = true
-        )
-
-        applyWithPaymentModel shouldBe regularApply
-
+          openPaymentsModelNoPeriod shouldBe regularApply
+        }
       }
     }
 
-    "given a Payment without a start and end date" should {
+    "calling .writes method" when {
 
-      "create an OpenPaymentsModelNoPeriod" in {
-        val applyWithPaymentModel = OpenPaymentsModel(
-          payment = Payment(
-            chargeType = OADebitCharge,
-            due = LocalDate.parse("2003-04-05"),
-            outstandingAmount = 300.00,
-            periodKey = Some("#003")
-          ),
-          overdue = true
+      "supplied model creates an OpenPaymentsModelWithPeriod" should {
+
+        val expectedJson = Json.parse(
+          """ {
+            |   "paymentType" : "VAT OA Debit Charge",
+            |   "amount" : 300,
+            |   "due" : "2003-04-05",
+            |   "start" : "2001-01-01",
+            |   "end" : "2001-03-31",
+            |   "periodKey" : "#003",
+            |   "overdue" : true
+            | }
+          """.stripMargin
         )
 
-        val regularApply = OpenPaymentsModel(
-          chargeType = OADebitCharge,
-          amount = 300.00,
-          due = LocalDate.parse("2003-04-05"),
-          periodKey = "#003",
-          overdue = true
+        "parse to JSON correctly" in {
+          OpenPaymentsModel.writes.writes(openPaymentsModelWithPeriod) shouldBe expectedJson
+        }
+      }
+
+      "supplied model is OpenPaymentsModelNoPeriod" should {
+
+        val expectedJson = Json.parse(
+          """ {
+            |   "paymentType" : "VAT OA Debit Charge",
+            |   "amount" : 300,
+            |   "due" : "2003-04-05",
+            |   "periodKey" : "#003",
+            |   "overdue" : true
+            | }
+          """.stripMargin
         )
 
-        applyWithPaymentModel shouldBe regularApply
+        "parse to JSON correctly" in {
+          OpenPaymentsModel.writes.writes(openPaymentsModelNoPeriod) shouldBe expectedJson
+        }
+      }
+    }
+  }
+
+  "OpenPaymentsModelNoPeriod" when {
+
+    "calling .makePaymentRedirect" should {
+
+      "return a correctly formatted payment redirect URL" in {
+        openPaymentsModelNoPeriod.makePaymentRedirect shouldBe controllers.routes.MakePaymentController.makePaymentNoPeriod(
+          30000,
+          "VAT OA Debit Charge",
+          "2003-04-05"
+        ).url
+      }
+    }
+
+    "calling .writes" should {
+
+      val model = OpenPaymentsModelNoPeriod(
+        chargeType = OADebitCharge,
+        due = LocalDate.parse("2003-04-05"),
+        amount = 300.00,
+        periodKey = "#003",
+        overdue = true
+      )
+
+      val expectedJson = Json.parse(
+        """ {
+          |   "paymentType" : "VAT OA Debit Charge",
+          |   "amount" : 300,
+          |   "due" : "2003-04-05",
+          |   "periodKey" : "#003",
+          |   "overdue" : true
+          | }
+        """.stripMargin
+      )
+
+      "parse to JSON correctly" in {
+        OpenPaymentsModelNoPeriod.writes.writes(model) shouldBe expectedJson
+      }
+    }
+  }
+
+  "OpenPaymentsModelWithPeriod" when {
+
+    "calling .makePaymentRedirect" should {
+
+      "return a correctly formatted payment redirect URL" in {
+        openPaymentsModelWithPeriod.makePaymentRedirect shouldBe controllers.routes.MakePaymentController.makePayment(
+          30000,
+          3,
+          2001,
+          "VAT OA Debit Charge",
+          "2003-04-05"
+        ).url
+      }
+    }
+
+    "calling .writes" should {
+
+      val model = OpenPaymentsModelWithPeriod(
+        chargeType = OADebitCharge,
+        due = LocalDate.parse("2003-04-05"),
+        start = LocalDate.parse("2001-01-01"),
+        end = LocalDate.parse("2001-03-31"),
+        amount = 300.00,
+        periodKey = "#003",
+        overdue = true
+      )
+
+      val expectedJson = Json.parse(
+        """ {
+          |   "paymentType" : "VAT OA Debit Charge",
+          |   "amount" : 300,
+          |   "due" : "2003-04-05",
+          |   "start" : "2001-01-01",
+          |   "end" : "2001-03-31",
+          |   "periodKey" : "#003",
+          |   "overdue" : true
+          | }
+        """.stripMargin
+      )
+
+      "parse to JSON correctly" in {
+        OpenPaymentsModelWithPeriod.writes.writes(model) shouldBe expectedJson
       }
     }
   }
