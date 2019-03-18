@@ -42,35 +42,35 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
   "WhatYouOweChargeHelper .description" when {
 
-    "payment has a to and from date" should {
+    "the charge has a to and from date" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(false), messages)
 
-      "return the description of the payment" in {
+      "return the description of the charge" in {
         helper.description shouldBe Some("for the period 1 January to 2 February 2018")
       }
     }
 
-    "payment should have a no to and from date to form the description, but doesn't" should {
+    "the charge should have a to and from date to form the description, but they are not retrieved" should {
 
       val model = paymentModelNoPeriod(ReturnDebitCharge)
       val helper = new WhatYouOweChargeHelper(model, Some(false), messages)
 
-      "omit the description of the payment" in {
+      "omit the description of the charge" in {
         helper.description shouldBe None
       }
     }
 
-    "payment has a no to and from date" should {
+    "the charge does not have to and from date" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), Some(false), messages)
 
-      "return the description of the payment" in {
+      "return the description of the charge" in {
         helper.description shouldBe Some("interest charged on the officer's assessment")
       }
     }
 
-    "payment has no description" should {
+    "the charge has no description" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModel(MiscPenaltyCharge), Some(false), messages)
 
@@ -191,7 +191,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
   "WhatYouOweChargeHelper .viewReturnContext" when {
 
-    "payment has a to and from period" when {
+    "the charge has a to and from period" when {
 
       "charge type is Return Debit Charge" should {
 
@@ -221,7 +221,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
       }
     }
 
-    "payment is has no to or from period" should {
+    "the charge has no to or from period" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), Some(true), messages)
 
@@ -233,7 +233,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
   "WhatYouOweChargeHelper .viewReturnGAEvent" when {
 
-    "payment has a to and from period" should {
+    "the charge has a to and from period" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
 
@@ -242,7 +242,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
       }
     }
 
-    "payment has no to and from period" should {
+    "the charge has no to and from period" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), Some(true), messages)
 
