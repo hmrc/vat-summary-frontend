@@ -18,6 +18,7 @@ package views.templates.payments
 
 import javax.inject.Inject
 import models.payments._
+import play.api.Logger
 import play.api.i18n.Messages
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
@@ -32,7 +33,14 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
       case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
         Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.start), Some(payment.end), useShortDayFormat = false))
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
-        Some(PaymentMessageHelper.getFullDescription(desc, None, None))
+        val descriptionText = PaymentMessageHelper.getFullDescription(desc, None, None)
+        if (descriptionText.contains("{0}")) {
+          Logger.warn("[WhatYouOweChargeHelper][description] - " +
+            s"No date period was found for ${payment.chargeType}. Omitting description.")
+          None
+        } else {
+          Some(descriptionText)
+        }
       case (_, _) => None
     }
   }

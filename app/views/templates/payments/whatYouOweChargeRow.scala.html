@@ -22,12 +22,13 @@
 @(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
+@defining(chargeDetails.description()) { chargeDescription =>
 
 <tr id="payment-@{count + 1}">
     <td scope="row">
 
         <h2 class="bold heading-small">@chargeDetails.title</h2>
-        @chargeDetails.description.map { description => <div>@description</div> }
+        @chargeDescription.map { description => <div>@description</div> }
 
         <div data-due="@(payment.due.toString)" class="form-hint">
             @messages("openPayments.dueBy") @displayDate(payment.due)
@@ -50,7 +51,7 @@
                         <span class="visuallyhidden">
                             @displayMoney(payment.amount)
                             @chargeDetails.overdueContext
-                            @chargeDetails.description.getOrElse("")
+                            @chargeDescription.getOrElse("")
                         </span>
                     </a>
                 }
@@ -70,3 +71,4 @@
         }
     </td>
 </tr>
+}
