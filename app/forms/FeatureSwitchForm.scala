@@ -30,7 +30,8 @@ object FeatureSwitchForm {
       ConfigKeys.vatCertificateFeature -> boolean,
       ConfigKeys.useVatObligationsService -> boolean,
       ConfigKeys.useDirectDebitDummyPageFeature -> boolean,
-      ConfigKeys.useLanguageSelectorFeature -> boolean
+      ConfigKeys.useLanguageSelectorFeature -> boolean,
+      ConfigKeys.submitReturnFeatures -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
