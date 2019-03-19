@@ -36,7 +36,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         vatCertificateEnabled = appConfig.features.vatCertificateEnabled(),
         enableVatObligationsService = appConfig.features.enableVatObligationsService(),
         useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage(),
-        useLanguageSelector = appConfig.features.useLanguageSelector()
+        useLanguageSelector = appConfig.features.useLanguageSelector(),
+        submitReturnFeatures = appConfig.features.submitReturnFeatures()
       )
     )))
   }
@@ -56,6 +57,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
     appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)
     appConfig.features.useLanguageSelector(model.useLanguageSelector)
+    appConfig.features.submitReturnFeatures(model.submitReturnFeatures)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
