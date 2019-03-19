@@ -17,9 +17,10 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
 import models.errors.ServerSideError
-import models.{Address, CustomerInformation}
+import models.{Address, CustomerInformation, MandationStatus}
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -66,13 +67,43 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
     }
 
     "return an HttpError if one is received" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubErrorFromApi
+      override def setupStubs(): StubMapping = CustomerInfoStub.stubErrorFromApi()
 
       val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
       val expected = Left(ServerSideError("500", message))
 
       setupStubs()
       private val result = await(connector.getCustomerInfo("1111"))
+
+      result shouldEqual expected
+    }
+  }
+
+  "calling getCustomerMandationStatus" should {
+
+    "return a user's mandation status" in new Test {
+      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerMandationStatus()
+
+      val expected = Right(
+        MandationStatus(
+          "MTDfB Mandated"
+        )
+      )
+
+      setupStubs()
+      private val result: HttpGetResult[MandationStatus] = await(connector.getCustomerMandationStatus("1111"))
+
+      result shouldEqual expected
+    }
+
+    "return an HttpError if one is received" in new Test {
+      override def setupStubs(): StubMapping = CustomerInfoStub.stubErrorFromApi("/vat-subscription/([0-9]+)/mandation-status")
+
+      val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
+      val expected = Left(ServerSideError("500", message))
+
+      setupStubs()
+      private val result = await(connector.getCustomerMandationStatus("1111"))
 
       result shouldEqual expected
     }
