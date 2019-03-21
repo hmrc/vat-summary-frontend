@@ -53,6 +53,28 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is an VAT return to display for a non-MTDfB user" should {
+
+      val obligationDueDate: Option[String] = Some("2019-04-30")
+
+      lazy val view = views.html.templates.nextReturnSection(
+        obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfB = true
+      )
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the 'Next return due' heading" in {
+        elementText(Selectors.nextReturnDueHeading) shouldBe "Next return due"
+      }
+
+      "display the due of the return" in {
+        elementText(Selectors.nextReturnDate) shouldBe "30 April 2019"
+      }
+
+      "display the 'View return deadlines' link" in {
+        elementText(Selectors.viewReturnsButton) shouldBe "Submit return"
+      }
+    }
+
     "there is an overdue return" should {
 
       val obligationDueDate: Option[String] = Some("2017-04-30")

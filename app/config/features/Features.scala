@@ -31,4 +31,5 @@ class Features @Inject()(config: Configuration) {
   val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
   val submitReturnFeatures = new Feature(ConfigKeys.submitReturnFeatures, config)
+  val checkMandationStatus = new Feature(ConfigKeys.checkMandationStatus, config)
 }
