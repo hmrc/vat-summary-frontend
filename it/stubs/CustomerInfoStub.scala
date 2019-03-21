@@ -24,14 +24,20 @@ import play.api.libs.json.{JsValue, Json}
 object CustomerInfoStub extends WireMockMethods {
 
   private val customerInfoUri = "/vat-subscription/([0-9]+)/customer-details"
+  private val customerMandationStatusUri = "/vat-subscription/([0-9]+)/mandation-status"
 
   def stubCustomerInfo(customerInfo: JsValue = customerInfo): StubMapping = {
     when(method = GET, uri = customerInfoUri)
       .thenReturn(status = OK, body = customerInfo)
   }
 
-  def stubErrorFromApi: StubMapping = {
-    when(method = GET, uri = customerInfoUri)
+  def stubCustomerMandationStatus(customerMandationStatus: JsValue = customerMandationStatus): StubMapping = {
+    when(method = GET, uri = customerMandationStatusUri)
+      .thenReturn(status = OK, customerMandationStatus)
+  }
+
+  def stubErrorFromApi(stubbedUrl: String = customerInfoUri): StubMapping = {
+    when(method = GET, uri = stubbedUrl)
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
   }
 
@@ -126,5 +132,13 @@ object CustomerInfoStub extends WireMockMethods {
   private val errorJson = Json.obj(
     "code" -> "500",
     "message" -> "INTERNAL_SERVER_ERROR"
+  )
+
+  private val customerMandationStatus = Json.parse(
+    """
+      |{
+      | "mandationStatus":"MTDfB Mandated"
+      |}
+    """.stripMargin
   )
 }
