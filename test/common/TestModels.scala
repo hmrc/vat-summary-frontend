@@ -18,7 +18,7 @@ package common
 
 import java.time.LocalDate
 
-import models.{Address, CustomerInformation}
+import models.{Address, CustomerInformation, MandationStatus}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
@@ -118,4 +118,12 @@ object TestModels {
   val successfulAuthResult: Future[Enrolments] = Future.successful(Enrolments(Set(
       Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
   )))
+
+  val validMandationStatus: MandationStatus = MandationStatus(
+    "MTDfB"
+  )
+
+  val validNonMTDfBMandationStatus: MandationStatus = MandationStatus(
+    "Non MTDfB"
+  )
 }

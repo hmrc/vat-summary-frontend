@@ -21,16 +21,17 @@ import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVat
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
-import models.{CustomerInformation, ServiceResponse, User, VatDetailsDataModel}
+import models._
 import models.payments.Payments
 import models.obligations.{Obligation, VatReturnObligations}
 import models.viewModels.VatDetailsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, VatDetailsService}
+import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import common.FinancialTransactionsConstants.nonMTDfB
 
 import scala.concurrent.Future
 
@@ -42,7 +43,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      authorisedController: AuthorisedController,
                                      val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
-                                     auditingService: AuditingService)
+                                     auditingService: AuditingService,
+                                     mandationStatusService: MandationStatusService)
   extends FrontendController with I18nSupport {
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
@@ -54,33 +56,36 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       for {
         customerInfo <- accountDetailsCall
         nextReturn <- returnObligationsCall
-        nextPayment <- if(retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
+        nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
+        mandationStatus <- mandationStatusService.getMandationStatus(user.vrn)
       } yield {
         auditEvents(user, nextReturn, nextPayment)
-        Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo)))
+        Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus)))
       }
   }
 
   private[controllers] def getObligationFlags(obligations: Seq[Obligation]): VatDetailsDataModel = {
     val hasMultiple = obligations.size > 1
-    val data: String = if(hasMultiple) obligations.size.toString else obligations.head.due.toString
+    val data: String = if (hasMultiple) obligations.size.toString else obligations.head.due.toString
 
     VatDetailsDataModel(
       displayData = Some(data),
       hasMultiple = hasMultiple,
-      isOverdue = if(obligations.size == 1) obligations.head.due.isBefore(dateService.now()) else false,
+      isOverdue = if (obligations.size == 1) obligations.head.due.isBefore(dateService.now()) else false,
       hasError = false
     )
   }
 
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               payments: ServiceResponse[Option[Payments]],
-                                              accountDetails: HttpGetResult[CustomerInformation]): VatDetailsViewModel = {
+                                              accountDetails: HttpGetResult[CustomerInformation],
+                                              mandationStatus: HttpGetResult[MandationStatus]): VatDetailsViewModel = {
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments)
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
+    val isNonMTDfB: Boolean = retrieveIsNonMTDfB(mandationStatus)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -93,7 +98,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.hasMultiple,
       paymentModel.isOverdue,
       paymentModel.hasError,
-      isHybridUser
+      isHybridUser,
+      isNonMTDfB
+    )
+  }
+
+  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Boolean = {
+    mandationStatus.fold(
+      _ => false,
+      _.mandationStatus == nonMTDfB
     )
   }
 
