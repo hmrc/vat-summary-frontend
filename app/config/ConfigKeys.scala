@@ -42,7 +42,6 @@ object ConfigKeys {
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
   val submitReturnFeatures: String = "features.submitReturnFeatures.enabled"
-  val checkMandationStatus: String = "features.checkMandationStatus.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account.host"
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"

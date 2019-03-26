@@ -57,7 +57,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         customerInfo <- accountDetailsCall
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
-        mandationStatus <- mandationStatusService.getMandationStatus(user.vrn)
+        mandationStatus <- if(appConfig.features.submitReturnFeatures()) {
+          mandationStatusService.getMandationStatus(user.vrn) } else { Future.successful(Right(MandationStatus("Disabled"))) }
       } yield {
         auditEvents(user, nextReturn, nextPayment)
         Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus)))
