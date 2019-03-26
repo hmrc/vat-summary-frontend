@@ -161,6 +161,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user is hybrid" should {
 
       "not attempt to retrieve payment obligations" in new DetailsTest {
+        mockAppConfig.features.submitReturnFeatures(true)
 
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
           Future.successful(Right(customerInformationHybrid))
@@ -195,6 +196,28 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         val result: Future[Result] = target.details()(fakeRequest)
         status(result) shouldBe Status.OK
+      }
+    }
+
+    "the feature switch is turned off" should {
+      "return a VatDetailsViewModel as a MTDfB user" in new DetailsTest {
+        mockAppConfig.features.submitReturnFeatures(false)
+        lazy val result: Future[Result] = target.details()(fakeRequest)
+        status(result) shouldBe OK
+        await(bodyOf(result)).contains(messages("returnObligation.viewReturns")) shouldBe true
+      }
+    }
+
+    "the feature switch is turned on" should {
+      "return a VatDetailsViewModel as a MTDfB user" in new DetailsTest {
+        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
+
+        mockAppConfig.features.submitReturnFeatures(true)
+        lazy val result: Future[Result] = target.details()(fakeRequest)
+        status(result) shouldBe OK
+        await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe true
       }
     }
   }
@@ -295,7 +318,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
 
     "there is an error from VAT API" should {
-
       "return a VatDetailsViewModel with the returnError flag set" in new DetailsTest {
         lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear, returnObligationError = true)
         lazy val result: VatDetailsViewModel = target.constructViewModel(
