@@ -24,7 +24,7 @@ import common.TestModels
 import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
-import models.errors.{NextPaymentError, ObligationsError}
+import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.Payments
 import models.viewModels.VatDetailsViewModel
@@ -209,7 +209,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
 
     "the feature switch is turned on" should {
-      "return a VatDetailsViewModel as a MTDfB user" in new DetailsTest {
+      "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
         (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
@@ -218,6 +218,18 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: Future[Result] = target.details()(fakeRequest)
         status(result) shouldBe OK
         await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe true
+      }
+
+      "return a VatDetailsViewModel as a MTDfB user if no mandation status is returned" in new DetailsTest {
+        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Left(BadRequestError("AN ERROR", "HAS OCCURRED"))))
+
+        mockAppConfig.features.submitReturnFeatures(true)
+        lazy val result: Future[Result] = target.details()(fakeRequest)
+        status(result) shouldBe OK
+        await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe false
+        await(bodyOf(result)).contains(messages("returnObligation.viewReturns")) shouldBe true
       }
     }
   }

@@ -23,6 +23,7 @@ import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs._
+import play.api.http.Status.BAD_REQUEST
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
@@ -74,6 +75,25 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           val response: WSResponse = await(request().get())
           response.status shouldBe Status.OK
           response.body.contains("Submit return") shouldBe true
+        }
+      }
+
+      "return 200 and 'View return deadlines' when mandation status not returned" in {
+        appConfig.features.submitReturnFeatures(true)
+
+        new Test {
+          override def setupStubs(): StubMapping = {
+            AuthStub.authorised()
+            obligationsStub.stubOutstandingObligations
+            CustomerInfoStub.stubCustomerInfo()
+            CustomerInfoStub.stubCustomerMandationStatus(Json.obj("code" -> "AN ERROR", "errorResponse" -> "HAS OCCURRED"), BAD_REQUEST)
+            FinancialDataStub.stubAllOutstandingOpenPayments
+          }
+
+          val response: WSResponse = await(request().get())
+          response.status shouldBe Status.OK
+          response.body.contains("Submit return") shouldBe false
+          response.body.contains("View return deadlines") shouldBe true
         }
       }
     }

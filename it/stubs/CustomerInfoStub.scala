@@ -31,9 +31,9 @@ object CustomerInfoStub extends WireMockMethods {
       .thenReturn(status = OK, body = customerInfo)
   }
 
-  def stubCustomerMandationStatus(customerMandationStatus: JsValue = customerMandationStatus): StubMapping = {
+  def stubCustomerMandationStatus(customerMandationStatus: JsValue = customerMandationStatus, returnStatus: Int = OK): StubMapping = {
     when(method = GET, uri = customerMandationStatusUri)
-      .thenReturn(status = OK, customerMandationStatus)
+      .thenReturn(status = returnStatus, customerMandationStatus)
   }
 
   def stubErrorFromApi(stubbedUrl: String = customerInfoUri): StubMapping = {
