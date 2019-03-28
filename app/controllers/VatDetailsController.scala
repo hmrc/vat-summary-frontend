@@ -86,7 +86,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val paymentModel: VatDetailsDataModel = retrievePayments(payments)
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
-    val isNonMTDfB: Boolean = retrieveIsNonMTDfB(mandationStatus)
+    val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -104,10 +104,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
-  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Boolean = {
+  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
     mandationStatus.fold(
-      _ => false,
-      _.mandationStatus == nonMTDfB
+      _ => None,
+      result => Some(result.mandationStatus == nonMTDfB)
     )
   }
 

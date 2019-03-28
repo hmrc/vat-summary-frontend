@@ -22,6 +22,7 @@ import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalatest.exceptions.TestFailedException
 import views.ViewBaseSpec
 
 class VatDetailsViewSpec extends ViewBaseSpec {
@@ -102,7 +103,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     currentYear,
     paymentError = true,
-    returnObligationError = true
+    returnObligationError = true,
+    isNonMTDfBUser = None
   )
 
   "Rendering the VAT details page" should {
@@ -363,12 +365,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementText(Selectors.nextPayment) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
 
-    "render the next payment section vat returns link" in {
-      elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
-    }
-
-    "have the correct next payment section vat returns link href" in {
-      element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
+    "not render the next payment section vat returns link" in {
+      intercept[TestFailedException](
+        elementText(selector = Selectors.returnsVatLink)
+      )
     }
 
     "have the correct GA tag regarding the entity name graceful error handling" in {

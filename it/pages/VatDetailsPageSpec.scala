@@ -78,7 +78,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         }
       }
 
-      "return 200 and 'View return deadlines' when mandation status not returned" in {
+      "return 200 when mandation status not returned" in {
         appConfig.features.submitReturnFeatures(true)
 
         new Test {
@@ -93,7 +93,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           val response: WSResponse = await(request().get())
           response.status shouldBe Status.OK
           response.body.contains("Submit return") shouldBe false
-          response.body.contains("View return deadlines") shouldBe true
+          response.body.contains("View return deadlines") shouldBe false
         }
       }
     }
