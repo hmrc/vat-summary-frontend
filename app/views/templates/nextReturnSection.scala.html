@@ -17,14 +17,15 @@
 @import java.time.LocalDate
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
-@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean)(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
+@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isNonMTDfB: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 <div class="column-one-half" id="next-return">
   <h2 class="heading-medium" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
   <p @if(isError){data-metrics="error:recovered:next-return"}>
-    @(obligationData, hasMultiple, isError) match {
-      case (_, _, true) => { @messages("vatDetails.error") }
-      case (Some(numOfObligations), true, _) => { @messages("vatDetails.returnsDue", numOfObligations)}
+    @(obligationData, hasMultiple, isNonMTDfB, isError) match {
+      case (_, _, _, true) => { @messages("vatDetails.error") }
+      case (_, _, None, _) => { @messages("vatDetails.error") }
+      case (Some(numOfObligations), true, Some(_), _) => { @messages("vatDetails.returnsDue", numOfObligations) }
       case _ => {
         @obligationData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("returnObligation.noReturn"))
         @if(isOverdue){
@@ -36,9 +37,20 @@
     }
   </p>
 
-  <p>
-    <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
-      @messages("returnObligation.viewReturns")
-    </a>
-  </p>
+  @if(isNonMTDfB.nonEmpty) {
+      <p>
+          @isNonMTDfB match {
+              case Some(true) => {
+                  <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
+                      @messages("returnObligation.submit")
+                  </a>
+              }
+              case Some(false) => {
+                  <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
+                     @messages("returnObligation.viewReturns")
+                  </a>
+              }
+          }
+      </p>
+  }
 </div>

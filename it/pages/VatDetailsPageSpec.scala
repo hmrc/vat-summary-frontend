@@ -17,12 +17,16 @@
 package pages
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import config.AppConfig
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
+import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs._
+import play.api.http.Status.BAD_REQUEST
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
+  val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   val obligationsStub: VatObligationsStub = new VatObligationsStub(
     app.configuration.underlying.getBoolean("features.useVatObligationsService.enabled")
@@ -41,15 +45,56 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
 
     "the user is authenticated" should {
 
-      "return 200" in new Test {
+      "return 200 and 'View returns deadline'" in new Test {
+        appConfig.features.submitReturnFeatures(true)
+
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           obligationsStub.stubOutstandingObligations
           CustomerInfoStub.stubCustomerInfo()
+          CustomerInfoStub.stubCustomerMandationStatus()
           FinancialDataStub.stubAllOutstandingOpenPayments
         }
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
+        response.body.contains("View return deadlines") shouldBe true
+      }
+
+      "return 200 and 'Submit return' when Non MTDfB" in {
+        appConfig.features.submitReturnFeatures(true)
+
+        new Test {
+          override def setupStubs(): StubMapping = {
+            AuthStub.authorised()
+            obligationsStub.stubOutstandingObligations
+            CustomerInfoStub.stubCustomerInfo()
+            CustomerInfoStub.stubCustomerMandationStatus(Json.obj("mandationStatus" -> "Non MTDfB"))
+            FinancialDataStub.stubAllOutstandingOpenPayments
+          }
+
+          val response: WSResponse = await(request().get())
+          response.status shouldBe Status.OK
+          response.body.contains("Submit return") shouldBe true
+        }
+      }
+
+      "return 200 when mandation status not returned" in {
+        appConfig.features.submitReturnFeatures(true)
+
+        new Test {
+          override def setupStubs(): StubMapping = {
+            AuthStub.authorised()
+            obligationsStub.stubOutstandingObligations
+            CustomerInfoStub.stubCustomerInfo()
+            CustomerInfoStub.stubCustomerMandationStatus(Json.obj("code" -> "AN ERROR", "errorResponse" -> "HAS OCCURRED"), BAD_REQUEST)
+            FinancialDataStub.stubAllOutstandingOpenPayments
+          }
+
+          val response: WSResponse = await(request().get())
+          response.status shouldBe Status.OK
+          response.body.contains("Submit return") shouldBe false
+          response.body.contains("View return deadlines") shouldBe false
+        }
       }
     }
 

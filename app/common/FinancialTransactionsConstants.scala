@@ -28,5 +28,5 @@ object FinancialTransactionsConstants {
   val taxPeriodTo = "taxPeriodTo"
   val dueDate = "dueDate"
   val outstandingAmount = "outstandingAmount"
-
+  val nonMTDfB: String = "Non MTDfB"
 }

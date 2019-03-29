@@ -80,6 +80,7 @@ vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf yn ddyledus
 returnObligation.viewReturns = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW
+returnObligation.submit = Cyflwyno Ffurflen
 
 payment.noPayment = Nid oes taliadau’n ddyledus nawr
 payment.nextPayment = Taliad nesaf yn ddyledus
