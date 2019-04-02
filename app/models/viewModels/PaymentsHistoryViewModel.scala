@@ -18,4 +18,7 @@ package models.viewModels
 
 case class PaymentsHistoryViewModel(displayedYears: Seq[Int],
                                     selectedYear: Int,
-                                    transactions: Seq[PaymentsHistoryModel])
+                                    transactions: Seq[PaymentsHistoryModel],
+                                    hasHmrcVatDecOrg: Boolean,
+                                    userVrn: String,
+                                    customerMigratedToETMPDateWithin15M: Boolean)

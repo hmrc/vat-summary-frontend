@@ -87,7 +87,8 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
           None,
           None,
           None,
-          isHybridUser = true
+          isHybridUser = true,
+          None
         )
       )
 

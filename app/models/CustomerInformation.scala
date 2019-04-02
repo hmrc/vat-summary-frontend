@@ -31,7 +31,8 @@ case class CustomerInformation(organisationName: Option[String],
                                correspondencePrimaryPhoneNumber: Option[String],
                                correspondenceMobileNumber: Option[String],
                                correspondenceEmailAddress: Option[String],
-                               isHybridUser: Boolean
+                               isHybridUser: Boolean,
+                               customerMigratedToETMPDate: Option[String]
                               ) {
   def entityName: Option[String] = {
     (firstName, lastName, tradingName, organisationName) match {
@@ -49,7 +50,8 @@ object CustomerInformation {
                                          firstName: Option[String],
                                          lastName: Option[String],
                                          tradingName: Option[String],
-                                         isPartialMigration: Option[Boolean]): CustomerInformation = {
+                                         isPartialMigration: Option[Boolean],
+                                         customerMigratedToETMPDate: Option[String]): CustomerInformation = {
 
     val dummyAddress = Address("", "", None, None, None)
     CustomerInformation(
@@ -65,7 +67,8 @@ object CustomerInformation {
       correspondencePrimaryPhoneNumber = None,
       correspondenceMobileNumber = None,
       correspondenceEmailAddress = None,
-      isHybridUser = isPartialMigration.contains(true)
+      isHybridUser = isPartialMigration.contains(true),
+      customerMigratedToETMPDate = customerMigratedToETMPDate
     )
   }
 
@@ -74,6 +77,7 @@ object CustomerInformation {
       (JsPath \ "firstName").readNullable[String] and
       (JsPath \ "lastName").readNullable[String] and
       (JsPath \ "tradingName").readNullable[String] and
-      (JsPath \ "isPartialMigration").readNullable[Boolean]
+      (JsPath \ "isPartialMigration").readNullable[Boolean] and
+      (JsPath \ "customerMigratedToETMPDate").readNullable[String]
     ) (createCustomerWithNameOnly _)
 }

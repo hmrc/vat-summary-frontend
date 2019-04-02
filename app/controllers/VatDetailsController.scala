@@ -32,6 +32,7 @@ import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import common.FinancialTransactionsConstants.nonMTDfB
+import utils.CustomerInfoDataRetriever.retrieveCustomerMigratedToETMPDate
 
 import scala.concurrent.Future
 
@@ -60,8 +61,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         mandationStatus <- if(appConfig.features.submitReturnFeatures()) {
           mandationStatusService.getMandationStatus(user.vrn) } else { Future.successful(Right(MandationStatus("Disabled"))) }
       } yield {
+        val migratedDate = retrieveCustomerMigratedToETMPDate(customerInfo)
         auditEvents(user, nextReturn, nextPayment)
         Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus)))
+          .addingToSession("customerMigratedToETMPDate" -> migratedDate.getOrElse("").toString)
       }
   }
 

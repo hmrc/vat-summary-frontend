@@ -19,7 +19,6 @@
 @import views.html.templates.formatters.money._
 @import views.html.templates.payments._
 @import models.viewModels.PaymentsHistoryViewModel
-@import java.time.LocalDate
 
 @(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
@@ -31,46 +30,48 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("paymentsHistory.title")
   )
-  
+
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
         <ul class="tabs-nav">
-            @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
+            @paymentsHistoryTabs(model.displayedYears, model.selectedYear, model.customerMigratedToETMPDateWithin15M, model.userVrn, model.hasHmrcVatDecOrg)
         </ul>
 
         <h2>@model.selectedYear.toString</h2>
 
-      @if(model.transactions.nonEmpty){
-        <table>
-            <thead>
-            <tr>
-              <th scope="col"> 
-                <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
-              </th>
+        @if(model.transactions.nonEmpty){
 
-	            <th scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
-              </th>
+            <table>
+                <thead>
+                <tr>
+                  <th scope="col">
+                    <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
+                  </th>
 
-      	      <th class="numeric" scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
-              </th>
+                    <th scope="col">
+                    <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
+                  </th>
 
-            </tr>
-            </thead>
-            <tbody>
-            @for(transaction <- model.transactions) {
-                @views.html.templates.payments.paymentsHistoryCharge(transaction)
-            }
-            </tbody>
+                  <th class="numeric" scope="col">
+                    <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
+                  </th>
 
-        </table>
+                </tr>
+                </thead>
+                <tbody>
+                @for(transaction <- model.transactions) {
+                    @views.html.templates.payments.paymentsHistoryCharge(transaction)
+                }
+                </tbody>
+
+            </table>
 
       } else {
+
         <p class="lede">
-          @if(model.selectedYear == model.displayedYears.head) {
+          @if(model.displayedYears.nonEmpty && model.selectedYear == model.displayedYears.head) {
               @messages("paymentsHistory.noCurrentYearHistory")
           } else {
               @messages("paymentsHistory.noPreviousYearHistory")

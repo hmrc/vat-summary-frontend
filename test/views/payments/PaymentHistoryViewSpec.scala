@@ -19,6 +19,7 @@ package views.payments
 import java.time.LocalDate
 
 import common.MessageLookup.PaymentMessages
+import config.AppConfig
 import models.payments._
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
@@ -27,6 +28,8 @@ import views.ViewBaseSpec
 import views.templates.payments.PaymentMessageHelper
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
+
+  val appConfig = app.injector.instanceOf[AppConfig]
 
   object Selectors {
     val pageHeading = "h1"
@@ -38,8 +41,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val paymentHistoryBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
     val tabOne = ".tabs-nav li:nth-of-type(1)"
     val tabTwo = ".tabs-nav li:nth-of-type(2)"
+    val tabPreviousPayments = ".tabs-nav li:nth-of-type(3)"
     val tabOneHiddenText = ".tabs-nav li:nth-of-type(1) span"
     val tabTwoHiddenText = ".tabs-nav li:nth-of-type(2) span"
+    val tabPreviousPaymentsHiddenText = ".tabs-nav li:nth-of-type(3) span"
     val tabHeading = "h2"
     val paymentDateTableHeading = "tr th:nth-of-type(1) div"
     val descriptionTableHeading = "tr th:nth-of-type(2) div"
@@ -72,6 +77,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val currentYear = 2018
     val previousYear = 2017
     val historyYears = Seq(currentYear, previousYear)
+    val vrn = "999999999"
 
     "there are multiple payment histories to display" should {
 
@@ -91,7 +97,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
             amount = 987654321,
             clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-          ))
+          )),
+        hasHmrcVatDecOrg = true,
+        userVrn = vrn,
+        customerMigratedToETMPDateWithin15M = true
       )
 
       lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
@@ -158,6 +167,22 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
       }
 
+      "have a Previous payments tab if the customer is migrated to ETMP within 15 months " +
+        "and the customer has the HMCE-VATDEC-ORG enrolment. The tab" should {
+
+        "have the correct text" in {
+          elementText(Selectors.tabPreviousPayments) should startWith("Previous payments")
+        }
+
+        "contain visually hidden text" in {
+          elementText(Selectors.tabPreviousPaymentsHiddenText) shouldBe "View previous payments"
+        }
+
+        "contain a link to the portal payments page" in {
+          element(Selectors.tabPreviousPayments).select("a").attr("href") shouldBe "/paymentHistoryNonHybridPortal"
+        }
+
+      }
 
       "have the correct tab heading" in {
         elementText(Selectors.tabHeading) shouldBe "2018"
@@ -210,7 +235,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
           historyYears,
           previousYear,
-          Seq.empty
+          Seq.empty,
+          hasHmrcVatDecOrg = true,
+          "999999999",
+          customerMigratedToETMPDateWithin15M = true
         )
 
         lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
@@ -260,7 +288,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
           historyYears,
           currentYear,
-          Seq.empty
+          Seq.empty,
+          hasHmrcVatDecOrg = true,
+          "999999999",
+          customerMigratedToETMPDateWithin15M = true
         )
 
         lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
@@ -325,7 +356,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
               taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
               amount = 500.00,
               clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-            ))
+            )),
+          hasHmrcVatDecOrg = true,
+          "999999999",
+          customerMigratedToETMPDateWithin15M = true
         ),
           ChargeType.apply(historyChargeHelper.name).value,
           PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,

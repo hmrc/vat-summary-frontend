@@ -42,7 +42,8 @@ class CustomerInformationSpec extends UnitSpec {
       None,
       None,
       None,
-      isHybridUser
+      isHybridUser,
+      None
     )
   }
 

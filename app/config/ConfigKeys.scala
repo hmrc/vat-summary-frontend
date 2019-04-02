@@ -88,4 +88,5 @@ object ConfigKeys {
   val portalPrefix: String = "portal.urlPrefix"
   val portalMakePaymentPostfix: String = "portal.makePaymentUrl"
   val portalPaymentHistoryPostfix: String = "portal.paymentHistoryUrl"
+  val nonHybridPaymentHistoryUrl: String = "portal.nonHybridPaymentHistoryUrl"
 }

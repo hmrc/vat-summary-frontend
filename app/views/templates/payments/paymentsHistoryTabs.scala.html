@@ -16,7 +16,7 @@
 
 @import views.html.templates.formatters.tabs._
 
-@(years: Seq[Int], selectedYear: Int)(implicit messages: Messages)
+@(years: Seq[Int], selectedYear: Int, customerMigratedToETMPDateWithin15M: Boolean, userVrn: String, hasHmrcVatDecOrg: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @for(yearToDisplay <- years) {
   @if(yearToDisplay == selectedYear) {
@@ -28,4 +28,12 @@
       controllers.routes.PaymentHistoryController.paymentHistory(yearToDisplay).url
     )
   }
+}
+
+@if(customerMigratedToETMPDateWithin15M && hasHmrcVatDecOrg){
+    @inactiveTab(
+    messages("paymentsHistory.previousPaymentsTab"),
+    messages("paymentsHistory.previousPaymentsTabHiddenText"),
+    appConfig.portalNonHybridPaymentHistoryUrl(userVrn)
+    )
 }

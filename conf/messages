@@ -116,6 +116,8 @@ paymentsHistory.activeTab = Currently viewing payment history from {0}
 paymentsHistory.inactiveTab = View payment history from {0}
 paymentsHistory.noPreviousYearHistory = You did not make or receive any payments this year.
 paymentsHistory.noCurrentYearHistory = You have not yet made or received any payments this year.
+paymentsHistory.previousPaymentsTab = Previous payments
+paymentsHistory.previousPaymentsTabHiddenText = View previous payments
 
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Repayment from HMRC
