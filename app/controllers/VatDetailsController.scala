@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import config.AppConfig
@@ -60,8 +62,13 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         mandationStatus <- if(appConfig.features.submitReturnFeatures()) {
           mandationStatusService.getMandationStatus(user.vrn) } else { Future.successful(Right(MandationStatus("Disabled"))) }
       } yield {
+        val migratedDate = customerInfo match {
+          case Right(details) => details.customerMigratedToETMPDate.map(LocalDate.parse)
+          case Left(_) => None
+        }
         auditEvents(user, nextReturn, nextPayment)
         Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus)))
+          .addingToSession("customerMigratedToETMPDate" -> migratedDate.getOrElse("").toString)
       }
   }
 

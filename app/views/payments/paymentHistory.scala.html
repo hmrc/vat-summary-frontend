@@ -19,9 +19,8 @@
 @import views.html.templates.formatters.money._
 @import views.html.templates.payments._
 @import models.viewModels.PaymentsHistoryViewModel
-@import java.time.LocalDate
 
-@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
+@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User, lang: Lang)
 
 @views.html.main_template(title = messages("paymentsHistory.title"), bodyClasses = None, appConfig = appConfig) {
 
@@ -31,53 +30,89 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("paymentsHistory.title")
   )
-  
+
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-        <ul class="tabs-nav">
-            @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
-        </ul>
+      @(model.displayedYears.length, user.hasNonMtdVat, model.migratedToETMPWithin15M) match {
 
+        case (_, true, true) => {
+          <ul class="tabs-nav">
+            @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
+            @if(!model.displayedYears.contains(model.selectedYear)) {
+              @activeTab(
+                messages("paymentsHistory.previousPayments.heading"),
+                messages("paymentsHistory.previousPayments.tabHiddenText")
+              )
+            } else {
+              @inactiveTab(
+                messages("paymentsHistory.previousPayments.heading"),
+                messages("paymentsHistory.previousPayments.tabHiddenText"),
+                controllers.routes.PaymentHistoryController.paymentHistory(model.displayedYears.last - 1).url
+              )
+            }
+          </ul>
+        }
+
+        case (2 | 3, _, _) => {
+          <ul class="tabs-nav">
+            @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
+          </ul>
+        }
+
+        case (_, _, _) => { }
+      }
+
+      @if(user.hasNonMtdVat && !model.displayedYears.contains(model.selectedYear) && model.migratedToETMPWithin15M) {
+        <h2>@messages("paymentsHistory.previousPayments.heading")</h2>
+        <p>
+          @messages("paymentsHistory.previousPayments.youCan")
+          <a target="_blank" href="@appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)">
+            @messages("paymentsHistory.previousPayments.viewPreviousPayments")
+          </a>
+          @messages("paymentsHistory.previousPayments.beforeMtd")
+        </p>
+      } else {
         <h2>@model.selectedYear.toString</h2>
 
-      @if(model.transactions.nonEmpty){
-        <table>
+        @if(model.transactions.nonEmpty){
+
+          <table>
             <thead>
-            <tr>
-              <th scope="col"> 
-                <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
-              </th>
+              <tr>
+                <th scope="col">
+                  <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
+                </th>
 
-	            <th scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
-              </th>
+                  <th scope="col">
+                  <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
+                </th>
 
-      	      <th class="numeric" scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
-              </th>
+                <th class="numeric" scope="col">
+                  <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
+                </th>
 
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            @for(transaction <- model.transactions) {
+              @for(transaction <- model.transactions) {
                 @views.html.templates.payments.paymentsHistoryCharge(transaction)
-            }
+              }
             </tbody>
+          </table>
 
-        </table>
+        } else {
 
-      } else {
-        <p class="lede">
-          @if(model.selectedYear == model.displayedYears.head) {
+          <p class="lede">
+            @if(model.displayedYears.nonEmpty && model.selectedYear == model.displayedYears.head) {
               @messages("paymentsHistory.noCurrentYearHistory")
-          } else {
+            } else {
               @messages("paymentsHistory.noPreviousYearHistory")
-          }
-        </p>
+            }
+          </p>
+        }
       }
     </div>
   </div>
-
 }

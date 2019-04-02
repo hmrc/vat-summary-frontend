@@ -18,4 +18,5 @@ package models.viewModels
 
 case class PaymentsHistoryViewModel(displayedYears: Seq[Int],
                                     selectedYear: Int,
-                                    transactions: Seq[PaymentsHistoryModel])
+                                    transactions: Seq[PaymentsHistoryModel],
+                                    migratedToETMPWithin15M: Boolean)

@@ -68,7 +68,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val makePayment = "#vatPaymentsLink"
   }
 
-  private val user = User("1111")
   val noPayment = Seq()
   val payments = Seq(
     OpenPaymentsModelWithPeriod(

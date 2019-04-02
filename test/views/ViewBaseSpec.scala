@@ -17,8 +17,10 @@
 package views
 
 import mocks.MockAppConfig
+import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import org.scalatest.Assertion
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
@@ -32,6 +34,8 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite {
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy implicit val user: User = User("123456789")
+  lazy val vatDecUser = User("123456789", hasNonMtdVat = true)
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
@@ -53,6 +57,16 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite {
   def elementAttributes(cssSelector: String)(implicit document: Document): Map[String, String] = {
     val attributes = element(cssSelector).attributes.asList().asScala.toList
     attributes.map(attribute => (attribute.getKey, attribute.getValue)).toMap
+  }
+
+  def elementExtinct(cssSelector: String)(implicit document: Document): Assertion = {
+    val elements = document.select(cssSelector)
+
+    if (elements.size == 0) {
+      succeed
+    } else {
+      fail(s"Element with selector '$cssSelector' was found!")
+    }
   }
 
   def formatHtml(markup: String): String = Jsoup.parseBodyFragment(s"\n$markup\n").toString.trim

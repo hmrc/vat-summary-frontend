@@ -54,6 +54,7 @@ object CustomerInfoStub extends WireMockMethods {
       |  "effectiveRegistrationDate" : "2017-08-21",
       |  "businessStartDate" : "2017-01-01",
       |  "isPartialMigration" : false,
+      |  "customerMigratedToETMPDate" : "2019-01-01",
       |  "PPOB":{
       |    "address":{
       |      "line1":"Bedrock Quarry",
@@ -98,6 +99,7 @@ object CustomerInfoStub extends WireMockMethods {
       |  "effectiveRegistrationDate" : "2017-08-21",
       |  "businessStartDate" : "2017-01-01",
       |  "isPartialMigration" : true,
+      |  "customerMigratedToETMPDate" : "2019-01-01",
       |  "PPOB":{
       |    "address":{
       |      "line1":"Bedrock Quarry",

@@ -56,7 +56,8 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           None,
           None,
           None,
-          isHybridUser = false
+          isHybridUser = false,
+          Some("2019-01-01")
         )
       )
 

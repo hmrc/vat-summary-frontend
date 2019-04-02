@@ -16,9 +16,6 @@
 
 package views.vatDetails
 
-import java.time.LocalDate
-
-import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -48,7 +45,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   val currentYear: Int = 2018
-  implicit val user: User = User("123456789")
   val detailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),

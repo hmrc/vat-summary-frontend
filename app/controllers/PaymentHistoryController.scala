@@ -19,14 +19,14 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewVatPaymentHistoryAuditModel
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
 import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
+import java.time.{LocalDate, Period}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{DateService, EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -38,32 +38,54 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
                                          authorisedController: AuthorisedController,
                                          dateService: DateService,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
+                                         val accountDetailsService: AccountDetailsService,
                                          implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
   extends FrontendController with I18nSupport {
 
-  def paymentHistory(year: Int): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
-    implicit user =>
-      if (isValidSearchYear(year)) {
-        getFinancialTransactions(user, year).map {
-          case Right(model) =>
-            auditEvent(user.vrn, model.transactions, year)
-            Ok(views.html.payments.paymentHistory(model))
-          case Left(error) =>
-            Logger.warn("[PaymentHistoryController][paymentHistory] error: " + error.toString)
-            InternalServerError(views.html.errors.standardError(appConfig,
-              messagesApi.apply("standardError.title"),
-              messagesApi.apply("standardError.heading"),
-              messagesApi.apply("standardError.message"))
-            )
+  def paymentHistory(year: Int): Action[AnyContent] = authorisedController.authorisedMigratedUserAction {
+    implicit request =>
+      implicit user =>
+
+        val customerMigratedToETMPDate: Future[Option[LocalDate]] =
+          request.session.get("customerMigratedToETMPDate") match {
+            case Some(date) if date.nonEmpty => Future.successful(Some(LocalDate.parse(date)))
+            case Some(_) => Future.successful(None)
+            case None => accountDetailsService.getAccountDetails(user.vrn) map {
+              case Right(details) => details.customerMigratedToETMPDate.map(LocalDate.parse)
+              case Left(_) => None
+            }
+          }
+
+        customerMigratedToETMPDate flatMap { customerMigratedDate =>
+          val migratedWithin15M = customerMigratedDate.fold(false)(customerMigratedWithin15M)
+          if (isValidSearchYear(year, migratedWithin15M = migratedWithin15M)) {
+            getFinancialTransactions(user, year, migratedWithin15M).map {
+              case Right(model) =>
+                auditEvent(user.vrn, model.transactions, year)
+                Ok(views.html.payments.paymentHistory(model))
+                  .addingToSession("customerMigratedToETMPDate" -> customerMigratedDate.getOrElse("").toString)
+              case Left(error) =>
+                Logger.warn("[PaymentHistoryController][paymentHistory] error: " + error.toString)
+                InternalServerError(views.html.errors.standardError(appConfig,
+                  messagesApi.apply("standardError.title"),
+                  messagesApi.apply("standardError.heading"),
+                  messagesApi.apply("standardError.message"))
+                )
+            }
+          } else {
+            Future.successful(NotFound(views.html.errors.notFound()))
+          }
         }
-      } else {
-        Future.successful(NotFound(views.html.errors.notFound()))
-      }
   }
 
+  private[controllers] def customerMigratedWithin15M(date: LocalDate): Boolean = {
+    val prevPaymentsMonthLimit = 14
+    val monthsSinceMigration = Math.abs(Period.between(dateService.now(), date).toTotalMonths)
+    0 to prevPaymentsMonthLimit contains monthsSinceMigration
+  }
 
-  private[controllers] def getFinancialTransactions(user: User, selectedYear: Int)
+  private[controllers] def getFinancialTransactions(user: User, selectedYear: Int, migratedWithin15M: Boolean)
                                                    (implicit hc: HeaderCarrier): Future[ServiceResponse[PaymentsHistoryViewModel]] = {
     val currentYear = dateService.now().getYear
     val potentialYears = List(currentYear, currentYear - 1)
@@ -74,25 +96,34 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
 
     def getYearsWithData = Future.sequence(potentialYears map getPaymentHistory) map (_.toMap)
 
-    getYearsWithData map { map =>
-      map(selectedYear).right map { transactions =>
-        PaymentsHistoryViewModel(
-          displayedYears = map.collect { case (year, data) if data.isRight => year }.toSeq,
+    getYearsWithData map { yearAndPayments =>
+      yearAndPayments.get(selectedYear) match {
+        case Some(result) => result.right.map { transactions =>
+          PaymentsHistoryViewModel(
+            displayedYears = yearAndPayments.collect { case (year, data) if data.isRight && data.right.get.nonEmpty => year }.toSeq,
+            selectedYear = selectedYear,
+            transactions = transactions,
+            migratedToETMPWithin15M = migratedWithin15M
+          )
+        }
+        case None => Right(PaymentsHistoryViewModel(
+          displayedYears = yearAndPayments.collect { case (year, data) if data.isRight && data.right.get.nonEmpty => year }.toSeq,
           selectedYear = selectedYear,
-          transactions = transactions
-        )
+          transactions = Seq.empty,
+          migratedToETMPWithin15M = migratedWithin15M
+        ))
       }
     }
   }
 
-  private[controllers] def isValidSearchYear(year: Int, upperBound: Int = dateService.now().getYear) = {
-    year <= upperBound && year >= upperBound - 1
+  private[controllers] def isValidSearchYear(year: Int,
+                                             upperBound: Int = dateService.now().getYear,
+                                             migratedWithin15M: Boolean)(implicit user: User) = {
+    val lowerBound = if(migratedWithin15M && user.hasNonMtdVat) 2 else 1
+    year <= upperBound && year >= upperBound - lowerBound
   }
 
-  private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel], year: Int)(implicit hc: HeaderCarrier): Unit = {
+  private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel], year: Int)(implicit hc: HeaderCarrier): Unit =
     auditingService.extendedAudit(ViewVatPaymentHistoryAuditModel(vrn, payments),
-      routes.PaymentHistoryController.paymentHistory(year = year).url)
-  }
-
+      routes.PaymentHistoryController.paymentHistory(year).url)
 }
-

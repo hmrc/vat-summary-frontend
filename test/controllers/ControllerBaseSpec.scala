@@ -20,6 +20,7 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import config.AppConfig
 import mocks.MockAppConfig
+import models.User
 import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.MessagesApi
@@ -41,6 +42,11 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   implicit val materializer: Materializer = ActorMaterializer()
 
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy implicit val user: User = User("123456789")
+  val vatDecUser: User = User("123456789", hasNonMtdVat = true)
+
+  def fakeRequestWithCustomerMigratedDate(dateString: String): FakeRequest[AnyContentAsEmpty.type] =
+    fakeRequest.withSession("customerMigratedToETMPDate" -> dateString)
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
     SessionKeys.lastRequestTimestamp -> "1498236506662", SessionKeys.authToken -> "Bearer Token")

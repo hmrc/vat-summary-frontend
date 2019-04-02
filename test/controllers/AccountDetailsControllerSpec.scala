@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
-  val exampleCunstomerInfo = CustomerInformation(
+  val exampleCustomerInfo = CustomerInformation(
     None,
     Some("Betty"),
     Some("Jones"),
@@ -58,7 +58,8 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     Some("01632 960026"),
     Some("07700 900018"),
     Some("bettylucknexttime@gmail.com"),
-    isHybridUser = true
+    isHybridUser = true,
+    Some("2019-01-01")
   )
 
   private trait AccountDetailsTest {
@@ -79,7 +80,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
       if(runMocks) {
         (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(Right(exampleCunstomerInfo))
+          .returns(Right(exampleCustomerInfo))
       }
     }
 
@@ -177,7 +178,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     "the AccountDetailsService retrieves a valid AccountDetailsModel" should {
 
       "return the AccountDetailsModel" in new HandleAccountDetailsModelTest {
-        override val connectorReturn = Right(exampleCunstomerInfo)
+        override val connectorReturn = Right(exampleCustomerInfo)
 
         val exampleAccountDetailsModel: AccountDetailsModel = {
           AccountDetailsModel(

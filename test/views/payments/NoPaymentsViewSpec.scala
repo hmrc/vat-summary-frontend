@@ -16,7 +16,6 @@
 
 package views.payments
 
-import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -38,8 +37,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
   }
-
-  private val user = User("123456789")
 
   "Rendering the no payments page" when {
 

@@ -80,7 +80,8 @@ object TestModels {
     None,
     None,
     None,
-    isHybridUser = false
+    isHybridUser = false,
+    Some("2019-01-01")
   )
 
   val customerInformationHybrid: CustomerInformation = CustomerInformation(
@@ -96,7 +97,8 @@ object TestModels {
     None,
     None,
     None,
-    isHybridUser = true
+    isHybridUser = true,
+    None
   )
 
   val customerInformationNoEntityName: CustomerInformation = CustomerInformation(
@@ -112,7 +114,8 @@ object TestModels {
     None,
     None,
     None,
-    isHybridUser = false
+    isHybridUser = false,
+    Some("2019-01-01")
   )
 
   val successfulAuthResult: Future[Enrolments] = Future.successful(Enrolments(Set(
