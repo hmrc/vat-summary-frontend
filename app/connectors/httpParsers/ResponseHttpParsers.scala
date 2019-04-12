@@ -18,11 +18,11 @@ package connectors.httpParsers
 
 import models.errors._
 import play.api.http.Status
-import play.api.libs.json.{JsValue, Json, Reads}
+import play.api.libs.json.{JsValue, Json}
 
 trait ResponseHttpParsers {
 
-  protected def handleBadRequest(json: JsValue)(implicit reads: Reads[ApiSingleError]): Left[HttpError, Nothing] = {
+  protected def handleBadRequest(json: JsValue): Left[HttpError, Nothing] = {
     val errorResponse: Option[ApiError] = json.asOpt[ApiMultiError]
       .orElse(json.asOpt[ApiMultiErrorFinancial])
       .orElse(json.asOpt[ApiSingleError])

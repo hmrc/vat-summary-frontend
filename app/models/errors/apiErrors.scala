@@ -24,17 +24,19 @@ sealed trait ApiError
 case class ApiSingleError(code: String, message: String) extends ApiError
 
 object ApiSingleError {
+
   implicit val apiSingleErrorWrites: Writes[ApiSingleError] = Json.writes[ApiSingleError]
 
   implicit val apiSingleErrorReads: Reads[ApiSingleError] = (
-    (JsPath \ "code").read[String] and
-      (JsPath \ "message").read[String]
-    ) (ApiSingleError.apply _)
-
-  implicit val apiSingleErrorFinancialReads: Reads[ApiSingleError] = (
-    (JsPath \ "code").read[String] and
+    (
+      (JsPath \ "code").read[String] or
+      (JsPath \ "status").read[String]
+    ) and (
+      (JsPath \ "body").read[String] or
+      (JsPath \ "message").read[String] or
       (JsPath \ "reason").read[String]
-    ) (ApiSingleError.apply _)
+    )
+  )(ApiSingleError.apply _)
 }
 
 case class ApiMultiError(code: String, message: String, errors: Seq[ApiSingleError]) extends ApiError
@@ -45,7 +47,7 @@ object ApiMultiError {
   implicit val apiMultiErrorReads: Reads[ApiMultiError] = (
     (JsPath \ "code").read[String] and
       (JsPath \ "message").read[String] and
-      (JsPath \ "errors").read(Reads.seq[ApiSingleError](ApiSingleError.apiSingleErrorReads))
+      (JsPath \ "errors").read(Reads.seq[ApiSingleError])
     ) (ApiMultiError.apply _)
 }
 
@@ -55,6 +57,6 @@ object ApiMultiErrorFinancial {
   implicit val apiMultiErrorFinancialWrites: Writes[ApiMultiErrorFinancial] = Json.writes[ApiMultiErrorFinancial]
 
   implicit val apiMultiErrorFinancialReads: Reads[ApiMultiErrorFinancial] =
-    (JsPath \ "failures").read(Reads.seq[ApiSingleError](ApiSingleError.apiSingleErrorFinancialReads))
+    (JsPath \ "failures").read(Reads.seq[ApiSingleError])
       .map(ApiMultiErrorFinancial.apply)
 }

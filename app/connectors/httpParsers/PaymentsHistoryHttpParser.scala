@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
+import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
@@ -32,7 +32,7 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
         case OK => Right(removeNonVatReturnCharges(response.json).as[Seq[PaymentsHistoryModel]])
         case NOT_FOUND =>
           Right(Seq.empty[PaymentsHistoryModel])
-        case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorFinancialReads)
+        case BAD_REQUEST => handleBadRequest(response.json)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
         case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
       }
