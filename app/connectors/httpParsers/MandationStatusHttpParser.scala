@@ -18,7 +18,7 @@ package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.MandationStatus
-import models.errors.{ApiSingleError, ServerSideError, UnexpectedStatusError}
+import models.errors.{ServerSideError, UnexpectedStatusError}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import play.api.http.Status._
 
@@ -28,7 +28,7 @@ object MandationStatusHttpParser extends ResponseHttpParsers {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[MandationStatus] = {
       response.status match {
         case OK => Right(response.json.as[MandationStatus])
-        case BAD_REQUEST => handleBadRequest(response.json)(ApiSingleError.apiSingleErrorReads)
+        case BAD_REQUEST => handleBadRequest(response.json)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
         case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
       }
