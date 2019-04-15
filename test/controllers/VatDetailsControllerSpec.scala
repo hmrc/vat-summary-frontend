@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.AuditModel
-import common.TestModels
+import common.{SessionKeys, TestModels}
 import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
@@ -113,7 +113,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   "Calling the details action" when {
 
-    "the user is logged in" should {
+    "the user is logged in and does not have a customerMigratedToETMPDate in session" should {
 
       "return 200" in new DetailsTest {
         private val result = target.details()(fakeRequest)
@@ -128,6 +128,34 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return charset utf-8" in new DetailsTest {
         private val result = target.details()(fakeRequest)
         charset(result) shouldBe Some("utf-8")
+      }
+
+      "put a customerMigratedToETMPDate key into the session" in new DetailsTest {
+        private val result = target.details()(fakeRequest)
+        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("")
+      }
+    }
+
+    "the user is logged in and has a customerMigratedToETMPDate in session" should {
+
+      "return 200" in new DetailsTest {
+        private val result = target.details()(fakeRequestWithSession)
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new DetailsTest {
+        private val result = target.details()(fakeRequestWithSession)
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset utf-8" in new DetailsTest {
+        private val result = target.details()(fakeRequestWithSession)
+        charset(result) shouldBe Some("utf-8")
+      }
+
+      "not overwrite the customerMigratedToETMPDate value in the session" in new DetailsTest {
+        private val result = target.details()(fakeRequestWithSession)
+        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2018-01-01")
       }
     }
 

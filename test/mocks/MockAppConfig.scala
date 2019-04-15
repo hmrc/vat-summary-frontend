@@ -74,6 +74,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val selfLookup: String = ""
   override val portalMakePaymentUrl: String => String = (vrn: String) => "/whatYouOwePortal"
   override val portalPaymentHistoryUrl: String => String = (vrn: String) => "/paymentHistoryPortal"
+  override val portalNonHybridPreviousPaymentsUrl: String => String = (vrn: String) => "/previousPaymentsPortal"
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
