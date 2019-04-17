@@ -1,10 +1,12 @@
 # microservice specific routes
 
-GET        /vat-overview                controllers.VatDetailsController.details
-GET        /what-you-owe                controllers.OpenPaymentsController.openPayments
-GET        /account/details             controllers.AccountDetailsController.accountDetails
-GET        /direct-debit                controllers.DirectDebitController.directDebits(status: Option[Boolean])
-GET        /payment-history/:year       controllers.PaymentHistoryController.paymentHistory(year: Int)
+GET        /vat-overview                        controllers.VatDetailsController.details
+GET        /what-you-owe                        controllers.OpenPaymentsController.openPayments
+GET        /account/details                     controllers.AccountDetailsController.accountDetails
+GET        /direct-debit                        controllers.DirectDebitController.directDebits(status: Option[Boolean])
+GET        /payment-history/previous-payments   controllers.PaymentHistoryController.previousPayments()
+GET        /payment-history/:year               controllers.PaymentHistoryController.paymentHistory(year: Int)
+
 GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
 GET        /make-payment/:amountInPence/:chargeType/:dueDate controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)
 
