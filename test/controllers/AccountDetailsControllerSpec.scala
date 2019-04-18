@@ -16,6 +16,7 @@
 
 package controllers
 
+import common.TestModels.customerInformationHybrid
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.HybridUserPredicate
@@ -35,32 +36,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
-  val exampleCunstomerInfo = CustomerInformation(
-    None,
-    Some("Betty"),
-    Some("Jones"),
-    None,
-    Address("Bedrock Quarry",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV2 4BB")
-    ),
-    Some("01632 982028"),
-    Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com"),
-    Address("13 Pebble Lane",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV13 4BJ")
-    ),
-    Some("01632 960026"),
-    Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com"),
-    isHybridUser = true
-  )
-
   private trait AccountDetailsTest {
     val runMocks = true
     val authResult: Future[_] =
@@ -79,7 +54,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
       if(runMocks) {
         (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(Right(exampleCunstomerInfo))
+          .returns(Right(customerInformationHybrid))
       }
     }
 
@@ -177,7 +152,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     "the AccountDetailsService retrieves a valid AccountDetailsModel" should {
 
       "return the AccountDetailsModel" in new HandleAccountDetailsModelTest {
-        override val connectorReturn = Right(exampleCunstomerInfo)
+        override val connectorReturn = Right(customerInformationHybrid)
 
         val exampleAccountDetailsModel: AccountDetailsModel = {
           AccountDetailsModel(

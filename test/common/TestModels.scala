@@ -80,23 +80,35 @@ object TestModels {
     None,
     None,
     None,
-    isHybridUser = false
+    isHybridUser = false,
+    None
   )
 
   val customerInformationHybrid: CustomerInformation = CustomerInformation(
-    Some("Cheapo Clothing Ltd"),
+    None,
     Some("Betty"),
     Some("Jones"),
-    Some(entityName),
-    address,
     None,
-    None,
-    None,
-    address,
-    None,
-    None,
-    None,
-    isHybridUser = true
+    Address("Bedrock Quarry",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV2 4BB")
+    ),
+    Some("01632 982028"),
+    Some("07700 900018"),
+    Some("bettylucknexttime@gmail.com"),
+    Address("13 Pebble Lane",
+      "Bedrock",
+      Some("Graveldon"),
+      Some("Graveldon"),
+      Some("GV13 4BJ")
+    ),
+    Some("01632 960026"),
+    Some("07700 900018"),
+    Some("bettylucknexttime@gmail.com"),
+    isHybridUser = true,
+    None
   )
 
   val customerInformationNoEntityName: CustomerInformation = CustomerInformation(
@@ -112,7 +124,8 @@ object TestModels {
     None,
     None,
     None,
-    isHybridUser = false
+    isHybridUser = false,
+    None
   )
 
   val successfulAuthResult: Future[Enrolments] = Future.successful(Enrolments(Set(

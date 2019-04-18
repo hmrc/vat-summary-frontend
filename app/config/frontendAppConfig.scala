@@ -78,6 +78,7 @@ trait AppConfig extends ServicesConfig {
   val directDebitRedirectUrl: String
   val portalMakePaymentUrl: String => String
   val portalPaymentHistoryUrl: String => String
+  val portalNonHybridPreviousPaymentsUrl: String => String
   def languageMap:Map[String,Lang]
   val routeToSwitchLanguage :String => Call
 }
@@ -181,6 +182,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override val portalPaymentHistoryUrl: String => String = (vrn: String) => {
     s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPaymentHistoryPostfix)}"
+  }
+
+  override val portalNonHybridPreviousPaymentsUrl: String => String = (vrn: String) => {
+    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.nonHybridPreviousPaymentsUrl)}"
   }
 
   override def languageMap: Map[String, Lang] = Map(

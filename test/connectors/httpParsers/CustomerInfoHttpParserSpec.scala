@@ -16,9 +16,9 @@
 
 package connectors.httpParsers
 
+import common.TestModels.customerInformation
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 import models.errors._
-import models.{Address, CustomerInformation}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -38,7 +38,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
             "firstName" -> "Betty",
             "lastName" -> "Jones",
             "tradingName" -> "Cheapo Clothing",
-            "isPartialMigration" -> true,
+            "isPartialMigration" -> false,
             "PPOB" -> Json.obj(
               "address" -> Json.obj(
                 "line1" -> "Bedrock Quarry",
@@ -71,25 +71,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
         )
       )
 
-      val dummyAddress = Address("", "", None, None, None)
-
-      val expected = Right(
-        CustomerInformation(
-          Some("Cheapo Clothing Ltd"),
-          Some("Betty"),
-          Some("Jones"),
-          Some("Cheapo Clothing"),
-          dummyAddress,
-          None,
-          None,
-          None,
-          dummyAddress,
-          None,
-          None,
-          None,
-          isHybridUser = true
-        )
-      )
+      val expected = Right(customerInformation)
 
       val result = CustomerInfoReads.read("", "", httpResponse)
 

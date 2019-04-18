@@ -18,6 +18,7 @@ package controllers
 
 import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
+import common.SessionKeys
 import config.AppConfig
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
@@ -28,7 +29,7 @@ import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
-import uk.gov.hmrc.http.SessionKeys
+import uk.gov.hmrc.http.{SessionKeys => GovUKSessionKeys}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
@@ -43,7 +44,10 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
-    SessionKeys.lastRequestTimestamp -> "1498236506662", SessionKeys.authToken -> "Bearer Token")
+    GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
+    GovUKSessionKeys.authToken -> "Bearer Token",
+    SessionKeys.migrationToETMP -> "2018-01-01"
+  )
 
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)

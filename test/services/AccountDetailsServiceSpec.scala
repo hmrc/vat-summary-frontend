@@ -54,7 +54,8 @@ class AccountDetailsServiceSpec extends UnitSpec with MockFactory with Matchers 
       Some("01632 960026"),
       Some("07700 900018"),
       Some("bettylucknexttime@gmail.com"),
-      isHybridUser = true
+      isHybridUser = true,
+      Some("2018-01-01")
     )
     val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInfo)
 
