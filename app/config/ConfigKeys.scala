@@ -75,8 +75,8 @@ object ConfigKeys {
 
   val governmentGatewayHost: String = "government-gateway.host"
 
-  val surveyHost: String = "feedback-survey-frontend.host"
-  val surveyUrl: String = "feedback-survey-frontend.url"
+  val surveyHost: String = "feedback-frontend.host"
+  val surveyUrl: String = "feedback-frontend.url"
 
   val mtdVatSignUpBaseUrl: String = "vat-sign-up-frontend.host"
   val mtdVatSignUpUrl: String = "vat-sign-up-frontend.signUpUrl"

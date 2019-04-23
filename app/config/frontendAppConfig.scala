@@ -162,7 +162,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val staticDateValue: String = getString(Keys.staticDateValue)
 
   private lazy val surveyBaseUrl = getString(Keys.surveyHost) + getString(Keys.surveyUrl)
-  override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
+  override lazy val surveyUrl = s"$surveyBaseUrl/$contactFormServiceIdentifier"
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
