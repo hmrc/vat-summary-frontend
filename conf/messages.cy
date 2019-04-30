@@ -142,6 +142,11 @@ paymentsHistory.activeTab = Yn edrych ar hyn o bryd ar hanes taliadau o {0}
 paymentsHistory.inactiveTab = Bwrw golwg dros hanes taliadau o {0}
 paymentsHistory.noPreviousYearHistory = Ni wnaethoch daliadau na chael unrhyw daliadau yn ystod y flwyddyn hon.
 paymentsHistory.noCurrentYearHistory = Nid ydych wedi gwneud taliadau na chael unrhyw daliadau hyd yma yn ystod y flwyddyn hon.
+paymentsHistory.previousPayments.heading = Taliadau blaenorol
+paymentsHistory.previousPayments.tabHiddenText = Tudalen taliadau blaenorol
+paymentsHistory.previousPayments.youCan = Gallwch
+paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol (yn agor tab newydd)
+paymentsHistory.previousPayments.beforeMTD = os gwnaethoch daliadau cyn ymuno â'r cynllun Troi Treth yn Ddigidol.
 
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
