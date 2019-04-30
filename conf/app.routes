@@ -12,11 +12,6 @@ GET        /make-payment/:amountInPence/:chargeType/:dueDate controllers.MakePay
 GET        /portal-what-you-owe         controllers.PortalController.hybridWYO
 GET        /portal-payment-history      controllers.PortalController.hybridPH
 
-#Feedback link Routes
-GET        /feedback                    controllers.feedback.FeedbackController.show
-POST       /feedback                    controllers.feedback.FeedbackController.submit
-GET        /thankyou                    controllers.feedback.FeedbackController.thankyou
-
 #Sign Out Routes
 GET        /sign-out                    controllers.SignOutController.signOut(authorised: Boolean)
 GET        /time-out                    controllers.SignOutController.timeout

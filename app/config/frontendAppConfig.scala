@@ -80,7 +80,9 @@ trait AppConfig extends ServicesConfig {
   val portalPaymentHistoryUrl: String => String
   val portalNonHybridPreviousPaymentsUrl: String => String
   def languageMap:Map[String,Lang]
-  val routeToSwitchLanguage :String => Call
+  val routeToSwitchLanguage: String => Call
+  val host: String
+  def feedbackUrl(redirect: String): String
 }
 
 @Singleton
@@ -194,5 +196,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   )
 
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
+
+  override val host: String = getString(Keys.host)
+
+  override def feedbackUrl(redirect: String): String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
+    s"&backUrl=${ContinueUrl(host + redirect).encodedUrl}"
 
 }
