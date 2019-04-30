@@ -239,6 +239,3 @@ banner.newService = Gwasanaeth newydd yw hwn – bydd eich
 banner.feedback = adborth
 banner.feedbackImprove = yn ein helpu i’w wella.
 banner.phaseName = BETA
-
-feedback.title = Adborth
-feedbackThanks.title = Diolch
