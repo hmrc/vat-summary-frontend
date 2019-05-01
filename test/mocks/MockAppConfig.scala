@@ -26,7 +26,6 @@ import play.api.mvc.Call
 import play.api.{Configuration, Mode}
 
 class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
-  override val host: String = "localhost"
   override def feedbackUrl(redirect: String): String = ""
   override val analyticsToken: String = ""
   override val analyticsHost: String = ""
