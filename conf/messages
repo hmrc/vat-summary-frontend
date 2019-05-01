@@ -214,6 +214,3 @@ banner.newService = This is a new service – your
 banner.feedback = feedback
 banner.feedbackImprove = will help us to improve it.
 banner.phaseName = BETA
-
-feedback.title = Feedback
-feedbackThanks.title = Thank you
