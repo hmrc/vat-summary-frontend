@@ -146,7 +146,7 @@ paymentsHistory.previousPayments.heading = Taliadau blaenorol
 paymentsHistory.previousPayments.tabHiddenText = Tudalen taliadau blaenorol
 paymentsHistory.previousPayments.youCan = Gallwch
 paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol (yn agor tab newydd)
-paymentsHistory.previousPayments.beforeMTD = os gwnaethoch daliadau cyn ymuno â'r cynllun Troi Treth yn Ddigidol.
+paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â'r cynllun Troi Treth yn Ddigidol.
 
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
