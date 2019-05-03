@@ -21,7 +21,7 @@
 @import models.viewModels.PaymentsHistoryViewModel
 @import java.time.LocalDate
 
-@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
+@(model: PaymentsHistoryViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang, user: User)
 
 @views.html.main_template(title = messages("paymentsHistory.title"), bodyClasses = None, appConfig = appConfig) {
 
@@ -36,48 +36,79 @@
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-        <ul class="tabs-nav">
-            @paymentsHistoryTabs(model.displayedYears, model.selectedYear)
-        </ul>
+      <ul class="tabs-nav">
+        @(model.tabOne, model.tabTwo) match {
+          case (Some(yearOne), Some(yearTwo)) => { @paymentsHistoryTabs(Seq(yearOne, yearTwo), model.selectedYear.getOrElse(0)) }
+          case (Some(yearOne), None) => { @paymentsHistoryTabs(Seq(yearOne), model.selectedYear.getOrElse(0)) }
+          case _ => { }
+        }
+        @model.previousPaymentsTab match {
+          case true if model.selectedYear.isEmpty => {
+            @activeTab(
+              messages("paymentsHistory.previousPayments.heading"),
+              messages("paymentsHistory.previousPayments.tabHiddenText")
+            )
+          }
+          case true => {
+            @inactiveTab(
+              messages("paymentsHistory.previousPayments.heading"),
+              messages("paymentsHistory.previousPayments.tabHiddenText"),
+              controllers.routes.PaymentHistoryController.previousPayments().url
+            )
+          }
+          case false => { }
+        }
+      </ul>
 
-        <h2>@model.selectedYear.toString</h2>
+      <h2>
+        @model.selectedYear match {
+          case Some(year) => { @year.toString }
+          case None => { @messages("paymentsHistory.previousPayments.heading") }
+        }
+      </h2>
 
-      @if(model.transactions.nonEmpty){
-        <table>
+      @(model.transactions.nonEmpty, model.selectedYear) match {
+
+        case (true, _) => {
+          <table>
             <thead>
             <tr>
-              <th scope="col"> 
+              <th scope="col">
                 <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
               </th>
 
-	            <th scope="col">
+              <th scope="col">
                 <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
               </th>
 
-      	      <th class="numeric" scope="col">
+              <th class="numeric" scope="col">
                 <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
               </th>
-
             </tr>
             </thead>
             <tbody>
-            @for(transaction <- model.transactions) {
+              @for(transaction <- model.transactions) {
                 @views.html.templates.payments.paymentsHistoryCharge(transaction)
-            }
+              }
             </tbody>
-
-        </table>
-
-      } else {
-        <p class="lede">
-          @if(model.selectedYear == model.displayedYears.head) {
-              @messages("paymentsHistory.noCurrentYearHistory")
-          } else {
-              @messages("paymentsHistory.noPreviousYearHistory")
-          }
-        </p>
+          </table>
+        }
+        case (false, Some(year)) if year == model.currentYear => {
+          <p class="lede">@messages("paymentsHistory.noCurrentYearHistory")</p>
+        }
+        case (false, Some(year)) => {
+          <p class="lede">@messages("paymentsHistory.noPreviousYearHistory")</p>
+        }
+        case (false, None) => {
+          <p>
+            @messages("paymentsHistory.previousPayments.youCan")
+            <a href="@appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)">
+              @messages("paymentsHistory.previousPayments.viewPreviousPayments")
+            </a>
+            @messages("paymentsHistory.previousPayments.beforeMtd")
+          </p>
+        }
       }
     </div>
   </div>
-
 }

@@ -109,7 +109,6 @@ standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 
 paymentsHistory.title = Payment history
-paymentsHistory.subheading = {0} Payments
 paymentsHistory.paymentReceivedTitle = Payment received
 paymentsHistory.descriptionTitle = Description
 paymentsHistory.amountTitle = Amount

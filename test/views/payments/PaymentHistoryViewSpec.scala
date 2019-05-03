@@ -18,13 +18,13 @@ package views.payments
 
 import java.time.LocalDate
 
-import common.MessageLookup.PaymentMessages
+import models.User
 import models.payments._
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.Html
 import views.ViewBaseSpec
-import views.templates.payments.PaymentMessageHelper
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 
@@ -38,332 +38,371 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val paymentHistoryBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
     val tabOne = ".tabs-nav li:nth-of-type(1)"
     val tabTwo = ".tabs-nav li:nth-of-type(2)"
+    val tabThree = ".tabs-nav li:nth-of-type(3)"
     val tabOneHiddenText = ".tabs-nav li:nth-of-type(1) span"
     val tabTwoHiddenText = ".tabs-nav li:nth-of-type(2) span"
-    val tabHeading = "h2"
+    val tabPreviousPaymentsHiddenText = ".tabs-nav li:nth-of-type(3) span"
+    val subheading = "h2"
     val paymentDateTableHeading = "tr th:nth-of-type(1) div"
     val descriptionTableHeading = "tr th:nth-of-type(2) div"
     val amountPaidTableHeading = "tr th:nth-of-type(3) div"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
-    val noPaymentsText = ".column-two-thirds > p"
-
-    def paymentDateTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(1)"
-
+    val mainParagraph = "#content > article > div.grid-row > div > p"
+    val mainParagraphLink: String = mainParagraph + " > a"
     val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
-
-    def descriptionTableChargeType(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(2) span.bold"
-
     val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
-
-    def descriptionTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(2) span:nth-of-type(2)"
-
     val amountPaidTableContent = "tr td:nth-of-type(3)"
-
-    def amountPaidTableContent(row: Int): String = s"tr:nth-of-type($row) td:nth-of-type(3)"
-
-    val noHistoryContent = "div.column-two-thirds p:nth-of-type(1)"
-    val noHistoryWillShowContent = "div.column-two-thirds p:nth-of-type(2)"
-    val noHistoryBullet1 = "div.column-two-thirds li:nth-of-type(1)"
-    val noHistoryBullet2 = "div.column-two-thirds li:nth-of-type(2)"
   }
+
+  val currentYear = 2018
+  val exampleAmount = 100
+
+  val baseModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
+    None,
+    None,
+    previousPaymentsTab = false,
+    Some(currentYear),
+    Seq.empty,
+    currentYear
+  )
+
+  implicit val user: User = User("123456789")
+  val vatDecUser = User("123456789", hasNonMtdVat = true)
 
   "Rendering the payments history page" when {
 
-    val currentYear = 2018
-    val previousYear = 2017
-    val historyYears = Seq(currentYear, previousYear)
+    "there is a single year of history retrieved" when {
 
-    "there are multiple payment histories to display" should {
+      "there was a payment in the year" when {
 
-      val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-        historyYears,
-        historyYears.head,
-        Seq(PaymentsHistoryModel(
+        val model = baseModel.copy(transactions = Seq(PaymentsHistoryModel(
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
           taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
-          amount = 123456789,
+          amount = exampleAmount,
           clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-        ),
-          PaymentsHistoryModel(
-            chargeType = ReturnDebitCharge,
-            taxPeriodFrom = Some(LocalDate.parse(s"2018-03-01")),
-            taxPeriodTo = Some(LocalDate.parse(s"2018-04-01")),
-            amount = 987654321,
-            clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-          ))
-      )
+        )))
 
-      lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+        "the user does not have the VATDEC enrolment" should {
 
-      "have the correct document title" in {
-        document.title shouldBe "Payment history"
-      }
+          lazy val view: Html = views.html.payments.paymentHistory(model)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe "Payment history"
-      }
-
-      "render breadcrumbs which" should {
-
-        "have the text 'Business tax account'" in {
-          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
-        }
-
-        "link to bta" in {
-          element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
-        }
-
-        "have the text 'Your VAT details'" in {
-          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
-        }
-
-        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
-        }
-
-        "have the text 'Payment history'" in {
-          elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
-        }
-      }
-
-      "have tabs for each return year" should {
-
-        "tab one" should {
-
-          "have the text '2018'" in {
-            elementText(Selectors.tabOne) should include("2018")
+          "have the correct document title" in {
+            document.title shouldBe "Payment history"
           }
 
-          "contain visually hidden text" in {
-            elementText(Selectors.tabOneHiddenText) shouldBe "Currently viewing payment history from 2018"
+          "have the correct page heading" in {
+            elementText(Selectors.pageHeading) shouldBe "Payment history"
+          }
+
+          "render breadcrumbs" which {
+
+            "have the text 'Business tax account'" in {
+              elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+            }
+
+            "link to bta" in {
+              element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+            }
+
+            "have the text 'Your VAT details'" in {
+              elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
+            }
+
+            s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+              element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+            }
+
+            "have the text 'Payment history'" in {
+              elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
+            }
+          }
+
+          "not display a current year tab" in {
+            elementExtinct(Selectors.tabOne)
+          }
+
+          "not display a previous payments tab" in {
+            elementExtinct(Selectors.tabTwo)
+          }
+
+          "have the current year subheading" in {
+            elementText(Selectors.subheading) shouldBe currentYear.toString
+          }
+
+          "contain a charge type" which {
+
+            "has the correct amount in the row" in {
+              elementText(Selectors.amountPaidTableContent) shouldBe "- £100"
+            }
+
+            "has the correct title in the row" in {
+              elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
+            }
+
+            "has the correct description in the row" in {
+              elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
+            }
+
+            "has the correct date in the row" in {
+              elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
+            }
           }
         }
 
-        "tab two" should {
+        "the user has the VATDEC enrolment" when {
 
-          "have the text '2017'" in {
-            elementText(Selectors.tabTwo) should include("2017")
+          "they migrated to MTD less than 15 months ago" should {
+
+            lazy val view: Html = views.html.payments.paymentHistory(
+              model.copy(tabOne = Some(currentYear), previousPaymentsTab = true)
+            )(request, messages, mockConfig, messages.lang, vatDecUser)
+            lazy implicit val document: Document = Jsoup.parse(view.body)
+
+            "display the current year tab" in {
+              element(Selectors.tabOne)
+            }
+
+            "display a previous payments tab" in {
+              elementText(Selectors.tabTwo) should include("Previous payments")
+            }
+
+            "have the current year subheading" in {
+              elementText(Selectors.subheading) shouldBe currentYear.toString
+            }
+
+            "contain a charge type" in {
+              element(Selectors.paymentDateTableHeading)
+            }
           }
 
-          s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url}" in {
-            element(Selectors.tabTwo).select("a").attr("href") shouldBe
-              controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url
-          }
+          "they migrated to MTD 15 months ago or longer" should {
 
-          "contain visually hidden text" in {
-            elementText(Selectors.tabTwoHiddenText) shouldBe "View payment history from 2017"
+            lazy val view: Html =
+              views.html.payments.paymentHistory(model)(request, messages, mockConfig, messages.lang, vatDecUser)
+            lazy implicit val document: Document = Jsoup.parse(view.body)
+
+            "not display a current year tab" in {
+              elementExtinct(Selectors.tabOne)
+            }
+
+            "not display a previous payments tab" in {
+              elementExtinct(Selectors.tabTwo)
+            }
+
+            "have the current year subheading" in {
+              elementText(Selectors.subheading) shouldBe currentYear.toString
+            }
+
+            "contain a charge type" in {
+              element(Selectors.paymentDateTableHeading)
+            }
           }
         }
       }
 
+      "there were no payments in the year" when {
 
-      "have the correct tab heading" in {
-        elementText(Selectors.tabHeading) shouldBe "2018"
+        "the user does not have the VATDEC enrolment" when {
+
+          lazy val view: Html = views.html.payments.paymentHistory(baseModel)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "not display a current year tab" in {
+            elementExtinct(Selectors.tabOne)
+          }
+
+          "not display a previous payments tab" in {
+            elementExtinct(Selectors.tabTwo)
+          }
+
+          "have the current year subheading" in {
+            elementText(Selectors.subheading) shouldBe currentYear.toString
+          }
+
+          "not contain a charge type" in {
+            elementExtinct(Selectors.paymentDateTableHeading)
+          }
+
+          "have the no payments message" in {
+            elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+          }
+        }
+
+        "the user has the VATDEC enrolment" when {
+
+          "they migrated to MTD less than 15 months ago" should {
+
+            lazy val view: Html = views.html.payments.paymentHistory(
+              baseModel.copy(tabOne = Some(currentYear), previousPaymentsTab = true)
+            )(request, messages, mockConfig, messages.lang, vatDecUser)
+            lazy implicit val document: Document = Jsoup.parse(view.body)
+
+            "display a current year tab" in {
+              element(Selectors.tabOne)
+            }
+
+            "display a previous payments tab" in {
+              elementText(Selectors.tabTwo) should include("Previous payments")
+            }
+
+            "have the current year subheading" in {
+              elementText(Selectors.subheading) shouldBe currentYear.toString
+            }
+
+            "not contain a charge type" in {
+              elementExtinct(Selectors.paymentDateTableHeading)
+            }
+
+            "have the no payments message" in {
+              elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+            }
+          }
+
+          "they migrated to MTD 15 months ago or longer" should {
+
+            lazy val view: Html =
+              views.html.payments.paymentHistory(baseModel)(request, messages, mockConfig, messages.lang, vatDecUser)
+            lazy implicit val document: Document = Jsoup.parse(view.body)
+
+            "not display a current year tab" in {
+              elementExtinct(Selectors.tabOne)
+            }
+
+            "not display a previous payments tab" in {
+              elementExtinct(Selectors.tabTwo)
+            }
+
+            "have the current year subheading" in {
+              elementText(Selectors.subheading) shouldBe currentYear.toString
+            }
+
+            "not contain a charge type" in {
+              elementExtinct(Selectors.paymentDateTableHeading)
+            }
+
+            "have the no payments message" in {
+              elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+            }
+          }
+        }
       }
 
-      "have the correct payment date table heading" in {
-        elementText(Selectors.paymentDateTableHeading) shouldBe "Payment received"
-      }
+      "the user has clicked the Previous Payments tab" should {
 
-      "have the correct description table heading" in {
-        elementText(Selectors.descriptionTableHeading) shouldBe "Description"
-      }
+        lazy val view: Html = views.html.payments.paymentHistory(
+          baseModel.copy(tabOne = Some(currentYear), selectedYear = None, previousPaymentsTab = true)
+        )(request, messages, mockConfig, messages.lang, vatDecUser)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct amount paid table heading" in {
-        elementText(Selectors.amountPaidTableHeading) shouldBe "Amount"
-      }
+        "have the correct subheading" in {
+          elementText(Selectors.subheading) shouldBe "Previous payments"
+        }
 
-      "have the visuallyhidden attribute on the payment date table heading" in {
-        element(Selectors.paymentDateTableHeading).attr("class") shouldBe "visuallyhidden"
-      }
+        "have the previous payments message" in {
+          elementText(Selectors.mainParagraph) shouldBe "You can view your previous payments (opens in new tab) " +
+            "if you made payments before joining Making Tax Digital."
+        }
 
-      "have the visuallyhidden attribute on the description table heading" in {
-        element(Selectors.descriptionTableHeading).attr("class") shouldBe "visuallyhidden"
-      }
+        "have a link to the old VAT portal" which {
 
-      "have the visuallyhidden attribute on the amount paid table heading" in {
-        element(Selectors.amountPaidTableHeading).attr("class") shouldBe "visuallyhidden"
-      }
+          "has the correct link text" in {
+            elementText(Selectors.mainParagraphLink) shouldBe "view your previous payments (opens in new tab)"
+          }
 
-      "have the correct payment date table content" in {
-        elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
-      }
-
-      "have the correct description table charge type" in {
-        elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
-      }
-
-      "have the correct description table content" in {
-        elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
-      }
-
-      "have the correct amount paid table content" in {
-        elementText(Selectors.amountPaidTableContent) shouldBe "- £123,456,789"
+          "has the correct link href" in {
+            element(Selectors.mainParagraphLink).attr("href") shouldBe
+              mockConfig.portalNonHybridPreviousPaymentsUrl(vatDecUser.vrn)
+          }
+        }
       }
     }
 
-    "there are no payments" when {
+    "there are multiple years retrieved" when {
 
-      "the previous year tab is selected" should {
-        val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-          historyYears,
-          previousYear,
-          Seq.empty
-        )
+      val model: PaymentsHistoryViewModel =
+        baseModel.copy(tabOne = Some(currentYear), tabTwo = Some(currentYear - 1), transactions = Seq.empty)
 
-        lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
+      "the user does not have the VATDEC enrolment" when {
+
+        lazy val view: Html = views.html.payments.paymentHistory(model)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have tabs for each return year" should {
-
-          "tab one" should {
-
-            "have the text '2018'" in {
-              elementText(Selectors.tabOne) should include("2018")
-            }
-
-            s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url}" in {
-              element(Selectors.tabOne).select("a").attr("href") shouldBe
-                controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url
-            }
-
-            "contain visually hidden text" in {
-              elementText(Selectors.tabOneHiddenText) shouldBe "View payment history from 2018"
-            }
-          }
-
-          "tab two" should {
-
-            "have the text '2017'" in {
-              elementText(Selectors.tabTwo) should include("2017")
-            }
-
-            "contain visually hidden text" in {
-              elementText(Selectors.tabTwoHiddenText) shouldBe "Currently viewing payment history from 2017"
-            }
-          }
+        "display a current year tab" in {
+          element(Selectors.tabOne)
         }
 
-        "have the correct tab heading" in {
-          elementText(Selectors.tabHeading) shouldBe "2017"
+        "display a previous year tab" in {
+          element(Selectors.tabTwo)
         }
 
-        "have the correct text in past tense" in {
-          elementText(Selectors.noPaymentsText) shouldBe "You did not make or receive any payments this year."
+        "not display a previous payments tab" in {
+          elementExtinct(Selectors.tabThree)
+        }
+
+        "have the current year subheading" in {
+          elementText(Selectors.subheading) shouldBe currentYear.toString
+        }
+
+        "have the no payments message" in {
+          elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
         }
       }
 
-      "the current year tab is selected" should {
+      "the user has the VATDEC enrolment" when {
 
-        val paymentHistoryModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
-          historyYears,
-          currentYear,
-          Seq.empty
-        )
+        "they migrated to MTD less than 15 months ago" should {
 
-        lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
+          lazy val view: Html = views.html.payments.paymentHistory(model.copy(previousPaymentsTab = true))(
+            request, messages, mockConfig, messages.lang, vatDecUser)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have tabs for each return year" should {
-
-          "tab one" should {
-
-            "have the text '2018'" in {
-              elementText(Selectors.tabOne) should include("2018")
-            }
-
-            "contain visually hidden text" in {
-              elementText(Selectors.tabOneHiddenText) shouldBe "Currently viewing payment history from 2018"
-            }
+          "display a current year tab" in {
+            element(Selectors.tabOne)
           }
 
-          "tab two" should {
+          "display a previous year tab" in {
+            element(Selectors.tabTwo)
+          }
 
-            "have the text '2017'" in {
-              elementText(Selectors.tabTwo) should include("2017")
-            }
+          "display a previous payments tab" in {
+            elementText(Selectors.tabThree) should include("Previous payments")
+          }
 
-            s"contain a link to ${controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url}" in {
-              element(Selectors.tabTwo).select("a").attr("href") shouldBe
-                controllers.routes.PaymentHistoryController.paymentHistory(previousYear).url
-            }
+          "have the current year subheading" in {
+            elementText(Selectors.subheading) shouldBe currentYear.toString
+          }
 
-            "contain visually hidden text" in {
-              elementText(Selectors.tabTwoHiddenText) shouldBe "View payment history from 2017"
-            }
+          "have the no history message" in {
+            elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
           }
         }
 
-        "have the correct tab heading" in {
-          elementText(Selectors.tabHeading) shouldBe "2018"
-        }
+        "they migrated to MTD 15 months ago or longer" should {
 
-        "have the correct text in present tense" in {
-          elementText(Selectors.noPaymentsText) shouldBe "You have not yet made or received any payments this year."
-        }
-      }
-    }
+          lazy val view: Html =
+            views.html.payments.paymentHistory(model)(request, messages, mockConfig, messages.lang, vatDecUser)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "supplying with the following charge types" should {
-
-      PaymentMessageHelper.values.map { historyChargeHelper =>
-        (PaymentsHistoryViewModel(
-          historyYears,
-          historyYears.head,
-          Seq(PaymentsHistoryModel(
-            chargeType = ChargeType.apply(historyChargeHelper.name),
-            taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
-            taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
-            amount = 1000.00,
-            clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-          ),
-            PaymentsHistoryModel(
-              chargeType = ChargeType.apply(historyChargeHelper.name),
-              taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
-              taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
-              amount = 500.00,
-              clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-            ))
-        ),
-          ChargeType.apply(historyChargeHelper.name).value,
-          PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,
-          PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._2)
-      }.foreach { case (paymentHistoryModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
-        lazy val view = views.html.payments.paymentHistory(paymentHistoryModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        s"contain a $chargeTypeTitle that" should {
-
-          "contain the correct amount in row 1" in {
-            elementText(Selectors.amountPaidTableContent(1)) shouldBe "- £1,000"
-          }
-          "contain the correct title in row 1" in {
-            elementText(Selectors.descriptionTableChargeType(1)) shouldBe expectedTitle
-          }
-          if (expectedDescription.nonEmpty) {
-            "contain the correct description in row 1" in {
-              elementText(Selectors.descriptionTableContent(1)) shouldBe expectedDescription
-            }
-          }
-          "contain the correct date in row 1" in {
-            elementText(Selectors.paymentDateTableContent(1)) shouldBe "1 Mar 2018"
+          "display a current year tab" in {
+            element(Selectors.tabOne)
           }
 
-          "contain the correct amount in row 2" in {
-            elementText(Selectors.amountPaidTableContent(2)) shouldBe "- £500"
+          "display a previous year tab" in {
+            element(Selectors.tabTwo)
           }
-          "contain the correct title in row 2" in {
-            elementText(Selectors.descriptionTableChargeType(2)) shouldBe expectedTitle
+
+          "not display a previous payments tab" in {
+            elementExtinct(Selectors.tabThree)
           }
-          if (expectedDescription.nonEmpty) {
-            "contain the correct description in row 2" in {
-              elementText(Selectors.descriptionTableContent(2)) shouldBe expectedDescription
-            }
+
+          "have the current year subheading" in {
+            elementText(Selectors.subheading) shouldBe currentYear.toString
           }
-          "contain the correct date in row 2" in {
-            elementText(Selectors.paymentDateTableContent(2)) shouldBe "1 Mar 2018"
+
+          "not contain a charge type" in {
+            elementExtinct(Selectors.paymentDateTableHeading)
           }
         }
       }

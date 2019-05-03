@@ -37,10 +37,8 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   lazy val injector: Injector = app.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
-
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
-
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(

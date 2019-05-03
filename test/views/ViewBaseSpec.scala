@@ -19,6 +19,7 @@ package views
 import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import org.scalatest.Assertion
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
@@ -44,6 +45,16 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite {
     }
 
     document.select(cssSelector).first()
+  }
+
+  def elementExtinct(cssSelector: String)(implicit document: Document): Assertion = {
+    val elements = document.select(cssSelector)
+
+    if (elements.size == 0) {
+      succeed
+    } else {
+      fail(s"Element with selector '$cssSelector' was found!")
+    }
   }
 
   def elementText(selector: String)(implicit document: Document): String = {
