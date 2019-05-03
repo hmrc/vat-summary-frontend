@@ -315,6 +315,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             element(Selectors.mainParagraphLink).attr("href") shouldBe
               mockConfig.portalNonHybridPreviousPaymentsUrl(vatDecUser.vrn)
           }
+
+          "has a GA event" in {
+            element(Selectors.mainParagraphLink).attr("data-journey-click") shouldBe
+             "payments:view-portal-payments:previous-payments"
+          }
         }
       }
     }
