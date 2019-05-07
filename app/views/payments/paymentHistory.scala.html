@@ -39,7 +39,7 @@
       <ul class="tabs-nav">
         @(model.tabOne, model.tabTwo) match {
           case (Some(yearOne), Some(yearTwo)) => { @paymentsHistoryTabs(Seq(yearOne, yearTwo), model.selectedYear.getOrElse(0)) }
-          case (Some(yearOne), None) => { @paymentsHistoryTabs(Seq(yearOne), model.selectedYear.getOrElse(0)) }
+          case (Some(yearOne), None) if model.previousPaymentsTab => { @paymentsHistoryTabs(Seq(yearOne), model.selectedYear.getOrElse(0)) }
           case _ => { }
         }
         @model.previousPaymentsTab match {
