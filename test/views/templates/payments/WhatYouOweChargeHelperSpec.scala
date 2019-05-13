@@ -140,6 +140,15 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
       }
     }
 
+    "charge type is Annual Accounting Return Debit Charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), Some(true), messages)
+
+      "return true" in {
+        helper.viewReturnEnabled shouldBe true
+      }
+    }
+
     "charge type is a different type of charge" should {
 
       val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
@@ -201,6 +210,16 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
           helper.viewReturnContext shouldBe "for the period 1 January to 2 February 2018"
         }
       }
+
+      "charge type is Annual Account Return Debit Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), Some(true), messages)
+
+        "return 'that you corrected for the period 1 January to 2 February 2018'" in {
+          helper.viewReturnContext shouldBe "for the period 1 January to 2 February 2018"
+        }
+      }
+
 
       "charge type is Error Correction Debit Charge" should {
 
