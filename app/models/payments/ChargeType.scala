@@ -159,6 +159,15 @@ case object CreditReturnOffsetCharge extends ChargeType {
 case object PaymentOnAccount extends ChargeType {
   override val value: String = "Payment on account"
 }
+case object PaymentOnAccountReturnDebitCharge extends ChargeType {
+  override val value: String = "VAT POA Return Debit Charge"
+}
+case object PaymentOnAccountReturnCreditCharge extends ChargeType {
+  override val value: String = "VAT POA Return Credit Charge"
+}
+case object PaymentOnAccountInstalments extends ChargeType {
+  override val value: String = "VAT POA Instalments"
+}
 case object UnallocatedPayment extends ChargeType {
   override val value: String = "Unallocated payment"
 }
@@ -216,6 +225,9 @@ object ChargeType {
     VatPaFurtherInterestCharge,
     CreditReturnOffsetCharge,
     PaymentOnAccount,
+    PaymentOnAccountReturnDebitCharge,
+    PaymentOnAccountReturnCreditCharge,
+    PaymentOnAccountInstalments,
     UnallocatedPayment,
     Refund
   )

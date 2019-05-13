@@ -302,6 +302,27 @@ object PaymentMessageHelper {
     "repayment"
   )
 
+  object VATPOAInstalmentCharge extends PaymentMessageHelper(
+    PaymentOnAccountInstalments.value,
+    "chargeType.POAInstalmentTitle",
+    Some("chargeType.POAChargeDescription"),
+    "poaInstalment"
+  )
+
+  object VATPOAReturnDebitCharge extends PaymentMessageHelper(
+    PaymentOnAccountReturnDebitCharge.value,
+    "chargeType.POAReturnDebitChargeTitle",
+    Some("chargeType.POAChargeDescription"),
+    "poaReturnDebit"
+  )
+
+  object VATPOAReturnCreditCharge extends PaymentMessageHelper(
+    PaymentOnAccountReturnCreditCharge.value,
+    "chargeType.POAReturnCreditChargeTitle",
+    Some("chargeType.POAChargeDescription"),
+    "repayment"
+  )
+
   val values = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
@@ -348,7 +369,10 @@ object PaymentMessageHelper {
     VatCreditReturnOffsetCharge,
     ProtectiveAssessmentCharge,
     UnallocatedPaymentCharge,
-    RefundsCharge
+    RefundsCharge,
+    VATPOAInstalmentCharge,
+    VATPOAReturnDebitCharge,
+    VATPOAReturnCreditCharge
   )
 
   def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate], useShortDayFormat: Boolean = true)

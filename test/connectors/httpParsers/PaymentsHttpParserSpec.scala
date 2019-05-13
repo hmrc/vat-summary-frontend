@@ -28,6 +28,9 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class PaymentsHttpParserSpec extends UnitSpec {
 
+  val paymentOnAccountReturnChargeMainType: String = "VAT POA Return Charge"
+  val paymentOnAccountInstalmentsMainType: String = "VAT POA Instalments"
+
   "PaymentsReads" when {
 
     "the http response status is 200 OK and there are valid charge types" should {
@@ -452,6 +455,45 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "amount" -> 50.00
                 )
               )
+            ),
+            Json.obj(
+              "mainType" -> paymentOnAccountInstalmentsMainType,
+              "chargeType" -> PaymentOnAccountInstalments,
+              "periodKey" -> "#018",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> paymentOnAccountReturnChargeMainType,
+              "chargeType" -> PaymentOnAccountReturnDebitCharge,
+              "periodKey" -> "#018",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
+            ),
+            Json.obj(
+              "mainType" -> paymentOnAccountReturnChargeMainType,
+              "chargeType" -> PaymentOnAccountReturnCreditCharge,
+              "periodKey" -> "#018",
+              "outstandingAmount" -> 50.00,
+              "items" -> Json.arr(
+                Json.obj(
+                  "subItem" -> "000",
+                  "dueDate" -> "2008-09-27",
+                  "amount" -> 50.00
+                )
+              )
             )
           )
         )
@@ -707,9 +749,26 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018")
+        ),
+        Payment(
+          PaymentOnAccountInstalments,
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          PaymentOnAccountReturnDebitCharge,
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
+        ),
+        Payment(
+          PaymentOnAccountReturnCreditCharge,
+          due = LocalDate.parse("2008-09-27"),
+          outstandingAmount = BigDecimal(50.00),
+          periodKey = Some("#018")
         )
       )))
-
 
       val result = PaymentsReads.read("", "", httpResponse)
 

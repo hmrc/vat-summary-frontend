@@ -212,6 +212,10 @@ chargeType.unallocatedPaymentTitle = Unallocated payment
 chargeType.unallocatedPaymentDescription = you made an overpayment, you can have this refunded or leave it on account
 chargeType.refundTitle = Refund payment from HMRC
 chargeType.refundDescription = as you requested a refund on an overpayment you made
+chargeType.POAInstalmentTitle = Payment on account instalment
+chargeType.POAReturnDebitChargeTitle = Payment on account balance
+chargeType.POAReturnCreditChargeTitle = Payment on account repayment
+chargeType.POAChargeDescription = for the period {0}
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
