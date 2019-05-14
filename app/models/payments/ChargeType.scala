@@ -66,6 +66,18 @@ case object AAFurtherInterestCharge extends ChargeType {
 case object AACharge extends ChargeType {
   override val value: String = "VAT Additional Assessment"
 }
+case object AAQuarterlyInstalments extends ChargeType {
+  override val value: String = "VAT AA Quarterly Instalments"
+}
+case object AAMonthlyInstalment extends ChargeType {
+  override val value: String = "VAT AA Monthly Instalment"
+}
+case object AAReturnDebitCharge extends ChargeType {
+  override val value: String = "VAT AA Return Debit Charge"
+}
+case object AAReturnCreditCharge extends ChargeType {
+  override val value: String = "VAT AA Return Credit Charge"
+}
 case object BnpRegPre2010Charge extends ChargeType {
   override val value: String = "VAT BNP of Reg Pre 2010"
 }
@@ -172,6 +184,10 @@ object ChargeType {
     AACharge,
     AAInterestCharge,
     AAFurtherInterestCharge,
+    AAMonthlyInstalment,
+    AAQuarterlyInstalments,
+    AAReturnDebitCharge,
+    AAReturnCreditCharge,
     BnpRegPre2010Charge,
     BnpRegPost2010Charge,
     FtnEachPartnerCharge,

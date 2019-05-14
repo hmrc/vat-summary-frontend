@@ -135,6 +135,50 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#008"
             ),
             Json.obj(
+              "mainType" -> "VAT AA Return Charge",
+              "chargeType" -> AAReturnDebitCharge,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#009"
+            ),
+            Json.obj(
+              "mainType" -> "VAT AA Return Charge",
+              "chargeType" -> AAReturnCreditCharge,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#010"
+            ),
+            Json.obj(
+              "mainType" -> "VAT Annual Accounting",
+              "chargeType" ->  AAMonthlyInstalment,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#011"
+            ),
+            Json.obj(
+              "mainType" -> "VAT Annual Accounting",
+              "chargeType" ->  AAQuarterlyInstalments,
+              "taxPeriodFrom" -> "2015-12-01",
+              "taxPeriodTo" -> "2014-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> 1000.30,
+              "periodKey" -> "#012"
+            ),
+            Json.obj(
               "mainType" -> OADefaultInterestCharge,
               "chargeType" -> OADefaultInterestCharge,
               "taxPeriodFrom" -> "2015-12-01",
@@ -485,6 +529,38 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#008"
+        ),
+        PaymentWithPeriod(
+          AAReturnDebitCharge,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#009"
+        ),
+        PaymentWithPeriod(
+          AAReturnCreditCharge,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#010"
+        ),
+        PaymentWithPeriod(
+          AAMonthlyInstalment,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#011"
+        ),
+        PaymentWithPeriod(
+          AAQuarterlyInstalments,
+          start = LocalDate.parse("2015-12-01"),
+          end = LocalDate.parse("2014-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(1000.30),
+          periodKey = "#012"
         ),
         PaymentWithPeriod(
           OADefaultInterestCharge,

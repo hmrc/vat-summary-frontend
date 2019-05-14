@@ -135,6 +135,31 @@ object PaymentMessageHelper {
     Some("chargeType.VatAdditionalAssessmentFurtherInterestDescription")
   )
 
+  object VatAAMonthlyInstalment extends PaymentMessageHelper(
+    AAMonthlyInstalment.value,
+    "chargeType.VatAnnualAccountMonthlyInstalmentTitle",
+    Some("chargeType.VatAnnualAccountMonthlyInstalmentDescription")
+  )
+
+  object VatAAQuarterlyInstalments extends PaymentMessageHelper(
+    AAQuarterlyInstalments.value,
+    "chargeType.VatAnnualAccountQuarterlyInstalmentsTitle",
+    Some("chargeType.VatAnnualAccountQuarterlyInstalmentsDescription")
+  )
+
+  object VatAAReturnDebitCharge extends PaymentMessageHelper(
+    AAReturnDebitCharge.value,
+    "chargeType.VatAnnualAccountReturnDebitChargeTitle",
+    Some("chargeType.VatAnnualAccountReturnDebitChargeDescription")
+  )
+
+  object VatAAReturnCreditCharge extends PaymentMessageHelper(
+    AAReturnCreditCharge.value,
+    "chargeType.VatAnnualAccountReturnCreditChargeTitle",
+    Some("chargeType.VatAnnualAccountReturnCreditChargeDescription"),
+    "repayment"
+  )
+
   object VatStatutoryInterestCharge extends PaymentMessageHelper(
     StatutoryInterestCharge.value,
     "chargeType.VatStatutoryInterestTitle",
@@ -299,6 +324,10 @@ object PaymentMessageHelper {
     VatAdditionalAssessment,
     VatAADefaultInterest,
     VatAAFurtherInterest,
+    VatAAMonthlyInstalment,
+    VatAAQuarterlyInstalments,
+    VatAAReturnCreditCharge,
+    VatAAReturnDebitCharge,
     CivilEvasionPenalty,
     VatInaccuraciesInECSales,
     VatFailureToSubmitECSales,
