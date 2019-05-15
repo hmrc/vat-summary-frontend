@@ -144,6 +144,16 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
       val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), Some(true), messages)
 
+
+      "return true" in {
+        helper.viewReturnEnabled shouldBe true
+      }
+    }
+
+    "charge type is POA Return Debit Charge" should {
+
+      val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnDebitCharge), Some(true), messages)
+
       "return true" in {
         helper.viewReturnEnabled shouldBe true
       }

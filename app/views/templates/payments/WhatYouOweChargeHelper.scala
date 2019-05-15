@@ -54,7 +54,8 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
   }
 
   val viewReturnEnabled: Boolean = payment.chargeType match {
-    case ReturnDebitCharge | ErrorCorrectionDebitCharge | AAReturnDebitCharge => true
+
+    case ReturnDebitCharge | ErrorCorrectionDebitCharge | PaymentOnAccountReturnDebitCharge | AAReturnDebitCharge => true
     case _ => false
   }
 
