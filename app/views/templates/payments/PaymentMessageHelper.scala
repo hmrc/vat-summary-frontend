@@ -305,15 +305,13 @@ object PaymentMessageHelper {
   object VATPOAInstalmentCharge extends PaymentMessageHelper(
     PaymentOnAccountInstalments.value,
     "chargeType.POAInstalmentTitle",
-    Some("chargeType.POAChargeDescription"),
-    "poaInstalment"
+    Some("chargeType.POAChargeDescription")
   )
 
   object VATPOAReturnDebitCharge extends PaymentMessageHelper(
     PaymentOnAccountReturnDebitCharge.value,
     "chargeType.POAReturnDebitChargeTitle",
-    Some("chargeType.POAChargeDescription"),
-    "poaReturnDebit"
+    Some("chargeType.POAChargeDescription")
   )
 
   object VATPOAReturnCreditCharge extends PaymentMessageHelper(
