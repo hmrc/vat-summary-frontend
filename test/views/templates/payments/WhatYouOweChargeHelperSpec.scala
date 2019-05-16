@@ -44,7 +44,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "the charge has a to and from date" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(false), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), messages)
 
       "return the description of the charge" in {
         helper.description shouldBe Some("for the period 1 January to 2 February 2018")
@@ -54,7 +54,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     "the charge should have a to and from date to form the description, but they are not retrieved" should {
 
       val model = paymentModelNoPeriod(ReturnDebitCharge)
-      val helper = new WhatYouOweChargeHelper(model, Some(false), messages)
+      val helper = new WhatYouOweChargeHelper(model, messages)
 
       "omit the description of the charge" in {
         helper.description shouldBe None
@@ -63,7 +63,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "the charge does not have to and from date" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), Some(false), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), messages)
 
       "return the description of the charge" in {
         helper.description shouldBe Some("interest charged on the officer's assessment")
@@ -72,7 +72,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "the charge has no description" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(MiscPenaltyCharge), Some(false), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(MiscPenaltyCharge), messages)
 
       "return no description" in {
         helper.description shouldBe None
@@ -82,7 +82,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
   "WhatYouOweChargeHelper .title" should {
 
-    val helper = new WhatYouOweChargeHelper(paymentModel(VatOAInaccuraciesFrom2009), Some(false), messages)
+    val helper = new WhatYouOweChargeHelper(paymentModel(VatOAInaccuraciesFrom2009), messages)
 
     "return the title" in {
       helper.title shouldBe "Inaccuracies penalty"
@@ -91,31 +91,12 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
   "WhatYouOweChargeHelper .payLinkText" when {
 
-
-    "charge type is Return Debit charge and has a direct debit" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
-
-      "return no Pay text" in {
-        helper.payLinkText shouldBe None
-      }
-    }
-
-    "charge type is Central Assessment charge" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(CentralAssessmentCharge), Some(true), messages)
-
-      "return 'Pay estimate'" in {
-        helper.payLinkText shouldBe Some("Pay estimate")
-      }
-    }
-
     "charge type is a different type of charge" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), messages)
 
       "return Pay now" in {
-        helper.payLinkText shouldBe Some("Pay now")
+        helper.payLinkText shouldBe "Pay now"
       }
     }
   }
@@ -124,7 +105,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "charge type is Return Debit Charge" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), messages)
 
       "return true" in {
         helper.viewReturnEnabled shouldBe true
@@ -133,7 +114,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "charge type is Error Correction Debit Charge" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), messages)
 
       "return true" in {
         helper.viewReturnEnabled shouldBe true
@@ -142,7 +123,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "charge type is Annual Accounting Return Debit Charge" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), messages)
 
 
       "return true" in {
@@ -152,7 +133,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "charge type is POA Return Debit Charge" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnDebitCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnDebitCharge), messages)
 
       "return true" in {
         helper.viewReturnEnabled shouldBe true
@@ -161,7 +142,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "charge type is a different type of charge" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), messages)
 
       "return Pay now" in {
         helper.viewReturnEnabled shouldBe false
@@ -171,39 +152,21 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
   "WhatYouOweChargeHelper .overdueContext" when {
 
-    "charge type is Return Debit Charge and overdue" should {
+    "payment is overdue" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge, overdue = true), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge, overdue = true), messages)
 
       "return overdue" in {
         helper.overdueContext shouldBe "overdue"
       }
     }
 
-    "charge type is Return Debit Charge and not overdue" should {
+    "payment is not overdue" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), messages)
 
-      "return empty string" in {
+      "return an empty string" in {
         helper.overdueContext shouldBe ""
-      }
-    }
-
-    "charge type is a different type of charge and overdue" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge, overdue = true), Some(true), messages)
-
-      "return 'is overdue'" in {
-        helper.overdueContext shouldBe "is overdue,"
-      }
-    }
-
-    "charge type is a different type of charge and not overdue" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
-
-      "return ','" in {
-        helper.overdueContext shouldBe ","
       }
     }
   }
@@ -214,7 +177,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
       "charge type is Return Debit Charge" should {
 
-        val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), Some(true), messages)
+        val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), messages)
 
         "return 'that you corrected for the period 1 January to 2 February 2018'" in {
           helper.viewReturnContext shouldBe "for the period 1 January to 2 February 2018"
@@ -223,17 +186,25 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
       "charge type is Annual Account Return Debit Charge" should {
 
-        val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), Some(true), messages)
+        val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), messages)
 
         "return 'that you corrected for the period 1 January to 2 February 2018'" in {
           helper.viewReturnContext shouldBe "for the period 1 January to 2 February 2018"
         }
       }
 
+      "charge type is a POA Return Debit Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), messages)
+
+        "return 'that you corrected for the period 1 January to 2 February 2018'" in {
+          helper.viewReturnContext shouldBe "for the period 1 January to 2 February 2018"
+        }
+      }
 
       "charge type is Error Correction Debit Charge" should {
 
-        val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), Some(true), messages)
+        val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), messages)
 
         "return 'for the period 1 January to 2 February 2018'" in {
           helper.viewReturnContext shouldBe "that you corrected for the period 1 January to 2 February 2018"
@@ -242,7 +213,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
       "charge type is different type of charge" should {
 
-        val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+        val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), messages)
 
         "return empty string" in {
           helper.viewReturnContext shouldBe ""
@@ -252,7 +223,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "the charge has no to or from period" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), messages)
 
       "return empty string" in {
         helper.viewReturnContext shouldBe ""
@@ -264,7 +235,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "the charge has a to and from period" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), messages)
 
       "return 'returns:view-return 2018-01-01-to-2018-02-02:open-payments'" in {
         helper.viewReturnGAEvent shouldBe "returns:view-return 2018-01-01-to-2018-02-02:open-payments"
@@ -273,7 +244,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
     "the charge has no to and from period" should {
 
-      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), Some(true), messages)
+      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), messages)
 
       "return 'returns:view-return:open-payments'" in {
         helper.viewReturnGAEvent shouldBe "returns:view-return:open-payments"

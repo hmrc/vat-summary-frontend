@@ -150,8 +150,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         elementText(Selectors.due(1)) shouldBe "due by 8 April 2001 overdue"
       }
 
-      "render the Direct Debit text" in {
-        elementText(Selectors.payByDirectDebit(1)) shouldBe "You pay by direct debit"
+      "render the Pay now text" in {
+        elementText(Selectors.payByDirectDebit(1)) shouldBe "Pay now"
       }
 
       "render the correct view return link text" in {

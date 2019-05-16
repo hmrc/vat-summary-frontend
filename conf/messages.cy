@@ -1,6 +1,5 @@
 common.dateRangeSeparator = i
 common.overdue = hwyr
-common.isOverdue = yn hwyr,
 common.newTab = (yn agor mewn tab newydd)
 
 base.back = Yn ôl
@@ -113,7 +112,6 @@ openPayments.directDebitViewAndUpdate = fwrw golwg dros fanylion o’ch Debydau 
 openPayments.youPayByDirectDebit = Rydych yn talu drwy Ddebyd Uniongyrchol
 openPayments.directDebit.heading = Debydau Uniongyrchol
 openPayments.vatReturn = ar gyfer y cyfnod {0}
-openPayments.payEstimate = Amcangyfrif o dâl
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
 noPayments.heading = Yr hyn sydd arnoch

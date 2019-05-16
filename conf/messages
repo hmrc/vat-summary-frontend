@@ -1,6 +1,5 @@
 common.dateRangeSeparator = to
 common.overdue = overdue
-common.isOverdue = is overdue,
 common.newTab = (opens in a new tab)
 
 base.back = Back
@@ -87,7 +86,6 @@ openPayments.directDebitViewAndUpdate = view your direct debit details
 openPayments.youPayByDirectDebit = You pay by direct debit
 openPayments.directDebit.heading = Direct debits
 openPayments.vatReturn = for the period {0}
-openPayments.payEstimate = Pay estimate
 openPayments.errorCorrectionReturnContext = that you corrected for the period {0}
 
 noPayments.heading = What you owe
