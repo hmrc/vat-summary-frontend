@@ -23,7 +23,6 @@ import play.api.i18n.Messages
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
-                                       hasDirectDebit: Option[Boolean],
                                        implicit val messages: Messages) {
 
   private def paymentMessageHelper()(implicit lang: play.api.i18n.Lang): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
@@ -47,26 +46,22 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
 
   val title: String = messages(paymentMessageHelper.title)
 
-  val payLinkText: Option[String] = (payment.chargeType, hasDirectDebit) match {
-    case (ReturnDebitCharge, Some(true)) => None
-    case (CentralAssessmentCharge, _) => Some(messages("openPayments.payEstimate"))
-    case (_, _) => Some(messages("openPayments.makePayment"))
-  }
+  val payLinkText: String = messages("openPayments.makePayment")
 
   val viewReturnEnabled: Boolean = payment.chargeType match {
-    case ReturnDebitCharge | ErrorCorrectionDebitCharge | AAReturnDebitCharge => true
+    case ReturnDebitCharge | ErrorCorrectionDebitCharge |
+         PaymentOnAccountReturnDebitCharge | AAReturnDebitCharge => true
     case _ => false
   }
 
-  val overdueContext: String = payment.chargeType match {
-    case ReturnDebitCharge => if (payment.overdue) messages("common.overdue") else ""
-    case _ => if (payment.overdue) messages("common.isOverdue") else ","
-  }
+  val overdueContext: String = if (payment.overdue) messages("common.overdue") else ""
 
   val viewReturnContext: String = payment match {
     case payment: OpenPaymentsModelWithPeriod => payment.chargeType match {
-      case ReturnDebitCharge | AAReturnDebitCharge => messages("openPayments.vatReturn", displayDateRange(payment.start, payment.end)).trim
-      case ErrorCorrectionDebitCharge => messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.start, payment.end)).trim
+      case ReturnDebitCharge | AAReturnDebitCharge | PaymentOnAccountReturnDebitCharge =>
+        messages("openPayments.vatReturn", displayDateRange(payment.start, payment.end)).trim
+      case ErrorCorrectionDebitCharge =>
+        messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.start, payment.end)).trim
       case _ => ""
     }
     case _ => ""

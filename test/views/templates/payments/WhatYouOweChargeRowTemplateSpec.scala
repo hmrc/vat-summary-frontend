@@ -68,7 +68,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
       "payment has a return associated" should {
 
         val model = generateModel(overdue = false)
-        lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0, Some(false))
+        lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
         lazy implicit val document: Document = Jsoup.parse(
           s"<table>${view.body}</table>"
         )
@@ -130,7 +130,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           "18AA"
         )
 
-        lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0, Some(false))
+        lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
         lazy implicit val document: Document = Jsoup.parse(
           s"<table>${view.body}</table>"
         )
@@ -141,23 +141,10 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
       }
     }
 
-    "user has a direct debit" should {
-
-      val model = generateModel(overdue = false)
-      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0, Some(true))
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${view.body}</table>"
-      )
-
-      "render the correct direct debit message" in {
-        elementText(Selectors.directDebitText) shouldBe "You pay by direct debit"
-      }
-    }
-
     "the payment is overdue" should {
 
       val model = generateModel(overdue = true)
-      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0, None)
+      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${view.body}</table>"
       )

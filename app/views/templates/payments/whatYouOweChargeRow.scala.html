@@ -19,9 +19,9 @@
 @import views.html.templates.formatters.money.{displayMoney, positiveNegative}
 @import views.templates.payments.WhatYouOweChargeHelper
 
-@(payment: OpenPaymentsModel, count: Int, hasDirectDebit: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
+@(payment: OpenPaymentsModel, count: Int)(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
-@chargeDetails = @{new WhatYouOweChargeHelper(payment, hasDirectDebit, messages)}
+@chargeDetails = @{new WhatYouOweChargeHelper(payment, messages)}
 @defining(chargeDetails.description()) { chargeDescription =>
 
 <tr id="payment-@{count + 1}">
@@ -44,23 +44,14 @@
 
     <td scope="row" class="nowrap">
         <div>
-            @chargeDetails.payLinkText match {
-                case Some(payLinkText) => {
-                    <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
-                        <span>@payLinkText</span>
-                        <span class="visuallyhidden">
-                            @displayMoney(payment.amount)
-                            @chargeDetails.overdueContext
-                            @chargeDescription.getOrElse("")
-                        </span>
-                    </a>
-                }
-                case None => {
-                    <span data-journey-click="direct-debit:direct-debit-handoff:open-payments">
-                        @messages("openPayments.youPayByDirectDebit")
-                    </span>
-                }
-            }
+            <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
+                <span>@chargeDetails.payLinkText</span>
+                <span class="visuallyhidden">
+                    @displayMoney(payment.amount)
+                    @chargeDetails.overdueContext
+                    @chargeDescription.getOrElse("")
+                </span>
+            </a>
         </div>
 
         @if(chargeDetails.viewReturnEnabled) {
