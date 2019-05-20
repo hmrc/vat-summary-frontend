@@ -238,7 +238,7 @@ chargeType.refundTitle = Ad-daliad oddi wrth CThEM
 chargeType.refundDescription = gan i chi ofyn am ad-daliad o ordaliad a wnaethoch
 chargeType.POAInstalmentTitle = Rhandaliad taliad ar gyfrif
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
-chargeType.POAReturnCreditChargeTitle = Ad-daliad cyfrifyddu blynyddol
+chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
 chargeType.POAChargeDescription =  ar gyfer y cyfnod {0}
 
 notFound.title = Heb ddod o hyd i’r dudalen
