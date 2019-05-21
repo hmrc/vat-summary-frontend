@@ -144,13 +144,22 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         session(result).get(SessionKeys.mandationStatus) shouldBe Some(Json.stringify(Json.toJson(MandationStatus("MTDfB"))))
       }
 
-      "not overrite the mandation status in the session" in new DetailsTest {
+      "not overwrite the mandation status in the session" in new DetailsTest {
         val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
           SessionKeys.mandationStatus -> Json.stringify(Json.toJson(MandationStatus("Non MTDfB")))
         )
 
         private val result = target().details()(fakeRequestWithSession)
         session(result).get(SessionKeys.mandationStatus) shouldBe Some(Json.stringify(Json.toJson(MandationStatus("Non MTDfB"))))
+      }
+
+      "not put the mandation status in the session if there is an error" in new DetailsTest {
+        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returning(Future.successful(Left(BadRequestError("", ""))))
+
+        private val result = target(false).details()(fakeRequestWithSession)
+        session(result).get(SessionKeys.mandationStatus) shouldBe None
       }
     }
 
