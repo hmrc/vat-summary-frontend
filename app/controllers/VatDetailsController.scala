@@ -126,11 +126,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
     request.session.get(mtdMandationSessionKey) match {
       case Some(value) => Future.successful(Right(Json.parse(value).as[MandationStatus]))
-      case _ => mandationStatusService.getMandationStatus(vrn).map { returnedResult =>
-        returnedResult.right.map {
-          mandationStatus => mandationStatus
-        }
-      }
+      case _ => mandationStatusService.getMandationStatus(vrn)
     }
   }
 
