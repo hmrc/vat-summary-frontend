@@ -53,7 +53,7 @@ vatDetails.checkWhatYouOwe = Check what you owe and make a payment
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.viewReturns = View return deadlines
-returnObligation.submit = Submit VAT return
+returnObligation.submit = Submit return
 
 payment.noPayment = No payments due right now
 payment.nextPayment = Next payment due

@@ -141,16 +141,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "put a mandation status in the session" in new DetailsTest {
         private val result = target().details()(fakeRequest)
-        session(result).get(SessionKeys.mandationStatus) shouldBe Some(Json.stringify(Json.toJson(MandationStatus("MTDfB"))))
+        session(result).get(SessionKeys.mandationStatus) shouldBe Some("MTDfB")
       }
 
       "not overwrite the mandation status in the session" in new DetailsTest {
         val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
-          SessionKeys.mandationStatus -> Json.stringify(Json.toJson(MandationStatus("Non MTDfB")))
-        )
+          SessionKeys.mandationStatus -> "Non MTDfB")
 
         private val result = target().details()(fakeRequestWithSession)
-        session(result).get(SessionKeys.mandationStatus) shouldBe Some(Json.stringify(Json.toJson(MandationStatus("Non MTDfB"))))
+        session(result).get(SessionKeys.mandationStatus) shouldBe Some("Non MTDfB")
       }
 
       "not put the mandation status in the session if there is an error" in new DetailsTest {
@@ -545,7 +544,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "return a mandation status" when {
       "it is available in session" in new DetailsTest {
         implicit val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
-          "mtdVatMandationStatus" -> Json.stringify(Json.toJson(MandationStatus("Non MTDfB")))
+          "mtdVatMandationStatus" -> "Non MTDfB"
         )
 
         val result: Future[HttpGetResult[MandationStatus]] = target(false).retrieveMandationStatus("111111111")(fakeRequestWithSession)

@@ -71,7 +71,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         auditEvents(user, nextReturn, nextPayment)
 
         val newSessionVariables: Seq[(String, String)] = Seq(SessionKeys.migrationToETMP -> migratedDate) ++ (mandationStatus match {
-          case Right(status) => Seq(SessionKeys.mandationStatus -> Json.stringify(Json.toJson(status)))
+          case Right(status) => Seq(SessionKeys.mandationStatus -> status.mandationStatus)
           case _ => Seq()
         })
 
@@ -122,10 +122,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
 
   def retrieveMandationStatus(vrn: String)(implicit request: Request[AnyContent]): Future[HttpGetResult[MandationStatus]] = {
-    val mtdMandationSessionKey = "mtdVatMandationStatus"
+    val mtdMandationSessionKey = SessionKeys.mandationStatus
 
     request.session.get(mtdMandationSessionKey) match {
-      case Some(value) => Future.successful(Right(Json.parse(value).as[MandationStatus]))
+      case Some(value) => Future.successful(Right(MandationStatus(value)))
       case _ => mandationStatusService.getMandationStatus(vrn)
     }
   }
