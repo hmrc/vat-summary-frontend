@@ -60,7 +60,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         response.body.contains("View return deadlines") shouldBe true
       }
 
-      "return 200 and 'Submit return' when Non MTDfB" in {
+      "return 200 and 'Submit VAT Return' when Non MTDfB" in {
         appConfig.features.submitReturnFeatures(true)
 
         new Test {
@@ -74,7 +74,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
 
           val response: WSResponse = await(request().get())
           response.status shouldBe Status.OK
-          response.body.contains("Submit return") shouldBe true
+          response.body.contains("Submit VAT Return") shouldBe true
         }
       }
 
