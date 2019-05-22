@@ -18,21 +18,22 @@ package controllers
 
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
+import common.FinancialTransactionsConstants.nonMTDfB
+import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
 import models._
-import models.payments.Payments
 import models.obligations.{Obligation, VatReturnObligations}
+import models.payments.Payments
 import models.viewModels.VatDetailsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent, Request}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import common.FinancialTransactionsConstants.nonMTDfB
-import common.SessionKeys
 
 import scala.concurrent.Future
 
@@ -59,7 +60,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
         mandationStatus <- if(appConfig.features.submitReturnFeatures()) {
-          mandationStatusService.getMandationStatus(user.vrn) } else { Future.successful(Right(MandationStatus("Disabled"))) }
+          retrieveMandationStatus(user.vrn)
+        } else { Future.successful(Right(MandationStatus("Disabled"))) }
       } yield {
         val migratedDate = (request.session.get(SessionKeys.migrationToETMP), customerInfo) match {
           case (Some(date), _) => date
@@ -67,8 +69,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
           case (None, Left(_)) => ""
         }
         auditEvents(user, nextReturn, nextPayment)
+
+        val newSessionVariables: Seq[(String, String)] = Seq(SessionKeys.migrationToETMP -> migratedDate) ++ (mandationStatus match {
+          case Right(status) => Seq(SessionKeys.mandationStatus -> status.mandationStatus)
+          case _ => Seq()
+        })
+
         Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus)))
-          .addingToSession(SessionKeys.migrationToETMP -> migratedDate)
+          .addingToSession(newSessionVariables: _*)
+
       }
   }
 
@@ -109,6 +118,16 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       isHybridUser,
       isNonMTDfB
     )
+  }
+
+
+  def retrieveMandationStatus(vrn: String)(implicit request: Request[AnyContent]): Future[HttpGetResult[MandationStatus]] = {
+    val mtdMandationSessionKey = SessionKeys.mandationStatus
+
+    request.session.get(mtdMandationSessionKey) match {
+      case Some(value) => Future.successful(Right(MandationStatus(value)))
+      case _ => mandationStatusService.getMandationStatus(vrn)
+    }
   }
 
   private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
