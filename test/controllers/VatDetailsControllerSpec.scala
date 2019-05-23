@@ -101,6 +101,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       mockAppConfig
     )
 
+    mockAppConfig.features.submitReturnFeatures(true)
+
     def target(needMandationCall: Boolean = true): VatDetailsController = {
       setup(needMandationCall)
       new VatDetailsController(messages,
