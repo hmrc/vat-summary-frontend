@@ -78,11 +78,11 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description text" in {
-          elementText(Selectors.description) shouldBe "for the period 1 January to 2 February 2018"
+          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
         }
 
         "display the correct due text" in {
-          elementText(Selectors.due) shouldBe "due by 3 March 2018"
+          elementText(Selectors.due) shouldBe "due by 3 Mar 2018"
         }
 
         "display the correct owed amount as a negative" in {
@@ -103,7 +103,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         }
 
         "have the correct pay link context" in {
-          elementText(Selectors.payHiddenContent) shouldBe "£100 for the period 1 January to 2 February 2018"
+          elementText(Selectors.payHiddenContent) shouldBe "£100 for the period 1 Jan to 2 Feb 2018"
         }
 
         "display the link to view the return" in {
@@ -154,7 +154,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct pay link context" in {
-        elementText(Selectors.payHiddenContent) shouldBe "£100 overdue for the period 1 January to 2 February 2018"
+        elementText(Selectors.payHiddenContent) shouldBe "£100 overdue for the period 1 Jan to 2 Feb 2018"
       }
     }
   }

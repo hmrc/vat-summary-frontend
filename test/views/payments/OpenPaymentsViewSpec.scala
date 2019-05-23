@@ -139,7 +139,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct description" in {
-        elementText(Selectors.description(1)) shouldBe "for the period 1 January to 31 March 2001"
+        elementText(Selectors.description(1)) shouldBe "for the period 1 Jan to 31 Mar 2001"
       }
 
       "render the correct amount" in {
@@ -147,7 +147,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct due period" in {
-        elementText(Selectors.due(1)) shouldBe "due by 8 April 2001 overdue"
+        elementText(Selectors.due(1)) shouldBe "due by 8 Apr 2001 overdue"
       }
 
       "render the Pay now text" in {
@@ -174,7 +174,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct description" in {
-        elementText(Selectors.description(2)) shouldBe "interest charged on additional tax assessed for the period 1 January to 31 March 2003"
+        elementText(Selectors.description(2)) shouldBe "interest charged on additional tax assessed for the period 1 Jan to 31 Mar 2003"
       }
 
       "render the correct amount" in {
@@ -182,7 +182,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct due period" in {
-        elementText(Selectors.due(2)) shouldBe "due by 5 April 2003"
+        elementText(Selectors.due(2)) shouldBe "due by 5 Apr 2003"
       }
 
       "render the Pay now text" in {
@@ -309,8 +309,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
           hasDirectDebit = Some(false)
         ),
         ChargeType.apply(historyChargeHelper.name).value,
-        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name, useLongDateFormat = true)._1,
-        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name, useLongDateFormat = true)._2
+        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,
+        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._2
       )
     }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
 
