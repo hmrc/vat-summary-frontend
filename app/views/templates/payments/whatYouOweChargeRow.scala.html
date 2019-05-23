@@ -16,7 +16,7 @@
 
 @import models.payments.OpenPaymentsModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
-@import views.html.templates.formatters.money.{displayMoney, positiveNegative}
+@import views.html.templates.formatters.money.displayMoney
 @import views.templates.payments.WhatYouOweChargeHelper
 
 @(payment: OpenPaymentsModel, count: Int)(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
@@ -39,7 +39,7 @@
     </td>
 
     <td scope="row" class="nowrap">
-        <span data-amount="@(payment.amount)">@positiveNegative(payment.amount)</span>
+        <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
     </td>
 
     <td scope="row" class="nowrap">

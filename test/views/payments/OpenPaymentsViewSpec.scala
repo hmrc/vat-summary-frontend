@@ -143,7 +143,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct amount" in {
-        elementText(Selectors.amount(1)) shouldBe "- £2,000,000,000.01"
+        elementText(Selectors.amount(1)) shouldBe "£2,000,000,000.01"
       }
 
       "render the correct due period" in {
@@ -178,7 +178,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct amount" in {
-        elementText(Selectors.amount(2)) shouldBe "- £300"
+        elementText(Selectors.amount(2)) shouldBe "£300"
       }
 
       "render the correct due period" in {
