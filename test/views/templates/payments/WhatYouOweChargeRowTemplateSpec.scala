@@ -86,11 +86,11 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct owed amount as a negative" in {
-          elementText(Selectors.amount) shouldBe "- £100"
+          elementText(Selectors.amount) shouldBe "£100"
         }
 
         "display the correct amount data attribute as a negative" in {
-          elementText(Selectors.amountData) shouldBe "- £100"
+          elementText(Selectors.amountData) shouldBe "£100"
         }
 
         "display the correct pay text" in {
