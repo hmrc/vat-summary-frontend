@@ -31,7 +31,7 @@
         @chargeDescription.map { description => <div>@description</div> }
 
         <div data-due="@(payment.due.toString)" class="form-hint">
-            @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat= true)
+            @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
             @if(payment.overdue) {
                 <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
             }

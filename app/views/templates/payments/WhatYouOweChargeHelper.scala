@@ -33,7 +33,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
         Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.start), Some(payment.end)))
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
         val descriptionText = PaymentMessageHelper.getFullDescription(desc, None, None)
-          if (descriptionText.contains("{0}")) {
+        if (descriptionText.contains("{0}")) {
           Logger.warn("[WhatYouOweChargeHelper][description] - " +
             s"No date period was found for ${payment.chargeType}. Omitting description.")
           None
