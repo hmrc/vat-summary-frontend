@@ -373,10 +373,10 @@ object PaymentMessageHelper {
     VATPOAReturnCreditCharge
   )
 
-  def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate], useShortDayFormat: Boolean = true)
+  def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
                         (implicit messages: Messages, lang: play.api.i18n.Lang): String = {
     (from, to) match {
-      case (Some(fromDate), Some(toDate)) => messages(descriptionMessageKey, displayDateRange(fromDate, toDate, useShortDayFormat))
+      case (Some(fromDate), Some(toDate)) => messages(descriptionMessageKey, displayDateRange(fromDate, toDate, useShortDayFormat = true))
       case _ => messages(descriptionMessageKey)
     }
   }

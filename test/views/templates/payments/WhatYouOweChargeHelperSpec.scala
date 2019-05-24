@@ -47,7 +47,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
       val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), messages)
 
       "return the description of the charge" in {
-        helper.description shouldBe Some("for the period 1 January to 2 February 2018")
+        helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
       }
     }
 

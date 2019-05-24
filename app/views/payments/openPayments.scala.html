@@ -40,10 +40,11 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("openPayments.title")
   )
+<div class="grid-row column-two-thirds">
 
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
-  <div class="column-two-thirds payments">
+    <div class="payments">
       <div class="section">
           <table>
               <thead>
@@ -111,5 +112,7 @@
 
     @expandingHelpSection(messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
 
+    </div>
   </div>
+
 }

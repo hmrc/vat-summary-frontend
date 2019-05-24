@@ -30,7 +30,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
   def description()(implicit lang: play.api.i18n.Lang): Option[String] = {
     (payment, paymentMessageHelper.description) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
-        Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.start), Some(payment.end), useShortDayFormat = false))
+        Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.start), Some(payment.end)))
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
         val descriptionText = PaymentMessageHelper.getFullDescription(desc, None, None)
         if (descriptionText.contains("{0}")) {
