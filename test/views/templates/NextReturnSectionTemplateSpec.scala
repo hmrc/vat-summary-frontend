@@ -72,7 +72,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the 'View return deadlines' link" in {
-        elementText(Selectors.viewReturnsButton) shouldBe "Submit return"
+        elementText(Selectors.viewReturnsButton) shouldBe "Submit VAT Return"
       }
     }
 
