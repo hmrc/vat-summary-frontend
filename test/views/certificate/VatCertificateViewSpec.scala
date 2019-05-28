@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,31 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit messages: Messages)
+package views.certificate
 
-<div class="column-one-half" id="vat-certificate">
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import views.ViewBaseSpec
 
-    <h2 class="heading-small"><a href="@controllers.routes.VatCertificateController.show().url">@messages("vatDetails.vatCertificate.link")</a></h2>
+class VatCertificateViewSpec extends ViewBaseSpec {
 
-    <p>@messages("vatDetails.vatCertificate.view")</p>
+  object Selectors {
+    val heading = "h1"
+  }
 
-</div>
+  "The VAT Certificate page" should {
+
+    lazy val view = views.html.certificate.vatCertificate()
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have the correct title" in {
+      document.title shouldBe "Your VAT Certificate"
+    }
+
+    "have the correct heading" in {
+      elementText(Selectors.heading) shouldBe "Your VAT Certificate"
+    }
+  }
+}

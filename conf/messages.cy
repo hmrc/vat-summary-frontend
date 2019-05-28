@@ -146,6 +146,8 @@ paymentsHistory.previousPayments.youCan = Gallwch
 paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol (yn agor tab newydd)
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
 
+vatCertificate.title = Eich tystysgrif TAW
+
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
 chargeType.vatReturnCreditChargeDescription = ar gyfer eich Ffurflen TAW {0}

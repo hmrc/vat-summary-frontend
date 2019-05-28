@@ -120,6 +120,8 @@ paymentsHistory.previousPayments.youCan = You can
 paymentsHistory.previousPayments.viewPreviousPayments = view your previous payments (opens in new tab)
 paymentsHistory.previousPayments.beforeMtd = if you made payments before joining Making Tax Digital.
 
+vatCertificate.title = Your VAT Certificate
+
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Repayment from HMRC
 chargeType.vatReturnCreditChargeDescription = for your {0} return

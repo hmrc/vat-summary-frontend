@@ -40,7 +40,7 @@ class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct link" in {
-        elementAttributes(Selectors.vatCertificateHeading).get("href") shouldBe Some("#")
+        elementAttributes(Selectors.vatCertificateHeading).get("href") shouldBe Some("/vat-through-software/vat-certificate")
       }
 
       "have the correct paragraph" in {

@@ -6,6 +6,7 @@ GET        /account/details                     controllers.AccountDetailsContro
 GET        /direct-debit                        controllers.DirectDebitController.directDebits(status: Option[Boolean])
 GET        /payment-history/previous-payments   controllers.PaymentHistoryController.previousPayments()
 GET        /payment-history/:year               controllers.PaymentHistoryController.paymentHistory(year: Int)
+GET        /vat-certificate                     controllers.VatCertificateController.show
 
 GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
 GET        /make-payment/:amountInPence/:chargeType/:dueDate controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)
