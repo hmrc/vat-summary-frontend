@@ -62,8 +62,8 @@ partials.btaHome.partialMigration.line2 = Bydd yn cymryd hyd at 72 awr i greu’
 partials.btaHome.partialMigration.line3 = Dewch yn ôl yn nes ymlaen.
 
 vatDetails.title = Eich manylion TAW
-vatDetails.vatCertificate.view = Bwrw golwg dros fanylion eich busnes a manylion eraill.
-vatDetails.vatCertificate.link = Bwrw golwg dros Dystysgrif TAW (yn agor mewn tab newydd)
+vatDetails.vatCertificate.view = View and print your VAT certificate.
+vatDetails.vatCertificate.link = View VAT certificate
 vatDetails.updateVatDetails.link = Diweddaru’ch manylion TAW
 vatDetails.updateVatDetails.view = Rhoi gwybod i ni am newidiadau i’ch busnes neu’ch Ffurflenni TAW.
 vatDetails.paymentHistory.link = Hanes taliadau

@@ -16,7 +16,6 @@
 
 package views.templates
 
-import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
@@ -28,19 +27,24 @@ class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
 
     object Selectors {
       val vatCertificateHeading = "#vat-certificate h2 a"
+      val vatCertificateParagraph = "#vat-certificate p"
     }
 
-    def view: HtmlFormat.Appendable = views.html.templates.vatCertificateSection(User("123456789"))
+    def view: HtmlFormat.Appendable = views.html.templates.vatCertificateSection()
     implicit def document: Document = Jsoup.parse(view.body)
 
     "the vat certificate feature" should {
 
       "have the correct heading" in {
-        elementText(Selectors.vatCertificateHeading) shouldBe "View VAT certificate (opens in a new tab)"
+        elementText(Selectors.vatCertificateHeading) shouldBe "View VAT certificate"
       }
 
-      "have the correct portal link" in {
-        elementAttributes(Selectors.vatCertificateHeading).get("href") shouldBe Some("/vat/trader/123456789/certificate")
+      "have the correct link" in {
+        elementAttributes(Selectors.vatCertificateHeading).get("href") shouldBe Some("#")
+      }
+
+      "have the correct paragraph" in {
+        elementText(Selectors.vatCertificateParagraph) shouldBe "View and print your VAT certificate."
       }
     }
   }

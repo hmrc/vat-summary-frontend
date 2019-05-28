@@ -16,8 +16,6 @@
 
 package views.vatDetails
 
-import java.time.LocalDate
-
 import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
@@ -107,6 +105,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     isNonMTDfBUser = None
   )
 
+  mockConfig.features.vatCertificateEnabled(true)
+
   "Rendering the VAT details page" should {
 
     lazy val view = views.html.vatDetails.details(detailsModel)
@@ -139,17 +139,16 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementText(Selectors.vatRegNo) shouldBe s"VAT registration number (VRN): ${user.vrn}"
     }
 
-    "have the vat certificate section" should {
+    "have the vat certificate section" which {
 
-      "have the heading" in {
+      lazy val vatCertificate = element(Selectors.vatCertificate)
 
-        mockConfig.features.vatCertificateEnabled(true)
-        lazy val view = views.html.vatDetails.details(detailsModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
+      "has the correct heading" in {
+        vatCertificate.select("h2").text() shouldBe "View VAT certificate"
+      }
 
-        lazy val vatCertificate = element(Selectors.vatCertificate)
-
-        vatCertificate.select("h2").text() shouldBe "View VAT certificate (opens in a new tab)"
+      "has the correct paragraph" in {
+        vatCertificate.select("p").text() shouldBe "View and print your VAT certificate."
       }
     }
 
@@ -204,20 +203,18 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         }
       }
     }
-  }
 
-  "Rendering the VAT details page without the vat certificate section" should {
-
-    "have the update your VAT details section" in {
-
-      mockConfig.features.vatCertificateEnabled(false)
-      lazy val view = views.html.vatDetails.details(detailsModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+    "have the update your VAT details section" which {
 
       lazy val updateVatDetails = element(Selectors.updateVatDetails)
 
-      updateVatDetails.select("h2").text() shouldBe "Update your VAT details"
+      "has the correct heading" in {
+        updateVatDetails.select("h2").text() shouldBe "Update your VAT details"
+      }
 
+      "has the correct paragraph" in {
+        updateVatDetails.select("p").text() shouldBe "Tell us about changes to your business or VAT Returns."
+      }
     }
   }
 

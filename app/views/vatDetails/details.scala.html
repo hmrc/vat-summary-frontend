@@ -90,12 +90,12 @@
             </div>
 
             <div class="grid-row">
+                @views.html.templates.updateVatDetailsSection()
                 @if(appConfig.features.vatCertificateEnabled()) {
-                    @views.html.templates.vatCertificateSection(user)
-                } else {
-                    @views.html.templates.updateVatDetailsSection()
+                    @views.html.templates.vatCertificateSection()
                 }
             </div>
+
         </div>
     </div>
 }

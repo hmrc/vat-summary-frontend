@@ -36,8 +36,8 @@ partials.btaHome.partialMigration.line2 = It will take up to 72 hours for your a
 partials.btaHome.partialMigration.line3 = Check back again later.
 
 vatDetails.title = Your VAT details
-vatDetails.vatCertificate.view = See your business information and other details.
-vatDetails.vatCertificate.link = View VAT certificate (opens in a new tab)
+vatDetails.vatCertificate.view = View and print your VAT certificate.
+vatDetails.vatCertificate.link = View VAT certificate
 vatDetails.updateVatDetails.link = Update your VAT details
 vatDetails.updateVatDetails.view = Tell us about changes to your business or VAT Returns.
 vatDetails.paymentHistory.link = Payment history

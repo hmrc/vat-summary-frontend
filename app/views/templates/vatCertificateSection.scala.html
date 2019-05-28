@@ -14,13 +14,11 @@
  * limitations under the License.
  *@
 
-@(user: models.User)(implicit messages: Messages)
+@()(implicit messages: Messages)
 
 <div class="column-one-half" id="vat-certificate">
 
-    <h2 class="heading-small"><a href="/vat/trader/@{user.vrn}/certificate"
-    data-journey-click="vat-certificate:view:vat-details"
-    target="_blank">@messages("vatDetails.vatCertificate.link")</a></h2>
+    <h2 class="heading-small"><a href="#">@messages("vatDetails.vatCertificate.link")</a></h2>
 
     <p>@messages("vatDetails.vatCertificate.view")</p>
 
