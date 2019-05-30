@@ -46,10 +46,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
       )))
 
+    val vatCertificateSwitch: Boolean = true
+
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(authResult)
+      mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
     }
 
     def target: VatCertificateController = {
@@ -60,44 +63,62 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
   "The show() action" when {
 
-    "the user is logged in with valid credentials" should {
+    "the vat certificate feature switch is on" when {
 
-      "return OK (200)" in new Test {
-        private val result = target.show()(fakeRequest)
-        status(result) shouldBe Status.OK
+      "the user is logged in with valid credentials" should {
+
+        "return OK (200)" in new Test {
+          private val result = target.show()(fakeRequest)
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in new Test {
+          private val result = target.show()(fakeRequest)
+          contentType(result) shouldBe Some("text/html")
+        }
       }
 
-      "return HTML" in new Test {
-        private val result = target.show()(fakeRequest)
-        contentType(result) shouldBe Some("text/html")
+      "the user is logged in with invalid credentials" should {
+
+        "return Forbidden (403)" in new Test {
+          override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+          private val result = target.show()(fakeRequest)
+          status(result) shouldBe Status.FORBIDDEN
+        }
+
+        "return HTML" in new Test {
+          override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+          private val result = target.show()(fakeRequest)
+          contentType(result) shouldBe Some("text/html")
+        }
+      }
+
+      "the user is not logged in" should {
+
+        "return Unauthorised (401)" in new Test {
+          override val authResult: Future[_] = Future.failed(MissingBearerToken())
+          private val result = target.show()(fakeRequest)
+          status(result) shouldBe Status.UNAUTHORIZED
+        }
+
+        "return HTML" in new Test {
+          override val authResult: Future[_] = Future.failed(MissingBearerToken())
+          private val result = target.show()(fakeRequest)
+          contentType(result) shouldBe Some("text/html")
+        }
       }
     }
 
-    "the user is logged in with invalid credentials" should {
+    "the vat certificate feature switch is off and a user is logged in with valid credentials" should {
 
-      "return Forbidden (403)" in new Test {
-        override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+      "return Not Found (404)" in new Test {
+        override val vatCertificateSwitch: Boolean = false
         private val result = target.show()(fakeRequest)
-        status(result) shouldBe Status.FORBIDDEN
+        status(result) shouldBe Status.NOT_FOUND
       }
 
       "return HTML" in new Test {
-        override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
-        private val result = target.show()(fakeRequest)
-        contentType(result) shouldBe Some("text/html")
-      }
-    }
-
-    "the user is not logged in" should {
-
-      "return Unauthorised (401)" in new Test {
-        override val authResult: Future[_] = Future.failed(MissingBearerToken())
-        private val result = target.show()(fakeRequest)
-        status(result) shouldBe Status.UNAUTHORIZED
-      }
-
-      "return HTML" in new Test {
-        override val authResult: Future[_] = Future.failed(MissingBearerToken())
+        override val vatCertificateSwitch: Boolean = false
         private val result = target.show()(fakeRequest)
         contentType(result) shouldBe Some("text/html")
       }

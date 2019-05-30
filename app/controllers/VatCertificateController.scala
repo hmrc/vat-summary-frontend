@@ -30,6 +30,10 @@ class VatCertificateController @Inject()(val messagesApi: MessagesApi,
   extends FrontendController with I18nSupport {
 
   def show(): Action[AnyContent] = authorisedController.authorisedAction { implicit request => _ =>
-    Future.successful(Ok(views.html.certificate.vatCertificate()))
+    if(appConfig.features.vatCertificateEnabled()) {
+      Future.successful(Ok(views.html.certificate.vatCertificate()))
+    } else {
+      Future.successful(NotFound(views.html.errors.notFound()))
+    }
   }
 }
