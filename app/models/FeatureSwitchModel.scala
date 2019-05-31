@@ -23,5 +23,6 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               enableVatObligationsService: Boolean,
                               useDirectDebitDummyPage: Boolean,
                               useLanguageSelector: Boolean,
-                              submitReturnFeatures: Boolean
+                              submitReturnFeatures: Boolean,
+                              agentAccess: Boolean
                              )
