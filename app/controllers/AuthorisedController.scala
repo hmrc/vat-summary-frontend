@@ -18,32 +18,36 @@ package controllers
 
 import common.EnrolmentKeys._
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import javax.inject.Inject
 import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, InsufficientEnrolments, NoActiveSession}
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
 import scala.concurrent.Future
 
 class AuthorisedController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      val hybridUserPredicate: HybridUserPredicate,
+                                     val authoriseAsAgent: AgentPredicate,
                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  def authorisedAction(block: Request[AnyContent] => User => Future[Result], checkMigrationStatus: Boolean = false): Action[AnyContent] = Action.async {
+  def authorisedAction(block: Request[AnyContent] => User => Future[Result],
+                       checkMigrationStatus: Boolean = false,
+                       allowAgentAccess: Boolean = false): Action[AnyContent] = Action.async {
     implicit request =>
 
       val predicate = ((Enrolment(vatDecEnrolmentKey) or Enrolment(vatVarEnrolmentKey)) and Enrolment(mtdVatEnrolmentKey))
         .or(Enrolment(mtdVatEnrolmentKey))
 
-      enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments) {
-        enrolments =>
+      enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments and Retrievals.affinityGroup) {
+
+        case _ ~ Some(AffinityGroup.Agent) if allowAgentAccess => authoriseAsAgent.authoriseAsAgent(block)
+        case enrolments ~ Some(_) =>
           val user = User(enrolments)
 
           if(checkMigrationStatus) {
@@ -51,6 +55,9 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
           } else {
             block(request)(user)
           }
+        case _ =>
+          Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
+          Future.successful(InternalServerError)
       } recoverWith {
         case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
         case _: InsufficientEnrolments => {
@@ -67,5 +74,10 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
   def authorisedMigratedUserAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
     block,
     checkMigrationStatus = true
+  )
+
+  def authorisedVatCertificateAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
+    block,
+    allowAgentAccess = appConfig.features.agentAccess()
   )
 }

@@ -19,7 +19,9 @@ package models
 import common.EnrolmentKeys._
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
 
-case class User(vrn: String, active: Boolean = true, hasNonMtdVat: Boolean = false)
+case class User(vrn: String, active: Boolean = true, hasNonMtdVat: Boolean = false, arn: Option[String] = None) {
+  def isAgent: Boolean = arn.isDefined
+}
 
 object User {
   def apply(authorisedEnrolments: Enrolments): User = {
@@ -32,11 +34,9 @@ object User {
 
     val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) || vatEnrolments.exists(_.key == vatVarEnrolmentKey)
 
-
     vatEnrolments.collectFirst {
       case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
         User(vrn, status == "Activated", containsNonMtdVat)
     }.getOrElse(throw InternalError("VRN is invalid"))
-
   }
 }

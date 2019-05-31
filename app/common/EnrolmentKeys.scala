@@ -19,8 +19,13 @@ package common
 object EnrolmentKeys {
 
   val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
+  val mtdVatIdentifierKey = "VRN"
   val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
   val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
+  val agentEnrolmentKey = "HMRC-AS-AGENT"
+  val agentIdentifierKey = "AgentReferenceNumber"
+  val agentDelegatedAuthRuleKey = "AgentReferenceNumber"
+  val activated = "Activated"
 
 }
 

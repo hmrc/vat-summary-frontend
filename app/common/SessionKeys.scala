@@ -19,4 +19,5 @@ package common
 object SessionKeys {
   val migrationToETMP = "customerMigratedToETMPDate"
   val mandationStatus = "mtdVatMandationStatus"
+  val agentSessionVrn = "CLIENT_VRN"
 }
