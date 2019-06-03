@@ -264,6 +264,15 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         }
       }
 
+      "user is an Agent" should {
+
+        "return 403 (Forbidden)" in new Test {
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+          val result: Future[Result] = target.openPayments()(fakeRequest)
+          status(result) shouldBe Status.FORBIDDEN
+        }
+      }
+
       "the user is not authenticated" should {
 
         "return 401 (Unauthorised)" in new Test {

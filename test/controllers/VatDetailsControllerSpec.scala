@@ -216,6 +216,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "user is an Agent" should {
+
+      "return 403 (Forbidden)" in new DetailsTest {
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+        val result: Future[Result] = target().details()(fakeRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
     "the user is hybrid" should {
 
       "not attempt to retrieve payment obligations" in new DetailsTest {

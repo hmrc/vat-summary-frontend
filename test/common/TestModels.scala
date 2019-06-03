@@ -21,7 +21,7 @@ import java.time.LocalDate
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
 import models.{Address, CustomerInformation, MandationStatus}
-import uk.gov.hmrc.auth.core.AffinityGroup.Individual
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 
@@ -140,6 +140,18 @@ object TestModels {
       )
     ),
     Some(Individual)
+  ))
+
+  val agentAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
+    Enrolments(
+      Set(
+        Enrolment(
+          "HMRC-AS-AGENT",
+          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
+          "Active")
+      )
+    ),
+    Some(Agent)
   ))
 
   val validMandationStatus: MandationStatus = MandationStatus(

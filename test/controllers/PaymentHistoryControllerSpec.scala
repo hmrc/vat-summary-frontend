@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{customerInformation, customerInformationHybrid, successfulAuthResult}
+import common.TestModels.{agentAuthResult, customerInformation, customerInformationHybrid, successfulAuthResult}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.{UnknownError, VatLiabilitiesError}
@@ -227,6 +227,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val authCall = true
         override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "user is an Agent" should {
+
+      "return 403 (Forbidden)" in new Test {
+        override val authCall = true
+        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+        val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }
     }

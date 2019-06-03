@@ -18,7 +18,7 @@ package controllers
 
 import audit.AuditingService
 import audit.models.AuditModel
-import common.TestModels.successfulAuthResult
+import common.TestModels.{agentAuthResult, successfulAuthResult}
 import connectors.VatSubscriptionConnector
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.DirectDebitDetailsModel
@@ -124,6 +124,15 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
 
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "user is an Agent" should {
+
+      "return 403 (Forbidden)" in new DirectDebitDetailsTest {
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+        val result: Future[Result] = target.directDebits()(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }
     }

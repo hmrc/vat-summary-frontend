@@ -148,6 +148,16 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
+    "user is an Agent" should {
+
+      "return 403 (Forbidden)" in new AccountDetailsTest {
+        override val runMocks: Boolean = false
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+        val result: Future[Result] = target.accountDetails()(fakeRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
   }
 
   "Calling the handleAccountDetailsModel function" when {

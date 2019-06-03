@@ -18,7 +18,7 @@ package controllers
 
 import audit.AuditingService
 import audit.models.AuditModel
-import common.TestModels.successfulAuthResult
+import common.TestModels.{agentAuthResult, successfulAuthResult}
 import connectors.VatSubscriptionConnector
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.PaymentSetupError
@@ -153,6 +153,15 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
 
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "user is an Agent" should {
+
+      "return 403 (Forbidden)" in new MakePaymentDetailsTest {
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+        val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }
     }
