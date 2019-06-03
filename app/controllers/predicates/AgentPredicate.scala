@@ -63,14 +63,12 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
             Logger.debug(s"AuthoriseAsAgentWithClient][authoriseAsAgent] - No active session. Redirecting to ${appConfig.signInUrl}")
             Redirect(appConfig.signInUrl)
           case _: AuthorisationException =>
-            //TODO: add url
             Logger.debug(s"[AuthoriseAsAgentWithClient][authoriseAsAgent] - Agent does not have delegated authority for Client. " +
               s"Redirecting to ${appConfig.agentClientUnauthorisedUrl(request.uri)}")
             Redirect(appConfig.agentClientUnauthorisedUrl(request.uri))
         }
       case None =>
-        //TODO: add url
-        Logger.debug(s"[AuthPredicate][authoriseAsAgent] - No Client VRN in session. Redirecting to 'url'")
+        Logger.debug(s"[AuthPredicate][authoriseAsAgent] - No Client VRN in session. Redirecting to ${appConfig.agentClientLookupStartUrl(request.uri)}")
         Future.successful(Redirect(appConfig.agentClientLookupStartUrl(request.uri)))
     }
   }
