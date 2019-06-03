@@ -31,6 +31,7 @@ class LanguageSpec extends IntegrationBaseSpec {
       AuthStub.authorised()
       obligationsStub.stubOutstandingObligations
       CustomerInfoStub.stubCustomerInfo()
+      CustomerInfoStub.stubCustomerMandationStatus()
       FinancialDataStub.stubAllOutstandingOpenPayments
       buildRequest("/vat-overview")
     }

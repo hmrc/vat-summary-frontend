@@ -156,7 +156,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
       "agent does not have delegated enrolment for VRN" should {
 
-        "return 303" in new Test {
+        "redirect to agent-client-lookup unauthorised page" in new Test {
 
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *, *)
@@ -165,7 +165,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
           lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
           await(status(result)) shouldBe Status.SEE_OTHER
-          redirectLocation(result) shouldBe Some("")
+          redirectLocation(result) shouldBe Some(mockAppConfig.agentClientUnauthorisedUrl("/"))
         }
       }
 
@@ -187,12 +187,12 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
     "CLIENT_VRN is not in session" should {
 
-      "redirect to agent-client lookup" in new Test {
+      "redirect to agent-client lookup VRN lookup page" in new Test {
 
         lazy val result: Future[Result] = target(fakeRequest)
 
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some("")
+        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupStartUrl("/"))
       }
     }
   }

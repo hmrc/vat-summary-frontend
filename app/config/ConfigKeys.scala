@@ -92,4 +92,8 @@ object ConfigKeys {
   val nonHybridPreviousPaymentsUrl: String = "portal.nonHybridPreviousPaymentsUrl"
 
   val host = "host"
+
+  val vatAgentClientLookupFrontendHost: String = "vat-agent-client-lookup-frontend.host"
+  val vatAgentClientLookupFrontendStartUrl: String = "vat-agent-client-lookup-frontend.startUrl"
+  val vatAgentClientLookupFrontendUnauthorisedUrl: String = "vat-agent-client-lookup-frontend.unauthorisedUrl"
 }

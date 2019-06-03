@@ -81,4 +81,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
     "english" -> Lang("en"),
     "cymraeg" -> Lang("cy")
   )
+  override val agentClientLookupStartUrl: String => String = uri => s"agent-client-lookup-start-url/$uri"
+  override val agentClientUnauthorisedUrl: String => String = uri => s"agent-client-unauthorised-url/$uri"
 }
