@@ -20,9 +20,9 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{customerInformation, customerInformationHybrid}
+import common.TestModels.{customerInformation, customerInformationHybrid, successfulAuthResult}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
@@ -33,10 +33,11 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
+import services._
+import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,10 +52,13 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   implicit val mockAuditService: AuditingService = mock[AuditingService]
   val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+  val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
+  val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
   val mockAuthorisedController: AuthorisedController = new AuthorisedController(
     messages,
     mockEnrolmentsAuthService,
     mockHybridUserPredicate,
+    mockAgentPredicate,
     mockAppConfig
   )
 
@@ -104,7 +108,10 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val authCall: Boolean = false
     val accountDetailsCall: Boolean = false
     val enrolments: Set[Enrolment] = Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), ""))
-    lazy val authResult: Future[_] = Future.successful(Enrolments(enrolments))
+    lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
+      Enrolments(enrolments),
+      Some(Individual)
+    ))
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformation)
 
     def setup(): Any = {
@@ -208,7 +215,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 401 (Unauthorised)" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[_] = Future.failed(MissingBearerToken())
+        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
         status(result) shouldBe Status.UNAUTHORIZED
       }
@@ -218,7 +225,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
         status(result) shouldBe Status.FORBIDDEN
       }
@@ -312,7 +319,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 401 (Unauthorised)" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[_] = Future.failed(MissingBearerToken())
+        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
         status(result) shouldBe Status.UNAUTHORIZED
       }
@@ -322,7 +329,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
         status(result) shouldBe Status.FORBIDDEN
       }

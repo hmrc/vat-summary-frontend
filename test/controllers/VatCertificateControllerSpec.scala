@@ -16,13 +16,14 @@
 
 package controllers
 
-import controllers.predicates.HybridUserPredicate
+import common.TestModels.successfulAuthResult
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService}
+import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,17 +35,17 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 
-    val authResult: Future[_] =
-      Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-      )))
+    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
     val vatCertificateSwitch: Boolean = true
 
@@ -81,13 +82,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       "the user is logged in with invalid credentials" should {
 
         "return Forbidden (403)" in new Test {
-          override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
           private val result = target.show()(fakeRequest)
           status(result) shouldBe Status.FORBIDDEN
         }
 
         "return HTML" in new Test {
-          override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
           private val result = target.show()(fakeRequest)
           contentType(result) shouldBe Some("text/html")
         }
@@ -96,13 +97,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       "the user is not logged in" should {
 
         "return Unauthorised (401)" in new Test {
-          override val authResult: Future[_] = Future.failed(MissingBearerToken())
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.show()(fakeRequest)
           status(result) shouldBe Status.UNAUTHORIZED
         }
 
         "return HTML" in new Test {
-          override val authResult: Future[_] = Future.failed(MissingBearerToken())
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.show()(fakeRequest)
           contentType(result) shouldBe Some("text/html")
         }

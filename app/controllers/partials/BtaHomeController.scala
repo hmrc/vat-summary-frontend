@@ -50,7 +50,7 @@ class BtaHomeController @Inject()(val messagesApi: MessagesApi,
   private def enrolledAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
       enrolments => {
-        val user = User(enrolments)
+        val user = User(enrolments, None)
         block(request)(user)
       }
     }.recover {
@@ -62,7 +62,7 @@ class BtaHomeController @Inject()(val messagesApi: MessagesApi,
   private def enrolledActionNonMtd(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised(Enrolment("HMCE-VATDEC-ORG")).retrieve(Retrievals.authorisedEnrolments) {
       enrolments => {
-        val user = User(enrolments)
+        val user = User(enrolments, None)
         block(request)(user)
       }
     }.recover {

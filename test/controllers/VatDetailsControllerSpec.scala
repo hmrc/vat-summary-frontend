@@ -23,21 +23,20 @@ import audit.models.AuditModel
 import common.TestModels._
 import common.{SessionKeys, TestModels}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models._
 import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.Payments
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
-import play.api.libs.json.Json
 import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -49,7 +48,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val obligations: VatReturnObligations = TestModels.obligations
     val payments: Payments = TestModels.payments
 
-    val authResult: Future[_] = successfulAuthResult
+    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val vatServiceReturnsResult: Future[ServiceResponse[Option[VatReturnObligations]]] = Future.successful(Right(Some(obligations)))
     val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] = Future.successful(Right(Some(payments)))
     val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(customerInformation))
@@ -61,6 +60,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockMandationService: MandationStatusService = mock[MandationStatusService]
 
@@ -98,6 +99,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 
@@ -190,7 +192,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user is not logged in" should {
 
       "return 401 (Unauthorised)" in new DetailsTest {
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
       }
@@ -199,7 +201,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user does not have sufficient enrolments" should {
 
       "return 403 (Forbidden)" in new DetailsTest {
-        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }
@@ -208,7 +210,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user is not authenticated" should {
 
       "return 403 (Forbidden)" in new DetailsTest {
-        override val authResult: Future[Nothing] = Future.failed(InsufficientConfidenceLevel())
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientConfidenceLevel())
         val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe Status.FORBIDDEN
       }

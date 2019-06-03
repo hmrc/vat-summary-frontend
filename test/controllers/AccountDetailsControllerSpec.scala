@@ -16,20 +16,20 @@
 
 package controllers
 
-import common.TestModels.customerInformationHybrid
+import common.TestModels._
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.ServerSideError
 import models.viewModels.AccountDetailsModel
 import models.{Address, CustomerInformation, User}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService}
+import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,10 +38,7 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
 
   private trait AccountDetailsTest {
     val runMocks = true
-    val authResult: Future[_] =
-      Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-      )))
+    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatSubscriptionConnector: VatSubscriptionConnector= mock[VatSubscriptionConnector]
@@ -61,10 +58,13 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 
@@ -80,10 +80,13 @@ class AccountDetailsControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = new AccountDetailsService(mockVatSubscriptionConnector)
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
     val testUser: User = User("999999999")

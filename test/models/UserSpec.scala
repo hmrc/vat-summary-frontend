@@ -69,7 +69,7 @@ class UserSpec extends UnitSpec {
       )
     )
 
-    val user = User(enrolments)
+    val user = User(enrolments, None)
 
     "say that it has the VATDEC and VATVAR enrolments" in {
       user.hasNonMtdVat shouldBe true
@@ -87,12 +87,72 @@ class UserSpec extends UnitSpec {
       ))
     )
 
-    val user = User(enrolments)
+    val user = User(enrolments, None)
 
     "say that it doesn't have the VATDEC and VATVAR enrolments" in {
       user.hasNonMtdVat shouldBe false
     }
 
+    "isAgent should return false" in {
+      user.isAgent shouldBe false
+    }
+  }
+
+  "Creating a User with an Agent Services enrolment" when {
+
+    "a delegated enrolment VRN is supplied" should {
+
+      val enrolments = Enrolments(
+        Set(Enrolment(
+          "HMRC-AS-AGENT",
+          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
+          "Activated"
+        ))
+      )
+
+      val user = User(enrolments, Some("909090909"))
+
+      "have the VRN specified in the delegated enrolment" in {
+        user.vrn shouldBe "909090909"
+      }
+
+      "have the ARN specified in the Agent enrolment" in {
+        user.arn shouldBe Some("XARN1234567")
+      }
+
+      "have the status 'Activated'" in {
+        user.active shouldBe true
+      }
+
+      "isAgent should return true" in {
+        user.isAgent shouldBe true
+      }
+    }
+
+    "a delegated enrolment VRN is not supplied" should {
+
+      val enrolments = Enrolments(
+        Set(Enrolment(
+          "HMRC-AS-AGENT",
+          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
+          "Activated"
+        ))
+      )
+
+      "throw an exception" in {
+
+        intercept[AuthorisationException] {
+          User(enrolments, None)
+        }
+      }
+
+      "have the correct message in the exception" in {
+
+        the[AuthorisationException] thrownBy {
+          User(enrolments, None)
+        } should have message "Delegated enrolment missing"
+      }
+    }
   }
 
   "Creating a User with a valid, active VAT Enrolment" should {
@@ -105,7 +165,7 @@ class UserSpec extends UnitSpec {
       ))
     )
 
-    val user = User(enrolments)
+    val user = User(enrolments, None)
 
     "have the VRN specified in the VAT Enrolment" in {
       user.vrn shouldBe "123456789"
@@ -113,6 +173,10 @@ class UserSpec extends UnitSpec {
 
     "have an active status" in {
       user.active shouldBe true
+    }
+
+    "isAgent should return false" in {
+      user.isAgent shouldBe false
     }
   }
 
@@ -126,7 +190,7 @@ class UserSpec extends UnitSpec {
       ))
     )
 
-    val user = User(enrolments)
+    val user = User(enrolments, None)
 
     "have the VRN specified in the VAT Enrolment" in {
       user.vrn shouldBe "123456789"
@@ -134,6 +198,10 @@ class UserSpec extends UnitSpec {
 
     "have an inactive status" in {
       user.active shouldBe false
+    }
+
+    "isAgent should return false" in {
+      user.isAgent shouldBe false
     }
   }
 
@@ -149,13 +217,13 @@ class UserSpec extends UnitSpec {
 
     "throw an exception" in {
       intercept[AuthorisationException] {
-        User(enrolments)
+        User(enrolments, None)
       }
     }
 
     "have the correct message in the exception" in {
       the[AuthorisationException] thrownBy {
-        User(enrolments)
+        User(enrolments, None)
       } should have message "VAT identifier invalid"
     }
   }
@@ -172,13 +240,13 @@ class UserSpec extends UnitSpec {
 
     "throw an exception" in {
       intercept[AuthorisationException] {
-        User(enrolments)
+        User(enrolments, None)
       }
     }
 
     "have the correct message in the exception" in {
       the[AuthorisationException] thrownBy {
-        User(enrolments)
+        User(enrolments, None)
       } should have message "VRN is invalid"
     }
   }

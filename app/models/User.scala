@@ -24,17 +24,20 @@ case class User(vrn: String, active: Boolean = true, hasNonMtdVat: Boolean = fal
 }
 
 object User {
-  def apply(authorisedEnrolments: Enrolments): User = {
+  def apply(authorisedEnrolments: Enrolments, delegatedEnrolmentVrn: Option[String]): User = {
 
     val vatEnrolments = authorisedEnrolments.enrolments.collect {
       case mtd@Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier("VRN", _) :: _, _, _) => mtd
       case Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => throw InternalError("VAT identifier invalid")
       case nonMtd@Enrolment(`vatDecEnrolmentKey` | `vatVarEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
+      case agentServices@Enrolment(`agentEnrolmentKey`, EnrolmentIdentifier(`agentIdentifierKey`, _) :: _, _, _) => agentServices
     }
 
     val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) || vatEnrolments.exists(_.key == vatVarEnrolmentKey)
 
     vatEnrolments.collectFirst {
+      case Enrolment(`agentEnrolmentKey`, EnrolmentIdentifier(_, arn) :: _, _, _) =>
+        User(delegatedEnrolmentVrn.getOrElse(throw InternalError("Delegated enrolment missing")), active = true, hasNonMtdVat = false, Some(arn))
       case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
         User(vrn, status == "Activated", containsNonMtdVat)
     }.getOrElse(throw InternalError("VRN is invalid"))

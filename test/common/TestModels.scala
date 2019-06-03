@@ -18,10 +18,12 @@ package common
 
 import java.time.LocalDate
 
-import models.{Address, CustomerInformation, MandationStatus}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
+import models.{Address, CustomerInformation, MandationStatus}
+import uk.gov.hmrc.auth.core.AffinityGroup.Individual
+import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 
 import scala.concurrent.Future
 
@@ -128,9 +130,17 @@ object TestModels {
     None
   )
 
-  val successfulAuthResult: Future[Enrolments] = Future.successful(Enrolments(Set(
-      Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-  )))
+  val successfulAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
+    Enrolments(
+      Set(
+        Enrolment(
+          "HMRC-MTD-VAT",
+          Seq(EnrolmentIdentifier("VRN", "123456789")),
+          "Active")
+      )
+    ),
+    Some(Individual)
+  ))
 
   val validMandationStatus: MandationStatus = MandationStatus(
     "MTDfB"

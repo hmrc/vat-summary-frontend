@@ -33,7 +33,7 @@ import scala.concurrent.Future
 class AuthorisedController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      val hybridUserPredicate: HybridUserPredicate,
-                                     val authoriseAsAgent: AgentPredicate,
+                                     val agentPredicate: AgentPredicate,
                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result],
@@ -46,9 +46,9 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
 
       enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments and Retrievals.affinityGroup) {
 
-        case _ ~ Some(AffinityGroup.Agent) if allowAgentAccess => authoriseAsAgent.authoriseAsAgent(block)
+        case _ ~ Some(AffinityGroup.Agent) if allowAgentAccess => agentPredicate.authoriseAsAgent(block)
         case enrolments ~ Some(_) =>
-          val user = User(enrolments)
+          val user = User(enrolments, None)
 
           if(checkMigrationStatus) {
             hybridUserPredicate.authoriseMigratedUserAction(block)(request, user)

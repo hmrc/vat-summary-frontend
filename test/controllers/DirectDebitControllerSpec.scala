@@ -18,8 +18,9 @@ package controllers
 
 import audit.AuditingService
 import audit.models.AuditModel
+import common.TestModels.successfulAuthResult
 import connectors.VatSubscriptionConnector
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.DirectDebitDetailsModel
 import models.errors.DirectDebitSetupError
 import org.jsoup.Jsoup
@@ -27,10 +28,10 @@ import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,11 +39,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class DirectDebitControllerSpec extends ControllerBaseSpec {
 
   private trait DirectDebitDetailsTest {
-    val authResult: Future[_] =
-      Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-      )))
-
+    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
@@ -50,10 +47,13 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 
