@@ -36,7 +36,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   def authoriseAsAgent(block: Request[AnyContent] => User => Future[Result])
-                      (implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
+                      (implicit request: Request[AnyContent]): Future[Result] = {
 
     val agentDelegatedAuthorityRule: String => Enrolment = vrn =>
       Enrolment(EnrolmentKeys.mtdVatEnrolmentKey)
@@ -82,8 +82,12 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
       case Right(MandationStatus(keys.nonMTDfB)) =>
         val user = User(enrolments, Some(vrn))
         block(request)(user)
-      case Left(_) =>
-        Logger.warn(s"[AuthPredicate][authoriseAsAgent] - No Client VRN in session. Redirecting to 'url'")
+      case Right(_) =>
+        //TODO: add page content
+        Logger.debug("[AuthPredicate][checkMandationStatus] - Agent acting for MTDfB client")
+        Future.successful(Forbidden)
+      case Left(error) =>
+        Logger.warn(s"[AuthPredicate][checkMandationStatus] - Error returned from mandationStatusService: $error")
         Future.successful(InternalServerError)
     }
   }

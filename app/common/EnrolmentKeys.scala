@@ -24,7 +24,7 @@ object EnrolmentKeys {
   val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
   val agentEnrolmentKey = "HMRC-AS-AGENT"
   val agentIdentifierKey = "AgentReferenceNumber"
-  val agentDelegatedAuthRuleKey = "AgentReferenceNumber"
+  val agentDelegatedAuthRuleKey = "mtd-vat-auth"
   val activated = "Activated"
 
 }
