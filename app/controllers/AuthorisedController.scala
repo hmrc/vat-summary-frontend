@@ -16,7 +16,7 @@
 
 package controllers
 
-import common.EnrolmentKeys._
+import common.{EnrolmentKeys => Keys}
 import config.AppConfig
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import javax.inject.Inject
@@ -28,6 +28,7 @@ import services._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
 import scala.concurrent.Future
 
 class AuthorisedController @Inject()(val messagesApi: MessagesApi,
@@ -41,34 +42,59 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
                        allowAgentAccess: Boolean = false): Action[AnyContent] = Action.async {
     implicit request =>
 
-      val predicate = ((Enrolment(vatDecEnrolmentKey) or Enrolment(vatVarEnrolmentKey)) and Enrolment(mtdVatEnrolmentKey))
-        .or(Enrolment(mtdVatEnrolmentKey))
+      enrolmentsAuthService
+        .authorised
+        .retrieve(Retrievals.allEnrolments and Retrievals.affinityGroup) {
+          case _ ~ Some(AffinityGroup.Agent) =>
+            if(allowAgentAccess) {
+              agentPredicate.authoriseAsAgent(block)
+            } else {
+              Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Rendering unauthorised page.")
+              Future.successful(Forbidden(views.html.errors.unauthorised()))
+            }
+          case _ ~ Some(AffinityGroup.Agent) => Future.successful(Forbidden(views.html.errors.unauthorised()))
+          case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, checkMigrationStatus)
+          case _ =>
+            Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
+            Future.successful(InternalServerError)
+        } recoverWith {
+          case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
+          case _: InsufficientEnrolments => {
+            Logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
+            Future.successful(Forbidden(views.html.errors.unauthorised()))
+          }
+          case _: AuthorisationException =>
+            Logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
+            Future.successful(Forbidden(views.html.errors.unauthorised()))
+        }
+  }
 
-      enrolmentsAuthService.authorised(predicate).retrieve(Retrievals.authorisedEnrolments and Retrievals.affinityGroup) {
+  private def authoriseAsNonAgent(block: Request[AnyContent] => User => Future[Result], enrolments: Enrolments, checkMigrationStatus: Boolean)
+                                 (implicit request: Request[AnyContent]): Future[Result] = {
 
-        case _ ~ Some(AffinityGroup.Agent) if allowAgentAccess => agentPredicate.authoriseAsAgent(block)
-        case enrolments ~ Some(_) =>
-          val user = User(enrolments, None)
+    val vatEnrolments: Set[Enrolment] = User.extractVatEnrolments(enrolments)
+
+    if(vatEnrolments.exists(_.key == Keys.mtdVatEnrolmentKey)) {
+      val containsNonMtdVat: Boolean = User.containsNonMtdVat(vatEnrolments)
+
+      vatEnrolments.collectFirst {
+        case Enrolment(Keys.mtdVatEnrolmentKey, EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn) :: _, status, _) =>
+
+          val user = User(vrn, status == Keys.activated, containsNonMtdVat)
 
           if(checkMigrationStatus) {
             hybridUserPredicate.authoriseMigratedUserAction(block)(request, user)
           } else {
             block(request)(user)
           }
-        case _ =>
-          Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
-          Future.successful(InternalServerError)
-      } recoverWith {
-        case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
-        case _: InsufficientEnrolments => {
-          Logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
-          Future.successful(Forbidden(views.html.errors.unauthorised()))
-        }
-        case _: AuthorisationException => {
-          Logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
-          Future.successful(Forbidden(views.html.errors.unauthorised()))
-        }
+      } getOrElse {
+        Logger.warn("[AuthPredicate][authoriseAsNonAgent] Non-agent with invalid VRN")
+        Future.successful(InternalServerError)
       }
+    } else {
+      Logger.debug("[AuthPredicate][authoriseAsNonAgent] Non-agent with no HMRC-MTD-VAT enrolment. Rendering unauthorised view.")
+      Future.successful(Forbidden(views.html.errors.unauthorised()))
+    }
   }
 
   def authorisedMigratedUserAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(

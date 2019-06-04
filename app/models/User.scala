@@ -16,30 +16,23 @@
 
 package models
 
-import common.EnrolmentKeys._
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
+import common.EnrolmentKeys
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
 case class User(vrn: String, active: Boolean = true, hasNonMtdVat: Boolean = false, arn: Option[String] = None) {
   def isAgent: Boolean = arn.isDefined
 }
 
 object User {
-  def apply(authorisedEnrolments: Enrolments, delegatedEnrolmentVrn: Option[String]): User = {
 
-    val vatEnrolments = authorisedEnrolments.enrolments.collect {
-      case mtd@Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier("VRN", _) :: _, _, _) => mtd
-      case Enrolment(`mtdVatEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => throw InternalError("VAT identifier invalid")
-      case nonMtd@Enrolment(`vatDecEnrolmentKey` | `vatVarEnrolmentKey`, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
-      case agentServices@Enrolment(`agentEnrolmentKey`, EnrolmentIdentifier(`agentIdentifierKey`, _) :: _, _, _) => agentServices
+  def containsNonMtdVat(enrolments: Set[Enrolment]): Boolean = {
+    enrolments.exists(_.key == EnrolmentKeys.vatDecEnrolmentKey) || enrolments.exists(_.key == EnrolmentKeys.vatVarEnrolmentKey)
+  }
+
+  def extractVatEnrolments(enrolments: Enrolments): Set[Enrolment] = {
+    enrolments.enrolments.collect {
+      case mtd@Enrolment(EnrolmentKeys.mtdVatEnrolmentKey, EnrolmentIdentifier(EnrolmentKeys.mtdVatIdentifierKey, _) :: _, _, _) => mtd
+      case nonMtd@Enrolment(EnrolmentKeys.vatDecEnrolmentKey | EnrolmentKeys.vatVarEnrolmentKey, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
     }
-
-    val containsNonMtdVat = vatEnrolments.exists(_.key == vatDecEnrolmentKey) || vatEnrolments.exists(_.key == vatVarEnrolmentKey)
-
-    vatEnrolments.collectFirst {
-      case Enrolment(`agentEnrolmentKey`, EnrolmentIdentifier(_, arn) :: _, _, _) =>
-        User(delegatedEnrolmentVrn.getOrElse(throw InternalError("Delegated enrolment missing")), active = true, hasNonMtdVat = false, Some(arn))
-      case Enrolment(_, EnrolmentIdentifier(_, vrn) :: _, status, _) if vrn.matches("\\d{9}") =>
-        User(vrn, status == "Activated", containsNonMtdVat)
-    }.getOrElse(throw InternalError("VRN is invalid"))
   }
 }

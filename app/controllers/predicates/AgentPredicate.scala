@@ -52,7 +52,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
               enrolments.enrolments.collectFirst {
                 case Enrolment(EnrolmentKeys.agentEnrolmentKey, EnrolmentIdentifier(_, arn) :: _, EnrolmentKeys.activated, _) => arn
               } match {
-                case Some(_) => checkMandationStatus(block, enrolments, vrn)
+                case Some(arn) => checkMandationStatus(block, arn, vrn)
                 case None =>
                   Logger.debug("[AgentPredicate][authoriseAsAgent] - Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
                   Future.successful(Forbidden(views.html.errors.agentUnauthorised()))
@@ -72,12 +72,12 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
     }
   }
 
-  private def checkMandationStatus(block: Request[AnyContent] => User => Future[Result], enrolments: Enrolments, vrn: String)
+  private def checkMandationStatus(block: Request[AnyContent] => User => Future[Result], arn: String, vrn: String)
                                   (implicit request: Request[AnyContent], hc: HeaderCarrier): Future[Result] = {
 
     mandationStatusService.getMandationStatus(vrn) flatMap {
       case Right(MandationStatus(keys.nonMTDfB)) =>
-        val user = User(enrolments, Some(vrn))
+        val user = User(vrn, arn = Some(arn))
         block(request)(user)
       case Right(_) =>
         Logger.debug("[AgentPredicate][checkMandationStatus] - Agent acting for MTDfB client")

@@ -47,15 +47,11 @@ class UserSpec extends UnitSpec {
     }
   }
 
-  "A User with valid MTD-VAT, VATDEC and VATVAR enrolments" should {
+  "containsNonMtdVat" when {
 
-    val enrolments = Enrolments(
-      Set(
-        Enrolment(
-          "HMRC-MTD-VAT",
-          Seq(EnrolmentIdentifier("VRN", "123456789")),
-          "Activated"
-        ),
+    "user has VATDEC and VATVAR enrolments" should {
+
+      val enrolments = Set(
         Enrolment(
           "HMCE-VATDEC-ORG",
           Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
@@ -67,187 +63,85 @@ class UserSpec extends UnitSpec {
           "Activated"
         )
       )
-    )
 
-    val user = User(enrolments, None)
-
-    "say that it has the VATDEC and VATVAR enrolments" in {
-      user.hasNonMtdVat shouldBe true
+      "return true" in {
+        User.containsNonMtdVat(enrolments) shouldBe true
+      }
     }
 
+    "user has no VATDEC or VATVAR enrolments" should {
+
+      val enrolments = Set(
+        Enrolment(
+          "OTHER-ENROLMENT",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMCE-VATVARRRRRRR-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        )
+      )
+
+      "return false" in {
+        User.containsNonMtdVat(enrolments) shouldBe false
+      }
+    }
+
+    "user has one 'old VAT' enrolment" should {
+
+      val enrolments = Set(
+        Enrolment(
+          "HMCE-VATDEC-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        )
+      )
+
+      "return true" in {
+        User.containsNonMtdVat(enrolments) shouldBe true
+      }
+    }
   }
 
-  "A User with only a valid MTD-VAT enrolment" should {
+  "extractVatEnrolments" should {
 
     val enrolments = Enrolments(
-      Set(Enrolment(
+      Set(
+        Enrolment(
+          "HMRC-MTD-VAT",
+          Seq(EnrolmentIdentifier("VRN", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMRC-MTD-IT",
+          Seq(EnrolmentIdentifier("SAUTR", "123456789")),
+          "Activated"
+        ),
+        Enrolment(
+          "HMCE-VATVAR-ORG",
+          Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
+          "Activated"
+        )
+      )
+    )
+
+    val expected = Set(
+      Enrolment(
         "HMRC-MTD-VAT",
         Seq(EnrolmentIdentifier("VRN", "123456789")),
         "Activated"
-      ))
-    )
-
-    val user = User(enrolments, None)
-
-    "say that it doesn't have the VATDEC and VATVAR enrolments" in {
-      user.hasNonMtdVat shouldBe false
-    }
-
-    "isAgent should return false" in {
-      user.isAgent shouldBe false
-    }
-  }
-
-  "Creating a User with an Agent Services enrolment" when {
-
-    "a delegated enrolment VRN is supplied" should {
-
-      val enrolments = Enrolments(
-        Set(Enrolment(
-          "HMRC-AS-AGENT",
-          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
-          "Activated"
-        ))
-      )
-
-      val user = User(enrolments, Some("909090909"))
-
-      "have the VRN specified in the delegated enrolment" in {
-        user.vrn shouldBe "909090909"
-      }
-
-      "have the ARN specified in the Agent enrolment" in {
-        user.arn shouldBe Some("XARN1234567")
-      }
-
-      "have the status 'Activated'" in {
-        user.active shouldBe true
-      }
-
-      "isAgent should return true" in {
-        user.isAgent shouldBe true
-      }
-    }
-
-    "a delegated enrolment VRN is not supplied" should {
-
-      val enrolments = Enrolments(
-        Set(Enrolment(
-          "HMRC-AS-AGENT",
-          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
-          "Activated"
-        ))
-      )
-
-      "throw an exception" in {
-
-        intercept[AuthorisationException] {
-          User(enrolments, None)
-        }
-      }
-
-      "have the correct message in the exception" in {
-
-        the[AuthorisationException] thrownBy {
-          User(enrolments, None)
-        } should have message "Delegated enrolment missing"
-      }
-    }
-  }
-
-  "Creating a User with a valid, active VAT Enrolment" should {
-
-    val enrolments = Enrolments(
-      Set(Enrolment(
-        "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VRN", "123456789")),
+      ),
+      Enrolment(
+        "HMCE-VATVAR-ORG",
+        Seq(EnrolmentIdentifier("VATRegNo", "123456789")),
         "Activated"
-      ))
+      )
     )
 
-    val user = User(enrolments, None)
-
-    "have the VRN specified in the VAT Enrolment" in {
-      user.vrn shouldBe "123456789"
-    }
-
-    "have an active status" in {
-      user.active shouldBe true
-    }
-
-    "isAgent should return false" in {
-      user.isAgent shouldBe false
-    }
-  }
-
-  "Creating a User with a valid, inactive VAT Enrolment" should {
-
-    val enrolments = Enrolments(
-      Set(Enrolment(
-        "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VRN", "123456789")),
-        ""
-      ))
-    )
-
-    val user = User(enrolments, None)
-
-    "have the VRN specified in the VAT Enrolment" in {
-      user.vrn shouldBe "123456789"
-    }
-
-    "have an inactive status" in {
-      user.active shouldBe false
-    }
-
-    "isAgent should return false" in {
-      user.isAgent shouldBe false
-    }
-  }
-
-  "Creating a User with an invalid VAT Identifier Name" should {
-
-    val enrolments = Enrolments(
-      Set(Enrolment(
-        "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VATXXXXX", "123456789")),
-        ""
-      ))
-    )
-
-    "throw an exception" in {
-      intercept[AuthorisationException] {
-        User(enrolments, None)
-      }
-    }
-
-    "have the correct message in the exception" in {
-      the[AuthorisationException] thrownBy {
-        User(enrolments, None)
-      } should have message "VAT identifier invalid"
-    }
-  }
-
-  "Creating a User with an invalid VRN" should {
-
-    val enrolments = Enrolments(
-      Set(Enrolment(
-        "HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VRN", "")),
-        ""
-      ))
-    )
-
-    "throw an exception" in {
-      intercept[AuthorisationException] {
-        User(enrolments, None)
-      }
-    }
-
-    "have the correct message in the exception" in {
-      the[AuthorisationException] thrownBy {
-        User(enrolments, None)
-      } should have message "VRN is invalid"
+    "extract only VAT enrolments" in {
+      User.extractVatEnrolments(enrolments) shouldBe expected
     }
   }
 }
