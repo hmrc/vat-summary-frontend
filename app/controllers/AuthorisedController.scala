@@ -52,7 +52,6 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
               Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Rendering unauthorised page.")
               Future.successful(Forbidden(views.html.errors.unauthorised()))
             }
-          case _ ~ Some(AffinityGroup.Agent) => Future.successful(Forbidden(views.html.errors.unauthorised()))
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, checkMigrationStatus)
           case _ =>
             Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")

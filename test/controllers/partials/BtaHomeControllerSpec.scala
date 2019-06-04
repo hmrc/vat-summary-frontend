@@ -96,6 +96,24 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
+
+    "Auth call was successful but VRN not found in enrolments" should {
+
+      val enrolments: Enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "",
+            Seq(EnrolmentIdentifier("NOT-VRN", "abc")),
+            "Active")
+        )
+      )
+
+      "return INTERNAL_SERVER_ERROR" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(enrolments)
+        private val result = target.vatSection()(fakeRequest)
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+    }
   }
 
   "Calling the .claimEnrolment action" when {
@@ -147,6 +165,24 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.UNAUTHORIZED
       }
     }
+
+    "Auth call was successful but VRN not found in enrolments" should {
+
+      val enrolments: Enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "",
+            Seq(EnrolmentIdentifier("NOT-VRN", "abc")),
+            "Active")
+        )
+      )
+
+      "return INTERNAL_SERVER_ERROR" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(enrolments)
+        private val result = target.claimEnrolment()(fakeRequest)
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+    }
   }
 
   "Calling the .partialMigration action" when {
@@ -196,6 +232,24 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         private val result = target.partialMigration()(fakeRequest)
         status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+
+    "Auth call was successful but VRN not found in enrolments" should {
+
+      val enrolments: Enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "",
+            Seq(EnrolmentIdentifier("NOT-VRN", "abc")),
+            "Active")
+        )
+      )
+
+      "return INTERNAL_SERVER_ERROR" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(enrolments)
+        private val result = target.partialMigration()(fakeRequest)
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }
