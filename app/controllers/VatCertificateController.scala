@@ -29,7 +29,7 @@ class VatCertificateController @Inject()(val messagesApi: MessagesApi,
                                         (implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  def show(): Action[AnyContent] = authorisedController.authorisedAction { implicit request => _ =>
+  def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request => _ =>
     if(appConfig.features.vatCertificateEnabled()) {
       Future.successful(Ok(views.html.certificate.vatCertificate()))
     } else {

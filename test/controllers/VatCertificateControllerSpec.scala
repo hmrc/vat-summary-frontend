@@ -16,11 +16,14 @@
 
 package controllers
 
-import common.TestModels.successfulAuthResult
+import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
+import models.MandationStatus
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService}
+import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -48,12 +51,14 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
     val vatCertificateSwitch: Boolean = true
+    val agentAccessSwitch: Boolean = true
 
     def setup(): Any = {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(authResult)
       mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
+      mockAppConfig.features.agentAccess(agentAccessSwitch)
     }
 
     def target: VatCertificateController = {
@@ -66,16 +71,88 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
     "the vat certificate feature switch is on" when {
 
-      "the user is logged in with valid credentials" should {
+      "the user is non-agent" when {
 
-        "return OK (200)" in new Test {
-          private val result = target.show()(fakeRequest)
-          status(result) shouldBe Status.OK
+        "authorised" should {
+
+          "return OK (200)" in new Test {
+            private val result = target.show()(fakeRequest)
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in new Test {
+            private val result = target.show()(fakeRequest)
+            contentType(result) shouldBe Some("text/html")
+          }
+        }
+      }
+
+      "the user is an agent" when {
+
+        "allow agent access feature switch is on" when {
+
+          "user is authorised" should {
+
+            "return OK (200)" in new Test {
+              override def setup(): Unit = {
+                (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+                  .expects(*, *, *, *)
+                  .returns(agentAuthResult)
+                  .noMoreThanOnce()
+
+                (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+                  .expects(*, *, *, *)
+                  .returns(Future.successful(agentEnrolments))
+                  .noMoreThanOnce()
+
+                (mockMandationStatusService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+                  .expects(*, *, *)
+                  .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
+              }
+
+              private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+
+              status(result) shouldBe Status.OK
+              contentType(result) shouldBe Some("text/html")
+            }
+          }
+
+          "user is unauthorised" should {
+
+            "return FORBIDDEN and agent unauthorised page" in new Test {
+
+              override def setup(): Unit = {
+                (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+                  .expects(*, *, *, *)
+                  .returns(Future.successful(new ~(otherEnrolment, Some(Agent))))
+                  .noMoreThanOnce()
+
+                (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+                  .expects(*, *, *, *)
+                  .returns(Future.successful(otherEnrolment))
+                  .noMoreThanOnce()
+              }
+
+              private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+
+              status(result) shouldBe Status.FORBIDDEN
+              Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet"
+            }
+          }
         }
 
-        "return HTML" in new Test {
-          private val result = target.show()(fakeRequest)
-          contentType(result) shouldBe Some("text/html")
+        "allow agent access feature switch is off" should {
+
+          "return FORBIDDEN and non-agent unauthorised page" in new Test {
+
+            override val agentAccessSwitch: Boolean = false
+            override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+
+            private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+
+            status(result) shouldBe Status.FORBIDDEN
+            Jsoup.parse(bodyOf(result)).title() shouldBe "You are not authorised to use this service"
+          }
         }
       }
 

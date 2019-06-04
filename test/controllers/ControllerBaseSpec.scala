@@ -22,6 +22,7 @@ import common.SessionKeys
 import config.AppConfig
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
@@ -32,7 +33,7 @@ import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
 import uk.gov.hmrc.http.{SessionKeys => GovUKSessionKeys}
 import uk.gov.hmrc.play.test.UnitSpec
 
-class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
+class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
   lazy val injector: Injector = app.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
@@ -63,5 +64,17 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
         Token.RequestTag -> token
       )).withHeaders(csrfConfig.headerName -> token)
     }
+  }
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    mockAppConfig.features.vatCertificateEnabled(true)
+    mockAppConfig.features.agentAccess(true)
+  }
+
+  override def afterEach(): Unit = {
+    super.afterEach()
+    mockAppConfig.features.vatCertificateEnabled(true)
+    mockAppConfig.features.agentAccess(true)
   }
 }

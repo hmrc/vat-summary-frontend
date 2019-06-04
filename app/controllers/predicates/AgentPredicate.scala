@@ -54,15 +54,15 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
               } match {
                 case Some(_) => checkMandationStatus(block, enrolments, vrn)
                 case None =>
-                  Logger.debug("[AuthPredicate][authoriseAsAgent] - Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
+                  Logger.debug("[AgentPredicate][authoriseAsAgent] - Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
                   Future.successful(Forbidden(views.html.errors.agentUnauthorised()))
               }
           } recover {
           case _: NoActiveSession =>
-            Logger.debug(s"AuthoriseAsAgentWithClient][authoriseAsAgent] - No active session. Redirecting to ${appConfig.signInUrl}")
+            Logger.debug(s"AgentPredicate][authoriseAsAgent] - No active session. Redirecting to ${appConfig.signInUrl}")
             Redirect(appConfig.signInUrl)
           case _: AuthorisationException =>
-            Logger.debug(s"[AuthoriseAsAgentWithClient][authoriseAsAgent] - Agent does not have delegated authority for Client. " +
+            Logger.debug(s"[AgentPredicate][authoriseAsAgent] - Agent does not have delegated authority for Client. " +
               s"Redirecting to ${appConfig.agentClientUnauthorisedUrl(request.uri)}")
             Redirect(appConfig.agentClientUnauthorisedUrl(request.uri))
         }
@@ -80,10 +80,10 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
         val user = User(enrolments, Some(vrn))
         block(request)(user)
       case Right(_) =>
-        Logger.debug("[AuthPredicate][checkMandationStatus] - Agent acting for MTDfB client")
+        Logger.debug("[AgentPredicate][checkMandationStatus] - Agent acting for MTDfB client")
         Future.successful(Redirect(appConfig.agentClientLookupActionUrl))
       case Left(error) =>
-        Logger.warn(s"[AuthPredicate][checkMandationStatus] - Error returned from mandationStatusService: $error")
+        Logger.warn(s"[AgentPredicate][checkMandationStatus] - Error returned from mandationStatusService: $error")
         Future.successful(InternalServerError)
     }
   }

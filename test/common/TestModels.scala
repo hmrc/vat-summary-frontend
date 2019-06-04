@@ -142,15 +142,26 @@ object TestModels {
     Some(Individual)
   ))
 
+  val agentEnrolments: Enrolments = Enrolments(
+    Set(
+      Enrolment(
+        "HMRC-AS-AGENT",
+        Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
+        "Activated")
+    )
+  )
+
+  val otherEnrolment: Enrolments = Enrolments(
+    Set(
+      Enrolment(
+        "OTHER-ENROLMENT",
+        Seq(EnrolmentIdentifier("BLAH", "12345")),
+        "Activated")
+    )
+  )
+
   val agentAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
-    Enrolments(
-      Set(
-        Enrolment(
-          "HMRC-AS-AGENT",
-          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
-          "Active")
-      )
-    ),
+    agentEnrolments,
     Some(Agent)
   ))
 
