@@ -55,8 +55,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
                 case Some(_) => checkMandationStatus(block, enrolments, vrn)
                 case None =>
                   Logger.debug("[AuthPredicate][authoriseAsAgent] - Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
-                  //TODO: need error page
-                  Future.successful(Forbidden)
+                  Future.successful(Forbidden(views.html.errors.agentUnauthorised()))
               }
           } recover {
           case _: NoActiveSession =>
@@ -81,9 +80,8 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
         val user = User(enrolments, Some(vrn))
         block(request)(user)
       case Right(_) =>
-        //TODO: add page content
         Logger.debug("[AuthPredicate][checkMandationStatus] - Agent acting for MTDfB client")
-        Future.successful(Forbidden)
+        Future.successful(Redirect(appConfig.agentClientLookupActionUrl))
       case Left(error) =>
         Logger.warn(s"[AuthPredicate][checkMandationStatus] - Error returned from mandationStatusService: $error")
         Future.successful(InternalServerError)

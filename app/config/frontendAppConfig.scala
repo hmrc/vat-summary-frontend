@@ -83,6 +83,8 @@ trait AppConfig extends ServicesConfig {
   def feedbackUrl(redirect: String): String
   val agentClientLookupStartUrl: String => String
   val agentClientUnauthorisedUrl: String => String
+  val agentClientLookupActionUrl: String
+  val agentServicesGovUkGuidance: String
 }
 
 @Singleton
@@ -214,4 +216,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
     agentClientLookupHost +
       getString(Keys.vatAgentClientLookupFrontendUnauthorisedUrl) +
       s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
+  override lazy val agentClientLookupActionUrl: String = getString(Keys.vatAgentClientLookupFrontendActionUrl)
+  override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
 }

@@ -93,7 +93,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
             "user has a mandation status not equal to 'Non-MTDfb'" should {
 
-              "return 403" in new Test {
+              "redirect to agent action page" in new Test {
 
                 (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
                   .expects(*, *, *, *)
@@ -105,7 +105,8 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
                 lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
-                status(result) shouldBe Status.FORBIDDEN
+                status(result) shouldBe Status.SEE_OTHER
+                redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupActionUrl)
               }
             }
           }
