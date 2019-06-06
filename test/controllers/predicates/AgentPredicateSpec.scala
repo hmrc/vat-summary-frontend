@@ -16,28 +16,24 @@
 
 package controllers.predicates
 
-import connectors.VatSubscriptionConnector
 import controllers.ControllerBaseSpec
-import models.MandationStatus
-import models.errors.UnexpectedStatusError
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.http.Status
 import play.api.mvc.Results.Ok
-import services.{EnrolmentsAuthService, MandationStatusService}
+import play.api.mvc.{AnyContent, Request, Result}
+import play.api.test.Helpers._
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.http.HeaderCarrier
-import play.api.http.Status
-import play.api.test.Helpers._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AgentPredicateSpec extends ControllerBaseSpec {
 
   private trait Test {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockMandationStatusService: MandationStatusService = new MandationStatusService(mockVatSubscriptionConnector)
     lazy val authResponse = Enrolments(
       Set(
         Enrolment(
@@ -51,7 +47,6 @@ class AgentPredicateSpec extends ControllerBaseSpec {
     lazy val mockAgentPredicate: AgentPredicate = new AgentPredicate(
       mockEnrolmentsAuthService,
       messages,
-      mockMandationStatusService,
       mockAppConfig
     )
 
@@ -68,65 +63,18 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
       "agent has delegated enrolment for VRN" when {
 
-        "agent has HMRC-AS-AGENT enrolment" when {
+        "agent has HMRC-AS-AGENT enrolment" should {
 
-          "mandation status call is successful" when {
+          "return the result of the original code block" in new Test {
 
-            "user has a mandation status of 'Non MTDfb'" should {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(authResponse)
 
-              "return the result of the original code block" in new Test {
+            lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
-                (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-                  .expects(*, *, *, *)
-                  .returns(authResponse)
-
-                (mockVatSubscriptionConnector.getCustomerMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-                  .expects(*, *, *)
-                  .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
-
-                lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
-
-                status(result) shouldBe Status.OK
-                await(bodyOf(result)) shouldBe "welcome"
-              }
-            }
-
-            "user has a mandation status not equal to 'Non-MTDfb'" should {
-
-              "redirect to agent action page" in new Test {
-
-                (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-                  .expects(*, *, *, *)
-                  .returns(authResponse)
-
-                (mockVatSubscriptionConnector.getCustomerMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-                  .expects(*, *, *)
-                  .returns(Future.successful(Right(MandationStatus("MTDfB Mandated"))))
-
-                lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
-
-                status(result) shouldBe Status.SEE_OTHER
-                redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupActionUrl)
-              }
-            }
-          }
-
-          "mandation status call is unsuccessful" should {
-
-            "return 500" in new Test {
-
-              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *, *)
-                .returns(authResponse)
-
-              (mockVatSubscriptionConnector.getCustomerMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *)
-                .returns(Future.successful(Left(UnexpectedStatusError("503", ""))))
-
-              lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
-
-              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-            }
+            status(result) shouldBe Status.OK
+            await(bodyOf(result)) shouldBe "welcome"
           }
         }
 

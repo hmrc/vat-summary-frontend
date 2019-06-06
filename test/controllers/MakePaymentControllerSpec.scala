@@ -53,8 +53,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,

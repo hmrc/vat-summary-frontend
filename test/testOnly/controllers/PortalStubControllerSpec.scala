@@ -21,7 +21,7 @@ import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import controllers.{AuthorisedController, ControllerBaseSpec}
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService}
+import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -42,8 +42,7 @@ class PortalStubControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
-    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     lazy val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,

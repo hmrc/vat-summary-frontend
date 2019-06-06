@@ -18,11 +18,10 @@ package controllers
 
 import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
-import models.MandationStatus
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService}
+import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -38,8 +37,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
-    val mockMandationStatusService: MandationStatusService = mock[MandationStatusService]
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockMandationStatusService, mockAppConfig)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
@@ -104,10 +102,6 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
                   .expects(*, *, *, *)
                   .returns(Future.successful(agentEnrolments))
                   .noMoreThanOnce()
-
-                (mockMandationStatusService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-                  .expects(*, *, *)
-                  .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
               }
 
               private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
