@@ -36,6 +36,11 @@ GET         /vat-through-software/test-only/bta-stub/partial-migration-partial @
 
 GET         /vat-through-software/test-only/:vrn/portal-stub                   @testOnly.controllers.PortalStubController.show(vrn: String)
 
+GET         /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.show(redirectUrl: String)
+POST        /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.post
+GET         /vat-through-software/test-only/vaclf-stub-unauth                  testOnly.controllers.AgentClientLookupStubController.unauthorised
+GET         /vat-through-software/test-only/vaclf-stub-agent-action            testOnly.controllers.AgentClientLookupStubController.agentAction
+
 # NOCSRF
 POST        /vat-through-software/test-only/direct-debit-backend/start-journey @testOnly.controllers.DirectDebitStubController.startJourney
 

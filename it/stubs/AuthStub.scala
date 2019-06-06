@@ -25,7 +25,7 @@ object AuthStub extends WireMockMethods {
 
   private val authoriseUri: String = "/auth/authorise"
 
-  private val mtdVatEnrolment: JsObject = Json.obj(
+  val mtdVatEnrolment: JsObject = Json.obj(
     "key" -> "HMRC-MTD-VAT",
     "identifiers" -> Json.arr(
       Json.obj(
@@ -35,7 +35,17 @@ object AuthStub extends WireMockMethods {
     )
   )
 
-  private val otherEnrolment: JsObject = Json.obj(
+  val vatDecEnrolment: JsObject = Json.obj(
+    "key" -> "HMCE-VATDEC-ORG",
+    "identifiers" -> Json.arr(
+      Json.obj(
+        "key" -> "VATRegNo",
+        "value" -> "555555555"
+      )
+    )
+  )
+
+  val otherEnrolment: JsObject = Json.obj(
     "key" -> "HMRC-XXX-XXX",
     "identifiers" -> Json.arr(
       Json.obj(
@@ -45,14 +55,19 @@ object AuthStub extends WireMockMethods {
     )
   )
 
-  def authorised(): StubMapping = {
+  def authorised(response: JsObject = successfulAuthResponse(mtdVatEnrolment)): StubMapping = {
     when(method = POST, uri = authoriseUri)
-      .thenReturn(status = OK, body = successfulAuthResponse(mtdVatEnrolment))
+      .thenReturn(status = OK, body = response)
   }
 
   def unauthorisedOtherEnrolment(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = OK, body = successfulAuthResponse(otherEnrolment))
+  }
+
+  def insufficientEnrolments(): StubMapping = {
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="InsufficientEnrolments""""))
   }
 
   def unauthorisedNotLoggedIn(): StubMapping = {
@@ -61,6 +76,10 @@ object AuthStub extends WireMockMethods {
   }
 
   private def successfulAuthResponse(enrolments: JsObject*): JsObject = {
+    Json.obj("allEnrolments" -> enrolments, "affinityGroup" -> "Individual")
+  }
+
+  def partialsAuthResponse(enrolments: JsObject*): JsObject = {
     Json.obj("authorisedEnrolments" -> enrolments)
   }
 }

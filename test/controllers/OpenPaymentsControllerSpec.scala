@@ -21,7 +21,7 @@ import java.time.LocalDate
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.{CustomerInformation, User}
 import models.errors.{DirectDebitStatusError, PaymentsError, UnknownError}
 import models.payments._
@@ -31,10 +31,10 @@ import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
+import services._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import common.TestModels._
 import play.api.test.Helpers.redirectLocation
@@ -44,10 +44,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val authResult: Future[_] =
-      Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-      )))
+    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformation)
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
@@ -86,10 +83,12 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 
@@ -260,6 +259,15 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         "return 403 (Forbidden)" in new Test {
           override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
           private val result = target.openPayments()(fakeRequest)
+          status(result) shouldBe Status.FORBIDDEN
+        }
+      }
+
+      "user is an Agent" should {
+
+        "return 403 (Forbidden)" in new Test {
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+          val result: Future[Result] = target.openPayments()(fakeRequest)
           status(result) shouldBe Status.FORBIDDEN
         }
       }

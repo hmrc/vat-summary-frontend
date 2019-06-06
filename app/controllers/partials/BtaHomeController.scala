@@ -16,14 +16,16 @@
 
 package controllers.partials
 
+import common.EnrolmentKeys
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, NoActiveSession}
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, EnrolmentIdentifier, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -48,26 +50,39 @@ class BtaHomeController @Inject()(val messagesApi: MessagesApi,
   }
 
   private def enrolledAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
-    enrolmentsAuthService.authorised(Enrolment("HMRC-MTD-VAT")).retrieve(Retrievals.authorisedEnrolments) {
-      enrolments => {
-        val user = User(enrolments)
-        block(request)(user)
+    enrolmentsAuthService
+      .authorised(Enrolment("HMRC-MTD-VAT"))
+      .retrieve(Retrievals.authorisedEnrolments) {
+        enrolments =>
+          enrolments.enrolments.collectFirst {
+          case Enrolment(EnrolmentKeys.mtdVatEnrolmentKey, EnrolmentIdentifier(_, vrn) :: _, status, _) =>
+            val user = User(vrn, status == EnrolmentKeys.activated)
+            block(request)(user)
+        } getOrElse {
+            Logger.warn("[BtaHomeController][enrolledAction] Error retrieving VRN")
+            Future.successful(InternalServerError)
+        }
+      } recover {
+        case _: NoActiveSession => Unauthorized
+        case _: AuthorisationException => Forbidden
       }
-    }.recover {
-      case _: NoActiveSession => Unauthorized
-      case _: AuthorisationException => Forbidden
-    }
   }
 
   private def enrolledActionNonMtd(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
-    enrolmentsAuthService.authorised(Enrolment("HMCE-VATDEC-ORG")).retrieve(Retrievals.authorisedEnrolments) {
-      enrolments => {
-        val user = User(enrolments)
-        block(request)(user)
+    enrolmentsAuthService
+      .authorised(Enrolment("HMCE-VATDEC-ORG"))
+      .retrieve(Retrievals.authorisedEnrolments) {
+        enrolments => enrolments.enrolments.collectFirst {
+          case Enrolment(EnrolmentKeys.vatDecEnrolmentKey, EnrolmentIdentifier(_, vrn) :: _, status, _) =>
+            val user = User(vrn, status == EnrolmentKeys.activated, hasNonMtdVat = true)
+            block(request)(user)
+        } getOrElse {
+          Logger.warn("[BtaHomeController][enrolledActionNonMtd] Error retrieving VRN")
+          Future.successful(InternalServerError)
+        }
+      } recover {
+        case _: NoActiveSession => Unauthorized
+        case _: AuthorisationException => Forbidden
       }
-    }.recover {
-      case _: NoActiveSession => Unauthorized
-      case _: AuthorisationException => Forbidden
-    }
   }
 }

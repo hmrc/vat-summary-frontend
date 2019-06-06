@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package common
+package testOnly.forms
 
-object EnrolmentKeys {
+import play.api.data.Form
+import play.api.data.Forms._
+import testOnly.models.StubAgentClientLookupModel
 
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val mtdVatIdentifierKey = "VRN"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
-  val agentEnrolmentKey = "HMRC-AS-AGENT"
-  val agentIdentifierKey = "AgentReferenceNumber"
-  val agentDelegatedAuthRuleKey = "mtd-vat-auth"
-  val activated = "Activated"
+object StubAgentClientLookupForm {
+
+  val form: Form[StubAgentClientLookupModel] = Form(
+    mapping(
+      "vrn" -> text,
+      "redirectUrl" -> text
+    )(StubAgentClientLookupModel.apply)(StubAgentClientLookupModel.unapply)
+  )
 
 }
-
-

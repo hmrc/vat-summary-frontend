@@ -18,7 +18,6 @@ package config
 
 import java.net.URLEncoder
 import java.util.Base64
-
 import config.features.Features
 import config.{ConfigKeys => Keys}
 import javax.inject.{Inject, Singleton}
@@ -82,6 +81,10 @@ trait AppConfig extends ServicesConfig {
   def languageMap:Map[String,Lang]
   val routeToSwitchLanguage: String => Call
   def feedbackUrl(redirect: String): String
+  val agentClientLookupStartUrl: String => String
+  val agentClientUnauthorisedUrl: String => String
+  val agentClientLookupActionUrl: String
+  val agentServicesGovUkGuidance: String
 }
 
 @Singleton
@@ -201,4 +204,18 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override def feedbackUrl(redirect: String): String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
     s"&backUrl=${ContinueUrl(host + redirect).encodedUrl}"
 
+  // Agent Client Lookup
+  private lazy val platformHost = getString(Keys.host)
+  private lazy val agentClientLookupRedirectUrl: String => String = uri => ContinueUrl(platformHost + uri).encodedUrl
+  private lazy val agentClientLookupHost = getString(Keys.vatAgentClientLookupFrontendHost)
+  override lazy val agentClientLookupStartUrl: String => String = uri =>
+    agentClientLookupHost +
+      getString(Keys.vatAgentClientLookupFrontendStartUrl) +
+      s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
+  override lazy val agentClientUnauthorisedUrl: String => String = uri =>
+    agentClientLookupHost +
+      getString(Keys.vatAgentClientLookupFrontendUnauthorisedUrl) +
+      s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
+  override lazy val agentClientLookupActionUrl: String = getString(Keys.vatAgentClientLookupFrontendActionUrl)
+  override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
 }

@@ -16,6 +16,8 @@
 
 package testOnly.controllers
 
+import common.TestModels._
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import controllers.{AuthorisedController, ControllerBaseSpec}
 import play.api.http.Status
 import play.api.test.Helpers._
@@ -24,8 +26,6 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
-import common.TestModels._
-import controllers.predicates.HybridUserPredicate
 
 import scala.concurrent.ExecutionContext
 
@@ -42,10 +42,12 @@ class PortalStubControllerSpec extends ControllerBaseSpec {
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     lazy val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 

@@ -21,6 +21,7 @@ import helpers.IntegrationBaseSpec
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.AuthStub
+import stubs.AuthStub._
 
 class PartialMigrationPageSpec extends IntegrationBaseSpec {
 
@@ -40,7 +41,7 @@ class PartialMigrationPageSpec extends IntegrationBaseSpec {
     "the user is authenticated" should {
 
       "return 200" in new Test {
-        override def setupStubs(): StubMapping = AuthStub.authorised()
+        override def setupStubs(): StubMapping = AuthStub.authorised(partialsAuthResponse(vatDecEnrolment))
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
       }
@@ -59,7 +60,7 @@ class PartialMigrationPageSpec extends IntegrationBaseSpec {
 
     "the user has a different enrolment" should {
 
-      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedOtherEnrolment()
+      def setupStubsForScenario(): StubMapping = AuthStub.insufficientEnrolments()
 
       "return 403" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()

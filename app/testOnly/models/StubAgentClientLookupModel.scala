@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-package common
+package testOnly.models
 
-object EnrolmentKeys {
-
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val mtdVatIdentifierKey = "VRN"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
-  val agentEnrolmentKey = "HMRC-AS-AGENT"
-  val agentIdentifierKey = "AgentReferenceNumber"
-  val agentDelegatedAuthRuleKey = "mtd-vat-auth"
-  val activated = "Activated"
-
-}
-
-
+case class StubAgentClientLookupModel(vrn: String, redirectUrl: String)

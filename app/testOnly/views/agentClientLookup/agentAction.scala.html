@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-object EnrolmentKeys {
+@views.html.main_template(title = "Stub Agent Client Lookup Frontend - Agent Action", bodyClasses = None, appConfig = appConfig) {
 
-  val mtdVatEnrolmentKey = "HMRC-MTD-VAT"
-  val mtdVatIdentifierKey = "VRN"
-  val vatDecEnrolmentKey = "HMCE-VATDEC-ORG"
-  val vatVarEnrolmentKey = "HMCE-VATVAR-ORG"
-  val agentEnrolmentKey = "HMRC-AS-AGENT"
-  val agentIdentifierKey = "AgentReferenceNumber"
-  val agentDelegatedAuthRuleKey = "mtd-vat-auth"
-  val activated = "Activated"
+    <h1>Agent Action</h1>
 
 }
-
-

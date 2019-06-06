@@ -17,16 +17,17 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.{AuditModel, ExtendedAuditModel}
+import audit.models.ExtendedAuditModel
+import common.TestModels.successfulAuthResult
 import connectors.VatSubscriptionConnector
-import controllers.predicates.HybridUserPredicate
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import services.{AccountDetailsService, EnrolmentsAuthService, PaymentsService}
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.auth.core.{AuthConnector, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,10 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PortalControllerSpec extends ControllerBaseSpec {
 
   private trait PortalControllerTest {
-    val authResult: Future[_] =
-      Future.successful(Enrolments(Set(
-        Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-      )))
+    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
@@ -46,10 +44,12 @@ class PortalControllerSpec extends ControllerBaseSpec {
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
       mockHybridUserPredicate,
+      mockAgentPredicate,
       mockAppConfig
     )
 
