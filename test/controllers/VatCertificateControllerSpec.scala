@@ -74,12 +74,12 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         "authorised" should {
 
           "return OK (200)" in new Test {
-            private val result = target.show()(fakeRequest)
+            private val result = target.show("non-agent")(fakeRequest)
             status(result) shouldBe Status.OK
           }
 
           "return HTML" in new Test {
-            private val result = target.show()(fakeRequest)
+            private val result = target.show("non-agent")(fakeRequest)
             contentType(result) shouldBe Some("text/html")
           }
         }
@@ -104,7 +104,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
                   .noMoreThanOnce()
               }
 
-              private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+              private val result = target.show("agent")(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
               status(result) shouldBe Status.OK
               contentType(result) shouldBe Some("text/html")
@@ -127,7 +127,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
                   .noMoreThanOnce()
               }
 
-              private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+              private val result = target.show("agent")(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
               status(result) shouldBe Status.FORBIDDEN
               Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet"
@@ -142,7 +142,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
             override val agentAccessSwitch: Boolean = false
             override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
 
-            private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+            private val result = target.show("agent")(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
             status(result) shouldBe Status.FORBIDDEN
             Jsoup.parse(bodyOf(result)).title() shouldBe "You are not authorised to use this service"
@@ -154,13 +154,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
         "return Forbidden (403)" in new Test {
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
-          private val result = target.show()(fakeRequest)
+          private val result = target.show("")(fakeRequest)
           status(result) shouldBe Status.FORBIDDEN
         }
 
         "return HTML" in new Test {
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
-          private val result = target.show()(fakeRequest)
+          private val result = target.show("")(fakeRequest)
           contentType(result) shouldBe Some("text/html")
         }
       }
@@ -169,13 +169,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
         "return Unauthorised (401)" in new Test {
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-          private val result = target.show()(fakeRequest)
+          private val result = target.show("")(fakeRequest)
           status(result) shouldBe Status.UNAUTHORIZED
         }
 
         "return HTML" in new Test {
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-          private val result = target.show()(fakeRequest)
+          private val result = target.show("")(fakeRequest)
           contentType(result) shouldBe Some("text/html")
         }
       }
@@ -185,13 +185,75 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
       "return Not Found (404)" in new Test {
         override val vatCertificateSwitch: Boolean = false
-        private val result = target.show()(fakeRequest)
+        private val result = target.show("")(fakeRequest)
         status(result) shouldBe Status.NOT_FOUND
       }
 
       "return HTML" in new Test {
         override val vatCertificateSwitch: Boolean = false
-        private val result = target.show()(fakeRequest)
+        private val result = target.show("")(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+    }
+  }
+
+  "The redirect() action" when {
+
+    "the vat certificate feature switch is on" when {
+
+      "user is agent" should {
+
+        s"redirect to ${controllers.routes.VatCertificateController.show("agent")}" in new Test {
+
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(agentAuthResult)
+              .noMoreThanOnce()
+
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(agentEnrolments))
+              .noMoreThanOnce()
+          }
+
+          private val result = target.redirect()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+
+          status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some("/vat-through-software/vat-certificate/agent")
+        }
+      }
+
+      "user is non-agent" should {
+
+        s"redirect to ${controllers.routes.VatCertificateController.show("non-agent")}" in new Test {
+
+          private val result = target.redirect()(fakeRequest)
+
+          status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some("/vat-through-software/vat-certificate/non-agent")
+        }
+      }
+    }
+
+    "the vat certificate feature switch is off" should {
+
+      "return Not Found (404)" in new Test {
+        override val vatCertificateSwitch: Boolean = false
+        private val result = target.show("")(fakeRequest)
+
+        status(result) shouldBe Status.NOT_FOUND
+        contentType(result) shouldBe Some("text/html")
+      }
+    }
+
+    "the user is unauthorised" should {
+
+      "return Unauthorised (401)" in new Test {
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+        private val result = target.show("")(fakeRequest)
+
+        status(result) shouldBe Status.UNAUTHORIZED
         contentType(result) shouldBe Some("text/html")
       }
     }

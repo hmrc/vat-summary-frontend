@@ -29,11 +29,25 @@ class VatCertificateController @Inject()(val messagesApi: MessagesApi,
                                         (implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request => _ =>
-    if(appConfig.features.vatCertificateEnabled()) {
-      Future.successful(Ok(views.html.certificate.vatCertificate()))
-    } else {
-      Future.successful(NotFound(views.html.errors.notFound()))
-    }
+  def redirect(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+    implicit user =>
+      Future.successful(
+        if(appConfig.features.vatCertificateEnabled()) {
+          val userType = if(user.isAgent) "agent" else "non-agent"
+          Redirect(controllers.routes.VatCertificateController.show(userType))
+        } else {
+          NotFound(views.html.errors.notFound())
+        }
+    )
+  }
+
+  def show(userType: String): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request => _ =>
+    Future.successful(
+      if(appConfig.features.vatCertificateEnabled()) {
+        Ok(views.html.certificate.vatCertificate())
+      } else {
+        NotFound(views.html.errors.notFound())
+      }
+    )
   }
 }
