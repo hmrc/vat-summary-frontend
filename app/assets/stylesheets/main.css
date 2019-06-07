@@ -1,0 +1,145 @@
+.card {
+  flex-grow: 0;
+  flex-basis: 100%;
+  margin-bottom: 2em;
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  .card {
+    flex-basis: 46%;
+  }
+  .card:nth-child(2n-1) {
+    margin-right: 3%;
+  }
+  .card:nth-child(2n-2) {
+    margin-left: 3%;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .card {
+    flex-basis: 30%;
+  }
+  .card:nth-child(3n-1) {
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+}
+
+html[data-useragent*='MSIE 10.0'] .flex-container .card {
+  flex-basis: 31%;
+  margin: 3%;
+}
+
+.card-full-width {
+  flex-basis: 100%;
+  margin-right: 0%;
+}
+
+.card {
+  border: 1px solid #dee0e2;
+  font-size: 16px;
+  background-color: #f8f8f8;
+}
+
+.card.inactive {
+  color: #6f777b;
+}
+
+.card .card-heading {
+  margin-top: 0;
+}
+
+.card .card-body {
+  border-bottom: 1px solid #dee0e2;
+  padding: 12px;
+}
+
+.card .card-body *:last-child {
+  margin-bottom: 0;
+}
+
+.card .card-body.active {
+  background-color: #f8f8f8;
+  transition: .1s ease-in-out;
+}
+
+.card .card-body.active .card-heading a {
+  color: #005ea5;
+  margin-top: 0;
+}
+
+.card .card-body .detail-large {
+  color: #6f777b;
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.card .card-body .detail {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.card .card-action {
+  border-top: 0;
+  padding: 12px;
+}
+
+.card .card-action a {
+  display: inline;
+  border-bottom: 1px solid #C7DCEB;
+  text-decoration: none;
+  color: #005ea5;
+  line-height: 1.5em;
+}
+
+.card .card-action a:link, .card .card-action a:visited {
+  color: #005ea5;
+}
+
+.card .card-action a:hover {
+  text-decoration: none;
+  border-bottom: 1px solid #005ea5;
+  color: #2e8aca;
+}
+
+.card .card-action ul {
+  margin: 0;
+}
+
+.card .card-action ul li {
+  margin: 0 0 1em;
+}
+
+.card .card-action ul li:last-child {
+  margin-bottom: 0;
+}
+
+.js .card-body.active:hover {
+  background-color: #005ea5;
+  color: #fff;
+  cursor: pointer;
+  transition: .1s ease-in-out;
+  transition-delay: .25s;
+}
+
+.js .card-body.active:hover .card-heading, .js .card-body.active:hover p {
+  color: #fff;
+  transition: .1s ease-in-out;
+  transition-delay: .25s;
+}
+
+.js .card-body.active:hover .card-heading a {
+  color: #fff;
+  transition-delay: .25s;
+}
+
+.js .card-body.active:hover .detail-large {
+  color: #fff;
+  transition-delay: .25s;
+}
+
+.js .card-body.active a {
+  text-decoration: none;
+}

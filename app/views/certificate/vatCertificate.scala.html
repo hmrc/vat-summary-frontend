@@ -18,6 +18,74 @@
 
 @views.html.main_template(messages("vatCertificate.title"), appConfig = appConfig) {
 
-  <h1>@messages("vatCertificate.title")</h1>
+    <h1>@messages("vatCertificate.title")</h1>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="heading-medium card-heading">About your registration</h2>
+            <div>
+                <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>VAT registration number (VRN)</td>
+                        <td>999984111</td>
+                    </tr>
+                    <tr>
+                        <td>Registration date</td>
+                        <td>31 October 2018</td>
+                    </tr>
+                    <tr>
+                        <td>Certificate date</td>
+                        <td>31 December 2018</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="heading-medium card-heading">About the business</h2>
+            <div>
+                <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Business name</td>
+                        <td>999984111</td>
+                    </tr>
+                    <tr>
+                        <td>Trading name</td>
+                        <td>ABC Studios</td>
+                    </tr>
+                    <tr>
+                        <td>Business type</td>
+                        <td>Company</td>
+                    </tr>
+                    <tr>
+                        <td>Trade classification (SIC code)</td>
+                        <td>62020</td>
+                    </tr>
+                    <tr>
+                        <td>Principal place of business address</td>
+                        <td>30 Romford Road<br>
+                            Wellington<br>
+                            Telford<br>
+                            Shropshire<br>
+                            TF1 4ER<br>
+                            United Kingdom</td>
+                    </tr>
+                    <tr>
+                        <td>Email address</td>
+                        <td>john.b@@abcdigital.com</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
 
 }
