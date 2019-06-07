@@ -16,8 +16,12 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import config.AppConfig
 import javax.inject.Inject
+import models.Address
+import models.viewModels.VatCertificateViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -31,7 +35,11 @@ class VatCertificateController @Inject()(val messagesApi: MessagesApi,
 
   def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request => _ =>
     if(appConfig.features.vatCertificateEnabled()) {
-      Future.successful(Ok(views.html.certificate.vatCertificate()))
+      Future.successful(Ok(views.html.certificate.vatCertificate(VatCertificateViewModel(
+        "1231231231", LocalDate.now(), LocalDate.now(), Some("ABC Studios"), Some("ABC Trading studios"), "Digital",
+        "Agriculture", Address("Line 1", "Line 2", Some("Line 3"), None, Some("TF4 3ER")), Some("ABCStudios@exmaple.com"), Some("******21"), Some("50****"),
+        "returnPeriod.MM"
+      ))))
     } else {
       Future.successful(NotFound(views.html.errors.notFound()))
     }

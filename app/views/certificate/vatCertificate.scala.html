@@ -14,10 +14,125 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
+@import models.viewModels.VatCertificateViewModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.html.templates.formatters.addresses._
 
+@(model: VatCertificateViewModel)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
 @views.html.main_template(messages("vatCertificate.title"), appConfig = appConfig) {
 
-  <h1>@messages("vatCertificate.title")</h1>
+    <h1>@messages("vatCertificate.title")</h1>
+
+    <div class="cert-header">
+        <img src='@routes.Assets.at("images/HMRC_Logo.png")' alt="HMRC Logo">
+        <h1 class="heading-large" style="text-align:right;">@messages("vatCertificate.certificateHeader.one")<br>@messages("vatCertificate.certificateHeader.two")</h1>
+    </div>
+
+    <div class="card-full-container column-full">
+        <div class="column-two-thirds">
+            <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutYourRegistration.title")</h2>
+        </div>
+        <div class="column-full">
+            <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@messages("vatCertificate.aboutYourRegistration.vrn")</td>
+                        <td>@model.vrn</td>
+                    </tr>
+                    <tr>
+                        <td>@messages("vatCertificate.aboutYourRegistration.registrationDate")</td>
+                        <td>@displayDate(model.registrationDate)</td>
+                    </tr>
+                    <tr>
+                        <td>@messages("vatCertificate.aboutYourRegistration.certificateDate")</td>
+                        <td>@displayDate(model.certificateDate)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-full-container column-full">
+        <div class="card-body">
+            <div class="column-two-thirds">
+                <h2 class="card-heading heading-medium">@messages("vatCertificate.aboutTheBusiness.title")</h2>
+            </div>
+            <div class="column-full">
+                <table>
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@messages("vatCertificate.aboutTheBusiness.businessName")</td>
+                            <td>@{model.businessName.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                        </tr>
+                        <tr>
+                            <td>@messages("vatCertificate.aboutTheBusiness.tradingName")</td>
+                            <td>@{model.tradingName.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                        </tr>
+                        <tr>
+                            <td>@messages("vatCertificate.aboutTheBusiness.businessType")</td>
+                            <td>@messages(model.businessTypeMsgKey)</td>
+                        </tr>
+                        <tr>
+                            <td>@messages("vatCertificate.aboutTheBusiness.tradeClassification")</td>
+                            <td>@{model.tradeClassification}</td>
+                        </tr>
+                        <tr>
+                            <td>@messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness")</td>
+                            <td>@fullAddress(model.ppob)</td>
+                        </tr>
+                        <tr>
+                            <td>@messages("vatCertificate.aboutTheBusiness.emailAddress")</td>
+                            <td>@{model.email.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-full-container column-full">
+        <div class="column-two-thirds">
+            <h2 class="heading-medium card-heading">@messages("vatCertificate.bankingDetails.title")</h2>
+        </div>
+        <div class="column-full">
+            <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@messages("vatCertificate.bankingDetails.accountNumber")r</td>
+                        <td>@{model.accountNumber.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                    </tr>
+                    <tr>
+                        <td>@messages("vatCertificate.bankingDetails.sortCode")</td>
+                        <td>@{model.sortCode.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-full-container column-full">
+        <div class="column-two-thirds">
+            <h2 class="heading-medium card-heading">@messages("vatCertificate.returnDetails.title")</h2>
+        </div>
+        <div class="column-full">
+            <table>
+                <thead>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@messages("vatCertificate.returnDetails.returnDates")</td>
+                        <td>@messages(model.returnPeriodMsgKey)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
 }
