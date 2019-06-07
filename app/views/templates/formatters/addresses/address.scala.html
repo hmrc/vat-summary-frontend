@@ -17,7 +17,7 @@
 @(address: Address)
 
 @defining({
-    Seq(Some(address.line1), Some(address.line2), address.line3, address.line4)
+    Seq(Some(address.line1), address.line2, address.line3, address.line4)
         .flatten
         .mkString(", ")
 }) { addressLine => @addressLine}

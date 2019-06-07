@@ -65,68 +65,43 @@ object TestModels {
     Some("#001")
   )))
 
-  val address: Address = Address("", "", None, None, None)
+  val address: Address = Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB"))
   val entityName: String = "Cheapo Clothing"
   val currentYear: Int = 2018
 
-  val customerInformation: CustomerInformation = CustomerInformation(
+  val customerInformationMax: CustomerInformation = CustomerInformation(
     Some("Cheapo Clothing Ltd"),
     Some("Betty"),
     Some("Jones"),
     Some(entityName),
     address,
-    None,
-    None,
-    None,
-    address,
-    None,
-    None,
-    None,
+    Some("bettylucknexttime@gmail.com"),
     isHybridUser = false,
-    None
+    Some("2017-05-05"),
+    Some("2017-01-01"),
+    Some("7"),
+    "10410",
+    Some("****1234"),
+    Some("69****"),
+    Some("MM")
   )
 
-  val customerInformationHybrid: CustomerInformation = CustomerInformation(
-    None,
-    Some("Betty"),
-    Some("Jones"),
-    None,
-    Address("Bedrock Quarry",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV2 4BB")
-    ),
-    Some("01632 982028"),
-    Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com"),
-    Address("13 Pebble Lane",
-      "Bedrock",
-      Some("Graveldon"),
-      Some("Graveldon"),
-      Some("GV13 4BJ")
-    ),
-    Some("01632 960026"),
-    Some("07700 900018"),
-    Some("bettylucknexttime@gmail.com"),
-    isHybridUser = true,
-    None
-  )
+  val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
 
-  val customerInformationNoEntityName: CustomerInformation = CustomerInformation(
+  val customerInformationMin: CustomerInformation = CustomerInformation(
     None,
     None,
     None,
     None,
-    address,
-    None,
-    None,
-    None,
-    address,
-    None,
-    None,
+    Address("Bedrock Quarry", None, None, None, None),
     None,
     isHybridUser = false,
+    None,
+    None,
+    None,
+    "10410",
+    None,
+    None,
     None
   )
 

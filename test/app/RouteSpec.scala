@@ -45,12 +45,6 @@ class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
     }
   }
 
-  "The route for the Account details controller" should {
-    "be /vat-through-software/account/details" in {
-      controllers.routes.AccountDetailsController.accountDetails().url shouldBe "/vat-through-software/account/details"
-    }
-  }
-
   "The route for the Payment History controller" should {
     "be /vat-through-software/payment-history/{year}" in {
       val currentYear = 2018

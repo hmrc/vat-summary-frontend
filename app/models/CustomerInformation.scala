@@ -24,59 +24,41 @@ case class CustomerInformation(organisationName: Option[String],
                                lastName: Option[String],
                                tradingName: Option[String],
                                businessAddress: Address,
-                               businessPrimaryPhoneNumber: Option[String],
-                               businessMobileNumber: Option[String],
                                businessEmailAddress: Option[String],
-                               correspondenceAddress: Address,
-                               correspondencePrimaryPhoneNumber: Option[String],
-                               correspondenceMobileNumber: Option[String],
-                               correspondenceEmailAddress: Option[String],
                                isHybridUser: Boolean,
-                               customerMigratedToETMPDate: Option[String]) {
-  def entityName: Option[String] = {
+                               customerMigratedToETMPDate: Option[String],
+                               registrationDate: Option[String],
+                               partyType: Option[String],
+                               sicCode: String,
+                               bankAccountNumber: Option[String],
+                               bankAccountSortCode: Option[String],
+                               returnPeriod: Option[String]) {
+
+  def entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
       case (Some(first), Some(last), None, None) => Some(s"$first $last")
       case (None, None, None, orgName) => orgName
       case _ => tradingName
     }
-  }
 }
 
 object CustomerInformation {
   implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
 
-  private def createCustomerWithNameOnly(organisationName: Option[String],
-                                         firstName: Option[String],
-                                         lastName: Option[String],
-                                         tradingName: Option[String],
-                                         isPartialMigration: Option[Boolean],
-                                         migratedToETMPDate: Option[String]): CustomerInformation = {
-
-    val dummyAddress = Address("", "", None, None, None)
-    CustomerInformation(
-      organisationName = organisationName,
-      firstName = firstName,
-      lastName = lastName,
-      tradingName = tradingName,
-      businessAddress = dummyAddress,
-      businessPrimaryPhoneNumber = None,
-      businessMobileNumber = None,
-      businessEmailAddress = None,
-      correspondenceAddress = dummyAddress,
-      correspondencePrimaryPhoneNumber = None,
-      correspondenceMobileNumber = None,
-      correspondenceEmailAddress = None,
-      isHybridUser = isPartialMigration.contains(true),
-      customerMigratedToETMPDate = migratedToETMPDate
-    )
-  }
-
   implicit val customerInformationReads: Reads[CustomerInformation] = (
-    (JsPath \ "organisationName").readNullable[String] and
-      (JsPath \ "firstName").readNullable[String] and
-      (JsPath \ "lastName").readNullable[String] and
-      (JsPath \ "tradingName").readNullable[String] and
-      (JsPath \ "isPartialMigration").readNullable[Boolean] and
-      (JsPath \ "customerMigratedToETMPDate").readNullable[String]
-    ) (createCustomerWithNameOnly _)
+    (JsPath \ "customerDetails" \ "organisationName").readNullable[String].orElse(Reads.pure(None)) and
+    (JsPath \ "customerDetails" \ "firstName").readNullable[String].orElse(Reads.pure(None)) and
+    (JsPath \ "customerDetails" \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
+    (JsPath \ "customerDetails" \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
+    (JsPath \ "ppob").read[Address] and
+    (JsPath \ "ppob" \ "contactDetails" \ "emailAddress").readNullable[String].orElse(Reads.pure(None)) and
+    (JsPath \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true)) and
+    (JsPath \\ "customerMigratedToETMPDate").readNullable[String] and
+    (JsPath \\ "vatRegistrationDate").readNullable[String] and
+    (JsPath \ "partyType").readNullable[String] and
+    (JsPath \ "primaryMainCode").read[String] and
+    (JsPath \\ "bankAccountNumber").readNullable[String] and
+    (JsPath \\ "sortCode").readNullable[String] and
+    (JsPath \\ "stdReturnPeriod").readNullable[String]
+  )(CustomerInformation.apply _)
 }

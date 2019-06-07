@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub}
-import stubs.CustomerInfoStub.customerInfoHybridUser
+import stubs.CustomerInfoStub.customerInfoJson
 
 class PaymentsPageSpec extends IntegrationBaseSpec {
 
@@ -104,7 +104,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo(customerInfoHybridUser)
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = true))
         }
 
         val response: WSResponse = await(request().get())

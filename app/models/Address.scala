@@ -20,21 +20,19 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 case class Address(line1: String,
-                   line2: String,
+                   line2: Option[String],
                    line3: Option[String],
                    line4: Option[String],
-                   postCode: Option[String]
-                   )
+                   postCode: Option[String])
 
 object Address {
   implicit val addressWrites: Writes[Address] = Json.writes[Address]
 
   implicit val addressReads: Reads[Address] = (
     (JsPath \ "address" \ "line1").read[String] and
-    (JsPath \ "address" \ "line2").read[String] and
+    (JsPath \ "address" \ "line2").readNullable[String] and
     (JsPath \ "address" \ "line3").readNullable[String] and
     (JsPath \ "address" \ "line4").readNullable[String] and
     (JsPath \ "address" \ "postCode").readNullable[String]
-
-    ) (Address.apply _)
+  )(Address.apply _)
 }

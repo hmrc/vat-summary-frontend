@@ -16,69 +16,28 @@
 
 package models
 
-import common.TestModels.{customerInformation, customerInformationNoEntityName}
-import play.api.libs.json.Json
+import common.TestModels.{customerInformationMax, customerInformationMin}
+import common.TestJson.{customerInfoJsonMax, customerInfoJsonMin}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class CustomerInformationSpec extends UnitSpec {
 
-  "A CustomerInformation object" should {
+  "A CustomerInformation object" when {
 
-    val exampleInputString =
-      """{
-        |"organisationName":"Cheapo Clothing Ltd",
-        |"firstName":"Betty",
-        |"lastName":"Jones",
-        |"tradingName":"Cheapo Clothing",
-        |"isPartialMigration": false,
-        |"PPOB":{
-        |  "address":{
-        |    "line1":"Bedrock Quarry",
-        |    "line2":"Bedrock",
-        |    "line3":"Graveldon",
-        |    "line4":"Graveldon",
-        |    "postCode":"GV2 4BB"
-        |  },
-        |  "contactDetails":{
-        |    "primaryPhoneNumber":"01632 982028",
-        |    "mobileNumber":"07700 900018",
-        |    "emailAddress":"bettylucknexttime@gmail.com"
-        |  }
-        |},
-        |"correspondenceContactDetails":{
-        |  "address":{
-        |    "line1":"13 Pebble Lane",
-        |    "line2":"Bedrock",
-        |    "line3":"Graveldon",
-        |    "line4":"Graveldon",
-        |    "postCode":"GV13 4BJ"
-        |  },
-        |  "contactDetails":{
-        |    "primaryPhoneNumber":"01632 960026",
-        |    "mobileNumber":"07700 900018",
-        |    "emailAddress":"bettylucknexttime@gmail.com"
-        |  }
-        |}
-        |}"""
-        .stripMargin.replace("\n", "")
+    "all available fields can be found in the JSON" should {
 
-    "be parsed from appropriate JSON" in {
-      val result: CustomerInformation = Json.parse(exampleInputString).as[CustomerInformation]
-      result shouldBe customerInformation
+      "parse to a model" in {
+        val result: CustomerInformation = customerInfoJsonMax.as[CustomerInformation]
+        result shouldBe customerInformationMax
+      }
     }
-  }
 
-  "A CustomerInformation object with no isPartialMigration value" should {
+    "the minimum amount of available fields can be found in the JSON" should {
 
-    val exampleJson = Json.obj(
-      "organisationName" -> "Cheapo Clothing Ltd",
-      "firstName" -> "Betty",
-      "lastName" -> "Jones",
-      "tradingName" -> "Cheapo Clothing"
-    )
-
-    "be parsed from appropriate JSON" in {
-      exampleJson.as[CustomerInformation] shouldBe customerInformation
+      "parse to a model" in {
+        val result: CustomerInformation = customerInfoJsonMin.as[CustomerInformation]
+        result shouldBe customerInformationMin
+      }
     }
   }
 
@@ -87,7 +46,7 @@ class CustomerInformationSpec extends UnitSpec {
     "the model contains a trading name" should {
 
       "return the trading name" in {
-        val result: Option[String] = customerInformation.entityName
+        val result: Option[String] = customerInformationMax.entityName
         result shouldBe Some("Cheapo Clothing")
       }
     }
@@ -95,7 +54,7 @@ class CustomerInformationSpec extends UnitSpec {
     "the model does not contain a trading name or organisation name" should {
 
       "return the first and last name" in {
-        val customerInfoSpecific = customerInformation.copy(tradingName = None, organisationName = None)
+        val customerInfoSpecific = customerInformationMax.copy(tradingName = None, organisationName = None)
         val result: Option[String] = customerInfoSpecific.entityName
         result shouldBe Some("Betty Jones")
       }
@@ -104,7 +63,7 @@ class CustomerInformationSpec extends UnitSpec {
     "the model does not contain a trading name, first name or last name" should {
 
       "return the organisation name" in {
-        val customerInfoSpecific = customerInformation.copy(tradingName = None, firstName = None, lastName = None)
+        val customerInfoSpecific = customerInformationMax.copy(tradingName = None, firstName = None, lastName = None)
         val result: Option[String] = customerInfoSpecific.entityName
         result shouldBe Some("Cheapo Clothing Ltd")
       }
@@ -113,7 +72,7 @@ class CustomerInformationSpec extends UnitSpec {
     "the model does not contains a trading name, organisation name, or individual names" should {
 
       "return None" in {
-        val result: Option[String] = customerInformationNoEntityName.entityName
+        val result: Option[String] = customerInformationMin.entityName
         result shouldBe None
       }
     }

@@ -40,26 +40,22 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
     "return a user's customer information" in new Test {
       override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo()
 
-      val dummyAddress = Address("", "", None, None, None)
-
-      val expected = Right(
-        CustomerInformation(
-          Some("Cheapo Clothing Ltd"),
-          Some("Betty"),
-          Some("Jones"),
-          Some("Cheapo Clothing"),
-          dummyAddress,
-          None,
-          None,
-          None,
-          dummyAddress,
-          None,
-          None,
-          None,
-          isHybridUser = false,
-          None
-        )
-      )
+      val expected = Right(CustomerInformation(
+        Some("Cheapo Clothing Ltd"),
+        Some("Betty"),
+        Some("Jones"),
+        Some("Cheapo Clothing"),
+        Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB")),
+        Some("bettylucknexttime@gmail.com"),
+        isHybridUser = false,
+        Some("2017-05-05"),
+        Some("2017-01-01"),
+        Some("7"),
+        "10410",
+        Some("****1234"),
+        Some("69****"),
+        Some("MM")
+      ))
 
       setupStubs()
       private val result = await(connector.getCustomerInfo("1111"))
