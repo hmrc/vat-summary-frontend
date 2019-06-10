@@ -20,18 +20,22 @@ import config.AppConfig
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class VatCertificateController @Inject()(val messagesApi: MessagesApi,
+                                         serviceInfoService: ServiceInfoService,
                                          authorisedController: AuthorisedController)
                                         (implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
   def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request => implicit user =>
     if(appConfig.features.vatCertificateEnabled()) {
-      Future.successful(Ok(views.html.certificate.vatCertificate()))
+      serviceInfoService.getPartial.map { serviceInfoContent =>
+       Ok(views.html.certificate.vatCertificate(serviceInfoContent))
+      }
     } else {
       Future.successful(NotFound(views.html.errors.notFound()))
     }

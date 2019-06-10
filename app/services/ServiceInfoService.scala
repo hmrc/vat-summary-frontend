@@ -14,30 +14,18 @@
  * limitations under the License.
  */
 
-package views.certificate
+package services
 
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import connectors.ServiceInfoPartialConnector
+import javax.inject.Inject
+import play.api.mvc._
 import play.twirl.api.Html
-import views.ViewBaseSpec
 
-class VatCertificateViewSpec extends ViewBaseSpec {
+import scala.concurrent.{ExecutionContext, Future}
 
-  object Selectors {
-    val heading = "h1"
-  }
+class ServiceInfoService @Inject()(serviceInfoPartialConnector: ServiceInfoPartialConnector){
 
-  "The VAT Certificate page" should {
-
-    lazy val view = views.html.certificate.vatCertificate( Html(""))
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "have the correct title" in {
-      document.title shouldBe "Your VAT Certificate"
-    }
-
-    "have the correct heading" in {
-      elementText(Selectors.heading) shouldBe "Your VAT Certificate"
-    }
+  def getPartial(implicit request: Request[_], executionContext: ExecutionContext): Future[Html] = {
+    serviceInfoPartialConnector.getServiceInfoPartial()
   }
 }

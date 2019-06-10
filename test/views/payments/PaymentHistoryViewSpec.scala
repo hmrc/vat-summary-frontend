@@ -85,7 +85,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
         "the user does not have the VATDEC enrolment" should {
 
-          lazy val view: Html = views.html.payments.paymentHistory(model)
+          lazy val view: Html = views.html.payments.paymentHistory(model, Html(""))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct document title" in {
@@ -156,7 +156,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           "they migrated to MTD less than 15 months ago" should {
 
             lazy val view: Html = views.html.payments.paymentHistory(
-              model.copy(tabOne = Some(currentYear), previousPaymentsTab = true)
+              model.copy(tabOne = Some(currentYear), previousPaymentsTab = true), Html("")
             )(request, messages, mockConfig, messages.lang, vatDecUser)
             lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -180,7 +180,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           "they migrated to MTD 15 months ago or longer" should {
 
             lazy val view: Html =
-              views.html.payments.paymentHistory(model)(request, messages, mockConfig, messages.lang, vatDecUser)
+              views.html.payments.paymentHistory(model, Html(""))(request, messages, mockConfig, messages.lang, vatDecUser)
             lazy implicit val document: Document = Jsoup.parse(view.body)
 
             "not display a current year tab" in {
@@ -206,7 +206,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
         "the user does not have the VATDEC enrolment" when {
 
-          lazy val view: Html = views.html.payments.paymentHistory(baseModel)
+          lazy val view: Html = views.html.payments.paymentHistory(baseModel, Html(""))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "not display a current year tab" in {
@@ -235,7 +235,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           "they migrated to MTD less than 15 months ago" should {
 
             lazy val view: Html = views.html.payments.paymentHistory(
-              baseModel.copy(tabOne = Some(currentYear), previousPaymentsTab = true)
+              baseModel.copy(tabOne = Some(currentYear), previousPaymentsTab = true), Html("")
             )(request, messages, mockConfig, messages.lang, vatDecUser)
             lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -263,7 +263,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           "they migrated to MTD 15 months ago or longer" should {
 
             lazy val view: Html =
-              views.html.payments.paymentHistory(baseModel)(request, messages, mockConfig, messages.lang, vatDecUser)
+              views.html.payments.paymentHistory(baseModel, Html(""))(request, messages, mockConfig, messages.lang, vatDecUser)
             lazy implicit val document: Document = Jsoup.parse(view.body)
 
             "not display a current year tab" in {
@@ -292,7 +292,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "the user has clicked the Previous Payments tab" should {
 
         lazy val view: Html = views.html.payments.paymentHistory(
-          baseModel.copy(tabOne = Some(currentYear), selectedYear = None, previousPaymentsTab = true)
+          baseModel.copy(tabOne = Some(currentYear), selectedYear = None, previousPaymentsTab = true), Html("")
         )(request, messages, mockConfig, messages.lang, vatDecUser)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -331,7 +331,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       "the user does not have the VATDEC enrolment" when {
 
-        lazy val view: Html = views.html.payments.paymentHistory(model)
+        lazy val view: Html = views.html.payments.paymentHistory(model, Html(""))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a current year tab" in {
@@ -359,7 +359,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
         "they migrated to MTD less than 15 months ago" should {
 
-          lazy val view: Html = views.html.payments.paymentHistory(model.copy(previousPaymentsTab = true))(
+          lazy val view: Html = views.html.payments.paymentHistory(model.copy(previousPaymentsTab = true), Html(""))(
             request, messages, mockConfig, messages.lang, vatDecUser)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -387,7 +387,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         "they migrated to MTD 15 months ago or longer" should {
 
           lazy val view: Html =
-            views.html.payments.paymentHistory(model)(request, messages, mockConfig, messages.lang, vatDecUser)
+            views.html.payments.paymentHistory(model, Html(""))(request, messages, mockConfig, messages.lang, vatDecUser)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display a current year tab" in {

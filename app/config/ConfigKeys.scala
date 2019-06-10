@@ -49,8 +49,8 @@ object ConfigKeys {
   val businessTaxAccountMessagesUrl: String = "business-tax-account.messagesUrl"
   val businessTaxAccountManageAccountUrl: String = "business-tax-account.manageAccountUrl"
 
-  val helpAndContactFrontendBase ="help-and-contact-frontend.host"
-  val helpAndContactHelpUrl="help-and-contact-frontend.helpUrl"
+  val helpAndContactFrontendBase: String = "help-and-contact-frontend.host"
+  val helpAndContactHelpUrl: String = "help-and-contact-frontend.helpUrl"
 
   val btaVatOverviewUrlBase: String = "business-tax-account.vatSummaryHost"
   val btaVatOverviewUrl: String = "business-tax-account.vatSummaryUrl"

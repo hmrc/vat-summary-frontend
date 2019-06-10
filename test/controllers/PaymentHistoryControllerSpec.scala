@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{agentAuthResult, customerInformationMax, customerInformationHybrid, successfulAuthResult}
+import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.{UnknownError, VatLiabilitiesError}
@@ -30,9 +30,10 @@ import models.{CustomerInformation, ServiceResponse, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.mvc.{AnyContentAsEmpty, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.twirl.api.Html
 import services._
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core._
@@ -49,6 +50,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val mockDateService: DateService = mock[DateService]
+  val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   implicit val mockAuditService: AuditingService = mock[AuditingService]
   val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
@@ -112,11 +114,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       Some(Individual)
     ))
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
+    val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     def setup(): Any = {
       (mockDateService.now: () => LocalDate)
         .stubs()
         .returns(LocalDate.parse("2018-05-01"))
+
+      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
+        .stubs(*,*)
+        .returns(serviceInfoServiceResult)
 
       if (authCall) {
         (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -152,6 +159,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockPaymentsService,
         mockAuthorisedController,
         mockDateService,
+        mockServiceInfoService,
         mockEnrolmentsAuthService,
         mockAccountDetailsService
       )

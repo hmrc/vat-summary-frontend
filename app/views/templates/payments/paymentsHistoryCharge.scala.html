@@ -29,7 +29,7 @@
 @transaction.clearedDate match {
 
   case Some(date) => {
-    <tr class="@chargeType.id ">
+    <tr class="@chargeType.id">
       <td scope="row" class="nowrap" valign="top">@displayDate(date, useShortDayFormat = true)</td>
       <td><span class="bold">@messages(s"${chargeType.title}")</span>
         @chargeType.description.map { description =>

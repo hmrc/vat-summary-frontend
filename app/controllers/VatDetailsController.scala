@@ -29,7 +29,6 @@ import models.payments.Payments
 import models.viewModels.VatDetailsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, Request}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -42,6 +41,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService,
+                                     serviceInfoService: ServiceInfoService,
                                      authorisedController: AuthorisedController,
                                      val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
@@ -59,6 +59,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         customerInfo <- accountDetailsCall
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
+        serviceInfoContent <- serviceInfoService.getPartial
         mandationStatus <- if(appConfig.features.submitReturnFeatures()) {
           retrieveMandationStatus(user.vrn)
         } else { Future.successful(Right(MandationStatus("Disabled"))) }
@@ -75,9 +76,9 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
           case _ => Seq()
         })
 
-        Ok(views.html.vatDetails.details(constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus)))
-          .addingToSession(newSessionVariables: _*)
-
+        Ok(views.html.vatDetails.details(
+          constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
+        )).addingToSession(newSessionVariables: _*)
       }
   }
 

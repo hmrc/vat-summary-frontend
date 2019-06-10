@@ -56,7 +56,7 @@ trait AppConfig extends ServicesConfig {
   val btaHomeUrl: String
   val btaMessagesUrl: String
   val btaManageAccountUrl: String
-  val btaHelpAndContactUrl:String
+  val btaHelpAndContactUrl: String
   val paymentsServiceUrl: String
   val setupPaymentsJourneyPath: String
   val paymentsReturnUrl: String
