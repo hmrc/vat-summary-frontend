@@ -29,8 +29,8 @@
 @transaction.clearedDate match {
 
   case Some(date) => {
-    <tr class="@chargeType.id">
-      <td scope="row">@displayDate(date, useShortDayFormat = true)</td>
+    <tr class="@chargeType.id ">
+      <td scope="row" class="nowrap" valign="top">@displayDate(date, useShortDayFormat = true)</td>
       <td><span class="bold">@messages(s"${chargeType.title}")</span>
         @chargeType.description.map { description =>
           <span class="form-hint">
@@ -38,7 +38,7 @@
           </span>
         }
       </td>
-      <td class="numeric nowrap
+      <td class="numeric nowrap amount
         @if(transaction.amount < 0 && !chargeType.name.equals(UnallocatedPayment.value) ||
         chargeType.name.equals(Refund.value))  {repayment-money}
 
