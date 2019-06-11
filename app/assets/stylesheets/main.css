@@ -141,7 +141,6 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
 }
 
 
-
 .card-full-container {
   border: 1px solid #bfc1c3;
   margin: 1em 0 2em 0;
@@ -216,4 +215,3 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
   width: 200px;
   float: left;
 }
-
