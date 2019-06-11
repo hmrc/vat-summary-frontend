@@ -16,7 +16,8 @@
 
 package connectors.httpParsers
 
-import common.TestModels.customerInformation
+import common.TestModels.customerInformationMax
+import common.TestJson.customerInfoJsonMax
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 import models.errors._
 import play.api.http.Status
@@ -32,46 +33,10 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(
         Status.OK,
-        responseJson = Some(
-          Json.obj(
-            "organisationName" -> "Cheapo Clothing Ltd",
-            "firstName" -> "Betty",
-            "lastName" -> "Jones",
-            "tradingName" -> "Cheapo Clothing",
-            "isPartialMigration" -> false,
-            "PPOB" -> Json.obj(
-              "address" -> Json.obj(
-                "line1" -> "Bedrock Quarry",
-                "line2" -> "Bedrock",
-                "line3" -> "Graveldon",
-                "line4" -> "Graveldon",
-                "postCode" -> "GV2 4BB"
-              ),
-              "contactDetails" -> Json.obj(
-                "primaryPhoneNumber" -> "01632 982028",
-                "mobileNumber" -> "07700 900018",
-                "emailAddress" -> "bettylucknexttime@gmail.com"
-              )
-            ),
-            "correspondenceContactDetails" -> Json.obj(
-              "address" -> Json.obj(
-                "line1" -> "13 Pebble Lane",
-                "line2" -> "Bedrock",
-                "line3" -> "Graveldon",
-                "line4" -> "Graveldon",
-                "postCode" -> "GV13 4BJ"
-              ),
-              "contactDetails" -> Json.obj(
-                "primaryPhoneNumber" -> "01632 960026",
-                "mobileNumber" -> "07700 900018",
-                "emailAddress" -> "bettylucknexttime@gmail.com"
-              )
-            )
-          )
-        )
+        responseJson = Some(customerInfoJsonMax)
       )
 
-      val expected = Right(customerInformation)
+      val expected = Right(customerInformationMax)
 
       val result = CustomerInfoReads.read("", "", httpResponse)
 

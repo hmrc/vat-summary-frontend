@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,40 +14,19 @@
  * limitations under the License.
  */
 
-package stubs
+package common
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import helpers.WireMockMethods
-import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 
-object CustomerInfoStub extends WireMockMethods {
+object TestJson {
 
-  private val customerInfoUri = "/vat-subscription/([0-9]+)/full-information"
-  private val customerMandationStatusUri = "/vat-subscription/([0-9]+)/mandation-status"
-
-  def stubCustomerInfo(customerInfo: JsValue = customerInfoJson(isPartialMigration = false)): StubMapping = {
-    when(method = GET, uri = customerInfoUri)
-      .thenReturn(status = OK, body = customerInfo)
-  }
-
-  def stubCustomerMandationStatus(customerMandationStatus: JsValue = customerMandationStatus, returnStatus: Int = OK): StubMapping = {
-    when(method = GET, uri = customerMandationStatusUri)
-      .thenReturn(status = returnStatus, customerMandationStatus)
-  }
-
-  def stubErrorFromApi(stubbedUrl: String = customerInfoUri): StubMapping = {
-    when(method = GET, uri = stubbedUrl)
-      .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
-  }
-
-  def customerInfoJson(isPartialMigration: Boolean): JsValue = Json.obj(
+  val customerInfoJsonMax: JsValue = Json.obj(
     "customerDetails" -> Json.obj(
       "organisationName" -> "Cheapo Clothing Ltd",
       "firstName" -> "Betty",
       "lastName" -> "Jones",
       "tradingName" -> "Cheapo Clothing",
-      "isPartialMigration" ->  isPartialMigration,
+      "isPartialMigration" ->  false,
       "vatRegistrationDate" -> "2017-01-01",
       "customerMigratedToETMPDate" -> "2017-05-05"
     ),
@@ -76,16 +55,15 @@ object CustomerInfoStub extends WireMockMethods {
     "primaryMainCode" -> "10410"
   )
 
-  private val errorJson = Json.obj(
-    "code" -> "500",
-    "message" -> "INTERNAL_SERVER_ERROR"
-  )
-
-  private val customerMandationStatus = Json.parse(
-    """
-      |{
-      | "mandationStatus":"MTDfB Mandated"
-      |}
-    """.stripMargin
+  val customerInfoJsonMin: JsValue = Json.obj(
+    "customerDetails" -> Json.obj(
+      "isPartialMigration" ->  false
+    ),
+    "ppob" -> Json.obj(
+      "address" -> Json.obj(
+        "line1" -> "Bedrock Quarry"
+      )
+    ),
+    "primaryMainCode" -> "10410"
   )
 }

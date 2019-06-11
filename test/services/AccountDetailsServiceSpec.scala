@@ -16,10 +16,11 @@
 
 package services
 
+import common.TestModels.customerInformationMax
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{BadRequestError, CustomerInformationError}
-import models.{Address, CustomerInformation, ServiceResponse}
+import models.{CustomerInformation, ServiceResponse}
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,33 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AccountDetailsServiceSpec extends UnitSpec with MockFactory with Matchers {
 
   private trait Test {
-    val customerInfo: CustomerInformation = CustomerInformation(
-      Some("Cheapo Clothing Ltd"),
-      Some("Betty"),
-      Some("Jones"),
-      Some("Cheapo Clothing"),
-      Address("Bedrock Quarry",
-        "Bedrock",
-        Some("Graveldon"),
-        Some("Graveldon"),
-        Some("GV2 4BB")
-      ),
-      Some("01632 982028"),
-      Some("07700 900018"),
-      Some("bettylucknexttime@gmail.com"),
-      Address("13 Pebble Lane",
-        "Bedrock",
-        Some("Graveldon"),
-        Some("Graveldon"),
-        Some("GV13 4BJ")
-      ),
-      Some("01632 960026"),
-      Some("07700 900018"),
-      Some("bettylucknexttime@gmail.com"),
-      isHybridUser = true,
-      Some("2018-01-01")
-    )
-    val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInfo)
+    val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]

@@ -46,7 +46,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
   private trait Test {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
-    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformation)
+    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
 
     def setupMocks(): Unit = {

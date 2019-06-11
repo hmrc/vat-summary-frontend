@@ -51,7 +51,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val vatServiceReturnsResult: Future[ServiceResponse[Option[VatReturnObligations]]] = Future.successful(Right(Some(obligations)))
     val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] = Future.successful(Right(Some(payments)))
-    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(customerInformation))
+    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(customerInformationMax))
     val mandationStatusServiceResult: Future[HttpGetResult[MandationStatus]] = Future.successful(Right(validMandationStatus))
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -139,7 +139,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "put a customerMigratedToETMPDate key into the session" in new DetailsTest {
         private val result = target().details()(fakeRequest)
-        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("")
+        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-05")
       }
 
       "put a mandation status in the session" in new DetailsTest {
@@ -312,7 +312,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -327,7 +327,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(Some(payments)),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -342,7 +342,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(None),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -357,7 +357,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -372,7 +372,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
-          Right(customerInformationNoEntityName),
+          Right(customerInformationMin),
           Right(validMandationStatus)
         )
 
@@ -387,7 +387,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
-          Right(customerInformationNoEntityName),
+          Right(customerInformationMin),
           Right(validNonMTDfBMandationStatus)
         )
 
@@ -401,7 +401,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Right(None),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -416,7 +416,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Left(NextPaymentError),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -433,7 +433,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Left(NextPaymentError),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -453,7 +453,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 
@@ -473,7 +473,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
-          Right(customerInformation),
+          Right(customerInformationMax),
           Right(validMandationStatus)
         )
 

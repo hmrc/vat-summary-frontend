@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{agentAuthResult, customerInformation, customerInformationHybrid, successfulAuthResult}
+import common.TestModels.{agentAuthResult, customerInformationMax, customerInformationHybrid, successfulAuthResult}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.{UnknownError, VatLiabilitiesError}
@@ -111,7 +111,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       Enrolments(enrolments),
       Some(Individual)
     ))
-    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformation)
+    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
 
     def setup(): Any = {
       (mockDateService.now: () => LocalDate)
@@ -399,7 +399,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         "return the date" in new Test {
           override val accountDetailsCall: Boolean = true
           override val accountDetailsResponse: HttpGetResult[CustomerInformation] =
-            Right(customerInformation.copy(customerMigratedToETMPDate = Some("2015-05-05")))
+            Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2015-05-05")))
           await(target.getMigratedToETMPDate(fakeRequest, user)) shouldBe Some(LocalDate.parse("2015-05-05"))
         }
       }

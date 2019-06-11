@@ -33,7 +33,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val result = address(Address(
           "line1",
-          "line2",
+          Some("line2"),
           Some("line3"),
           Some("line4"),
           Some("postcode"))
@@ -51,7 +51,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val result = address(Address(
           "line1",
-          "line2",
+          Some("line2"),
           Some("line3"),
           None,
           Some("postcode"))
@@ -69,7 +69,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val result = address(Address(
           "line1",
-          "line2",
+          Some("line2"),
           None,
           Some("line4"),
           Some("postcode"))
@@ -87,7 +87,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val result = address(Address(
           "line1",
-          "line2",
+          Some("line2"),
           None,
           None,
           Some("postcode"))
