@@ -17,11 +17,20 @@
 @import models.viewModels.VatCertificateViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.html.templates.formatters.addresses._
+@import views.html.templates.formatters.breadcrumbs._
 
-@(model: VatCertificateViewModel)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
-@views.html.main_template(messages("vatCertificate.title"), appConfig = appConfig) {
+@(model: VatCertificateViewModel, isAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
+@views.html.main_template(if(isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"), appConfig = appConfig) {
 
-    <h1>@messages("vatCertificate.title")</h1>
+    @if(!isAgent) {
+        @navigationBreadcrumb(
+            links = Map(
+                appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
+                controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
+            currentPage = messages("vatCertificate.title")
+        )
+    }
+    <h1>@if(isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
 
     <div class="cert-header">
         <img src='@routes.Assets.at("images/HMRC_Logo.png")' alt="HMRC Logo">
@@ -104,7 +113,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@messages("vatCertificate.bankingDetails.accountNumber")r</td>
+                        <td>@messages("vatCertificate.bankingDetails.accountNumber")</td>
                         <td>@{model.accountNumber.getOrElse(messages("vatCertificate.notProvided"))}</td>
                     </tr>
                     <tr>
@@ -133,4 +142,9 @@
             </table>
         </div>
     </div>
+
+    @if(isAgent){
+        <p><a href="@routes.VatCertificateController.changeClientAction()">Back to your client options</a></p>
+        <p><a href="@routes.VatCertificateController.changeClient()">Change client</a></p>
+    }
 }

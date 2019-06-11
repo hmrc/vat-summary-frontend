@@ -124,6 +124,7 @@ paymentsHistory.previousPayments.beforeMtd = if you made payments before joining
 
 #VAT certificate
 vatCertificate.title = Your VAT Certificate
+vatCertificate.agentTitle = Your client''s VAT Certificate
 vatCertificate.certificateHeader.one = Certificate of Registration
 vatCertificate.certificateHeader.two = for Value Added Tax
 

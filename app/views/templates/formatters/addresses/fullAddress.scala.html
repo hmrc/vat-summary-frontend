@@ -15,19 +15,19 @@
  *@
 
 @(address: Address)
-    @address.line1 <br/>
-    @address.line2
-    @{
+    @{address.line1}@{
+        address.line2.map{ line =>
+            HtmlFormat.raw("<br/>" + line)
+        }
+    }@{
         address.line3.map{ line =>
             HtmlFormat.raw("<br/>" + line)
         }
-    }
-    @{
+    }@{
         address.line4.map{ line =>
             HtmlFormat.raw("<br/>" + line)
         }
-    }
-    @{
+    }@{
         address.postCode.map{ line =>
             HtmlFormat.raw("<br/>" + line)
         }

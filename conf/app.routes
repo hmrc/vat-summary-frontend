@@ -1,26 +1,28 @@
 # microservice specific routes
 
-GET        /vat-overview                        controllers.VatDetailsController.details
-GET        /what-you-owe                        controllers.OpenPaymentsController.openPayments
-GET        /direct-debit                        controllers.DirectDebitController.directDebits(status: Option[Boolean])
-GET        /payment-history/previous-payments   controllers.PaymentHistoryController.previousPayments()
-GET        /payment-history/:year               controllers.PaymentHistoryController.paymentHistory(year: Int)
-GET        /vat-certificate                     controllers.VatCertificateController.show
+GET        /vat-overview                                                                           controllers.VatDetailsController.details
+GET        /what-you-owe                                                                           controllers.OpenPaymentsController.openPayments
+GET        /direct-debit                                                                           controllers.DirectDebitController.directDebits(status: Option[Boolean])
+GET        /payment-history/previous-payments                                                      controllers.PaymentHistoryController.previousPayments()
+GET        /payment-history/:year                                                                  controllers.PaymentHistoryController.paymentHistory(year: Int)
+GET        /vat-certificate                                                                        controllers.VatCertificateController.show
+GET        /vat-certificate/change-client-vat-number                                               controllers.VatCertificateController.changeClient
+GET        /vat-certificate/change-client-action                                                   controllers.VatCertificateController.changeClientAction
 
-GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
-GET        /make-payment/:amountInPence/:chargeType/:dueDate controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)
+GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate        controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
+GET        /make-payment/:amountInPence/:chargeType/:dueDate                                       controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)
 
 #Portal hand-off Routes
-GET        /portal-what-you-owe         controllers.PortalController.hybridWYO
-GET        /portal-payment-history      controllers.PortalController.hybridPH
+GET        /portal-what-you-owe                                                                    controllers.PortalController.hybridWYO
+GET        /portal-payment-history                                                                 controllers.PortalController.hybridPH
 
 #Sign Out Routes
-GET        /sign-out                    controllers.SignOutController.signOut(authorised: Boolean)
-GET        /time-out                    controllers.SignOutController.timeout
+GET        /sign-out                                                                               controllers.SignOutController.signOut(authorised: Boolean)
+GET        /time-out                                                                               controllers.SignOutController.timeout
 
 #Language Controller
-GET        /language/:lang              controllers.LanguageController.switchToLanguage(lang: String)
+GET        /language/:lang                                                                         controllers.LanguageController.switchToLanguage(lang: String)
 
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                controllers.Assets.at(path="/public", file)
+GET        /assets/*file                                                                           controllers.Assets.at(path="/public", file)
