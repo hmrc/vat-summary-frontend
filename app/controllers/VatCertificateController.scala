@@ -37,7 +37,7 @@ class VatCertificateController @Inject()(val messagesApi: MessagesApi,
     if(appConfig.features.vatCertificateEnabled()) {
       Future.successful(Ok(views.html.certificate.vatCertificate(VatCertificateViewModel(
         "1231231231", LocalDate.now(), LocalDate.now(), Some("ABC Studios"), Some("ABC Trading studios"), "Digital",
-        "Agriculture", Address("Line 1", "Line 2", Some("Line 3"), None, Some("TF4 3ER")), Some("ABCStudios@exmaple.com"), Some("******21"), Some("50****"),
+        "Agriculture", Address("Line 1", Some("Line 2"), Some("Line 3"), None, Some("TF4 3ER")), Some("ABCStudios@exmaple.com"), Some("******21"), Some("50****"),
         "returnPeriod.MM"
       ))))
     } else {
