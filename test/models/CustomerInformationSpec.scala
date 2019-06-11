@@ -77,4 +77,66 @@ class CustomerInformationSpec extends UnitSpec {
       }
     }
   }
+
+  "Calling .partyTypeMessageKey" when {
+
+    "the model contains a partyType" should {
+
+      "return the message key for that party type" in {
+        customerInformationMax.partyTypeMessageKey shouldBe "partyType.7"
+      }
+
+      "the model does not contain a partyType" should {
+
+        "return the message key for 'Not provided'" in {
+          customerInformationMin.partyTypeMessageKey shouldBe "common.notProvided"
+        }
+      }
+    }
+  }
+
+  "Calling .returnPeriodMessageKey" when {
+
+    "the return period is a standard quarterly stagger of 'MM'" should {
+
+      "return the message key for monthly stagger" in {
+        customerInformationMax.copy(returnPeriod = Some("MM")).returnPeriodMessageKey shouldBe "returnPeriod.MM"
+      }
+    }
+
+    "the return period is a standard quarterly stagger of 'MA'" should {
+
+      "return the message key for the quarterly stagger type A" in {
+        customerInformationMax.copy(returnPeriod = Some("MA")).returnPeriodMessageKey shouldBe "returnPeriod.MA"
+      }
+    }
+
+    "the return period is a standard quarterly stagger of 'MB'" should {
+
+      "return the message key for the quarterly stagger type B" in {
+        customerInformationMax.copy(returnPeriod = Some("MB")).returnPeriodMessageKey shouldBe "returnPeriod.MB"
+      }
+    }
+
+    "the return period is a standard quarterly stagger of 'MC'" should {
+
+      "return the message key for the quarterly stagger type C" in {
+        customerInformationMax.copy(returnPeriod = Some("MC")).returnPeriodMessageKey shouldBe "returnPeriod.MC"
+      }
+    }
+
+    "the return period is non standard" should {
+
+      "return the message key for 'Non-standard'" in {
+        customerInformationMax.copy(returnPeriod = Some("MZ")).returnPeriodMessageKey shouldBe "returnPeriod.nonStandard"
+      }
+    }
+
+    "the model does not contain a returnPeriod" should {
+
+      "return the message key for 'Not provided'" in {
+        customerInformationMin.returnPeriodMessageKey shouldBe "common.notProvided"
+      }
+    }
+  }
 }

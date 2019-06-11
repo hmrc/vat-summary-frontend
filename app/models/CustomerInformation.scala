@@ -40,11 +40,15 @@ case class CustomerInformation(organisationName: Option[String],
       case (None, None, None, orgName) => orgName
       case _ => tradingName
     }
+
+  val partyTypeMessageKey: String = partyType.fold("common.notProvided")(x => s"partyType.$x")
+  val returnPeriodMessageKey: String = returnPeriod.fold("common.notProvided"){
+    case x @ ("MM" | "MA" | "MB" | "MC") => s"returnPeriod.$x"
+    case _ => "returnPeriod.nonStandard"
+  }
 }
 
 object CustomerInformation {
-  implicit val customerInformationWrites: Writes[CustomerInformation] = Json.writes[CustomerInformation]
-
   implicit val customerInformationReads: Reads[CustomerInformation] = (
     (JsPath \ "customerDetails" \ "organisationName").readNullable[String].orElse(Reads.pure(None)) and
     (JsPath \ "customerDetails" \ "firstName").readNullable[String].orElse(Reads.pure(None)) and
