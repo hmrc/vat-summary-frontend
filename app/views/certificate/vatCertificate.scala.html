@@ -29,6 +29,8 @@
                 controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
             currentPage = messages("vatCertificate.title")
         )
+    } else {
+        <a class="link-back" href='@controllers.routes.VatCertificateController.changeClientAction()'>@messages("base.back")</a>
     }
     <h1>@if(isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
 
