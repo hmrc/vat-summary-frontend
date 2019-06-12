@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages)
+@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages, user: User)
 
 @contentHeader = {
   <h1>@messages("paymentsError.heading")</h1>
@@ -31,6 +31,7 @@
 @govuk_wrapper(appConfig = appConfig,
   title = messages("paymentsError.title"),
   contentHeader = Some(contentHeader),
-  mainContent = mainContent
+  mainContent = mainContent,
+  user = Some(user)
 )
 

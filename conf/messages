@@ -4,6 +4,9 @@ common.newTab = (opens in a new tab)
 common.fullStop = .
 common.notProvided = Not provided
 
+navTitle.nonAgent = Business tax account
+navTitle.agent = Client’s VAT details
+
 base.back = Back
 base.signOut = Sign out
 

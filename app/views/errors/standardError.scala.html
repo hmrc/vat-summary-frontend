@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages)
+@(appConfig: config.AppConfig, pageTitle: String, heading: String, message: String)(implicit request: Request[_], messages: Messages, user: Option[User] = None)
 
 @contentHeader = {
  <h1>@heading</h1>
@@ -24,8 +24,10 @@
  <p class="lede">@message</p>
 }
 
-@govuk_wrapper(appConfig = appConfig,
+@govuk_wrapper(
+ appConfig = appConfig,
  title = pageTitle,
  contentHeader = Some(contentHeader),
- mainContent = mainContent
+ mainContent = mainContent,
+ user = user
 )
