@@ -18,11 +18,11 @@ package models.viewModels
 
 import java.time.LocalDate
 
-import models.Address
+import models.{Address, CustomerInformation}
 
 case class VatCertificateViewModel(
                                     vrn: String,
-                                    registrationDate: LocalDate,
+                                    registrationDate: Option[LocalDate],
                                     certificateDate: LocalDate,
                                     businessName: Option[String],
                                     tradingName: Option[String],
@@ -34,3 +34,15 @@ case class VatCertificateViewModel(
                                     sortCode: Option[String],
                                     returnPeriodMsgKey: String
                                   )
+
+object VatCertificateViewModel {
+  def fromCustomerInformation(vrn: String, customerInformation: CustomerInformation): VatCertificateViewModel = {
+    VatCertificateViewModel(
+      vrn, customerInformation.registrationDate.map(LocalDate.parse(_)), LocalDate.now(),
+      customerInformation.organisationName, customerInformation.tradingName,
+      customerInformation.partyTypeMessageKey, customerInformation.sicCode, customerInformation.businessAddress,
+      customerInformation.businessEmailAddress, customerInformation.bankAccountNumber,
+      customerInformation.bankAccountSortCode, customerInformation.returnPeriodMessageKey
+    )
+  }
+}

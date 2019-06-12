@@ -31,7 +31,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   }
   lazy val model = VatCertificateViewModel(
     "5555555555",
-    LocalDate.parse("2017-01-01"),
+    Some(LocalDate.parse("2017-01-01")),
     LocalDate.parse("2018-01-01"),
     None,
     Some("ABC Traders"),

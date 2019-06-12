@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <td>@messages("vatCertificate.aboutYourRegistration.registrationDate")</td>
-                        <td>@displayDate(model.registrationDate)</td>
+                        <td>@{model.registrationDate.map(displayDate(_)).getOrElse(messages("vatCertificate.notProvided"))}</td>
                     </tr>
                     <tr>
                         <td>@messages("vatCertificate.aboutYourRegistration.certificateDate")</td>
