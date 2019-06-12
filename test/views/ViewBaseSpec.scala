@@ -17,6 +17,7 @@
 package views
 
 import mocks.MockAppConfig
+import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.scalatest.Assertion
@@ -33,6 +34,7 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite {
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  implicit val user: User = User("999999999")
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)

@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages)
+@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages, user: Option[User] = None)
 
 @views.html.errors.standardError(
   appConfig,

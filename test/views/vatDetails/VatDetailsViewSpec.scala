@@ -46,7 +46,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   val currentYear: Int = 2018
-  implicit val user: User = User("123456789")
+  override implicit val user: User = User("123456789")
   val detailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),

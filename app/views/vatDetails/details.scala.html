@@ -21,7 +21,11 @@
 
 @(detailsViewModel: VatDetailsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User, lang: Lang)
 
-@views.html.main_template(title = messages("vatDetails.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(
+    title = messages("vatDetails.title"),
+    bodyClasses = None,
+    appConfig = appConfig,
+    user = Some(user)) {
 
     @navigationBreadcrumb(
         links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),

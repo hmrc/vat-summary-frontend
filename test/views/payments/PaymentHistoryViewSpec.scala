@@ -66,7 +66,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     currentYear
   )
 
-  implicit val user: User = User("123456789")
+  override implicit val user: User = User("123456789")
   val vatDecUser = User("123456789", hasNonMtdVat = true)
 
   "Rendering the payments history page" when {

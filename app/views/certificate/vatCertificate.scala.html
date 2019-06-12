@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
+@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
-@views.html.main_template(messages("vatCertificate.title"), appConfig = appConfig) {
+@views.html.main_template(messages("vatCertificate.title"), appConfig = appConfig, user = Some(user)) {
 
   <h1>@messages("vatCertificate.title")</h1>
 

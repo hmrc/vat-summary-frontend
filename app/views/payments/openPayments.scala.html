@@ -32,7 +32,11 @@
   </p>
 }
 
-@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(
+    title = messages("openPayments.title"),
+    bodyClasses = None,
+    appConfig = appConfig,
+    user = Some(user)) {
 
   @navigationBreadcrumb(
     links = Map(
