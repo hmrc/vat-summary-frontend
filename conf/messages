@@ -12,6 +12,11 @@ base.signOut = Sign out
 
 breadcrumbs.bta = Business tax account
 
+btaNavLinks.home = Home
+btaNavLinks.manageAccount = Manage account
+btaNavLinks.messages = Messages
+btaNavLinks.helpAndContact = Help and contact
+
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To view your VAT summary, you will have to
 sessionTimeout.helpTwo = sign in

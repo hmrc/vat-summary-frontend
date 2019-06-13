@@ -33,6 +33,11 @@ month.short.12 = Rhag
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
+btaNavLinks.home = Hafan
+btaNavLinks.manageAccount = Rheoli''r cyfrif
+btaNavLinks.messages = Negeseuon
+btaNavLinks.helpAndContact = Cymorth a chysylltu
+
 sessionTimeout.title = Mae’ch sesiwn wedi’i therfynu
 sessionTimeout.helpOne = Er mwyn gweld eich crynodeb TAW, bydd angen i chi
 sessionTimeout.helpTwo = fewngofnodi

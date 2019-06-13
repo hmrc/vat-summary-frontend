@@ -28,7 +28,7 @@ import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Request}
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -39,6 +39,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
                                          val paymentsService: PaymentsService,
                                          authorisedController: AuthorisedController,
                                          dateService: DateService,
+                                         serviceInfoService: ServiceInfoService,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
                                          accountDetailsService: AccountDetailsService)
                                         (implicit val appConfig: AppConfig,
@@ -52,6 +53,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
     implicit user =>
        for {
         migrationDate <- getMigratedToETMPDate
+        serviceInfoContent <- serviceInfoService.getPartial
         validYears = getValidYears(user.vrn, migrationDate, Some(year))
         migratedWithin15Months = customerMigratedWithin15M(migrationDate)
         paymentsServiceYearOne <-
@@ -68,7 +70,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
           generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, year) match {
             case Some(model) =>
               auditEvent(user.vrn, model.transactions, year)
-              Ok(views.html.payments.paymentHistory(model))
+              Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
             case None =>
               Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
               InternalServerError(views.html.errors.standardError(appConfig,
@@ -85,6 +87,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
     implicit user =>
       for {
         migrationDate <- getMigratedToETMPDate
+        serviceInfoContent <- serviceInfoService.getPartial
         migratedWithin15Months = customerMigratedWithin15M(migrationDate)
       } yield {
         if (migratedWithin15Months && user.hasNonMtdVat) {
@@ -99,7 +102,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
             Seq.empty,
             currentYear
           )
-          Ok(views.html.payments.paymentHistory(model))
+          Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
         } else {
           NotFound(views.html.errors.notFound())
         }

@@ -49,6 +49,10 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val vatObligationsBaseUrl: String = "/obligations-api"
   override val financialDataBaseUrl = ""
   override val btaHomeUrl: String = "bta-url"
+  override val btaHelpAndContactUrl: String = "bta-help-and-contact-url"
+  override val btaManageAccountUrl: String = "bta-manage-account-url"
+  override val btaMessagesUrl: String = "bta-messages-url"
+
   override val paymentsServiceUrl: String = "payments-url"
   override val setupPaymentsJourneyPath: String = "/payment/start"
   override val directDebitServiceUrl: String = "direct-debits-url"

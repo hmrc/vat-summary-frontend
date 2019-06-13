@@ -22,7 +22,8 @@
   showLogout: Boolean = true,
   appConfig: config.AppConfig,
   feedbackOnSignOut: Boolean = true,
-  user: Option[User] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+  serviceInfoContent: Html = HtmlFormat.empty,
+  user: Option[User] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages))
 
 @import uk.gov.hmrc.play.views.html.layouts
 
@@ -52,5 +53,6 @@
     mainContent = layouts.article(mainContentWithGA),
     showLogout = showLogout,
     feedbackOnSignOut = feedbackOnSignOut,
-    user = user
+    user = user,
+    serviceInfoContent = serviceInfoContent
 )

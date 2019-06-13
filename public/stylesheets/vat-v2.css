@@ -37,6 +37,10 @@ table td:last-child.repayment-money {
     padding-right: 16px;
 }
 
+table td:last-child.amount{
+    padding-right: 16px;
+}
+
 .unallocated {
     border-right: solid 6px #005ea5;
 }
@@ -54,15 +58,35 @@ table td:last-child {
     text-align: right;
 }
 
-table td {
-    padding-bottom: 1em;
-}
-
 table thead {
     border-bottom: hidden;
 }
 
 a.in-selected-tab {
-  color: #0B0C0C;
-  text-decoration: none;
+    color: #0B0C0C;
+    text-decoration: none;
+}
+
+.bta-navigation ul{
+    margin-top: 0;
+}
+
+.bta-navigation li{
+    display: inline-block;
+    margin: 0 0.5em;
+}
+
+.bta-navigation a{
+    font-size: 16px;
+}
+
+@media(max-width: 768px) {
+    .bta-navigation li{
+        display: block;
+        margin: 0.5em 0 0.5em 0.5em;
+    }
+}
+
+.bta-navigation {
+    padding: 10px 0 8px 0;
 }

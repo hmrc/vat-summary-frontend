@@ -21,6 +21,7 @@ import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.exceptions.TestFailedException
+import play.twirl.api.Html
 import views.ViewBaseSpec
 
 class VatDetailsViewSpec extends ViewBaseSpec {
@@ -43,6 +44,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
     val paymentHistory = "#payment-history"
+    val serviceInfoNav = ".service-info nav"
   }
 
   val currentYear: Int = 2018
@@ -109,8 +111,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page" should {
 
-    lazy val view = views.html.vatDetails.details(detailsModel)
+    lazy val view = views.html.vatDetails.details(detailsModel, Html("<nav>BTA Links</nav>"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render service information content" in {
+      elementText(Selectors.serviceInfoNav) shouldBe "BTA Links"
+    }
 
     "render breadcrumbs which" should {
 
@@ -173,7 +179,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "if the user is NOT Hybrid" should {
 
-        lazy val view = views.html.vatDetails.details(detailsModel)
+        lazy val view = views.html.vatDetails.details(detailsModel, Html(""))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         lazy val submittedReturns = element(Selectors.paymentHistory)
@@ -189,7 +195,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "if the user is Hybrid" should {
 
-        lazy val view = views.html.vatDetails.details(hybridDetailsModel)
+        lazy val view = views.html.vatDetails.details(hybridDetailsModel, Html(""))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         lazy val submittedReturns = element(Selectors.paymentHistory)
@@ -220,7 +226,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a next return and a next payment" should {
 
-    lazy val view = views.html.vatDetails.details(detailsModel)
+    lazy val view = views.html.vatDetails.details(detailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -251,7 +257,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, currentYear))
+    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, currentYear),  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -281,7 +287,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with an overdue return" should {
 
-    lazy val view = views.html.vatDetails.details(overdueReturnDetailsModel)
+    lazy val view = views.html.vatDetails.details(overdueReturnDetailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the overdue label" in {
@@ -291,7 +297,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with an overdue payment" should {
 
-    lazy val view = views.html.vatDetails.details(overduePaymentDetailsModel)
+    lazy val view = views.html.vatDetails.details(overduePaymentDetailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the overdue label" in {
@@ -301,7 +307,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with multiple return obligations" should {
 
-    lazy val view = views.html.vatDetails.details(multipleReturnsDetailsModel)
+    lazy val view = views.html.vatDetails.details(multipleReturnsDetailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct message regarding the number of obligations due" in {
@@ -311,7 +317,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a payment error" should {
 
-    lazy val view = views.html.vatDetails.details(paymentErrorDetailsModel)
+    lazy val view = views.html.vatDetails.details(paymentErrorDetailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next payment section heading" in {
@@ -325,7 +331,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a return error" should {
 
-    lazy val view = views.html.vatDetails.details(returnErrorDetailsModel)
+    lazy val view = views.html.vatDetails.details(returnErrorDetailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -343,7 +349,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with errors in all APIs" should {
 
-    lazy val view = views.html.vatDetails.details(bothErrorDetailsModel)
+    lazy val view = views.html.vatDetails.details(bothErrorDetailsModel,  Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {

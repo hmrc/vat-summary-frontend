@@ -54,6 +54,9 @@ trait AppConfig extends ServicesConfig {
   val vatReturnDeadlinesUrl: String
   def vatReturnUrl(periodKey: String): String
   val btaHomeUrl: String
+  val btaMessagesUrl: String
+  val btaManageAccountUrl: String
+  val btaHelpAndContactUrl: String
   val paymentsServiceUrl: String
   val setupPaymentsJourneyPath: String
   val paymentsReturnUrl: String
@@ -139,8 +142,13 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
   override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
 
+  private lazy val helpAndContactFrontendUrl: String = getString(Keys.helpAndContactFrontendBase)
+
   private lazy val btaBaseUrl: String = getString(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = btaBaseUrl + getString(Keys.businessTaxAccountUrl)
+  override lazy val btaMessagesUrl: String = btaHomeUrl + getString(Keys.businessTaxAccountMessagesUrl)
+  override lazy val btaManageAccountUrl: String = btaHomeUrl + getString(Keys.businessTaxAccountManageAccountUrl)
+  override lazy val btaHelpAndContactUrl: String = helpAndContactFrontendUrl + getString(Keys.helpAndContactHelpUrl)
 
   override lazy val paymentsServiceUrl: String = baseUrl(Keys.paymentsServiceBase)
   override lazy val setupPaymentsJourneyPath: String = getString(Keys.setupPaymentsJourneyPath)

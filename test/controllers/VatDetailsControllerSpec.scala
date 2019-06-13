@@ -30,9 +30,10 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.Payments
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.mvc.{AnyContentAsEmpty, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.twirl.api.Html
 import services._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -53,15 +54,17 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] = Future.successful(Right(Some(payments)))
     val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(customerInformationMax))
     val mandationStatusServiceResult: Future[HttpGetResult[MandationStatus]] = Future.successful(Right(validMandationStatus))
+    val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
+    val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockMandationService: MandationStatusService = mock[MandationStatusService]
 
     def setup(needMandationCall: Boolean = true): Any = {
@@ -87,6 +90,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .stubs(*, *, *, *)
         .returns({})
 
+      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
+        .stubs(*,*)
+        .returns(serviceInfoServiceResult)
+
       if(needMandationCall) {
         (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
@@ -110,6 +117,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockEnrolmentsAuthService,
         mockAppConfig,
         mockVatDetailsService,
+        mockServiceInfoService,
         mockAuthorisedController,
         mockAccountDetailsService,
         mockDateService,
@@ -233,6 +241,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           Future.successful(Right(customerInformationHybrid))
 
         override def setup(needMandationCall: Boolean = true): Unit = {
+
+          (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
+            .stubs(*,*)
+            .returns(serviceInfoServiceResult)
+
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *, *)
             .returns(authResult)
@@ -520,7 +533,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsDataModel with the hasMultiple flag set" in new DetailsTest {
 
-        val multipleObligations = Seq(
+        val multipleObligations: Seq[VatReturnObligation] = Seq(
           VatReturnObligation(
             LocalDate.parse("2019-04-04"),
             LocalDate.parse("2019-05-05"),
