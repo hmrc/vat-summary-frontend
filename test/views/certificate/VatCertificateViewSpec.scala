@@ -18,7 +18,6 @@ package views.certificate
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.Html
 import views.ViewBaseSpec
 
 class VatCertificateViewSpec extends ViewBaseSpec {
@@ -29,7 +28,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
   "The VAT Certificate page" should {
 
-    lazy val view = views.html.certificate.vatCertificate( Html(""))
+    lazy val view = views.html.certificate.vatCertificate()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {

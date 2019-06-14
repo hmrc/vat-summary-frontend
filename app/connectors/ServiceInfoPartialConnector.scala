@@ -35,7 +35,7 @@ class ServiceInfoPartialConnector @Inject()(val http: HttpClient,
                                             val config: AppConfig) extends HtmlPartialHttpReads with I18nSupport {
   import hcForPartials._
 
-  lazy val btaUrl: String = config.btaHomeUrl + "/partial/service-info"
+  lazy val btaUrl: String = config.btaBaseUrl + "/business-account/partial/service-info"
 
   def getServiceInfoPartial()(implicit request: Request[_], executionContext: ExecutionContext): Future[Html] =
     http.GET[HtmlPartial](btaUrl) recover connectionExceptionsAsHtmlPartialFailure map {
