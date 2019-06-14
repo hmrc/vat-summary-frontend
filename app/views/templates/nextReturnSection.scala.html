@@ -19,23 +19,25 @@
 
 @(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isNonMTDfB: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
-<div class="column-one-half" id="next-return">
-  <h2 class="heading-medium" style="margin-top: 0px">@messages("returnObligation.nextReturn")</h2>
-  <p @if(isError){data-metrics="error:recovered:next-return"}>
-    @(obligationData, hasMultiple, isNonMTDfB, isError) match {
-      case (_, _, _, true) => { @messages("vatDetails.error") }
-      case (_, _, None, _) => { @messages("vatDetails.error") }
-      case (Some(numOfObligations), true, Some(_), _) => { @messages("vatDetails.returnsDue", numOfObligations) }
-      case _ => {
-        @obligationData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("returnObligation.noReturn"))
-        @if(isOverdue){
-          <span>
-            <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
-          </span>
+
+<div class="card">
+  <div id="next-return" class="card-body">
+    <h2 class="heading-medium push--top" >@messages("returnObligation.nextReturn")</h2>
+      <p @if(isError){data-metrics="error:recovered:next-return"}>
+      @(obligationData, hasMultiple, isNonMTDfB, isError) match {
+        case (_, _, _, true) => { @messages("vatDetails.error") }
+        case (_, _, None, _) => { @messages("vatDetails.error") }
+        case (Some(numOfObligations), true, Some(_), _) => { @messages("vatDetails.returnsDue", numOfObligations) }
+        case _ => {
+          @obligationData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("returnObligation.noReturn"))
+          @if(isOverdue){
+            <span>
+              <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+            </span>
+          }
         }
       }
-    }
-  </p>
+        </p>
 
   @if(isNonMTDfB.nonEmpty) {
       <p>
@@ -53,4 +55,5 @@
           }
       </p>
   }
+  </div>
 </div>

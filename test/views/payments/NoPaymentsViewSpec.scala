@@ -101,7 +101,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         }
 
         "have the text 'VAT'" in {
-          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
+          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
         }
 
         s"link to ${controllers.routes.VatDetailsController.details().url}" in {

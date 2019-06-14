@@ -31,6 +31,8 @@ month.short.10 = Hyd
 month.short.11 = Tach
 month.short.12 = Rhag
 
+navTitle.nonAgent = Cyfrif Treth Busnes
+
 breadcrumbs.bta = Cyfrif Treth Busnes
 
 btaNavLinks.home = Hafan
@@ -66,15 +68,14 @@ partials.btaHome.partialMigration.line1 = Cawsoch eich cofrestru’n ddiweddar a
 partials.btaHome.partialMigration.line2 = Bydd yn cymryd hyd at 72 awr i greu’ch cyfrif.
 partials.btaHome.partialMigration.line3 = Dewch yn ôl yn nes ymlaen.
 
-vatDetails.title = Eich manylion TAW
-vatDetails.vatCertificate.view = View and print your VAT certificate.
-vatDetails.vatCertificate.link = View VAT certificate
-vatDetails.updateVatDetails.link = Diweddaru’ch manylion TAW
-vatDetails.updateVatDetails.view = Rhoi gwybod i ni am newidiadau i’ch busnes neu’ch Ffurflenni TAW.
-vatDetails.paymentHistory.link = Hanes taliadau
-vatDetails.paymentHistory.view = Gwirio’r taliadau rydych wedi’u gwneud neu wedi’u cael.
-vatDetails.submittedReturns.link = Ffurflenni TAW wedi’u cyflwyno
-vatDetails.submittedReturns.view = Gwirio’r Ffurflenni TAW rydych wedi’u hanfon atom.
+vatDetails.title = Eich cyfrif TAW
+vatDetails.manageYourVat = Rheoli’ch TAW
+vatDetails.vatCertificate.view = Bwrw golwg dros eich tystysgrif TAW a’i hargraffu.
+vatDetails.vatCertificate.link = Bwrw golwg dros y dystysgrif TAW
+vatDetails.updateVatDetails.link = Manylion eich busnes
+vatDetails.updateVatDetails.view = Newid eich manylion busnes, cyswllt neu TAW.
+vatDetails.viewPastPayments.link = Bwrw golwg dros daliadau blaenorol
+vatDetails.viewPastReturns.link = Bwrw golwg dros Ffurflenni TAW blaenorol
 vatDetails.vrn = Rhif Cofrestru TAW (VRN): {0}
 vatDetails.error = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
 vatDetails.returnsDue = Mae gennych {0} o Ffurflenni TAW i’w cyflwyno
@@ -93,6 +94,8 @@ payment.afterSubmitted = Ar ôl i chi gyflwyno Ffurflen TAW, gall gymryd 24 awr 
 payment.stillMake = Mae’n dal yn bosibl i chi
 payment.stillMakeLink = dalu (yn agor mewn tab newydd)
 payment.evenIfNotShown = hyd yn oed os na ddangosir taliad
+
+pastHistory.history = Hanes
 
 openPayments.title = Yr hyn sydd arnoch
 openPayments.heading = Yr hyn sydd arnoch

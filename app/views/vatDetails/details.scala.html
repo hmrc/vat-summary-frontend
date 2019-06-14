@@ -15,7 +15,6 @@
  *@
 
 @import models.viewModels.VatDetailsViewModel
-@import java.time.LocalDate
 @import views.html.templates.formatters.breadcrumbs._
 @import views.html.templates.formatters.links._
 
@@ -32,75 +31,43 @@
         links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
         currentPage = messages("vatDetails.title")
     )
+    <header class="page-heading push--top"
+      @if(!detailsViewModel.entityName.isDefined){data-metrics="error:hidden-text:vat-overview-entity-name"}>
+      <h1 class="heading-xlarge">@messages("vatDetails.title")
+       <span class="form-hint">@messages("vatDetails.vrn", user.vrn)<br>
+         @detailsViewModel.entityName.map { entityName =>
+           <p>@entityName</p>
+         }
+       </span>
+      </h1>
+    </header>
+    <div class="flex-container grid-row">
+      @views.html.templates.nextPaymentSection(
+          detailsViewModel.paymentsData,
+          detailsViewModel.hasMultiplePayments,
+          detailsViewModel.paymentOverdue,
+          detailsViewModel.paymentError,
+          detailsViewModel.isHybridUser
+      )
 
-    <div class="grid-row form-group">
-        <div class="column-two-thirds">
-            <header class="page-heading push--top"
-                @if(!detailsViewModel.entityName.isDefined){data-metrics="error:hidden-text:vat-overview-entity-name"}>
-                <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
-                @detailsViewModel.entityName.map { entityName =>
-                    <p class="heading-secondary">@entityName</p>
-                }
-                <span class="form-hint">@messages("vatDetails.vrn", user.vrn)</span>
-            </header>
-        </div>
+      @views.html.templates.nextReturnSection(
+          detailsViewModel.obligationData,
+          detailsViewModel.hasMultipleReturnObligations,
+          detailsViewModel.returnObligationOverdue,
+          detailsViewModel.returnObligationError,
+          detailsViewModel.isNonMTDfBUser
+      )
+
+      @views.html.templates.historySection(detailsViewModel.currentYear, detailsViewModel.isHybridUser)
     </div>
-
+    <div>
+      <h2 class="heading-large">@messages("vatDetails.manageYourVat")</h2>
+    </div>
     <div class="grid-row">
-        <div class="column-two-thirds">
-
-            <div class="grid-row divider--bottom">
-                @views.html.templates.nextPaymentSection(
-                    detailsViewModel.paymentsData,
-                    detailsViewModel.hasMultiplePayments,
-                    detailsViewModel.paymentOverdue,
-                    detailsViewModel.paymentError,
-                    detailsViewModel.isHybridUser
-                )
-                @views.html.templates.nextReturnSection(
-                    detailsViewModel.obligationData,
-                    detailsViewModel.hasMultipleReturnObligations,
-                    detailsViewModel.returnObligationOverdue,
-                    detailsViewModel.returnObligationError,
-                    detailsViewModel.isNonMTDfBUser
-                )
-            </div>
-
-            <div class="grid-row">
-              <div class="column-one-half" id="payment-history">
-                  <h2 class="heading-small">
-                      @if(detailsViewModel.isHybridUser) {
-                          @openInNewTab(
-                            controllers.routes.PortalController.hybridPH().url,
-                            messages("vatDetails.paymentHistory.link"),
-                            Some("payment-history:view:portal-payment-history-details")
-                          )
-                      } else {
-                          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(detailsViewModel.currentYear)"
-                          data-journey-click="payment-history:view:payment-history-details">
-                            @messages("vatDetails.paymentHistory.link")
-                          </a>
-                      }
-                  </h2>
-                  <p>@messages("vatDetails.paymentHistory.view")</p>
-              </div>
-              <div class="column-one-half" id="submitted-returns">
-                  <h2 class="heading-small">
-                      <a href="@{appConfig.vatSubmittedReturnsUrl}/@detailsViewModel.currentYear" data-journey-click="return:view:vat-details">
-                      @messages("vatDetails.submittedReturns.link")
-                      </a>
-                  </h2>
-                  <p>@messages("vatDetails.submittedReturns.view")</p>
-              </div>
-            </div>
-
-            <div class="grid-row">
-                @views.html.templates.updateVatDetailsSection()
-                @if(appConfig.features.vatCertificateEnabled()) {
-                    @views.html.templates.vatCertificateSection()
-                }
-            </div>
-
-        </div>
+      @views.html.templates.updateVatDetailsSection()
+      @if(appConfig.features.vatCertificateEnabled()) {
+        @views.html.templates.vatCertificateSection()
+      }
     </div>
+
 }
