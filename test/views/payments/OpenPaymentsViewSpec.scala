@@ -24,7 +24,6 @@ import models.payments._
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.templates.payments.PaymentMessageHelper
 
@@ -95,7 +94,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = Some(true)
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = views.html.payments.openPayments(user, viewModel, Html(""))
+    lazy val view = views.html.payments.openPayments(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -237,7 +236,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = Some(false)
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = views.html.payments.openPayments(user, viewModel, Html(""))
+    lazy val view = views.html.payments.openPayments(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the Pay now text" in {
@@ -272,7 +271,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = None
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = views.html.payments.openPayments(user, viewModel, Html(""))
+    lazy val view = views.html.payments.openPayments(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct text for the processing time" in {
@@ -315,7 +314,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       )
     }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
 
-      lazy val view = views.html.payments.openPayments(user, openPaymentsViewModel, Html(""))
+      lazy val view = views.html.payments.openPayments(user, openPaymentsViewModel)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"contain a $chargeTypeTitle which" should {

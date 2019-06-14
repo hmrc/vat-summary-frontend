@@ -19,7 +19,6 @@ package views.payments
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.Html
 import views.ViewBaseSpec
 
 class NoPaymentsViewSpec extends ViewBaseSpec {
@@ -46,7 +45,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the user has a direct debit" should {
 
-      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(true), Html(""))
+      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(true))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -117,7 +116,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the user does not have a direct debit" should {
 
-      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(false),  Html(""))
+      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct message regarding setting up a direct debit" in {
@@ -140,7 +139,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the call to the direct debit service fails" should {
 
-      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = None,  Html(""))
+      lazy val view = views.html.payments.noPayments(user, hasDirectDebit = None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display a direct debit message" in {

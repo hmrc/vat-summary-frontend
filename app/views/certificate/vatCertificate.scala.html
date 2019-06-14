@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(serviceInfoContent: Html)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
+@(serviceInfoContent: Html = HtmlFormat.empty)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
 @views.html.main_template(
   messages("vatCertificate.title"),

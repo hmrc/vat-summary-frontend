@@ -179,7 +179,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "if the user is NOT Hybrid" should {
 
-        lazy val view = views.html.vatDetails.details(detailsModel, Html(""))
+        lazy val view = views.html.vatDetails.details(detailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         lazy val submittedReturns = element(Selectors.paymentHistory)
@@ -195,7 +195,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "if the user is Hybrid" should {
 
-        lazy val view = views.html.vatDetails.details(hybridDetailsModel, Html(""))
+        lazy val view = views.html.vatDetails.details(hybridDetailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         lazy val submittedReturns = element(Selectors.paymentHistory)

@@ -49,7 +49,7 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
 
   "ServiceInfoPartialConnector" should {
     "generate the correct url" in new Test {
-      connector.btaUrl shouldBe "bta-url/partial/service-info"
+      connector.btaUrl shouldBe "/business-account/partial/service-info"
     }
   }
 
