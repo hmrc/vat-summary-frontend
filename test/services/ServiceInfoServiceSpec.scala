@@ -18,8 +18,9 @@ package services
 
 import connectors.ServiceInfoPartialConnector
 import controllers.ControllerBaseSpec
+import models.User
 import play.api.mvc.Request
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -28,7 +29,8 @@ class ServiceInfoServiceSpec extends ControllerBaseSpec {
   val mockConnector: ServiceInfoPartialConnector = mock[ServiceInfoPartialConnector]
   val service: ServiceInfoService = new ServiceInfoService(mockConnector)
   val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
-
+  val user: User = User("1231231231")
+  val agentUser: User = User("1231231231", arn = Some("XAIT123123123"))
   val validHtml = Html("<nav>btalink<nav>")
   val htmlError = Html("error")
 
@@ -38,8 +40,18 @@ class ServiceInfoServiceSpec extends ControllerBaseSpec {
         .expects(*, *)
         .returning(Future.successful(validHtml))
 
-      val result: Html = await(service.getPartial(fakeRequest,ec))
+      val result: Html = await(service.getPartial(fakeRequest, user, ec))
       val expectedResult: Html = validHtml
+
+      result shouldBe expectedResult
+    }
+    "return empty HTML for an agent" in {
+      (mockConnector.getServiceInfoPartial()(_:Request[_], _:ExecutionContext))
+        .expects(*, *)
+        .never()
+
+      val result: Html = await(service.getPartial(fakeRequest, agentUser, ec))
+      val expectedResult: Html = HtmlFormat.empty
 
       result shouldBe expectedResult
     }

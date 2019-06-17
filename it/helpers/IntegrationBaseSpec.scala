@@ -16,10 +16,12 @@
 
 package helpers
 
+import common.SessionKeys
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
@@ -31,6 +33,8 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wireMockPort.toString
   val appRouteContext: String = "/vat-through-software"
+
+  def formatSessionVrn: Option[String] => Map[String, String] =_.fold(Map.empty[String, String])(x => Map(SessionKeys.agentSessionVrn -> x))
 
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
 
@@ -69,7 +73,10 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     super.afterAll()
   }
 
-  def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port$appRouteContext$path").withFollowRedirects(false)
+  def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
+    client.url(s"http://localhost:$port$appRouteContext$path")
+      .withHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
+      .withFollowRedirects(false)
 
   def document(response: WSResponse): Document = Jsoup.parse(response.body)
 }

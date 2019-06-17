@@ -121,8 +121,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         .stubs()
         .returns(LocalDate.parse("2018-05-01"))
 
-      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-        .stubs(*,*)
+      (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
+        .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
 
       if (authCall) {

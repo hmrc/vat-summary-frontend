@@ -16,28 +16,59 @@
 
 package controllers
 
+import common.SessionKeys
 import config.AppConfig
 import javax.inject.Inject
+import models.viewModels.VatCertificateViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.ServiceInfoService
+import services.{AccountDetailsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
-class VatCertificateController @Inject()(val messagesApi: MessagesApi,
-                                         serviceInfoService: ServiceInfoService,
-                                         authorisedController: AuthorisedController)
-                                        (implicit val appConfig: AppConfig)
+class VatCertificateController @Inject()(
+                                          val messagesApi: MessagesApi,
+                                          serviceInfoService: ServiceInfoService,
+                                          authorisedController: AuthorisedController,
+                                          accountDetailsService: AccountDetailsService
+                                        )(implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request => implicit user =>
-    if(appConfig.features.vatCertificateEnabled()) {
-      serviceInfoService.getPartial.map { serviceInfoContent =>
-       Ok(views.html.certificate.vatCertificate(serviceInfoContent))
+  def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+    implicit user =>
+      if (appConfig.features.vatCertificateEnabled()) {
+        val vrn = user.vrn
+        serviceInfoService.getPartial.flatMap { serviceInfoContent =>
+          accountDetailsService.getAccountDetails(vrn).map {
+            case Right(customerInformation) =>
+              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation), user.isAgent))
+            case Left(_) =>
+              InternalServerError
+          }
+        }
+      } else {
+        Future.successful(NotFound(views.html.errors.notFound()))
       }
-    } else {
-      Future.successful(NotFound(views.html.errors.notFound()))
-    }
+  }
+
+  def changeClient: Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+    user =>
+      if (appConfig.features.vatCertificateEnabled() && user.isAgent) {
+        Future.successful(Redirect(appConfig.agentClientLookupStartUrl(routes.VatCertificateController.show().url))
+          .removingFromSession(SessionKeys.agentSessionVrn))
+      } else {
+        Future.successful(NotFound(views.html.errors.notFound()))
+      }
+  }
+
+  def changeClientAction: Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+    user =>
+      if (appConfig.features.vatCertificateEnabled() && user.isAgent) {
+        Future.successful(Redirect(appConfig.agentClientLookupActionUrl)
+          .removingFromSession(SessionKeys.agentSessionVrn))
+      } else {
+        Future.successful(NotFound(views.html.errors.notFound()))
+      }
   }
 }
