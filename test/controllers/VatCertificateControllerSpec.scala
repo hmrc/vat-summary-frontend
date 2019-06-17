@@ -315,7 +315,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       }
 
       "the user is an agent" should {
-        "redirect the user to the ACLUFE" in new Test {
+        "redirect the user to the VACLUFE" in new Test {
 
           override def setup(): Unit = {
             mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
@@ -389,7 +389,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       }
 
       "the user is an agent" should {
-        "redirect the user to the ACLUFE" in new Test {
+        "redirect the user to the VACLUFE" in new Test {
           override def setup(): Unit = {
             (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *, *)
@@ -425,6 +425,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         }
       }
     }
+
     "the vat certificate feature switch is off and a user is logged in with valid credentials" should {
 
       "return Not Found (404)" in new Test {

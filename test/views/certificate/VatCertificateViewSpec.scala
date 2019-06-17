@@ -154,6 +154,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
       }
     }
+
     "Accessed by an agent" should {
 
       lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model, true)
@@ -250,6 +251,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           regDateRow.select("td").get(1).text() shouldBe s"****11"
         }
       }
+
       "have the return details card" that {
         lazy val card = document.select(Selectors.cardClass).get(3)
         "contains the correct heading" in {
@@ -263,7 +265,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have a link to change action for client" that {
-        lazy val link = document.select("p").get(2)
+        lazy val link = document.select("p").get(3)
         "has the correct text" in {
           link.select("a").text() shouldBe "Back to your client options"
         }
@@ -271,8 +273,9 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           link.select("a").first().attr("href") shouldBe "/vat-through-software/vat-certificate/change-client-action"
         }
       }
+
       "have a link to change client" that {
-        lazy val link = document.select("p").get(3)
+        lazy val link = document.select("p").get(4)
         "has the correct text" in {
           link.select("a").text() shouldBe "Change client"
         }

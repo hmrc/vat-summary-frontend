@@ -41,8 +41,8 @@ class VatCertificateController @Inject()(
         val vrn = user.vrn
         serviceInfoService.getPartial.flatMap { serviceInfoContent =>
           accountDetailsService.getAccountDetails(vrn).map {
-            case Right(customerInfomation) =>
-              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInfomation), user.isAgent))
+            case Right(customerInformation) =>
+              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation), user.isAgent))
             case Left(_) =>
               InternalServerError
           }
