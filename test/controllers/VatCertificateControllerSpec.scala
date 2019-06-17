@@ -19,6 +19,7 @@ package controllers
 import common.SessionKeys
 import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
+import models.User
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Request
@@ -67,8 +68,8 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
           .returns(Right(customerInformationMax))
       }
 
-      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-        .stubs(*,*)
+      (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
+        .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
 
       mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
@@ -123,8 +124,8 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
                 (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
                   .expects(*, *, *)
                   .returns(Right(customerInformationMax))
-                (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-                  .stubs(*,*)
+                (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
+                  .stubs(*,*,*)
                   .returns(serviceInfoServiceResult)
               }
 

@@ -263,7 +263,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have a link to change action for client" that {
-        lazy val link = document.select("p").get(4)
+        lazy val link = document.select("p").get(2)
         "has the correct text" in {
           link.select("a").text() shouldBe "Back to your client options"
         }
@@ -272,7 +272,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
       }
       "have a link to change client" that {
-        lazy val link = document.select("p").get(5)
+        lazy val link = document.select("p").get(3)
         "has the correct text" in {
           link.select("a").text() shouldBe "Change client"
         }
