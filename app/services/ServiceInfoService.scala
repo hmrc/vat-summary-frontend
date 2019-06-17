@@ -18,14 +18,19 @@ package services
 
 import connectors.ServiceInfoPartialConnector
 import javax.inject.Inject
+import models.User
 import play.api.mvc._
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceInfoService @Inject()(serviceInfoPartialConnector: ServiceInfoPartialConnector){
 
-  def getPartial(implicit request: Request[_], executionContext: ExecutionContext): Future[Html] = {
-    serviceInfoPartialConnector.getServiceInfoPartial()
+  def getPartial(implicit request: Request[_], user: User, executionContext: ExecutionContext): Future[Html] = {
+    if(user.isAgent){
+      Future.successful(HtmlFormat.empty)
+    } else {
+      serviceInfoPartialConnector.getServiceInfoPartial()
+    }
   }
 }
