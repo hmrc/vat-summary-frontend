@@ -90,8 +90,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .stubs(*, *, *, *)
         .returns({})
 
-      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-        .stubs(*,*)
+      (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
+        .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
 
       if(needMandationCall) {
@@ -242,8 +242,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         override def setup(needMandationCall: Boolean = true): Unit = {
 
-          (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-            .stubs(*,*)
+          (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
+            .stubs(*,*,*)
             .returns(serviceInfoServiceResult)
 
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))

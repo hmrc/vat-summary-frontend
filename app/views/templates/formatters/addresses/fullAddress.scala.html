@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package services
-
-import connectors.ServiceInfoPartialConnector
-import javax.inject.Inject
-import models.User
-import play.api.mvc._
-import play.twirl.api.{Html, HtmlFormat}
-
-import scala.concurrent.{ExecutionContext, Future}
-
-class ServiceInfoService @Inject()(serviceInfoPartialConnector: ServiceInfoPartialConnector){
-
-  def getPartial(implicit request: Request[_], user: User, executionContext: ExecutionContext): Future[Html] = {
-    if(user.isAgent){
-      Future.successful(HtmlFormat.empty)
-    } else {
-      serviceInfoPartialConnector.getServiceInfoPartial()
+@(address: Address)
+    @{address.line1}@{
+        address.line2.map{ line =>
+            HtmlFormat.raw("<br/>" + line)
+        }
+    }@{
+        address.line3.map{ line =>
+            HtmlFormat.raw("<br/>" + line)
+        }
+    }@{
+        address.line4.map{ line =>
+            HtmlFormat.raw("<br/>" + line)
+        }
+    }@{
+        address.postCode.map{ line =>
+            HtmlFormat.raw("<br/>" + line)
+        }
     }
-  }
-}

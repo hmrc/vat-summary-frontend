@@ -20,10 +20,12 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.auth.core.AffinityGroup
 
 object AuthStub extends WireMockMethods {
 
   private val authoriseUri: String = "/auth/authorise"
+  private val AGENT_ENROLMENT_KEY = "HMRC-AS-AGENT"
 
   val mtdVatEnrolment: JsObject = Json.obj(
     "key" -> "HMRC-MTD-VAT",
@@ -45,6 +47,16 @@ object AuthStub extends WireMockMethods {
     )
   )
 
+  private val agentEnrolment = Json.obj(
+    "key" -> AGENT_ENROLMENT_KEY,
+    "identifiers" -> Json.arr(
+      Json.obj(
+        "key" -> "AgentReferenceNumber",
+        "value" -> "1234567890"
+      )
+    )
+  )
+
   val otherEnrolment: JsObject = Json.obj(
     "key" -> "HMRC-XXX-XXX",
     "identifiers" -> Json.arr(
@@ -55,14 +67,18 @@ object AuthStub extends WireMockMethods {
     )
   )
 
-  def authorised(response: JsObject = successfulAuthResponse(mtdVatEnrolment)): StubMapping = {
+  def authorised(response: JsObject = successfulAuthResponse("Individual", mtdVatEnrolment)): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = OK, body = response)
   }
 
+  def agentAuthorised(): StubMapping = {
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = OK, body = successfulAuthResponse("Agent", agentEnrolment))
+  }
   def unauthorisedOtherEnrolment(): StubMapping = {
     when(method = POST, uri = authoriseUri)
-      .thenReturn(status = OK, body = successfulAuthResponse(otherEnrolment))
+      .thenReturn(status = OK, body = successfulAuthResponse("Individual", otherEnrolment))
   }
 
   def insufficientEnrolments(): StubMapping = {
@@ -75,8 +91,8 @@ object AuthStub extends WireMockMethods {
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
   }
 
-  private def successfulAuthResponse(enrolments: JsObject*): JsObject = {
-    Json.obj("allEnrolments" -> enrolments, "affinityGroup" -> "Individual")
+  private def successfulAuthResponse(affinityGroup: String, enrolments: JsObject*): JsObject = {
+    Json.obj("allEnrolments" -> enrolments, "affinityGroup" -> affinityGroup)
   }
 
   def partialsAuthResponse(enrolments: JsObject*): JsObject = {
