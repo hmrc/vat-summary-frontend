@@ -20,7 +20,7 @@
 @import views.html.templates.expandingHelpSection
 @import views.html.templates.formatters.breadcrumbs._
 
-@(user: User, model: OpenPaymentsViewModel)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
+@(user: User, model: OpenPaymentsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 @hiddenHelpTextContent = {
   <p>@messages("openPayments.incorrect")
@@ -32,7 +32,11 @@
   </p>
 }
 
-@views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(
+    title = messages("openPayments.title"),
+    appConfig = appConfig,
+    serviceInfoContent = serviceInfoContent,
+    user = Some(user)) {
 
   @navigationBreadcrumb(
     links = Map(

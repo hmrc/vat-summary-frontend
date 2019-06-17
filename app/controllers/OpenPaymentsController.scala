@@ -26,16 +26,18 @@ import models.viewModels.OpenPaymentsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{DateService, EnrolmentsAuthService, PaymentsService}
+import services.{DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import models.payments.PaymentOnAccount
+import play.twirl.api.Html
 
 import scala.concurrent.Future
 
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
                                        authorisedController: AuthorisedController,
+                                       serviceInfoService: ServiceInfoService,
                                        val paymentsService: PaymentsService,
                                        val dateService: DateService,
                                        implicit val appConfig: AppConfig,
@@ -44,22 +46,23 @@ extends FrontendController with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
     implicit user =>
-      paymentsService.getDirectDebitStatus(user.vrn).flatMap {
-        result =>
-          renderView(result.fold(_ => None, status => Some(status)))
-      }
+      for {
+        directDebitStatus <- paymentsService.getDirectDebitStatus(user.vrn)
+        serviceInfoContent <- serviceInfoService.getPartial
+        paymentsView <- renderView(directDebitStatus.fold(_ => None, status => Some(status)), serviceInfoContent)
+      } yield paymentsView
   }
 
-  private[controllers] def renderView(hasActiveDirectDebit: Option[Boolean])
+  private[controllers] def renderView(hasActiveDirectDebit: Option[Boolean], serviceInfoContent: Html)
                                      (implicit request: Request[_], user: User, hc: HeaderCarrier): Future[Result] = {
     paymentsService.getOpenPayments(user.vrn).map {
       case Right(Some(payments)) =>
         val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), hasActiveDirectDebit)
         auditEvent(user, model.payments)
-        Ok(views.html.payments.openPayments(user, model))
+        Ok(views.html.payments.openPayments(user, model, serviceInfoContent))
       case Right(_) =>
         auditEvent(user, Seq.empty)
-        Ok(views.html.payments.noPayments(user, hasActiveDirectDebit))
+        Ok(views.html.payments.noPayments(user, hasActiveDirectDebit, serviceInfoContent))
       case Left(error) =>
         Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
         InternalServerError(views.html.errors.paymentsError())

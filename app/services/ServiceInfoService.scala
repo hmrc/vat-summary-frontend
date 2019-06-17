@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: Option[User] = None)
+package services
 
-@views.html.main_template(title = messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
- <h1>@messages("sessionTimeout.title")</h1>
+import connectors.ServiceInfoPartialConnector
+import javax.inject.Inject
+import play.api.mvc._
+import play.twirl.api.Html
 
- <p>@messages("sessionTimeout.helpOne")
-   <a href=@appConfig.signInUrl>@messages("sessionTimeout.helpTwo")</a>
-   @messages("sessionTimeout.helpThree")
- </p>
+import scala.concurrent.{ExecutionContext, Future}
+
+class ServiceInfoService @Inject()(serviceInfoPartialConnector: ServiceInfoPartialConnector){
+
+  def getPartial(implicit request: Request[_], executionContext: ExecutionContext): Future[Html] = {
+    serviceInfoPartialConnector.getServiceInfoPartial()
+  }
 }

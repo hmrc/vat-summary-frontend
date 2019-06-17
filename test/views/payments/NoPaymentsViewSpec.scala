@@ -39,7 +39,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
   }
 
-  private val user = User("123456789")
+  override val user = User("123456789")
 
   "Rendering the no payments page" when {
 

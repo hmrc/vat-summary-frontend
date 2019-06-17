@@ -16,7 +16,11 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig, feedbackOnSignOut = false) {
+@views.html.main_template(
+ title = messages("unauthorised.title"),
+ bodyClasses = None,
+ appConfig = appConfig,
+ feedbackOnSignOut = false) {
 
  <h1>@messages("unauthorised.title")</h1>
  <p> @messages("unauthorised.signUpWithSoftware")</p>

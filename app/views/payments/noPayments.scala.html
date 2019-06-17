@@ -16,9 +16,13 @@
 
 @import views.html.templates.formatters.breadcrumbs._
 
-@(user: models.User, hasDirectDebit: Option[Boolean])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: models.User, hasDirectDebit: Option[Boolean], serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-  @views.html.main_template(title = messages("openPayments.title"), bodyClasses = None, appConfig = appConfig) {
+  @views.html.main_template(
+    title = messages("openPayments.title"),
+    appConfig = appConfig,
+    serviceInfoContent = serviceInfoContent,
+    user = Some(user)) {
 
     @navigationBreadcrumb(
       links = Map(

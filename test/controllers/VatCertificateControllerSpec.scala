@@ -21,8 +21,10 @@ import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import org.jsoup.Jsoup
 import play.api.http.Status
+import play.api.mvc.Request
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService}
+import play.twirl.api.Html
+import services.{AccountDetailsService, EnrolmentsAuthService, ServiceInfoService}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -37,6 +39,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
+    val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
     val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
@@ -48,6 +51,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     )
 
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+    val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     val vatCertificateSwitch: Boolean = true
     val agentAccessSwitch: Boolean = true
@@ -62,13 +66,19 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
           .expects(*, *, *)
           .returns(Right(customerInformationMax))
       }
+
+      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
+        .stubs(*,*)
+        .returns(serviceInfoServiceResult)
+
       mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
       mockAppConfig.features.agentAccess(agentAccessSwitch)
+
     }
 
     def target: VatCertificateController = {
       setup()
-      new VatCertificateController(messages, mockAuthorisedController, mockAccountDetailsService)
+      new VatCertificateController(messages, mockServiceInfoService, mockAuthorisedController, mockAccountDetailsService)
     }
   }
 
@@ -113,6 +123,9 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
                 (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
                   .expects(*, *, *)
                   .returns(Right(customerInformationMax))
+                (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
+                  .stubs(*,*)
+                  .returns(serviceInfoServiceResult)
               }
 
               private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))

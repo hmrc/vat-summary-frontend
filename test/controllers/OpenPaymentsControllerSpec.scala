@@ -29,7 +29,7 @@ import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import services._
 import uk.gov.hmrc.auth.core._
@@ -38,6 +38,7 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import common.TestModels._
 import play.api.test.Helpers.redirectLocation
+import play.twirl.api.Html
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -45,9 +46,11 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+    val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
+    val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
 
     def setupMocks(): Unit = {
       (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
@@ -59,6 +62,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
         .returns({})
+
+      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
+        .stubs(*,*)
+        .returns(serviceInfoServiceResult)
     }
 
     val payment: PaymentWithPeriod = Payment(
@@ -101,6 +108,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         messages,
         mockEnrolmentsAuthService,
         mockAuthorisedController,
+        mockServiceInfoService,
         mockPaymentsService,
         mockDateService,
         mockAppConfig,

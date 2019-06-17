@@ -27,14 +27,15 @@
   mainContent: Html = HtmlFormat.empty,
   serviceInfoContent: Html = HtmlFormat.empty,
   showLogout: Boolean = true,
-  feedbackOnSignOut: Boolean = true)(implicit request: Request[_], messages: Messages)
+  feedbackOnSignOut: Boolean = true,
+  user: Option[User] = None)(implicit request: Request[_], messages: Messages)
 
 @import layouts.{govuk_template => hmrcGovUkTemplate}
 @import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
 @import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
 @linksElement = {
-  <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/vat-v1.css")'>
+  <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/vat-v2.css")'>
 }
 
 @scriptElement = {
@@ -70,7 +71,7 @@
 
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = Some("Business tax account"),
+      navTitle = user.map(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent")),
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
@@ -106,7 +107,8 @@
       betaBanner = phaseBanner,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent),
-      setLang = messages.lang.code
+      setLang = messages.lang.code,
+      includeHMRCBranding = false
     )
 }
 

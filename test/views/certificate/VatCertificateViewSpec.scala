@@ -22,6 +22,7 @@ import models.Address
 import models.viewModels.VatCertificateViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
 class VatCertificateViewSpec extends ViewBaseSpec {
 
@@ -47,7 +48,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   "The VAT Certificate page" when {
     "Accessed by a non-agent" should {
 
-      lazy val view = views.html.certificate.vatCertificate(model, false)
+      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model, false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -155,7 +156,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     }
     "Accessed by an agent" should {
 
-      lazy val view = views.html.certificate.vatCertificate(model, true)
+      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model, true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -262,7 +263,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have a link to change action for client" that {
-        lazy val link = document.select("p").get(2)
+        lazy val link = document.select("p").get(4)
         "has the correct text" in {
           link.select("a").text() shouldBe "Back to your client options"
         }
@@ -271,7 +272,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
       }
       "have a link to change client" that {
-        lazy val link = document.select("p").get(3)
+        lazy val link = document.select("p").get(5)
         "has the correct text" in {
           link.select("a").text() shouldBe "Change client"
         }

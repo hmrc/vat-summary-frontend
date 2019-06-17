@@ -149,8 +149,17 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
   background-color: #f8f8f8;
 }
 
+<<<<<<< HEAD:public/stylesheets/vat-v1.css
 .card-full-container p:last-child {
   margin-bottom: 10px;
+=======
+table td:last-child.amount{
+    padding-right: 16px;
+}
+
+.unallocated {
+    border-right: solid 6px #005ea5;
+>>>>>>> 1628a501bd6d324b2bc18361bb408c659912fe0b:public/stylesheets/vat-v2.css
 }
 
 .card-full-container .card-body {
@@ -165,6 +174,7 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
   border-bottom: none;
 }
 
+<<<<<<< HEAD:public/stylesheets/vat-v1.css
 .card-full-container td:first-child {
   width:60%;
 }
@@ -214,4 +224,37 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
 .cert-header img {
   width: 200px;
   float: left;
+=======
+table thead {
+    border-bottom: hidden;
+}
+
+a.in-selected-tab {
+    color: #0B0C0C;
+    text-decoration: none;
+}
+
+.bta-navigation ul{
+    margin-top: 0;
+>>>>>>> 1628a501bd6d324b2bc18361bb408c659912fe0b:public/stylesheets/vat-v2.css
+}
+
+.bta-navigation li{
+    display: inline-block;
+    margin: 0 0.5em;
+}
+
+.bta-navigation a{
+    font-size: 16px;
+}
+
+@media(max-width: 768px) {
+    .bta-navigation li{
+        display: block;
+        margin: 0.5em 0 0.5em 0.5em;
+    }
+}
+
+.bta-navigation {
+    padding: 10px 0 8px 0;
 }

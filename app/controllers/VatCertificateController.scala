@@ -16,36 +16,36 @@
 
 package controllers
 
-import java.time.LocalDate
-
 import common.SessionKeys
 import config.AppConfig
 import javax.inject.Inject
-import models.Address
 import models.viewModels.VatCertificateViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.AccountDetailsService
+import services.{AccountDetailsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class VatCertificateController @Inject()(
                                           val messagesApi: MessagesApi,
+                                          serviceInfoService: ServiceInfoService,
                                           authorisedController: AuthorisedController,
                                           accountDetailsService: AccountDetailsService
                                         )(implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
   def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
-    user =>
+    implicit user =>
       if (appConfig.features.vatCertificateEnabled()) {
         val vrn = user.vrn
-        accountDetailsService.getAccountDetails(vrn).map {
-          case Right(customerInfomation) =>
-            Ok(views.html.certificate.vatCertificate(VatCertificateViewModel.fromCustomerInformation(vrn, customerInfomation), user.isAgent))
-          case Left(_) =>
-            InternalServerError
+        serviceInfoService.getPartial.flatMap { serviceInfoContent =>
+          accountDetailsService.getAccountDetails(vrn).map {
+            case Right(customerInfomation) =>
+              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInfomation), user.isAgent))
+            case Left(_) =>
+              InternalServerError
+          }
         }
       } else {
         Future.successful(NotFound(views.html.errors.notFound()))
