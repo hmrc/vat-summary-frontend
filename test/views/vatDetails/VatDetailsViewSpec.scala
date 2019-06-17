@@ -28,8 +28,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
-    val header = "#content > article > div.grid-row.form-group > div > header"
-    val entityNameHeading = "header > p"
+    val header = ".page-heading"
+    val entityNameHeading = ".form-hint > p:nth-child(2)"
     val nextPaymentHeading = "#payments h2"
     val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
@@ -43,7 +43,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
-    val paymentHistory = "#payment-history"
+    val historyHeading = "#history > h2"
+    val historyPastPayments = "ul.list > li:nth-child(1) > a:nth-child(1)"
+    val historyPastReturns = "ul.list > li:nth-child(2) > a:nth-child(1)"
     val serviceInfoNav = ".service-info nav"
   }
 
@@ -129,12 +131,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "have the text 'VAT'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT details"
+        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
       }
     }
 
     "have the correct document title" in {
-      document.title shouldBe "Your VAT details"
+      document.title shouldBe "Your VAT account"
     }
 
     "have the correct entity name" in {
@@ -142,7 +144,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct VRN message" in {
-      elementText(Selectors.vatRegNo) shouldBe s"VAT registration number (VRN): ${user.vrn}"
+      elementText(Selectors.vatRegNo) should include (s"VAT registration number (VRN): ${user.vrn}")
     }
 
     "have the vat certificate section" which {
@@ -158,55 +160,47 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "have the submitted returns section" should {
+    "have the history section" when {
 
-      lazy val submittedReturns = element(Selectors.submittedReturns)
+      "the user is NOT Hybrid" should {
 
-      "have the heading" in {
-        submittedReturns.select("h2").text() shouldBe "Submitted returns"
-      }
-
-      s"have a link to 'returns-url/$currentYear'" in {
-        submittedReturns.select("a").attr("href") shouldBe s"returns-url/$currentYear"
-      }
-
-      "have the text" in {
-        submittedReturns.select("p").text() shouldBe "Check the returns you have sent us."
-      }
-    }
-
-    "have the payment history section" should {
-
-      "if the user is NOT Hybrid" should {
+        "have the heading" in {
+          elementText(Selectors.historyHeading) shouldBe "History"
+        }
 
         lazy val view = views.html.vatDetails.details(detailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        lazy val submittedReturns = element(Selectors.paymentHistory)
-
-        "have the heading" in {
-          submittedReturns.select("h2").text() shouldBe "Payment history"
+        "have the payment history text" in {
+          elementText(Selectors.historyPastPayments) shouldBe "View past payments"
         }
 
         "have a link to the payment history" in {
-          submittedReturns.select("a").attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url
+          element(Selectors.historyPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory(currentYear).url
+        }
+
+        "have the past returns text" in {
+          elementText(Selectors.historyPastReturns) shouldBe "View past returns"
+        }
+
+        "have a link to the Submitted returns" in {
+          element(Selectors.historyPastReturns).attr("href") shouldBe s"returns-url/$currentYear"
         }
       }
 
-      "if the user is Hybrid" should {
+      "the user is Hybrid" should {
 
         lazy val view = views.html.vatDetails.details(hybridDetailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        lazy val submittedReturns = element(Selectors.paymentHistory)
-
-        "have the heading" in {
-          submittedReturns.select("h2").text() shouldBe "Payment history (opens in a new tab)"
+        "have the past payments text " in {
+          elementText(Selectors.historyPastPayments) shouldBe "View past payments (opens in a new tab)"
         }
 
         "have a link to the portal via the PortalController" in {
-          submittedReturns.select("a").attr("href") shouldBe "/vat-through-software/portal-payment-history"
+          element(Selectors.historyPastPayments).attr("href") shouldBe "/vat-through-software/portal-payment-history"
         }
+
       }
     }
 
@@ -215,13 +209,14 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val updateVatDetails = element(Selectors.updateVatDetails)
 
       "has the correct heading" in {
-        updateVatDetails.select("h2").text() shouldBe "Update your VAT details"
+        updateVatDetails.select("h2").text() shouldBe "Your business details"
       }
 
       "has the correct paragraph" in {
-        updateVatDetails.select("p").text() shouldBe "Tell us about changes to your business or VAT Returns."
+        updateVatDetails.select("p").text() shouldBe "Change your business, contact or VAT details."
       }
     }
+
   }
 
   "Rendering the VAT details page with a next return and a next payment" should {
@@ -369,8 +364,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "not render the next payment section vat returns link" in {
-      intercept[TestFailedException](
-        elementText(selector = Selectors.returnsVatLink)
+      intercept[TestFailedException](elementText(selector = Selectors.returnsVatLink)
       )
     }
 
