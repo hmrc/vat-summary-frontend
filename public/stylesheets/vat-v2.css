@@ -1,230 +1,232 @@
 .card {
-  flex-grow: 0;
-  flex-basis: 100%;
-  margin-bottom: 2em;
+    flex-grow: 0;
+    flex-basis: 100%;
+    margin-bottom: 2em;
 }
 
 @media screen and (min-width: 600px) and (max-width: 900px) {
-  .card {
-    flex-basis: 46%;
-  }
-  .card:nth-child(2n-1) {
-    margin-right: 3%;
-  }
-  .card:nth-child(2n-2) {
-    margin-left: 3%;
-  }
+    .card {
+        flex-basis: 46%;
+    }
+
+    .card:nth-child(2n-1) {
+        margin-right: 3%;
+    }
+
+    .card:nth-child(2n-2) {
+        margin-left: 3%;
+    }
 }
 
 @media screen and (min-width: 900px) {
-  .card {
-    flex-basis: 30%;
-  }
-  .card:nth-child(3n-1) {
-    margin-left: 3%;
-    margin-right: 3%;
-  }
+    .card {
+        flex-basis: 30%;
+    }
+
+    .card:nth-child(3n-1) {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
 }
 
 html[data-useragent*='MSIE 10.0'] .flex-container .card {
-  flex-basis: 31%;
-  margin: 3%;
+    flex-basis: 31%;
+    margin: 3%;
 }
 
 .card-full-width {
-  flex-basis: 100%;
-  margin-right: 0%;
+    flex-basis: 100%;
+    margin-right: 0%;
 }
 
 .card {
-  border: 1px solid #dee0e2;
-  font-size: 16px;
-  background-color: #f8f8f8;
+    border: 1px solid #dee0e2;
+    font-size: 16px;
+    background-color: #f8f8f8;
 }
 
 .card.inactive {
-  color: #6f777b;
+    color: #6f777b;
 }
 
 .card .card-heading {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .card .card-body {
-  border-bottom: 1px solid #dee0e2;
-  padding: 12px;
+    border-bottom: 1px solid #dee0e2;
+    padding: 12px;
 }
 
 .card .card-body *:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .card .card-body.active {
-  background-color: #f8f8f8;
-  transition: .1s ease-in-out;
+    background-color: #f8f8f8;
+    transition: .1s ease-in-out;
 }
 
 .card .card-body.active .card-heading a {
-  color: #005ea5;
-  margin-top: 0;
+    color: #005ea5;
+    margin-top: 0;
 }
 
 .card .card-body .detail-large {
-  color: #6f777b;
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 8px;
+    color: #6f777b;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .card .card-body .detail {
-  font-weight: 600;
-  margin-bottom: 8px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .card .card-action {
-  border-top: 0;
-  padding: 12px;
+    border-top: 0;
+    padding: 12px;
 }
 
 .card .card-action a {
-  display: inline;
-  border-bottom: 1px solid #C7DCEB;
-  text-decoration: none;
-  color: #005ea5;
-  line-height: 1.5em;
+    display: inline;
+    border-bottom: 1px solid #C7DCEB;
+    text-decoration: none;
+    color: #005ea5;
+    line-height: 1.5em;
 }
 
 .card .card-action a:link, .card .card-action a:visited {
-  color: #005ea5;
+    color: #005ea5;
 }
 
 .card .card-action a:hover {
-  text-decoration: none;
-  border-bottom: 1px solid #005ea5;
-  color: #2e8aca;
+    text-decoration: none;
+    border-bottom: 1px solid #005ea5;
+    color: #2e8aca;
 }
 
 .card .card-action ul {
-  margin: 0;
+    margin: 0;
 }
 
 .card .card-action ul li {
-  margin: 0 0 1em;
+    margin: 0 0 1em;
 }
 
 .card .card-action ul li:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .js .card-body.active:hover {
-  background-color: #005ea5;
-  color: #fff;
-  cursor: pointer;
-  transition: .1s ease-in-out;
-  transition-delay: .25s;
+    background-color: #005ea5;
+    color: #fff;
+    cursor: pointer;
+    transition: .1s ease-in-out;
+    transition-delay: .25s;
 }
 
 .js .card-body.active:hover .card-heading, .js .card-body.active:hover p {
-  color: #fff;
-  transition: .1s ease-in-out;
-  transition-delay: .25s;
+    color: #fff;
+    transition: .1s ease-in-out;
+    transition-delay: .25s;
 }
 
 .js .card-body.active:hover .card-heading a {
-  color: #fff;
-  transition-delay: .25s;
+    color: #fff;
+    transition-delay: .25s;
 }
 
 .js .card-body.active:hover .detail-large {
-  color: #fff;
-  transition-delay: .25s;
+    color: #fff;
+    transition-delay: .25s;
 }
-
 
 .card-full-container {
-  border: 1px solid #bfc1c3;
-  margin: 1em 0 2em 0;
-  padding: 1em .5em;
-  width: 100%;
-  background-color: #f8f8f8;
+    border: 1px solid #bfc1c3;
+    margin: 1em 0 2em 0;
+    padding: 1em .5em;
+    width: 100%;
+    background-color: #f8f8f8;
 }
 
-<<<<<<< HEAD:public/stylesheets/vat-v1.css
 .card-full-container p:last-child {
-  margin-bottom: 10px;
-=======
-table td:last-child.amount{
+    margin-bottom: 10px;
+}
+
+table td:last-child.amount {
     padding-right: 16px;
 }
 
 .unallocated {
     border-right: solid 6px #005ea5;
->>>>>>> 1628a501bd6d324b2bc18361bb408c659912fe0b:public/stylesheets/vat-v2.css
 }
 
 .card-full-container .card-body {
-  margin-bottom: 1em;
+    margin-bottom: 1em;
 }
 
 .card-full-container .card-body p {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .card-full-container table tr:last-child td {
-  border-bottom: none;
+    border-bottom: none;
 }
 
-<<<<<<< HEAD:public/stylesheets/vat-v1.css
+
 .card-full-container td:first-child {
-  width:60%;
+    width: 60%;
 }
 
 .card-full-container .card-body .error-card-heading {
-  margin-bottom: 2em;
+    margin-bottom: 2em;
 }
 
 .card-full-container .card-body .returns-penalty-deadline {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .card-full-container .card-body .amount {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .card-full-container .card-body .returns-complete {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .card-full-container .card-body .returns-list__link {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .card-full-container .card-body .multi-year-missed-filing {
-  margin-top: 30px;
+    margin-top: 30px;
 }
 
 .card-full-container .card-heading {
-  margin: 0;
-  margin-bottom: .83333em;
+    margin: 0;
+    margin-bottom: .83333em;
 }
 
 .card-full-container .subpage-link {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 .cert-header {
-  width: 100%;
-  display: block;
-  clear: both;
-  text-align: right;
-  padding-top: 90px;
-  padding-bottom: 30px;
+    width: 100%;
+    display: block;
+    clear: both;
+    text-align: right;
+    padding-top: 90px;
+    padding-bottom: 30px;
 }
 
 .cert-header img {
-  width: 200px;
-  float: left;
-=======
+    width: 200px;
+    float: left;
+}
+
 table thead {
     border-bottom: hidden;
 }
@@ -234,22 +236,21 @@ a.in-selected-tab {
     text-decoration: none;
 }
 
-.bta-navigation ul{
+.bta-navigation ul {
     margin-top: 0;
->>>>>>> 1628a501bd6d324b2bc18361bb408c659912fe0b:public/stylesheets/vat-v2.css
 }
 
-.bta-navigation li{
+.bta-navigation li {
     display: inline-block;
     margin: 0 0.5em;
 }
 
-.bta-navigation a{
+.bta-navigation a {
     font-size: 16px;
 }
 
-@media(max-width: 768px) {
-    .bta-navigation li{
+@media (max-width: 768px) {
+    .bta-navigation li {
         display: block;
         margin: 0.5em 0 0.5em 0.5em;
     }

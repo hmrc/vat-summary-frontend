@@ -20,10 +20,9 @@
 @import views.html.templates.formatters.breadcrumbs._
 
 @(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel, isAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
-@views.html.main_template(if(isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"), appConfig = appConfig) {
 
 @views.html.main_template(
-  messages("vatCertificate.title"),
+  if(isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
   appConfig = appConfig,
   user = Some(user),
   serviceInfoContent = serviceInfoContent) {
@@ -155,5 +154,4 @@
         <p><a href="@routes.VatCertificateController.changeClientAction()">Back to your client options</a></p>
         <p><a href="@routes.VatCertificateController.changeClient()">Change client</a></p>
     }
-}
 }
