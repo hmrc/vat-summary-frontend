@@ -1,31 +1,32 @@
+@import "card.css";
 .task-overdue {
-  display: -moz-inline-stack;
-  display: inline-block;
-  margin: 0 8px 0 0;
-  padding: 2px 5px 0;
-  font-family: "nta", Arial, sans-serif;
-  font-weight: 700;
-  text-transform: none;
-  font-size: 14px;
-  line-height: 1.14286;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-decoration: none;
-  color: #fff;
-  background-color: #B10E1E;
-  margin-left: 5px;
-  padding-top: 3px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    margin: 0 8px 0 0;
+    padding: 2px 5px 0;
+    font-family: "nta", Arial, sans-serif;
+    font-weight: 700;
+    text-transform: none;
+    font-size: 14px;
+    line-height: 1.14286;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #B10E1E;
+    margin-left: 5px;
+    padding-top: 3px;
 }
 
 .credit-charge {
-  background-color: #BFE0CE;
+    background-color: #BFE0CE;
 }
 
 @media (max-width: 640px) {
-   #paymentsSection .payment-actions .float--right {
-    float: left !important;
-    padding: 0 15px;
-   }
+    #paymentsSection .payment-actions .float--right {
+        float: left !important;
+        padding: 0 15px;
+    }
 }
 
 .repayment {

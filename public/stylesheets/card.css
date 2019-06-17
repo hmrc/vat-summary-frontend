@@ -1,0 +1,117 @@
+.card {
+    flex-grow: 0;
+    flex-basis: 100%;
+    margin-bottom: 2em;
+}
+
+@media screen and (min-width: 600px) and (max-width: 900px) {
+    .card {
+        flex-basis: 46%;
+    }
+
+    .card:nth-child(2n-1) {
+        margin-right: 3%;
+    }
+
+    .card:nth-child(2n-2) {
+        margin-left: 3%;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .card {
+        flex-basis: 30%;
+    }
+
+    .card:nth-child(3n-1) {
+        margin-left: 3%;
+        margin-right: 3%;
+    }
+}
+
+html[data-useragent*='MSIE 10.0'] .flex-container .card {
+    flex-basis: 31%;
+    margin: 3%;
+}
+
+.card-full-width {
+    flex-basis: 100%;
+    margin-right: 0%;
+}
+
+.card {
+    border: 1px solid #dee0e2;
+    font-size: 16px;
+    background-color: #f8f8f8;
+}
+
+.card .card-heading {
+    margin-top: 0;
+}
+
+.card .card-body {
+    border-bottom: 1px solid #dee0e2;
+    padding: 12px;
+}
+
+.card .card-body *:last-child {
+    margin-bottom: 0;
+}
+
+.card-full-container {
+    border: 1px solid #bfc1c3;
+    margin: 1em 0 2em 0;
+    padding: 1em .5em;
+    width: 100%;
+    background-color: #f8f8f8;
+}
+
+.card-full-container p:last-child {
+    margin-bottom: 10px;
+}
+
+table td:last-child.amount {
+    padding-right: 16px;
+}
+
+
+.card-full-container .card-body {
+    margin-bottom: 1em;
+}
+
+.card-full-container .card-body p {
+    margin-bottom: 10px;
+}
+
+.card-full-container table tr:last-child td {
+    border-bottom: none;
+}
+
+
+.card-full-container td:first-child {
+    width: 60%;
+}
+
+.card-full-container .card-heading {
+    margin: 0;
+    margin-bottom: .83333em;
+}
+
+.card-full-container table td:last-child {
+    text-align: left;
+}
+
+
+.cert-header {
+    width: 100%;
+    display: block;
+    clear: both;
+    text-align: right;
+    padding-top: 90px;
+    padding-bottom: 30px;
+}
+
+.cert-header img {
+    width: 200px;
+    float: left;
+}

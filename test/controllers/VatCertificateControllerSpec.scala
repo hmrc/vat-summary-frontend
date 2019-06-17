@@ -16,8 +16,10 @@
 
 package controllers
 
+import common.SessionKeys
 import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
+import models.User
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Request
@@ -54,14 +56,20 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
     val vatCertificateSwitch: Boolean = true
     val agentAccessSwitch: Boolean = true
-
+    val customerInfoCallExpected: Boolean = true
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *, *)
-      .returns(authResult)
+        .expects(*, *, *, *)
+        .returns(authResult)
 
-      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-        .stubs(*,*)
+      if(customerInfoCallExpected) {
+        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Right(customerInformationMax))
+      }
+
+      (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
+        .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
 
       mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
@@ -71,7 +79,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
     def target: VatCertificateController = {
       setup()
-      new VatCertificateController(messages, mockServiceInfoService, mockAuthorisedController)
+      new VatCertificateController(messages, mockServiceInfoService, mockAuthorisedController, mockAccountDetailsService)
     }
   }
 
@@ -113,8 +121,11 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
                   .returns(Future.successful(agentEnrolments))
                   .noMoreThanOnce()
 
-                (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-                  .stubs(*,*)
+                (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+                  .expects(*, *, *)
+                  .returns(Right(customerInformationMax))
+                (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
+                  .stubs(*,*,*)
                   .returns(serviceInfoServiceResult)
               }
 
@@ -151,30 +162,63 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
         "allow agent access feature switch is off" should {
 
-          "return FORBIDDEN and non-agent unauthorised page" in new Test {
+          "return Not Found (404)" in new Test {
+            override def setup(): Unit = {
+              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+                .expects(*, *, *, *)
+                .returns(Future.successful(new ~(agentEnrolments, Some(Agent))))
+                .noMoreThanOnce()
 
-            override val agentAccessSwitch: Boolean = false
-            override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+                .expects(*, *, *, *)
+                .returns(Future.successful(agentEnrolments))
+                .noMoreThanOnce()
+              mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
+            }
 
-            private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
-
-            status(result) shouldBe Status.FORBIDDEN
-            Jsoup.parse(bodyOf(result)).title() shouldBe "You are not authorised to use this service"
+            override val vatCertificateSwitch: Boolean = false
+            private val result = target.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2223334443"))
+            status(result) shouldBe Status.NOT_FOUND
           }
+
         }
       }
 
       "the user is logged in with invalid credentials" should {
 
         "return Forbidden (403)" in new Test {
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(new ~(otherEnrolment, Some(Agent))))
+              .noMoreThanOnce()
+
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(otherEnrolment))
+              .noMoreThanOnce()
+          }
+
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
-          private val result = target.show()(fakeRequest)
+          private val result = target.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "1112223331"))
           status(result) shouldBe Status.FORBIDDEN
         }
 
         "return HTML" in new Test {
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(new ~(otherEnrolment, Some(Agent))))
+              .noMoreThanOnce()
+
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(otherEnrolment))
+              .noMoreThanOnce()
+          }
+
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
-          private val result = target.show()(fakeRequest)
+          private val result = target.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "1112223331"))
           contentType(result) shouldBe Some("text/html")
         }
       }
@@ -182,13 +226,26 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       "the user is not logged in" should {
 
         "return Unauthorised (401)" in new Test {
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.failed(MissingBearerToken()))
+              .noMoreThanOnce()
+          }
+
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.show()(fakeRequest)
           status(result) shouldBe Status.UNAUTHORIZED
         }
 
         "return HTML" in new Test {
-          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.failed(MissingBearerToken()))
+              .noMoreThanOnce()
+          }
+
           private val result = target.show()(fakeRequest)
           contentType(result) shouldBe Some("text/html")
         }
@@ -199,13 +256,189 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
       "return Not Found (404)" in new Test {
         override val vatCertificateSwitch: Boolean = false
-        private val result = target.show()(fakeRequest)
+
+        override def setup(): Unit = {
+          mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(agentAuthResult)
+            .noMoreThanOnce()
+
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(agentEnrolments))
+            .noMoreThanOnce()
+        }
+
+
+        private val result = target.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "1111111111"))
         status(result) shouldBe Status.NOT_FOUND
       }
 
       "return HTML" in new Test {
         override val vatCertificateSwitch: Boolean = false
-        private val result = target.show()(fakeRequest)
+
+        override def setup(): Unit = {
+          mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(agentAuthResult)
+            .noMoreThanOnce()
+
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(agentEnrolments))
+            .noMoreThanOnce()
+        }
+
+        private val result = target.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2222222221"))
+        contentType(result) shouldBe Some("text/html")
+      }
+    }
+  }
+
+  "The changeClient() action" when {
+    "the vat certificate feature switch is on" when {
+      "the user is non-agent" should {
+        "return Not Found (404)" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          private val result = target.changeClient()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2223334443"))
+          status(result) shouldBe Status.NOT_FOUND
+        }
+
+        "return HTML" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          override val vatCertificateSwitch: Boolean = false
+          private val result = target.changeClient()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2223334443"))
+          contentType(result) shouldBe Some("text/html")
+        }
+      }
+
+      "the user is an agent" should {
+        "redirect the user to the VACLUFE" in new Test {
+
+          override def setup(): Unit = {
+            mockAppConfig.features.vatCertificateEnabled(vatCertificateSwitch)
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(agentAuthResult)
+              .noMoreThanOnce()
+
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(agentEnrolments))
+              .noMoreThanOnce()
+          }
+
+          private val result = target.changeClient()(fakeRequest)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some("agent-client-lookup-start-url//")
+        }
+
+      }
+
+      "the user is unauthorised" should {
+        "return Unauthorised (401)" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+          private val result = target.changeClient()(fakeRequest)
+          status(result) shouldBe Status.UNAUTHORIZED
+        }
+
+        "return HTML" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+          private val result = target.changeClient()(fakeRequest)
+          contentType(result) shouldBe Some("text/html")
+        }
+      }
+    }
+    "the vat certificate feature switch is off and a user is logged in with valid credentials" should {
+
+      "return Not Found (404)" in new Test {
+        override val customerInfoCallExpected: Boolean = false
+        override val vatCertificateSwitch: Boolean = false
+        private val result = target.changeClient()(fakeRequest)
+        status(result) shouldBe Status.NOT_FOUND
+      }
+
+      "return HTML" in new Test {
+        override val customerInfoCallExpected: Boolean = false
+        override val vatCertificateSwitch: Boolean = false
+        private val result = target.changeClient()(fakeRequest)
+        contentType(result) shouldBe Some("text/html")
+      }
+    }
+  }
+
+  "The changeClientAction() action" when {
+    "the vat certificate feature switch is on" when {
+      "the user is non-agent" should {
+        "return Not Found (404)" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          private val result = target.changeClientAction()(fakeRequest)
+          status(result) shouldBe Status.NOT_FOUND
+        }
+
+        "return HTML" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          override val vatCertificateSwitch: Boolean = false
+          private val result = target.changeClientAction()(fakeRequest)
+          contentType(result) shouldBe Some("text/html")
+        }
+      }
+
+      "the user is an agent" should {
+        "redirect the user to the VACLUFE" in new Test {
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(agentAuthResult)
+              .noMoreThanOnce()
+
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(agentEnrolments))
+              .noMoreThanOnce()
+          }
+
+          private val result = target.changeClientAction()(fakeRequest)
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some("agent-client-lookup-start-url//")
+        }
+
+      }
+
+      "the user is unauthorised" should {
+        "return Unauthorised (401)" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+          private val result = target.changeClientAction()(fakeRequest)
+          status(result) shouldBe Status.UNAUTHORIZED
+        }
+
+        "return HTML" in new Test {
+          override val customerInfoCallExpected: Boolean = false
+          override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+          private val result = target.changeClientAction()(fakeRequest)
+          contentType(result) shouldBe Some("text/html")
+        }
+      }
+    }
+
+    "the vat certificate feature switch is off and a user is logged in with valid credentials" should {
+
+      "return Not Found (404)" in new Test {
+        override val customerInfoCallExpected: Boolean = false
+        override val vatCertificateSwitch: Boolean = false
+        private val result = target.changeClientAction()(fakeRequest)
+        status(result) shouldBe Status.NOT_FOUND
+      }
+
+      "return HTML" in new Test {
+        override val customerInfoCallExpected: Boolean = false
+        override val vatCertificateSwitch: Boolean = false
+        private val result = target.changeClientAction()(fakeRequest)
         contentType(result) shouldBe Some("text/html")
       }
     }

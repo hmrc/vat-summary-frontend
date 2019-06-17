@@ -63,8 +63,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         .stubs(*, *, *, *)
         .returns({})
 
-      (mockServiceInfoService.getPartial(_: Request[_], _: ExecutionContext))
-        .stubs(*,*)
+      (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
+        .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
     }
 
