@@ -49,7 +49,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Your VAT details"
+          document.title() shouldBe "Your VAT account"
         }
       }
 
@@ -61,7 +61,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Eich manylion TAW"
+          document.title() shouldBe "Eich cyfrif TAW"
         }
       }
     }
@@ -74,7 +74,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         lazy val document: Document = Jsoup.parse(response.body)
 
-        document.title() shouldBe "Your VAT details"
+        document.title() shouldBe "Your VAT account"
       }
     }
   }
