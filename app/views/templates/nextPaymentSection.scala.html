@@ -22,9 +22,9 @@
 @(paymentsData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isHybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User, lang: Lang)
 
 
-<div class ="card">
-  <div id="payments" class="card-body">
-    <h2 class="heading-medium push--top" >@messages("payment.nextPayment")</h2>
+<div class ="tile">
+  <div id="payments" class="tile-body">
+    <h2 class="heading-medium push--top">@messages("payment.nextPayment")</h2>
 
     @if(isHybridUser) {
       @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))

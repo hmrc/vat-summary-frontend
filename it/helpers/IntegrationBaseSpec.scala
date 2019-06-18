@@ -55,6 +55,8 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     "microservice.services.vat-obligations.port" -> mockPort,
     "microservice.services.direct-debit.host" -> mockHost,
     "microservice.services.direct-debit.port" -> mockPort,
+    "microservice.services.business-tax-account.host" -> mockHost,
+    "microservice.services.business-tax-account.port" -> mockPort,
     "features.useDirectDebitDummyPage.enabled" -> "false"
   )
 

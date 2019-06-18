@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AuthStub, CustomerInfoStub}
+import stubs.{AuthStub, CustomerInfoStub, ServiceInfoStub}
 
 class VatCertificatePageSpec extends IntegrationBaseSpec {
 
@@ -29,9 +29,12 @@ class VatCertificatePageSpec extends IntegrationBaseSpec {
 
     def request(isAgent: Boolean = false): WSRequest = {
       setupStubs()
+      CustomerInfoStub.stubCustomerInfo()
+
       if (isAgent) {
         buildRequest("/vat-certificate", formatSessionVrn(Some("1112221112")))
       } else {
+        ServiceInfoStub.stubServiceInfoPartial
         buildRequest("/vat-certificate")
       }
     }
@@ -42,11 +45,7 @@ class VatCertificatePageSpec extends IntegrationBaseSpec {
     "the user is a non agent" should {
 
       "return 200 with the agent title" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo()
-        }
-
+        override def setupStubs(): StubMapping = AuthStub.authorised()
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
         response.body.contains("Your VAT Certificate") shouldBe true
@@ -56,11 +55,7 @@ class VatCertificatePageSpec extends IntegrationBaseSpec {
     "the user is an agent" should {
 
       "return 200 with the non-agent title" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuthStub.agentAuthorised()
-          CustomerInfoStub.stubCustomerInfo()
-        }
-
+        override def setupStubs(): StubMapping = AuthStub.agentAuthorised()
         val response: WSResponse = await(request(true).get())
         response.status shouldBe Status.OK
         response.body.contains("Your client&#x27;s VAT Certificate<") shouldBe true

@@ -22,7 +22,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub}
+import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, ServiceInfoStub}
 import stubs.CustomerInfoStub.customerInfoJson
 
 class PaymentsPageSpec extends IntegrationBaseSpec {
@@ -31,6 +31,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
     def setupStubs(): StubMapping
     def request(): WSRequest = {
       setupStubs()
+      ServiceInfoStub.stubServiceInfoPartial
       buildRequest("/what-you-owe")
     }
   }
@@ -98,6 +99,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         document.select(firstPaymentAmount) shouldBe empty
       }
     }
+
     "the user has a partial migration" should {
 
       "redirect to /vat-overview" in new Test {
@@ -112,6 +114,5 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
         response.header("Location").get shouldBe "/vat-through-software/vat-overview"
       }
     }
-
   }
 }

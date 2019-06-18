@@ -20,9 +20,9 @@
 @(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isNonMTDfB: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig, lang: Lang)
 
 
-<div class="card">
-  <div id="next-return" class="card-body">
-    <h2 class="heading-medium push--top" >@messages("returnObligation.nextReturn")</h2>
+<div class="tile">
+  <div id="next-return" class="tile-body">
+    <h2 class="heading-medium push--top">@messages("returnObligation.nextReturn")</h2>
       <p @if(isError){data-metrics="error:recovered:next-return"}>
       @(obligationData, hasMultiple, isNonMTDfB, isError) match {
         case (_, _, _, true) => { @messages("vatDetails.error") }

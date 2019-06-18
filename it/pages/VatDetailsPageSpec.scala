@@ -54,6 +54,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           CustomerInfoStub.stubCustomerInfo()
           CustomerInfoStub.stubCustomerMandationStatus()
           FinancialDataStub.stubAllOutstandingOpenPayments
+          ServiceInfoStub.stubServiceInfoPartial
         }
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
@@ -70,6 +71,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
             CustomerInfoStub.stubCustomerInfo()
             CustomerInfoStub.stubCustomerMandationStatus(Json.obj("mandationStatus" -> "Non MTDfB"))
             FinancialDataStub.stubAllOutstandingOpenPayments
+            ServiceInfoStub.stubServiceInfoPartial
           }
 
           val response: WSResponse = await(request().get())
@@ -88,6 +90,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
             CustomerInfoStub.stubCustomerInfo()
             CustomerInfoStub.stubCustomerMandationStatus(Json.obj("code" -> "AN ERROR", "errorResponse" -> "HAS OCCURRED"), BAD_REQUEST)
             FinancialDataStub.stubAllOutstandingOpenPayments
+            ServiceInfoStub.stubServiceInfoPartial
           }
 
           val response: WSResponse = await(request().get())

@@ -20,7 +20,7 @@ import helpers.IntegrationBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, VatObligationsStub}
+import stubs._
 
 class LanguageSpec extends IntegrationBaseSpec {
 
@@ -33,6 +33,7 @@ class LanguageSpec extends IntegrationBaseSpec {
       CustomerInfoStub.stubCustomerInfo()
       CustomerInfoStub.stubCustomerMandationStatus()
       FinancialDataStub.stubAllOutstandingOpenPayments
+      ServiceInfoStub.stubServiceInfoPartial
       buildRequest("/vat-overview")
     }
   }
