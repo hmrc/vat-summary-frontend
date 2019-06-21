@@ -27,6 +27,7 @@ class Features @Inject()(config: Configuration) {
   val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
   val vatCertificateEnabled = new Feature(ConfigKeys.vatCertificateFeature, config)
+  val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature, config)
   val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
   val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)

@@ -170,6 +170,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         private val result = target(false).details()(fakeRequestWithSession)
         session(result).get(SessionKeys.mandationStatus) shouldBe None
+
       }
     }
 
@@ -321,7 +322,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is both a payment and an obligation" should {
 
       "return a VatDetailsViewModel with both due dates" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(paymentDueDate, obligationData, Some(entityName), currentYear)
+        lazy val expected = VatDetailsViewModel(paymentDueDate, obligationData, Some(entityName), currentYear, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
@@ -336,7 +337,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is a payment but no obligation" should {
 
       "return a VatDetailsViewModel with a payment due date and no obligation due date" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(paymentDueDate, None, Some(entityName), currentYear)
+        lazy val expected = VatDetailsViewModel(paymentDueDate, None, Some(entityName), currentYear, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(Some(payments)),
@@ -351,7 +352,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is an obligation but no payment" should {
 
       "return a VatDetailsViewModel with an obligation due date and no payment due date" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, obligationData, Some(entityName), currentYear)
+        lazy val expected = VatDetailsViewModel(None, obligationData, Some(entityName), currentYear, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(None),
@@ -366,7 +367,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation or payment" should {
 
       "return a VatDetailsViewModel with no obligation due date and no payment due date" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear)
+        lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -381,7 +382,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation, payment, or entity name" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, None, currentYear)
+        lazy val expected = VatDetailsViewModel(None, None, None, currentYear, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -396,7 +397,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation, payment, or entity name with a non-MTDfB user" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfB flag set to true" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, None, currentYear, isNonMTDfBUser = Some(true))
+        lazy val expected = VatDetailsViewModel(None, None, None, currentYear, isNonMTDfBUser = Some(true), customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -410,7 +411,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is an error from VAT API" should {
       "return a VatDetailsViewModel with the returnError flag set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear, returnObligationError = true)
+        lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear, returnObligationError = true, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Right(None),
@@ -425,7 +426,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is an error from Financial Data API" should {
 
       "return a VatDetailsViewModel with the paymentError flag set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear, paymentError = true)
+        lazy val expected = VatDetailsViewModel(None, None, Some(entityName), currentYear, paymentError = true, customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Left(NextPaymentError),
@@ -441,7 +442,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsViewModel with the returnError and paymentError flags set" in new DetailsTest {
         lazy val expected = VatDetailsViewModel(
-          None, None, Some(entityName), currentYear, returnObligationError = true, paymentError = true
+          None, None, Some(entityName), currentYear, returnObligationError = true, paymentError = true, customerInfoError = false
         )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
@@ -461,7 +462,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         override val obligations: VatReturnObligations = overdueObligations
 
         lazy val expected = VatDetailsViewModel(
-          paymentDueDate, overdueObligationDueDate, Some(entityName), currentYear, returnObligationOverdue = true
+          paymentDueDate, overdueObligationDueDate, Some(entityName), currentYear, returnObligationOverdue = true, customerInfoError = false
         )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
@@ -481,7 +482,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         override val payments: Payments = overduePayment
 
         lazy val expected = VatDetailsViewModel(
-          overduePaymentDueDate, obligationData, Some(entityName), currentYear, paymentOverdue = true
+          overduePaymentDueDate, obligationData, Some(entityName), currentYear, paymentOverdue = true, customerInfoError = false
         )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),

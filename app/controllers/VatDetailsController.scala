@@ -104,6 +104,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
+    val customerInfoError: Boolean = accountDetails.isLeft
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -117,7 +118,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
-      isNonMTDfB
+      isNonMTDfB,
+      customerInfoError
     )
   }
 
