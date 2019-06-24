@@ -38,6 +38,7 @@ object ConfigKeys {
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
   val vatCertificateFeature: String = "features.vatCertificate.enabled"
+  val vatOptOutServiceFeature: String = "features.vatOptOutService.enabled"
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
@@ -104,5 +105,9 @@ object ConfigKeys {
   val vatAgentClientLookupFrontendStartUrl: String = "vat-agent-client-lookup-frontend.startUrl"
   val vatAgentClientLookupFrontendUnauthorisedUrl: String = "vat-agent-client-lookup-frontend.unauthorisedUrl"
   val vatAgentClientLookupFrontendActionUrl: String = "vat-agent-client-lookup-frontend.agentActionUrl"
+
+  val vatOptOutFrontendHost: String = "vat-opt-out-frontend.host"
+  val vatOptOutFrontendStartUrl: String = "vat-opt-out-frontend.startUrl"
+
   val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
 }
