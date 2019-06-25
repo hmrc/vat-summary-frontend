@@ -83,7 +83,8 @@ object TestModels {
     "10410",
     Some("****1234"),
     Some("69****"),
-    Some("MM")
+    Some("MM"),
+    Some("MTDfB Voluntary")
   )
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
@@ -100,6 +101,7 @@ object TestModels {
     None,
     None,
     "10410",
+    None,
     None,
     None,
     None

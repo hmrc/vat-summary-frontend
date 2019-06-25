@@ -73,7 +73,10 @@ object CustomerInfoStub extends WireMockMethods {
       "stdReturnPeriod" -> "MM"
     ),
     "partyType" -> "7",
-    "primaryMainCode" -> "10410"
+    "primaryMainCode" -> "10410",
+    "pendingChanges" -> Json.obj(
+      "mandationStatus" -> "MTDfB Voluntary"
+    )
   )
 
   private val errorJson = Json.obj(

@@ -54,7 +54,8 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         "10410",
         Some("****1234"),
         Some("69****"),
-        Some("MM")
+        Some("MM"),
+        Some("MTDfB Voluntary")
       ))
 
       setupStubs()

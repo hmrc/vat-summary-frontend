@@ -103,6 +103,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val paymentModel: VatDetailsDataModel = retrievePayments(payments)
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
+    val pendingOptOut: Boolean =
+      accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
     val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
     val customerInfoError: Boolean = accountDetails.isLeft
 
@@ -119,7 +121,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.hasError,
       isHybridUser,
       isNonMTDfB,
-      customerInfoError
+      customerInfoError,
+      pendingOptOut
     )
   }
 

@@ -23,27 +23,55 @@ import views.ViewBaseSpec
 
 class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
 
-  "The vatOptOutSection" should {
+  object Selectors {
+    val vatOptOutSection = "#vat-optout"
+    val vatOptOutHeading = s"$vatOptOutSection > h2:nth-child(1)"
+    val vatOptOutHeadingLink = s"$vatOptOutHeading a"
+    val vatOptOutParagraph = s"$vatOptOutSection > p:nth-child(2)"
+  }
 
-    object Selectors {
-      val vatOptOutHeading = "#vat-optout > h2:nth-child(1) a"
-      val vatOptOutParagraph = "#vat-optout > p:nth-child(2)"
+  "The vatOptOutSection" when {
+
+    "the user is opted in to MTD" should {
+
+      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(false), pendingOptOut = false)
+      implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct heading" in {
+        elementText(Selectors.vatOptOutHeading) shouldBe "Opt out of Making Tax Digital for VAT"
+      }
+
+      "have the correct link" in {
+        element(Selectors.vatOptOutHeadingLink).attr("href") shouldBe "/vat-through-software/account/opt-out"
+      }
+
+      "have the correct paragraph" in {
+        elementText(Selectors.vatOptOutParagraph) shouldBe "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
+      }
     }
 
-    def view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(false))
-    implicit def document: Document = Jsoup.parse(view.body)
+    "the user has an opt out request pending" should {
 
-    "have the correct heading" in {
-      elementText(Selectors.vatOptOutHeading) shouldBe "Opt out of Making Tax Digital for VAT"
+      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(false), pendingOptOut = true)
+      implicit val document: Document = Jsoup.parse(view.body)
+
+      "not have a link to the opt out service" in {
+        elementExtinct(Selectors.vatOptOutHeadingLink)
+      }
+
+      "have the correct paragraph" in {
+        elementText(Selectors.vatOptOutParagraph) shouldBe "Your request to opt out is being processed."
+      }
     }
 
-    "have the correct link" in {
-      element(Selectors.vatOptOutHeading).attr("href") shouldBe "/vat-through-software/account/opt-out"
-    }
+    "the user is already opted out" should {
 
-    "have the correct paragraph" in {
-      elementText(Selectors.vatOptOutParagraph) shouldBe "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
-    }
+      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(true), pendingOptOut = false)
+      implicit val document: Document = Jsoup.parse(view.body)
 
+      "not display" in {
+        elementExtinct(Selectors.vatOptOutSection)
+      }
+    }
   }
 }

@@ -52,7 +52,10 @@ object TestJson {
       "stdReturnPeriod" -> "MM"
     ),
     "partyType" -> "7",
-    "primaryMainCode" -> "10410"
+    "primaryMainCode" -> "10410",
+    "pendingChanges" -> Json.obj(
+      "mandationStatus" -> "MTDfB Voluntary"
+    )
   )
 
   val customerInfoJsonMin: JsValue = Json.obj(

@@ -14,20 +14,23 @@
  * limitations under the License.
  *@
 
-@import models.viewModels.VatDetailsViewModel
+@(isNonMTDfBUser: Option[Boolean], pendingOptOut: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
-@(isNonMTDfBUser: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
+@isNonMTDfBUser match {
 
+  case Some(false) => {
+    <div class="column-one-third" id="vat-optout">
+      @if(pendingOptOut) {
+        <h2 class="heading-small">@messages("vatDetails.vatOptOut.link")</h2>
+        <p>@messages("vatDetails.vatOptOut.pending")</p>
+      } else {
+        <h2 class="heading-small"><a href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a></h2>
+        <p>@messages("vatDetails.vatOptOut.info")</p>
+      }
+    </div>
+  }
 
-@(isNonMTDfBUser) match {
-
-   case Some(false) => {
-     <div class="column-one-third" id="vat-optout">
-       <h2 class="heading-small"><a href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a></h2>
-       <p>@messages("vatDetails.vatOptOut.view")</p>
-     </div>
-   }
-   case _ => {}
+  case _ => {}
 }
 
 

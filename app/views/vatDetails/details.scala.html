@@ -72,14 +72,14 @@
     </div>
 
     @if(appConfig.features.vatOptOutEnabled()) {
-      @if(detailsViewModel.customerInfoError){
+      @if(detailsViewModel.customerInfoError) {
         <hr>
         <h3 class="heading-medium">
-          @messages("vatDetails.vatOptOut.error")
+          @messages("vatDetails.customerInfo.error")
         </h3>
-      } else{
+      } else {
         <div class = "grid-row">
-        @views.html.templates.vatOptOutSection(detailsViewModel.isNonMTDfBUser)
+          @views.html.templates.vatOptOutSection(detailsViewModel.isNonMTDfBUser, detailsViewModel.pendingOptOut)
         </div>
       }
     }
