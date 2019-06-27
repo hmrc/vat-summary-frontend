@@ -19,15 +19,15 @@
 @import views.html.templates.formatters.addresses._
 @import views.html.templates.formatters.breadcrumbs._
 
-@(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel, isAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
+@(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
 @views.html.main_template(
-  if(isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
+  if(user.isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
   appConfig = appConfig,
   user = Some(user),
   serviceInfoContent = serviceInfoContent) {
 
-    @if(!isAgent) {
+    @if(!user.isAgent) {
         @navigationBreadcrumb(
             links = Map(
                 appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
@@ -37,11 +37,10 @@
     } else {
         <a class="link-back" href='@controllers.routes.VatCertificateController.changeClientAction()'>@messages("base.back")</a>
     }
-    <h1>@if(isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
+    <h1 class="heading-xlarge">@if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
 
     <div class="cert-header">
         <img src='@routes.Assets.at("images/HMRC_Logo.png")' alt="HMRC Logo">
-        <h1 class="heading-large" style="text-align:right;">@messages("vatCertificate.certificateHeader.one")<br>@messages("vatCertificate.certificateHeader.two")</h1>
     </div>
 
     <div class="card-full-container column-full">
@@ -59,7 +58,7 @@
                     </tr>
                     <tr>
                         <td>@messages("vatCertificate.aboutYourRegistration.registrationDate")</td>
-                        <td>@{model.registrationDate.map(displayDate(_)).getOrElse(messages("vatCertificate.notProvided"))}</td>
+                        <td>@{model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided"))}</td>
                     </tr>
                     <tr>
                         <td>@messages("vatCertificate.aboutYourRegistration.certificateDate")</td>
@@ -82,11 +81,11 @@
                     <tbody>
                         <tr>
                             <td>@messages("vatCertificate.aboutTheBusiness.businessName")</td>
-                            <td>@{model.businessName.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                            <td>@{model.businessName.getOrElse(messages("common.notProvided"))}</td>
                         </tr>
                         <tr>
                             <td>@messages("vatCertificate.aboutTheBusiness.tradingName")</td>
-                            <td>@{model.tradingName.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                            <td>@{model.tradingName.getOrElse(messages("common.notProvided"))}</td>
                         </tr>
                         <tr>
                             <td>@messages("vatCertificate.aboutTheBusiness.businessType")</td>
@@ -99,10 +98,6 @@
                         <tr>
                             <td>@messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness")</td>
                             <td>@fullAddress(model.ppob)</td>
-                        </tr>
-                        <tr>
-                            <td>@messages("vatCertificate.aboutTheBusiness.emailAddress")</td>
-                            <td>@{model.email.getOrElse(messages("vatCertificate.notProvided"))}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -121,11 +116,11 @@
                 <tbody>
                     <tr>
                         <td>@messages("vatCertificate.bankingDetails.accountNumber")</td>
-                        <td>@{model.accountNumber.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                        <td>@{model.accountNumber.getOrElse(messages("common.notProvided"))}</td>
                     </tr>
                     <tr>
                         <td>@messages("vatCertificate.bankingDetails.sortCode")</td>
-                        <td>@{model.sortCode.getOrElse(messages("vatCertificate.notProvided"))}</td>
+                        <td>@{model.sortCode.getOrElse(messages("common.notProvided"))}</td>
                     </tr>
                 </tbody>
             </table>
@@ -150,7 +145,7 @@
         </div>
     </div>
 
-    @if(isAgent){
+    @if(user.isAgent){
         <p><a href="@routes.VatCertificateController.changeClientAction()">Back to your client options</a></p>
         <p><a href="@routes.VatCertificateController.changeClient()">Change client</a></p>
     }

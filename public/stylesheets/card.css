@@ -89,7 +89,7 @@ table td:last-child.amount {
 
 
 .card-full-container td:first-child {
-    width: 60%;
+    width: 50%;
 }
 
 .card-full-container .card-heading {
@@ -106,12 +106,10 @@ table td:last-child.amount {
     width: 100%;
     display: block;
     clear: both;
-    text-align: right;
-    padding-top: 90px;
-    padding-bottom: 30px;
+    padding-top: 0px;
+    padding-bottom: 15px;
 }
 
 .cert-header img {
-    width: 200px;
-    float: left;
+    width: 150px;
 }

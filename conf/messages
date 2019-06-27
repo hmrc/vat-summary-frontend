@@ -138,10 +138,6 @@ paymentsHistory.previousPayments.beforeMtd = if you made payments before joining
 #VAT certificate
 vatCertificate.title = Your VAT Certificate
 vatCertificate.agentTitle = Your client''s VAT Certificate
-vatCertificate.certificateHeader.one = Certificate of Registration
-vatCertificate.certificateHeader.two = for Value Added Tax
-
-vatCertificate.notProvided = Not provided
 
 vatCertificate.aboutYourRegistration.title = About your registration
 vatCertificate.aboutYourRegistration.vrn = VAT registration number (VRN)
@@ -154,7 +150,6 @@ vatCertificate.aboutTheBusiness.tradingName = Trading name
 vatCertificate.aboutTheBusiness.businessType = Business type
 vatCertificate.aboutTheBusiness.tradeClassification = Trade classification (SIC code)
 vatCertificate.aboutTheBusiness.principalPlaceOfBusiness = Principal place of business address
-vatCertificate.aboutTheBusiness.emailAddress = Email address
 
 vatCertificate.bankingDetails.title = Banking details
 vatCertificate.bankingDetails.accountNumber = Account number

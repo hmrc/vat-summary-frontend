@@ -42,7 +42,7 @@ class VatCertificateController @Inject()(
         serviceInfoService.getPartial.flatMap { serviceInfoContent =>
           accountDetailsService.getAccountDetails(vrn).map {
             case Right(customerInformation) =>
-              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation), user.isAgent))
+              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
             case Left(_) =>
               InternalServerError
           }

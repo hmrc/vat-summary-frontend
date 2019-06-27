@@ -39,7 +39,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "partyType.11",
     "6602",
     Address("Line 1", Some("Line 2"), None, None, Some("TF4 3ER")),
-    Some("ABCStudios@example.com"),
     Some("333*****"),
     Some("****11"),
     "returnPeriod.MM"
@@ -48,7 +47,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   "The VAT Certificate page" when {
     "Accessed by a non-agent" should {
 
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model, false)
+      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -117,12 +116,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           certDateRow.select("td").first().text() shouldBe "Principal place of business address"
           certDateRow.select("td").get(1).text() shouldBe s"Line 1 Line 2 TF4 3ER"
         }
-        "contains the email address" in {
-          val certDateRow = card.select("tr:nth-of-type(6)")
-          val date = LocalDate.now()
-          certDateRow.select("td").first().text() shouldBe "Email address"
-          certDateRow.select("td").get(1).text() shouldBe s"ABCStudios@example.com"
-        }
       }
 
       "have the banking details card" that {
@@ -157,7 +150,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
     "Accessed by an agent" should {
 
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model, true)
+      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model)(messages, mockConfig, request, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -225,12 +218,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           val date = LocalDate.now()
           certDateRow.select("td").first().text() shouldBe "Principal place of business address"
           certDateRow.select("td").get(1).text() shouldBe s"Line 1 Line 2 TF4 3ER"
-        }
-        "contains the email address" in {
-          val certDateRow = card.select("tr:nth-of-type(6)")
-          val date = LocalDate.now()
-          certDateRow.select("td").first().text() shouldBe "Email address"
-          certDateRow.select("td").get(1).text() shouldBe s"ABCStudios@example.com"
         }
       }
 
