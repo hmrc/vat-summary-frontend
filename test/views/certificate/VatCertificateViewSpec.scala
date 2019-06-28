@@ -29,7 +29,9 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   object Selectors {
     val heading = "h1"
     val cardClass = ".card-full-container"
+    val printButton = "button"
   }
+
   lazy val model = VatCertificateViewModel(
     "5555555555",
     Some(LocalDate.parse("2017-01-01")),
@@ -144,6 +146,21 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           val vrnRow = card.select("tr:nth-of-type(1)")
           vrnRow.select("td").first().text() shouldBe "VAT Return dates"
           vrnRow.select("td").get(1).text() shouldBe "Every month"
+        }
+      }
+
+      "have a button to print the certificate" that {
+
+        "has the correct text" in {
+          elementText(Selectors.printButton) shouldBe "Print certificate"
+        }
+
+        "evokes the javascript print event on click" in {
+          element(Selectors.printButton).attr("onclick") shouldBe "javascript:window.print()"
+        }
+
+        "has the correct GA tag" in {
+          element(Selectors.printButton).attr("data-journey-click") shouldBe "vat-certificate:print:certificate"
         }
       }
     }
@@ -268,6 +285,21 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
         "has the correct link" in {
           link.attr("href") shouldBe "/vat-through-software/vat-certificate/change-client-vat-number"
+        }
+      }
+
+      "have a button to print the certificate" that {
+
+        "has the correct text" in {
+          elementText(Selectors.printButton) shouldBe "Print certificate"
+        }
+
+        "evokes the javascript print event on click" in {
+          element(Selectors.printButton).attr("onclick") shouldBe "javascript:window.print()"
+        }
+
+        "has the correct GA tag" in {
+          element(Selectors.printButton).attr("data-journey-click") shouldBe "agent_vat-certificate:print:certificate"
         }
       }
     }

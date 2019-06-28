@@ -138,6 +138,7 @@ paymentsHistory.previousPayments.beforeMtd = if you made payments before joining
 #VAT certificate
 vatCertificate.title = Your VAT Certificate
 vatCertificate.agentTitle = Your client''s VAT Certificate
+vatCertificate.print = Print certificate
 
 vatCertificate.aboutYourRegistration.title = About your registration
 vatCertificate.aboutYourRegistration.vrn = VAT registration number (VRN)

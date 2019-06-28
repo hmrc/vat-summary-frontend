@@ -25,8 +25,8 @@
   if(user.isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
   appConfig = appConfig,
   user = Some(user),
-  serviceInfoContent = serviceInfoContent) {
-
+  serviceInfoContent = serviceInfoContent
+) {
     @if(!user.isAgent) {
         @navigationBreadcrumb(
             links = Map(
@@ -149,4 +149,7 @@
         <p><a href="@routes.VatCertificateController.changeClientAction()">Back to your client options</a></p>
         <p><a href="@routes.VatCertificateController.changeClient()">Change client</a></p>
     }
+
+    <button data-journey-click="@{if(user.isAgent)"agent_"}vat-certificate:print:certificate"
+            onclick="javascript:window.print()">@messages("vatCertificate.print")</button>
 }

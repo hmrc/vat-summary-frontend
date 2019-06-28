@@ -1,0 +1,42 @@
+@media print {
+
+  header, #notice-banner, .centered-content, .breadcrumbs, #content > .float--right, button, #get-help-action, .link-back, p {
+    display: none;
+  }
+
+  #content {
+    padding-bottom: 0px;
+  }
+
+  .heading-xlarge {
+    font-size: 30px;
+    margin-bottom: 12px;
+    margin-top: 0px;
+  }
+
+  .cert-header {
+    padding-bottom: 0px;
+  }
+
+  .cert-header img {
+    width: 120px;
+  }
+
+  .heading-medium {
+    font-size: 18px;
+  }
+
+  .card-full-container {
+    margin-top: 16px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+  }
+
+  .card-full-container .card-heading {
+    margin-bottom: 6px;
+  }
+
+  table td {
+    font-size: 14px;
+  }
+}
