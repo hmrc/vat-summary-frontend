@@ -38,7 +38,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |    "processingDate" : "2018-03-07T09:30:00.000Z",
        |    "financialTransactions" : [
        |      {
-       |        "chargeType" : "${ReturnDebitCharge}",
+       |        "chargeType" : "$ReturnDebitCharge",
        |        "mainType" : "VAT Return Charge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
@@ -55,18 +55,17 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-01-10",
        |            "dueDate" : "2018-12-07",
-       |            "amount" : 150
+       |            "paymentAmount" : 150
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${ReturnCreditCharge}",
+       |        "chargeType" : "$ReturnCreditCharge",
        |        "mainType" : "VAT Return Charge",
        |        "periodKey" : "17BB",
        |        "periodKeyDescription" : "ABCD",
@@ -82,19 +81,18 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 600,
-       |        "outstandingAmount" : 600,
+       |        "originalAmount" : -600,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-03-10",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 600
+       |            "paymentAmount" : -600
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${OADebitCharge}",
+       |        "chargeType" : "$OADebitCharge",
        |        "mainType" : "VAT Officer's Assessment",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
@@ -110,19 +108,18 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
+       |        "originalAmount" : 200,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-04-14",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 200
+       |            "paymentAmount" : 200
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${OACreditCharge}",
+       |        "chargeType" : "$OACreditCharge",
        |        "mainType" : "VAT Officer's Assessment",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
@@ -138,20 +135,19 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
+       |        "originalAmount" : -550,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-06-28",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 550
+       |            "paymentAmount" : -550
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${DefaultSurcharge}",
-       |        "mainType" : "${DefaultSurcharge}",
+       |        "chargeType" : "$DefaultSurcharge",
+       |        "mainType" : "$DefaultSurcharge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-06-10",
@@ -167,19 +163,18 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 150
+       |            "paymentAmount" : 150
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${CentralAssessmentCharge}",
-       |        "mainType" : "${CentralAssessmentCharge}",
+       |        "chargeType" : "$CentralAssessmentCharge",
+       |        "mainType" : "$CentralAssessmentCharge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -195,18 +190,17 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-11-10",
-       |            "amount" : 150
+       |            "paymentAmount" : 150
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${ErrorCorrectionCreditCharge}",
+       |        "chargeType" : "$ErrorCorrectionCreditCharge",
        |        "mainType" : "VAT Error Correction",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
@@ -222,19 +216,18 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
+       |        "originalAmount" : -150,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-06-10",
        |            "dueDate" : "2018-06-10",
-       |            "amount" : 150
+       |            "paymentAmount" : -150
        |          }
        |        ]
        |      },
        |       {
-       |        "chargeType" : "${ErrorCorrectionDebitCharge}",
+       |        "chargeType" : "$ErrorCorrectionDebitCharge",
        |        "mainType" : "VAT Error Correction",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
@@ -250,20 +243,19 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
+       |        "originalAmount" : 1000,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 1000
+       |            "paymentAmount" : 1000
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${OADefaultInterestCharge}",
-       |        "mainType" : "${OADefaultInterestCharge}",
+       |        "chargeType" : "$OADefaultInterestCharge",
+       |        "mainType" : "$OADefaultInterestCharge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-10-12",
@@ -278,14 +270,13 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
+       |        "originalAmount" : 1000,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 1000
+       |            "paymentAmount" : 1000
        |          }
        |        ]
        |      },
@@ -307,13 +298,12 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 150,
-       |        "outstandingAmount" : 0,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 150
+       |            "paymentAmount" : 150
        |          }
        |        ]
        |      },
@@ -335,13 +325,12 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 400,
-       |        "outstandingAmount" : 0,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 400
+       |            "paymentAmount" : 400
        |          }
        |        ]
        |      },
@@ -363,13 +352,12 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 555,
-       |        "outstandingAmount" : 0,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-10-07",
        |            "dueDate" : "2018-10-08",
-       |            "amount" : 555
+       |            "paymentAmount" : 555
        |          }
        |        ]
        |      },
@@ -391,13 +379,12 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : -555,
-       |        "outstandingAmount" : 0,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-10-07",
        |            "dueDate" : "2018-10-08",
-       |            "amount" : -555
+       |            "paymentAmount" : -555
        |          }
        |        ]
        |      }
@@ -417,7 +404,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
-      amount = 600,
+      amount = -600,
       clearedDate = Some(LocalDate.of(2018, 3, 10))
     ),
     PaymentsHistoryModel(
@@ -431,7 +418,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       chargeType = OACreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
-      amount = 550,
+      amount = -550,
       clearedDate = Some(LocalDate.of(2018, 6, 28))
     ),
     PaymentsHistoryModel(
@@ -452,7 +439,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       chargeType = ErrorCorrectionCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 2, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 5, 20)),
-      amount = 150,
+      amount = -150,
       clearedDate = Some(LocalDate.of(2018, 6, 10))
     ),
     PaymentsHistoryModel(
@@ -531,19 +518,12 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |        "mainTransaction" : "1234",
          |        "subTransaction" : "5678",
          |        "originalAmount" : 150,
-         |        "outstandingAmount" : 150,
          |        "items" : [
-         |          {
-         |            "subItem" : "000",
-         |            "clearingDate" : "2018-01-10",
-         |            "dueDate" : "2018-12-07",
-         |            "amount" : 150
-         |          },
          |          {
          |            "subItem" : "000",
          |            "clearingDate" : "2018-03-10",
          |            "dueDate" : "2018-12-07",
-         |            "amount" : 100
+         |            "paymentAmount" : 100
          |          }
          |        ]
          |      },
@@ -564,19 +544,12 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |        "mainTransaction" : "1234",
          |        "subTransaction" : "5678",
          |        "originalAmount" : 150,
-         |        "outstandingAmount" : 150,
          |        "items" : [
-         |          {
-         |            "subItem" : "000",
-         |            "clearingDate" : "2018-01-10",
-         |            "dueDate" : "2018-12-07",
-         |            "amount" : 150
-         |          },
          |          {
          |            "subItem" : "000",
          |            "clearingDate" : "2018-03-10",
          |            "dueDate" : "2018-12-07",
-         |            "amount" : 100
+         |            "paymentAmount" : 150
          |          }
          |        ]
          |      }

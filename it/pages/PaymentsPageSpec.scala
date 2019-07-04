@@ -45,7 +45,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
           AuthStub.authorised()
           CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubSuccessfulDirectDebit
-          FinancialDataStub.stubAllOutstandingOpenPayments
+          FinancialDataStub.stubOutstandingTransactions
         }
 
         val response: WSResponse = await(request().get())
@@ -58,7 +58,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
           AuthStub.authorised()
           CustomerInfoStub.stubCustomerInfo()
           FinancialDataStub.stubSuccessfulDirectDebit
-          FinancialDataStub.stubAllOutstandingOpenPayments
+          FinancialDataStub.stubOutstandingTransactions
         }
 
         val response: WSResponse = await(request().get())

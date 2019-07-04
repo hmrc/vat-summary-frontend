@@ -59,9 +59,10 @@ object PaymentsHistoryModel {
 
   private[models] def generatePaymentModel(chargeType: ChargeType,
                                            subItem: TransactionSubItem,
-                                           transaction: JsValue): Option[PaymentsHistoryModel] = {
-    chargeType.value match {
-      case PaymentOnAccount.value if subItem.clearingReason.isEmpty =>
+                                           transaction: JsValue): Option[PaymentsHistoryModel] =
+    (chargeType.value, subItem.paymentAmount) match {
+
+      case (PaymentOnAccount.value, _) if subItem.clearingReason.isEmpty =>
         Some(PaymentsHistoryModel(
           chargeType = UnallocatedPayment,
           taxPeriodFrom = None,
@@ -69,24 +70,25 @@ object PaymentsHistoryModel {
           amount = (transaction \ FinancialTransactionsConstants.outstandingAmount).as[BigDecimal],
           clearedDate = subItem.dueDate
         ))
-      case PaymentOnAccount.value =>
+      case (PaymentOnAccount.value, Some(subItemAmount)) =>
         Some(PaymentsHistoryModel(
           chargeType = Refund,
           taxPeriodFrom = None,
           taxPeriodTo = None,
-          amount = subItem.amount,
+          amount = subItemAmount,
           clearedDate = subItem.clearingDate
         ))
-      case _ =>
+      case (_, Some(subItemAmount)) =>
         Some(PaymentsHistoryModel(
           chargeType = chargeType,
           taxPeriodFrom = (transaction \ FinancialTransactionsConstants.taxPeriodFrom).asOpt[LocalDate],
           taxPeriodTo = (transaction \ FinancialTransactionsConstants.taxPeriodTo).asOpt[LocalDate],
-          amount = subItem.amount,
+          amount = subItemAmount,
           clearedDate = subItem.clearingDate
         ))
+      case (_, None) =>
+        None
     }
-  }
 
   private[models] def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] = {
     val subItems = (transaction \ FinancialTransactionsConstants.items).as[Seq[TransactionSubItem]]

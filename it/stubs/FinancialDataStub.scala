@@ -27,16 +27,16 @@ object FinancialDataStub extends WireMockMethods {
   private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
   private val financialDataDirectDebitUri = "/financial-transactions/has-direct-debit/([0-9]+)"
 
-  def stubAllOutstandingOpenPayments: StubMapping = {
+  def stubOutstandingTransactions: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
-      .thenReturn(status = OK, body = allOutStandingOpenPayments)
+      .thenReturn(status = OK, body = outstandingTransactions)
   }
 
-  def stubAllOutstandingPayments: StubMapping = {
+  def stubPaidTransactions: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map(
       "dateFrom" -> "2018-01-01",
       "dateTo" -> "2018-12-31"))
-      .thenReturn(status = OK, body = allOutStandingPayments)
+      .thenReturn(status = OK, body = paidTransactions)
   }
 
   def stubNoPayments: StubMapping = {
@@ -64,7 +64,7 @@ object FinancialDataStub extends WireMockMethods {
       .thenReturn(BAD_REQUEST, body = invalidVrn)
   }
 
-  private val allOutStandingPayments: JsValue = Json.parse(
+  private val paidTransactions: JsValue = Json.parse(
     s"""{
        |    "idType" : "VRN",
        |    "idNumber" : "555555555",
@@ -72,8 +72,8 @@ object FinancialDataStub extends WireMockMethods {
        |    "processingDate" : "2018-03-07T09:30:00.000Z",
        |    "financialTransactions" : [
        |      {
-       |        "chargeType" : "${ReturnDebitCharge}",
-       |       "mainType" : "VAT Return Charge",
+       |        "chargeType" : "$ReturnDebitCharge",
+       |        "mainType" : "VAT Return Charge",
        |        "periodKey" : "17AA",
        |        "periodKeyDescription" : "ABCD",
        |        "taxPeriodFrom" : "2018-08-01",
@@ -89,18 +89,17 @@ object FinancialDataStub extends WireMockMethods {
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
        |        "originalAmount" : 150,
-       |        "outstandingAmount" : 150,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-01-10",
        |            "dueDate" : "2018-12-07",
-       |            "amount" : 150
+       |            "paymentAmount" : 150
        |          }
        |        ]
        |      },
        |      {
-       |        "chargeType" : "${ReturnCreditCharge}",
+       |        "chargeType" : "$ReturnCreditCharge",
        |        "mainType" : "VAT Return Charge",
        |        "periodKey" : "17BB",
        |        "periodKeyDescription" : "ABCD",
@@ -116,14 +115,13 @@ object FinancialDataStub extends WireMockMethods {
        |        "chargeReference" : "XD002750002155",
        |        "mainTransaction" : "1234",
        |        "subTransaction" : "5678",
-       |        "originalAmount" : 600,
-       |        "outstandingAmount" : 600,
+       |        "originalAmount" : -600,
        |        "items" : [
        |          {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-03-10",
        |            "dueDate" : "2018-09-07",
-       |            "amount" : 600
+       |            "paymentAmount" : -600
        |          }
        |        ]
        |      }
@@ -131,15 +129,15 @@ object FinancialDataStub extends WireMockMethods {
        |  }""".stripMargin
   )
 
-  private val allOutStandingOpenPayments = Json.parse(
-    """{
+  private val outstandingTransactions = Json.parse(
+    s"""{
       |    "idType" : "VRN",
       |    "idNumber" : 555555555,
       |    "regimeType" : "VATC",
       |    "processingDate" : "2017-03-07T09:30:00.000Z",
       |    "financialTransactions" : [
       |      {
-      |        "chargeType" : "VAT Return Debit Charge",
+      |        "chargeType" : "$ReturnDebitCharge",
       |        "mainType" : "VAT Return Charge",
       |        "periodKey" : "15AC",
       |        "periodKeyDescription" : "March 2015",
@@ -157,7 +155,6 @@ object FinancialDataStub extends WireMockMethods {
       |        "subTransaction" : "1174",
       |        "originalAmount" : 10000,
       |        "outstandingAmount" : 10000,
-      |        "clearedAmount" : 10000,
       |        "items" : [
       |          {
       |            "subItem" : "000",
@@ -167,7 +164,7 @@ object FinancialDataStub extends WireMockMethods {
       |        ]
       |      },
       |      {
-      |        "chargeType" : "VAT Return Debit Charge",
+      |        "chargeType" : "$ReturnDebitCharge",
       |        "mainType" : "VAT Return Charge",
       |        "periodKey" : "15AC",
       |        "periodKeyDescription" : "March 2015",
@@ -185,7 +182,6 @@ object FinancialDataStub extends WireMockMethods {
       |        "subTransaction" : "1174",
       |        "originalAmount" : 10000,
       |        "outstandingAmount" : 10000,
-      |        "clearedAmount" : 10000,
       |        "items" : [
       |          {
       |            "subItem" : "000",

@@ -32,7 +32,7 @@ class LanguageSpec extends IntegrationBaseSpec {
       obligationsStub.stubOutstandingObligations
       CustomerInfoStub.stubCustomerInfo()
       CustomerInfoStub.stubCustomerMandationStatus()
-      FinancialDataStub.stubAllOutstandingOpenPayments
+      FinancialDataStub.stubOutstandingTransactions
       ServiceInfoStub.stubServiceInfoPartial
       buildRequest("/vat-overview")
     }

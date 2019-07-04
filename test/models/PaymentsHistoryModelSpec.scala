@@ -18,7 +18,6 @@ package models
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import play.api.libs.json._
@@ -59,14 +58,13 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
-           |          }
+           |            "clearingDate" : "2018-01-10"
+         |            }
            |        ]
            |      },
            |      {
@@ -86,15 +84,14 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "chargeReference" : "XD002750002155",
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
-           |        "originalAmount" : 600,
-           |        "outstandingAmount" : 600,
+           |        "originalAmount" : -600,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-03-10",
+           |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
-           |            "amount" : 600
-           |          }
+           |            "clearingDate" : "2018-03-10"
+         |            }
            |        ]
            |      }
            |    ]
@@ -113,7 +110,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
           chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
-          amount = 600,
+          amount = -600,
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         )
       )
@@ -134,7 +131,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "VAT Return Charge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -150,19 +147,18 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      },
            |      {
            |        "chargeType" : "$DefaultSurcharge",
-           |       "mainType" : "$DefaultSurcharge",
+           |        "mainType" : "$DefaultSurcharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -178,19 +174,18 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      },
            |      {
            |        "chargeType" : "$CentralAssessmentCharge",
-           |       "mainType" : "$CentralAssessmentCharge",
+           |        "mainType" : "$CentralAssessmentCharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -206,18 +201,17 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      },
            |      {
-           |        "chargeType" : "${ReturnCreditCharge}",
+           |        "chargeType" : "$ReturnCreditCharge",
            |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17BB",
            |        "periodKeyDescription" : "ABCD",
@@ -233,14 +227,13 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "chargeReference" : "XD002750002155",
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
-           |        "originalAmount" : 600,
-           |        "outstandingAmount" : 600,
+           |        "originalAmount" : -600,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-03-10",
+           |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
-           |            "amount" : 600
+           |            "clearingDate" : "2018-03-10"
            |          }
            |        ]
            |      },
@@ -261,14 +254,13 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "chargeReference" : "XD002750002155",
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
-           |        "originalAmount" : 600,
-           |        "outstandingAmount" : 600,
+           |        "originalAmount" : -600,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-03-10",
+           |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
-           |            "amount" : 600
+           |            "clearingDate" : "2018-03-10"
            |          }
            |        ]
            |      },
@@ -290,13 +282,12 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 600,
-           |        "outstandingAmount" : 600,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-03-10",
+           |            "paymentAmount" : 600,
            |            "dueDate" : "2018-09-07",
-           |            "amount" : 600
+           |            "clearingDate" : "2018-03-10"
            |          }
            |        ]
            |      }
@@ -330,14 +321,14 @@ class PaymentsHistoryModelSpec extends UnitSpec {
           chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
-          amount = 600,
+          amount = -600,
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
           chargeType = ErrorCorrectionCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
-          amount = 600,
+          amount = -600,
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
@@ -380,13 +371,12 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      },
@@ -407,14 +397,13 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "chargeReference" : "XD002750002155",
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
-           |        "originalAmount" : 600,
-           |        "outstandingAmount" : 600,
+           |        "originalAmount" : -600,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-04-10",
+           |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
-           |            "amount" : 600
+           |            "clearingDate" : "2018-04-10"
            |          }
            |        ]
            |      }
@@ -434,7 +423,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
           chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
-          amount = 600,
+          amount = -600,
           clearedDate = Some(LocalDate.of(2018, 4, 10))
         )
       )
@@ -444,7 +433,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
       }
     }
 
-    "there is multiple items in one period" should {
+    "there are multiple payments against one charge" should {
 
       val testJson: JsValue = Json.parse(
         s"""{
@@ -470,20 +459,19 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "chargeReference" : "XD002750002155",
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
-           |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
+           |        "originalAmount" : 250,
            |        "items" : [
            |          {
-           |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "subItem" : "001",
+           |            "paymentAmount" : 100,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-03-10"
            |          },
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-03-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 100
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      }
@@ -497,15 +485,15 @@ class PaymentsHistoryModelSpec extends UnitSpec {
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
-          amount = 150,
-          clearedDate = Some(LocalDate.of(2018, 1, 10))
+          amount = 100,
+          clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
-          amount = 100,
-          clearedDate = Some(LocalDate.of(2018, 3, 10))
+          amount = 150,
+          clearedDate = Some(LocalDate.of(2018, 1, 10))
         )
       )
 
@@ -579,7 +567,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
       }
     }
 
-    "there is no amount" should {
+    "there is no paymentAmount" should {
       val testJson = Json.parse(
         s"""{
            |    "idType" : "VRN",
@@ -605,12 +593,11 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
-           |            "dueDate" : "2018-12-07"
+           |            "dueDate" : "2018-12-07",
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      }
@@ -618,8 +605,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |  }""".stripMargin
       )
 
-      "throw a JsResultException" in {
-        intercept[JsResultException](Json.fromJson(testJson)(reads))
+      "return an empty sequence" in {
+        Json.fromJson(testJson)(reads) shouldBe JsSuccess(Seq())
       }
     }
 
@@ -649,13 +636,12 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      }
@@ -703,13 +689,12 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 150,
-           |        "outstandingAmount" : 150,
            |        "items" : [
            |          {
            |            "subItem" : "000",
-           |            "clearingDate" : "2018-01-10",
+           |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
-           |            "amount" : 150
+           |            "clearingDate" : "2018-01-10"
            |          }
            |        ]
            |      }
@@ -754,18 +739,13 @@ class PaymentsHistoryModelSpec extends UnitSpec {
              |        "sapDocumentNumberItem" : "0",
              |        "mainTransaction" : "1234",
              |        "subTransaction" : "5678",
-             |        "originalAmount" : -5050,
-             |        "outstandingAmount" : -5050,
+             |        "originalAmount" : 5050,
+             |        "outstandingAmount" : 5050,
              |        "items" : [
              |          {
-             |            "subItem": "000",
-             |            "dueDate": "2010-12-04",
-             |            "amount": -4,
-             |            "paymentReference": "654378944",
-             |            "paymentAmount": 6000,
-             |            "paymentMethod": "BANK GIRO RECEIPTS",
-             |            "paymentLot": "RP11",
-             |            "paymentLotItem": "000001"
+             |            "subItem" : "000",
+             |            "dueDate" : "2018-12-04",
+             |            "amount" : 5050
              |          }
              |        ]
              |      }
@@ -778,8 +758,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
             UnallocatedPayment,
             None,
             None,
-            -5050,
-            Some(LocalDate.of(2010, 12, 4)))
+            5050,
+            Some(LocalDate.of(2018, 12, 4)))
         )
 
         s"return $UnallocatedPayment as the charge type" in {
@@ -809,19 +789,18 @@ class PaymentsHistoryModelSpec extends UnitSpec {
              |        "mainTransaction" : "1234",
              |        "subTransaction" : "5678",
              |        "originalAmount" : -5050,
-             |        "outstandingAmount" : -5050,
              |        "items" : [
              |          {
              |            "subItem": "000",
-             |            "dueDate": "2010-12-04",
              |            "amount": -5050,
              |            "paymentReference": "654378944",
-             |            "paymentAmount": 6000,
+             |            "paymentAmount": -5050,
              |            "paymentMethod": "BANK GIRO RECEIPTS",
              |            "paymentLot": "RP11",
              |            "paymentLotItem": "000001",
-             |            "clearingDate": "2018-05-04",
-             |            "clearingReason": "some clearing reason"
+             |            "dueDate": "2018-12-04",
+             |            "clearingDate": "2017-12-04",
+             |            "clearingReason": "Some clearing reason"
              |          }
              |        ]
              |      }
@@ -835,7 +814,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
             None,
             None,
             -5050,
-            Some(LocalDate.of(2018, 5, 4)))
+            Some(LocalDate.of(2017, 12, 4)))
         )
 
         s"return $Refund as the charge type " in {
@@ -850,7 +829,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
     "Charge type is not Payment on account" should {
 
       val chargeType = ReturnDebitCharge
-      val subItem = TransactionSubItem(9, Some(LocalDate.of(2018, 1, 1)), None)
+      val subItem = TransactionSubItem(Some(9), Some(LocalDate.of(2018, 1, 1)), None)
       val transaction: JsValue = Json.parse(
         """ {
           |   "taxPeriodFrom" : "2018-08-01",
@@ -874,7 +853,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
       }
 
       "return the amount of the sub item" in {
-        result.amount shouldBe subItem.amount
+        result.amount shouldBe subItem.paymentAmount.get
       }
 
       "return the cleared date of the sub item" in {
@@ -888,7 +867,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       "clearing reason is defined" should {
 
-        val subItem = TransactionSubItem(9000, Some(LocalDate.of(2018, 1, 1)), Some("some clearing reason"))
+        val subItem = TransactionSubItem(Some(9000), Some(LocalDate.of(2018, 1, 1)), Some("some clearing reason"))
         val transaction: JsValue = Json.parse(
           """ {
             |   "taxPeriodFrom" : "2018-08-01",
@@ -912,7 +891,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
         }
 
         "return the correct amount" in {
-          result.amount shouldBe subItem.amount
+          result.amount shouldBe subItem.paymentAmount.get
         }
 
         "return a clearing date" in {
@@ -922,7 +901,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
       "clearing reason is not defined" should {
 
-        val subItem = TransactionSubItem(9, None, None, Some(LocalDate.of(2018, 1, 1)))
+        val subItem = TransactionSubItem(Some(9), None, None, Some(LocalDate.of(2018, 1, 1)))
         val transaction: JsValue = Json.parse(
           """ {
             |   "outstandingAmount" : "1000"

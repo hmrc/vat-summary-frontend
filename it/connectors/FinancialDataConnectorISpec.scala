@@ -41,7 +41,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
   "calling getOpenPayments with a status of 'O'" should {
 
     "return all outstanding payments for a given period" in new Test {
-      override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingOpenPayments
+      override def setupStubs(): StubMapping = FinancialDataStub.stubOutstandingTransactions
 
       val expected = Right(Payments(Seq(
         PaymentWithPeriod(
@@ -100,8 +100,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
   "calling getVatLiabilities" should {
 
     "return a PaymentsHistoryModel" in new Test {
-      override def setupStubs(): StubMapping = FinancialDataStub.stubAllOutstandingPayments
-
+      override def setupStubs(): StubMapping = FinancialDataStub.stubPaidTransactions
 
       val expected = Right(Seq(
         PaymentsHistoryModel(
@@ -115,7 +114,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           chargeType    =  ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-05-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-07-31")),
-          amount        = 600,
+          amount        = -600,
           clearedDate   = Some(LocalDate.parse("2018-03-10"))
         )
       ))

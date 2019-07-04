@@ -21,7 +21,7 @@ import play.api.libs.functional.syntax._
 import common.FinancialTransactionsConstants
 import play.api.libs.json._
 
-case class TransactionSubItem(amount: BigDecimal,
+case class TransactionSubItem(paymentAmount: Option[BigDecimal] = None,
                               clearingDate: Option[LocalDate] = None,
                               clearingReason: Option[String] = None,
                               dueDate: Option[LocalDate] = None)
@@ -29,7 +29,7 @@ case class TransactionSubItem(amount: BigDecimal,
 object TransactionSubItem {
 
   implicit val reads: Reads[TransactionSubItem] = (
-    (JsPath \ FinancialTransactionsConstants.amount).read[BigDecimal] and
+    (JsPath \ FinancialTransactionsConstants.paymentAmount).readNullable[BigDecimal] and
     (JsPath \ FinancialTransactionsConstants.clearingDate).readNullable[LocalDate] and
     (JsPath \ FinancialTransactionsConstants.clearingReason).readNullable[String] and
     (JsPath \ FinancialTransactionsConstants.dueDate).readNullable[LocalDate]
