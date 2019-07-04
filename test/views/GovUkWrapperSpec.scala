@@ -43,8 +43,8 @@ class GovUkWrapperSpec extends ViewBaseSpec {
         lazy val view = views.html.govuk_wrapper(mockConfig, "title", user = Some(User("999999999", arn = Some("XARN1234567"))))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have a nav title of 'Client’s VAT details'" in {
-          elementText(navTitleSelector) shouldBe "Client’s VAT details"
+        "have a nav title of 'Your client’s VAT details'" in {
+          elementText(navTitleSelector) shouldBe "Your client’s VAT details"
         }
       }
 

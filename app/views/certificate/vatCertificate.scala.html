@@ -40,7 +40,7 @@
     <h1 class="heading-xlarge">@if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
 
     <div class="cert-header">
-        <img src='@routes.Assets.at("images/HMRC_Logo.png")' alt="HMRC Logo">
+        <img src='@routes.Assets.at("images/"+messages("vatCertificate.logo")+".png")' alt="HMRC Logo">
     </div>
 
     <div class="card-full-container column-full">
@@ -146,8 +146,8 @@
     </div>
 
     @if(user.isAgent){
-        <p><a href="@routes.VatCertificateController.changeClientAction()">Back to your client options</a></p>
-        <p><a href="@routes.VatCertificateController.changeClient()">Change client</a></p>
+        <p><a href="@routes.VatCertificateController.changeClientAction()">@messages("vatCertificate.backToClientOptions")</a></p>
+        <p><a href="@routes.VatCertificateController.changeClient()">@messages("vatCertificate.changeClient")</a></p>
     }
 
     <button data-journey-click="@{if(user.isAgent)"agent_"}vat-certificate:print:certificate"

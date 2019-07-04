@@ -5,7 +5,7 @@ common.fullStop = .
 common.notProvided = Not provided
 
 navTitle.nonAgent = Business tax account
-navTitle.agent = Client’s VAT details
+navTitle.agent = Your client’s VAT details
 
 base.back = Back
 base.signOut = Sign out
@@ -158,6 +158,9 @@ vatCertificate.bankingDetails.sortCode = Sort code
 
 vatCertificate.returnDetails.title = Return details
 vatCertificate.returnDetails.returnDates = VAT Return dates
+vatCertificate.backToClientOptions = Back to your client options
+vatCertificate.changeClient = Change client
+vatCertificate.logo = HMRC_Logo
 
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Repayment from HMRC

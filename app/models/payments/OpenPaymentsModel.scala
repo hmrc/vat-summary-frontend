@@ -20,7 +20,6 @@ import java.time.LocalDate
 
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, Writes}
-import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 
 sealed trait OpenPaymentsModel {
