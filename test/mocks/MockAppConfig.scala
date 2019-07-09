@@ -90,4 +90,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentServicesGovUkGuidance: String = "guidance/get-an-hmrc-agent-services-account"
   override val agentClientLookupActionUrl: String = "agent-client-lookup-action-url"
   override val optOutFrontendUrl: String = "/vat-through-software/account/opt-out"
+  override val manageVatUrl: String = "/vat-through-software/account/change-business-details"
 }

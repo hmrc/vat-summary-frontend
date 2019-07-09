@@ -90,6 +90,7 @@ trait AppConfig extends ServicesConfig {
   val agentClientLookupActionUrl: String
   val agentServicesGovUkGuidance: String
   val optOutFrontendUrl: String
+  val manageVatUrl: String
 }
 
 @Singleton
@@ -230,4 +231,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
 
   override lazy val optOutFrontendUrl: String = getString(Keys.vatOptOutFrontendHost) + getString(Keys.vatOptOutFrontendStartUrl)
+
+  override lazy val manageVatUrl: String = getString(Keys.manageVatHost) + getString(Keys.manageVatUrl)
 }
