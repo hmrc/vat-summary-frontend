@@ -29,7 +29,9 @@ object PaymentMessageHelper {
   object VatReturnCreditCharge extends PaymentMessageHelper(
     ReturnCreditCharge.value,
     "chargeType.vatReturnCreditChargeTitle",
-    Some("chargeType.vatReturnCreditChargeDescription"))
+    Some("chargeType.vatReturnCreditChargeDescription"),
+    "repayment"
+  )
 
   object VatReturnDebitCharge extends PaymentMessageHelper(
     ReturnDebitCharge.value,
@@ -39,7 +41,9 @@ object PaymentMessageHelper {
   object VatOfficerAssessmentCreditCharge extends PaymentMessageHelper(
     OACreditCharge.value,
     "chargeType.officerAssessmentChargeTitle",
-    Some("chargeType.officerAssessmentCreditChargeDescription"))
+    Some("chargeType.officerAssessmentCreditChargeDescription"),
+    "repayment"
+  )
 
   object VatOfficerAssessmentDebitCharge extends PaymentMessageHelper(
     OADebitCharge.value,
@@ -65,7 +69,8 @@ object PaymentMessageHelper {
   object VatErrorCorrectionCreditCharge extends PaymentMessageHelper(
     ErrorCorrectionCreditCharge.value,
     "chargeType.vatErrorCorrectionCreditChargeTitle",
-    Some("chargeType.vatErrorCorrectionChargeDescription")
+    Some("chargeType.vatErrorCorrectionChargeDescription"),
+    "repayment"
   )
 
   object VatRepaymentSupplement extends PaymentMessageHelper(
@@ -321,7 +326,7 @@ object PaymentMessageHelper {
     "repayment"
   )
 
-  val values = Seq(
+  val values: Seq[PaymentMessageHelper] = Seq(
     VatReturnDebitCharge,
     VatReturnCreditCharge,
     VatOfficerAssessmentCreditCharge,
