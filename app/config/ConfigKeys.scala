@@ -110,4 +110,7 @@ object ConfigKeys {
   val vatOptOutFrontendStartUrl: String = "vat-opt-out-frontend.startUrl"
 
   val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
+
+  val manageVatHost: String = "manage-vat-subscription-frontend.host"
+  val manageVatUrl: String = "manage-vat-subscription-frontend.url"
 }
