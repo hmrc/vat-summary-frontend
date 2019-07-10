@@ -1,6 +1,8 @@
 common.dateRangeSeparator = i
 common.overdue = hwyr
 common.newTab = (yn agor mewn tab newydd)
+common.fullStop = .
+common.notProvided = Heb ddarparu
 
 base.back = Yn ôl
 base.signOut = Allgofnodi
@@ -32,6 +34,7 @@ month.short.11 = Tach
 month.short.12 = Rhag
 
 navTitle.nonAgent = Cyfrif Treth Busnes
+navTitle.agent = Manylion TAW eich cleient
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
@@ -158,7 +161,32 @@ paymentsHistory.previousPayments.youCan = Gallwch
 paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol (yn agor tab newydd)
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
 
+#VAT certificate
 vatCertificate.title = Eich tystysgrif TAW
+vatCertificate.agentTitle = Tystysgrif TAW eich cleient
+vatCertificate.print = Argraffu’r dystysgrif
+
+vatCertificate.aboutYourRegistration.title = Ynglŷn â’ch cofrestriad
+vatCertificate.aboutYourRegistration.vrn = Rhif Cofrestru TAW (VRN)
+vatCertificate.aboutYourRegistration.registrationDate = Dyddiad cofrestru
+vatCertificate.aboutYourRegistration.certificateDate = Dyddiad y dystysgrif
+
+vatCertificate.aboutTheBusiness.title = Ynglŷn â’r busnes
+vatCertificate.aboutTheBusiness.businessName = Enw’r busnes
+vatCertificate.aboutTheBusiness.tradingName = Enw masnachu
+vatCertificate.aboutTheBusiness.businessType = Math o fusnes
+vatCertificate.aboutTheBusiness.tradeClassification = Dosbarthiad masnachu (cod SIC)
+vatCertificate.aboutTheBusiness.principalPlaceOfBusiness = Cyfeiriad prif leoliad y busnes
+
+vatCertificate.bankingDetails.title = Manylion banc
+vatCertificate.bankingDetails.accountNumber = Rhif y cyfrif
+vatCertificate.bankingDetails.sortCode = Cod didoli
+
+vatCertificate.returnDetails.title = Manylion y Ffurflen TAW
+vatCertificate.returnDetails.returnDates = Dyddiadau Ffurflenni TAW
+vatCertificate.backToClientOptions = Yn ôl i opsiynau’ch cleient
+vatCertificate.changeClient = Newid cleient
+vatCertificate.logo = HMRC_WelshLogo
 
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
@@ -263,3 +291,39 @@ banner.newService = Gwasanaeth newydd yw hwn – bydd eich
 banner.feedback = adborth
 banner.feedbackImprove = yn ein helpu i’w wella.
 banner.phaseName = BETA
+
+partyType.1 = Unig Fasnachwr
+partyType.2 = Partneriaeth Atebolrwydd Cyfyngedig
+partyType.3 = Partneriaeth
+partyType.4 = Corff Corfforedig
+partyType.5 = Corff Anghorfforedig
+partyType.6 = Ymddiriedolaeth
+partyType.7 = Cwmni
+partyType.8 = Sefydliad Corfforedig Elusennol
+partyType.9 = Elusen y tu allan i’r DU
+partyType.10 = Cymdeithas Ddiwydiannol a Darbodus
+partyType.11 = Sefydliad
+partyType.12 = Lloyds Syndicate
+partyType.50 = Cwmni yn y DU (gyda sefydliad yn y DU)
+partyType.51 = Cwmni y tu allan i’r DU
+partyType.52 = Partneriaeth Atebolrwydd Cyfyngedig
+partyType.53 = Sefydliad Corfforedig Elusennol
+partyType.54 = Cymdeithas Gofrestredig
+partyType.55 = Cwmni y tu allan i’r DU (heb sefydliad yn y DU)
+partyType.56 = Sefydliad y Llywodraeth
+partyType.57 = Corfforaeth
+partyType.58 = Partneriaeth yn yr Alban
+partyType.59 = Partneriaeth Gyfyngedig yn yr Alban
+partyType.60 = Ymddiriedolaeth
+partyType.61 = Partneriaeth Gyffredin
+partyType.62 = Partneriaeth Gyfyngedig
+partyType.63 = Cymdeithas Anghorfforedig
+partyType.65 = Is-adran Weinyddol
+partyType.Z1 = Unigolyn
+partyType.Z2 = Grŵp TAW
+
+returnPeriod.MM = Bob mis
+returnPeriod.MA = Ebrill, Gorffennaf, Hydref a Ionawr
+returnPeriod.MB = Mai, Awst, Thachwedd a Chwefror
+returnPeriod.MC = Mawrth, Mehefin, Medi a Rhagfyr
+returnPeriod.nonStandard = Ansafonol

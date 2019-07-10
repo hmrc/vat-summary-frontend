@@ -16,9 +16,6 @@
 
 package common
 
-import java.time.LocalDate
-
-import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 import views.templates.payments.PaymentMessageHelper._
 
 object MessageLookup {

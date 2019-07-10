@@ -23,14 +23,14 @@ import java.time.format.{DateTimeFormatter, ResolverStyle}
 object DisplayDateRangeHelper {
 
   def displayDateRange(from: LocalDate, to: LocalDate, useShortDayFormat: Boolean = false)
-                      (implicit messages: Messages, lang: play.api.i18n.Lang): String = {
+                      (implicit messages: Messages): String = {
     s"${displayDate(from, from.getYear != to.getYear, useShortDayFormat)} " +
       s"${messages("common.dateRangeSeparator")} " +
       s"${displayDate(to, true, useShortDayFormat)}"
   }
 
   def displayDate(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false)
-                 (implicit lang: play.api.i18n.Lang, messages: Messages): String = {
+                 (implicit  messages: Messages): String = {
     val englishFormat = (if (useShortDayFormat) "d MMM" else "d MMMM") + (if (showYear) " uuuu" else "")
     val welshFormat = {
       (if (useShortDayFormat){
@@ -39,7 +39,7 @@ object DisplayDateRangeHelper {
         s"""d '${messages(s"month.${date.getMonthValue}")}'"""
       }) + (if (showYear) " uuuu" else "")
     }
-    val format = if(lang.language == "cy") welshFormat else englishFormat
+    val format = if(messages.lang.language == "cy") welshFormat else englishFormat
     val formatter = DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT)
     date.format(formatter)
   }
