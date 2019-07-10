@@ -107,7 +107,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
       }
 
       "display the correct charge title" in {
@@ -163,7 +163,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
       }
 
       "display the correct charge title" in {
@@ -247,7 +247,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
       }
 
       "display the correct charge title" in {
@@ -686,6 +686,202 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "have the correct CSS applied" in {
         element(Selectors.thirdTableElement).attr("class") should include("repayment-money")
+      }
+    }
+
+    "there is a VAT POA Instalment charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        PaymentOnAccountInstalments,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Payment on account instalment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+      }
+    }
+
+    "there is a VAT POA Return Debit charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        PaymentOnAccountReturnDebitCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Payment on account balance"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+      }
+    }
+
+    "there is a VAT POA Return Credit charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        PaymentOnAccountReturnCreditCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Payment on account repayment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+      }
+    }
+
+    "there is a VAT AA Monthly Instalment charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAMonthlyInstalment,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Annual accounting monthly instalment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+      }
+    }
+
+    "there is a VAT AA Quarterly Instalment charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAQuarterlyInstalments,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Annual accounting quarterly instalment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+      }
+    }
+
+    "there is a VAT AA Return Debit charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAReturnDebitCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Annual accounting balance"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+      }
+    }
+
+    "there is a VAT AA Return Credit charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        AAReturnCreditCharge,
+        Some(LocalDate.parse("2018-01-01")),
+        Some(LocalDate.parse("2018-02-02")),
+        500,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Annual accounting repayment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
       }
     }
   }
