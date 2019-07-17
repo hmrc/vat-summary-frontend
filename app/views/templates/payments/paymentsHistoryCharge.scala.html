@@ -40,10 +40,7 @@
       </td>
       <td class="numeric nowrap amount
         @if(transaction.amount < 0 && !chargeType.name.equals(UnallocatedPayment.value) ||
-        chargeType.name.equals(Refund.value))  {repayment-money}
-
-        @if(chargeType.name.equals(UnallocatedPayment.value)) {unallocated-payment}"
-        valign="top">
+        chargeType.name.equals(Refund.value))  {repayment-money}" valign="top">
           @if(chargeType.name equals UnallocatedPayment.value) {
               @positiveNegative(transaction.amount.abs)
           } else {

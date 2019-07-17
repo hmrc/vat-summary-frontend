@@ -651,10 +651,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       "display the correct amount as a negative" in {
         elementText(Selectors.amount) shouldBe "- £500"
       }
-
-      "have the correct CSS applied" in {
-        element(Selectors.thirdTableElement).attr("class") should include("unallocated-payment")
-      }
     }
 
     "there is an Refund Charge Type" should {
