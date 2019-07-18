@@ -43,10 +43,10 @@ btaNavLinks.manageAccount = Rheoli''r cyfrif
 btaNavLinks.messages = Negeseuon
 btaNavLinks.helpAndContact = Cymorth a chysylltu
 
-sessionTimeout.title = Mae’ch sesiwn wedi’i therfynu
-sessionTimeout.helpOne = Er mwyn gweld eich crynodeb TAW, bydd angen i chi
-sessionTimeout.helpTwo = fewngofnodi
-sessionTimeout.helpThree = gan ddefnyddio’ch Dynodydd Defnyddiwr (ID) ar gyfer Porth y Llywodraeth.
+sessionTimeout.title = Sesiwn wedi dod i ben
+sessionTimeout.helpOne = Mae’n flin gennym, mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch.
+sessionTimeout.helpTwo = I ddefnyddio’r gwasanaeth hwn, rhaid i chi
+sessionTimeout.helpThree = fewngofnodi.
 
 unauthorised.title = Nid ydych wedi’ch awdurdodi i ddefnyddio’r gwasanaeth hwn
 unauthorised.signUpWithSoftware = Mae angen i chi gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno’ch Ffurflenni TAW.

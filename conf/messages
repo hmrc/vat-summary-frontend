@@ -17,10 +17,10 @@ btaNavLinks.manageAccount = Manage account
 btaNavLinks.messages = Messages
 btaNavLinks.helpAndContact = Help and contact
 
-sessionTimeout.title = Your session has timed out
-sessionTimeout.helpOne = To view your VAT summary, you will have to
-sessionTimeout.helpTwo = sign in
-sessionTimeout.helpThree = using your Government Gateway ID.
+sessionTimeout.title = Session timed out
+sessionTimeout.helpOne = Sorry, your session has timed out due to inactivity.
+sessionTimeout.helpTwo = To use this service you need to
+sessionTimeout.helpThree = sign in.
 
 unauthorised.title = You are not authorised to use this service
 unauthorised.signUpWithSoftware = You need to sign up to use software to submit your VAT Returns.

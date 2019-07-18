@@ -18,9 +18,9 @@
 
 @views.html.main_template(title = messages("sessionTimeout.title"), bodyClasses = None, appConfig = appConfig, showLogout = false) {
  <h1>@messages("sessionTimeout.title")</h1>
-
- <p>@messages("sessionTimeout.helpOne")
-   <a href=@appConfig.signInUrl>@messages("sessionTimeout.helpTwo")</a>
-   @messages("sessionTimeout.helpThree")
+ <h2>@messages("sessionTimeout.helpOne")</h2>
+ <p>
+   @messages("sessionTimeout.helpTwo")
+   <a href=@appConfig.signInUrl>@messages("sessionTimeout.helpThree")</a>
  </p>
 }
