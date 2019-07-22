@@ -20,7 +20,7 @@ btaNavLinks.helpAndContact = Help and contact
 sessionTimeout.title = Session timed out
 sessionTimeout.helpOne = Sorry, your session has timed out due to inactivity.
 sessionTimeout.helpTwo = To use this service you need to
-sessionTimeout.helpThree = sign in.
+sessionTimeout.helpThree = sign in
 
 unauthorised.title = You are not authorised to use this service
 unauthorised.signUpWithSoftware = You need to sign up to use software to submit your VAT Returns.

@@ -25,8 +25,10 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
   "Rendering the session timeout page" should {
 
     object Selectors {
-      val pageHeading = "#content h1"
+      val pageHeading = "h1"
+      val subheading = "h2"
       val instructions = "#content > article > p"
+      val signInLink = s"$instructions > a"
     }
 
     lazy val view = views.html.errors.sessionTimeout()
@@ -40,8 +42,23 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
       elementText(Selectors.pageHeading) shouldBe "Session timed out"
     }
 
+    "have the correct subheading" in {
+      elementText(Selectors.subheading) shouldBe "Sorry, your session has timed out due to inactivity."
+    }
+
     "have the correct instructions on the page" in {
       elementText(Selectors.instructions) shouldBe "To use this service you need to sign in."
+    }
+
+    "have a link to sign in" which {
+
+      "has the correct text" in {
+        elementText(Selectors.signInLink) shouldBe "sign in"
+      }
+
+      "has the correct link location" in {
+        element(Selectors.signInLink).attr("href") shouldBe mockConfig.signInUrl
+      }
     }
   }
 }
