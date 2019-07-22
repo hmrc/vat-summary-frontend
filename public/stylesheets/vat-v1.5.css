@@ -44,15 +44,6 @@ table td:last-child.amount{
     padding-right: 16px;
 }
 
-.unallocated {
-    border-right: solid 6px #005ea5;
-}
-
-table td:last-child.unallocated-payment {
-    color: #005ea5;
-    padding-right: 16px;
-}
-
 .nowrap {
     white-space: nowrap;
 }
