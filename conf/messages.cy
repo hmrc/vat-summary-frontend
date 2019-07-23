@@ -46,7 +46,7 @@ btaNavLinks.helpAndContact = Cymorth a chysylltu
 sessionTimeout.title = Sesiwn wedi dod i ben
 sessionTimeout.helpOne = Mae’n flin gennym, mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch.
 sessionTimeout.helpTwo = I ddefnyddio’r gwasanaeth hwn, rhaid i chi
-sessionTimeout.helpThree = fewngofnodi.
+sessionTimeout.helpThree = fewngofnodi
 
 unauthorised.title = Nid ydych wedi’ch awdurdodi i ddefnyddio’r gwasanaeth hwn
 unauthorised.signUpWithSoftware = Mae angen i chi gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno’ch Ffurflenni TAW.
