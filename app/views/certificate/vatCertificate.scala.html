@@ -150,6 +150,6 @@
         <p><a href="@routes.VatCertificateController.changeClient()">@messages("vatCertificate.changeClient")</a></p>
     }
 
-    <button data-journey-click="@{if(user.isAgent)"agent_"}vat-certificate:print:certificate"
+    <button class="button" data-journey-click="@{if(user.isAgent)"agent_"}vat-certificate:print:certificate"
             onclick="javascript:window.print()">@messages("vatCertificate.print")</button>
 }

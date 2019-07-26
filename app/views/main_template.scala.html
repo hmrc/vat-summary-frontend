@@ -33,24 +33,13 @@
     }
 }
 
-@mainContentWithGA = {
-  <noscript>
-    <iframe src='https://www.googletagmanager.com/ns.html?id=GTM-TSFTCWZ'
-            height='0'
-            width='0'
-            style='display:none;visibility:hidden'>
-    </iframe>
-  </noscript>
-  @mainContent
-}
-
 @govuk_wrapper(appConfig = appConfig,
     title = title,
     mainClass = mainClass,
     bodyClasses = bodyClasses,
     sidebar = sidebar,
     contentHeader = contentHeader,
-    mainContent = layouts.article(mainContentWithGA),
+    mainContent = layouts.article(mainContent),
     showLogout = showLogout,
     feedbackOnSignOut = feedbackOnSignOut,
     user = user,
