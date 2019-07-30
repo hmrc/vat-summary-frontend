@@ -37,7 +37,7 @@ class NavigationBreadcrumbTemplateSpec extends TemplateBaseSpec {
          |    <ol class="push--top">
          |        <li><a href="/link-url1">link text1</a></li>
          |        <li><a href="/link-url2">link text2</a></li>
-         |        <li>$currentPage</li>
+         |        <li aria-current="page">$currentPage</li>
          |    </ol>
          |</div>
       """.stripMargin

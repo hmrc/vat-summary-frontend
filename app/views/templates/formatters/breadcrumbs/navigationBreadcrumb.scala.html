@@ -21,6 +21,6 @@
         @links.map {
             case (key, value) => { <li><a href="@key">@value</a></li> }
         }
-        <li>@currentPage</li>
+        <li aria-current="page">@currentPage</li>
     </ol>
 </div>
