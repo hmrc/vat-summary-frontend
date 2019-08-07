@@ -16,52 +16,91 @@
 
 package controllers
 
-import controllers.predicates.HybridUserPredicate
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsEmpty, Result}
-import play.api.test.FakeRequest
+import play.api.mvc.Result
 import play.api.test.Helpers._
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector}
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class SignOutControllerSpec extends ControllerBaseSpec {
 
-  private trait SignOutControllerTest {
-    def target: SignOutController = {
-      new SignOutController(messages, mockAppConfig)
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
+  val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+  implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
+  val controller: SignOutController = new SignOutController(messages, mockEnrolmentsAuthService)
+
+  def mockAuth(authResult: Option[AffinityGroup]): Any =
+    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Option[AffinityGroup]])(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *)
+      .returns(Future.successful(authResult))
+
+  "The .signOut action" when {
+
+    "the user is authorised" when {
+
+      "the user is an agent" should {
+
+        lazy val result: Future[Result] = {
+          mockAuth(Some(AffinityGroup.Agent))
+          controller.signOut(authorised = true)(fakeRequestWithSession)
+        }
+
+        "return 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the correct survey url" in {
+          redirectLocation(result) shouldBe Some(mockAppConfig.signOutUrl("VATCA"))
+        }
+      }
+
+      "the user is a principal entity" should {
+
+        lazy val result: Future[Result] = {
+          mockAuth(Some(AffinityGroup.Individual))
+          controller.signOut(authorised = true)(fakeRequestWithSession)
+        }
+
+        "return 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the correct survey url" in {
+          redirectLocation(result) shouldBe Some(mockAppConfig.signOutUrl("VATC"))
+        }
+      }
+    }
+
+    "the user is unauthorised" should {
+
+      lazy val result: Future[Result] = controller.signOut(authorised = false)(fakeRequestWithSession)
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the unauthorised sign out URL" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
+      }
     }
   }
 
-  "navigating to signout page" when {
+  "The .timeout action" should {
 
-    "authorised" should {
-      "return 303 and navigate to the survey url" in new SignOutControllerTest {
-        lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithSession
-        lazy val result: Future[Result] = target.signOut(authorised = true)(request)
+    lazy val result: Future[Result] = controller.timeout(fakeRequestWithSession)
 
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockAppConfig.signOutUrl)
-      }
+
+    "return 303" in {
+      status(result) shouldBe Status.SEE_OTHER
     }
 
-    "unauthorised" should {
-      "return 303 and navigate to sign out url" in new SignOutControllerTest {
-        lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithSession
-        lazy val result: Future[Result] = target.signOut(authorised = false)(request)
-
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
-      }
-    }
-
-    "signing out on timeout" should {
-      "return 303 and navigate to the expected sign out url" in new SignOutControllerTest {
-        lazy val request: FakeRequest[AnyContentAsEmpty.type] = fakeRequestWithSession
-        lazy val result: Future[Result] = target.timeout(request)
-
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
-      }
+    "redirect to the unauthorised sign out URL" in {
+      redirectLocation(result) shouldBe Some(mockAppConfig.unauthorisedSignOutUrl)
     }
   }
 }
