@@ -108,12 +108,13 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
     }
 
     "the user is not logged in" should {
-      "return 401 (Unauthorised)" in new DirectDebitDetailsTest {
+      "return SEE_OTHER" in new DirectDebitDetailsTest {
         lazy val result: Future[Result] = target.directDebits()(fakeRequest)
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
 
-        status(result) shouldBe Status.UNAUTHORIZED
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 

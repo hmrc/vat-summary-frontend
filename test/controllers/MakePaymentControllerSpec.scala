@@ -129,7 +129,8 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     }
 
     "the user is not logged in" should {
-      "return 401 (Unauthorised)" in new MakePaymentDetailsTest {
+
+      "redirect to sign in" in new MakePaymentDetailsTest {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
@@ -138,7 +139,8 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
 
-        status(result) shouldBe Status.UNAUTHORIZED
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 
@@ -211,7 +213,8 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     }
 
     "the user is not logged in" should {
-      "return 401 (Unauthorised)" in new MakePaymentDetailsTest {
+
+      "redirect to sign in" in new MakePaymentDetailsTest {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
@@ -220,7 +223,8 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
 
-        status(result) shouldBe Status.UNAUTHORIZED
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 

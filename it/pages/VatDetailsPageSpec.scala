@@ -101,14 +101,15 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
       }
     }
 
-    "the user is not authenticated" should {
+    "the user is not signed in" should {
 
       def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedNotLoggedIn()
 
-      "return 401 (Unauthorised)" in new Test {
+      "return 303 (SEE_OTHER)" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.UNAUTHORIZED
+
+        response.status shouldBe Status.SEE_OTHER
       }
     }
   }

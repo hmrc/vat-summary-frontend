@@ -220,11 +220,13 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the user is not logged in" should {
 
-      "return 401 (Unauthorised)" in new Test {
+      "return SEE_OTHER" in new Test {
         override val authCall = true
         override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
-        status(result) shouldBe Status.UNAUTHORIZED
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 
@@ -334,11 +336,13 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the user is not logged in" should {
 
-      "return 401 (Unauthorised)" in new Test {
+      "return SEE_OTHER" in new Test {
         override val authCall = true
         override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.paymentHistory(currentYear)(fakeRequestWithSession)
-        status(result) shouldBe Status.UNAUTHORIZED
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 

@@ -280,12 +280,14 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the user is not authenticated" should {
+      "the user is not signed in" should {
 
-        "return 401 (Unauthorised)" in new Test {
+        "redirect to sign in" in new Test {
           override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
           private val result = target.openPayments()(fakeRequest)
-          status(result) shouldBe Status.UNAUTHORIZED
+
+          status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
         }
       }
 

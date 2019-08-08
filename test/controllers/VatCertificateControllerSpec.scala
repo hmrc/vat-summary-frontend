@@ -225,7 +225,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
       "the user is not logged in" should {
 
-        "return Unauthorised (401)" in new Test {
+        "return SEE_OTHER" in new Test {
           override def setup(): Unit = {
             (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *, *)
@@ -235,10 +235,10 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.show()(fakeRequest)
-          status(result) shouldBe Status.UNAUTHORIZED
+          status(result) shouldBe Status.SEE_OTHER
         }
 
-        "return HTML" in new Test {
+        "redirect to sign in" in new Test {
           override def setup(): Unit = {
             (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *, *)
@@ -247,7 +247,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
           }
 
           private val result = target.show()(fakeRequest)
-          contentType(result) shouldBe Some("text/html")
+          redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
         }
       }
     }
@@ -337,19 +337,22 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
       }
 
-      "the user is unauthorised" should {
-        "return Unauthorised (401)" in new Test {
+      "the user is not signed in" should {
+
+        "return SEE_OTHER" in new Test {
           override val customerInfoCallExpected: Boolean = false
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.changeClient()(fakeRequest)
-          status(result) shouldBe Status.UNAUTHORIZED
+
+          status(result) shouldBe Status.SEE_OTHER
         }
 
-        "return HTML" in new Test {
+        "redirect to sign in" in new Test {
           override val customerInfoCallExpected: Boolean = false
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.changeClient()(fakeRequest)
-          contentType(result) shouldBe Some("text/html")
+
+          redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
         }
       }
     }
@@ -409,19 +412,21 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
       }
 
-      "the user is unauthorised" should {
-        "return Unauthorised (401)" in new Test {
+      "the user is not signed in" should {
+        "return SEE_OTHER" in new Test {
           override val customerInfoCallExpected: Boolean = false
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.changeClientAction()(fakeRequest)
-          status(result) shouldBe Status.UNAUTHORIZED
+
+          status(result) shouldBe Status.SEE_OTHER
         }
 
-        "return HTML" in new Test {
+        "redirect to sign in" in new Test {
           override val customerInfoCallExpected: Boolean = false
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
           private val result = target.changeClientAction()(fakeRequest)
-          contentType(result) shouldBe Some("text/html")
+
+          redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
         }
       }
     }

@@ -199,10 +199,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the user is not logged in" should {
 
-      "return 401 (Unauthorised)" in new DetailsTest {
+      "return SEE_OTHER" in new DetailsTest {
         override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target().details()(fakeRequest)
-        status(result) shouldBe Status.UNAUTHORIZED
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 
