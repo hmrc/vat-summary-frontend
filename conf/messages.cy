@@ -34,7 +34,7 @@ month.short.11 = Tach
 month.short.12 = Rhag
 
 navTitle.nonAgent = Cyfrif Treth Busnes
-navTitle.agent = Manylion TAW eich cleient
+navTitle.agent = Manylion TAW y cleient
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
@@ -92,7 +92,7 @@ vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i’w chyflwyno
 returnObligation.viewReturns = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW
-returnObligation.submit = Cyflwyno Ffurflen
+returnObligation.submit = Cyflwyno Ffurflen TAW
 
 payment.noPayment = Nid oes taliadau’n ddyledus nawr
 payment.nextPayment = Taliad nesaf yn ddyledus
@@ -291,6 +291,11 @@ banner.newService = Gwasanaeth newydd yw hwn – bydd eich
 banner.feedback = adborth
 banner.feedbackImprove = yn ein helpu i’w wella.
 banner.phaseName = BETA
+
+unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
+unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
+unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau
+
 
 partyType.1 = Unig Fasnachwr
 partyType.2 = Partneriaeth Atebolrwydd Cyfyngedig
