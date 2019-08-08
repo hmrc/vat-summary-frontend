@@ -49,19 +49,18 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
             if(allowAgentAccess) {
               agentPredicate.authoriseAsAgent(block)
             } else {
-              Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Rendering unauthorised page.")
-              Future.successful(Forbidden(views.html.errors.unauthorised()))
+              Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
+              Future.successful(Redirect(appConfig.agentClientLookupActionUrl))
             }
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, checkMigrationStatus)
           case _ =>
             Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
             Future.successful(InternalServerError)
         } recoverWith {
-          case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
-          case _: InsufficientEnrolments => {
+          case _: NoActiveSession => Future.successful(Redirect(appConfig.signInUrl))
+          case _: InsufficientEnrolments =>
             Logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
             Future.successful(Forbidden(views.html.errors.unauthorised()))
-          }
           case _: AuthorisationException =>
             Logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
             Future.successful(Forbidden(views.html.errors.unauthorised()))
