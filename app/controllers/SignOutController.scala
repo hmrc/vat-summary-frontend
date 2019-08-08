@@ -18,23 +18,38 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.AffinityGroup
+import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.controller.BaseController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class SignOutController @Inject()(val messagesApi: MessagesApi,
-                                  implicit val appConfig: AppConfig) extends BaseController with I18nSupport {
+                                  enrolmentsAuthService: EnrolmentsAuthService)
+                                 (implicit val appConfig: AppConfig,
+                                  implicit val ec: ExecutionContext) extends BaseController with I18nSupport {
 
   def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
-    val redirectUrl: String = if (authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl
-    Future.successful(Redirect(redirectUrl))
+    implicit val hc: HeaderCarrier =
+      HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+
+    if(authorised) {
+      enrolmentsAuthService.authorised.retrieve(Retrievals.affinityGroup) {
+        case Some(AffinityGroup.Agent) => Future.successful("VATCA")
+        case _ => Future.successful("VATC")
+      }.map(contactFormIdentifier => Redirect(appConfig.signOutUrl(contactFormIdentifier)))
+    } else {
+      Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
+    }
   }
 
-  val timeout: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
+  val timeout: Action[AnyContent] = Action { implicit request =>
+    Redirect(appConfig.unauthorisedSignOutUrl)
   }
 }

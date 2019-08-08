@@ -69,8 +69,8 @@ trait AppConfig extends ServicesConfig {
   val feedbackFormPartialUrl: String
   val contactFormServiceIdentifier: String
   val staticDateValue: String
-  val surveyUrl: String
-  val signOutUrl: String
+  def surveyUrl(identifier: String): String
+  def signOutUrl(identifier: String): String
   val mtdVatSignUpUrl: String
   val mtdVatClaimSubscriptionUrl: String
   val unauthorisedSignOutUrl: String
@@ -177,11 +177,12 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val staticDateValue: String = getString(Keys.staticDateValue)
 
   private lazy val surveyBaseUrl = getString(Keys.surveyHost) + getString(Keys.surveyUrl)
-  override lazy val surveyUrl = s"$surveyBaseUrl/$contactFormServiceIdentifier"
+  override def surveyUrl(identifier: String): String = s"$surveyBaseUrl/$identifier"
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
-  override lazy val signOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
+  override def signOutUrl(identifier: String): String =
+    s"$governmentGatewayHost/gg/sign-out?continue=${surveyUrl(identifier)}"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
   private val mtdVatSignUpBaseUrl: String = getString(Keys.mtdVatSignUpBaseUrl)
