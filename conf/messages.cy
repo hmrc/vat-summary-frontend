@@ -34,7 +34,7 @@ month.short.11 = Tach
 month.short.12 = Rhag
 
 navTitle.nonAgent = Cyfrif Treth Busnes
-navTitle.agent = Manylion TAW y cleient
+navTitle.agent = Manylion TAW eich cleient
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
