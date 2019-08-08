@@ -160,10 +160,12 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     "user is an Agent" should {
 
-      "return 403 (Forbidden)" in new MakePaymentDetailsTest {
+      "redirect to Agent Action page" in new MakePaymentDetailsTest {
         override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
         val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequest)
-        status(result) shouldBe Status.FORBIDDEN
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupActionUrl)
       }
     }
   }

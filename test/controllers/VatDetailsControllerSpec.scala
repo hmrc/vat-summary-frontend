@@ -228,10 +228,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "user is an Agent" should {
 
-      "return 403 (Forbidden)" in new DetailsTest {
+      "redirect to Agent Action page" in new DetailsTest {
         override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
         val result: Future[Result] = target().details()(fakeRequest)
-        status(result) shouldBe Status.FORBIDDEN
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupActionUrl)
       }
     }
 

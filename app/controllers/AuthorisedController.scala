@@ -49,8 +49,8 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
             if(allowAgentAccess) {
               agentPredicate.authoriseAsAgent(block)
             } else {
-              Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Rendering unauthorised page.")
-              Future.successful(Forbidden(views.html.errors.unauthorised()))
+              Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
+              Future.successful(Redirect(appConfig.agentClientLookupActionUrl))
             }
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, checkMigrationStatus)
           case _ =>

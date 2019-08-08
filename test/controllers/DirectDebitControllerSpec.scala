@@ -130,10 +130,12 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
     "user is an Agent" should {
 
-      "return 403 (Forbidden)" in new DirectDebitDetailsTest {
+      "redirect to Agent Action page" in new DirectDebitDetailsTest {
         override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
         val result: Future[Result] = target.directDebits()(fakeRequest)
-        status(result) shouldBe Status.FORBIDDEN
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupActionUrl)
       }
     }
 
