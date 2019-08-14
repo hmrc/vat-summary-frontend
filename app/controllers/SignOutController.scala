@@ -21,7 +21,7 @@ import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.AffinityGroup
+import uk.gov.hmrc.auth.core.{AffinityGroup, AuthorisationException}
 import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -43,7 +43,9 @@ class SignOutController @Inject()(val messagesApi: MessagesApi,
       enrolmentsAuthService.authorised.retrieve(Retrievals.affinityGroup) {
         case Some(AffinityGroup.Agent) => Future.successful("VATCA")
         case _ => Future.successful("VATC")
-      }.map(contactFormIdentifier => Redirect(appConfig.signOutUrl(contactFormIdentifier)))
+      }.map(contactFormIdentifier => Redirect(appConfig.signOutUrl(contactFormIdentifier))).recover {
+        case _: AuthorisationException => Redirect(appConfig.unauthorisedSignOutUrl)
+      }
     } else {
       Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
     }
