@@ -15,7 +15,6 @@
  */
 
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
@@ -43,7 +42,8 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "testOnly.*",
     "testOnlyDoNotUseInAppConf.*",
     ".*feedback*.*",
-    "partials.*")
+    "partials.*"
+  )
 
   Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
@@ -55,7 +55,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.13.0",
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.14.0",
   "uk.gov.hmrc" %% "govuk-template" % "5.35.0-play-25",
   "uk.gov.hmrc" %% "play-ui" % "7.40.0-play-25",
   "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-25",
