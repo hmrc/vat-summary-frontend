@@ -9,6 +9,7 @@ navTitle.agent = Your client’s VAT details
 
 base.back = Back
 base.signOut = Sign out
+base.pageTitle = {0} - {1} - GOV.UK
 
 breadcrumbs.bta = Business tax account
 
@@ -111,13 +112,13 @@ noPayments.viewDirectDebit = view your direct debit details (opens in a new tab)
 noPayments.setUpDirectDebit = set up a direct debit (opens in a new tab)
 noPayments.forYourVatReturns = for your VAT Returns.
 
-paymentsError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+paymentsError.title = There is a problem with the service
 paymentsError.heading = Sorry, there is a problem with the service
 paymentsError.message = Try again later.
 paymentsError.payNowOne = If you know how much you owe, you can still
 paymentsError.payNowTwo = pay now
 
-standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+standardError.title = There is a problem with the service
 standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 

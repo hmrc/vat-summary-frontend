@@ -35,7 +35,7 @@ class AgentUnauthorisedViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe "You can’t use this service yet"
+      document.title shouldBe "You can’t use this service yet - Business tax account - GOV.UK"
     }
 
     s"have a the correct page heading" in {

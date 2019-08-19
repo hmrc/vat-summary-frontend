@@ -68,9 +68,17 @@
     data-journey-click="primary-navigation:Click:Signout">@messages("base.signOut")</a></li>}
 }
 
+@dynamicNavTitle = @{
+  user.map(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
+}
+
+@pageTitle = @{
+  messages("base.pageTitle", title, dynamicNavTitle.getOrElse(messages("navTitle.nonAgent")))
+}
+
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = user.map(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent")),
+      navTitle = dynamicNavTitle,
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
@@ -137,4 +145,4 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)

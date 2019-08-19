@@ -33,7 +33,7 @@ class DirectDebitErrorViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "There is a problem with the service - VAT reporting through software - GOV.UK"
+      document.title shouldBe "There is a problem with the service - Business tax account - GOV.UK"
     }
 
     "have the correct page heading" in {
