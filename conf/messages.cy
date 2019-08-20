@@ -6,6 +6,7 @@ common.notProvided = Heb ddarparu
 
 base.back = Yn ôl
 base.signOut = Allgofnodi
+base.pageTitle = {0} - {1} - GOV.UK
 
 month.1 = Ionawr
 month.2 = Chwefror
@@ -137,13 +138,13 @@ noPayments.viewDirectDebit = fwrw golwg dros fanylion o’ch Debyd Uniongyrchol 
 noPayments.setUpDirectDebit = sefydlu Debyd Uniongyrchol (yn agor mewn tab newydd)
 noPayments.forYourVatReturns = ar gyfer eich Ffurflenni TAW.
 
-paymentsError.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
+paymentsError.title = Mae problem gyda’r gwasanaeth
 paymentsError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth.
 paymentsError.message = Rhowch gynnig arall arni yn nes ymlaen.
 paymentsError.payNowOne = Os ydych yn gwybod faint sydd arnoch, mae’n dal yn bosibl i chi
 paymentsError.payNowTwo = dalu nawr
 
-standardError.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
+standardError.title = Mae problem gyda’r gwasanaeth
 standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth.
 standardError.message = Rhowch gynnig arall arni yn nes ymlaen.
 

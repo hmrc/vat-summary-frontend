@@ -35,7 +35,7 @@ class BtaStubViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "BTA Landing Page Stub"
+      document.title shouldBe "BTA Landing Page Stub - Business tax account - GOV.UK"
     }
 
     "have the correct page heading" in {

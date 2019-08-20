@@ -69,8 +69,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   }
 
   override val user = User("1111")
-  val noPayment = Seq()
-  val payments = Seq(
+  val noPayment: Seq[Nothing] = Seq()
+  val payments: Seq[OpenPaymentsModelWithPeriod] = Seq(
     OpenPaymentsModelWithPeriod(
       chargeType = ReturnDebitCharge,
       amount = 2000000000.01,
@@ -98,7 +98,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "What you owe"
+      document.title shouldBe "What you owe - Business tax account - GOV.UK"
     }
 
     "have the correct page heading" in {

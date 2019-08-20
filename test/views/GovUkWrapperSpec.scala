@@ -34,6 +34,10 @@ class GovUkWrapperSpec extends ViewBaseSpec {
       "have no nav title" in {
         elementText(navTitleSelector) shouldBe ""
       }
+
+      "default to the BTA page title" in {
+        document.title shouldBe "title - Business tax account - GOV.UK"
+      }
     }
 
     "user is known" when {
@@ -46,6 +50,10 @@ class GovUkWrapperSpec extends ViewBaseSpec {
         "have a nav title of 'Your client’s VAT details'" in {
           elementText(navTitleSelector) shouldBe "Your client’s VAT details"
         }
+
+        "have the correct page title" in {
+          document.title shouldBe "title - Your client’s VAT details - GOV.UK"
+        }
       }
 
       "user is not an agent" should {
@@ -55,6 +63,10 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
         "have a nav title of 'Business tax account'" in {
           elementText(navTitleSelector) shouldBe "Business tax account"
+        }
+
+        "have the correct page title" in {
+          document.title shouldBe "title - Business tax account - GOV.UK"
         }
       }
     }
