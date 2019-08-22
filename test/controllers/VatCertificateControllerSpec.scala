@@ -155,7 +155,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
               private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
               status(result) shouldBe Status.FORBIDDEN
-              Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet - Business tax account - GOV.UK"
+              Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet - Making Tax Digital for VAT - GOV.UK"
             }
           }
         }
