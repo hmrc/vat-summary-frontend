@@ -52,8 +52,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
       val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
-      val returnObligationsCall = vatDetailsService.getReturnObligations(user, dateService.now())
-      lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user)
+      val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn, dateService.now())
+      lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user.vrn)
 
       for {
         customerInfo <- accountDetailsCall

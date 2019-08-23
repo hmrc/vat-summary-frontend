@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-import models.{DirectDebitDetailsModel, ServiceResponse, User}
+import models.{DirectDebitDetailsModel, ServiceResponse}
 import models.errors._
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
@@ -45,12 +45,12 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
       case Left(_) => Left(PaymentsError)
     }
 
-  def getPaymentsHistory(user: User, searchYear: Int)
+  def getPaymentsHistory(vrn: String, searchYear: Int)
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Seq[PaymentsHistoryModel]]] = {
     val from: LocalDate = LocalDate.parse(s"$searchYear-01-01")
     val to: LocalDate = LocalDate.parse(s"$searchYear-12-31")
 
-    financialDataConnector.getVatLiabilities(user.vrn, from, to).map {
+    financialDataConnector.getVatLiabilities(vrn, from, to).map {
       case Right(liabilities) => Right(liabilities.sortBy(_.clearedDate.toString).reverse)
       case Left(_) => Left(VatLiabilitiesError)
     }
@@ -64,17 +64,15 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     }
 
   def setupDirectDebitJourney(directDebitJourneyDetails: DirectDebitDetailsModel)
-                             (implicit  hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] = {
+                             (implicit  hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] =
     directDebitConnector.setupJourney(directDebitJourneyDetails) map {
       case Right(url) => Right(url)
       case Left(_) => Left(DirectDebitSetupError)
     }
-  }
 
-  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Boolean]] = {
+  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Boolean]] =
     financialDataConnector.getDirectDebitStatus(vrn) map {
       case Right(directDebitStatus) => Right(directDebitStatus)
       case Left(_) => Left(DirectDebitStatusError)
     }
-  }
 }

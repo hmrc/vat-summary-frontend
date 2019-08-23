@@ -57,10 +57,10 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
         validYears = getValidYears(user.vrn, migrationDate, Some(year))
         migratedWithin15Months = customerMigratedWithin15M(migrationDate)
         paymentsServiceYearOne <-
-          if (validYears.contains(year)) { paymentsService.getPaymentsHistory(user, validYears.head) }
+          if (validYears.contains(year)) { paymentsService.getPaymentsHistory(user.vrn, validYears.head) }
           else { Future.successful(Right(Seq.empty)) }
         paymentsServiceYearTwo <-
-          if (validYears.length == 2 && validYears.contains(year)) { paymentsService.getPaymentsHistory(user, validYears.drop(1).head) }
+          if (validYears.length == 2 && validYears.contains(year)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head) }
           else { Future.successful(Right(Seq.empty)) }
       } yield {
         if(validYears.isEmpty) {
