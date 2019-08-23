@@ -19,13 +19,14 @@ package controllers
 import audit.AuditingService
 import audit.models.{HybridPHModel, HybridWYOModel}
 import config.AppConfig
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
+@Singleton
 class PortalController @Inject()(val messagesApi: MessagesApi,
                                  authorisedController: AuthorisedController,
                                  val auditingService: AuditingService,

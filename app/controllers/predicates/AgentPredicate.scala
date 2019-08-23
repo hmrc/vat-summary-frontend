@@ -16,9 +16,9 @@
 
 package controllers.predicates
 
-import common.{EnrolmentKeys, SessionKeys, FinancialTransactionsConstants => keys}
+import common.{EnrolmentKeys, SessionKeys}
 import config.AppConfig
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -30,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
+@Singleton
 class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
                                val messagesApi: MessagesApi,
                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
