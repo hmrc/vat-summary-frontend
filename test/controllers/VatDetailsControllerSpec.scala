@@ -74,11 +74,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
 
-      (mockVatDetailsService.getReturnObligations(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+      (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
         .returns(vatServiceReturnsResult)
 
-      (mockVatDetailsService.getPaymentObligations(_: User)(_: HeaderCarrier, _: ExecutionContext))
+      (mockVatDetailsService.getPaymentObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *)
         .returns(vatServicePaymentsResult)
 
@@ -261,11 +261,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             .stubs(*, *, *)
             .returns(accountDetailsServiceResult)
 
-          (mockVatDetailsService.getReturnObligations(_: User, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+          (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *, *)
             .returns(vatServiceReturnsResult)
 
-          (mockVatDetailsService.getPaymentObligations(_: User)(_: HeaderCarrier, _: ExecutionContext))
+          (mockVatDetailsService.getPaymentObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *)
             .never()
 

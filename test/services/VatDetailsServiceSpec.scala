@@ -21,7 +21,7 @@ import java.time.LocalDate
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
-import models._
+import models.ServiceResponse
 import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments._
@@ -124,7 +124,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the most recent outstanding obligation" in new Test {
         override val obligationsCall = true
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(target.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
+          await(target.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
         result shouldBe Right(Some(obligations))
       }
     }
@@ -135,7 +135,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         override val obligationsCall = true
         override val obligations = VatReturnObligations(Seq.empty)
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(target.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
+          await(target.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
         result shouldBe Right(None)
       }
     }
@@ -146,7 +146,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         override val obligationsCall = true
         override lazy val obligationResult = Left(BadRequestError("TEST_FAIL", "this is a test"))
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(target.getReturnObligations(User("1111"), LocalDate.parse("2018-01-01")))
+          await(target.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
         result shouldBe Left(ObligationsError)
       }
     }
@@ -158,7 +158,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the most recent outstanding payment obligation" in new Test {
         override val paymentsCall = true
-        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations(User("1111")))
+        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations("1111"))
         result shouldBe Right(Some(payments))
       }
     }
@@ -168,7 +168,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return nothing" in new Test {
         override val paymentsCall = true
         override val payments = Payments(Seq.empty)
-        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations(User("1111")))
+        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations("1111"))
         result shouldBe Right(None)
       }
     }
@@ -178,7 +178,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       "return the error" in new Test {
         override val paymentsCall = true
         override lazy val paymentsResult = Left(BadRequestError("TEST_FAIL", "this is a test"))
-        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations(User("1111")))
+        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations("1111"))
         result shouldBe Left(NextPaymentError)
       }
     }

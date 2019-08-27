@@ -17,13 +17,13 @@
 package controllers
 
 import config.AppConfig
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Call}
 import uk.gov.hmrc.play.language.LanguageUtils
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-
+@Singleton
 class LanguageController @Inject()(val appConfig: AppConfig,
                                    val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
 

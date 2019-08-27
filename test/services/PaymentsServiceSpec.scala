@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
-import models.{DirectDebitDetailsModel, ServiceResponse, User}
+import models.{DirectDebitDetailsModel, ServiceResponse}
 import models.errors._
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
@@ -252,7 +252,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
         Right(Seq(paymentModel3, paymentModel2, paymentModel4, paymentModel1))
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
       private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
-        await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
+        await(target.getPaymentsHistory("999999999", taxPeriodYear))
 
       result shouldBe sortedPayments
     }
@@ -260,7 +260,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
     "return a http error" in new Test {
       override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
       private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
-        await(target.getPaymentsHistory(User("999999999"), taxPeriodYear))
+        await(target.getPaymentsHistory("999999999", taxPeriodYear))
 
       result shouldBe Left(VatLiabilitiesError)
     }

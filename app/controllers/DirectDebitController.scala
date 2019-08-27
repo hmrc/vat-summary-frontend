@@ -19,7 +19,6 @@ package controllers
 import audit.AuditingService
 import audit.models.DirectDebitAuditModel
 import config.AppConfig
-import controllers.predicates.HybridUserPredicate
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
 import play.api.Logger

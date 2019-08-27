@@ -18,7 +18,7 @@ package controllers
 
 import common.SessionKeys
 import config.AppConfig
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.viewModels.VatCertificateViewModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -27,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
+@Singleton
 class VatCertificateController @Inject()(
                                           val messagesApi: MessagesApi,
                                           serviceInfoService: ServiceInfoService,

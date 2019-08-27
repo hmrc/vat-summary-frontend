@@ -21,7 +21,7 @@ import java.time.LocalDate
 import config.AppConfig
 import connectors.{FinancialDataConnector, VatObligationsConnector}
 import javax.inject.{Inject, Singleton}
-import models._
+import models.ServiceResponse
 import models.errors.{NextPaymentError, ObligationsError}
 import models.obligations.Obligation.Status._
 import models.obligations.VatReturnObligations
@@ -35,21 +35,21 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
                                   financialDataConnector: FinancialDataConnector,
                                   implicit val appConfig: AppConfig) {
 
-  def getReturnObligations(user: User, date: LocalDate)
+  def getReturnObligations(vrn: String, date: LocalDate)
                           (implicit hc: HeaderCarrier,
-                           ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] = {
+                           ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] =
 
-    vatObligationsConnector.getVatReturnObligations(user.vrn, Outstanding).map {
+    vatObligationsConnector.getVatReturnObligations(vrn, Outstanding).map {
       case Right(nextReturns) if nextReturns.obligations.nonEmpty => Right(Some(nextReturns))
       case Right(_) => Right(None)
       case Left(_) => Left(ObligationsError)
     }
-  }
 
-  def getPaymentObligations(user: User)
-                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] = {
+  def getPaymentObligations(vrn: String)
+                           (implicit hc: HeaderCarrier,
+                            ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] =
 
-    financialDataConnector.getOpenPayments(user.vrn).map {
+    financialDataConnector.getOpenPayments(vrn).map {
       case Right(payments) =>
         val outstandingPayments = payments.financialTransactions.filter(_.outstandingAmount > 0)
         if(outstandingPayments.nonEmpty) {
@@ -59,5 +59,4 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
         }
       case Left(_) => Left(NextPaymentError)
     }
-  }
 }

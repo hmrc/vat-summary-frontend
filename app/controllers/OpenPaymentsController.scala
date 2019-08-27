@@ -19,7 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments.{OpenPaymentsModel, Payment}
 import models.viewModels.OpenPaymentsViewModel
@@ -34,6 +34,7 @@ import play.twirl.api.Html
 
 import scala.concurrent.Future
 
+@Singleton
 class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
                                        val enrolmentsAuthService: EnrolmentsAuthService,
                                        authorisedController: AuthorisedController,

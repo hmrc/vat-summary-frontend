@@ -19,7 +19,7 @@ package controllers
 import common.{EnrolmentKeys => Keys}
 import config.AppConfig
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -31,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
+@Singleton
 class AuthorisedController @Inject()(val messagesApi: MessagesApi,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      val hybridUserPredicate: HybridUserPredicate,
