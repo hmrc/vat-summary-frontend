@@ -69,16 +69,16 @@
 }
 
 @dynamicNavTitle = @{
-  user.map(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
+  user.fold(messages("navTitle.vat"))(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
 }
 
 @pageTitle = @{
-  messages("base.pageTitle", title, dynamicNavTitle.getOrElse(messages("navTitle.nonAgent")))
+  messages("base.pageTitle", title, dynamicNavTitle)
 }
 
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = dynamicNavTitle,
+      navTitle = Some(dynamicNavTitle),
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
