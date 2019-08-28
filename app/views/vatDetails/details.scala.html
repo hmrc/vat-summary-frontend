@@ -33,13 +33,12 @@
     )
     <header class="page-heading push--top"
       @if(!detailsViewModel.entityName.isDefined){data-metrics="error:hidden-text:vat-overview-entity-name"}>
-      <h1 class="heading-xlarge">@messages("vatDetails.title")
+      <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
        <span class="form-hint">@messages("vatDetails.vrn", user.vrn)<br>
          @detailsViewModel.entityName.map { entityName =>
            <p>@entityName</p>
          }
        </span>
-      </h1>
     </header>
     <div class="flex-container grid-row">
       @views.html.templates.nextPaymentSection(
