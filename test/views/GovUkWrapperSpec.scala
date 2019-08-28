@@ -32,11 +32,11 @@ class GovUkWrapperSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the default nav title 'Making Tax Digital for VAT'" in {
-        elementText(navTitleSelector) shouldBe "Making Tax Digital for VAT"
+        elementText(navTitleSelector) shouldBe "VAT"
       }
 
       "default to the 'Making Tax Digital for VAT' page title" in {
-        document.title shouldBe "title - Making Tax Digital for VAT - GOV.UK"
+        document.title shouldBe "title - VAT - GOV.UK"
       }
     }
 

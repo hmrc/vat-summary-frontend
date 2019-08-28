@@ -69,7 +69,7 @@
 }
 
 @dynamicNavTitle = @{
-  user.fold(messages("navTitle.makingTaxDigitalForVat"))(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
+  user.fold(messages("navTitle.vat"))(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
 }
 
 @pageTitle = @{

@@ -6,7 +6,7 @@ common.notProvided = Not provided
 
 navTitle.nonAgent = Business tax account
 navTitle.agent = Your client’s VAT details
-navTitle.makingTaxDigitalForVat = Making Tax Digital for VAT
+navTitle.vat = VAT
 
 base.back = Back
 base.signOut = Sign out

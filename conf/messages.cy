@@ -36,7 +36,7 @@ month.short.12 = Rhag
 
 navTitle.nonAgent = Cyfrif Treth Busnes
 navTitle.agent = Manylion TAW eich cleient
-navTitle.makingTaxDigitalForVat = Troi Treth yn Ddigidol ar gyfer TAW
+navTitle.vat = TAW
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
