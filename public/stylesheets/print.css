@@ -1,6 +1,6 @@
 @media print {
 
-  header, #notice-banner, .centered-content, .breadcrumbs, #content > .float--right, button, #get-help-action, .link-back, p {
+  header, #notice-banner, .centered-content, .breadcrumbs, #content > .float--right, .button, #get-help-action, .link-back, p {
     display: none;
   }
 
