@@ -30,6 +30,7 @@
     margin-top: 16px;
     margin-bottom: 0px;
     padding-bottom: 0px;
+    border: 1px solid #dee0e2;
   }
 
   .card-full-container .card-heading {
@@ -39,4 +40,24 @@
   table td {
     font-size: 14px;
   }
+
+  dt {
+    float: left;
+    clear: left;
+    width: 50%;
+    text-align: left;
+    font-weight: bold;
+  }
+
+  dd {
+    margin: 0 0 0 110px;
+    padding: 0 0 0.5em 0;
+    text-align: left;
+    overflow: hidden;
+  }
+
+   .button {
+    visibility: hidden;
+   }
+
 }
