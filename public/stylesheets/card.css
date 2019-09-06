@@ -59,7 +59,6 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
 }
 
 .card-full-container {
-    border: 1px solid #bfc1c3;
     margin: 1em 0 2em 0;
     padding: 1em .5em;
     width: 100%;
@@ -101,6 +100,17 @@ table td:last-child.amount {
     text-align: left;
 }
 
+.govuk-check-your-answers{
+    padding-bottom: 15px
+}
+
+.column-full .govuk-check-your-answers:last-child dd {
+    border-bottom: none;
+}
+
+.column-full .govuk-check-your-answers:last-child dt {
+    border-bottom: none;
+}
 
 .cert-header {
     width: 100%;
