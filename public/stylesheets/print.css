@@ -1,6 +1,6 @@
 @media print {
 
-  header, #notice-banner, .centered-content, .breadcrumbs, #content > .float--right, button, #get-help-action, .link-back, p {
+  header, #notice-banner, .centered-content, .button, .breadcrumbs, #content > .float--right, button, #get-help-action, .link-back, p {
     display: none;
   }
 
@@ -41,23 +41,60 @@
     font-size: 14px;
   }
 
+  .govuk-check-your-answers {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dee0e2;
+  }
+
+
+
+  .govuk-check-your-answers:before,
+  .govuk-check-your-answers:after {
+     content: " "; /* 1 */
+     display: table; /* 2 */
+   }
+
+   .govuk-check-your-answers:after {
+     clear: both;
+   }
+
+   .govuk-check-your-answers div {
+    border-bottom: none;
+   }
+
+   .cya-question{
+        border-bottom: none;
+   }
+
+   .cya-answer {
+        border-bottom: none;
+   }
+
+   .card-full .govuk-check-your-answers:last-child {
+   border-bottom: none;
+   }
+
+   dt, dd {
+    font-size: 14px;
+   }
+
   dt {
     float: left;
     clear: left;
     width: 50%;
     text-align: left;
     font-weight: bold;
+    border-bottom: none;
   }
 
   dd {
+    float: left;
     margin: 0 0 0 110px;
     padding: 0 0 0.5em 0;
     text-align: left;
     overflow: hidden;
+    border-bottom: none;
   }
-
-   .button {
-    visibility: hidden;
-   }
 
 }
