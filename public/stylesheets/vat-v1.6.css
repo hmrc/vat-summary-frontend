@@ -15,7 +15,7 @@
     letter-spacing: 1px;
     text-decoration: none;
     color: #fff;
-    background-color: #B10E1E;
+    background-color: #d4351c;
     margin-left: 5px;
     padding-top: 3px;
 }
@@ -32,11 +32,11 @@
 }
 
 .repayment {
-    border-right: solid 6px #00823B;
+    border-right: solid 6px #00703c;
 }
 
 table td:last-child.repayment-money {
-    color:#00823B;
+    color:#00703c;
     padding-right: 16px;
 }
 
@@ -102,7 +102,7 @@ a.in-selected-tab {
   flex-basis: 100%;
   margin-bottom: 2em;
   border: 1px solid #dee0e2;
-  background: #f8f8f8;
+  background: #f3f2f1;
 }
 
 @media screen and (min-width:600px) and (max-width:900px) {
