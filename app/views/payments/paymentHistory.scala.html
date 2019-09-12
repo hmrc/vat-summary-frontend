@@ -40,7 +40,7 @@
     <div class="column-two-thirds">
       <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-      <ul class="tabs-nav">
+      <ul class="tabs-nav" role="tablist">
         @(model.tabOne, model.tabTwo) match {
           case (Some(yearOne), Some(yearTwo)) => { @paymentsHistoryTabs(Seq(yearOne, yearTwo), model.selectedYear.getOrElse(0)) }
           case (Some(yearOne), None) if model.previousPaymentsTab => { @paymentsHistoryTabs(Seq(yearOne), model.selectedYear.getOrElse(0)) }

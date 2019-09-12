@@ -16,8 +16,8 @@
 
 @(tabText: String, hiddenText: String, tabUrl: String)
 
-<li class="tabs-nav__tab font-medium">
-  <a href="@tabUrl">
+<li class="tabs-nav__tab font-medium" role="presentation">
+  <a href="@tabUrl" role="tab" aria-controls="@tabText" aria-selected="false" tabindex="-1">
     @tabText
     <span class="visuallyhidden">@hiddenText</span>
   </a>

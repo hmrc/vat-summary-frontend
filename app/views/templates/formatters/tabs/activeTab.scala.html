@@ -16,7 +16,10 @@
 
 @(tabText: String, hiddenText: String)
 
-<li class="tabs-nav__tab tabs-nav__tab--active font-medium">
-    <a href="#" class="in-selected-tab">@tabText</a>
+<li class="tabs-nav__tab tabs-nav__tab--active font-medium" role="presentation">
+    <a href="#" class="in-selected-tab" role="tab"
+       aria-controls="@tabText" aria-selected="true" tabindex="0">
+     @tabText
+    </a>
   <span class="visuallyhidden">@hiddenText</span>
 </li>
