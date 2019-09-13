@@ -27,7 +27,7 @@ object FeatureSwitchForm {
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.allowDirectDebitsFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.vatCertificateFeature -> boolean,
+      ConfigKeys.paymentsAndRepaymentsFeature -> boolean,
       ConfigKeys.vatOptOutServiceFeature -> boolean,
       ConfigKeys.useVatObligationsService -> boolean,
       ConfigKeys.useDirectDebitDummyPageFeature -> boolean,

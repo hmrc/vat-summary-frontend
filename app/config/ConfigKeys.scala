@@ -37,7 +37,7 @@ object ConfigKeys {
   val allowDirectDebitsFeature: String = "features.allowDirectDebits.enabled"
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
-  val vatCertificateFeature: String = "features.vatCertificate.enabled"
+  val paymentsAndRepaymentsFeature: String = "features.paymentsAndRepayments.enabled"
   val vatOptOutServiceFeature: String = "features.vatOptOutService.enabled"
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
@@ -105,6 +105,9 @@ object ConfigKeys {
   val vatAgentClientLookupFrontendStartUrl: String = "vat-agent-client-lookup-frontend.startUrl"
   val vatAgentClientLookupFrontendUnauthorisedUrl: String = "vat-agent-client-lookup-frontend.unauthorisedUrl"
   val vatAgentClientLookupFrontendActionUrl: String = "vat-agent-client-lookup-frontend.agentActionUrl"
+
+  val vatRepaymentTrackerFrontendHost: String = "vat-repayment-tracker-frontend.host"
+  val vatRepaymentTrackerFrontendUrl: String = "vat-repayment-tracker-frontend.url"
 
   val vatOptOutFrontendHost: String = "vat-opt-out-frontend.host"
   val vatOptOutFrontendStartUrl: String = "vat-opt-out-frontend.startUrl"

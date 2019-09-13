@@ -38,24 +38,20 @@ class VatCertificateController @Inject()(
 
   def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
     implicit user =>
-      if (appConfig.features.vatCertificateEnabled()) {
-        val vrn = user.vrn
-        serviceInfoService.getPartial.flatMap { serviceInfoContent =>
-          accountDetailsService.getAccountDetails(vrn).map {
-            case Right(customerInformation) =>
-              Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
-            case Left(_) =>
-              InternalServerError
-          }
+      val vrn = user.vrn
+      serviceInfoService.getPartial.flatMap { serviceInfoContent =>
+        accountDetailsService.getAccountDetails(vrn).map {
+          case Right(customerInformation) =>
+            Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
+          case Left(_) =>
+            InternalServerError
         }
-      } else {
-        Future.successful(NotFound(views.html.errors.notFound()))
       }
   }
 
   def changeClient: Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
     user =>
-      if (appConfig.features.vatCertificateEnabled() && user.isAgent) {
+      if (user.isAgent) {
         Future.successful(Redirect(appConfig.agentClientLookupStartUrl(routes.VatCertificateController.show().url))
           .removingFromSession(SessionKeys.agentSessionVrn))
       } else {
@@ -65,7 +61,7 @@ class VatCertificateController @Inject()(
 
   def changeClientAction: Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
     user =>
-      if (appConfig.features.vatCertificateEnabled() && user.isAgent) {
+      if (user.isAgent) {
         Future.successful(Redirect(appConfig.agentClientLookupActionUrl)
           .removingFromSession(SessionKeys.agentSessionVrn))
       } else {

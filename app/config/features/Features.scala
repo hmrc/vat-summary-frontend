@@ -26,7 +26,7 @@ class Features @Inject()(config: Configuration) {
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
   val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
-  val vatCertificateEnabled = new Feature(ConfigKeys.vatCertificateFeature, config)
+  val paymentsAndRepaymentsEnabled = new Feature(ConfigKeys.paymentsAndRepaymentsFeature, config)
   val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature, config)
   val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
   val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
