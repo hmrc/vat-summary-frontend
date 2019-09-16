@@ -33,7 +33,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         allowDirectDebitsEnabled = appConfig.features.allowDirectDebits(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        vatCertificateEnabled = appConfig.features.vatCertificateEnabled(),
+        paymentsAndRepaymentsEnabled = appConfig.features.paymentsAndRepaymentsEnabled(),
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
         enableVatObligationsService = appConfig.features.enableVatObligationsService(),
         useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage(),
@@ -55,7 +55,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.allowDirectDebits(model.allowDirectDebitsEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
-    appConfig.features.vatCertificateEnabled(model.vatCertificateEnabled)
+    appConfig.features.paymentsAndRepaymentsEnabled(model.paymentsAndRepaymentsEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
     appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
     appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)

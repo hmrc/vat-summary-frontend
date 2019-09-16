@@ -65,9 +65,10 @@
     </div>
     <div class="grid-row">
       @views.html.templates.updateVatDetailsSection()
-      @if(appConfig.features.vatCertificateEnabled()) {
-        @views.html.templates.vatCertificateSection()
+      @if(appConfig.features.paymentsAndRepaymentsEnabled()) {
+        @views.html.templates.paymentsAndRepaymentsSection(user.vrn)
       }
+      @views.html.templates.vatCertificateSection()
     </div>
 
     @if(appConfig.features.vatOptOutEnabled()) {

@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import org.scalatest.Assertion
+import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
@@ -30,7 +30,13 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.collection.JavaConverters._
 
-trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite {
+trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
+
+  override def afterEach(): Unit = {
+    super.afterEach()
+    mockConfig.features.paymentsAndRepaymentsEnabled(true)
+    mockConfig.features.vatOptOutEnabled(true)
+  }
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

@@ -34,6 +34,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
     val nextReturn = "#next-return p"
+    val paymentsAndRepaymentsSection = "#payments-and-repayments"
     val vatCertificate = "#vat-certificate"
     val updateVatDetails = "#update-vat-details"
     val submittedReturns = "#submitted-returns"
@@ -120,9 +121,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     customerInfoError = true
   )
 
-  mockConfig.features.vatCertificateEnabled(true)
-  mockConfig.features.vatOptOutEnabled(true)
-
   "Rendering the VAT details page" should {
 
     lazy val view = views.html.vatDetails.details(detailsModel, Html("<nav>BTA Links</nav>"))
@@ -156,20 +154,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct VRN message" in {
-      elementText(Selectors.vatRegNo) should include (s"VAT registration number (VRN): ${user.vrn}")
-    }
-
-    "have the vat certificate section" which {
-
-      lazy val vatCertificate = element(Selectors.vatCertificate)
-
-      "has the correct heading" in {
-        vatCertificate.select("h2").text() shouldBe "View VAT certificate"
-      }
-
-      "has the correct paragraph" in {
-        vatCertificate.select("p").text() shouldBe "View and print your VAT certificate."
-      }
+      elementText(Selectors.vatRegNo) should include(s"VAT registration number (VRN): ${user.vrn}")
     }
 
     "have the history section" when {
@@ -205,7 +190,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         lazy val view = views.html.vatDetails.details(hybridDetailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have the past payments text " in {
+        "have the past payments text" in {
           elementText(Selectors.historyPastPayments) shouldBe "View past payments (opens in a new tab)"
         }
 
@@ -213,6 +198,38 @@ class VatDetailsViewSpec extends ViewBaseSpec {
           element(Selectors.historyPastPayments).attr("href") shouldBe "/vat-through-software/portal-payment-history"
         }
 
+      }
+    }
+
+    "have the payments and repayments section" which {
+
+      lazy val paymentsAndRepaymentsSection = element(Selectors.paymentsAndRepaymentsSection)
+
+      "has the correct heading" in {
+        paymentsAndRepaymentsSection.select("h2").text() shouldBe "Payments and repayments"
+      }
+
+      "has a link to the vat-repayment-tracker service" in {
+        paymentsAndRepaymentsSection.select("h2 a").attr("href") shouldBe s"/vat-repayment-tracker-frontend" +
+          s"/manage-or-track/vrn/${user.vrn}"
+      }
+
+      "has the correct paragraph" in {
+        paymentsAndRepaymentsSection.select("p").text() shouldBe "Manage your Direct Debit, repayment bank account " +
+          "details and track what HMRC owe you."
+      }
+    }
+
+    "have the vat certificate section" which {
+
+      lazy val vatCertificate = element(Selectors.vatCertificate)
+
+      "has the correct heading" in {
+        vatCertificate.select("h2").text() shouldBe "View VAT certificate"
+      }
+
+      "has the correct paragraph" in {
+        vatCertificate.select("p").text() shouldBe "View and print your VAT certificate."
       }
     }
 
@@ -241,12 +258,37 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         updateVatDetails.select("p").text() shouldBe "Change your business, contact or VAT details."
       }
     }
+  }
 
+  "Rendering the VAT details page" when {
+
+    "the paymentsAndRepayments feature switch is false" should {
+
+      "not display the payments and repayments section" in {
+        mockConfig.features.paymentsAndRepaymentsEnabled(false)
+        lazy val view = views.html.vatDetails.details(detailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        elementExtinct(Selectors.paymentsAndRepaymentsSection)
+      }
+    }
+  }
+
+  "Rendering the VAT details page" when {
+
+    "the optOut feature switch is false" should {
+
+      "not display the opt out section" in {
+        mockConfig.features.vatOptOutEnabled(false)
+        lazy val view = views.html.vatDetails.details(detailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        elementExtinct(Selectors.vatOptOutLink)
+      }
+    }
   }
 
   "Rendering the VAT details page with a next return and a next payment" should {
 
-    lazy val view = views.html.vatDetails.details(detailsModel,  Html(""))
+    lazy val view = views.html.vatDetails.details(detailsModel, Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -277,7 +319,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, currentYear,customerInfoError = true))
+    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, currentYear, customerInfoError = true))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -411,5 +453,4 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementExtinct(Selectors.vatOptOutLink)
     }
   }
-
 }

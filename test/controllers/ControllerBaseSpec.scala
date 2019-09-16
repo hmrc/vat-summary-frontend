@@ -68,13 +68,11 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    mockAppConfig.features.vatCertificateEnabled(true)
     mockAppConfig.features.agentAccess(true)
   }
 
   override def afterEach(): Unit = {
     super.afterEach()
-    mockAppConfig.features.vatCertificateEnabled(true)
     mockAppConfig.features.agentAccess(true)
   }
 }
