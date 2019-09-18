@@ -24,42 +24,44 @@
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, messages)}
 @defining(chargeDetails.description()) { chargeDescription =>
 
-<tr id="payment-@{count + 1}">
-    <td scope="row">
+<div id="payment-@{count + 1}">
 
-        <h2 class="bold heading-small">@chargeDetails.title</h2>
-        @chargeDescription.map { description => <div>@description</div> }
+<h2 class="bold heading-small">@chargeDetails.title @chargeDescription.map { description => <div>@description</div> }</h2>
 
-        <div data-due="@(payment.due.toString)" class="form-hint">
-            @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
-            @if(payment.overdue) {
+<dl class="govuk-check-your-answers cya-questions-long" style="border-bottom: 1px solid #dee0e2;padding-top:10px;height: auto;
+  min-height: 100%">
+    <div class="check-your-answer-row" style="align-items:center;border-bottom: 0;min-height:100%;">
+        <dt class="cya-question" style="border-bottom: 0;width: 50%;">
+            <div data-due="@(payment.due.toString)" class="form-hint">
+                @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
+                @if(payment.overdue) {
                 <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
-            }
-        </div>
-    </td>
-
-    <td scope="row" class="numeric nowrap">
-        <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
-    </td>
-
-    <td scope="row" class="nowrap">
-        <div>
-            <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
-                <span>@chargeDetails.payLinkText</span>
-                <span class="visuallyhidden">
+                }
+            </div>
+        </dt>
+        <dd class="cya-answer" style="border-bottom: 0;width: 20%">
+            <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
+        </dd>
+        <dd class="cya-change" style="border-bottom: 0;width: 20%">
+            <div>
+                <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
+                    <span>@chargeDetails.payLinkText</span>
+                    <span class="visuallyhidden">
                     @displayMoney(payment.amount)
                     @chargeDetails.overdueContext
                     @chargeDescription.getOrElse("")
                 </span>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        @if(chargeDetails.viewReturnEnabled) {
+            @if(chargeDetails.viewReturnEnabled) {
             <a data-journey-click="@chargeDetails.viewReturnGAEvent" href="@appConfig.vatReturnUrl(payment.periodKey)">
                 <span class="visuallyhidden">@chargeDetails.viewReturnContext</span>
                 <span>@messages("openPayments.viewReturnLink")</span>
             </a>
-        }
-    </td>
-</tr>
+            }
+        </dd>
+    </div>
+</dl>
+</div>
 }

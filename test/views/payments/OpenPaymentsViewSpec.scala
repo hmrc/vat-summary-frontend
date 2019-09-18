@@ -41,17 +41,17 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
 
-    private val columnOne: Int => String = row => s"#payment-$row td:nth-of-type(1)"
+    private val columnOne: Int => String = row => s"#payment-$row"
     val title: Int => String = row => s"${columnOne(row)} > h2"
     val description: Int => String = row => s"${columnOne(row)} div:nth-of-type(1)"
-    val due: Int => String = row =>s"${columnOne(row)} > div:nth-of-type(2)"
+    val due: Int => String = row =>s"${columnOne(row)} > dl > div > dt"
     val overdueLabel: Int => String = row => s"${due(row)} .task-overdue"
 
-    private val columnTwo: Int => String = row => s"#payment-$row td:nth-of-type(2)"
+    private val columnTwo: Int => String = row => s"#payment-$row dd:nth-of-type(1)"
     val amount: Int => String = row => s"${columnTwo(row)} > span"
 
-    private val columnThree: Int => String = row => s"#payment-$row td:nth-of-type(3)"
-    val payLink: Int => String = row => s"${columnThree(row)} div > a:nth-of-type(1)"
+    private val columnThree: Int => String = row => s"#payment-$row dd:nth-of-type(2)"
+    val payLink: Int => String = row => s"${columnThree(row)} > div > a:nth-of-type(1)"
     val payText: Int => String = row => s"${payLink(row)} > span:nth-of-type(1)"
     val payByDirectDebit: Int => String = row => s"${columnThree(row)} span"
     val viewReturnLink: Int => String = row => s"${columnThree(row)} > a"
@@ -135,7 +135,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "for the first payment" should {
 
       "render the correct title" in {
-        elementText(Selectors.title(1)) shouldBe "Return"
+        elementText(Selectors.title(1)) shouldBe "Return for the period 1 Jan to 31 Mar 2001"
       }
 
       "render the correct description" in {
@@ -170,7 +170,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "for the second payment" should {
 
       "render the correct title" in {
-        elementText(Selectors.title(2)) shouldBe "Additional assessment interest"
+        elementText(Selectors.title(2)) shouldBe "Additional assessment interest interest charged on additional tax assessed for the period 1 Jan to 31 Mar 2003"
       }
 
       "render the correct description" in {
@@ -319,13 +319,17 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       s"contain a $chargeTypeTitle which" should {
 
-        "render the correct title" in {
-          elementText(Selectors.title(1)) shouldBe expectedTitle
-        }
-
         if (expectedDescription.nonEmpty) {
+          "render the correct title" in {
+            elementText(Selectors.title(1)) shouldBe expectedTitle + " " + expectedDescription
+          }
+
           "render the correct description" in {
             elementText(Selectors.description(1)) shouldBe expectedDescription
+          }
+        } else {
+          "render the correct title" in {
+            elementText(Selectors.title(1)) shouldBe expectedTitle
           }
         }
       }

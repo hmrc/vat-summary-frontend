@@ -29,18 +29,17 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
   mockConfig.features.allowDirectDebits(true)
 
   object Selectors {
-    private val columnOne = "td:nth-of-type(1)"
-    val title = s"$columnOne > h2"
-    val description = s"$columnOne div:nth-of-type(1)"
-    val due = s"$columnOne > div:nth-of-type(2)"
+    private val columnOne = ""
+    val title = s"h2"
+    val due = s"$columnOne dt"
     val overdueLabel = s"$due .task-overdue"
 
-    private val columnTwo = "td:nth-of-type(2)"
+    private val columnTwo = "dd:nth-of-type(1)"
     val amount = s"$columnTwo > span"
     val amountData = s"$columnTwo > span[data-amount]"
 
-    private val columnThree = "td:nth-of-type(3)"
-    val payLink = s"$columnThree div > a:nth-of-type(1)"
+    private val columnThree = "dd:nth-of-type(2)"
+    val payLink = s"$columnThree > div > a:nth-of-type(1)"
     val payText = s"$payLink > span:nth-of-type(1)"
     val directDebitText = s"$columnThree span"
     val payHiddenContent = s"$payLink > span:nth-of-type(2)"
@@ -74,11 +73,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         )
 
         "display the correct title" in {
-          elementText(Selectors.title) shouldBe "Return"
-        }
-
-        "display the correct description text" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.title) shouldBe "Return for the period 1 Jan to 2 Feb 2018"
         }
 
         "display the correct due text" in {
