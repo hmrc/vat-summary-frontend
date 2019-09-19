@@ -28,10 +28,9 @@
 
 <h2 class="bold heading-small">@chargeDetails.title @chargeDescription.map { description => <div>@description</div> }</h2>
 
-<dl class="govuk-check-your-answers cya-questions-long" style="border-bottom: 1px solid #dee0e2;padding-top:10px;height: auto;
-  min-height: 100%">
-    <div class="check-your-answer-row" style="align-items:center;border-bottom: 0;min-height:100%;">
-        <dt class="cya-question" style="border-bottom: 0;width: 50%;">
+<dl class="govuk-check-your-answers cya-questions-long what-you-owe-dl">
+    <div class="check-your-answer-row what-you-owe-row">
+        <dt class="cya-question what-you-owe-due-date">
             <div data-due="@(payment.due.toString)" class="form-hint">
                 @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
                 @if(payment.overdue) {
@@ -39,10 +38,10 @@
                 }
             </div>
         </dt>
-        <dd class="cya-answer" style="border-bottom: 0;width: 20%">
+        <dd class="cya-answer what-you-owe-amount">
             <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
         </dd>
-        <dd class="cya-change" style="border-bottom: 0;width: 20%">
+        <dd class="cya-change what-you-owe-links">
             <div>
                 <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
                     <span>@chargeDetails.payLinkText</span>

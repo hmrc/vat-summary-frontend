@@ -143,3 +143,31 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
 .tile .tile-body *:last-child {
   margin-bottom: 0;
 }
+
+.what-you-owe-dl {
+    border-bottom: 1px solid #dee0e2;
+    padding-top:10px;
+    height: auto;
+    min-height: 100%
+}
+
+.what-you-owe-row {
+    align-items:center;
+    border-bottom: 0;
+    min-height:100%;
+}
+
+.what-you-owe-due-date {
+    border-bottom: 0;
+    width: 50%;
+}
+
+.what-you-owe-amount {
+    border-bottom: 0;
+    width: 20%;
+}
+
+.what-you-owe-links {
+    border-bottom: 0;
+    width: 20%;
+}
