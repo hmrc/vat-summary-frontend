@@ -327,7 +327,10 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
           "On the ‘Payment History’ and ‘Past Returns’ pages, when the tabs are clicked, the user is not told that " +
             "the page had been refreshed This doesn’t meet WCAG 2.1 success criterion 4.1.2 Name, Role, Value (A) " +
           "On the ‘Payment History’ and ‘Past Returns’ pages, when the user clicks on a tab, the page focus is sent " +
-            "to the top of the page This doesn’t meet WCAG 2.1 success criterion 2.4.3 Focus Order (A)"
+            "to the top of the page This doesn’t meet WCAG 2.1 success criterion 2.4.3 Focus Order (A) " +
+          "On the ‘What you owe’ page, some headings were duplicated and weren’t descriptive enough so they were " +
+            "challenging to understand for screen reader users This doesn’t meet WCAG 2.1 success criterion 2.4.6 " +
+            "Headings and Labels (AA)"
       }
     }
 
