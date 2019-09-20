@@ -1,0 +1,150 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
+
+@views.html.main_template(title = messages("a11yStatement.title"), appConfig = appConfig, user = Some(user)) {
+
+<div class="grid-row column-two-thirds">
+
+  <div id="introduction">
+    <h1 class="heading-xlarge">@messages("a11yStatement.title")</h1>
+    <p class="lede">@messages("a11yStatement.description")</p>
+    <p>
+      @messages("a11yStatement.separateStatement.1")
+      <a href="@appConfig.govUkAccessibilityUrl" target="_blank">@messages("a11yStatement.separateStatement.2")</a>
+      @messages("a11yStatement.separateStatement.3")
+    </p>
+    <p>
+      @messages("a11yStatement.onlyMTD.1")
+      <a href="@appConfig.govUkHMRCUrl" target="_blank">@messages("a11yStatement.onlyMTD.2")</a>@messages("common.fullStop")
+    </p>
+  </div>
+
+  <div id="using-this-service">
+    <h2 class="heading-large">@messages("a11yStatement.usingThisService")</h2>
+    <p>@messages("a11yStatement.MTDDescription")</p>
+    <ul class="list list-bullet">
+      <li>@messages("a11yStatement.MTDFeatureList.1")</li>
+      <li>@messages("a11yStatement.MTDFeatureList.2")</li>
+      <li>@messages("a11yStatement.MTDFeatureList.3")</li>
+      <li>@messages("a11yStatement.MTDFeatureList.4")</li>
+      <li>@messages("a11yStatement.MTDFeatureList.5")</li>
+      <li>@messages("a11yStatement.MTDFeatureList.6")</li>
+    </ul>
+    <p>@messages("a11yStatement.runByHMRC")</p>
+    <ul class="list list-bullet">
+      <li>@messages("a11yStatement.a11yFeatureList.1")</li>
+      <li>@messages("a11yStatement.a11yFeatureList.2")</li>
+      <li>@messages("a11yStatement.a11yFeatureList.3")</li>
+      <li>@messages("a11yStatement.a11yFeatureList.4")</li>
+      <li>@messages("a11yStatement.a11yFeatureList.5")</li>
+    </ul>
+    <p>@messages("a11yStatement.simpleAsPossible")</p>
+    <p>
+      @messages("a11yStatement.abilityNet.1")
+      <a href="@appConfig.abilityNetUrl" target="_blank">@messages("a11yStatement.abilityNet.2")</a>
+      @messages("a11yStatement.abilityNet.3")
+    </p>
+  </div>
+
+  <div id="how-accessible">
+    <h2 class="heading-large">@messages("a11yStatement.howAccessible")</h2>
+    <p>
+      @messages("a11yStatement.WCAGCompliant.1")
+      <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("common.fullStop")
+    </p>
+    <p>@messages("a11yStatement.somePeople")</p>
+    <ul class="list list-bullet">
+      <li>@messages("a11yStatement.difficultyList.1")</li>
+      <li>@messages("a11yStatement.difficultyList.2")</li>
+    </ul>
+  </div>
+
+  <div id="reporting-problems">
+    <h2 class="heading-large">@messages("a11yStatement.reportingProblems")</h2>
+    <p>
+      @messages("a11yStatement.lookingToImprove.1")
+      <a href='mailto:@messages("a11yStatement.lookingToImprove.2")'>
+        @messages("a11yStatement.lookingToImprove.2")</a>@messages("common.fullStop")
+    </p>
+  </div>
+
+  <div id="complaints">
+    <h2 class="heading-large">@messages("a11yStatement.notHappy")</h2>
+    <p>
+      @messages("a11yStatement.EHRC.1")
+      <a href="@appConfig.eassUrl" target="_blank">@messages("a11yStatement.EHRC.2")</a>
+      @messages("a11yStatement.EHRC.3")
+      <a href="@appConfig.ecniUrl" target="_blank">@messages("a11yStatement.EHRC.4")</a>
+      @messages("a11yStatement.EHRC.5")
+    </p>
+  </div>
+
+  <div id="contact-us">
+    <h2 class="heading-large">@messages("a11yStatement.contactingUs")</h2>
+    <p>@messages("a11yStatement.textRelayService")</p>
+    <p>@messages("a11yStatement.BSL")</p>
+    <p>
+      @messages("a11yStatement.howToContactUs.1")
+      <a href="@appConfig.govUkHearingImpairedUrl" target="_blank">@messages("a11yStatement.howToContactUs.2")</a>@messages("common.fullStop")
+    </p>
+  </div>
+
+  <div id="technical-information">
+    <h2 class="heading-large">@messages("a11yStatement.technicalInformation")</h2>
+    <p>@messages("a11yStatement.HMRCCommitted")</p>
+    <p>
+      @messages("a11yStatement.WCAGCompliant.1")
+      <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("a11yStatement.nonCompliancesBelow")
+    </p>
+  </div>
+
+  <div id="non-accessible">
+    <h3 class="heading-medium">@messages("a11yStatement.nonAccessible")</h3>
+    <p>@messages("a11yStatement.nonAccessibleContent")</p>
+  </div>
+
+  <div id="non-compliance">
+    <h3 class="heading-medium">@messages("a11yStatement.nonCompliance")</h3>
+    <p>@messages("a11yStatement.nonAccessibleFixedBy")</p>
+    <ul class="list list-bullet">
+      <li>
+        @messages("a11yStatement.difficultyList.1")
+        <br>
+        @messages("a11yStatement.doesNotMeet.1")
+      </li>
+      <li>
+        @messages("a11yStatement.difficultyList.2")
+        <br>
+        @messages("a11yStatement.doesNotMeet.2")
+      </li>
+    </ul>
+  </div>
+
+  <div id="how-we-tested">
+    <h2 class="heading-large">@messages("a11yStatement.howWeTested")</h2>
+    <p>@messages("a11yStatement.lastTested")</p>
+    <p>
+      @messages("a11yStatement.testCarriedOut.1")
+      <a href="@appConfig.dacUrl" target="_blank">@messages("a11yStatement.testCarriedOut.2")</a>@messages("common.fullStop")
+      @messages("a11yStatement.testCarriedOut.3")
+    </p>
+    <p>@messages("a11yStatement.pagePrepared")</p>
+  </div>
+
+</div>
+}

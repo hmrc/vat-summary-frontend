@@ -8,6 +8,7 @@ GET        /payment-history/:year                                               
 GET        /vat-certificate                                                                        controllers.VatCertificateController.show
 GET        /vat-certificate/change-client-vat-number                                               controllers.VatCertificateController.changeClient
 GET        /vat-certificate/change-client-action                                                   controllers.VatCertificateController.changeClientAction
+GET        /accessibility-statement                                                                controllers.AccessibilityStatementController.show
 
 GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate        controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
 GET        /make-payment/:amountInPence/:chargeType/:dueDate                                       controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)

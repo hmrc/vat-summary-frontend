@@ -112,7 +112,16 @@ object ConfigKeys {
   val vatOptOutFrontendHost: String = "vat-opt-out-frontend.host"
   val vatOptOutFrontendStartUrl: String = "vat-opt-out-frontend.startUrl"
 
-  val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
+  val govUkSetupAgentServices: String = "gov-uk.setupAgentServicesUrl"
+  val govUkAccessibilityUrl: String = "gov-uk.accessibilityUrl"
+  val govUkHMRCUrl: String = "gov-uk.hmrcUrl"
+  val govUkHearingImpairedUrl: String = "gov-uk.hearingImpairedUrl"
+
+  val abilityNetUrl: String = "accessibility.abilityNetUrl"
+  val wcagGuidelinesUrl: String = "accessibility.wcagGuidelinesUrl"
+  val eassUrl: String = "accessibility.eassUrl"
+  val ecniUrl: String = "accessibility.ecniUrl"
+  val dacUrl: String = "accessibility.dacUrl"
 
   val manageVatHost: String = "manage-vat-subscription-frontend.host"
   val manageVatUrl: String = "manage-vat-subscription-frontend.url"
