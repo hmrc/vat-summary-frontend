@@ -172,11 +172,11 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
     width: 20%;
 }
 
-what-you-owe-subheading {
+.what-you-owe-subheading {
     font-weight: normal;
 }
 
-what-you-owe-heading {
-    padding-top: 10px;
-    width: 50%
+.what-you-owe-heading {
+    padding-top: 19px;
+    width: 75%
 }
