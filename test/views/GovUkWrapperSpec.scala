@@ -23,6 +23,7 @@ import org.jsoup.nodes.Document
 class GovUkWrapperSpec extends ViewBaseSpec {
 
   val navTitleSelector = ".header__menu__proposition-name"
+  val accessibilityFooterSelector = "#footer > div > div > div.footer-meta-inner > ul > li:nth-child(2) > a"
 
   "Calling .govuk_wrapper" when {
 
@@ -68,6 +69,16 @@ class GovUkWrapperSpec extends ViewBaseSpec {
         "have the correct page title" in {
           document.title shouldBe "title - Business tax account - GOV.UK"
         }
+      }
+    }
+
+    "the accessibility statement link has been provided in the footer links" should {
+
+      lazy val view = views.html.govuk_wrapper(mockConfig, "title", user = Some(User("999999999", arn = None)))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct accessibility statement link" in {
+        element(accessibilityFooterSelector).attr("href") shouldBe "/vat-through-software/accessibility-statement"
       }
     }
   }
