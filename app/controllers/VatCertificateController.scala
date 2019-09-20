@@ -36,7 +36,7 @@ class VatCertificateController @Inject()(
                                         )(implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  def show(): Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+  def show(): Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user =>
       val vrn = user.vrn
       serviceInfoService.getPartial.flatMap { serviceInfoContent =>
@@ -49,7 +49,7 @@ class VatCertificateController @Inject()(
       }
   }
 
-  def changeClient: Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+  def changeClient: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     user =>
       if (user.isAgent) {
         Future.successful(Redirect(appConfig.agentClientLookupStartUrl(routes.VatCertificateController.show().url))
@@ -59,7 +59,7 @@ class VatCertificateController @Inject()(
       }
   }
 
-  def changeClientAction: Action[AnyContent] = authorisedController.authorisedVatCertificateAction { implicit request =>
+  def changeClientAction: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     user =>
       if (user.isAgent) {
         Future.successful(Redirect(appConfig.agentClientLookupActionUrl)

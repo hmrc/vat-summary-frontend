@@ -89,6 +89,14 @@ trait AppConfig extends ServicesConfig {
   val agentClientUnauthorisedUrl: String => String
   val agentClientLookupActionUrl: String
   val agentServicesGovUkGuidance: String
+  val govUkAccessibilityUrl: String
+  val govUkHMRCUrl: String
+  val govUkHearingImpairedUrl: String
+  val abilityNetUrl: String
+  val wcagGuidelinesUrl: String
+  val eassUrl: String
+  val ecniUrl: String
+  val dacUrl: String
   val optOutFrontendUrl: String
   val paymentsAndRepaymentsUrl: String
   val manageVatUrl: String
@@ -230,7 +238,17 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
       getString(Keys.vatAgentClientLookupFrontendUnauthorisedUrl) +
       s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
   override lazy val agentClientLookupActionUrl: String = agentClientLookupHost + getString(Keys.vatAgentClientLookupFrontendActionUrl)
+
   override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
+  override lazy val govUkAccessibilityUrl: String = getString(Keys.govUkAccessibilityUrl)
+  override lazy val govUkHMRCUrl: String = getString(Keys.govUkHMRCUrl)
+  override lazy val govUkHearingImpairedUrl: String = getString(Keys.govUkHearingImpairedUrl)
+
+  override lazy val abilityNetUrl: String = getString(Keys.abilityNetUrl)
+  override lazy val wcagGuidelinesUrl: String = getString(Keys.wcagGuidelinesUrl)
+  override lazy val eassUrl: String = getString(Keys.eassUrl)
+  override lazy val ecniUrl: String = getString(Keys.ecniUrl)
+  override lazy val dacUrl: String = getString(Keys.dacUrl)
 
   override lazy val optOutFrontendUrl: String = getString(Keys.vatOptOutFrontendHost) + getString(Keys.vatOptOutFrontendStartUrl)
 

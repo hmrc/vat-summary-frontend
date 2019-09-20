@@ -101,7 +101,7 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
     checkMigrationStatus = true
   )
 
-  def authorisedVatCertificateAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
+  def authorisedActionAllowAgents(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
     block,
     allowAgentAccess = appConfig.features.agentAccess()
   )
