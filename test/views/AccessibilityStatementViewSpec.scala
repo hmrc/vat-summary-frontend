@@ -166,6 +166,8 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
       "has a bullet list of service difficulties" in {
         elementText("#how-accessible > ul") shouldBe
+          "On the ‘What you owe’ page, some information and headings might be challenging to understand for screen " +
+            "reader users " +
           "On the ‘Payment History’ and ‘Past Returns’ pages, when the tabs are clicked, the user is not told that " +
             "the page had been refreshed " +
           "On the ‘Payment History’ and ‘Past Returns’ pages, when the user clicks on a tab, the page focus is sent " +
@@ -320,6 +322,8 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
       "has a bullet list of service difficulties" in {
         elementText("#non-compliance > ul") shouldBe
+          "On the ‘What you owe’ page, some information and headings might be challenging to understand for screen " +
+            "reader users This doesn’t meet WCAG 2.1 success criterion 1.3.1 Info and Relationships (A) " +
           "On the ‘Payment History’ and ‘Past Returns’ pages, when the tabs are clicked, the user is not told that " +
             "the page had been refreshed This doesn’t meet WCAG 2.1 success criterion 4.1.2 Name, Role, Value (A) " +
           "On the ‘Payment History’ and ‘Past Returns’ pages, when the user clicks on a tab, the page focus is sent " +
