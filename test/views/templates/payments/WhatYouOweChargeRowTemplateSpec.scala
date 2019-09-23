@@ -98,7 +98,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         }
 
         "have the correct pay link context" in {
-          elementText(Selectors.payHiddenContent) shouldBe "£100 for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.payHiddenContent) shouldBe "£100"
         }
 
         "display the link to view the return" in {
@@ -149,7 +149,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct pay link context" in {
-        elementText(Selectors.payHiddenContent) shouldBe "£100 overdue for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.payHiddenContent) shouldBe "£100"
       }
     }
   }

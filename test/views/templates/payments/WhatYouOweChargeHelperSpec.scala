@@ -150,27 +150,6 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     }
   }
 
-  "WhatYouOweChargeHelper .overdueContext" when {
-
-    "payment is overdue" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge, overdue = true), messages)
-
-      "return overdue" in {
-        helper.overdueContext shouldBe "overdue"
-      }
-    }
-
-    "payment is not overdue" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), messages)
-
-      "return an empty string" in {
-        helper.overdueContext shouldBe ""
-      }
-    }
-  }
-
   "WhatYouOweChargeHelper .viewReturnContext" when {
 
     "the charge has a to and from period" when {

@@ -54,8 +54,6 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
     case _ => false
   }
 
-  val overdueContext: String = if (payment.overdue) messages("common.overdue") else ""
-
   val viewReturnContext: String = payment match {
     case payment: OpenPaymentsModelWithPeriod => payment.chargeType match {
       case ReturnDebitCharge | AAReturnDebitCharge | PaymentOnAccountReturnDebitCharge =>
