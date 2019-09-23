@@ -159,15 +159,17 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
 
 .what-you-owe-due-date {
     border-bottom: 0;
-    width: 50%;
+    width: 70%;
 }
 
 .what-you-owe-amount {
+    vertical-align:middle;
     border-bottom: 0;
-    width: 20%;
+    width: 10%;
 }
 
 .what-you-owe-links {
+    vertical-align:middle;
     border-bottom: 0;
     width: 20%;
 }
@@ -178,5 +180,5 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
 
 .what-you-owe-heading {
     padding-top: 19px;
-    width: 75%
+    width: 90%
 }

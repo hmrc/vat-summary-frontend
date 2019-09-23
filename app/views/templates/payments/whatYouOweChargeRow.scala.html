@@ -26,11 +26,10 @@
 
 <div id="payment-@{count + 1}">
 
-<h2 class="bold heading-small what-you-owe-heading">@chargeDetails.title @chargeDescription.map { description => <div class="what-you-owe-subheading">@description</div> }</h2>
-
 <dl class="govuk-check-your-answers cya-questions-long what-you-owe-dl">
     <div class="check-your-answer-row what-you-owe-row">
         <dt class="cya-question what-you-owe-due-date">
+            <h2 class="bold heading-small what-you-owe-heading">@chargeDetails.title @chargeDescription.map { description => <div class="what-you-owe-subheading">@description</div> }</h2>
             <div data-due="@(payment.due.toString)" class="form-hint">
                 @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
                 @if(payment.overdue) {
