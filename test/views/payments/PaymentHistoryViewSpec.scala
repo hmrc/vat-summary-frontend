@@ -226,7 +226,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           }
 
           "have the no payments message" in {
-            elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+            elementText(Selectors.mainParagraph) shouldBe
+              "You have not made or received any payments using the new VAT service this year."
           }
         }
 
@@ -256,7 +257,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             }
 
             "have the no payments message" in {
-              elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+              elementText(Selectors.mainParagraph) shouldBe
+                "You have not made or received any payments using the new VAT service this year."
             }
           }
 
@@ -283,7 +285,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
             }
 
             "have the no payments message" in {
-              elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+              elementText(Selectors.mainParagraph) shouldBe
+                "You have not made or received any payments using the new VAT service this year."
             }
           }
         }
@@ -351,7 +354,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "have the no payments message" in {
-          elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+          elementText(Selectors.mainParagraph) shouldBe
+            "You have not made or received any payments using the new VAT service this year."
         }
       }
 
@@ -380,7 +384,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           }
 
           "have the no history message" in {
-            elementText(Selectors.mainParagraph) shouldBe "You have not yet made or received any payments this year."
+            elementText(Selectors.mainParagraph) shouldBe
+              "You have not made or received any payments using the new VAT service this year."
           }
         }
 

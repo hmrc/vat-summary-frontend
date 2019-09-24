@@ -97,11 +97,8 @@
             </tbody>
           </table>
         }
-        case (false, Some(year)) if year == model.currentYear => {
-          <p class="lede">@messages("paymentsHistory.noCurrentYearHistory")</p>
-        }
         case (false, Some(year)) => {
-          <p class="lede">@messages("paymentsHistory.noPreviousYearHistory")</p>
+          <p class="lede">@messages("paymentsHistory.noCurrentYearHistory")</p>
         }
         case (false, None) => {
           <p>
