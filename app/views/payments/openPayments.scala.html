@@ -50,28 +50,9 @@
 
     <div class="payments">
       <div class="section">
-          <table>
-              <thead>
-                  <tr>
-                      <th scope="col">
-                          <div class="visuallyhidden">@messages("openPayments.description")</div>
-                      </th>
-
-                      <th scope="col" class="numeric">
-                          <div class="visuallyhidden">@messages("openPayments.amount")</div>
-                      </th>
-
-                      <th scope="col">
-                          <div class="visuallyhidden">@messages("openPayments.action")</div>
-                      </th>
-                  </tr>
-              </thead>
-              <tbody>
-                  @model.payments.zipWithIndex.map { case(payment, count) =>
-                      @views.html.templates.payments.whatYouOweChargeRow(payment, count)
-                  }
-              </tbody>
-          </table>
+          @model.payments.zipWithIndex.map { case(payment, count) =>
+              @views.html.templates.payments.whatYouOweChargeRow(payment, count)
+          }
       </div>
 
       @model.hasDirectDebit match {
