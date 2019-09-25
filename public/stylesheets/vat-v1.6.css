@@ -169,6 +169,7 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
 }
 
 .what-you-owe-links {
+    padding-top: 19px;
     vertical-align:middle;
     border-bottom: 0;
     width: 20%;
