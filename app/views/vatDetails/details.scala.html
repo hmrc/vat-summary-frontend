@@ -65,7 +65,7 @@
     </div>
     <div class="grid-row">
       @views.html.templates.updateVatDetailsSection()
-      @if(appConfig.features.paymentsAndRepaymentsEnabled()) {
+      @if(appConfig.features.paymentsAndRepaymentsEnabled() && !detailsViewModel.customerInfoError && !detailsViewModel.isHybridUser) {
         @views.html.templates.paymentsAndRepaymentsSection(user.vrn)
       }
       @views.html.templates.vatCertificateSection()
