@@ -14,6 +14,6 @@
  * limitations under the License.
  *@
 
-@(link: String, linkText: String, gaEvent: Option[String] = None)(implicit messages: Messages)
+@(link: String, linkText: String)(implicit messages: Messages)
 
-<a href="@link" target="_blank" @gaEvent.map(event => s"data-journey-click=$event")>@linkText @messages("common.newTab")</a>
+<a href="@link" target="_blank" >@linkText @messages("common.newTab")</a>

@@ -29,7 +29,7 @@
     @if(isHybridUser) {
       @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))
     } else {
-      <p @if(isError){data-metrics="error:recovered:next-payment"}>
+      <p>
       @(paymentsData, hasMultiple, isError) match {
         case (_, _, true) => { @messages("vatDetails.error") }
         case (Some(numOfPayments), true, _) => { @messages("vatDetails.paymentsDue", numOfPayments)}
@@ -45,7 +45,7 @@
       </p>
 
       <p>
-        <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}" data-journey-click="payment:check:vat-details">
+        <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}">
           @messages("payment.check")
         </a>
       </p>

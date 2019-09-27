@@ -444,13 +444,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementText(Selectors.apiError) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
 
-    "have the correct GA tag regarding the entity name graceful error handling" in {
-      element(Selectors.header).attr("data-metrics") shouldBe "error:hidden-text:vat-overview-entity-name"
-    }
-
     "not display the payments and repayments section" in {
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
     }
+
   }
 
   "Should not Render the opt out section when the customer is not mandated" should {

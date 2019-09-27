@@ -50,8 +50,5 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
       element(Selectors.payNowLink).attr("href") shouldBe "unauthenticated-payments-url"
     }
 
-    "have the correct GA tag for the graceful error content" in {
-      element(Selectors.payNow).attr("data-metrics") shouldBe "error:help-text:payments-service"
-    }
   }
 }

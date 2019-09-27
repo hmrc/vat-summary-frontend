@@ -49,9 +49,5 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
         "account details and track what HMRC owe you."
     }
 
-    "has the correct GA tag" in {
-      element(Selectors.paymentsAndRepaymentsLink).attr("data-journey-click") shouldBe "vat-overview:click:" +
-        "repayment-tracker-handoff"
-    }
   }
 }

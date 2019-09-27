@@ -42,7 +42,7 @@
         </dd>
         <dd class="cya-change what-you-owe-links">
             <div>
-                <a data-journey-click="payment:make-payment:open-payments" href="@payment.makePaymentRedirect">
+                <a href="@payment.makePaymentRedirect">
                     <span>@chargeDetails.payLinkText</span>
                     <span class="visuallyhidden">
                     @displayMoney(payment.amount)
@@ -51,7 +51,7 @@
             </div>
 
             @if(chargeDetails.viewReturnEnabled) {
-            <a data-journey-click="@chargeDetails.viewReturnGAEvent" href="@appConfig.vatReturnUrl(payment.periodKey)">
+            <a href="@appConfig.vatReturnUrl(payment.periodKey)">
                 <span class="visuallyhidden">@chargeDetails.viewReturnContext</span>
                 <span>@messages("openPayments.viewReturnLink")</span>
             </a>

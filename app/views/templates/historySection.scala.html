@@ -28,19 +28,17 @@
         @if(isHybridUser) {
           @openInNewTab(
             controllers.routes.PortalController.hybridPH().url,
-            messages("vatDetails.viewPastPayments.link"),
-            Some("payment-history:view:portal-payment-history-details")
+            messages("vatDetails.viewPastPayments.link")
           )
         } else {
-          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(currentYear)"
-             data-journey-click="payment-history:view:payment-history-details">
+          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(currentYear)">
              @messages("vatDetails.viewPastPayments.link")
           </a>
         }
       </li>
 
       <li>
-        <a href="@{appConfig.vatSubmittedReturnsUrl}/@currentYear" data-journey-click="return:view:vat-details">
+        <a href="@{appConfig.vatSubmittedReturnsUrl}/@currentYear">
            @messages("vatDetails.viewPastReturns.link")
         </a>
       </li>
