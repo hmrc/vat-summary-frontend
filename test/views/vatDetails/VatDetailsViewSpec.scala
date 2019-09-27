@@ -271,9 +271,15 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         elementExtinct(Selectors.paymentsAndRepaymentsSection)
       }
     }
-  }
 
-  "Rendering the VAT details page" when {
+    "the user is hybrid" should {
+
+      "not display the payments and repayments section" in {
+        lazy val view = views.html.vatDetails.details(detailsModel.copy(isHybridUser = true))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        elementExtinct(Selectors.paymentsAndRepaymentsSection)
+      }
+    }
 
     "the optOut feature switch is false" should {
 
@@ -314,7 +320,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "have the correct next payment section vat returns link href" in {
       element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
-
   }
 
   "Rendering the VAT details page without a next return or next payment" should {
@@ -441,6 +446,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "have the correct GA tag regarding the entity name graceful error handling" in {
       element(Selectors.header).attr("data-metrics") shouldBe "error:hidden-text:vat-overview-entity-name"
+    }
+
+    "not display the payments and repayments section" in {
+      elementExtinct(Selectors.paymentsAndRepaymentsSection)
     }
   }
 
