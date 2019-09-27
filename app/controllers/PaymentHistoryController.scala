@@ -67,7 +67,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
           NotFound(views.html.errors.notFound())
         } else {
           val showPreviousPaymentsTab: Boolean = migratedWithin15Months && user.hasNonMtdVat
-          generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, year) match {
+          generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, year, migrationDate) match {
             case Some(model) =>
               auditEvent(user.vrn, model.transactions, year)
               Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
@@ -140,10 +140,13 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
   private[controllers] def generateViewModel(paymentsServiceYearOne: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              paymentsServiceYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              showPreviousPaymentsTab: Boolean,
-                                             selectedYear: Int): Option[PaymentsHistoryViewModel] =
+                                             selectedYear: Int,
+                                             customerMigratedToETMPDate: Option[LocalDate]): Option[PaymentsHistoryViewModel] =
     (paymentsServiceYearOne, paymentsServiceYearTwo) match {
       case (Right(yearOneTrans), Right(yearTwoTrans)) =>
-        val (tabOne, tabTwo) = generateTabs(yearOneTrans.isEmpty, yearTwoTrans.isEmpty, showPreviousPaymentsTab)
+        val migratedThisYear = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
+        val (tabOne, tabTwo) =
+          generateTabs(yearOneTrans.isEmpty, yearTwoTrans.isEmpty, showPreviousPaymentsTab, migratedThisYear)
         val transactions = if(selectedYear == currentYear) yearOneTrans else yearTwoTrans
         if (yearTwoTrans.isEmpty && selectedYear == previousYear && !showPreviousPaymentsTab) {
           None
@@ -160,9 +163,13 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
       case _ => None
   }
 
-  def generateTabs(yearOneEmpty: Boolean, yearTwoEmpty: Boolean, showPreviousPaymentsTab: Boolean): (Option[Int], Option[Int]) =
+  def generateTabs(yearOneEmpty: Boolean,
+                   yearTwoEmpty: Boolean,
+                   showPreviousPaymentsTab: Boolean,
+                   migratedThisYear: Boolean): (Option[Int], Option[Int]) =
     (yearOneEmpty, yearTwoEmpty) match {
-      case (true, true) if showPreviousPaymentsTab => (Some(currentYear), Some(previousYear))
+      case _ if showPreviousPaymentsTab && migratedThisYear => (Some(currentYear), None)
+      case _ if showPreviousPaymentsTab => (Some(currentYear), Some(previousYear))
       case (true, true) => (None, None)
       case (false, true) => (Some(currentYear), None)
       case _ => (Some(currentYear), Some(previousYear))

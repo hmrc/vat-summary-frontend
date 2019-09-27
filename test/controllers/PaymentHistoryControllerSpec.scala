@@ -461,7 +461,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         "return a PaymentsHistoryViewModel with the transactions from the current year" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear
+            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear, None
           ) shouldBe Some(PaymentsHistoryViewModel(
             Some(currentYear),
             Some(currentYear - 1),
@@ -477,7 +477,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         "return a PaymentsHistoryViewModel with the transactions from the previous year" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear - 1
+            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear - 1, None
           ) shouldBe Some(PaymentsHistoryViewModel(
             Some(currentYear),
             Some(currentYear - 1),
@@ -494,7 +494,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         "return None" in new Test {
           override val serviceResultYearTwo = Right(Seq.empty)
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear - 1
+            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear - 1, None
           ) shouldBe None
         }
       }
@@ -505,7 +505,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       "return None" in new Test {
         override val serviceResultYearOne = Left(VatLiabilitiesError)
         target.generateViewModel(
-          serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear
+          serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, currentYear, None
         ) shouldBe None
       }
     }
@@ -513,11 +513,21 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   "Calling .generateTabs" when {
 
-    "both years are empty and the previous payments tab is enabled" should {
+    "the previous payments tab is enabled and user was migrated to ETMP in the current year" should {
 
-      "generate no tabs (None, None)" in new Test {
+      "generate only the first tab (Some, None)" in new Test {
         target.generateTabs(
-          yearOneEmpty = true, yearTwoEmpty = true, showPreviousPaymentsTab = false) shouldBe (None, None)
+          yearOneEmpty = true, yearTwoEmpty = true, showPreviousPaymentsTab = true, migratedThisYear = true
+        ) shouldBe (Some(currentYear), None)
+      }
+    }
+
+    "the previous payments tab is enabled and user was migrated to ETMP before the current year" should {
+
+      "generate both tabs (Some, Some)" in new Test {
+        target.generateTabs(
+          yearOneEmpty = true, yearTwoEmpty = true, showPreviousPaymentsTab = true, migratedThisYear = false
+        ) shouldBe (Some(currentYear), Some(currentYear - 1))
       }
     }
 
@@ -525,7 +535,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "generate no tabs (None, None)" in new Test {
         target.generateTabs(
-          yearOneEmpty = true, yearTwoEmpty = true, showPreviousPaymentsTab = false) shouldBe (None, None)
+          yearOneEmpty = true, yearTwoEmpty = true, showPreviousPaymentsTab = false, migratedThisYear = true
+        ) shouldBe (None, None)
       }
     }
 
@@ -533,7 +544,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "generate only the first tab (Some, None)" in new Test {
         target.generateTabs(
-          yearOneEmpty = false, yearTwoEmpty = true, showPreviousPaymentsTab = false) shouldBe (Some(currentYear), None)
+          yearOneEmpty = false, yearTwoEmpty = true, showPreviousPaymentsTab = false, migratedThisYear = true
+        ) shouldBe (Some(currentYear), None)
       }
     }
 
@@ -541,7 +553,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "generate both tabs (Some, Some)" in new Test {
         target.generateTabs(
-          yearOneEmpty = false, yearTwoEmpty = false, showPreviousPaymentsTab = false
+          yearOneEmpty = false, yearTwoEmpty = false, showPreviousPaymentsTab = false, migratedThisYear = true
         ) shouldBe (Some(currentYear), Some(currentYear - 1))
       }
     }
@@ -550,7 +562,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "generate both tabs (Some, Some)" in new Test {
         target.generateTabs(
-          yearOneEmpty = false, yearTwoEmpty = false, showPreviousPaymentsTab = false
+          yearOneEmpty = false, yearTwoEmpty = false, showPreviousPaymentsTab = false, migratedThisYear = true
         ) shouldBe (Some(currentYear), Some(currentYear - 1))
       }
     }
