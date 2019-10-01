@@ -159,9 +159,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           element(Selectors.printButton).attr("onclick") shouldBe "javascript:window.print()"
         }
 
-        "has the correct GA tag" in {
-          element(Selectors.printButton).attr("data-journey-click") shouldBe "vat-certificate:print:certificate"
-        }
       }
     }
 
@@ -298,9 +295,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           element(Selectors.printButton).attr("onclick") shouldBe "javascript:window.print()"
         }
 
-        "has the correct GA tag" in {
-          element(Selectors.printButton).attr("data-journey-click") shouldBe "agent_vat-certificate:print:certificate"
-        }
       }
     }
   }

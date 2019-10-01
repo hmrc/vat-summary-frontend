@@ -23,7 +23,7 @@
 <div class="tile">
   <div id="next-return" class="tile-body">
     <h2 class="heading-medium push--top">@messages("returnObligation.nextReturn")</h2>
-      <p @if(isError){data-metrics="error:recovered:next-return"}>
+      <p>
       @(obligationData, hasMultiple, isNonMTDfB, isError) match {
         case (_, _, _, true) => { @messages("vatDetails.error") }
         case (_, _, None, _) => { @messages("vatDetails.error") }
@@ -43,12 +43,12 @@
       <p>
           @isNonMTDfB match {
               case Some(true) => {
-                  <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
+                  <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
                       @messages("returnObligation.submit")
                   </a>
               }
               case Some(false) => {
-                  <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}" data-journey-click="return:view-deadlines:vat-details">
+                  <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
                      @messages("returnObligation.viewReturns")
                   </a>
               }

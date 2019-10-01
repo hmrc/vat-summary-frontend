@@ -47,8 +47,7 @@
                       <p>
                         @messages("noPayments.youCanAlso")
                         <a target="_blank"
-                           href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)"
-                           data-metrics="direct-debit:direct-debit-handoff:no-open-payments">
+                           href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)">
                           @messages("noPayments.viewDirectDebit")</a>.
                       </p>
                     }
@@ -56,8 +55,7 @@
                       <p>
                         @messages("noPayments.youCanAlso")
                         <a target="_blank"
-                           href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)"
-                           data-metrics="direct-debit:direct-debit-handoff:no-open-payments">
+                           href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)">
                           @messages("noPayments.setUpDirectDebit")
                         </a>
                         @messages("noPayments.forYourVatReturns")

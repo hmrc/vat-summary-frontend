@@ -31,7 +31,7 @@ class ExpandingHelpSectionTemplateSpec extends TemplateBaseSpec {
     val expectedMarkup = Html(
       s"""
         |<details>
-        |    <summary><span class="summary" data-journey-click="$feature:help:reveal:$pageName">$helpTextTitle</span></summary>
+        |    <summary><span class="summary">$helpTextTitle</span></summary>
         |    <div class="panel-indent">
         |        $content
         |    </div>

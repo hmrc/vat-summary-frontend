@@ -210,24 +210,4 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     }
   }
 
-  "WhatYouOweChargeHelper .viewReturnGAEvent" when {
-
-    "the charge has a to and from period" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), messages)
-
-      "return 'returns:view-return 2018-01-01-to-2018-02-02:open-payments'" in {
-        helper.viewReturnGAEvent shouldBe "returns:view-return 2018-01-01-to-2018-02-02:open-payments"
-      }
-    }
-
-    "the charge has no to and from period" should {
-
-      val helper = new WhatYouOweChargeHelper(paymentModelNoPeriod(MpRepeatedPre2009Charge), messages)
-
-      "return 'returns:view-return:open-payments'" in {
-        helper.viewReturnGAEvent shouldBe "returns:view-return:open-payments"
-      }
-    }
-  }
 }

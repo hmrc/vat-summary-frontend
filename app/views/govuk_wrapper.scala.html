@@ -66,8 +66,8 @@
 }
 
 @headerNavLinks = {
-    @if(showLogout) {<li><a id="sign-out" href="@routes.SignOutController.signOut(feedbackOnSignOut)"
-    data-journey-click="primary-navigation:Click:Signout">@messages("base.signOut")</a></li>}
+    @if(showLogout) {<li><a id="sign-out" href="@routes.SignOutController.signOut(feedbackOnSignOut)">
+    @messages("base.signOut")</a></li>}
 }
 
 @dynamicNavTitle = @{
@@ -92,8 +92,8 @@
 
 @bodyEnd = {
     @uiLayouts.footer(
-      analyticsToken = Some(appConfig.analyticsToken),
-      analyticsHost = appConfig.analyticsHost,
+      analyticsToken = None,
+      analyticsHost = "",
       ssoUrl = None,
       scriptElem = Some(scriptElement),
       gaCalls = None)

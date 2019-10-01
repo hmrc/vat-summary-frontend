@@ -86,10 +86,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
       }
 
-      "have the correct GA tag on the direct debit link" in {
-        element(Selectors.directDebitLink).attr("data-metrics") shouldBe "direct-debit:direct-debit-handoff:no-open-payments"
-      }
-
       "render breadcrumbs which" should {
 
         "have the text 'Business tax account'" in {
@@ -132,9 +128,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=false"
       }
 
-      "have the correct GA tag on the direct debit link" in {
-        element(Selectors.directDebitLink).attr("data-metrics") shouldBe "direct-debit:direct-debit-handoff:no-open-payments"
-      }
     }
 
     "the call to the direct debit service fails" should {

@@ -65,8 +65,4 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
     case _ => ""
   }
 
-  val viewReturnGAEvent: String = payment match {
-    case payment: OpenPaymentsModelWithPeriod => s"returns:view-return ${payment.start}-to-${payment.end}:open-payments"
-    case _ => s"returns:view-return:open-payments"
-  }
 }

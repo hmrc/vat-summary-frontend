@@ -103,8 +103,7 @@
         case (false, None) => {
           <p>
             @messages("paymentsHistory.previousPayments.youCan")
-            <a href="@appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)"
-               data-journey-click="payments:view-portal-payments:previous-payments">
+            <a href="@appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)">
               @messages("paymentsHistory.previousPayments.viewPreviousPayments")
             </a>
             @messages("paymentsHistory.previousPayments.beforeMtd")

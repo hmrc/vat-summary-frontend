@@ -114,9 +114,6 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
       }
 
-      "have the correct GA tag for the graceful error content" in {
-        element(Selectors.nextPaymentDate).attr("data-metrics") shouldBe "error:recovered:next-payment"
-      }
     }
 
     "there are multiple payments to display" should {
