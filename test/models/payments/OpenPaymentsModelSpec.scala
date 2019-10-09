@@ -25,8 +25,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
   val openPaymentsModelWithPeriod: OpenPaymentsModel = OpenPaymentsModel(
     payment = Payment(
       chargeType = OADebitCharge,
-      start = LocalDate.parse("2001-01-01"),
-      end = LocalDate.parse("2001-03-31"),
+      periodFrom = LocalDate.parse("2001-01-01"),
+      periodTo = LocalDate.parse("2001-03-31"),
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003")
@@ -56,8 +56,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             chargeType = OADebitCharge,
             amount = 300.00,
             due = LocalDate.parse("2003-04-05"),
-            start = LocalDate.parse("2001-01-01"),
-            end = LocalDate.parse("2001-03-31"),
+            periodFrom = LocalDate.parse("2001-01-01"),
+            periodTo = LocalDate.parse("2001-03-31"),
             periodKey = "#003",
             overdue = true
           )
@@ -92,8 +92,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             |   "paymentType" : "VAT OA Debit Charge",
             |   "amount" : 300,
             |   "due" : "2003-04-05",
-            |   "start" : "2001-01-01",
-            |   "end" : "2001-03-31",
+            |   "periodFrom" : "2001-01-01",
+            |   "periodTo" : "2001-03-31",
             |   "periodKey" : "#003",
             |   "overdue" : true
             | }
@@ -185,8 +185,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       val model = OpenPaymentsModelWithPeriod(
         chargeType = OADebitCharge,
         due = LocalDate.parse("2003-04-05"),
-        start = LocalDate.parse("2001-01-01"),
-        end = LocalDate.parse("2001-03-31"),
+        periodFrom = LocalDate.parse("2001-01-01"),
+        periodTo = LocalDate.parse("2001-03-31"),
         amount = 300.00,
         periodKey = "#003",
         overdue = true
@@ -197,8 +197,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
           |   "paymentType" : "VAT OA Debit Charge",
           |   "amount" : 300,
           |   "due" : "2003-04-05",
-          |   "start" : "2001-01-01",
-          |   "end" : "2001-03-31",
+          |   "periodFrom" : "2001-01-01",
+          |   "periodTo" : "2001-03-31",
           |   "periodKey" : "#003",
           |   "overdue" : true
           | }

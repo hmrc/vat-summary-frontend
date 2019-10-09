@@ -29,8 +29,8 @@ case class ViewNextOpenVatObligationAuditModel(user: User,
     case Some(obs) => Map(
       "obligationOpen" -> "yes",
       "obligationDueBy" -> obs.obligations.head.due.toString,
-      "obligationPeriodFrom" -> obs.obligations.head.start.toString,
-      "obligationPeriodTo" -> obs.obligations.head.end.toString
+      "obligationPeriodFrom" -> obs.obligations.head.periodFrom.toString,
+      "obligationPeriodTo" -> obs.obligations.head.periodTo.toString
     )
     case _ => Map("obligationOpen" -> "no")
   }

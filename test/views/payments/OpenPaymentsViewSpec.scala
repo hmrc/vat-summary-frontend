@@ -75,8 +75,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       chargeType = ReturnDebitCharge,
       amount = 2000000000.01,
       due = LocalDate.parse("2001-04-08"),
-      start = LocalDate.parse("2001-01-01"),
-      end = LocalDate.parse("2001-03-31"),
+      periodFrom = LocalDate.parse("2001-01-01"),
+      periodTo = LocalDate.parse("2001-03-31"),
       periodKey = "#001",
       overdue = true
     ),
@@ -294,8 +294,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
             chargeType = ChargeType.apply(historyChargeHelper.name),
             amount = 2000000000.01,
             due = LocalDate.parse("2008-04-08"),
-            start = LocalDate.parse("2018-01-01"),
-            end = LocalDate.parse("2018-02-01"),
+            periodFrom = LocalDate.parse("2018-01-01"),
+            periodTo = LocalDate.parse("2018-02-01"),
             periodKey = "#001"
           )),
           hasDirectDebit = Some(false)

@@ -30,7 +30,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
   def description()(implicit lang: play.api.i18n.Lang): Option[String] = {
     (payment, paymentMessageHelper.description) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
-        Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.start), Some(payment.end)))
+        Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.periodFrom), Some(payment.periodTo)))
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
         val descriptionText = PaymentMessageHelper.getFullDescription(desc, None, None)
         if (descriptionText.contains("{0}")) {
@@ -57,9 +57,9 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
   val viewReturnContext: String = payment match {
     case payment: OpenPaymentsModelWithPeriod => payment.chargeType match {
       case ReturnDebitCharge | AAReturnDebitCharge | PaymentOnAccountReturnDebitCharge =>
-        messages("openPayments.vatReturn", displayDateRange(payment.start, payment.end)).trim
+        messages("openPayments.vatReturn", displayDateRange(payment.periodFrom, payment.periodTo)).trim
       case ErrorCorrectionDebitCharge =>
-        messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.start, payment.end)).trim
+        messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.periodFrom, payment.periodTo)).trim
       case _ => ""
     }
     case _ => ""

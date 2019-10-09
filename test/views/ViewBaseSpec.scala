@@ -32,8 +32,8 @@ import scala.collection.JavaConverters._
 
 trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
-  override def afterEach(): Unit = {
-    super.afterEach()
+  override def beforeEach(): Unit = {
+    super.beforeEach()
     mockConfig.features.paymentsAndRepaymentsEnabled(true)
     mockConfig.features.vatOptOutEnabled(true)
   }

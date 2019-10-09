@@ -502,232 +502,232 @@ class PaymentsHttpParserSpec extends UnitSpec {
       val expected = Right(Payments(Seq(
         PaymentWithPeriod(
           ReturnDebitCharge,
-          start = LocalDate.parse("2016-12-01"),
-          end = LocalDate.parse("2017-01-01"),
+          periodFrom = LocalDate.parse("2016-12-01"),
+          periodTo = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.50),
           periodKey = "#001"
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
-          start = LocalDate.parse("2017-12-01"),
-          end = LocalDate.parse("2018-01-01"),
+          periodFrom = LocalDate.parse("2017-12-01"),
+          periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2018-10-25"),
           outstandingAmount = BigDecimal(1000.51),
           periodKey = "#002"
         ),
         PaymentWithPeriod(
           OACreditCharge,
-          start = LocalDate.parse("2017-12-01"),
-          end = LocalDate.parse("2018-01-01"),
+          periodFrom = LocalDate.parse("2017-12-01"),
+          periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.52),
           periodKey = "#003"
         ),
         PaymentWithPeriod(
           OADebitCharge,
-          start = LocalDate.parse("2017-12-01"),
-          end = LocalDate.parse("2018-01-01"),
+          periodFrom = LocalDate.parse("2017-12-01"),
+          periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.53),
           periodKey = "#004"
         ),
         PaymentWithPeriod(
           CentralAssessmentCharge,
-          start = LocalDate.parse("2016-12-01"),
-          end = LocalDate.parse("2017-01-01"),
+          periodFrom = LocalDate.parse("2016-12-01"),
+          periodTo = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2016-10-25"),
           outstandingAmount = BigDecimal(1000.25),
           periodKey = "#005"
         ),
         PaymentWithPeriod(
           DefaultSurcharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
           periodKey = "#006"
         ),
         PaymentWithPeriod(
           ErrorCorrectionCreditCharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.29),
           periodKey = "#007"
         ),
         PaymentWithPeriod(
           ErrorCorrectionDebitCharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#007"
         ),
         PaymentWithPeriod(
           AAInterestCharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#008"
         ),
         PaymentWithPeriod(
           AAReturnDebitCharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#009"
         ),
         PaymentWithPeriod(
           AAReturnCreditCharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#010"
         ),
         PaymentWithPeriod(
           AAMonthlyInstalment,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#011"
         ),
         PaymentWithPeriod(
           AAQuarterlyInstalments,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#012"
         ),
         PaymentWithPeriod(
           OADefaultInterestCharge,
-          start = LocalDate.parse("2015-12-01"),
-          end = LocalDate.parse("2014-01-01"),
+          periodFrom = LocalDate.parse("2015-12-01"),
+          periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#018"
         ),
         PaymentWithPeriod(
           AACharge,
-          start = LocalDate.parse("2016-03-20"),
-          end = LocalDate.parse("2016-06-21"),
+          periodFrom = LocalDate.parse("2016-03-20"),
+          periodTo = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#009"
         ),
         PaymentWithPeriod(
           OAFurtherInterestCharge,
-          start = LocalDate.parse("2016-03-20"),
-          end = LocalDate.parse("2016-06-21"),
+          periodFrom = LocalDate.parse("2016-03-20"),
+          periodTo = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#010"
         ),
         PaymentWithPeriod(
           BnpRegPre2010Charge,
-          start = LocalDate.parse("2015-03-20"),
-          end = LocalDate.parse("2015-06-21"),
+          periodFrom = LocalDate.parse("2015-03-20"),
+          periodTo = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#019"
         ),
         PaymentWithPeriod(
           BnpRegPost2010Charge,
-          start = LocalDate.parse("2015-03-20"),
-          end = LocalDate.parse("2015-06-21"),
+          periodFrom = LocalDate.parse("2015-03-20"),
+          periodTo = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#011"
         ),
         PaymentWithPeriod(
           FtnMatPre2010Charge,
-          start = LocalDate.parse("2014-03-20"),
-          end = LocalDate.parse("2014-06-21"),
+          periodFrom = LocalDate.parse("2014-03-20"),
+          periodTo = LocalDate.parse("2014-06-21"),
           due = LocalDate.parse("2014-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#012"
         ),
         PaymentWithPeriod(
           FtnMatPost2010Charge,
-          start = LocalDate.parse("2013-03-20"),
-          end = LocalDate.parse("2013-06-21"),
+          periodFrom = LocalDate.parse("2013-03-20"),
+          periodTo = LocalDate.parse("2013-06-21"),
           due = LocalDate.parse("2013-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#013"
         ),
         PaymentWithPeriod(
           MiscPenaltyCharge,
-          start = LocalDate.parse("2012-03-20"),
-          end = LocalDate.parse("2012-06-21"),
+          periodFrom = LocalDate.parse("2012-03-20"),
+          periodTo = LocalDate.parse("2012-06-21"),
           due = LocalDate.parse("2012-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#014"
         ),
         PaymentWithPeriod(
           FtnEachPartnerCharge,
-          start = LocalDate.parse("2011-03-20"),
-          end = LocalDate.parse("2011-06-21"),
+          periodFrom = LocalDate.parse("2011-03-20"),
+          periodTo = LocalDate.parse("2011-06-21"),
           due = LocalDate.parse("2011-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#015"
         ),
         PaymentWithPeriod(
           MpPre2009Charge,
-          start = LocalDate.parse("2010-03-20"),
-          end = LocalDate.parse("2010-06-21"),
+          periodFrom = LocalDate.parse("2010-03-20"),
+          periodTo = LocalDate.parse("2010-06-21"),
           due = LocalDate.parse("2010-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#016"
         ),
         PaymentWithPeriod(
           MpRepeatedPre2009Charge,
-          start = LocalDate.parse("2009-03-20"),
-          end = LocalDate.parse("2009-06-21"),
+          periodFrom = LocalDate.parse("2009-03-20"),
+          periodTo = LocalDate.parse("2009-06-21"),
           due = LocalDate.parse("2009-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#017"
         ),
         PaymentWithPeriod(
           CivilEvasionPenaltyCharge,
-          start = LocalDate.parse("2008-03-20"),
-          end = LocalDate.parse("2008-06-21"),
+          periodFrom = LocalDate.parse("2008-03-20"),
+          periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#018"
         ),
         Payment(
           VatOAInaccuraciesFrom2009,
-          start = LocalDate.parse("2017-03-20"),
-          end = LocalDate.parse("2017-06-21"),
+          periodFrom = LocalDate.parse("2017-03-20"),
+          periodTo = LocalDate.parse("2017-06-21"),
           due = LocalDate.parse("2017-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#020")
         ),
         Payment(
           InaccuraciesAssessmentsPenCharge,
-          start = LocalDate.parse("2008-03-20"),
-          end = LocalDate.parse("2008-06-21"),
+          periodFrom = LocalDate.parse("2008-03-20"),
+          periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018")
         ),
         Payment(
           InaccuraciesReturnReplacedCharge,
-          start = LocalDate.parse("2008-03-20"),
-          end = LocalDate.parse("2008-06-21"),
+          periodFrom = LocalDate.parse("2008-03-20"),
+          periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018")
         ),
         Payment(
           CarterPenaltyCharge,
-          start = LocalDate.parse("2008-03-20"),
-          end = LocalDate.parse("2008-06-21"),
+          periodFrom = LocalDate.parse("2008-03-20"),
+          periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018")

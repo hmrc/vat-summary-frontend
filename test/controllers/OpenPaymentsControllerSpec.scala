@@ -400,8 +400,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             ReturnDebitCharge,
             payment.outstandingAmount,
             payment.due,
-            payment.start,
-            payment.end,
+            payment.periodFrom,
+            payment.periodTo,
             payment.periodKey,
             overdue = true
           )),

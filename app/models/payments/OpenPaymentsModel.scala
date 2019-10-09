@@ -36,10 +36,10 @@ object OpenPaymentsModel {
   def apply(chargeType: ChargeType,
             amount: BigDecimal,
             due: LocalDate,
-            start: LocalDate,
-            end: LocalDate,
+            periodFrom: LocalDate,
+            periodTo: LocalDate,
             periodKey: String,
-            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(chargeType, amount, due, start, end, periodKey, overdue)
+            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(chargeType, amount, due, periodFrom, periodTo, periodKey, overdue)
 
   def apply(chargeType: ChargeType,
             amount: BigDecimal,
@@ -52,8 +52,8 @@ object OpenPaymentsModel {
       payment.chargeType,
       payment.outstandingAmount,
       payment.due,
-      payment.start,
-      payment.end,
+      payment.periodFrom,
+      payment.periodTo,
       payment.periodKey,
       overdue
     )
@@ -75,15 +75,15 @@ object OpenPaymentsModel {
 case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        amount: BigDecimal,
                                        due: LocalDate,
-                                       start: LocalDate,
-                                       end: LocalDate,
+                                       periodFrom: LocalDate,
+                                       periodTo: LocalDate,
                                        periodKey: String,
                                        overdue: Boolean = false) extends OpenPaymentsModel {
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (amount * 100).toLong,
-    taxPeriodMonth = end.getMonthValue,
-    taxPeriodYear = end.getYear,
+    taxPeriodMonth = periodTo.getMonthValue,
+    taxPeriodYear = periodTo.getYear,
     chargeType.value,
     dueDate = due.toString
   ).url
@@ -95,8 +95,8 @@ object OpenPaymentsModelWithPeriod {
       "paymentType" -> model.chargeType,
       "amount" -> model.amount,
       "due" -> model.due,
-      "start" -> model.start,
-      "end" -> model.end,
+      "periodFrom" -> model.periodFrom,
+      "periodTo" -> model.periodTo,
       "periodKey" -> model.periodKey,
       "overdue" -> model.overdue
     )

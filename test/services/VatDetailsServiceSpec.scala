@@ -34,8 +34,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
   private trait Test {
     val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
-      start = LocalDate.parse("2017-01-01"),
-      end = LocalDate.parse("2017-03-30"),
+      periodFrom = LocalDate.parse("2017-01-01"),
+      periodTo = LocalDate.parse("2017-03-30"),
       due = LocalDate.parse("2017-04-30"),
       status = "O",
       received = None,
@@ -47,40 +47,40 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     val payments: Payments = Payments(Seq(
       PaymentWithPeriod(
         ReturnDebitCharge,
-        start = LocalDate.parse("2017-11-22"),
-        end = LocalDate.parse("2017-12-22"),
+        periodFrom = LocalDate.parse("2017-11-22"),
+        periodTo = LocalDate.parse("2017-12-22"),
         due = LocalDate.parse("2017-12-26"),
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
-        start = LocalDate.parse("2016-11-22"),
-        end = LocalDate.parse("2016-12-22"),
+        periodFrom = LocalDate.parse("2016-11-22"),
+        periodTo = LocalDate.parse("2016-12-22"),
         due = LocalDate.parse("2016-12-26"),
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
-        start = LocalDate.parse("2015-11-22"),
-        end = LocalDate.parse("2015-12-22"),
+        periodFrom = LocalDate.parse("2015-11-22"),
+        periodTo = LocalDate.parse("2015-12-22"),
         due = LocalDate.parse("2015-12-26"),
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
-        start = LocalDate.parse("2011-11-22"),
-        end = LocalDate.parse("2011-12-22"),
+        periodFrom = LocalDate.parse("2011-11-22"),
+        periodTo = LocalDate.parse("2011-12-22"),
         due = LocalDate.parse("2011-12-26"),
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
-        start = LocalDate.parse("2013-11-22"),
-        end = LocalDate.parse("2013-12-22"),
+        periodFrom = LocalDate.parse("2013-11-22"),
+        periodTo = LocalDate.parse("2013-12-22"),
         due = LocalDate.parse("2013-12-26"),
         outstandingAmount = BigDecimal(1000.00),
         periodKey = "#003"

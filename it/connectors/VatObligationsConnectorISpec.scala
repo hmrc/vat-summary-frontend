@@ -50,16 +50,16 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturnObligations(
         Seq(
           VatReturnObligation(
-            start = LocalDate.parse("2018-01-01"),
-            end = LocalDate.parse("2018-03-31"),
+            periodFrom = LocalDate.parse("2018-01-01"),
+            periodTo = LocalDate.parse("2018-03-31"),
             due = LocalDate.parse("2018-05-07"),
             status = "F",
             received = Some(LocalDate.parse("2018-04-15")),
             periodKey = "#001"
           ),
           VatReturnObligation(
-            start = LocalDate.parse("2018-01-01"),
-            end = LocalDate.parse("2018-03-31"),
+            periodFrom = LocalDate.parse("2018-01-01"),
+            periodTo = LocalDate.parse("2018-03-31"),
             due = LocalDate.parse("2018-05-07"),
             status = "O",
             received = None,
@@ -88,8 +88,8 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturnObligations(
         Seq(
           VatReturnObligation(
-            start = LocalDate.parse("2018-01-01"),
-            end = LocalDate.parse("2018-03-31"),
+            periodFrom = LocalDate.parse("2018-01-01"),
+            periodTo = LocalDate.parse("2018-03-31"),
             due = LocalDate.parse("2018-05-07"),
             status = "O",
             received = None,
@@ -118,8 +118,8 @@ class VatObligationsConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(VatReturnObligations(
         Seq(
           VatReturnObligation(
-            start = LocalDate.parse("2018-01-01"),
-            end = LocalDate.parse("2018-03-31"),
+            periodFrom = LocalDate.parse("2018-01-01"),
+            periodTo = LocalDate.parse("2018-03-31"),
             due = LocalDate.parse("2018-05-07"),
             status = "F",
             received = Some(LocalDate.parse("2018-04-15")),
