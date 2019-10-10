@@ -48,8 +48,8 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
 
       val expected = Right(VatReturnObligations(Seq(
         VatReturnObligation(
-          start = LocalDate.parse("2017-01-01"),
-          end = LocalDate.parse("2017-03-30"),
+          periodFrom = LocalDate.parse("2017-01-01"),
+          periodTo = LocalDate.parse("2017-03-30"),
           due = LocalDate.parse("2017-04-30"),
           status = "O",
           received = None,

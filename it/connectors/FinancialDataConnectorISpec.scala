@@ -46,16 +46,16 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       val expected = Right(Payments(Seq(
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
-          start = LocalDate.parse("2015-03-01"),
-          end = LocalDate.parse("2015-03-31"),
+          periodFrom = LocalDate.parse("2015-03-01"),
+          periodTo = LocalDate.parse("2015-03-31"),
           due = LocalDate.parse("2019-01-15"),
           outstandingAmount = 10000,
           periodKey = "15AC"
         ),
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
-          start = LocalDate.parse("2015-03-01"),
-          end = LocalDate.parse("2015-03-31"),
+          periodFrom = LocalDate.parse("2015-03-01"),
+          periodTo = LocalDate.parse("2015-03-31"),
           due = LocalDate.parse("2019-01-16"),
           outstandingAmount = 10000,
           periodKey = "15AC"

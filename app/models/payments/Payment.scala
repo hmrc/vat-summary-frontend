@@ -33,8 +33,8 @@ sealed trait Payment extends Obligation {
 }
 
 case class PaymentWithPeriod(chargeType: ChargeType,
-                             start: LocalDate,
-                             end: LocalDate,
+                             periodFrom: LocalDate,
+                             periodTo: LocalDate,
                              due: LocalDate,
                              outstandingAmount: BigDecimal,
                              periodKey: String) extends Payment {
@@ -42,8 +42,8 @@ case class PaymentWithPeriod(chargeType: ChargeType,
   val auditDetails: Map[String, String] = Map(
     "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
     "paymentDueBy" -> due.toString,
-    "paymentPeriodFrom" -> start.toString,
-    "paymentPeriodTo" -> end.toString
+    "paymentPeriodFrom" -> periodFrom.toString,
+    "paymentPeriodTo" -> periodTo.toString
   )
 
 }
@@ -63,23 +63,23 @@ case class PaymentNoPeriod(chargeType: ChargeType,
 object Payment {
 
   private def createPayment(chargeType: ChargeType,
-            start: Option[LocalDate],
-            end: Option[LocalDate],
+            periodFrom: Option[LocalDate],
+            periodTo: Option[LocalDate],
             due: LocalDate,
             outstandingAmount: BigDecimal,
-            periodKey: Option[String]): Payment = (start, end) match {
+            periodKey: Option[String]): Payment = (periodFrom, periodTo) match {
     case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey)
     case (None, None) => apply(chargeType, due, outstandingAmount, periodKey)
-    case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: start: '$s', end: '$e'")
+    case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
   }
 
   def apply(chargeType: ChargeType,
-            start: LocalDate,
-            end: LocalDate,
+            periodFrom: LocalDate,
+            periodTo: LocalDate,
             due: LocalDate,
             outstandingAmount: BigDecimal,
             periodKey: Option[String]): PaymentWithPeriod =
-    PaymentWithPeriod(chargeType, start, end, due, outstandingAmount, periodKey.getOrElse("0000"))
+    PaymentWithPeriod(chargeType, periodFrom, periodTo, due, outstandingAmount, periodKey.getOrElse("0000"))
 
   def apply(chargeType: ChargeType,
             due: LocalDate,

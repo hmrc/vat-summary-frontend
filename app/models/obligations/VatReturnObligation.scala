@@ -21,8 +21,8 @@ import java.time.LocalDate
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, Reads, Writes}
 
-case class VatReturnObligation(start: LocalDate,
-                               end: LocalDate,
+case class VatReturnObligation(periodFrom: LocalDate,
+                               periodTo: LocalDate,
                                due: LocalDate,
                                status: String,
                                received: Option[LocalDate],

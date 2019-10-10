@@ -47,8 +47,8 @@ class PaymentSpec extends UnitSpec {
 
         val paymentWithPeriodModel = PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
-          start = LocalDate.parse(startDate),
-          end = LocalDate.parse(endDate),
+          periodFrom = LocalDate.parse(startDate),
+          periodTo = LocalDate.parse(endDate),
           due = LocalDate.parse(dueDate),
           outstandingAmount = 9999,
           periodKey = "#001"
@@ -99,7 +99,7 @@ class PaymentSpec extends UnitSpec {
         val exception = intercept[Exception] {
           paymentJson.as[Payment]
         }
-        exception.getMessage shouldBe s"Partial taxPeriod was supplied: start: 'Some($startDate)', end: 'None'"
+        exception.getMessage shouldBe s"Partial taxPeriod was supplied: periodFrom: 'Some($startDate)', periodTo: 'None'"
       }
     }
 
