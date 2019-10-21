@@ -562,8 +562,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |  }""".stripMargin
       )
 
-      "throw a JsResultException" in {
-        intercept[JsResultException](Json.fromJson(testJson)(reads))
+      "return an empty sequence of sub items" in {
+        Json.fromJson(testJson)(reads) shouldBe JsSuccess(Seq())
       }
     }
 
