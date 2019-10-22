@@ -90,8 +90,6 @@ object PaymentsHistoryModel {
         None
     }
 
-  private[models] def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] = {
-    val subItems = (transaction \ FinancialTransactionsConstants.items).as[Seq[TransactionSubItem]]
-    if(subItems.isEmpty) throw new IllegalStateException("No sub items found for transaction") else subItems
-  }
+  private[models] def getSubItemsForTransaction(transaction: JsValue): Seq[TransactionSubItem] =
+    (transaction \ FinancialTransactionsConstants.items).asOpt[Seq[TransactionSubItem]].getOrElse(Seq())
 }
