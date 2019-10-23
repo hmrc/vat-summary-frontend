@@ -33,4 +33,5 @@ class Features @Inject()(config: Configuration) {
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
   val submitReturnFeatures = new Feature(ConfigKeys.submitReturnFeatures, config)
   val agentAccess = new Feature(ConfigKeys.agentAccessFeature, config)
+  val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature, config)
 }

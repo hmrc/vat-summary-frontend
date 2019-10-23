@@ -25,5 +25,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               useDirectDebitDummyPage: Boolean,
                               useLanguageSelector: Boolean,
                               submitReturnFeatures: Boolean,
-                              agentAccess: Boolean
-                             )
+                              agentAccess: Boolean,
+                              mtdSignUp: Boolean)
