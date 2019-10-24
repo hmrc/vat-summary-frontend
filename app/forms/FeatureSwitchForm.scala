@@ -33,7 +33,8 @@ object FeatureSwitchForm {
       ConfigKeys.useDirectDebitDummyPageFeature -> boolean,
       ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.submitReturnFeatures -> boolean,
-      ConfigKeys.agentAccessFeature -> boolean
+      ConfigKeys.agentAccessFeature -> boolean,
+      ConfigKeys.mtdSignUpFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

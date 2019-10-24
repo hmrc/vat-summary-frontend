@@ -16,10 +16,11 @@
 
 @import config.ConfigKeys
 @import helper.CSRF
+@import views.html.templates.inputs.singleCheckbox
 
 @(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = "Feature switches", bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(title = "Feature switches", appConfig = appConfig) {
 
     @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
         @CSRF.formField
@@ -30,16 +31,17 @@
                     <h1 class="heading-medium">Features</h1>
                 </legend>
 
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.userResearchBannerFeature), "User research banner")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.allowDirectDebitsFeature), "Direct debits allowed")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.staticDateEnabledFeature), "Use static date (2018-05-01)")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.paymentsAndRepaymentsFeature), "Show payments and repayments tile")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.vatOptOutServiceFeature), "Show vat opt-out section")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useVatObligationsService), "Use vat-obligations microservice")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useDirectDebitDummyPageFeature), "Use direct debit hand-off dummy page")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useLanguageSelectorFeature), "Show welsh content")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.submitReturnFeatures), "Opted-out users - Submit Return enabled")
-                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.agentAccessFeature), "Agent access enabled")
+                @singleCheckbox(form(ConfigKeys.userResearchBannerFeature), "User research banner")
+                @singleCheckbox(form(ConfigKeys.allowDirectDebitsFeature), "Direct debits allowed")
+                @singleCheckbox(form(ConfigKeys.staticDateEnabledFeature), "Use static date (2018-05-01)")
+                @singleCheckbox(form(ConfigKeys.paymentsAndRepaymentsFeature), "Show payments and repayments tile")
+                @singleCheckbox(form(ConfigKeys.vatOptOutServiceFeature), "Show vat opt-out section")
+                @singleCheckbox(form(ConfigKeys.useVatObligationsService), "Use vat-obligations microservice")
+                @singleCheckbox(form(ConfigKeys.useDirectDebitDummyPageFeature), "Use direct debit hand-off dummy page")
+                @singleCheckbox(form(ConfigKeys.useLanguageSelectorFeature), "Show welsh content")
+                @singleCheckbox(form(ConfigKeys.submitReturnFeatures), "Opted-out users - Submit Return enabled")
+                @singleCheckbox(form(ConfigKeys.agentAccessFeature), "Agent access enabled")
+                @singleCheckbox(form(ConfigKeys.mtdSignUpFeature), "MTD sign up enabled")
 
             </fieldset>
         </div>
