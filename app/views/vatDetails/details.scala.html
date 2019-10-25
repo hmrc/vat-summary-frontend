@@ -70,16 +70,22 @@
       @views.html.templates.vatCertificateSection()
     </div>
 
-    @if(appConfig.features.vatOptOutEnabled()) {
-      @if(detailsViewModel.customerInfoError) {
-        <hr>
-        <h3 class="heading-medium">
-          @messages("vatDetails.customerInfo.error")
-        </h3>
-      } else {
-        <div class = "grid-row">
-          @views.html.templates.vatOptOutSection(detailsViewModel.isNonMTDfBUser, detailsViewModel.pendingOptOut)
-        </div>
-      }
-    }
+    <div class="grid-row">
+        @if(detailsViewModel.customerInfoError) {
+            <hr>
+            <h3 class="heading-medium">
+              @messages("vatDetails.customerInfo.error")
+            </h3>
+        } else {
+            @detailsViewModel.isNonMTDfBUser.map {
+                case true if(appConfig.features.mtdSignUp()) => {
+                    @views.html.templates.mtdSignupSection(user.vrn)
+                }
+                case false if(appConfig.features.vatOptOutEnabled()) => {
+                    @views.html.templates.vatOptOutSection(detailsViewModel.pendingOptOut)
+                }
+                case _ => {}
+            }
+        }
+    </div>
 }

@@ -35,6 +35,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val nextReturnHeading = "#next-return h2"
     val nextReturn = "#next-return p"
     val paymentsAndRepaymentsSection = "#payments-and-repayments"
+    val mtdSignupSection = "#mtd-signup"
     val vatCertificate = "#vat-certificate"
     val updateVatDetails = "#update-vat-details"
     val submittedReturns = "#submitted-returns"
@@ -58,48 +59,49 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
+    currentYear
+  )
+  val nonMtdDetailsModel = VatDetailsViewModel(
+    None,
+    None,
+    None,
     currentYear,
-    customerInfoError = false
+    isNonMTDfBUser = Some(true)
   )
   val hybridDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear,
-    isHybridUser = true,
-    customerInfoError = false
+    isHybridUser = true
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2017-01-01"),
     Some("Cheapo Clothing"),
     currentYear,
-    returnObligationOverdue = true,
-    customerInfoError = false
+    returnObligationOverdue = true
   )
   val multipleReturnsDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2"),
     Some("Cheapo Clothing"),
     currentYear,
-    hasMultipleReturnObligations = true,
-    customerInfoError = false
+    hasMultipleReturnObligations = true
   )
   val overduePaymentDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear,
-    paymentOverdue = true,
-    customerInfoError = false
+    paymentOverdue = true
   )
   val paymentErrorDetailsModel = VatDetailsViewModel(
     None,
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentYear,
-    paymentError = true,
-    customerInfoError = false
+    paymentError = true
 
   )
   val returnErrorDetailsModel = VatDetailsViewModel(
@@ -107,8 +109,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     Some("Cheapo Clothing"),
     currentYear,
-    returnObligationError = true,
-    customerInfoError = false
+    returnObligationError = true
   )
   val bothErrorDetailsModel = VatDetailsViewModel(
     None,
@@ -121,7 +122,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     customerInfoError = true
   )
 
-  "Rendering the VAT details page" should {
+  "Rendering the VAT details page for an mtd user" should {
 
     lazy val view = views.html.vatDetails.details(detailsModel, Html("<nav>BTA Links</nav>"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -258,6 +259,47 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         updateVatDetails.select("p").text() shouldBe "Change your business, contact or VAT details."
       }
     }
+
+    "not have the mtd signup section" in {
+      elementExtinct(Selectors.mtdSignupSection)
+    }
+  }
+
+  "Rendering the VAT details page for a non mtd user" should {
+
+    lazy val view = views.html.vatDetails.details(nonMtdDetailsModel, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have the mtd sign up section" which {
+
+      lazy val mtdSignupSection = element(Selectors.mtdSignupSection)
+
+      "has the correct heading" in {
+        mtdSignupSection.select("h2").text() shouldBe "Sign up for Making Tax Digital for VAT"
+      }
+
+      "has a link to the vat-sign-up service" in {
+        mtdSignupSection.select("h2 a").attr("href") shouldBe s"/vat-through-software/sign-up/vat-number/${user.vrn}"
+      }
+
+      "has the correct paragraph" in {
+        mtdSignupSection.select("p").text() shouldBe "If your taxable turnover exceeds the VAT threshold, " +
+          "you must sign up to Making Tax Digital for VAT."
+      }
+    }
+
+    "not have the Opt out section" in {
+      elementExtinct(Selectors.vatOptOutLink)
+    }
+  }
+
+  "Rendering the VAT details page for a hybrid user" should {
+
+    "not display the payments and repayments section" in {
+      lazy val view = views.html.vatDetails.details(detailsModel.copy(isHybridUser = true))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      elementExtinct(Selectors.paymentsAndRepaymentsSection)
+    }
   }
 
   "Rendering the VAT details page" when {
@@ -272,15 +314,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user is hybrid" should {
-
-      "not display the payments and repayments section" in {
-        lazy val view = views.html.vatDetails.details(detailsModel.copy(isHybridUser = true))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-        elementExtinct(Selectors.paymentsAndRepaymentsSection)
-      }
-    }
-
     "the optOut feature switch is false" should {
 
       "not display the opt out section" in {
@@ -288,6 +321,16 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         lazy val view = views.html.vatDetails.details(detailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
         elementExtinct(Selectors.vatOptOutLink)
+      }
+    }
+
+    "the mtdSignup feature switch is false" should {
+
+      "not display the mtd signup section" in {
+        mockConfig.features.mtdSignUp(false)
+        lazy val view = views.html.vatDetails.details(detailsModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        elementExtinct(Selectors.mtdSignupSection)
       }
     }
   }
@@ -450,13 +493,4 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   }
 
-  "Should not Render the opt out section when the customer is not mandated" should {
-
-    lazy val view = views.html.vatDetails.details(detailsModel.copy(isNonMTDfBUser = Some(true)))
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "not render the Opt out section" in {
-      elementExtinct(Selectors.vatOptOutLink)
-    }
-  }
 }

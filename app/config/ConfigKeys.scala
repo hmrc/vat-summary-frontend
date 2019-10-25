@@ -86,7 +86,8 @@ object ConfigKeys {
 
   val mtdVatSignUpBaseUrl: String = "vat-sign-up-frontend.host"
   val mtdVatSignUpUrl: String = "vat-sign-up-frontend.signUpUrl"
-  val mtdVatClaimSubcriptionUrl: String = "vat-sign-up-frontend.claimSubscriptionUrl"
+  val mtdVatReSignUpUrl: String = "vat-sign-up-frontend.reSignUpUrl"
+  val mtdVatClaimSubscriptionUrl: String = "vat-sign-up-frontend.claimSubscriptionUrl"
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountDown: String = "timeout.countDown"
