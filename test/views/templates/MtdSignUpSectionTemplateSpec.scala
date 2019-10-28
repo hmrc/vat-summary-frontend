@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
 
-class  mtdSignUpSectionTemplateSpec extends ViewBaseSpec {
+class  MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val mtdSignupSection = "#mtd-signup"
