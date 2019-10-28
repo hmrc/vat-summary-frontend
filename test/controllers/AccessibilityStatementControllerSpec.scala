@@ -71,12 +71,15 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
       "return 200" in new Test {
         override val authResult: Future[Enrolments ~ Option[AffinityGroup]] = agentAuthResult
-        private val result = controller.show(fakeRequest.withSession("CLIENT_VRN" -> "999999999"))
+        override def setup: Any = {
+          super.setup
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(agentEnrolments))
+            .noMoreThanOnce()
+        }
 
-        (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *)
-          .returns(Future.successful(agentEnrolments))
-          .noMoreThanOnce()
+        private val result = controller.show(fakeRequest.withSession("CLIENT_VRN" -> "999999999"))
 
         status(result) shouldBe Status.OK
       }
@@ -89,12 +92,15 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
           otherEnrolment,
           Some(Individual)
         ))
-        private val result = controller.show(fakeRequest)
+        override def setup: Any = {
+          super.setup
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(otherEnrolment))
+            .noMoreThanOnce()
+        }
 
-        (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *)
-          .returns(Future.successful(otherEnrolment))
-          .noMoreThanOnce()
+        private val result = controller.show(fakeRequest)
 
         status(result) shouldBe Status.FORBIDDEN
       }
