@@ -14,14 +14,11 @@
  * limitations under the License.
  *@
 
-@(pendingOptOut: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
+@(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
 
-    <div class="column-one-third" id="vat-optout">
-      @if(pendingOptOut) {
-        <h2 class="heading-small">@messages("vatDetails.vatOptOut.link")</h2>
-        <p>@messages("vatDetails.vatOptOut.pending")</p>
-      } else {
-        <h2 class="heading-small"><a href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a></h2>
-        <p>@messages("vatDetails.vatOptOut.info")</p>
-      }
+    <div class="column-one-third" id="mtd-signup">
+        <h2 class="heading-small">
+            <a href="@{appConfig.mtdVatReSignUpUrl + vrn}">@messages("vatDetails.mtdSignup.link")</a>
+        </h2>
+        <p>@messages("vatDetails.mtdSignup.info")</p>
     </div>

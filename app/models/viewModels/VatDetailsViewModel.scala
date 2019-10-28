@@ -28,5 +28,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                paymentError: Boolean = false,
                                isHybridUser: Boolean = false,
                                isNonMTDfBUser: Option[Boolean] = Some(false),
-                               customerInfoError: Boolean,
+                               customerInfoError: Boolean = false,
                                pendingOptOut: Boolean = false)

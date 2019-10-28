@@ -36,6 +36,7 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfter
     super.beforeEach()
     mockConfig.features.paymentsAndRepaymentsEnabled(true)
     mockConfig.features.vatOptOutEnabled(true)
+    mockConfig.features.mtdSignUp(true)
   }
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)

@@ -30,29 +30,26 @@ class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
     val vatOptOutParagraph = s"$vatOptOutSection > p:nth-child(2)"
   }
 
-  "The vatOptOutSection" when {
+  "The vatOptOutSection" should {
 
-    "the user is opted in to MTD" should {
+    val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(pendingOptOut = false)
+    implicit val document: Document = Jsoup.parse(view.body)
 
-      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(false), pendingOptOut = false)
-      implicit val document: Document = Jsoup.parse(view.body)
+    "have the correct heading" in {
+      elementText(Selectors.vatOptOutHeading) shouldBe "Opt out of Making Tax Digital for VAT"
+    }
 
-      "have the correct heading" in {
-        elementText(Selectors.vatOptOutHeading) shouldBe "Opt out of Making Tax Digital for VAT"
-      }
+    "have the correct link" in {
+      element(Selectors.vatOptOutHeadingLink).attr("href") shouldBe "/vat-through-software/account/opt-out"
+    }
 
-      "have the correct link" in {
-        element(Selectors.vatOptOutHeadingLink).attr("href") shouldBe "/vat-through-software/account/opt-out"
-      }
-
-      "have the correct paragraph" in {
-        elementText(Selectors.vatOptOutParagraph) shouldBe "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
-      }
+    "have the correct paragraph" in {
+      elementText(Selectors.vatOptOutParagraph) shouldBe "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
     }
 
     "the user has an opt out request pending" should {
 
-      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(false), pendingOptOut = true)
+      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(pendingOptOut = true)
       implicit val document: Document = Jsoup.parse(view.body)
 
       "not have a link to the opt out service" in {
@@ -61,16 +58,6 @@ class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
 
       "have the correct paragraph" in {
         elementText(Selectors.vatOptOutParagraph) shouldBe "Your request to opt out is being processed."
-      }
-    }
-
-    "the user is already opted out" should {
-
-      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(Some(true), pendingOptOut = false)
-      implicit val document: Document = Jsoup.parse(view.body)
-
-      "not display" in {
-        elementExtinct(Selectors.vatOptOutSection)
       }
     }
   }

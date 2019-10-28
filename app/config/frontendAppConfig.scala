@@ -69,7 +69,7 @@ trait AppConfig extends ServicesConfig {
   val staticDateValue: String
   def surveyUrl(identifier: String): String
   def signOutUrl(identifier: String): String
-  val mtdVatSignUpUrl: String
+  val mtdVatReSignUpUrl: String
   val mtdVatClaimSubscriptionUrl: String
   val unauthorisedSignOutUrl: String
   val timeoutPeriod: Int
@@ -191,8 +191,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
   private val mtdVatSignUpBaseUrl: String = getString(Keys.mtdVatSignUpBaseUrl)
-  override lazy val mtdVatSignUpUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatSignUpUrl)
-  override lazy val mtdVatClaimSubscriptionUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatClaimSubcriptionUrl)
+  override lazy val mtdVatReSignUpUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatReSignUpUrl)
+  override lazy val mtdVatClaimSubscriptionUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatClaimSubscriptionUrl)
 
   override lazy val timeoutPeriod: Int = getString(Keys.timeoutPeriod).toInt
   override lazy val timeoutCountdown: Int = getString(Keys.timeoutCountDown).toInt
