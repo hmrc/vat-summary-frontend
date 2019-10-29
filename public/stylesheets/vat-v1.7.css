@@ -134,6 +134,10 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
   }
 }
 
+.tile-no-border {
+    border: 0;
+}
+
 .tile .tile-body {
   border-bottom: 0px;
   padding: 12px;
