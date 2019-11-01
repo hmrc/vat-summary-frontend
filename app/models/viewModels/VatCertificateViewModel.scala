@@ -29,8 +29,6 @@ case class VatCertificateViewModel(
                                     businessTypeMsgKey: String,
                                     tradeClassification: String,
                                     ppob: Address,
-                                    accountNumber: Option[String],
-                                    sortCode: Option[String],
                                     returnPeriodMsgKey: String
                                   )
 
@@ -40,7 +38,7 @@ object VatCertificateViewModel {
       vrn, customerInformation.registrationDate.map(LocalDate.parse(_)), LocalDate.now(),
       customerInformation.organisationName, customerInformation.tradingName,
       customerInformation.partyTypeMessageKey, customerInformation.sicCode, customerInformation.businessAddress,
-      customerInformation.bankAccountNumber, customerInformation.bankAccountSortCode, customerInformation.returnPeriodMessageKey
+      customerInformation.returnPeriodMessageKey
     )
   }
 }

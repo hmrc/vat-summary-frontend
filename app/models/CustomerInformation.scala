@@ -29,8 +29,6 @@ case class CustomerInformation(organisationName: Option[String],
                                registrationDate: Option[String],
                                partyType: Option[String],
                                sicCode: String,
-                               bankAccountNumber: Option[String],
-                               bankAccountSortCode: Option[String],
                                returnPeriod: Option[String],
                                pendingMandationStatus: Option[String]) {
 
@@ -60,8 +58,6 @@ object CustomerInformation {
     (JsPath \\ "vatRegistrationDate").readNullable[String] and
     (JsPath \ "partyType").readNullable[String] and
     (JsPath \ "primaryMainCode").read[String] and
-    (JsPath \\ "bankAccountNumber").readNullable[String] and
-    (JsPath \\ "sortCode").readNullable[String] and
     (JsPath \\ "stdReturnPeriod").readNullable[String] and
     (JsPath \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None))
   )(CustomerInformation.apply _)

@@ -82,87 +82,57 @@
     </div>
 
     <div class="card-full-container column-full">
-        <div class="card-body">
-            <div class="column-two-thirds">
-                <h2 class="card-heading heading-medium">@messages("vatCertificate.aboutTheBusiness.title")</h2>
-            </div>
-            <div class="column-full card-full">
-                <dl class="govuk-check-your-answers cya-questions-long">
-                    <div>
-                        <dt class="cya-question">
-                            @messages("vatCertificate.aboutTheBusiness.businessName")
-                        </dt>
-                        <dd class="cya-answer">
-                            @{model.businessName.getOrElse(messages("common.notProvided"))}
-                        </dd>
-                    </div>
-                </dl>
-                <dl class="govuk-check-your-answers cya-questions-long">
-                    <div>
-                        <dt class="cya-question">
-                            @messages("vatCertificate.aboutTheBusiness.tradingName")
-                        </dt>
-                        <dd class="cya-answer">
-                            @{model.tradingName.getOrElse(messages("common.notProvided"))}
-                        </dd>
-                    </div>
-                </dl>
-                <dl class="govuk-check-your-answers cya-questions-long">
-                    <div>
-                        <dt class="cya-question">
-                            @messages("vatCertificate.aboutTheBusiness.businessType")
-                        </dt>
-                        <dd class="cya-answer">
-                            @messages(model.businessTypeMsgKey)
-                        </dd>
-                    </div>
-                </dl>
-                <dl class="govuk-check-your-answers cya-questions-long">
-                    <div>
-                        <dt class="cya-question">
-                            @messages("vatCertificate.aboutTheBusiness.tradeClassification")
-                        </dt>
-                        <dd class="cya-answer">
-                            @{model.tradeClassification}
-                        </dd>
-                    </div>
-                </dl>
-                <dl class="govuk-check-your-answers cya-questions-long">
-                    <div>
-                        <dt class="cya-question">
-                            @messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness")
-                        </dt>
-                        <dd class="cya-answer">
-                            @fullAddress(model.ppob)
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-        </div>
-    </div>
-
-    <div class="card-full-container column-full">
         <div class="column-two-thirds">
-            <h2 class="heading-medium card-heading">@messages("vatCertificate.bankingDetails.title")</h2>
+            <h2 class="card-heading heading-medium">@messages("vatCertificate.aboutTheBusiness.title")</h2>
         </div>
         <div class="column-full card-full">
             <dl class="govuk-check-your-answers cya-questions-long">
                 <div>
                     <dt class="cya-question">
-                        @messages("vatCertificate.bankingDetails.accountNumber")
+                        @messages("vatCertificate.aboutTheBusiness.businessName")
                     </dt>
                     <dd class="cya-answer">
-                        @{model.accountNumber.getOrElse(messages("common.notProvided"))}
+                        @{model.businessName.getOrElse(messages("common.notProvided"))}
                     </dd>
                 </div>
             </dl>
             <dl class="govuk-check-your-answers cya-questions-long">
                 <div>
                     <dt class="cya-question">
-                        @messages("vatCertificate.bankingDetails.sortCode")
+                        @messages("vatCertificate.aboutTheBusiness.tradingName")
                     </dt>
                     <dd class="cya-answer">
-                        @{model.sortCode.getOrElse(messages("common.notProvided"))}
+                        @{model.tradingName.getOrElse(messages("common.notProvided"))}
+                    </dd>
+                </div>
+            </dl>
+            <dl class="govuk-check-your-answers cya-questions-long">
+                <div>
+                    <dt class="cya-question">
+                        @messages("vatCertificate.aboutTheBusiness.businessType")
+                    </dt>
+                    <dd class="cya-answer">
+                        @messages(model.businessTypeMsgKey)
+                    </dd>
+                </div>
+            </dl>
+            <dl class="govuk-check-your-answers cya-questions-long">
+                <div>
+                    <dt class="cya-question">
+                        @messages("vatCertificate.aboutTheBusiness.tradeClassification")
+                    </dt>
+                    <dd class="cya-answer">
+                        @{model.tradeClassification}
+                    </dd>
+                </div>
+            </dl>
+            <dl class="govuk-check-your-answers cya-questions-long">
+                <div>
+                    <dt class="cya-question">
+                        @messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness")
+                    </dt>
+                    <dd class="cya-answer">
+                        @fullAddress(model.ppob)
                     </dd>
                 </div>
             </dl>

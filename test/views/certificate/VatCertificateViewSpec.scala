@@ -24,6 +24,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
+
 class VatCertificateViewSpec extends ViewBaseSpec {
 
   object Selectors {
@@ -41,8 +42,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "partyType.11",
     "6602",
     Address("Line 1", Some("Line 2"), None, None, Some("TF4 3ER")),
-    Some("333*****"),
-    Some("****11"),
     "returnPeriod.MM"
   )
 
@@ -72,13 +71,11 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
         "contains the registration date" in {
           val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          val date = LocalDate.now().minus(Period.ofDays(2))
           regDateRow.select("dt").text() shouldBe "Registration date"
           regDateRow.select("dd").text() shouldBe s"1 January 2017"
         }
         "contains the certificate date" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(3)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Certificate date"
           certDateRow.select("dd").text() shouldBe s"1 January 2018"
         }
@@ -96,47 +93,26 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
         "contains the trading name" in {
           val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          val date = LocalDate.now().minus(Period.ofDays(2))
           regDateRow.select("dt").text() shouldBe "Trading name"
           regDateRow.select("dd").text() shouldBe s"ABC Traders"
         }
         "contains the business type" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(3)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Business type"
           certDateRow.select("dd").text() shouldBe s"Organisation"
         }
         "contains the trade classification" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(4)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Trade classification (SIC code)"
           certDateRow.select("dd").text() shouldBe s"6602"
         }
         "contains the address" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(5)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Principal place of business address"
           certDateRow.select("dd").text() shouldBe s"Line 1 Line 2 TF4 3ER"
         }
       }
 
-      "have the banking details card" that {
-        lazy val card = document.select(Selectors.cardClass).get(2)
-        "contains the correct heading" in {
-          card.select("h2").text() shouldBe "Banking details"
-        }
-        "contains the business name" in {
-          val vrnRow = card.select(".govuk-check-your-answers:nth-of-type(1)")
-          vrnRow.select("dt").text() shouldBe "Account number"
-          vrnRow.select("dd").text() shouldBe "333*****"
-        }
-        "contains the trading name" in {
-          val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          val date = LocalDate.now().minus(Period.ofDays(2))
-          regDateRow.select("dt").text() shouldBe "Sort code"
-          regDateRow.select("dd").text() shouldBe s"****11"
-        }
-      }
       "have the return details card" that {
         lazy val card = document.select(Selectors.cardClass).get(3)
         "contains the correct heading" in {
@@ -187,13 +163,11 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
         "contains the registration date" in {
           val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          val date = LocalDate.now().minus(Period.ofDays(2))
           regDateRow.select("dt").text() shouldBe "Registration date"
           regDateRow.select("dd").text() shouldBe s"1 January 2017"
         }
         "contains the certificate date" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(3)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Certificate date"
           certDateRow.select("dd").text() shouldBe s"1 January 2018"
         }
@@ -211,45 +185,23 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
         "contains the trading name" in {
           val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          val date = LocalDate.now().minus(Period.ofDays(2))
           regDateRow.select("dt").text() shouldBe "Trading name"
           regDateRow.select("dd").text() shouldBe s"ABC Traders"
         }
         "contains the business type" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(3)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Business type"
           certDateRow.select("dd").text() shouldBe s"Organisation"
         }
         "contains the trade classification" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(4)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Trade classification (SIC code)"
           certDateRow.select("dd").text() shouldBe s"6602"
         }
         "contains the address" in {
           val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(5)")
-          val date = LocalDate.now()
           certDateRow.select("dt").text() shouldBe "Principal place of business address"
           certDateRow.select("dd").text() shouldBe s"Line 1 Line 2 TF4 3ER"
-        }
-      }
-
-      "have the banking details card" that {
-        lazy val card = document.select(Selectors.cardClass).get(2)
-        "contains the correct heading" in {
-          card.select("h2").text() shouldBe "Banking details"
-        }
-        "contains the business name" in {
-          val vrnRow = card.select(".govuk-check-your-answers:nth-of-type(1)")
-          vrnRow.select("dt").text() shouldBe "Account number"
-          vrnRow.select("dd").text() shouldBe "333*****"
-        }
-        "contains the trading name" in {
-          val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          val date = LocalDate.now().minus(Period.ofDays(2))
-          regDateRow.select("dt").text() shouldBe "Sort code"
-          regDateRow.select("dd").text() shouldBe s"****11"
         }
       }
 
