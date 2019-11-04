@@ -114,7 +114,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have the return details card" that {
-        lazy val card = document.select(Selectors.cardClass).get(3)
+        lazy val card = document.select(Selectors.cardClass).get(2)
         "contains the correct heading" in {
           card.select("h2").text() shouldBe "Return details"
         }
@@ -206,7 +206,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have the return details card" that {
-        lazy val card = document.select(Selectors.cardClass).get(3)
+        lazy val card = document.select(Selectors.cardClass).get(2)
         "contains the correct heading" in {
           card.select("h2").text() shouldBe "Return details"
         }
@@ -218,7 +218,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have a link to change action for client" that {
-        lazy val link = document.select("#content > article > p:nth-child(8) > a")
+        lazy val link = document.select("#content > article > p:nth-child(7) > a")
         "has the correct text" in {
           link.text() shouldBe "Back to your client options"
         }
@@ -228,7 +228,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have a link to change client" that {
-        lazy val link = document.select("#content > article > p:nth-child(9) > a")
+        lazy val link = document.select("#content > article > p:nth-child(8) > a")
         "has the correct text" in {
           link.text() shouldBe "Change client"
         }
