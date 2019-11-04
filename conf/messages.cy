@@ -183,10 +183,6 @@ vatCertificate.aboutTheBusiness.businessType = Math o fusnes
 vatCertificate.aboutTheBusiness.tradeClassification = Dosbarthiad masnachu (cod SIC)
 vatCertificate.aboutTheBusiness.principalPlaceOfBusiness = Cyfeiriad prif leoliad y busnes
 
-vatCertificate.bankingDetails.title = Manylion banc
-vatCertificate.bankingDetails.accountNumber = Rhif y cyfrif
-vatCertificate.bankingDetails.sortCode = Cod didoli
-
 vatCertificate.returnDetails.title = Manylion y Ffurflen TAW
 vatCertificate.returnDetails.returnDates = Dyddiadau Ffurflenni TAW
 vatCertificate.backToClientOptions = Yn ôl i opsiynau’ch cleient

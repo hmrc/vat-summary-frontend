@@ -51,8 +51,6 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some("2017-01-01"),
         Some("7"),
         "10410",
-        Some("****1234"),
-        Some("69****"),
         Some("MM"),
         Some("MTDfB Voluntary")
       ))

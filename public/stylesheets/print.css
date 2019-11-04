@@ -4,6 +4,10 @@
     display: none;
   }
 
+  html {
+    background-color: white;
+  }
+
   #content {
     padding-bottom: 0px;
   }
@@ -19,18 +23,19 @@
   }
 
   .cert-header img {
-    width: 120px;
+    width: 20%;
   }
 
   .heading-medium {
-    font-size: 18px;
+    font-size: 12px;
   }
 
   .card-full-container {
     margin-top: 16px;
     margin-bottom: 0px;
     padding-bottom: 0px;
-    border: 1px solid #dee0e2;
+    background-color: #f3f2f1 !important;
+    -webkit-print-color-adjust: exact;
   }
 
   .card-full-container .card-heading {
@@ -38,7 +43,7 @@
   }
 
   table td {
-    font-size: 14px;
+    font-size: 12px;
   }
 
   .govuk-check-your-answers {
@@ -46,8 +51,6 @@
     padding-bottom: 5px;
     border-bottom: 1px solid #dee0e2;
   }
-
-
 
   .govuk-check-your-answers:before,
   .govuk-check-your-answers:after {
@@ -76,7 +79,7 @@
    }
 
    dt, dd {
-    font-size: 14px;
+    font-size: 12px;
    }
 
   dt {

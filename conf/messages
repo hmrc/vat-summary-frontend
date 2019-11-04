@@ -157,10 +157,6 @@ vatCertificate.aboutTheBusiness.businessType = Business type
 vatCertificate.aboutTheBusiness.tradeClassification = Trade classification (SIC code)
 vatCertificate.aboutTheBusiness.principalPlaceOfBusiness = Principal place of business address
 
-vatCertificate.bankingDetails.title = Banking details
-vatCertificate.bankingDetails.accountNumber = Account number
-vatCertificate.bankingDetails.sortCode = Sort code
-
 vatCertificate.returnDetails.title = Return details
 vatCertificate.returnDetails.returnDates = VAT Return dates
 vatCertificate.backToClientOptions = Back to your client options
