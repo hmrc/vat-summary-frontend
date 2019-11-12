@@ -147,7 +147,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
         val migratedThisYear = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
         val (tabOne, tabTwo) =
           generateTabs(yearOneTrans.isEmpty, yearTwoTrans.isEmpty, showPreviousPaymentsTab, migratedThisYear)
-        val transactions = if(selectedYear == currentYear) yearOneTrans else yearTwoTrans
+        val transactions = yearOneTrans ++ yearTwoTrans
         if (yearTwoTrans.isEmpty && selectedYear == previousYear && !showPreviousPaymentsTab) {
           None
         } else {

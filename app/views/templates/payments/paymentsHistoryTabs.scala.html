@@ -18,14 +18,6 @@
 
 @(years: Seq[Int], selectedYear: Int)(implicit messages: Messages)
 
-@for(yearToDisplay <- years) {
-  @if(yearToDisplay == selectedYear) {
-    @activeTab(yearToDisplay.toString, messages("paymentsHistory.activeTab", yearToDisplay.toString))
-  } else {
-    @inactiveTab(
-      yearToDisplay.toString,
-      messages("paymentsHistory.inactiveTab", yearToDisplay.toString),
-      controllers.routes.PaymentHistoryController.paymentHistory(yearToDisplay).url
-    )
-  }
+@for(year <- years) {
+<button class="tablinks" onclick="openYear(event, @year)" style="background-color: #ffffff">@year</button>
 }
