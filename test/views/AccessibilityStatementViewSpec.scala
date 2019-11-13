@@ -23,7 +23,8 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
   "The accessibility statement page" should {
 
-    lazy val view = views.html.accessibility_statement()
+    lazy val fakeUri: String = "/vat-through-software/vat-overview"
+    lazy val view = views.html.accessibility_statement(fakeUri)
     implicit lazy val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
@@ -184,16 +185,16 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
         "has the correct content" in {
           elementText("#reporting-problems > p") shouldBe "We are always looking to improve the accessibility of " +
             "this service. If you find any problems that are not listed on this page or think we are not meeting " +
-            "accessibility requirements, contact hmrc-accessibility-problems@digital.hmrc.gov.uk."
+            "accessibility requirements, report the accessibility problem."
         }
 
         "has the correct link text" in {
-          elementText("#reporting-problems > p > a") shouldBe "hmrc-accessibility-problems@digital.hmrc.gov.uk"
+          elementText("#reporting-problems > p > a") shouldBe "report the accessibility problem"
         }
 
         "has the correct link location" in {
-          element("#reporting-problems > p > a").attr("href") shouldBe
-            "mailto:hmrc-accessibility-problems@digital.hmrc.gov.uk"
+          element("#reporting-problems > p > a")
+            .attr("href") shouldBe mockConfig.reportA11yProblemUrl + s"&userAction=$fakeUri"
         }
       }
     }
