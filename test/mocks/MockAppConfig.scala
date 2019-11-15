@@ -64,6 +64,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val btaVatOverviewUrl: String = "mock-url"
   override val feedbackFormPartialUrl: String = "BasefeedbackUrl"
   override val contactFormServiceIdentifier: String = "VATVC"
+  override val a11yServiceIdentifier: String = "VATVCACCESSIBILITY"
   override val staticDateValue: String = "2018-05-01"
   override def surveyUrl(identifier: String): String = "/some-survey-url"
   override val mtdVatReSignUpUrl: String = "/vat-through-software/sign-up/vat-number/"
@@ -98,4 +99,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val optOutFrontendUrl: String = "/vat-through-software/account/opt-out"
   override val manageVatUrl: String = "/vat-through-software/account/change-business-details"
   override val paymentsAndRepaymentsUrl: String = "/vat-repayment-tracker-frontend/manage-or-track/vrn/"
+  override val reportA11yProblemUrl: String =
+    "/contact/accessibility?service=VATVCACCESSIBILITY&userAction=/vat-through-software/vat-overview"
 }

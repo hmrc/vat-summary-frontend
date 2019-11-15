@@ -21,6 +21,7 @@ import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import java.net.URI
 
 import scala.concurrent.Future
 
@@ -30,6 +31,7 @@ class AccessibilityStatementController @Inject()(authorisedController: Authorise
 
   def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user =>
-      Future.successful(Ok(views.html.accessibility_statement()))
+      val refererUri = new URI( request.headers.get(REFERER).getOrElse("") ).getPath
+      Future.successful(Ok(views.html.accessibility_statement(refererUri)))
   }
 }

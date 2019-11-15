@@ -98,6 +98,8 @@ trait AppConfig extends ServicesConfig {
   val optOutFrontendUrl: String
   val paymentsAndRepaymentsUrl: String
   val manageVatUrl: String
+  val reportA11yProblemUrl: String
+  val a11yServiceIdentifier: String
 }
 
 @Singleton
@@ -109,6 +111,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val contactHost: String = getString(Keys.contactFrontendHost)
   override lazy val contactFormServiceIdentifier: String = "VATVC"
   private lazy val contactFrontendService = baseUrl(Keys.contactFrontendService)
+  override lazy val a11yServiceIdentifier: String = "VATVCACCESSIBILITY"
+  override lazy val reportA11yProblemUrl = s"$contactHost/contact/accessibility?service=$a11yServiceIdentifier"
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   override lazy val feedbackFormPartialUrl: String = s"$contactFrontendService/contact/beta-feedback/form"

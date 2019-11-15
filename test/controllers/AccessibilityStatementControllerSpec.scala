@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.net.URI
+
 import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import play.api.http.Status

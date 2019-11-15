@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
+@(refererUri: String)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
 @views.html.main_template(title = messages("a11yStatement.title"), appConfig = appConfig, user = Some(user)) {
 
@@ -77,9 +77,9 @@
   <div id="reporting-problems">
     <h2 class="heading-large">@messages("a11yStatement.reportingProblems")</h2>
     <p>
-      @messages("a11yStatement.lookingToImprove.1")
-      <a href='mailto:@messages("a11yStatement.lookingToImprove.2")'>
-        @messages("a11yStatement.lookingToImprove.2")</a>@messages("common.fullStop")
+      @messages("a11yStatement.reportProblem.1")
+      <a target="_blank" href="@{s"${appConfig.reportA11yProblemUrl}&userAction=${refererUri}"}">
+        @messages("a11yStatement.reportProblem.2")</a>@messages("common.fullStop")
     </p>
   </div>
 
