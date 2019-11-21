@@ -18,7 +18,7 @@ package controllers
 
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
-import common.FinancialTransactionsConstants.nonMTDfB
+import common.FinancialTransactionsConstants.{nonMTDfB, nonDigital}
 import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -105,7 +105,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val pendingOptOut: Boolean =
       accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
-    val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
+    val isNonMTDfBOrNonDigital: Option[Boolean] = retrieveIsNonMTDfBOrNonDigital(mandationStatus)
     val customerInfoError: Boolean = accountDetails.isLeft
 
     VatDetailsViewModel(
@@ -120,7 +120,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
-      isNonMTDfB,
+      isNonMTDfBOrNonDigital,
       customerInfoError,
       pendingOptOut
     )
@@ -136,10 +136,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
+  private def retrieveIsNonMTDfBOrNonDigital(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
     mandationStatus.fold(
       _ => None,
-      result => Some(result.mandationStatus == nonMTDfB)
+      result => Some(result.mandationStatus == nonMTDfB || result.mandationStatus == nonDigital)
     )
   }
 

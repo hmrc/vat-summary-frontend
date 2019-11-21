@@ -66,7 +66,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     None,
     currentYear,
-    isNonMTDfBUser = Some(true)
+    isNonMTDfBOrNonDigitalUser = Some(true)
   )
   val hybridDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
@@ -118,7 +118,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     currentYear,
     paymentError = true,
     returnObligationError = true,
-    isNonMTDfBUser = None,
+    isNonMTDfBOrNonDigitalUser = None,
     customerInfoError = true
   )
 
