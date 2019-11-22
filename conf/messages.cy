@@ -185,6 +185,10 @@ vatCertificate.aboutTheBusiness.principalPlaceOfBusiness = Cyfeiriad prif leolia
 
 vatCertificate.returnDetails.title = Manylion y Ffurflen TAW
 vatCertificate.returnDetails.returnDates = Dyddiadau Ffurflenni TAW
+vatCertificate.nstp.title = Cyfnodau treth ansafonol
+vatCertificate.nstp.p1 = Os na fyddwch yn adnewydddu’ch cyfnodau treth ansafonol, caiff cyfnod ychwanegol ({0} i {1}) ei ychwanegu.
+vatCertificate.nstp.p2 = Bydd hyn yn cwmpasu’r amser rhwng eich cyfnod treth ansafonol diwethaf a dechrau’ch cyfnodau treth safonol.
+vatCertificate.nstp.dateFromTo = {0} i {1}
 vatCertificate.backToClientOptions = Yn ôl i opsiynau’ch cleient
 vatCertificate.changeClient = Newid cleient
 vatCertificate.logo = HMRC_WelshLogo

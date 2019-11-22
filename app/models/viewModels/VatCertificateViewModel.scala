@@ -18,7 +18,7 @@ package models.viewModels
 
 import java.time.LocalDate
 
-import models.{Address, CustomerInformation}
+import models.{Address, CustomerInformation, TaxPeriod}
 
 case class VatCertificateViewModel(
                                     vrn: String,
@@ -29,7 +29,9 @@ case class VatCertificateViewModel(
                                     businessTypeMsgKey: String,
                                     tradeClassification: String,
                                     ppob: Address,
-                                    returnPeriodMsgKey: String
+                                    returnPeriodMsgKey: String,
+                                    nonStdTaxPeriods: Option[Seq[TaxPeriod]],
+                                    firstNonNSTPPeriod: Option[TaxPeriod]
                                   )
 
 object VatCertificateViewModel {
@@ -37,8 +39,9 @@ object VatCertificateViewModel {
     VatCertificateViewModel(
       vrn, customerInformation.registrationDate.map(LocalDate.parse(_)), LocalDate.now(),
       customerInformation.organisationName, customerInformation.tradingName,
-      customerInformation.partyTypeMessageKey, customerInformation.sicCode, customerInformation.businessAddress,
-      customerInformation.returnPeriodMessageKey
+      customerInformation.partyTypeMessageKey, customerInformation.sicCode,
+      customerInformation.businessAddress, customerInformation.returnPeriodMessageKey,
+      customerInformation.nonStdTaxPeriods, customerInformation.firstNonNSTPPeriod
     )
   }
 }

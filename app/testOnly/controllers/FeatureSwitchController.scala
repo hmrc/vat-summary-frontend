@@ -31,7 +31,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
-        allowDirectDebitsEnabled = appConfig.features.allowDirectDebits(),
+        vatCertNSTPsEnabled = appConfig.features.vatCertNSTPs(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         paymentsAndRepaymentsEnabled = appConfig.features.paymentsAndRepaymentsEnabled(),
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
@@ -54,7 +54,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
-    appConfig.features.allowDirectDebits(model.allowDirectDebitsEnabled)
+    appConfig.features.vatCertNSTPs(model.vatCertNSTPsEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.paymentsAndRepaymentsEnabled(model.paymentsAndRepaymentsEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)

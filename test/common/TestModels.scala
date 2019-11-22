@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
-import models.{Address, CustomerInformation, MandationStatus}
+import models.{Address, CustomerInformation, MandationStatus, TaxPeriod}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -81,6 +81,11 @@ object TestModels {
     Some("7"),
     "10410",
     Some("MM"),
+    Some(List(
+      TaxPeriod(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-15")),
+      TaxPeriod(LocalDate.parse("2018-01-06"), LocalDate.parse("2018-01-28")))
+    ),
+    Some(TaxPeriod(LocalDate.parse("2018-01-29"), LocalDate.parse("2018-01-31"))),
     Some("MTDfB Voluntary")
   )
 
@@ -97,6 +102,8 @@ object TestModels {
     None,
     None,
     "10410",
+    None,
+    None,
     None,
     None
   )
@@ -147,4 +154,13 @@ object TestModels {
   val validNonDigitalMandationStatus: MandationStatus = MandationStatus(
     "Non Digital"
   )
+
+  val exampleNonStandardTaxPeriods: Seq[TaxPeriod] = Seq(
+      TaxPeriod("2018-12-29", "2018-12-30"),
+      TaxPeriod("2018-12-31", "2019-01-01"),
+      TaxPeriod("2019-01-02", "2019-01-03"),
+      TaxPeriod("2019-01-04", "2019-01-05")
+  )
+
+  val exampleNonNSTP: Option[TaxPeriod] = Some(TaxPeriod("2019-01-06", "2019-01-31"))
 }

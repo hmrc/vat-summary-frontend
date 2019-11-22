@@ -18,6 +18,8 @@
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.html.templates.formatters.addresses._
 @import views.html.templates.formatters.breadcrumbs._
+@import views.html.certificate.helpers._
+@import org.joda.time.LocalDate
 
 @(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
@@ -139,23 +141,17 @@
         </div>
     </div>
 
-    <div class="card-full-container column-full">
-        <div class="column-two-thirds">
-            <h2 class="heading-medium card-heading">@messages("vatCertificate.returnDetails.title")</h2>
-        </div>
-        <div class="column-full card-full">
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.returnDetails.returnDates")
-                    </dt>
-                    <dd class="cya-answer">
-                        @messages(model.returnPeriodMsgKey)
-                    </dd>
-                </div>
-            </dl>
-        </div>
-    </div>
+    @{
+        if(!appConfig.features.vatCertNSTPs()) {
+            standardReturnFrequency(model.returnPeriodMsgKey)
+        } else {
+            model.nonStdTaxPeriods.fold {
+                standardReturnFrequency(model.returnPeriodMsgKey)
+            }{ nonStdReturnPeriods =>
+                nonStandardReturnFrequency(nonStdReturnPeriods, model.firstNonNSTPPeriod)
+            }
+        }
+    }
 
     @if(user.isAgent){
         <p><a href="@routes.VatCertificateController.changeClientAction()">@messages("vatCertificate.backToClientOptions")</a></p>

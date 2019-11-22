@@ -24,7 +24,7 @@ import play.api.Configuration
 class Features @Inject()(config: Configuration) {
 
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val allowDirectDebits = new Feature(ConfigKeys.allowDirectDebitsFeature, config)
+  val vatCertNSTPs = new Feature(ConfigKeys.vatCertNSTPsFeature, config)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
   val paymentsAndRepaymentsEnabled = new Feature(ConfigKeys.paymentsAndRepaymentsFeature, config)
   val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature, config)

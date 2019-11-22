@@ -72,6 +72,20 @@ object CustomerInfoStub extends WireMockMethods {
     "returnPeriod" -> Json.obj(
       "stdReturnPeriod" -> "MM"
     ),
+    "nonStdTaxPeriods" -> Json.arr(
+      Json.obj(
+        "periodStart" -> "2018-01-01",
+        "periodEnd" -> "2018-01-15"
+      ),
+      Json.obj(
+        "periodStart" -> "2018-01-06",
+        "periodEnd" -> "2018-01-28"
+      )
+    ),
+    "firstNonNSTPPeriod" -> Json.obj(
+      "periodStart" -> "2018-01-29",
+      "periodEnd" -> "2018-01-31"
+    ),
     "partyType" -> "7",
     "primaryMainCode" -> "10410",
     "pendingChanges" -> Json.obj(

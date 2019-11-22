@@ -26,8 +26,6 @@ import views.ViewBaseSpec
 
 class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
 
-  mockConfig.features.allowDirectDebits(true)
-
   object Selectors {
     private val columnOne = ""
     val title = s"h2"

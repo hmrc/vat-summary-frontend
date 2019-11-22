@@ -25,7 +25,7 @@ object FeatureSwitchForm {
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
       ConfigKeys.userResearchBannerFeature -> boolean,
-      ConfigKeys.allowDirectDebitsFeature -> boolean,
+      ConfigKeys.vatCertNSTPsFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.paymentsAndRepaymentsFeature -> boolean,
       ConfigKeys.vatOptOutServiceFeature -> boolean,
