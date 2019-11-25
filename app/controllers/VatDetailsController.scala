@@ -105,6 +105,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val pendingOptOut: Boolean =
       accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
+    val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
     val isNonMTDfBOrNonDigital: Option[Boolean] = retrieveIsNonMTDfBOrNonDigital(mandationStatus)
     val customerInfoError: Boolean = accountDetails.isLeft
 
@@ -120,6 +121,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
+      isNonMTDfB,
       isNonMTDfBOrNonDigital,
       customerInfoError,
       pendingOptOut
@@ -134,6 +136,13 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case Some(value) => Future.successful(Right(MandationStatus(value)))
       case _ => mandationStatusService.getMandationStatus(vrn)
     }
+  }
+
+  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
+    mandationStatus.fold(
+      _ => None,
+      result => Some(result.mandationStatus == nonMTDfB)
+    )
   }
 
   private def retrieveIsNonMTDfBOrNonDigital(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {

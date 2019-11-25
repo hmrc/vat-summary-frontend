@@ -77,7 +77,7 @@
               @messages("vatDetails.customerInfo.error")
             </h3>
         } else {
-            @detailsViewModel.isNonMTDfBUser.map {
+            @detailsViewModel.isNonMTDfBOrNonDigitalUser.map {
                 case true if(appConfig.features.mtdSignUp()) => {
                     @views.html.templates.mtdSignupSection(user.vrn)
                 }

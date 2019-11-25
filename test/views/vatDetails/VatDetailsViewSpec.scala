@@ -118,6 +118,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     currentYear,
     paymentError = true,
     returnObligationError = true,
+    isNonMTDfBUser = None,
     isNonMTDfBOrNonDigitalUser = None,
     customerInfoError = true
   )
