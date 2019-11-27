@@ -16,11 +16,7 @@
 
 package views.certificate.helpers
 
-import java.time.LocalDate
-
 import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
-import models.viewModels.VatCertificateViewModel
-import models.{Address, TaxPeriod}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec

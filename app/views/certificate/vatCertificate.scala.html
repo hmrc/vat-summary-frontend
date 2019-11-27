@@ -19,7 +19,6 @@
 @import views.html.templates.formatters.addresses._
 @import views.html.templates.formatters.breadcrumbs._
 @import views.html.certificate.helpers._
-@import org.joda.time.LocalDate
 
 @(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
@@ -85,7 +84,7 @@
 
     <div class="card-full-container column-full">
         <div class="column-two-thirds">
-            <h2 class="card-heading heading-medium">@messages("vatCertificate.aboutTheBusiness.title")</h2>
+            <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
         </div>
         <div class="column-full card-full">
             <dl class="govuk-check-your-answers cya-questions-long">

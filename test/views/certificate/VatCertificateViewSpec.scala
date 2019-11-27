@@ -24,7 +24,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
-import common.TestModels.{exampleNonStandardTaxPeriods, exampleNonNSTP}
+import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
 
 class VatCertificateViewSpec extends ViewBaseSpec {
 
@@ -49,6 +49,10 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     None,
     None
   )
+
+  lazy val modelWithNSTP: VatCertificateViewModel = model.copy(
+    nonStdTaxPeriods = Some(exampleNonStandardTaxPeriods),
+    firstNonNSTPPeriod = exampleNonNSTP)
 
   "The VAT Certificate page" when {
 
@@ -183,25 +187,44 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user has non-standard tax periods" should {
+    "the user has non-standard tax periods" when {
 
-      lazy val modelWithNSTP = model.copy(
-        nonStdTaxPeriods = Some(exampleNonStandardTaxPeriods),
-        firstNonNSTPPeriod = exampleNonNSTP)
+      "the vatCertNSTPs feature is on" should {
 
-      lazy val view = views.html.certificate.vatCertificate(
-        HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+        lazy val view = views.html.certificate.vatCertificate(
+          HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the non-standard tax periods card" which {
-        lazy val card = document.select(Selectors.cardClass).get(2)
-        "contains the correct heading" in {
-          card.select("h2").text() shouldBe "Non-standard tax periods"
+        "have the non-standard tax periods card" which {
+          lazy val card = document.select(Selectors.cardClass).get(2)
+          "contains the correct heading" in {
+            card.select("h2").text() shouldBe "Non-standard tax periods"
+          }
+        }
+
+        "not have the return details card" in {
+          document.select(Selectors.cardClass).contains("Return details") shouldBe false
         }
       }
 
-      "not have the return details card" in {
-        document.select(Selectors.cardClass).contains("Return details") shouldBe false
+      "the vatCertNSTPs feature is off" should {
+
+        "have the return details card" in {
+          mockConfig.features.vatCertNSTPs(false)
+          lazy val view = views.html.certificate.vatCertificate(
+            HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+          elementText("#content > article > div:nth-child(6) > " +
+            "div.column-two-thirds > h2") shouldBe "Return details"
+        }
+
+        "not have the non-standard return details card" in {
+          mockConfig.features.vatCertNSTPs(false)
+          lazy val view = views.html.certificate.vatCertificate(
+            HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+          document.select(Selectors.cardClass).contains("Non-standard tax periods") shouldBe false
+        }
       }
     }
   }

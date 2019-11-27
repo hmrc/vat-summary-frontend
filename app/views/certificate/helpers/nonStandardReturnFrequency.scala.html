@@ -19,7 +19,7 @@
 @(nonStdTaxPeriods: Seq[TaxPeriod],
         firstNonNSTPPeriod: Option[TaxPeriod])(implicit messages: Messages, appConfig: config.AppConfig)
 
-    <div class="card-full-container column-full">
+    <div id="nstp-card" class="card-full-container column-full">
         <div class="column-full">
             <h2 class="heading-medium card-heading">@messages("vatCertificate.nstp.title")</h2>
             <p>
@@ -33,7 +33,7 @@
             <p>@messages("vatCertificate.nstp.p2")</p>
             <dl class="govuk-check-your-answers cya-questions-long">
 
-            @for(taxYear <- nonStdTaxPeriods.map(period => period.periodEnd.getYear).distinct) {
+            @for(taxYear <- nonStdTaxPeriods.map(period => period.periodStart.getYear).distinct) {
                 <div class="check-your-answer-row">
                     <div>
                         <dt class="cya-question">

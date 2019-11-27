@@ -67,15 +67,15 @@
    }
 
    .cya-question{
-        border-bottom: none;
+    border-bottom: none;
    }
 
    .cya-answer {
-        border-bottom: none;
+    border-bottom: none;
    }
 
    .card-full .govuk-check-your-answers:last-child {
-   border-bottom: none;
+    border-bottom: none;
    }
 
    dt, dd {
@@ -96,6 +96,14 @@
     text-align: left;
     overflow: hidden;
     border-bottom: none;
+  }
+
+  #nstp-card {
+   page-break-before: always;
+  }
+
+  .check-your-answer-row div dd {
+    clear: left;
   }
 
 }

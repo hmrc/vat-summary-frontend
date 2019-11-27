@@ -16,8 +16,6 @@
 
 package connectors
 
-import java.time.LocalDate
-
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
@@ -55,10 +53,10 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         "10410",
         Some("MM"),
         Some(List(
-          TaxPeriod(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-15")),
-          TaxPeriod(LocalDate.parse("2018-01-06"), LocalDate.parse("2018-01-28")))
+          TaxPeriod("2018-01-01", "2018-01-15"),
+          TaxPeriod("2018-01-06", "2018-01-28"))
         ),
-        Some(TaxPeriod(LocalDate.parse("2018-01-29"), LocalDate.parse("2018-01-31"))),
+        Some(TaxPeriod("2018-01-29", "2018-01-31")),
         Some("MTDfB Voluntary")
       ))
 
