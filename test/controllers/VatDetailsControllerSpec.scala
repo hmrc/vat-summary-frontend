@@ -400,15 +400,28 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is no obligation, payment, or entity name with a non-MTDfB user" should {
 
-      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfB flag set to true" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, None, currentYear, isNonMTDfBUser = Some(true), customerInfoError = false)
+      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in new DetailsTest {
+        lazy val expected = VatDetailsViewModel(None, None, None, currentYear, isNonMTDfBUser = Some(true), isNonMTDfBOrNonDigitalUser = Some(true), customerInfoError = false)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
           Right(customerInformationMin),
           Right(validNonMTDfBMandationStatus)
         )
+        result shouldBe expected
+      }
+    }
 
+    "there is no obligation, payment, or entity name with a non-Digital user" should {
+
+      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in new DetailsTest {
+        lazy val expected = VatDetailsViewModel(None, None, None, currentYear, isNonMTDfBOrNonDigitalUser = Some(true), customerInfoError = false)
+        lazy val result: VatDetailsViewModel = target().constructViewModel(
+          Right(None),
+          Right(None),
+          Right(customerInformationMin),
+          Right(validNonDigitalMandationStatus)
+        )
         result shouldBe expected
       }
     }

@@ -29,4 +29,5 @@ object FinancialTransactionsConstants {
   val dueDate = "dueDate"
   val outstandingAmount = "outstandingAmount"
   val nonMTDfB: String = "Non MTDfB"
+  val nonDigital = "Non Digital"
 }

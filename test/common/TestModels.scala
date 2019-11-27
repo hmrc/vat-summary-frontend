@@ -143,4 +143,8 @@ object TestModels {
   val validNonMTDfBMandationStatus: MandationStatus = MandationStatus(
     "Non MTDfB"
   )
+
+  val validNonDigitalMandationStatus: MandationStatus = MandationStatus(
+    "Non Digital"
+  )
 }
