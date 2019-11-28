@@ -20,7 +20,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
 import models.errors.ServerSideError
-import models.{Address, CustomerInformation, MandationStatus}
+import models.{Address, CustomerInformation, MandationStatus, TaxPeriod}
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -52,6 +52,11 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some("7"),
         "10410",
         Some("MM"),
+        Some(List(
+          TaxPeriod("2018-01-01", "2018-01-15"),
+          TaxPeriod("2018-01-06", "2018-01-28"))
+        ),
+        Some(TaxPeriod("2018-01-29", "2018-01-31")),
         Some("MTDfB Voluntary")
       ))
 

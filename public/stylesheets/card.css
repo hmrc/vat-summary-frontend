@@ -60,7 +60,7 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
 
 .card-full-container {
     margin: 1em 0 2em 0;
-    padding: 1em .5em;
+    padding: 1em 1em;
     width: 100%;
     background-color: #f3f2f1;
 }
@@ -72,7 +72,6 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
 table td:last-child.amount {
     padding-right: 16px;
 }
-
 
 .card-full-container .card-body {
     margin-bottom: 1em;
@@ -94,6 +93,7 @@ table td:last-child.amount {
 .card-full-container .card-heading {
     margin: 0;
     margin-bottom: .83333em;
+    padding-top: 20px;
 }
 
 .card-full-container table td:last-child {

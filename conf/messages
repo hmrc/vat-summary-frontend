@@ -159,6 +159,10 @@ vatCertificate.aboutTheBusiness.principalPlaceOfBusiness = Principal place of bu
 
 vatCertificate.returnDetails.title = Return details
 vatCertificate.returnDetails.returnDates = VAT Return dates
+vatCertificate.nstp.title = Non-standard tax periods
+vatCertificate.nstp.p1 = If you do not renew your non-standard tax periods, an additional period ({0} to {1}) will be added.
+vatCertificate.nstp.p2 = This will cover the time between your last non-standard tax period and the start of your standard tax periods.
+vatCertificate.nstp.dateFromTo = {0} to {1}
 vatCertificate.backToClientOptions = Back to your client options
 vatCertificate.changeClient = Change client
 vatCertificate.logo = HMRC_Logo

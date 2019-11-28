@@ -30,6 +30,8 @@ case class CustomerInformation(organisationName: Option[String],
                                partyType: Option[String],
                                sicCode: String,
                                returnPeriod: Option[String],
+                               nonStdTaxPeriods: Option[Seq[TaxPeriod]],
+                               firstNonNSTPPeriod: Option[TaxPeriod],
                                pendingMandationStatus: Option[String]) {
 
   def entityName: Option[String] =
@@ -59,6 +61,8 @@ object CustomerInformation {
     (JsPath \ "partyType").readNullable[String] and
     (JsPath \ "primaryMainCode").read[String] and
     (JsPath \\ "stdReturnPeriod").readNullable[String] and
+    (JsPath \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]] and
+    (JsPath \\ "firstNonNSTPPeriod").readNullable[TaxPeriod] and
     (JsPath \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None))
   )(CustomerInformation.apply _)
 }

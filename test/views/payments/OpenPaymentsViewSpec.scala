@@ -29,8 +29,6 @@ import views.templates.payments.PaymentMessageHelper
 
 class OpenPaymentsViewSpec extends ViewBaseSpec {
 
-  mockConfig.features.allowDirectDebits(true)
-
   object Selectors {
     val pageHeading = "h1"
     val paymentLink = "#payments a"

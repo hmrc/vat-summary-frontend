@@ -1,0 +1,68 @@
+@*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+
+@(nonStdTaxPeriods: Seq[TaxPeriod],
+        firstNonNSTPPeriod: Option[TaxPeriod])(implicit messages: Messages, appConfig: config.AppConfig)
+
+    <div id="nstp-card" class="card-full-container column-full">
+        <div class="column-full">
+            <h2 class="heading-medium card-heading">@messages("vatCertificate.nstp.title")</h2>
+            <p>
+                @firstNonNSTPPeriod.map(
+                    taxPeriod => {
+                        messages("vatCertificate.nstp.p1", displayDate(taxPeriod.periodStart),
+                            displayDate(date = taxPeriod.periodEnd))
+                    }
+                )
+            </p>
+            <p>@messages("vatCertificate.nstp.p2")</p>
+            <dl class="govuk-check-your-answers cya-questions-long">
+
+            @for(taxYear <- nonStdTaxPeriods.map(period => period.periodStart.getYear).distinct) {
+                <div class="check-your-answer-row">
+                    <div>
+                        <dt class="cya-question">
+                        @taxYear
+                        </dt>
+                    </div>
+                </div>
+                @for(taxPeriod <- nonStdTaxPeriods.filter(_.periodStart.getYear == taxYear)) {
+                    <div class="check-your-answer-row">
+                        <div>
+                            <dd class="cya-answer">
+                                @{
+                                    if(taxPeriod.periodStart.getYear != taxPeriod.periodEnd.getYear) {
+                                        messages("vatCertificate.nstp.dateFromTo",
+                                            displayDate(taxPeriod.periodStart),
+                                            displayDate(taxPeriod.periodEnd)
+                                        )
+                                    } else {
+                                        messages("vatCertificate.nstp.dateFromTo",
+                                            displayDate(taxPeriod.periodStart, showYear = false),
+                                            displayDate(taxPeriod.periodEnd, showYear = false)
+                                        )
+                                    }
+                                }
+                            </dd>
+                        </div>
+                    </div>
+                }
+            }
+            </dl>
+        </div>
+    </div>
