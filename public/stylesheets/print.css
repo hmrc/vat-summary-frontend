@@ -31,9 +31,10 @@
   }
 
   .card-full-container {
-    margin-top: 16px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
     margin-bottom: 0px;
-    padding-bottom: 0px;
     background-color: #f3f2f1 !important;
     -webkit-print-color-adjust: exact;
   }
@@ -47,7 +48,7 @@
   }
 
   .govuk-check-your-answers {
-    padding-top: 10px;
+    padding-top: 5px;
     padding-bottom: 5px;
     border-bottom: 1px solid #dee0e2;
   }
@@ -99,8 +100,13 @@
   }
 
   #nstp-card {
-   page-break-before: always;
+    page-break-before: always;
   }
+
+   #nstp-card div p {
+     font-size: 12px;
+     display: block;
+   }
 
   .check-your-answer-row div dd {
     clear: left;
