@@ -14,7 +14,8 @@
  * limitations under the License.
  *@
 
-@(refererUri: String)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
+@(refererUri: String, fullyCompliant: Boolean)(implicit messages: Messages,
+        appConfig: config.AppConfig, request: Request[_], user: User)
 
 @views.html.main_template(title = messages("a11yStatement.title"), appConfig = appConfig, user = Some(user)) {
 
@@ -63,15 +64,23 @@
 
   <div id="how-accessible">
     <h2 class="heading-large">@messages("a11yStatement.howAccessible")</h2>
-    <p>
-      @messages("a11yStatement.WCAGCompliant.1")
-      <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("common.fullStop")
-    </p>
-    <p>@messages("a11yStatement.somePeople")</p>
-    <ul class="list list-bullet">
-      <li>@messages("a11yStatement.difficultyList.1")</li>
-      <li>@messages("a11yStatement.difficultyList.2")</li>
-    </ul>
+    @if(fullyCompliant){
+      <p>
+        @messages("a11yStatement.WCAGCompliant.1a")
+        <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("common.fullStop")
+      </p>
+      <p>@messages("a11yStatement.noKnownIssues")</p>
+    }else{
+      <p>
+        @messages("a11yStatement.WCAGCompliant.1b")
+        <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("common.fullStop")
+      </p>
+      <p>@messages("a11yStatement.somePeople")</p>
+      <ul class="list list-bullet">
+        <li>@messages("a11yStatement.difficultyList.1")</li>
+        <li>@messages("a11yStatement.difficultyList.2")</li>
+      </ul>
+    }
   </div>
 
   <div id="reporting-problems">
@@ -108,32 +117,39 @@
     <h2 class="heading-large">@messages("a11yStatement.technicalInformation")</h2>
     <p>@messages("a11yStatement.HMRCCommitted")</p>
     <p>
-      @messages("a11yStatement.WCAGCompliant.1")
-      <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("a11yStatement.nonCompliancesBelow")
+      @if(fullyCompliant){
+        @messages("a11yStatement.WCAGCompliant.1a")
+        <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("common.fullStop")
+      }else {
+        @messages("a11yStatement.WCAGCompliant.1b")
+        <a href="@appConfig.wcagGuidelinesUrl" target="_blank">@messages("a11yStatement.WCAGCompliant.2")</a>@messages("a11yStatement.nonCompliancesBelow")
+      }
     </p>
   </div>
 
-  <div id="non-accessible">
-    <h3 class="heading-medium">@messages("a11yStatement.nonAccessible")</h3>
-    <p>@messages("a11yStatement.nonAccessibleContent")</p>
-  </div>
+  @if(!fullyCompliant){
+    <div id="non-accessible">
+      <h3 class="heading-medium">@messages("a11yStatement.nonAccessible")</h3>
+      <p>@messages("a11yStatement.nonAccessibleContent")</p>
+    </div>
 
-  <div id="non-compliance">
-    <h3 class="heading-medium">@messages("a11yStatement.nonCompliance")</h3>
-    <p>@messages("a11yStatement.nonAccessibleFixedBy")</p>
-    <ul class="list list-bullet">
-      <li>
-        @messages("a11yStatement.difficultyList.1")
-        <br>
-        @Html(messages("a11yStatement.doesNotMeet.1"))
-      </li>
-      <li>
-        @messages("a11yStatement.difficultyList.2")
-        <br>
-        @Html(messages("a11yStatement.doesNotMeet.2"))
-      </li>
-    </ul>
-  </div>
+    <div id="non-compliance">
+      <h3 class="heading-medium">@messages("a11yStatement.nonCompliance")</h3>
+      <p>@messages("a11yStatement.nonAccessibleFixedBy")</p>
+      <ul class="list list-bullet">
+        <li>
+          @messages("a11yStatement.difficultyList.1")
+          <br>
+          @Html(messages("a11yStatement.doesNotMeet.1"))
+        </li>
+        <li>
+          @messages("a11yStatement.difficultyList.2")
+          <br>
+          @Html(messages("a11yStatement.doesNotMeet.2"))
+        </li>
+      </ul>
+    </div>
+  }
 
   <div id="how-we-tested">
     <h2 class="heading-large">@messages("a11yStatement.howWeTested")</h2>
