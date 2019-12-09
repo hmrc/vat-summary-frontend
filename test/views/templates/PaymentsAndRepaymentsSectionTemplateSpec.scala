@@ -40,8 +40,8 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
     }
 
     "have the correct link" in {
-      elementAttributes(Selectors.paymentsAndRepaymentsLink).get("href") shouldBe Some("/vat-repayment-tracker-" +
-        "frontend/manage-or-track/vrn/123456789")
+      elementAttributes(Selectors.paymentsAndRepaymentsLink).get("href") shouldBe Some("/vat-repayment-tracker" +
+        "/manage-or-track/vrn/123456789")
     }
 
     "have the correct paragraph" in {
