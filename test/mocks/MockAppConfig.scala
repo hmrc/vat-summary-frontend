@@ -98,7 +98,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentClientLookupActionUrl: String = "agent-client-lookup-action-url"
   override val optOutFrontendUrl: String = "/vat-through-software/account/opt-out"
   override val manageVatUrl: String = "/vat-through-software/account/change-business-details"
-  override val paymentsAndRepaymentsUrl: String = "/vat-repayment-tracker-frontend/manage-or-track/vrn/"
+  override val paymentsAndRepaymentsUrl: String = "/vat-repayment-tracker/manage-or-track-vrt"
   override val reportA11yProblemUrl: String =
     "/contact/accessibility?service=VATVCACCESSIBILITY&userAction=/vat-through-software/vat-overview"
 }

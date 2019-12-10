@@ -29,7 +29,7 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
     val paymentsAndRepaymentsParagraph = "#payments-and-repayments p"
   }
 
-  def view: HtmlFormat.Appendable = views.html.templates.paymentsAndRepaymentsSection("123456789")
+  def view: HtmlFormat.Appendable = views.html.templates.paymentsAndRepaymentsSection()
 
   implicit def document: Document = Jsoup.parse(view.body)
 
@@ -40,8 +40,8 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
     }
 
     "have the correct link" in {
-      elementAttributes(Selectors.paymentsAndRepaymentsLink).get("href") shouldBe Some("/vat-repayment-tracker-frontend" +
-        "/manage-or-track/vrn/123456789")
+      elementAttributes(Selectors.paymentsAndRepaymentsLink).get("href") shouldBe Some("/vat-repayment-tracker" +
+        "/manage-or-track-vrt")
     }
 
     "have the correct paragraph" in {

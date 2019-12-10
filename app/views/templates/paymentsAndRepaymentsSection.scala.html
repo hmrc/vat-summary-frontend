@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
+@()(implicit messages: Messages, appConfig: config.AppConfig)
 
 <div class="column-one-third" id="payments-and-repayments">
 
  <h2 class="heading-small">
-  <a href="@{appConfig.paymentsAndRepaymentsUrl + vrn}">
+  <a href="@appConfig.paymentsAndRepaymentsUrl">
    @messages("vatDetails.paymentsAndRepayments.link")
   </a>
  </h2>
