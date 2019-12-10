@@ -212,7 +212,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has a link to the vat-repayment-tracker service" in {
-        paymentsAndRepaymentsSection.select("h2 a").attr("href") shouldBe s"/vat-repayment-tracker" +
+        paymentsAndRepaymentsSection.select("h2 a").attr("href") shouldBe s"/vat-repayment-tracker-frontend" +
           s"/manage-or-track/vrn/${user.vrn}"
       }
 
