@@ -16,8 +16,6 @@
 
 @(years: Seq[Int], showPreviousPaymentsTab: Boolean)(implicit messages: Messages)
 
-@selectedYear = @{years.headOption.getOrElse(0)}
-
 <ul>
   @for(year <- years) {
     <li class="tablinks" aria-controls="@year">
