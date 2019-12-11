@@ -21,37 +21,68 @@ import views.templates.TemplateBaseSpec
 
 class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
 
-  "The payment history tabs template" should {
+  "The payment history tabs template" when {
 
-    "render a series of tabs, with the selected tab rendered as active" in {
-      val tab1Year = "2022"
-      val tab2Year = "2023"
-      val hiddenText1 = "View payment history from 2022"
-      val hiddenText2 = "Currently viewing payment history from 2023"
-      def tabUrl(year: String): String = s"/vat-through-software/payment-history/$year"
+    val tab1Year = 2022
+    val tab2Year = 2023
+    val prevPayments = "Previous payments"
+    val tabs = Seq(tab1Year, tab2Year)
 
-      val tabs = Seq(2022, 2023)
-      val selectedYear = 2023
+    "the previous payments boolean is set to true" should {
 
-      val expectedMarkup = Html(
-        s"""
-          |<li class="tabs-nav__tab font-medium" role="presentation">
-          |  <a href="${tabUrl(tab1Year)}" role="tab" aria-controls="$tab1Year" aria-selected="false" tabindex="-1">
-          |    $tab1Year
-          |    <span class="visuallyhidden">$hiddenText1</span>
-          |  </a>
-          |</li>
-          |<li class="tabs-nav__tab tabs-nav__tab--active font-medium" role="presentation">
-          |  <a href="#" class="in-selected-tab" role="tab" aria-controls="$tab2Year" aria-selected="true" tabindex="0">
-          |    $tab2Year
-          |</a>
-          |  <span class="visuallyhidden">$hiddenText2</span>
-          |</li>
-        """.stripMargin
-      )
-      val result = views.html.templates.payments.paymentsHistoryTabs(tabs, selectedYear)
+      "render a series of tabs, including the previous payments tab" in {
 
-      formatHtml(result) shouldBe formatHtml(expectedMarkup)
+        val expectedMarkup = Html(
+          s"""
+            |<ul>
+            |  <li class="tablinks" aria-controls="$tab1Year">
+            |    <a href="#$tab1Year">
+            |      $tab1Year
+            |    </a>
+            |  </li>
+            |  <li class="tablinks" aria-controls="$tab2Year">
+            |    <a href="#$tab2Year">
+            |      $tab2Year
+            |    </a>
+            |  </li>
+            |  <li class="tablinks" aria-controls="$prevPayments">
+            |    <a href="#$prevPayments">
+            |      $prevPayments
+            |    </a>
+            |  </li>
+            |</ul>
+          """.stripMargin
+        )
+        val result = views.html.templates.payments.paymentsHistoryTabs(tabs, showPreviousPaymentsTab = true)
+
+        formatHtml(result) shouldBe formatHtml(expectedMarkup)
+      }
+    }
+
+    "the previous payments boolean is set to false" should {
+
+      "render a series of tabs, excluding the previous payments tab" in {
+
+        val expectedMarkup = Html(
+          s"""
+             |<ul>
+             |  <li class="tablinks" aria-controls="$tab1Year">
+             |    <a href="#$tab1Year">
+             |      $tab1Year
+             |    </a>
+             |  </li>
+             |  <li class="tablinks" aria-controls="$tab2Year">
+             |    <a href="#$tab2Year">
+             |      $tab2Year
+             |    </a>
+             |  </li>
+             |</ul>
+          """.stripMargin
+        )
+        val result = views.html.templates.payments.paymentsHistoryTabs(tabs, showPreviousPaymentsTab = false)
+
+        formatHtml(result) shouldBe formatHtml(expectedMarkup)
+      }
     }
   }
 }

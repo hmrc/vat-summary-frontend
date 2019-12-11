@@ -157,14 +157,12 @@ paymentsHistory.title = Hanes taliadau
 paymentsHistory.paymentReceivedTitle = Taliad wedi dod i law
 paymentsHistory.descriptionTitle = Disgrifiad
 paymentsHistory.amountTitle = Swm
-paymentsHistory.activeTab = Yn edrych ar hyn o bryd ar hanes taliadau o {0}
-paymentsHistory.inactiveTab = Bwrw golwg dros hanes taliadau o {0}
 paymentsHistory.noCurrentYearHistory = Nid ydych wedi cael na gwneud unrhyw daliadau gan ddefnyddio’r gwasanaeth TAW newydd y flwyddyn hon.
 paymentsHistory.previousPayments.heading = Taliadau blaenorol
-paymentsHistory.previousPayments.tabHiddenText = Tudalen taliadau blaenorol
 paymentsHistory.previousPayments.youCan = Gallwch
 paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol (yn agor tab newydd)
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
+paymentsHistory.backToTop = Nôl i’r brig
 
 #VAT certificate
 vatCertificate.title = Eich tystysgrif TAW

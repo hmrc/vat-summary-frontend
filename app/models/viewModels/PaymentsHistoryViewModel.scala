@@ -16,9 +16,7 @@
 
 package models.viewModels
 
-case class PaymentsHistoryViewModel(tabOne: Option[Int],
+case class PaymentsHistoryViewModel(tabOne: Int,
                                     tabTwo: Option[Int],
                                     previousPaymentsTab: Boolean,
-                                    selectedYear: Option[Int],
-                                    transactions: Seq[PaymentsHistoryModel],
-                                    currentYear: Int)
+                                    transactions: Seq[PaymentsHistoryModel])

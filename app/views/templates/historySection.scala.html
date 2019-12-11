@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.links._
 @import config.AppConfig
+@import views.html.templates.formatters.links._
 
 @(currentYear: Int, isHybridUser: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User, lang: Lang)
 
@@ -31,7 +31,7 @@
             messages("vatDetails.viewPastPayments.link")
           )
         } else {
-          <a href="@controllers.routes.PaymentHistoryController.paymentHistory(currentYear)">
+          <a href="@controllers.routes.PaymentHistoryController.paymentHistory()">
              @messages("vatDetails.viewPastPayments.link")
           </a>
         }

@@ -14,10 +14,23 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.tabs._
+@(years: Seq[Int], showPreviousPaymentsTab: Boolean)(implicit messages: Messages)
 
-@(years: Seq[Int], selectedYear: Int)(implicit messages: Messages)
+@selectedYear = @{years.headOption.getOrElse(0)}
 
-@for(year <- years) {
-<button class="tablinks" onclick="openYear(event, @year)" style="background-color: #ffffff">@year</button>
-}
+<ul>
+  @for(year <- years) {
+    <li class="tablinks" aria-controls="@year">
+      <a href="#@year">
+        @year
+      </a>
+    </li>
+  }
+  @if(showPreviousPaymentsTab) {
+    <li class="tablinks" aria-controls="@messages("paymentsHistory.previousPayments.heading")">
+      <a href="#@messages("paymentsHistory.previousPayments.heading")">
+        @messages("paymentsHistory.previousPayments.heading")
+      </a>
+    </li>
+  }
+</ul>
