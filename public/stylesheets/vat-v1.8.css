@@ -1,5 +1,6 @@
 @import "card.css";
 @import "print.css";
+@import "tabs.css";
 
 .task-overdue {
     display: -moz-inline-stack;
@@ -50,10 +51,6 @@ table td:last-child.amount{
 
 table td:last-child {
     text-align: right;
-}
-
-table thead {
-    border-bottom: hidden;
 }
 
 a.in-selected-tab {

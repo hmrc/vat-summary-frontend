@@ -3,8 +3,7 @@
 GET        /vat-overview                                                                           controllers.VatDetailsController.details
 GET        /what-you-owe                                                                           controllers.OpenPaymentsController.openPayments
 GET        /direct-debit                                                                           controllers.DirectDebitController.directDebits(status: Option[Boolean])
-GET        /payment-history/previous-payments                                                      controllers.PaymentHistoryController.previousPayments()
-GET        /payment-history/:year                                                                  controllers.PaymentHistoryController.paymentHistory(year: Int)
+GET        /payment-history                                                                        controllers.PaymentHistoryController.paymentHistory
 GET        /vat-certificate                                                                        controllers.VatCertificateController.show
 GET        /vat-certificate/change-client-vat-number                                               controllers.VatCertificateController.changeClient
 GET        /vat-certificate/change-client-action                                                   controllers.VatCertificateController.changeClientAction

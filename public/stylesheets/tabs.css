@@ -1,0 +1,74 @@
+.tabbed {
+    display: none;
+}
+
+[role="tablist"] {
+    margin: 0;
+}
+
+[role="tablist"] li, [role="tablist"] a {
+    display: inline-block;
+}
+
+[role="tablist"] li {
+    background-color: #f3f2f1;
+    font-size: 24px;
+    box-shadow: 0px 2px 0px 0px transparent;
+}
+
+[role="tablist"] a {
+    padding: 14px 16px;
+    color: #0b0c0c;
+    text-decoration: underline;
+}
+
+[role="tabpanel"] {
+    border: 1px solid #b1b4b6;
+    padding: 1.5rem;
+}
+
+[role="tabpanel"] * + * {
+    margin-top: 0.75rem;
+}
+
+[role="tablist"] a:focus {
+    background-color: #fd0;
+    outline: 3px solid transparent;
+    box-shadow: 0 0 #fd0, 0 4px #0b0c0c;
+}
+
+[role="tablist"] [aria-selected] {
+    background-color: #ffffff;
+    border: 1px solid #b1b4b6;
+    border-bottom: none;
+    box-shadow: 0px 2px 0px 0px #ffffff;
+    text-decoration: none;
+}
+
+@media (max-width: 550px) {
+
+    [role="tablist"] li, [role="tablist"] a {
+        display: block;
+        position: static;
+    }
+
+    [role="tablist"] a {
+        border: 2px solid #222 !important;
+    }
+
+    [role="tablist"] li + li a {
+        border-top: 0 !important;
+    }
+
+    [role="tablist"] [aria-selected] {
+        position: static;
+    }
+
+    [role="tablist"] [aria-selected]::after {
+        content: '\0020⬅';
+    }
+
+    [role="tabpanel"] {
+        border-top: 0;
+    }
+}

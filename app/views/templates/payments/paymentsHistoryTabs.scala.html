@@ -14,18 +14,21 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.tabs._
+@(years: Seq[Int], showPreviousPaymentsTab: Boolean)(implicit messages: Messages)
 
-@(years: Seq[Int], selectedYear: Int)(implicit messages: Messages)
-
-@for(yearToDisplay <- years) {
-  @if(yearToDisplay == selectedYear) {
-    @activeTab(yearToDisplay.toString, messages("paymentsHistory.activeTab", yearToDisplay.toString))
-  } else {
-    @inactiveTab(
-      yearToDisplay.toString,
-      messages("paymentsHistory.inactiveTab", yearToDisplay.toString),
-      controllers.routes.PaymentHistoryController.paymentHistory(yearToDisplay).url
-    )
+<ul>
+  @for(year <- years) {
+    <li class="tablinks" aria-controls="@year">
+      <a href="#@year">
+        @year
+      </a>
+    </li>
   }
-}
+  @if(showPreviousPaymentsTab) {
+    <li class="tablinks" aria-controls="@messages("paymentsHistory.previousPayments.heading")">
+      <a href="#@messages("paymentsHistory.previousPayments.heading")">
+        @messages("paymentsHistory.previousPayments.heading")
+      </a>
+    </li>
+  }
+</ul>

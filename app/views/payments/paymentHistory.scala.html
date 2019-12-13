@@ -14,12 +14,9 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.breadcrumbs._
-@import views.html.templates.formatters.tabs._
-@import views.html.templates.formatters.money._
+@import views.html.templates.formatters.breadcrumbs.navigationBreadcrumb
 @import views.html.templates.payments._
 @import models.viewModels.PaymentsHistoryViewModel
-@import java.time.LocalDate
 
 @(model: PaymentsHistoryViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang, user: User)
 
@@ -35,81 +32,34 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("paymentsHistory.title")
   )
-  
+
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-xlarge">@messages("paymentsHistory.title")</h1>
+      <h1 id="top" class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
-      <ul class="tabs-nav" role="tablist">
-        @(model.tabOne, model.tabTwo) match {
-          case (Some(yearOne), Some(yearTwo)) => { @paymentsHistoryTabs(Seq(yearOne, yearTwo), model.selectedYear.getOrElse(0)) }
-          case (Some(yearOne), None) if model.previousPaymentsTab => { @paymentsHistoryTabs(Seq(yearOne), model.selectedYear.getOrElse(0)) }
-          case _ => { }
-        }
-        @model.previousPaymentsTab match {
-          case true if model.selectedYear.isEmpty => {
-            @activeTab(
-              messages("paymentsHistory.previousPayments.heading"),
-              messages("paymentsHistory.previousPayments.tabHiddenText")
-            )
+      <div class="tabbed">
+        @model.tabTwo match {
+          case Some(yearTwo) => {
+            @paymentsHistoryTabs(Seq(model.tabOne, yearTwo), model.previousPaymentsTab)
+            @paymentsHistoryTabsContent(Seq(model.tabOne, yearTwo), model.transactions, model.previousPaymentsTab, javascriptEnabled = true)
           }
-          case true => {
-            @inactiveTab(
-              messages("paymentsHistory.previousPayments.heading"),
-              messages("paymentsHistory.previousPayments.tabHiddenText"),
-              controllers.routes.PaymentHistoryController.previousPayments().url
-            )
+          case None => {
+            @paymentsHistoryTabs(Seq(model.tabOne), model.previousPaymentsTab)
+            @paymentsHistoryTabsContent(Seq(model.tabOne), model.transactions, model.previousPaymentsTab, javascriptEnabled = true)
           }
-          case false => { }
         }
-      </ul>
+      </div>
 
-      <h2>
-        @model.selectedYear match {
-          case Some(year) => { @year.toString }
-          case None => { @messages("paymentsHistory.previousPayments.heading") }
+      <noscript>
+        @model.tabTwo match {
+          case Some(yearTwo) => {
+            @paymentsHistoryTabsContent(Seq(model.tabOne, yearTwo), model.transactions, model.previousPaymentsTab, javascriptEnabled = false)
+          }
+          case None => {
+            @paymentsHistoryTabsContent(Seq(model.tabOne), model.transactions, model.previousPaymentsTab, javascriptEnabled = false)
+          }
         }
-      </h2>
-
-      @(model.transactions.nonEmpty, model.selectedYear) match {
-
-        case (true, _) => {
-          <table>
-            <thead>
-            <tr>
-              <th scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.paymentReceivedTitle")</div>
-              </th>
-
-              <th scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.descriptionTitle")</div>
-              </th>
-
-              <th class="numeric" scope="col">
-                <div class="visuallyhidden">@messages("paymentsHistory.amountTitle")</div>
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-              @for(transaction <- model.transactions) {
-                @views.html.templates.payments.paymentsHistoryCharge(transaction)
-              }
-            </tbody>
-          </table>
-        }
-        case (false, Some(year)) => {
-          <p>@messages("paymentsHistory.noCurrentYearHistory")</p>
-        }
-        case (false, None) => {
-          <p>
-            @messages("paymentsHistory.previousPayments.youCan")
-            <a href="@appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)">
-              @messages("paymentsHistory.previousPayments.viewPreviousPayments")
-            </a>
-            @messages("paymentsHistory.previousPayments.beforeMtd")
-          </p>
-        }
-      }
+      </noscript>
     </div>
   </div>
 }

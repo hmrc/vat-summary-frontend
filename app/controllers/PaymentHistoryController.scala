@@ -49,62 +49,32 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
   def currentYear: Int = dateService.now().getYear
   def previousYear: Int = currentYear - 1
 
-  def paymentHistory(year: Int): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
-    implicit user =>
-       for {
-        migrationDate <- getMigratedToETMPDate
-        serviceInfoContent <- serviceInfoService.getPartial
-        validYears = getValidYears(user.vrn, migrationDate, Some(year))
-        migratedWithin15Months = customerMigratedWithin15M(migrationDate)
-        paymentsServiceYearOne <-
-          if (validYears.contains(year)) { paymentsService.getPaymentsHistory(user.vrn, validYears.head) }
-          else { Future.successful(Right(Seq.empty)) }
-        paymentsServiceYearTwo <-
-          if (validYears.length == 2 && validYears.contains(year)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head) }
-          else { Future.successful(Right(Seq.empty)) }
-      } yield {
-        if(validYears.isEmpty) {
-          NotFound(views.html.errors.notFound())
-        } else {
-          val showPreviousPaymentsTab: Boolean = migratedWithin15Months && user.hasNonMtdVat
-          generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, year, migrationDate) match {
-            case Some(model) =>
-              auditEvent(user.vrn, model.transactions, year)
-              Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
-            case None =>
-              Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
-              InternalServerError(views.html.errors.standardError(appConfig,
-                messagesApi.apply("standardError.title"),
-                messagesApi.apply("standardError.heading"),
-                messagesApi.apply("standardError.message"))
-              )
-          }
-        }
-      }
-  }
-
-  def previousPayments(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
+  def paymentHistory(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
     implicit user =>
       for {
         migrationDate <- getMigratedToETMPDate
         serviceInfoContent <- serviceInfoService.getPartial
+        validYears = getValidYears(user.vrn, migrationDate)
         migratedWithin15Months = customerMigratedWithin15M(migrationDate)
+        paymentsServiceYearOne <-
+          if (validYears.contains(currentYear)) { paymentsService.getPaymentsHistory(user.vrn, validYears.head) }
+          else { Future.successful(Right(Seq.empty)) }
+        paymentsServiceYearTwo <-
+          if (validYears.contains(previousYear)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head) }
+          else { Future.successful(Right(Seq.empty)) }
       } yield {
-        if (migratedWithin15Months && user.hasNonMtdVat) {
-          val validYears = getValidYears(user.vrn, migrationDate, None)
-          val tabOne = validYears.headOption
-          val tabTwo = validYears.drop(1).headOption
-          val model = PaymentsHistoryViewModel(
-            tabOne,
-            tabTwo,
-            previousPaymentsTab = true,
-            None,
-            Seq.empty,
-            currentYear
-          )
-          Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
-        } else {
-          NotFound(views.html.errors.notFound())
+        val showPreviousPaymentsTab: Boolean = migratedWithin15Months && user.hasNonMtdVat
+        generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, migrationDate) match {
+          case Some(model) =>
+            auditEvent(user.vrn, model.transactions)
+            Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
+          case None =>
+            Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
+            InternalServerError(views.html.errors.standardError(appConfig,
+              messagesApi.apply("standardError.title"),
+              messagesApi.apply("standardError.heading"),
+              messagesApi.apply("standardError.message"))
+            )
         }
       }
   }
@@ -129,54 +99,33 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
     }
 
   private[controllers] def getValidYears(vrn: String,
-                                         migrationDate: Option[LocalDate],
-                                         givenYear: Option[Int])(implicit user: User): Seq[Int] =
-    (migrationDate, givenYear) match {
-      case (_, Some(year)) if year > currentYear | year < previousYear => Seq.empty
-      case (Some(date), _) if date.getYear == currentYear => Seq(currentYear)
-      case _ => Seq(currentYear, currentYear - 1)
+                                         migrationDate: Option[LocalDate])(implicit user: User): Seq[Int] =
+    migrationDate match {
+      case Some(date) if date.getYear == currentYear => Seq(currentYear)
+      case _ => Seq(currentYear, previousYear)
     }
 
   private[controllers] def generateViewModel(paymentsServiceYearOne: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              paymentsServiceYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              showPreviousPaymentsTab: Boolean,
-                                             selectedYear: Int,
                                              customerMigratedToETMPDate: Option[LocalDate]): Option[PaymentsHistoryViewModel] =
     (paymentsServiceYearOne, paymentsServiceYearTwo) match {
       case (Right(yearOneTrans), Right(yearTwoTrans)) =>
-        val migratedThisYear = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
-        val (tabOne, tabTwo) =
-          generateTabs(yearOneTrans.isEmpty, yearTwoTrans.isEmpty, showPreviousPaymentsTab, migratedThisYear)
-        val transactions = if(selectedYear == currentYear) yearOneTrans else yearTwoTrans
-        if (yearTwoTrans.isEmpty && selectedYear == previousYear && !showPreviousPaymentsTab) {
-          None
-        } else {
-          Some(PaymentsHistoryViewModel(
-            tabOne,
-            tabTwo,
-            showPreviousPaymentsTab,
-            Some(selectedYear),
-            transactions,
-            currentYear
-          ))
-        }
+        val migratedThisYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
+        val tabOne: Int = currentYear
+        val tabTwo: Option[Int] = if(migratedThisYear) None else Some(previousYear)
+        val transactions = yearOneTrans ++ yearTwoTrans
+        Some(PaymentsHistoryViewModel(
+          tabOne,
+          tabTwo,
+          showPreviousPaymentsTab,
+          transactions
+        ))
       case _ => None
   }
 
-  def generateTabs(yearOneEmpty: Boolean,
-                   yearTwoEmpty: Boolean,
-                   showPreviousPaymentsTab: Boolean,
-                   migratedThisYear: Boolean): (Option[Int], Option[Int]) =
-    (yearOneEmpty, yearTwoEmpty) match {
-      case _ if showPreviousPaymentsTab && migratedThisYear => (Some(currentYear), None)
-      case _ if showPreviousPaymentsTab => (Some(currentYear), Some(previousYear))
-      case (true, true) => (None, None)
-      case (false, true) => (Some(currentYear), None)
-      case _ => (Some(currentYear), Some(previousYear))
-    }
-
-  private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel], year: Int)
+  private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel])
                                      (implicit hc: HeaderCarrier): Unit =
     auditingService.extendedAudit(ViewVatPaymentHistoryAuditModel(vrn, payments),
-      routes.PaymentHistoryController.paymentHistory(year = year).url)
+      routes.PaymentHistoryController.paymentHistory().url)
 }
