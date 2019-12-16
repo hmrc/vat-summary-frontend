@@ -18,7 +18,6 @@ package views.templates.payments
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants._
 import models.payments._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -30,7 +29,6 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
     private val columnOne = ""
     val title = s"h2"
     val due = s"$columnOne dt > div"
-    val overdueLabel = s"$due .task-overdue"
 
     private val columnTwo = "dd:nth-of-type(1)"
     val amount = s"$columnTwo > span"
@@ -48,15 +46,14 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
 
   "Rendering the view" when {
 
-    def generateModel(overdue: Boolean): OpenPaymentsModelWithPeriod = {
+    def generateModel: OpenPaymentsModelWithPeriod = {
       OpenPaymentsModelWithPeriod(
         ReturnDebitCharge,
         BigDecimal(100.00),
         LocalDate.parse("2018-03-03"),
         LocalDate.parse("2018-01-01"),
         LocalDate.parse("2018-02-02"),
-        "18AA",
-        overdue
+        "18AA"
       )
     }
 
@@ -64,7 +61,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
 
       "payment has a return associated" should {
 
-        val model = generateModel(overdue = false)
+        val model = generateModel
         lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
         lazy implicit val document: Document = Jsoup.parse(
           s"<table>${view.body}</table>"
@@ -131,23 +128,6 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         "not show a link to View Return" in {
           document.select(Selectors.viewReturnLink) shouldBe empty
         }
-      }
-    }
-
-    "the payment is overdue" should {
-
-      val model = generateModel(overdue = true)
-      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${view.body}</table>"
-      )
-
-      "display the overdue label" in {
-        elementText(Selectors.overdueLabel) shouldBe "overdue"
-      }
-
-      "have the correct pay link context" in {
-        elementText(Selectors.payHiddenContent) shouldBe "£100"
       }
     }
   }

@@ -26,7 +26,6 @@ sealed trait OpenPaymentsModel {
   val chargeType: ChargeType
   val amount: BigDecimal
   val due: LocalDate
-  val overdue: Boolean
   val periodKey: String
   def makePaymentRedirect: String
 }
@@ -38,31 +37,28 @@ object OpenPaymentsModel {
             due: LocalDate,
             periodFrom: LocalDate,
             periodTo: LocalDate,
-            periodKey: String,
-            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(chargeType, amount, due, periodFrom, periodTo, periodKey, overdue)
+            periodKey: String): OpenPaymentsModel = OpenPaymentsModelWithPeriod(chargeType, amount, due, periodFrom, periodTo, periodKey)
 
   def apply(chargeType: ChargeType,
             amount: BigDecimal,
             due: LocalDate,
-            periodKey: String,
-            overdue: Boolean): OpenPaymentsModel = OpenPaymentsModelNoPeriod(chargeType, amount, due, periodKey, overdue)
+            periodKey: String): OpenPaymentsModel = OpenPaymentsModelNoPeriod(chargeType, amount, due, periodKey)
 
-  def apply(payment: Payment, overdue: Boolean)(implicit messages: Messages): OpenPaymentsModel = payment match {
+  def apply(payment: Payment)(implicit messages: Messages): OpenPaymentsModel = payment match {
     case payment: PaymentWithPeriod => OpenPaymentsModelWithPeriod(
       payment.chargeType,
       payment.outstandingAmount,
       payment.due,
       payment.periodFrom,
       payment.periodTo,
-      payment.periodKey,
-      overdue
+      payment.periodKey
+
     )
     case payment: PaymentNoPeriod => OpenPaymentsModelNoPeriod(
       payment.chargeType,
       payment.outstandingAmount,
       payment.due,
-      payment.periodKey,
-      overdue
+      payment.periodKey
     )
   }
 
@@ -77,8 +73,7 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        due: LocalDate,
                                        periodFrom: LocalDate,
                                        periodTo: LocalDate,
-                                       periodKey: String,
-                                       overdue: Boolean = false) extends OpenPaymentsModel {
+                                       periodKey: String) extends OpenPaymentsModel {
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (amount * 100).toLong,
@@ -97,8 +92,7 @@ object OpenPaymentsModelWithPeriod {
       "due" -> model.due,
       "periodFrom" -> model.periodFrom,
       "periodTo" -> model.periodTo,
-      "periodKey" -> model.periodKey,
-      "overdue" -> model.overdue
+      "periodKey" -> model.periodKey
     )
   }
 }
@@ -106,8 +100,7 @@ object OpenPaymentsModelWithPeriod {
 case class OpenPaymentsModelNoPeriod(chargeType: ChargeType,
                                      amount: BigDecimal,
                                      due: LocalDate,
-                                     periodKey: String,
-                                     overdue: Boolean = false) extends OpenPaymentsModel {
+                                     periodKey: String) extends OpenPaymentsModel {
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePaymentNoPeriod(
     amountInPence = (amount * 100).toLong,
@@ -122,8 +115,7 @@ object OpenPaymentsModelNoPeriod {
       "paymentType" -> model.chargeType,
       "amount" -> model.amount,
       "due" -> model.due,
-      "periodKey" -> model.periodKey,
-      "overdue" -> model.overdue
+      "periodKey" -> model.periodKey
     )
   }
 }

@@ -32,9 +32,6 @@
             <h2 class="bold heading-small what-you-owe-heading">@chargeDetails.title @chargeDescription.map { description => <div class="what-you-owe-subheading">@description</div> }</h2>
             <div data-due="@(payment.due.toString)" class="form-hint">
                 @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
-                @if(payment.overdue) {
-                <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
-                }
             </div>
         </dt>
         <dd class="cya-answer what-you-owe-amount">

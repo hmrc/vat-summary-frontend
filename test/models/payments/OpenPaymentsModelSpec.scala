@@ -30,8 +30,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003")
-    ),
-    overdue = true
+    )
   )
 
   val openPaymentsModelNoPeriod: OpenPaymentsModel = OpenPaymentsModel(
@@ -40,8 +39,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003")
-    ),
-    overdue = true
+    )
   )
 
   "OpenPaymentsModel" when {
@@ -58,8 +56,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             due = LocalDate.parse("2003-04-05"),
             periodFrom = LocalDate.parse("2001-01-01"),
             periodTo = LocalDate.parse("2001-03-31"),
-            periodKey = "#003",
-            overdue = true
+            periodKey = "#003"
           )
 
           openPaymentsModelWithPeriod shouldBe regularApply
@@ -74,8 +71,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             chargeType = OADebitCharge,
             amount = 300.00,
             due = LocalDate.parse("2003-04-05"),
-            periodKey = "#003",
-            overdue = true
+            periodKey = "#003"
           )
 
           openPaymentsModelNoPeriod shouldBe regularApply
@@ -94,8 +90,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             |   "due" : "2003-04-05",
             |   "periodFrom" : "2001-01-01",
             |   "periodTo" : "2001-03-31",
-            |   "periodKey" : "#003",
-            |   "overdue" : true
+            |   "periodKey" : "#003"
             | }
           """.stripMargin
         )
@@ -112,8 +107,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             |   "paymentType" : "VAT OA Debit Charge",
             |   "amount" : 300,
             |   "due" : "2003-04-05",
-            |   "periodKey" : "#003",
-            |   "overdue" : true
+            |   "periodKey" : "#003"
             | }
           """.stripMargin
         )
@@ -144,8 +138,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         chargeType = OADebitCharge,
         due = LocalDate.parse("2003-04-05"),
         amount = 300.00,
-        periodKey = "#003",
-        overdue = true
+        periodKey = "#003"
       )
 
       val expectedJson = Json.parse(
@@ -153,8 +146,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
           |   "paymentType" : "VAT OA Debit Charge",
           |   "amount" : 300,
           |   "due" : "2003-04-05",
-          |   "periodKey" : "#003",
-          |   "overdue" : true
+          |   "periodKey" : "#003"
           | }
         """.stripMargin
       )
@@ -188,8 +180,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         periodFrom = LocalDate.parse("2001-01-01"),
         periodTo = LocalDate.parse("2001-03-31"),
         amount = 300.00,
-        periodKey = "#003",
-        overdue = true
+        periodKey = "#003"
       )
 
       val expectedJson = Json.parse(
@@ -199,8 +190,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
           |   "due" : "2003-04-05",
           |   "periodFrom" : "2001-01-01",
           |   "periodTo" : "2001-03-31",
-          |   "periodKey" : "#003",
-          |   "overdue" : true
+          |   "periodKey" : "#003"
           | }
         """.stripMargin
       )

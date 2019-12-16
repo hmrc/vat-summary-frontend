@@ -491,26 +491,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         result shouldBe expected
       }
     }
-
-    "the payment is overdue" should {
-
-      "return a VatDetailsViewModel with the payment overdue flag set" in new DetailsTest {
-        val overduePaymentDueDate: Option[String] = Some("2017-03-03")
-        override val payments: Payments = overduePayment
-
-        lazy val expected = VatDetailsViewModel(
-          overduePaymentDueDate, obligationData, Some(entityName), currentYear, paymentOverdue = true, customerInfoError = false
-        )
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(Some(obligations)),
-          Right(Some(payments)),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
-        )
-
-        result shouldBe expected
-      }
-    }
   }
 
   "Calling .getObligationFlags" when {

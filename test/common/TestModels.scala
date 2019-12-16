@@ -56,15 +56,6 @@ object TestModels {
     "#001"
   )))
 
-  val overduePayment: Payments = Payments(Seq(Payment(
-    ReturnDebitCharge,
-    LocalDate.parse("2017-01-01"),
-    LocalDate.parse("2017-02-02"),
-    LocalDate.parse("2017-03-03"),
-    1,
-    Some("#001")
-  )))
-
   val address: Address = Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB"))
   val entityName: String = "Cheapo Clothing"
   val currentYear: Int = 2018

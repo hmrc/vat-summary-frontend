@@ -23,14 +23,13 @@ import views.ViewBaseSpec
 
 class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
-  def paymentModel(chargeType: ChargeType, overdue: Boolean = false): OpenPaymentsModel = OpenPaymentsModel(
+  def paymentModel(chargeType: ChargeType): OpenPaymentsModel = OpenPaymentsModel(
     chargeType,
     BigDecimal(100.00),
     LocalDate.parse("2018-03-03"),
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
-    "18AA",
-    overdue
+    "18AA"
   )
 
   def paymentModelNoPeriod(chargeType: ChargeType): OpenPaymentsModel = OpenPaymentsModelNoPeriod(

@@ -402,8 +402,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             payment.due,
             payment.periodFrom,
             payment.periodTo,
-            payment.periodKey,
-            overdue = true
+            payment.periodKey
           )),
           Some(true)
         )
