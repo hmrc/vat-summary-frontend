@@ -27,6 +27,10 @@
     @years.map { year =>
       <a href="#nonJS-@year">@year</a> @if(years.lastOption.getOrElse(0) != year){|}
     }
+
+    @if(showPreviousPaymentsTab) {
+      | <a href="#nonJS-previous-payments">@messages("paymentsHistory.previousPayments.heading")</a>
+    }
   </p>
 }
 
@@ -63,7 +67,14 @@
 }
 
 @if(showPreviousPaymentsTab) {
-  <section id="previous-payments" @if(javascriptEnabled){class="tabcontent" role="tabpanel"}>
+
+  <section
+      @if(javascriptEnabled){
+          id="previous-payments" class="tabcontent" role="tabpanel"
+      }else{
+          id="nonJS-previous-payments"
+      }
+    >
     <h2 class="heading-medium">@messages("paymentsHistory.previousPayments.heading")</h2>
     <p>
       @messages("paymentsHistory.previousPayments.youCan")
