@@ -13,7 +13,7 @@ $(document).ready(function() {
     const panels = tabbed.querySelectorAll('[class^="tabcontent"]');
 
     // The tab switching function
-    const switchTab = (oldTab, newTab) => {
+    const switchTab = function(oldTab, newTab) {
       newTab.focus();
       // Make the active tab focusable by the user (Tab key)
       newTab.removeAttribute('tabindex');
@@ -33,14 +33,14 @@ $(document).ready(function() {
     tablist.setAttribute('role', 'tablist');
 
     // Add semantics are remove user focusability for each tab
-    Array.prototype.forEach.call(tabs, (tab, i) => {
+    Array.prototype.forEach.call(tabs, function(tab, i) {
       tab.setAttribute('role', 'tab');
       tab.setAttribute('id', 'tab' + (i + 1));
       tab.setAttribute('tabindex', '-1');
       tab.parentNode.setAttribute('role', 'presentation');
 
       // Handle clicking of tabs for mouse users
-      tab.addEventListener('click', e => {
+      tab.addEventListener('click', function(e) {
         e.preventDefault();
         let currentTab = tablist.querySelector('[aria-selected]');
         if (e.currentTarget !== currentTab) {
@@ -49,7 +49,7 @@ $(document).ready(function() {
       });
 
       // Handle keydown events for keyboard users
-      tab.addEventListener('keydown', e => {
+      tab.addEventListener('keydown', function(e) {
         // Get the index of the current tab in the tabs node list
         let index = Array.prototype.indexOf.call(tabs, e.currentTarget);
         // Work out which key the user is pressing and
@@ -65,7 +65,7 @@ $(document).ready(function() {
     });
 
     // Add tab panel semantics and hide them all
-    Array.prototype.forEach.call(panels, (panel, i) => {
+    Array.prototype.forEach.call(panels, function(panel, i) {
       panel.setAttribute('role', 'tabpanel');
       panel.setAttribute('tabindex', '-1');
       let id = panel.getAttribute('id');
