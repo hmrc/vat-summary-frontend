@@ -73,7 +73,7 @@ extends FrontendController with I18nSupport {
   private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]): OpenPaymentsViewModel = {
     OpenPaymentsViewModel(
       payments.map { payment =>
-        OpenPaymentsModel(payment, payment.due.isBefore(dateService.now()))
+        OpenPaymentsModel(payment)
       },
       hasActiveDirectDebit
     )

@@ -43,7 +43,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val title: Int => String = row => s"${columnOne(row)} dt > h2"
     val description: Int => String = row => s"${columnOne(row)} div:nth-of-type(1)"
     val due: Int => String = row =>s"${columnOne(row)} > dl > div > dt > div"
-    val overdueLabel: Int => String = row => s"${due(row)} .task-overdue"
 
     private val columnTwo: Int => String = row => s"#payment-$row dd:nth-of-type(1)"
     val amount: Int => String = row => s"${columnTwo(row)} > span"
@@ -75,8 +74,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       due = LocalDate.parse("2001-04-08"),
       periodFrom = LocalDate.parse("2001-01-01"),
       periodTo = LocalDate.parse("2001-03-31"),
-      periodKey = "#001",
-      overdue = true
+      periodKey = "#001"
     ),
     OpenPaymentsModelWithPeriod(
       AAInterestCharge,
@@ -141,7 +139,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct due period" in {
-        elementText(Selectors.due(1)) shouldBe "due by 8 Apr 2001 overdue"
+        elementText(Selectors.due(1)) shouldBe "due by 8 Apr 2001"
       }
 
       "render the Pay now text" in {
@@ -155,11 +153,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "render the correct view return link" in {
         element(Selectors.viewReturnLink(1)).attr("href") shouldBe "/submitted/%23001"
       }
-
-      "render the overdue label" in {
-        elementText(Selectors.overdueLabel(1)) shouldBe "overdue"
-      }
     }
+
 
     "for the second payment" should {
 
