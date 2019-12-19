@@ -36,7 +36,7 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
   "the payments and repayments section" should {
 
     "have the correct heading" in {
-      elementText(Selectors.paymentsAndRepaymentsHeading) shouldBe "Payments and repayments"
+      elementText(Selectors.paymentsAndRepaymentsHeading) shouldBe "Manage bank accounts or view repayments"
     }
 
     "have the correct link" in {
@@ -45,8 +45,8 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
     }
 
     "have the correct paragraph" in {
-      elementText(Selectors.paymentsAndRepaymentsParagraph) shouldBe "Manage your Direct Debit, repayment bank " +
-        "account details and track what HMRC owe you."
+      elementText(Selectors.paymentsAndRepaymentsParagraph) shouldBe "Change or add Direct Debit details or repayment" +
+        " bank account details and if HMRC owes you money, find out when you'll be paid."
     }
 
   }

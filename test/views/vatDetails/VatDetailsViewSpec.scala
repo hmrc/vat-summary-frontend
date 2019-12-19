@@ -200,7 +200,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val paymentsAndRepaymentsSection = element(Selectors.paymentsAndRepaymentsSection)
 
       "has the correct heading" in {
-        paymentsAndRepaymentsSection.select("h2").text() shouldBe "Payments and repayments"
+        paymentsAndRepaymentsSection.select("h2").text() shouldBe "Manage bank accounts or view repayments"
       }
 
       "has a link to the vat-repayment-tracker service" in {
@@ -209,8 +209,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has the correct paragraph" in {
-        paymentsAndRepaymentsSection.select("p").text() shouldBe "Manage your Direct Debit, repayment bank account " +
-          "details and track what HMRC owe you."
+        paymentsAndRepaymentsSection.select("p").text() shouldBe "Change or add Direct Debit details or repayment bank" +
+          " account details and if HMRC owes you money, find out when you'll be paid."
       }
     }
 
