@@ -16,12 +16,10 @@
 
 package config.filters
 
-
 import akka.util.ByteString
 import javax.inject.Inject
 import play.api.libs.streams.Accumulator
 import play.api.mvc._
-import play.api.routing.Router
 import play.filters.csrf._
 
 /*
