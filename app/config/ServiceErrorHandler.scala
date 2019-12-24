@@ -45,4 +45,7 @@ class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi, appConfig: App
   }
 
   def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(internalServerErrorTemplate)
+
+  override def notFoundTemplate(implicit request: Request[_]): Html =
+    views.html.errors.standardError(appConfig,"notFound.title", "notFound.heading", "notFound.message")
 }
