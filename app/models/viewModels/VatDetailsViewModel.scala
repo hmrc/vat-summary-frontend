@@ -19,7 +19,6 @@ package models.viewModels
 case class VatDetailsViewModel(paymentsData: Option[String],
                                obligationData: Option[String],
                                entityName: Option[String],
-                               currentYear: Int,
                                hasMultipleReturnObligations: Boolean = false,
                                returnObligationOverdue: Boolean = false,
                                returnObligationError: Boolean = false,
