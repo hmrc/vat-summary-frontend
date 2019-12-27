@@ -38,7 +38,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "use the English language" in {
         cookies(result).get(Play.langCookieName(messages)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = false))
+          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
       }
     }
 
@@ -52,7 +52,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "use the Welsh language" in {
         cookies(result).get(Play.langCookieName(messages)) shouldBe
-          Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = false))
+          Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = true))
       }
 
     }
@@ -68,7 +68,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "keep the current language" in {
         cookies(result).get(Play.langCookieName(messages)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = false))
+          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
       }
     }
   }
