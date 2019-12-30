@@ -32,30 +32,6 @@ class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOn
 
   val service: ServiceErrorHandler = new ServiceErrorHandler(messagesApi,mockAppConfig)
 
-
-  "calling .standardErrorTemplate " should {
-
-    object Selectors {
-      val pageHeading = "h1"
-      val message = ".lede"
-    }
-    lazy val view=service.standardErrorTemplate("There is a problem with the service - VAT - GOV.UK","Sorry, there is a problem with the service","Try again later.")
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-
-    "display the correct title" in {
-      document.title shouldBe "There is a problem with the service - VAT - GOV.UK"
-    }
-
-    "displays the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Sorry, there is a problem with the service"
-    }
-
-    "displays the correct message" in {
-      element(Selectors.message).text() shouldBe "Try again later."
-    }
-  }
-
   "calling .notFoundTemplate " should {
 
     object Selectors {
