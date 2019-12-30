@@ -16,6 +16,7 @@
 
 package controllers.predicates
 
+import config.ServiceErrorHandler
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
@@ -26,7 +27,8 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsService) extends FrontendController {
+class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsService,
+                                    errorHandler: ServiceErrorHandler) extends FrontendController {
 
   def authoriseMigratedUserAction(f: Request[AnyContent] => User => Future[Result])
                                  (implicit request: Request[AnyContent], user: User): Future[Result] = {
@@ -37,7 +39,7 @@ class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsSer
       case Right(_) => f(request)(user)
       case Left(error) =>
         Logger.warn(s"[HybridCheckPredicate][bounceHybridToHome] Error returned from accountDetailsService: $error")
-        Future.successful(InternalServerError)
+        Future.successful(errorHandler.showInternalServerError)
     }
   }
 }
