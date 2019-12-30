@@ -53,7 +53,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   implicit val mockAuditService: AuditingService = mock[AuditingService]
   val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-  val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+  val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
   val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
   val mockAuthorisedController: AuthorisedController = new AuthorisedController(
     messages,

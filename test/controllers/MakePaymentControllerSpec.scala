@@ -23,6 +23,7 @@ import connectors.VatSubscriptionConnector
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.PaymentSetupError
 import models.payments.PaymentDetailsModel
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -51,7 +52,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
     val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
+    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
@@ -125,6 +126,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         lazy val result: Future[Result] = target.makePaymentNoPeriod(testAmountInPence, testChargeType, testDueDate)(fakeRequestWithSession)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - Business tax account - GOV.UK"
       }
     }
 
