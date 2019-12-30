@@ -39,7 +39,7 @@ class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOn
       val pageHeading = "h1"
       val message = ".lede"
     }
-    lazy val view=service.standardErrorTemplate("","","")
+    lazy val view=service.standardErrorTemplate("There is a problem with the service - VAT - GOV.UK","Sorry, there is a problem with the service","Try again later.")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
 
