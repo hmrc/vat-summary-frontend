@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package controllers
 
 import audit.AuditingService
 import audit.models.DirectDebitAuditModel
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
 import play.api.Logger
@@ -33,7 +33,8 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
                                       implicit val appConfig: AppConfig,
                                       paymentsService: PaymentsService,
                                       authorisedController: AuthorisedController,
-                                      auditingService: AuditingService)
+                                      auditingService: AuditingService,
+                                      serviceErrorHandler: ServiceErrorHandler)
   extends FrontendController with I18nSupport {
 
   def directDebits(hasActiveDirectDebit: Option[Boolean] = None): Action[AnyContent] = authorisedController.authorisedAction {
@@ -58,11 +59,7 @@ class DirectDebitController @Inject()(val messagesApi: MessagesApi,
 
           case Left(error) =>
             Logger.warn("[DirectDebitController][directDebits] error: " + error.toString)
-            InternalServerError(views.html.errors.standardError(appConfig,
-            messagesApi.apply("standardError.title"),
-            messagesApi.apply("standardError.heading"),
-            messagesApi.apply("standardError.message"))
-          )
+            serviceErrorHandler.showInternalServerError
        }
   }
 }

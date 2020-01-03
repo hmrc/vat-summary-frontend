@@ -14,35 +14,44 @@
  * limitations under the License.
  */
 
-package views.errors
+package config
 
+import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.scalamock.scalatest.MockFactory
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import views.ViewBaseSpec
 
-class NotFoundViewSpec extends ViewBaseSpec {
+class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOneAppPerSuite{
 
-  "Rendering the not found page" should {
+  implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+  val service: ServiceErrorHandler = new ServiceErrorHandler(messagesApi,mockAppConfig)
+
+  "calling .notFoundTemplate " should {
 
     object Selectors {
-      val pageHeading = "#content h1"
-      val instructions = "#content > p"
+      val pageHeading = "h1"
+      val message = ".lede"
     }
-
-    lazy val view = views.html.errors.notFound()
+    lazy val view=service.notFoundTemplate
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the correct document title" in {
+
+    "display the correct title" in {
       document.title shouldBe "Page not found - VAT - GOV.UK"
     }
 
-    "have a the correct page heading" in {
+    "displays the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe "This page cannot be found"
     }
 
-    "have the correct message on the page" in {
-      elementText(Selectors.instructions) shouldBe "Please check that you have entered the correct web address."
+    "displays the correct message" in {
+      element(Selectors.message).text() shouldBe "Please check that you have entered the correct web address."
     }
   }
 }
-

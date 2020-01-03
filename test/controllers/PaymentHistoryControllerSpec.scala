@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.time.LocalDate
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax}
+import config.ServiceErrorHandler
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.{UnknownError, VatLiabilitiesError}
@@ -55,6 +56,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
   val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
+  val mockErrorHandler: ServiceErrorHandler = new ServiceErrorHandler(messages, mockAppConfig)
   val mockAuthorisedController: AuthorisedController = new AuthorisedController(
     messages,
     mockEnrolmentsAuthService,
@@ -161,7 +163,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockDateService,
         mockServiceInfoService,
         mockEnrolmentsAuthService,
-        mockAccountDetailsService
+        mockAccountDetailsService,
+        mockErrorHandler
       )
     }
   }

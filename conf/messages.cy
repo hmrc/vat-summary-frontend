@@ -398,3 +398,7 @@ a11yStatement.testCarriedOut.1 = Adeiladwyd y gwasanaeth gan ddefnyddio rhannau 
 a11yStatement.testCarriedOut.2 = Ganolfan Hygyrchedd Digidol
 a11yStatement.testCarriedOut.3 = Profwyd y gwasanaeth llawn gan CThEM, ac roedd y gwaith o brofi’r gwasanaeth yn cynnwys defnyddwyr anabl.
 a11yStatement.pagePrepared = Paratowyd y dudalen hon ar 20 Medi 2019. Cafodd ei diweddaru ddiwethaf ar 20 Medi 2019.
+
+global.error.InternalServerError500.title = Mae problem gyda'r gwasanaeth – TAW – GOV.UK
+global.error.InternalServerError500.heading = Mae'n ddrwg gennym – mae problem gyda'r gwasanaeth
+global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
