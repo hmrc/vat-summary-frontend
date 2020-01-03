@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.AuditModel
 import common.TestModels.{agentAuthResult, successfulAuthResult}
+import config.ServiceErrorHandler
 import connectors.VatSubscriptionConnector
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.DirectDebitDetailsModel
@@ -48,6 +49,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
     val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService)
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
+    val mockErrorHandler: ServiceErrorHandler = new ServiceErrorHandler(messages, mockAppConfig)
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
       messages,
       mockEnrolmentsAuthService,
@@ -75,7 +77,8 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         mockAppConfig,
         mockPaymentsService,
         mockAuthorisedController,
-        mockAuditService)
+        mockAuditService,
+        mockErrorHandler)
     }
   }
 

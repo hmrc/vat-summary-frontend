@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.time.{LocalDate, Period}
 import audit.AuditingService
 import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
@@ -41,7 +41,8 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
                                          dateService: DateService,
                                          serviceInfoService: ServiceInfoService,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
-                                         accountDetailsService: AccountDetailsService)
+                                         accountDetailsService: AccountDetailsService,
+                                         serviceErrorHandler: ServiceErrorHandler)
                                         (implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
   extends FrontendController with I18nSupport {
@@ -70,11 +71,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
             Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
           case None =>
             Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
-            InternalServerError(views.html.errors.standardError(appConfig,
-              messagesApi.apply("standardError.title"),
-              messagesApi.apply("standardError.heading"),
-              messagesApi.apply("standardError.message"))
-            )
+            serviceErrorHandler.showInternalServerError
         }
       }
   }
