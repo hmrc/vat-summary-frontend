@@ -37,7 +37,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       val obligationDueDate: Option[String] = Some("2019-04-30")
 
       lazy val view = views.html.templates.nextReturnSection(
-        obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfB = Some(false)
+        obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfBOrNonDigital = Some(false)
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -54,12 +54,12 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
     }
 
-    "there is an VAT return to display for a non-MTDfB user" should {
+    "there is an VAT return to display for a non-MTDfB/non-Digital user" should {
 
       val obligationDueDate: Option[String] = Some("2019-04-30")
 
       lazy val view = views.html.templates.nextReturnSection(
-        obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfB = Some(true)
+        obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfBOrNonDigital = Some(true)
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -81,7 +81,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       val obligationDueDate: Option[String] = Some("2017-04-30")
 
       lazy val view = views.html.templates.nextReturnSection(
-        obligationDueDate, hasMultiple = false, isOverdue = true, isError = false, isNonMTDfB = Some(false)
+        obligationDueDate, hasMultiple = false, isOverdue = true, isError = false, isNonMTDfBOrNonDigital = Some(false)
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -92,7 +92,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
     "there is no VAT return to display" should {
 
-      lazy val view = views.html.templates.nextReturnSection(None, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfB = Some(false))
+      lazy val view = views.html.templates.nextReturnSection(None, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfBOrNonDigital = Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -110,7 +110,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
     "there are multiple obligations to display" should {
 
-      lazy val view = views.html.templates.nextReturnSection(Some("2"), hasMultiple = true, isOverdue = false, isError = false, isNonMTDfB = Some(false))
+      lazy val view = views.html.templates.nextReturnSection(Some("2"), hasMultiple = true, isOverdue = false, isError = false, isNonMTDfBOrNonDigital = Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -128,7 +128,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
 
     "there is an error retrieving the return" should {
 
-      lazy val view = views.html.templates.nextReturnSection(None, hasMultiple = false, isOverdue = false, isError = true, isNonMTDfB = Some(false))
+      lazy val view = views.html.templates.nextReturnSection(None, hasMultiple = false, isOverdue = false, isError = true, isNonMTDfBOrNonDigital = Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
