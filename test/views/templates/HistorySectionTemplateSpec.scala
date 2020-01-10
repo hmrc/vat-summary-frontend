@@ -24,8 +24,6 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
 
   "The history section template" when {
 
-    val currentYear: Int = 2009
-
     object Selectors {
       val viewPastPayments = ".list > li:nth-child(1) > a:nth-child(1)"
       val viewPastReturns = ".list > li:nth-child(2) > a:nth-child(1)"
@@ -35,7 +33,7 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
 
     "the user is Not Hybrid" should {
 
-      lazy val view = views.html.templates.historySection(currentYear, isHybridUser = false)
+      lazy val view = views.html.templates.historySection(isHybridUser = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'History' heading" in {
@@ -56,16 +54,16 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
       }
 
       "have a link to the Submitted returns" in {
-        element(Selectors.viewPastReturns).attr("href") shouldBe s"returns-url/$currentYear"
+        element(Selectors.viewPastReturns).attr("href") shouldBe "returns-url"
       }
     }
 
     "the user is Hybrid" should {
 
-      lazy val view = views.html.templates.historySection(currentYear, isHybridUser = true)
+      lazy val view = views.html.templates.historySection(isHybridUser = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the past payments text " in {
+      "have the past payments text" in {
         elementText(Selectors.viewPastPayments) shouldBe "View past payments (opens in a new tab)"
       }
 

@@ -53,61 +53,52 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatOptOutLink = "#vat-optout"
   }
 
-  val currentYear: Int = 2018
   override implicit val user: User = User("123456789")
   val detailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
-    Some("Cheapo Clothing"),
-    currentYear
+    Some("Cheapo Clothing")
   )
   val nonMtdDetailsModel = VatDetailsViewModel(
     None,
     None,
     None,
-    currentYear,
     isNonMTDfBOrNonDigitalUser = Some(true)
   )
   val hybridDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
-    currentYear,
     isHybridUser = true
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2017-01-01"),
     Some("Cheapo Clothing"),
-    currentYear,
     returnObligationOverdue = true
   )
   val multipleReturnsDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2"),
     Some("Cheapo Clothing"),
-    currentYear,
     hasMultipleReturnObligations = true
   )
   val paymentErrorDetailsModel = VatDetailsViewModel(
     None,
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
-    currentYear,
     paymentError = true
   )
   val returnErrorDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     None,
     Some("Cheapo Clothing"),
-    currentYear,
     returnObligationError = true
   )
   val bothErrorDetailsModel = VatDetailsViewModel(
     None,
     None,
     None,
-    currentYear,
     paymentError = true,
     returnObligationError = true,
     isNonMTDfBUser = None,
@@ -175,7 +166,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         }
 
         "have a link to the Submitted returns" in {
-          element(Selectors.historyPastReturns).attr("href") shouldBe s"returns-url/$currentYear"
+          element(Selectors.historyPastReturns).attr("href") shouldBe "returns-url"
         }
       }
 
@@ -360,7 +351,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, currentYear, customerInfoError = true))
+    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, customerInfoError = true))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
