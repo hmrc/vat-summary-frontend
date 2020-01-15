@@ -18,14 +18,14 @@
 
 <ul>
   @for(year <- years) {
-    <li class="tablinks" aria-controls="@year">
+    <li class="tablinks">
       <a href="#@year">
         @year
       </a>
     </li>
   }
   @if(showPreviousPaymentsTab) {
-    <li class="tablinks" aria-controls="@messages("paymentsHistory.previousPayments.heading")">
+    <li class="tablinks">
       <a href="#@messages("paymentsHistory.previousPayments.heading")">
         @messages("paymentsHistory.previousPayments.heading")
       </a>

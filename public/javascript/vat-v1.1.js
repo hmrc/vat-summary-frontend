@@ -37,6 +37,7 @@ $(document).ready(function() {
       tab.setAttribute('role', 'tab');
       tab.setAttribute('id', 'tab' + (i + 1));
       tab.setAttribute('tabindex', '-1');
+      tab.setAttribute('aria-controls', 'tab' + (i + 1));
       tab.parentNode.setAttribute('role', 'presentation');
 
       // Handle clicking of tabs for mouse users

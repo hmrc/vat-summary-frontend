@@ -35,17 +35,17 @@ class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
         val expectedMarkup = Html(
           s"""
             |<ul>
-            |  <li class="tablinks" aria-controls="$tab1Year">
+            |  <li class="tablinks">
             |    <a href="#$tab1Year">
             |      $tab1Year
             |    </a>
             |  </li>
-            |  <li class="tablinks" aria-controls="$tab2Year">
+            |  <li class="tablinks">
             |    <a href="#$tab2Year">
             |      $tab2Year
             |    </a>
             |  </li>
-            |  <li class="tablinks" aria-controls="$prevPayments">
+            |  <li class="tablinks">
             |    <a href="#$prevPayments">
             |      $prevPayments
             |    </a>
@@ -66,12 +66,12 @@ class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
         val expectedMarkup = Html(
           s"""
              |<ul>
-             |  <li class="tablinks" aria-controls="$tab1Year">
+             |  <li class="tablinks">
              |    <a href="#$tab1Year">
              |      $tab1Year
              |    </a>
              |  </li>
-             |  <li class="tablinks" aria-controls="$tab2Year">
+             |  <li class="tablinks">
              |    <a href="#$tab2Year">
              |      $tab2Year
              |    </a>
