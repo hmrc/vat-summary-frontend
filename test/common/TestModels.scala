@@ -20,7 +20,8 @@ import java.time.LocalDate
 
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
-import models.{Address, CustomerInformation, MandationStatus, TaxPeriod}
+import models._
+import models.viewModels.VatDetailsViewModel
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -77,7 +78,9 @@ object TestModels {
       TaxPeriod(LocalDate.parse("2018-01-06"), LocalDate.parse("2018-01-28")))
     ),
     Some(TaxPeriod(LocalDate.parse("2018-01-29"), LocalDate.parse("2018-01-31"))),
-    Some("MTDfB Voluntary")
+    Some("MTDfB Voluntary"),
+    Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
+    Some(ChangeIndicators(false))
   )
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
@@ -96,7 +99,59 @@ object TestModels {
     None,
     None,
     None,
+    None,
+    None,
     None
+  )
+
+  val customerInfoPendingDereg: CustomerInformation = CustomerInformation(
+    None,
+    None,
+    None,
+    None,
+    Address("Bedrock Quarry", None, None, None, None),
+    isHybridUser = false,
+    None,
+    None,
+    None,
+    "10410",
+    None,
+    None,
+    None,
+    None,
+    None,
+    Some(ChangeIndicators(true))
+  )
+
+  val customerInfoFutureDereg: CustomerInformation = CustomerInformation(
+    None,
+    None,
+    None,
+    None,
+    Address("Bedrock Quarry", None, None, None, None),
+    isHybridUser = false,
+    None,
+    None,
+    None,
+    "10410",
+    None,
+    None,
+    None,
+    None,
+    Some(Deregistration(Some(LocalDate.parse("2020-02-02")))),
+    None
+  )
+
+  val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName)
+  )
+
+  val vatDetailsDeregModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02"))
+  )
+
+  val vatDetailsPendingDeregModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true
   )
 
   val successfulAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(

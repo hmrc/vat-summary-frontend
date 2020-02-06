@@ -16,11 +16,13 @@
 
 package connectors
 
+import java.time.LocalDate
+
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
 import models.errors.ServerSideError
-import models.{Address, CustomerInformation, MandationStatus, TaxPeriod}
+import models._
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -57,7 +59,9 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           TaxPeriod("2018-01-06", "2018-01-28"))
         ),
         Some(TaxPeriod("2018-01-29", "2018-01-31")),
-        Some("MTDfB Voluntary")
+        Some("MTDfB Voluntary"),
+        Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
+        Some(ChangeIndicators(deregister = false))
       ))
 
       setupStubs()

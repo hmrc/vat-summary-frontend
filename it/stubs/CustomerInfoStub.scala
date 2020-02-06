@@ -90,6 +90,12 @@ object CustomerInfoStub extends WireMockMethods {
     "primaryMainCode" -> "10410",
     "pendingChanges" -> Json.obj(
       "mandationStatus" -> "MTDfB Voluntary"
+    ),
+    "deregistration" -> Json.obj(
+      "effectDateOfCancellation" -> "2020-01-01"
+    ),
+    "changeIndicators" -> Json.obj(
+      "deregister" -> false
     )
   )
 

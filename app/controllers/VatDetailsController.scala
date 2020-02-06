@@ -16,9 +16,11 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
-import common.FinancialTransactionsConstants.{nonMTDfB, nonDigital}
+import common.FinancialTransactionsConstants.{nonDigital, nonMTDfB}
 import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -77,7 +79,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         })
 
         Ok(views.html.vatDetails.details(
-          constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
+          constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), dateService.now(), serviceInfoContent
         )).addingToSession(newSessionVariables: _*)
       }
   }
@@ -108,6 +110,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
     val isNonMTDfBOrNonDigital: Option[Boolean] = retrieveIsNonMTDfBOrNonDigital(mandationStatus)
     val customerInfoError: Boolean = accountDetails.isLeft
+    val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
+    val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -123,7 +127,9 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       isNonMTDfB,
       isNonMTDfBOrNonDigital,
       customerInfoError,
-      pendingOptOut
+      pendingOptOut,
+      deregDate,
+      pendingDereg
     )
   }
 
@@ -165,6 +171,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case Right(model) => model.entityName
       case Left(error) =>
         Logger.warn("[VatDetailsController][displayedName] could not retrieve display name: " + error.toString)
+        None
+    }
+  }
+
+  private def retrieveDeregDate(accountDetails: HttpGetResult[CustomerInformation]): Option[LocalDate] = {
+    accountDetails match {
+      case Right(model) => model.deregistration.flatMap(_.effectDateOfCancellation)
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][retrieveDeregDate] could not retrieve deregDate: " + error.toString)
         None
     }
   }

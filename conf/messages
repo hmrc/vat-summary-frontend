@@ -165,6 +165,18 @@ vatCertificate.backToClientOptions = Back to your client options
 vatCertificate.changeClient = Change client
 vatCertificate.logo = HMRC_Logo
 
+#Vat Overview Partials
+deregPartial.cancelRegistration.title = Cancel VAT registration
+deregPartial.cancelRegistration.content = Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
+deregPartial.historicDeregistration.title = Your VAT registration
+deregPartial.historicDeregistration.content = Your VAT registration was cancelled on {0}.
+deregPartial.historicDeregistration.link = How to register for VAT (opens in a new window or tab).
+deregPartial.pendingDeregistration.title = Cancel VAT registration
+deregPartial.pendingDeregistration.content = Your request to cancel your VAT registration is pending.
+deregPartial.futureDeregistration.title = Your VAT registration
+deregPartial.futureDeregistration.content = Your VAT registration will be cancelled on {0}.
+deregPartial.futureDeregistration.link = How to register for VAT (opens in new window or tab).
+
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Repayment from HMRC
 chargeType.vatReturnCreditChargeDescription = for your {0} return

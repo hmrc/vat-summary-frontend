@@ -90,12 +90,14 @@ trait AppConfig extends ServicesConfig {
   val govUkAccessibilityUrl: String
   val govUkHMRCUrl: String
   val govUkHearingImpairedUrl: String
+  val govUkVatRegistrationUrl: String
   val abilityNetUrl: String
   val wcagGuidelinesUrl: String
   val eassUrl: String
   val ecniUrl: String
   val dacUrl: String
   val optOutFrontendUrl: String
+  val deregisterVatUrl: String
   val paymentsAndRepaymentsUrl: String
   val manageVatUrl: String
   val reportA11yProblemUrl: String
@@ -243,6 +245,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val govUkAccessibilityUrl: String = getString(Keys.govUkAccessibilityUrl)
   override lazy val govUkHMRCUrl: String = getString(Keys.govUkHMRCUrl)
   override lazy val govUkHearingImpairedUrl: String = getString(Keys.govUkHearingImpairedUrl)
+  override lazy val govUkVatRegistrationUrl: String = getString(Keys.govUkVatRegistrationUrl)
 
   override lazy val abilityNetUrl: String = getString(Keys.abilityNetUrl)
   override lazy val wcagGuidelinesUrl: String = getString(Keys.wcagGuidelinesUrl)
@@ -251,6 +254,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val dacUrl: String = getString(Keys.dacUrl)
 
   override lazy val optOutFrontendUrl: String = getString(Keys.vatOptOutFrontendHost) + getString(Keys.vatOptOutFrontendStartUrl)
+
+  override lazy val deregisterVatUrl: String = getString(Keys.deregisterVatHost) + getString(Keys.deregisterVatUrl)
 
   override lazy val paymentsAndRepaymentsUrl: String = getString(Keys.vatRepaymentTrackerFrontendHost) + getString(Keys.vatRepaymentTrackerFrontendUrl)
 
