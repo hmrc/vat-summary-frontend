@@ -104,44 +104,6 @@ object TestModels {
     None
   )
 
-  val customerInfoPendingDereg: CustomerInformation = CustomerInformation(
-    None,
-    None,
-    None,
-    None,
-    Address("Bedrock Quarry", None, None, None, None),
-    isHybridUser = false,
-    None,
-    None,
-    None,
-    "10410",
-    None,
-    None,
-    None,
-    None,
-    None,
-    Some(ChangeIndicators(true))
-  )
-
-  val customerInfoFutureDereg: CustomerInformation = CustomerInformation(
-    None,
-    None,
-    None,
-    None,
-    Address("Bedrock Quarry", None, None, None, None),
-    isHybridUser = false,
-    None,
-    None,
-    None,
-    "10410",
-    None,
-    None,
-    None,
-    None,
-    Some(Deregistration(Some(LocalDate.parse("2020-02-02")))),
-    None
-  )
-
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2019-03-03"), Some("2019-03-03"), Some(entityName)
   )
