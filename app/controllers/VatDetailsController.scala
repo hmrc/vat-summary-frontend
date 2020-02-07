@@ -79,7 +79,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
         })
 
         Ok(views.html.vatDetails.details(
-          constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), dateService.now(), serviceInfoContent
+          constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
         )).addingToSession(newSessionVariables: _*)
       }
   }
@@ -129,7 +129,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       customerInfoError,
       pendingOptOut,
       deregDate,
-      pendingDereg
+      pendingDereg,
+      dateService.now()
     )
   }
 

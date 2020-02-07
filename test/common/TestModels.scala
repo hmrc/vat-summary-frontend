@@ -30,6 +30,8 @@ import scala.concurrent.Future
 
 object TestModels {
 
+  val testDate = LocalDate.parse("2018-05-01")
+
   val payments: Payments = Payments(Seq(Payment(
     ReturnDebitCharge,
     LocalDate.parse("2019-01-01"),
@@ -105,15 +107,19 @@ object TestModels {
   )
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName)
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate
   )
 
   val vatDetailsDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02"))
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02")), currentDate = testDate
+  )
+
+  val vatDetailsHistoricDeregModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2017-02-02")), currentDate = testDate
   )
 
   val vatDetailsPendingDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate
   )
 
   val successfulAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(

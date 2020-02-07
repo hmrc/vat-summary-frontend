@@ -20,7 +20,7 @@
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import models.viewModels.VatDetailsViewModel
 
-@(details: VatDetailsViewModel, currentDate: LocalDate)(implicit messages: Messages, appConfig: AppConfig, user: User)
+@(details: VatDetailsViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User)
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">
@@ -63,7 +63,7 @@
 
 @{
     (details.deregDate, details.pendingDereg) match {
-        case (Some(date), _) if date.isAfter(currentDate) => futureDeregistration(date)
+        case (Some(date), _) if date.isAfter(details.currentDate) => futureDeregistration(date)
         case (Some(date), _) => historicDeregistration(date)
         case (_, true) => pendingDeregistration
         case _ => cancelRegistration

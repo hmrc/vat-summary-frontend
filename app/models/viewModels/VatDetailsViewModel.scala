@@ -33,4 +33,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                customerInfoError: Boolean = false,
                                pendingOptOut: Boolean = false,
                                deregDate: Option[LocalDate] = None,
-                               pendingDereg: Boolean = false)
+                               pendingDereg: Boolean = false,
+                               currentDate: LocalDate)

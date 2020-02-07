@@ -19,7 +19,7 @@
 @import views.html.templates.formatters.links._
 @import java.time.LocalDate
 
-@(detailsViewModel: VatDetailsViewModel, currentDate: LocalDate, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User, lang: Lang)
+@(detailsViewModel: VatDetailsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User, lang: Lang)
 
 @views.html.main_template(
     title = messages("vatDetails.title"),
@@ -86,7 +86,7 @@
                 }
                 case _ => {}
             }
+            @views.html.templates.deregSection(detailsViewModel)
         }
-        @views.html.templates.deregSection(detailsViewModel, currentDate)
     </div>
 }
