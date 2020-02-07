@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package views.partials
+package views.templates
 
 import java.time.LocalDate
 
+import common.TestModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.partials.deregPartial
-import common.TestModels._
+import views.html.templates.deregSection
 
-class DeregPartialSpec  extends ViewBaseSpec {
+class DeregSectionSpec  extends ViewBaseSpec {
 
   object DeregPartialMessages {
     val deregTitle = "Cancel VAT registration"
@@ -45,7 +45,7 @@ class DeregPartialSpec  extends ViewBaseSpec {
 
       "user is not pending deregistration" when {
 
-        lazy val view = deregPartial(vatDetailsModel, LocalDate.parse("2020-01-01"))(messages, mockConfig, user)
+        lazy val view = deregSection(vatDetailsModel, LocalDate.parse("2020-01-01"))(messages, mockConfig, user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for cancelling registration" which {
@@ -66,7 +66,7 @@ class DeregPartialSpec  extends ViewBaseSpec {
 
       "user is pending deregistration" should {
 
-        lazy val view = deregPartial(vatDetailsPendingDeregModel, LocalDate.parse("2020-01-01"))(messages, mockConfig, user)
+        lazy val view = deregSection(vatDetailsPendingDeregModel, LocalDate.parse("2020-01-01"))(messages, mockConfig, user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for pending deregistration" which {
@@ -88,7 +88,7 @@ class DeregPartialSpec  extends ViewBaseSpec {
 
         "display the historic dereg partial" which {
 
-          lazy val view = deregPartial(vatDetailsDeregModel, LocalDate.parse("2020-03-03"))(messages, mockConfig, user)
+          lazy val view = deregSection(vatDetailsDeregModel, LocalDate.parse("2020-03-03"))(messages, mockConfig, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${DeregPartialMessages.historicDeregTitle}" in {
@@ -109,7 +109,7 @@ class DeregPartialSpec  extends ViewBaseSpec {
 
         "display a section for future registration" which {
 
-          lazy val view = deregPartial(vatDetailsDeregModel, LocalDate.parse("2020-01-01"))(messages, mockConfig, user)
+          lazy val view = deregSection(vatDetailsDeregModel, LocalDate.parse("2020-01-01"))(messages, mockConfig, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${DeregPartialMessages.futureDeregTitle}" in {
