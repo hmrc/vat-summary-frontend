@@ -23,6 +23,7 @@ import org.jsoup.nodes.Document
 import org.scalatest.exceptions.TestFailedException
 import play.twirl.api.Html
 import views.ViewBaseSpec
+import common.TestModels.testDate
 
 class VatDetailsViewSpec extends ViewBaseSpec {
 
@@ -51,49 +52,57 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val serviceInfoNav = ".service-info nav"
     val apiError = "h3.heading-medium"
     val vatOptOutLink = "#vat-optout"
+    val deregHeading = "#cancel-vat"
   }
 
   override implicit val user: User = User("123456789")
   val detailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
-    Some("Cheapo Clothing")
+    Some("Cheapo Clothing"),
+    currentDate = testDate
   )
   val nonMtdDetailsModel = VatDetailsViewModel(
     None,
     None,
     None,
-    isNonMTDfBOrNonDigitalUser = Some(true)
+    isNonMTDfBOrNonDigitalUser = Some(true),
+    currentDate = testDate
   )
   val hybridDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
-    isHybridUser = true
+    isHybridUser = true,
+    currentDate = testDate
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2017-01-01"),
     Some("Cheapo Clothing"),
-    returnObligationOverdue = true
+    returnObligationOverdue = true,
+    currentDate = testDate
   )
   val multipleReturnsDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2"),
     Some("Cheapo Clothing"),
-    hasMultipleReturnObligations = true
+    hasMultipleReturnObligations = true,
+    currentDate = testDate
   )
   val paymentErrorDetailsModel = VatDetailsViewModel(
     None,
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
-    paymentError = true
+    paymentError = true,
+    currentDate = testDate
   )
   val returnErrorDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     None,
     Some("Cheapo Clothing"),
-    returnObligationError = true
+    returnObligationError = true,
+    currentDate = testDate
   )
   val bothErrorDetailsModel = VatDetailsViewModel(
     None,
@@ -103,7 +112,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     returnObligationError = true,
     isNonMTDfBUser = None,
     isNonMTDfBOrNonDigitalUser = None,
-    customerInfoError = true
+    customerInfoError = true,
+    currentDate = testDate
   )
 
   "Rendering the VAT details page for an mtd user" should {
@@ -244,6 +254,20 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
     }
 
+    "have the deregister for VAT section" which {
+
+      lazy val deregSection = element(Selectors.deregHeading)
+
+      "has the correct heading" in {
+        deregSection.select("h3").text() shouldBe "Cancel VAT registration"
+      }
+
+      "has the correct paragraph" in {
+        deregSection.select("p").text() shouldBe
+          "Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
+      }
+    }
+
     "not have the mtd signup section" in {
       elementExtinct(Selectors.mtdSignupSection)
     }
@@ -351,7 +375,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, customerInfoError = true))
+    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {

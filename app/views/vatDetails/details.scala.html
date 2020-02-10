@@ -17,6 +17,7 @@
 @import models.viewModels.VatDetailsViewModel
 @import views.html.templates.formatters.breadcrumbs._
 @import views.html.templates.formatters.links._
+@import java.time.LocalDate
 
 @(detailsViewModel: VatDetailsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User, lang: Lang)
 
@@ -77,14 +78,15 @@
             </h3>
         } else {
             @detailsViewModel.isNonMTDfBOrNonDigitalUser.map {
-                case true if(appConfig.features.mtdSignUp()) => {
+                case true if appConfig.features.mtdSignUp() => {
                     @views.html.templates.mtdSignupSection(user.vrn)
                 }
-                case false if(appConfig.features.vatOptOutEnabled()) => {
+                case false if appConfig.features.vatOptOutEnabled() => {
                     @views.html.templates.vatOptOutSection(detailsViewModel.pendingOptOut)
                 }
                 case _ => {}
             }
+            @views.html.templates.deregSection(detailsViewModel)
         }
     </div>
 }

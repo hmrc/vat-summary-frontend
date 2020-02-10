@@ -191,6 +191,18 @@ vatCertificate.backToClientOptions = Yn ôl i opsiynau’ch cleient
 vatCertificate.changeClient = Newid cleient
 vatCertificate.logo = HMRC_WelshLogo
 
+#Vat Overview Partials
+deregPartial.cancelRegistration.title = Canslo cofrestriad TAW
+deregPartial.cancelRegistration.content = Canslo’ch cofrestriad TAW os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i chi fod wedi cofrestru ar gyfer TAW.
+deregPartial.historicDeregistration.title = Eich cofrestriad TAW
+deregPartial.historicDeregistration.content = Cafodd eich cofrestriad TAW ei ganslo ar {0}.
+deregPartial.historicDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor ffenestr neu dab newydd)
+deregPartial.pendingDeregistration.title = Canslo cofrestriad TAW
+deregPartial.pendingDeregistration.content = Mae’r cais i ganslo’ch cofrestriad TAW ar y gweill.
+deregPartial.futureDeregistration.title = Eich cofrestriad TAW
+deregPartial.futureDeregistration.content = Bydd eich cofrestriad TAW yn cael ei ganslo ar {0}.
+deregPartial.futureDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor ffenestr neu dab newydd)
+
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
 chargeType.vatReturnCreditChargeDescription = ar gyfer eich Ffurflen TAW {0}

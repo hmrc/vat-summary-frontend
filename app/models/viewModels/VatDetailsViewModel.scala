@@ -16,6 +16,8 @@
 
 package models.viewModels
 
+import java.time.LocalDate
+
 case class VatDetailsViewModel(paymentsData: Option[String],
                                obligationData: Option[String],
                                entityName: Option[String],
@@ -29,4 +31,7 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                isNonMTDfBUser: Option[Boolean] = Some(false),
                                isNonMTDfBOrNonDigitalUser: Option[Boolean] = Some(false),
                                customerInfoError: Boolean = false,
-                               pendingOptOut: Boolean = false)
+                               pendingOptOut: Boolean = false,
+                               deregDate: Option[LocalDate] = None,
+                               pendingDereg: Boolean = false,
+                               currentDate: LocalDate)

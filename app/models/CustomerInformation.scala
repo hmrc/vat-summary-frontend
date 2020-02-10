@@ -32,7 +32,9 @@ case class CustomerInformation(organisationName: Option[String],
                                returnPeriod: Option[String],
                                nonStdTaxPeriods: Option[Seq[TaxPeriod]],
                                firstNonNSTPPeriod: Option[TaxPeriod],
-                               pendingMandationStatus: Option[String]) {
+                               pendingMandationStatus: Option[String],
+                               deregistration: Option[Deregistration],
+                               changeIndicators: Option[ChangeIndicators]) {
 
   def entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
@@ -63,6 +65,8 @@ object CustomerInformation {
     (JsPath \\ "stdReturnPeriod").readNullable[String] and
     (JsPath \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]] and
     (JsPath \\ "firstNonNSTPPeriod").readNullable[TaxPeriod] and
-    (JsPath \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None))
+    (JsPath \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None)) and
+    (JsPath \ "deregistration").readNullable[Deregistration] and
+    (JsPath \ "changeIndicators").readNullable[ChangeIndicators]
   )(CustomerInformation.apply _)
 }
