@@ -25,7 +25,7 @@ class  MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val mtdSignupSection = "#mtd-signup"
-    val mtdSignupSectionHeading = s"$mtdSignupSection > h2:nth-child(1)"
+    val mtdSignupSectionHeading = s"$mtdSignupSection > h3:nth-child(1)"
     val mtdSignupSectionHeadingLink = s"$mtdSignupSectionHeading a"
     val mtdSignupSectionParagraph = s"$mtdSignupSection > p:nth-child(2)"
   }

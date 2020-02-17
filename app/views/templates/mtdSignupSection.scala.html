@@ -17,8 +17,8 @@
 @(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
 
     <div class="column-one-third" id="mtd-signup">
-        <h2 class="heading-small">
+        <h3 class="heading-small">
             <a href="@{appConfig.mtdVatReSignUpUrl + vrn}">@messages("vatDetails.mtdSignup.link")</a>
-        </h2>
+        </h3>
         <p>@messages("vatDetails.mtdSignup.info")</p>
     </div>

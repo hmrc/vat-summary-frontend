@@ -18,10 +18,10 @@
 
     <div class="column-one-third" id="vat-optout">
       @if(pendingOptOut) {
-        <h2 class="heading-small">@messages("vatDetails.vatOptOut.link")</h2>
+        <h3 class="heading-small">@messages("vatDetails.vatOptOut.link")</h3>
         <p>@messages("vatDetails.vatOptOut.pending")</p>
       } else {
-        <h2 class="heading-small"><a href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a></h2>
+        <h3 class="heading-small"><a href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a></h3>
         <p>@messages("vatDetails.vatOptOut.info")</p>
       }
     </div>

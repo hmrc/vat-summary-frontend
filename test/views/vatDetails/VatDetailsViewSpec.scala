@@ -201,11 +201,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val paymentsAndRepaymentsSection = element(Selectors.paymentsAndRepaymentsSection)
 
       "has the correct heading" in {
-        paymentsAndRepaymentsSection.select("h2").text() shouldBe "Payments and repayments"
+        paymentsAndRepaymentsSection.select("h3").text() shouldBe "Payments and repayments"
       }
 
       "has a link to the vat-repayment-tracker service" in {
-        paymentsAndRepaymentsSection.select("h2 a").attr("href") shouldBe s"/vat-repayment-tracker" +
+        paymentsAndRepaymentsSection.select("h3 a").attr("href") shouldBe s"/vat-repayment-tracker" +
           s"/manage-or-track-vrt"
       }
 
@@ -220,7 +220,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val vatCertificate = element(Selectors.vatCertificate)
 
       "has the correct heading" in {
-        vatCertificate.select("h2").text() shouldBe "View VAT certificate"
+        vatCertificate.select("h3").text() shouldBe "View VAT certificate"
       }
 
       "has the correct paragraph" in {
@@ -233,7 +233,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val optOutLink = element(Selectors.vatOptOutLink)
 
       "has the correct heading" in {
-        optOutLink.select("h2").text() shouldBe "Opt out of Making Tax Digital for VAT"
+        optOutLink.select("h3").text() shouldBe "Opt out of Making Tax Digital for VAT"
       }
 
       "has the correct paragraph" in {
@@ -246,7 +246,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val updateVatDetails = element(Selectors.updateVatDetails)
 
       "has the correct heading" in {
-        updateVatDetails.select("h2").text() shouldBe "Your business details"
+        updateVatDetails.select("h3").text() shouldBe "Your business details"
       }
 
       "has the correct paragraph" in {
@@ -283,11 +283,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val mtdSignupSection = element(Selectors.mtdSignupSection)
 
       "has the correct heading" in {
-        mtdSignupSection.select("h2").text() shouldBe "Sign up for Making Tax Digital for VAT"
+        mtdSignupSection.select("h3").text() shouldBe "Sign up for Making Tax Digital for VAT"
       }
 
       "has a link to the vat-sign-up service" in {
-        mtdSignupSection.select("h2 a").attr("href") shouldBe s"/vat-through-software/sign-up/vat-number/${user.vrn}"
+        mtdSignupSection.select("h3 a").attr("href") shouldBe s"/vat-through-software/sign-up/vat-number/${user.vrn}"
       }
 
       "has the correct paragraph" in {

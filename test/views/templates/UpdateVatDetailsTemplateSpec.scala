@@ -35,7 +35,7 @@ class UpdateVatDetailsTemplateSpec extends ViewBaseSpec {
     "the update Vat details feature" should {
 
       "have the correct heading" in {
-        element(Selectors.updateVatDetails).select("h2").text() shouldBe "Your business details"
+        element(Selectors.updateVatDetails).select("h3").text() shouldBe "Your business details"
       }
 
       "have the correct hand-off link" in {

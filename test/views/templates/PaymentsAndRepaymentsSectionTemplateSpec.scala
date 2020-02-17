@@ -24,8 +24,8 @@ import views.ViewBaseSpec
 class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
-    val paymentsAndRepaymentsHeading = "#payments-and-repayments h2"
-    val paymentsAndRepaymentsLink = "#payments-and-repayments h2 a"
+    val paymentsAndRepaymentsHeading = "#payments-and-repayments h3"
+    val paymentsAndRepaymentsLink = "#payments-and-repayments h3 a"
     val paymentsAndRepaymentsParagraph = "#payments-and-repayments p"
   }
 
