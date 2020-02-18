@@ -26,7 +26,7 @@ class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
   "The vatCertificateSection" when {
 
     object Selectors {
-      val vatCertificateHeading = "#vat-certificate h2 a"
+      val vatCertificateHeading = "#vat-certificate h3 a"
       val vatCertificateParagraph = "#vat-certificate p"
     }
 

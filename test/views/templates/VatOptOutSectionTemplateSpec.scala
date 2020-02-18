@@ -25,7 +25,7 @@ class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val vatOptOutSection = "#vat-optout"
-    val vatOptOutHeading = s"$vatOptOutSection > h2:nth-child(1)"
+    val vatOptOutHeading = s"$vatOptOutSection > h3:nth-child(1)"
     val vatOptOutHeadingLink = s"$vatOptOutHeading a"
     val vatOptOutParagraph = s"$vatOptOutSection > p:nth-child(2)"
   }
