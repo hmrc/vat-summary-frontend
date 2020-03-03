@@ -273,3 +273,7 @@ input.form-control-error[type="password"],
 .notice-banner {
   background-color: #1d70b8;
 }
+
+.text--right {
+    margin-bottom:0em !important
+}
