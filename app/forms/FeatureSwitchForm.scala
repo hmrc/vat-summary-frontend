@@ -34,7 +34,8 @@ object FeatureSwitchForm {
       ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.submitReturnFeatures -> boolean,
       ConfigKeys.agentAccessFeature -> boolean,
-      ConfigKeys.mtdSignUpFeature -> boolean
+      ConfigKeys.mtdSignUpFeature -> boolean,
+      ConfigKeys.ddCollectionInProgressFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

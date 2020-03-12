@@ -24,8 +24,7 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val heading = "h1"
-    val message = "p:nth-of-type(1)"
-    val payNow = "p:nth-of-type(2)"
+    val payNow = "p:nth-of-type(3)"
     val payNowLink = s"$payNow > a"
   }
 

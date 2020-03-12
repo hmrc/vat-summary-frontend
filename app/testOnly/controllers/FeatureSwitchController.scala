@@ -40,7 +40,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         useLanguageSelector = appConfig.features.useLanguageSelector(),
         submitReturnFeatures = appConfig.features.submitReturnFeatures(),
         agentAccess = appConfig.features.agentAccess(),
-        mtdSignUp = appConfig.features.mtdSignUp()
+        mtdSignUp = appConfig.features.mtdSignUp(),
+        ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled()
       )
     )))
   }
@@ -64,6 +65,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.submitReturnFeatures(model.submitReturnFeatures)
     appConfig.features.agentAccess(model.agentAccess)
     appConfig.features.mtdSignUp(model.mtdSignUp)
+    appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
