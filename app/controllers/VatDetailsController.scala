@@ -26,8 +26,8 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
 import models._
-import models.obligations.{Obligation, VatReturnObligations}
-import models.payments.Payments
+import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
+import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -84,14 +84,31 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       }
   }
 
-  private[controllers] def getObligationFlags(obligations: Seq[Obligation]): VatDetailsDataModel = {
+  private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {
+    val isOverdue = payments.headOption.fold(false) { payment =>
+      appConfig.features.ddCollectionInProgressEnabled() && payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress
+    }
+    getObligationDetails(
+      payments,
+      isOverdue
+    )
+  }
+
+  private[controllers] def getReturnObligationDetails(obligations: Seq[VatReturnObligation]): VatDetailsDataModel = {
+    getObligationDetails(
+      obligations,
+      obligations.headOption.fold(false)(obligation => obligation.due.isBefore(dateService.now()))
+    )
+  }
+
+  private[controllers] def getObligationDetails(obligations: Seq[Obligation], isOverdue: Boolean): VatDetailsDataModel = {
     val hasMultiple = obligations.size > 1
     val data: String = if (hasMultiple) obligations.size.toString else obligations.head.due.toString
 
     VatDetailsDataModel(
       displayData = Some(data),
       hasMultiple = hasMultiple,
-      isOverdue = if (obligations.size == 1) obligations.head.due.isBefore(dateService.now()) else false,
+      isOverdue = isOverdue,
       hasError = false
     )
   }
@@ -187,7 +204,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   private def retrievePayments(payments: ServiceResponse[Option[Payments]]): VatDetailsDataModel = {
     payments match {
-      case Right(Some(model)) => getObligationFlags(model.financialTransactions)
+      case Right(Some(model)) => getPaymentObligationDetails(model.financialTransactions)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
       case Left(error) =>
         Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)
@@ -197,7 +214,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
 
   private def retrieveReturns(obligations: ServiceResponse[Option[VatReturnObligations]]): VatDetailsDataModel = {
     obligations match {
-      case Right(Some(obs)) => getObligationFlags(obs.obligations)
+      case Right(Some(obs)) => getReturnObligationDetails(obs.obligations)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
       case Left(error) =>
         Logger.warn("[VatDetailsController][constructViewModel] error: " + error.toString)

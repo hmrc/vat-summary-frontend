@@ -34,24 +34,50 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       val portalLink = "a"
     }
 
-    "there is a payment to display" should {
+    "there is a payment to display" when {
 
-      lazy val view = views.html.templates.nextPaymentSection(Some("2017-03-08"),
-        hasMultiple = false,
-        isError = false,
-        isHybridUser = false)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "payment is not overdue" should {
 
-      "display the 'Next payment due' heading" in {
-        elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
+        lazy val view = views.html.templates.nextPaymentSection(
+          Some("2017-03-08"),
+          hasMultiple = false,
+          isError = false,
+          isHybridUser = false,
+          isOverdue = false
+        )
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "display the 'Next payment due' heading" in {
+          elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
+        }
+
+        "display the due date of the payment" in {
+          elementText(Selectors.nextPaymentDate) shouldBe "8 March 2017"
+        }
+
+        "display the 'View payment details' button" in {
+          elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
+        }
+
+        "not display overdue flag" in {
+          elementExtinct(".task-overdue")
+        }
       }
 
-      "display the due date of the payment" in {
-        elementText(Selectors.nextPaymentDate) shouldBe "8 March 2017"
-      }
+      "payment is overdue" should {
 
-      "display the 'View payment details' button" in {
-        elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
+        lazy val view = views.html.templates.nextPaymentSection(
+          Some("2017-03-08"),
+          hasMultiple = false,
+          isError = false,
+          isHybridUser = false,
+          isOverdue = true
+        )
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "display overdue flag" in {
+          elementText(".task-overdue")shouldBe "overdue"
+        }
       }
     }
 
@@ -60,7 +86,9 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = views.html.templates.nextPaymentSection(None,
         hasMultiple = false,
         isError = false,
-        isHybridUser = false)
+        isHybridUser = false,
+        isOverdue = false
+      )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -81,7 +109,9 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = views.html.templates.nextPaymentSection(None,
         hasMultiple = false,
         isError = true,
-        isHybridUser = false)
+        isHybridUser = false,
+        isOverdue = false
+      )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -103,7 +133,9 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = views.html.templates.nextPaymentSection(Some("2"),
         hasMultiple = true,
         isError = false,
-        isHybridUser = false)
+        isHybridUser = false,
+        isOverdue = false
+      )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -125,7 +157,9 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = views.html.templates.nextPaymentSection(None,
         hasMultiple = false,
         isError = false,
-        isHybridUser = true)
+        isHybridUser = true,
+        isOverdue = false
+      )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
