@@ -41,6 +41,7 @@ object ConfigKeys {
   val submitReturnFeatures: String = "features.submitReturnFeatures.enabled"
   val agentAccessFeature: String = "features.agentAccess.enabled"
   val mtdSignUpFeature: String = "features.mtdSignUp.enabled"
+  val ddCollectionInProgressFeature: String = "features.ddCollectionInProgress.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"
