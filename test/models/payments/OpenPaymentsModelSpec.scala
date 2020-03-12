@@ -31,7 +31,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
       ddCollectionInProgress = false
-    )
+    ),
+    isOverdue = false
   )
 
   val openPaymentsModelNoPeriod: OpenPaymentsModel = OpenPaymentsModel(
@@ -41,7 +42,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
       ddCollectionInProgress = false
-    )
+    ),
+    isOverdue = false
   )
 
   "OpenPaymentsModel" when {
@@ -58,7 +60,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             due = LocalDate.parse("2003-04-05"),
             periodFrom = LocalDate.parse("2001-01-01"),
             periodTo = LocalDate.parse("2001-03-31"),
-            periodKey = "#003"
+            periodKey = "#003",
+            isOverdue = false
           )
 
           openPaymentsModelWithPeriod shouldBe regularApply
@@ -73,7 +76,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             chargeType = OADebitCharge,
             amount = 300.00,
             due = LocalDate.parse("2003-04-05"),
-            periodKey = "#003"
+            periodKey = "#003",
+            isOverdue = false
           )
 
           openPaymentsModelNoPeriod shouldBe regularApply
@@ -140,7 +144,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         chargeType = OADebitCharge,
         due = LocalDate.parse("2003-04-05"),
         amount = 300.00,
-        periodKey = "#003"
+        periodKey = "#003",
+        isOverdue = false
       )
 
       val expectedJson = Json.parse(
@@ -182,7 +187,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         periodFrom = LocalDate.parse("2001-01-01"),
         periodTo = LocalDate.parse("2001-03-31"),
         amount = 300.00,
-        periodKey = "#003"
+        periodKey = "#003",
+        isOverdue = false
       )
 
       val expectedJson = Json.parse(

@@ -53,7 +53,8 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         LocalDate.parse("2018-03-03"),
         LocalDate.parse("2018-01-01"),
         LocalDate.parse("2018-02-02"),
-        "18AA"
+        "18AA",
+        isOverdue = false
       )
     }
 
@@ -117,7 +118,8 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           LocalDate.parse("2018-03-03"),
           LocalDate.parse("2018-01-01"),
           LocalDate.parse("2018-02-02"),
-          "18AA"
+          "18AA",
+          isOverdue = false
         )
 
         lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
