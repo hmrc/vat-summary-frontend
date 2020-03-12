@@ -51,7 +51,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodTo = LocalDate.parse("2017-12-22"),
         due = LocalDate.parse("2017-12-26"),
         outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003"
+        periodKey = "#003",
+        ddCollectionInProgress = false
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
@@ -59,7 +60,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodTo = LocalDate.parse("2016-12-22"),
         due = LocalDate.parse("2016-12-26"),
         outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003"
+        periodKey = "#003",
+        ddCollectionInProgress = false
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
@@ -67,7 +69,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodTo = LocalDate.parse("2015-12-22"),
         due = LocalDate.parse("2015-12-26"),
         outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003"
+        periodKey = "#003",
+        ddCollectionInProgress = false
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
@@ -75,7 +78,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodTo = LocalDate.parse("2011-12-22"),
         due = LocalDate.parse("2011-12-26"),
         outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003"
+        periodKey = "#003",
+        ddCollectionInProgress = false
       ),
       PaymentWithPeriod(
         ReturnDebitCharge,
@@ -83,7 +87,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodTo = LocalDate.parse("2013-12-22"),
         due = LocalDate.parse("2013-12-26"),
         outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003"
+        periodKey = "#003",
+        ddCollectionInProgress = false
       )))
     lazy val paymentsResult: HttpGetResult[Payments] = Right(payments)
     val paymentsCall: Boolean = false

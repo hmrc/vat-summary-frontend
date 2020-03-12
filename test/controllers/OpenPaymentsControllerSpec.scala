@@ -74,14 +74,16 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       BigDecimal("10000"),
-      Some("ABCD")
+      Some("ABCD"),
+      ddCollectionInProgress = false
     )
 
     val paymentOnAccount = Payment(
       PaymentOnAccount,
       LocalDate.parse("2017-01-01"),
       BigDecimal("0"),
-      None
+      None,
+      ddCollectionInProgress = false
     )
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]

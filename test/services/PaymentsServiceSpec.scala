@@ -65,7 +65,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-11-29"),
           BigDecimal("21.22"),
-          ""
+          "",
+          ddCollectionInProgress = false
         )
         val payment2 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -73,7 +74,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-12-01"),
           BigDecimal("21.22"),
-          ""
+          "",
+          ddCollectionInProgress = false
         )
         val payment3 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -81,7 +83,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2009-01-01"),
           BigDecimal("21.22"),
-          ""
+          "",
+          ddCollectionInProgress = false
         )
         val payment4 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -89,7 +92,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-11-30"),
           BigDecimal("21.22"),
-          ""
+          "",
+          ddCollectionInProgress = false
         )
 
         val payments = Payments(Seq(payment1, payment2, payment3, payment4))
@@ -110,7 +114,8 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
           LocalDate.parse("2009-01-04"),
           LocalDate.parse("2008-12-06"),
           BigDecimal("-1000"),
-          ""
+          "",
+          ddCollectionInProgress = false
         )))
         override val responseFromFinancialDataConnector = Right(payments)
         val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))

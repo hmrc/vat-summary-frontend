@@ -31,7 +31,8 @@ class PaymentsSpec extends UnitSpec {
       LocalDate.parse("2017-03-01"),
       LocalDate.parse("2017-03-08"),
       9999,
-      "#001"
+      "#001",
+      ddCollectionInProgress = false
     )
 
     val exampleInputString =
@@ -62,7 +63,8 @@ class PaymentsSpec extends UnitSpec {
           LocalDate.parse("2017-03-01"),
           LocalDate.parse("2017-03-08"),
           9999,
-          "#001"
+          "#001",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -70,7 +72,8 @@ class PaymentsSpec extends UnitSpec {
           LocalDate.parse("2017-04-01"),
           LocalDate.parse("2017-05-08"),
           7777,
-          "#002"
+          "#002",
+          ddCollectionInProgress = false
         )
       )
     )
