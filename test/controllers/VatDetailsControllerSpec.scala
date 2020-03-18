@@ -27,7 +27,7 @@ import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models._
 import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.payments.{Payment, PaymentNoPeriod, PaymentWithPeriod, Payments, ReturnDebitCharge}
+import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsEmpty, Request, Result}
