@@ -29,14 +29,16 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     LocalDate.parse("2018-03-03"),
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
-    "18AA"
+    "18AA",
+    isOverdue = false
   )
 
   def paymentModelNoPeriod(chargeType: ChargeType): OpenPaymentsModel = OpenPaymentsModelNoPeriod(
     chargeType,
     BigDecimal(100.00),
     LocalDate.parse("2018-03-03"),
-    "18AA"
+    "18AA",
+    isOverdue = false
   )
 
   "WhatYouOweChargeHelper .description" when {

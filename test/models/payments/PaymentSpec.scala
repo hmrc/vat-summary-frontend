@@ -29,7 +29,7 @@ class PaymentSpec extends UnitSpec {
     val endDate = "2017-03-01"
     val dueDate = "2017-03-08"
 
-    "given a start and end date" should {
+    "given a start and end date and no direct debit collection flag" should {
 
       "write to Json correctly" in {
         val paymentJson = Json.obj(
@@ -51,15 +51,16 @@ class PaymentSpec extends UnitSpec {
           periodTo = LocalDate.parse(endDate),
           due = LocalDate.parse(dueDate),
           outstandingAmount = 9999,
-          periodKey = "#001"
+          periodKey = "#001",
+          ddCollectionInProgress = false
         )
         paymentJson.as[Payment] shouldBe paymentWithPeriodModel
       }
     }
 
-    "not given a start and end date" should {
+    "not given a start and end date and no direct debit collection flag" should {
 
-      "write to Json correctly" in {
+      "read from Json correctly" in {
         val paymentJson = Json.obj(
           "chargeType" -> ReturnDebitCharge.value,
           "items" -> Json.arr(
@@ -75,7 +76,8 @@ class PaymentSpec extends UnitSpec {
           chargeType = ReturnDebitCharge,
           due = LocalDate.parse(dueDate),
           outstandingAmount = -9999,
-          periodKey = "#001"
+          periodKey = "#001",
+          ddCollectionInProgress = false
         )
         paymentJson.as[Payment] shouldBe paymentNoPeriodModel
       }
@@ -83,7 +85,7 @@ class PaymentSpec extends UnitSpec {
 
     "not given only a start or an end date" should {
 
-      "write to Json correctly" in {
+      "read from Json correctly" in {
         val paymentJson = Json.obj(
           "chargeType" -> ReturnDebitCharge.value,
           "taxPeriodFrom" -> startDate,
@@ -103,6 +105,35 @@ class PaymentSpec extends UnitSpec {
       }
     }
 
-  }
+    "given a direct debit collection flag" should {
 
+      val paymentJson = Json.obj(
+        "chargeType" -> ReturnDebitCharge.value,
+        "taxPeriodFrom" -> startDate,
+        "taxPeriodTo" -> endDate,
+        "items" -> Json.arr(
+          Json.obj(
+            "dueDate" -> dueDate,
+            "DDCollectionInProgress" -> true
+          )
+        ),
+        "outstandingAmount" -> 0,
+        "periodKey" -> "#001"
+      )
+
+      val model = PaymentWithPeriod(
+        chargeType = ReturnDebitCharge,
+        periodFrom = LocalDate.parse(startDate),
+        periodTo = LocalDate.parse(endDate),
+        due = LocalDate.parse(dueDate),
+        outstandingAmount = 0,
+        periodKey = "#001",
+        ddCollectionInProgress = true
+      )
+
+      "read from json correctly" in {
+        paymentJson.as[Payment] shouldBe model
+      }
+    }
+  }
 }

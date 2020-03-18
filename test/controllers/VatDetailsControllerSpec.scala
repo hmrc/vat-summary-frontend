@@ -27,7 +27,7 @@ import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models._
 import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.payments.Payments
+import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsEmpty, Request, Result}
@@ -283,7 +283,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the feature switch is turned off" should {
+    "the submit return feature switch is turned off" should {
       "the View Returns link should be displayed" in new DetailsTest {
         mockAppConfig.features.submitReturnFeatures(false)
         lazy val result: Future[Result] = target().details()(fakeRequest)
@@ -292,7 +292,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the feature switch is turned on" should {
+    "the submit return feature switch is turned on" should {
       "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
         (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
@@ -499,9 +499,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .getObligationFlags" when {
+  "Calling .getObligationDetails" when {
 
-    "there is a single due obligation" should {
+    "there is a single obligation" should {
 
       "return a VatDetailsDataModel with the correct data" in new DetailsTest {
 
@@ -512,23 +512,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           hasError = false
         )
 
-        val result: VatDetailsDataModel = target().getObligationFlags(obligations.obligations)
-        result shouldBe expected
-      }
-    }
-
-    "there is a single overdue obligation" should {
-
-      "return a VatDetailsDataModel with the overdue flag set" in new DetailsTest {
-
-        val expected = VatDetailsDataModel(
-          Some("2017-06-06"),
-          hasMultiple = false,
-          isOverdue = true,
-          hasError = false
-        )
-
-        val result: VatDetailsDataModel = target().getObligationFlags(overdueObligations.obligations)
+        val result: VatDetailsDataModel = target().getObligationDetails(obligations.obligations, isOverdue = false)
         result shouldBe expected
       }
     }
@@ -563,14 +547,149 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           hasError = false
         )
 
-        val result: VatDetailsDataModel = target().getObligationFlags(multipleObligations)
+        val result: VatDetailsDataModel = target().getObligationDetails(multipleObligations, isOverdue = false)
         result shouldBe expected
       }
     }
   }
 
+  "Calling .getPaymentObligationDetails" when {
+
+    "there is at least one obligation" when {
+
+      "ddCollectionInProgressEnabled feature switch is on" when {
+
+        "due date of payment is in the past" when {
+
+          "user has direct debit collection in progress" should {
+
+            "return payment that is not overdue" in new DetailsTest {
+
+              mockAppConfig.features.ddCollectionInProgressEnabled(true)
+
+              val testPayment: PaymentNoPeriod = Payment(
+                ReturnDebitCharge,
+                due = LocalDate.parse("2017-01-01"),
+                BigDecimal("10000"),
+                Some("ABCD"),
+                ddCollectionInProgress = true
+              )
+
+              val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+
+              result.isOverdue shouldBe false
+            }
+          }
+
+          "user has no direct debit collection in progress" should {
+
+            "return payment that is overdue" in new DetailsTest {
+
+              mockAppConfig.features.ddCollectionInProgressEnabled(true)
+
+              val testPayment: PaymentNoPeriod = Payment(
+                ReturnDebitCharge,
+                due = LocalDate.parse("2017-01-01"),
+                BigDecimal("10000"),
+                Some("ABCD"),
+                ddCollectionInProgress = false
+              )
+
+              val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+
+              result.isOverdue shouldBe true
+            }
+          }
+        }
+
+        "due date of payment is in the future" should {
+
+          "return payment that is not overdue" in new DetailsTest {
+
+            mockAppConfig.features.ddCollectionInProgressEnabled(true)
+
+            val testPayment: PaymentNoPeriod = Payment(
+              ReturnDebitCharge,
+              due = LocalDate.parse("2020-01-01"),
+              BigDecimal("10000"),
+              Some("ABCD"),
+              ddCollectionInProgress = false
+            )
+
+            val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+
+            result.isOverdue shouldBe false
+          }
+        }
+      }
+
+      "ddCollectionInProgressEnabled feature switch is off" when {
+
+        "due date of payment is in the past and has no direct debit" should {
+
+          "return payment that isn't not overdue" in new DetailsTest {
+
+            mockAppConfig.features.ddCollectionInProgressEnabled(false)
+
+            val testPayment: PaymentNoPeriod = Payment(
+              ReturnDebitCharge,
+              due = LocalDate.parse("2017-01-01"),
+              BigDecimal("10000"),
+              Some("ABCD"),
+              ddCollectionInProgress = false
+            )
+
+            val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+
+            result.isOverdue shouldBe false
+          }
+        }
+      }
+    }
+  }
+
+  "Calling .getReturnObligationDetails" when {
+
+    "there is at least one obligation" when {
+
+      "obligation is overdue" should {
+
+        "return VatDetailsDataModel with overdue flag set to true" in new DetailsTest {
+
+          val expected = VatDetailsDataModel(
+            displayData = Some("2017-06-06"),
+            hasMultiple = false,
+            isOverdue = true,
+            hasError = false
+          )
+
+          val result: VatDetailsDataModel = target().getReturnObligationDetails(overdueObligations.obligations)
+          result shouldBe expected
+        }
+      }
+
+      "obligation is not overdue" should {
+
+        "return VatDetailsDataModel with overdue flag set to false" in new DetailsTest {
+
+          val expected = VatDetailsDataModel(
+            displayData = Some("2019-06-06"),
+            hasMultiple = false,
+            isOverdue = false,
+            hasError = false
+          )
+
+          val result: VatDetailsDataModel = target().getReturnObligationDetails(obligations.obligations)
+          result shouldBe expected
+        }
+      }
+    }
+  }
+
   "Calling .retrieveMandationStatus" should {
+
     "return a mandation status" when {
+
       "it is available in session" in new DetailsTest {
         implicit val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
           "mtdVatMandationStatus" -> "Non MTDfB"
@@ -580,6 +699,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         await(result) shouldBe Right(MandationStatus("Non MTDfB"))
       }
+
       "it is needs to be collected from the mandation service" in new DetailsTest {
         implicit val fakeRequestWithEmptySession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession()
 
@@ -594,7 +714,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         await(result) shouldBe Right(MandationStatus("Non MTDfB"))
       }
     }
+
     "return a HTTP error" when {
+
       "one is received from the mandation service layer" in new DetailsTest {
         (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)

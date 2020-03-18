@@ -53,7 +53,8 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         LocalDate.parse("2018-03-03"),
         LocalDate.parse("2018-01-01"),
         LocalDate.parse("2018-02-02"),
-        "18AA"
+        "18AA",
+        isOverdue = false
       )
     }
 
@@ -87,6 +88,10 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           elementText(Selectors.payText) shouldBe "Pay now"
         }
 
+        "not display overdue flag" in {
+          elementExtinct(".task-overdue")
+        }
+
         "have the correct pay link destination" in {
           element(Selectors.payLink).attr("href") shouldBe
             "/vat-through-software/make-payment/10000/2/2018/VAT%20Return%20Debit%20Charge/2018-03-03"
@@ -117,7 +122,8 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           LocalDate.parse("2018-03-03"),
           LocalDate.parse("2018-01-01"),
           LocalDate.parse("2018-02-02"),
-          "18AA"
+          "18AA",
+          isOverdue = false
         )
 
         lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
@@ -128,6 +134,29 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         "not show a link to View Return" in {
           document.select(Selectors.viewReturnLink) shouldBe empty
         }
+      }
+    }
+
+    "payment is overdue" should {
+
+      val model: OpenPaymentsModelWithPeriod = {
+        OpenPaymentsModelWithPeriod(
+          ReturnDebitCharge,
+          BigDecimal(100.00),
+          LocalDate.parse("2018-03-03"),
+          LocalDate.parse("2018-01-01"),
+          LocalDate.parse("2018-02-02"),
+          "18AA",
+          isOverdue = true
+        )
+      }
+      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${view.body}</table>"
+      )
+
+      "display overdue flag" in {
+        elementText(".task-overdue")shouldBe "overdue"
       }
     }
   }

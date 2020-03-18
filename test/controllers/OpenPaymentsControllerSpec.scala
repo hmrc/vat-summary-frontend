@@ -74,14 +74,16 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       LocalDate.parse("2017-01-01"),
       LocalDate.parse("2017-01-01"),
       BigDecimal("10000"),
-      Some("ABCD")
+      Some("ABCD"),
+      ddCollectionInProgress = false
     )
 
     val paymentOnAccount = Payment(
       PaymentOnAccount,
       LocalDate.parse("2017-01-01"),
       BigDecimal("0"),
-      None
+      None,
+      ddCollectionInProgress = false
     )
 
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -388,27 +390,161 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "Calling the .getModel function" should {
+    "Calling the .getModel function" when {
 
-      "return a sequence of OpenPaymentsModel" in new Test {
-        override def setupMocks(): Unit = (
-          mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
-        )
+      "ddCollectionInProgressEnabled feature switch is on" when {
 
-        val expected = OpenPaymentsViewModel(
-          Seq(OpenPaymentsModel(
-            ReturnDebitCharge,
-            payment.outstandingAmount,
-            payment.due,
-            payment.periodFrom,
-            payment.periodTo,
-            payment.periodKey
-          )),
-          Some(true)
-        )
-        val result: OpenPaymentsViewModel = target.getModel(Seq(payment), Some(true))
+        "due date of payments is in the past" when {
 
-        result shouldBe expected
+          "user has direct debit collections in progress" should {
+
+            "return payments that are not overdue" in new Test {
+
+              override def setupMocks(): Unit = (
+                mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
+              )
+
+              val testPayment: PaymentWithPeriod = Payment(
+                ReturnDebitCharge,
+                LocalDate.parse("2017-01-01"),
+                LocalDate.parse("2017-01-01"),
+                due = LocalDate.parse("2017-01-01"),
+                BigDecimal("10000"),
+                Some("ABCD"),
+                ddCollectionInProgress = true
+              )
+
+              val expected = OpenPaymentsViewModel(
+                Seq(OpenPaymentsModel(
+                  testPayment.chargeType,
+                  testPayment.outstandingAmount,
+                  testPayment.due,
+                  testPayment.periodFrom,
+                  testPayment.periodTo,
+                  testPayment.periodKey,
+                  isOverdue = false
+                )),
+                Some(true)
+              )
+              val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+
+              result shouldBe expected
+            }
+          }
+
+          "user has no direct debit collections in progress" should {
+
+            "return payments that are overdue" in new Test {
+
+              override def setupMocks(): Unit = (
+                mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
+              )
+
+              val testPayment: PaymentWithPeriod = Payment(
+                ReturnDebitCharge,
+                LocalDate.parse("2017-01-01"),
+                LocalDate.parse("2017-01-01"),
+                due = LocalDate.parse("2017-01-01"),
+                BigDecimal("10000"),
+                Some("ABCD"),
+                ddCollectionInProgress = false
+              )
+
+              val expected = OpenPaymentsViewModel(
+                Seq(OpenPaymentsModel(
+                  testPayment.chargeType,
+                  testPayment.outstandingAmount,
+                  testPayment.due,
+                  testPayment.periodFrom,
+                  testPayment.periodTo,
+                  testPayment.periodKey,
+                  isOverdue = true
+                )),
+                Some(true)
+              )
+              val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+
+              result shouldBe expected
+            }
+          }
+        }
+
+        "due date of payments is in the future" should {
+
+          "return payments that are not overdue" in new Test {
+
+            override def setupMocks(): Unit = (
+              mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
+            )
+
+            val testPayment: PaymentWithPeriod = Payment(
+              ReturnDebitCharge,
+              LocalDate.parse("2017-01-01"),
+              LocalDate.parse("2017-01-01"),
+              due = LocalDate.parse("2020-01-01"),
+              BigDecimal("10000"),
+              Some("ABCD"),
+              ddCollectionInProgress = false
+            )
+
+            val expected = OpenPaymentsViewModel(
+              Seq(OpenPaymentsModel(
+                testPayment.chargeType,
+                testPayment.outstandingAmount,
+                testPayment.due,
+                testPayment.periodFrom,
+                testPayment.periodTo,
+                testPayment.periodKey,
+                isOverdue = false
+              )),
+              Some(true)
+            )
+            val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+
+            result shouldBe expected
+          }
+        }
+      }
+
+      "ddCollectionInProgressEnabled feature switch is off" when {
+
+        "due date of payments are in the past and have no direct debit" should {
+
+          "return payments that are not overdue" in new Test {
+
+            mockAppConfig.features.ddCollectionInProgressEnabled(false)
+
+            override def setupMocks(): Unit = (
+              mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
+            )
+
+            val testPayment: PaymentWithPeriod = Payment(
+              ReturnDebitCharge,
+              LocalDate.parse("2017-01-01"),
+              LocalDate.parse("2017-01-01"),
+              due = LocalDate.parse("2017-01-01"),
+              BigDecimal("10000"),
+              Some("ABCD"),
+              ddCollectionInProgress = false
+            )
+
+            val expected = OpenPaymentsViewModel(
+              Seq(OpenPaymentsModel(
+                testPayment.chargeType,
+                testPayment.outstandingAmount,
+                testPayment.due,
+                testPayment.periodFrom,
+                testPayment.periodTo,
+                testPayment.periodKey,
+                isOverdue = false
+              )),
+              Some(true)
+            )
+            val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+
+            result shouldBe expected
+          }
+        }
       }
     }
   }

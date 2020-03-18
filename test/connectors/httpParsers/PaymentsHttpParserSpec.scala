@@ -506,7 +506,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.50),
-          periodKey = "#001"
+          periodKey = "#001",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -514,7 +515,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2018-10-25"),
           outstandingAmount = BigDecimal(1000.51),
-          periodKey = "#002"
+          periodKey = "#002",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           OACreditCharge,
@@ -522,7 +524,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.52),
-          periodKey = "#003"
+          periodKey = "#003",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           OADebitCharge,
@@ -530,7 +533,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.53),
-          periodKey = "#004"
+          periodKey = "#004",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           CentralAssessmentCharge,
@@ -538,7 +542,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2016-10-25"),
           outstandingAmount = BigDecimal(1000.25),
-          periodKey = "#005"
+          periodKey = "#005",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           DefaultSurcharge,
@@ -546,7 +551,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
-          periodKey = "#006"
+          periodKey = "#006",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           ErrorCorrectionCreditCharge,
@@ -554,7 +560,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.29),
-          periodKey = "#007"
+          periodKey = "#007",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           ErrorCorrectionDebitCharge,
@@ -562,7 +569,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#007"
+          periodKey = "#007",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           AAInterestCharge,
@@ -570,7 +578,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#008"
+          periodKey = "#008",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           AAReturnDebitCharge,
@@ -578,7 +587,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#009"
+          periodKey = "#009",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           AAReturnCreditCharge,
@@ -586,7 +596,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#010"
+          periodKey = "#010",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           AAMonthlyInstalment,
@@ -594,7 +605,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#011"
+          periodKey = "#011",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           AAQuarterlyInstalments,
@@ -602,7 +614,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#012"
+          periodKey = "#012",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           OADefaultInterestCharge,
@@ -610,7 +623,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#018"
+          periodKey = "#018",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           AACharge,
@@ -618,7 +632,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#009"
+          periodKey = "#009",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           OAFurtherInterestCharge,
@@ -626,7 +641,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#010"
+          periodKey = "#010",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           BnpRegPre2010Charge,
@@ -634,7 +650,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#019"
+          periodKey = "#019",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           BnpRegPost2010Charge,
@@ -642,7 +659,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#011"
+          periodKey = "#011",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           FtnMatPre2010Charge,
@@ -650,7 +668,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2014-06-21"),
           due = LocalDate.parse("2014-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#012"
+          periodKey = "#012",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           FtnMatPost2010Charge,
@@ -658,7 +677,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2013-06-21"),
           due = LocalDate.parse("2013-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#013"
+          periodKey = "#013",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           MiscPenaltyCharge,
@@ -666,7 +686,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2012-06-21"),
           due = LocalDate.parse("2012-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#014"
+          periodKey = "#014",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           FtnEachPartnerCharge,
@@ -674,7 +695,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2011-06-21"),
           due = LocalDate.parse("2011-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#015"
+          periodKey = "#015",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           MpPre2009Charge,
@@ -682,7 +704,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2010-06-21"),
           due = LocalDate.parse("2010-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#016"
+          periodKey = "#016",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           MpRepeatedPre2009Charge,
@@ -690,7 +713,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2009-06-21"),
           due = LocalDate.parse("2009-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#017"
+          periodKey = "#017",
+          ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
           CivilEvasionPenaltyCharge,
@@ -698,7 +722,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#018"
+          periodKey = "#018",
+          ddCollectionInProgress = false
         ),
         Payment(
           VatOAInaccuraciesFrom2009,
@@ -706,7 +731,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2017-06-21"),
           due = LocalDate.parse("2017-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#020")
+          periodKey = Some("#020"),
+          ddCollectionInProgress = false
         ),
         Payment(
           InaccuraciesAssessmentsPenCharge,
@@ -714,7 +740,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           InaccuraciesReturnReplacedCharge,
@@ -722,7 +749,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           CarterPenaltyCharge,
@@ -730,43 +758,50 @@ class PaymentsHttpParserSpec extends UnitSpec {
           periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           WrongDoingPenaltyCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           FailureToSubmitRCSLCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           FailureToNotifyRCSLCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           PaymentOnAccountInstalments,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           PaymentOnAccountReturnDebitCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         ),
         Payment(
           PaymentOnAccountReturnCreditCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = Some("#018")
+          periodKey = Some("#018"),
+          ddCollectionInProgress = false
         )
       )))
 

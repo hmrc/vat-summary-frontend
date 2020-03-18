@@ -38,7 +38,8 @@ object TestModels {
     LocalDate.parse("2019-02-02"),
     LocalDate.parse("2019-03-03"),
     1,
-    Some("#001")
+    Some("#001"),
+    ddCollectionInProgress = false
   )))
 
   val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(

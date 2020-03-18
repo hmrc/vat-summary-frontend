@@ -74,7 +74,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       due = LocalDate.parse("2001-04-08"),
       periodFrom = LocalDate.parse("2001-01-01"),
       periodTo = LocalDate.parse("2001-03-31"),
-      periodKey = "#001"
+      periodKey = "#001",
+      isOverdue = false
     ),
     OpenPaymentsModelWithPeriod(
       AAInterestCharge,
@@ -82,7 +83,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2003-04-05"),
       LocalDate.parse("2003-01-01"),
       LocalDate.parse("2003-03-31"),
-      "#003"
+      "#003",
+      isOverdue = false
     )
   )
 
@@ -289,7 +291,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
             due = LocalDate.parse("2008-04-08"),
             periodFrom = LocalDate.parse("2018-01-01"),
             periodTo = LocalDate.parse("2018-02-01"),
-            periodKey = "#001"
+            periodKey = "#001",
+            isOverdue = false
           )),
           hasDirectDebit = Some(false)
         ),

@@ -28,7 +28,7 @@ sealed trait Payment extends Obligation {
   val due: LocalDate
   val outstandingAmount: BigDecimal
   val periodKey: String
-
+  val ddCollectionInProgress: Boolean
   val auditDetails: Map[String, String]
 }
 
@@ -37,7 +37,8 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              periodTo: LocalDate,
                              due: LocalDate,
                              outstandingAmount: BigDecimal,
-                             periodKey: String) extends Payment {
+                             periodKey: String,
+                             ddCollectionInProgress: Boolean) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
     "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
@@ -51,7 +52,8 @@ case class PaymentWithPeriod(chargeType: ChargeType,
 case class PaymentNoPeriod(chargeType: ChargeType,
                            due: LocalDate,
                            outstandingAmount: BigDecimal,
-                           periodKey: String) extends Payment {
+                           periodKey: String,
+                           ddCollectionInProgress: Boolean) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
     "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
@@ -63,14 +65,16 @@ case class PaymentNoPeriod(chargeType: ChargeType,
 object Payment {
 
   private def createPayment(chargeType: ChargeType,
-            periodFrom: Option[LocalDate],
-            periodTo: Option[LocalDate],
-            due: LocalDate,
-            outstandingAmount: BigDecimal,
-            periodKey: Option[String]): Payment = (periodFrom, periodTo) match {
-    case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey)
-    case (None, None) => apply(chargeType, due, outstandingAmount, periodKey)
-    case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
+                            periodFrom: Option[LocalDate],
+                            periodTo: Option[LocalDate],
+                            due: LocalDate,
+                            outstandingAmount: BigDecimal,
+                            periodKey: Option[String],
+                            ddCollectionInProgress: Boolean): Payment =
+    (periodFrom, periodTo) match {
+      case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey, ddCollectionInProgress)
+      case (None, None) => apply(chargeType, due, outstandingAmount, periodKey, ddCollectionInProgress)
+      case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
   }
 
   def apply(chargeType: ChargeType,
@@ -78,22 +82,39 @@ object Payment {
             periodTo: LocalDate,
             due: LocalDate,
             outstandingAmount: BigDecimal,
-            periodKey: Option[String]): PaymentWithPeriod =
-    PaymentWithPeriod(chargeType, periodFrom, periodTo, due, outstandingAmount, periodKey.getOrElse("0000"))
+            periodKey: Option[String],
+            ddCollectionInProgress: Boolean): PaymentWithPeriod =
+    PaymentWithPeriod(
+      chargeType,
+      periodFrom,
+      periodTo,
+      due,
+      outstandingAmount,
+      periodKey.getOrElse("0000"),
+      ddCollectionInProgress
+    )
 
   def apply(chargeType: ChargeType,
             due: LocalDate,
             outstandingAmount: BigDecimal,
-            periodKey: Option[String]): PaymentNoPeriod =
-    PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey.getOrElse("0000"))
+            periodKey: Option[String],
+            ddCollectionInProgress: Boolean): PaymentNoPeriod =
+    PaymentNoPeriod(
+      chargeType,
+      due,
+      outstandingAmount,
+      periodKey.getOrElse("0000"),
+      ddCollectionInProgress
+    )
 
   implicit val paymentReads: Reads[Payment] = (
     (JsPath \ "chargeType").read[ChargeType] and
-      (JsPath \ "taxPeriodFrom").readNullable[LocalDate] and
-      (JsPath \ "taxPeriodTo").readNullable[LocalDate] and
-      (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
-      (JsPath \ "outstandingAmount").read[BigDecimal] and
-      (JsPath \ "periodKey").readNullable[String]
-    )(Payment.createPayment _)
+    (JsPath \ "taxPeriodFrom").readNullable[LocalDate] and
+    (JsPath \ "taxPeriodTo").readNullable[LocalDate] and
+    (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
+    (JsPath \ "outstandingAmount").read[BigDecimal] and
+    (JsPath \ "periodKey").readNullable[String] and
+    (JsPath \ "items")(0).\("DDCollectionInProgress").read[Boolean].or(Reads.pure(false))
+  )(Payment.createPayment _)
 
 }
