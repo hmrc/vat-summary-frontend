@@ -73,11 +73,11 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "have the correct message regarding viewing a direct debit" in {
-        elementText(Selectors.directDebitMessage) shouldBe "You can also view your direct debit details (opens in a new tab)."
+        elementText(Selectors.directDebitMessage) shouldBe "You can also view your Direct Debit details (opens in a new tab)."
       }
 
       "have the correct link text regarding viewing a direct debit" in {
-        elementText(Selectors.directDebitLink) shouldBe "view your direct debit details (opens in a new tab)"
+        elementText(Selectors.directDebitLink) shouldBe "view your Direct Debit details (opens in a new tab)"
       }
 
       "have the correct link destination regarding viewing a direct debit" in {
@@ -115,11 +115,11 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
       "have the correct message regarding setting up a direct debit" in {
         elementText(Selectors.directDebitMessage) shouldBe
-          "You can also set up a direct debit (opens in a new tab) for your VAT Returns."
+          "You can also set up a Direct Debit (opens in a new tab) for your VAT Returns."
       }
 
       "have the correct link text regarding setting up a direct debit" in {
-        elementText(Selectors.directDebitLink) shouldBe "set up a direct debit (opens in a new tab)"
+        elementText(Selectors.directDebitLink) shouldBe "set up a Direct Debit (opens in a new tab)"
       }
 
       "have the correct link destination regarding setting up a direct debit" in {

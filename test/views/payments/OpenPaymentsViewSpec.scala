@@ -185,7 +185,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct heading for the direct debits" in {
-      elementText(Selectors.directDebit) shouldBe "Direct debits"
+      elementText(Selectors.directDebit) shouldBe "Direct Debits"
     }
 
     "render the correct text for the direct debits" in {
@@ -239,11 +239,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitText) shouldBe
-        "You can set up a direct debit to pay your VAT Returns."
+        "You can set up a Direct Debit to pay your VAT Returns."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitLink) shouldBe "set up a direct debit"
+      elementText(Selectors.directDebitLink) shouldBe "set up a Direct Debit"
     }
 
     "have the correct link destination to the direct debits service" in {
@@ -260,12 +260,12 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitText) shouldBe
-        "If you have already set up a direct debit, you do not need to pay now. " +
-          "You can view your direct debits if you are not sure."
+        "If you have already set up a Direct Debit, you do not need to pay now. " +
+          "You can view your Direct Debits if you are not sure."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitLink) shouldBe "view your direct debits"
+      elementText(Selectors.directDebitLink) shouldBe "view your Direct Debits"
     }
 
     "have the correct link destination to the direct debits service" in {

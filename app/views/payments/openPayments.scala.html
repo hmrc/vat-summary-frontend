@@ -48,14 +48,15 @@
             <p>@messages("openPayments.processingTime")</p>
         </div>
 
-        <h2 id="what-you-owe-missing" class="heading-small">@messages("openPayments.whatOweHelp.heading")</h2>
-            <p>@messages("openPayments.incorrect")
-                <a target="_blank" href="https://www.gov.uk/vat-corrections">@messages("openPayments.correctErrors")</a>.
-            </p>
-            <p>@messages("payment.afterSubmitted") @Messages("payment.stillMake")
-                <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">
-                    @messages("payment.stillMakeLink")<span class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
-            </p>
+        <h2 class="heading-small" id="what-you-owe-missing">@messages("openPayments.whatOweHelp.heading")</h2>
+        <p>@messages("openPayments.incorrect")
+            <a href="https://www.gov.uk/vat-corrections" target="_blank">@messages("openPayments.correctErrors")</a>.
+        </p>
+        <p>@messages("payment.afterSubmitted") @Messages("payment.stillMake")
+            <a href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink" target="_blank">
+                @messages("payment.stillMakeLink")<span
+                    class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
+        </p>
 
       <h2 id="direct-debits" class="heading-small">@messages("openPayments.directDebit.heading")</h2>
       <div id="check-direct-debit" class="form-group">
