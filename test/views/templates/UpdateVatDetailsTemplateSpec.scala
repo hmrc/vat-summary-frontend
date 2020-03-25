@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ class UpdateVatDetailsTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct text" in {
-        element(Selectors.updateVatDetails).select("p").text() shouldBe "Change your business, contact or VAT details."
+        element(Selectors.updateVatDetails).select("p").text() shouldBe "Change your business details or VAT Return dates."
       }
     }
   }
