@@ -17,20 +17,9 @@
 @import models.User
 @import models.viewModels.OpenPaymentsViewModel
 @import uk.gov.hmrc.play.views.html.helpers.form
-@import views.html.templates.expandingHelpSection
 @import views.html.templates.formatters.breadcrumbs._
 
 @(user: User, model: OpenPaymentsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, lang: Lang)
-
-@hiddenHelpTextContent = {
-  <p>@messages("openPayments.incorrect")
-    <a target="_blank" href="https://www.gov.uk/vat-corrections">@messages("openPayments.correctErrors")</a>.
-  </p>
-  <p>@messages("payment.afterSubmitted") @Messages("payment.stillMake")
-    <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink">
-      @messages("payment.stillMakeLink")<span class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
-  </p>
-}
 
 @views.html.main_template(
     title = messages("openPayments.title"),
@@ -55,20 +44,19 @@
           }
       </div>
 
-      @model.hasDirectDebit match {
-          case Some(hasDD) => {
-              @if(!hasDD) {
-                  <div id="processing-time">
-                      <p>@messages("openPayments.processingTime")</p>
-                  </div>
-              }
-          }
-          case None => {
-              <div id="processing-time-old">
-                  <p>@messages("openPayments.processingTimeOld")</p>
-              </div>
-          }
-      }
+        <div id="processing-time">
+            <p>@messages("openPayments.processingTime")</p>
+        </div>
+
+        <h2 class="heading-small" id="what-you-owe-missing">@messages("openPayments.whatOweHelp.heading")</h2>
+        <p>@messages("openPayments.incorrect")
+            <a href="https://www.gov.uk/vat-corrections" target="_blank">@messages("openPayments.correctErrors")</a>.
+        </p>
+        <p>@messages("payment.afterSubmitted") @Messages("payment.stillMake")
+            <a href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink" target="_blank">
+                @messages("payment.stillMakeLink")<span
+                    class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
+        </p>
 
       <h2 id="direct-debits" class="heading-small">@messages("openPayments.directDebit.heading")</h2>
       <div id="check-direct-debit" class="form-group">
@@ -92,8 +80,6 @@
               }
           </p>
       </div>
-
-    @expandingHelpSection(messages("openPayments.whatOweHelp"), "payments", "open-payments", hiddenHelpTextContent)
 
     </div>
   </div>

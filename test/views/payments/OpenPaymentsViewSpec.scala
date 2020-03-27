@@ -32,7 +32,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val paymentLink = "#payments a"
-    val correctErrorLink = "details p:nth-of-type(1) a"
+    val correctErrorLink = "div > p:nth-child(4) > a"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
@@ -55,12 +55,12 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val viewReturnText: Int => String = row => s"${viewReturnLink(row)} > span:nth-of-type(2)"
 
     val processingTime = "#processing-time"
-    val processingTimeOld = "#processing-time-old"
+    val whatOweMissing = "#what-you-owe-missing"
     val directDebit = "#direct-debits"
     val directDebitText = "#check-direct-debit p:nth-of-type(1)"
     val directDebitLink = "#check-direct-debit a:nth-of-type(1)"
-    val helpText = "details p:nth-of-type(1)"
-    val helpMakePayment = "details p:nth-of-type(2)"
+    val helpText = "div > p:nth-child(4)"
+    val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
   }
@@ -161,7 +161,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "for the second payment" should {
 
       "render the correct title" in {
-        elementText(Selectors.title(2)) shouldBe "Additional assessment interest interest charged on additional tax assessed for the period 1 Jan to 31 Mar 2003"
+        elementText(Selectors.title(2)) shouldBe "Additional assessment interest interest charged on additional " +
+          "tax assessed for the period 1 Jan to 31 Mar 2003"
       }
 
       "render the correct amount" in {
@@ -184,23 +185,23 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct heading for the direct debits" in {
-      elementText(Selectors.directDebit) shouldBe "Direct debits"
+      elementText(Selectors.directDebit) shouldBe "Direct Debits"
     }
 
     "render the correct text for the direct debits" in {
-      elementText(Selectors.directDebitText) shouldBe "You can view your direct debit details."
+      elementText(Selectors.directDebitText) shouldBe "You can view, change or cancel your Direct Debit."
     }
 
     "render the correct link text for the direct debits" in {
-      elementText(Selectors.directDebitLink) shouldBe "view your direct debit details"
+      elementText(Selectors.directDebitLink) shouldBe "view, change or cancel your Direct Debit"
     }
 
     "have the correct link destination to the direct debits service" in {
       element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
     }
 
-    "render the correct help revealing link text" in {
-      elementText(Selectors.helpSummaryRevealLink) shouldBe "What I owe is incorrect or missing"
+    "render the correct heading for what I owe is incorrect or missing" in {
+      elementText(Selectors.whatOweMissing) shouldBe "What I owe is incorrect or missing"
     }
 
     "render the correct help text" in {
@@ -236,17 +237,13 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       )
     }
 
-    "render the correct text for the processing time" in {
-      elementText(Selectors.processingTime) shouldBe "Payments can take up to 5 days to process."
-    }
-
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitText) shouldBe
-        "You can set up a direct debit to pay your VAT Returns."
+        "You can set up a Direct Debit to pay your VAT Returns."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitLink) shouldBe "set up a direct debit"
+      elementText(Selectors.directDebitLink) shouldBe "set up a Direct Debit"
     }
 
     "have the correct link destination to the direct debits service" in {
@@ -261,18 +258,14 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy val view = views.html.payments.openPayments(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render the correct text for the processing time" in {
-      elementText(Selectors.processingTimeOld) shouldBe
-        "Your payment could take up to 5 days to process. You may be fined if it is late."
-    }
-
     "render the correct text for the direct debit paragraph" in {
       elementText(Selectors.directDebitText) shouldBe
-        "If you have already set up a direct debit, you do not need to pay now. You can view your direct debits if you are not sure."
+        "If you have already set up a Direct Debit, you do not need to pay now. " +
+          "You can view your Direct Debits if you are not sure."
     }
 
     "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitLink) shouldBe "view your direct debits"
+      elementText(Selectors.directDebitLink) shouldBe "view your Direct Debits"
     }
 
     "have the correct link destination to the direct debits service" in {
