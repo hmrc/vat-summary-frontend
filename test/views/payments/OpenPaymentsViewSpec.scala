@@ -63,6 +63,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
+
+    val covidPartial = ".warning-banner"
   }
 
   override val user = User("1111")
@@ -271,6 +273,40 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "have the correct link destination to the direct debits service" in {
       element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit"
     }
+  }
+
+  "Rendering the open payments page" should {
+
+    "display the covid message" when {
+
+      "the display covid feature switch is on" in {
+        mockConfig.features.displayCovidMessage(true)
+
+        val hasDirectDebit = None
+        val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
+        lazy val view = views.html.payments.openPayments(user, viewModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
+      }
+
+    }
+
+    "not display the covid message" when {
+
+      "the display covid feature switch is off" in {
+        mockConfig.features.displayCovidMessage(false)
+
+        val hasDirectDebit = None
+        val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
+        lazy val view = views.html.payments.openPayments(user, viewModel)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        document.select(Selectors.covidPartial).toString shouldNot include("Coronavirus (COVID 19) VAT deferral")
+      }
+
+    }
+
   }
 
   "Supplying with the following charge types" should {

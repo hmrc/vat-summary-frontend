@@ -32,6 +32,7 @@
     )
 
     <div class="grid-row">
+        @if(appConfig.features.displayCovidMessage()) { @views.html.partials.covid.covidMessage() }
         <div class="column-two-thirds">
             <h1 class="heading-xlarge">@messages("noPayments.heading")</h1>
             <div class="form-group" id="noPaymentsDetail">

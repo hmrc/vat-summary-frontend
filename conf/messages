@@ -382,3 +382,10 @@ a11yStatement.testCarriedOut.1 = The service was built using parts that were tes
 a11yStatement.testCarriedOut.2 = Digital Accessibility Centre
 a11yStatement.testCarriedOut.3 = The full service was tested by HMRC and included disabled users.
 a11yStatement.pagePrepared = This page was prepared on 20 September 2019. It was last updated on 20 September 2019.
+
+covid.line1 = Coronavirus (COVID 19) VAT deferral
+covid.line2 = If you have VAT payments that are due between 20 March and 30 June 2020, you can choose to:
+covid.line3 = defer them without paying interest or penalties
+covid.line4 = pay the VAT due as normal
+covid.line5 = You must continue to submit your returns as normal. If you choose to defer your VAT payment, you must pay the VAT due on or before 31 March 2021. You do not need to tell HMRC that you are deferring your VAT payment.
+covid.line6 = If you normally pay by Direct Debit, you must contact your bank to cancel it as soon as possible.
