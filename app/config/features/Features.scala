@@ -35,5 +35,6 @@ class Features @Inject()(config: Configuration) {
   val agentAccess = new Feature(ConfigKeys.agentAccessFeature, config)
   val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature, config)
   val ddCollectionInProgressEnabled = new Feature(ConfigKeys.ddCollectionInProgressFeature, config)
+  val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature, config)
 
 }
