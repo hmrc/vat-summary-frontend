@@ -27,4 +27,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               submitReturnFeatures: Boolean,
                               agentAccess: Boolean,
                               mtdSignUp: Boolean,
-                              ddCollectionInProgress: Boolean)
+                              ddCollectionInProgress: Boolean,
+                              displayCovid: Boolean)
