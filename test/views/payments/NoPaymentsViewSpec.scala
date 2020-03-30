@@ -140,7 +140,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the open payments page" should {
+  "Rendering the no payments page" should {
 
     "display the covid message" when {
 
@@ -163,7 +163,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString shouldNot include("Coronavirus (COVID 19) VAT deferral")
+        elementExtinct(Selectors.covidPartial)
       }
 
     }

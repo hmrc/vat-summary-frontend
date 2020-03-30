@@ -302,7 +302,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         lazy val view = views.html.payments.openPayments(user, viewModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString shouldNot include("Coronavirus (COVID 19) VAT deferral")
+        elementExtinct(Selectors.covidPartial)
       }
 
     }
