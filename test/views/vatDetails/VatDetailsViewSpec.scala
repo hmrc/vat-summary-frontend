@@ -50,9 +50,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val historyPastPayments = "ul.list > li:nth-child(1) > a:nth-child(1)"
     val historyPastReturns = "ul.list > li:nth-child(2) > a:nth-child(1)"
     val serviceInfoNav = ".service-info nav"
-    val apiError = "h3.heading-medium"
+    val apiError = "h3:nth-child(2).heading-medium"
     val vatOptOutLink = "#vat-optout"
     val deregHeading = "#cancel-vat"
+    val covidPartial = ".warning-banner"
   }
 
   override implicit val user: User = User("123456789")
@@ -487,6 +488,36 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "not display the payments and repayments section" in {
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
+    }
+
+  }
+
+  "Rendering the overview page" should {
+
+    "display the covid message" when {
+
+      "the display covid feature switch is on" in {
+        mockConfig.features.displayCovidMessage(true)
+
+        lazy val view = views.html.vatDetails.details(detailsModel, Html("<nav>BTA Links</nav>"))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
+      }
+
+    }
+
+    "not display the covid message" when {
+
+      "the display covid feature switch is off" in {
+        mockConfig.features.displayCovidMessage(false)
+
+        lazy val view = views.html.vatDetails.details(detailsModel, Html("<nav>BTA Links</nav>"))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementExtinct(Selectors.covidPartial)
+      }
+
     }
 
   }

@@ -35,6 +35,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
+    val covidPartial = ".warning-banner"
   }
 
   override val user = User("123456789")
@@ -137,5 +138,35 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.directDebitMessage))
       }
     }
+  }
+
+  "Rendering the no payments page" should {
+
+    "display the covid message" when {
+
+      "the display covid feature switch is on" in {
+        mockConfig.features.displayCovidMessage(true)
+
+        lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(true))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
+      }
+
+    }
+
+    "not display the covid message" when {
+
+      "the display covid feature switch is off" in {
+        mockConfig.features.displayCovidMessage(false)
+
+        lazy val view = views.html.payments.noPayments(user, hasDirectDebit = Some(true))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementExtinct(Selectors.covidPartial)
+      }
+
+    }
+
   }
 }

@@ -33,7 +33,9 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("openPayments.title")
   )
-<div class="grid-row column-two-thirds">
+  @if(appConfig.features.displayCovidMessage()) { @views.html.partials.covid.covidMessage() }
+
+  <div class="grid-row column-two-thirds">
 
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
