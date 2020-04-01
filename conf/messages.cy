@@ -410,6 +410,13 @@ a11yStatement.testCarriedOut.2 = Ganolfan Hygyrchedd Digidol
 a11yStatement.testCarriedOut.3 = Profwyd y gwasanaeth llawn gan CThEM, ac roedd y gwaith o brofi’r gwasanaeth yn cynnwys defnyddwyr anabl.
 a11yStatement.pagePrepared = Paratowyd y dudalen hon ar 20 Medi 2019. Cafodd ei diweddaru ddiwethaf ar 20 Medi 2019.
 
-global.error.InternalServerError500.title = Mae problem gyda'r gwasanaeth – TAW – GOV.UK
-global.error.InternalServerError500.heading = Mae'n ddrwg gennym – mae problem gyda'r gwasanaeth
+global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW – GOV.UK
+global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
+
+covid.line1 = Gohirio TAW yn sgil coronafeirws (COVID-19)
+covid.line2 = Os oes gennych daliadau TAW sydd i’w talu rhwng 20 Mawrth a 30 Mehefin 2020, gallwch ddewis gwneud un o’r canlynol:
+covid.line3 = gohirio’r taliadau heb dalu llog na chosbau
+covid.line4 = talu’r TAW sy’n ddyledus, fel arfer
+covid.line5 = Mae’n rhaid i chi barhau i gyflwyno’ch Ffurflenni TAW fel arfer. Os dewiswch ohirio’ch taliad TAW, mae’n rhaid i chi dalu’r TAW sy’n ddyledus ar neu cyn 31 Mawrth 2021. Does dim rhaid i chi roi gwybod i CThEM eich bod yn gohirio’ch taliad TAW.
+covid.line6 = Os ydych fel arfer yn talu drwy Ddebyd Uniongyrchol, mae’n rhaid i chi gysylltu â’ch banc i’w ganslo cyn gynted â phosibl.
