@@ -126,7 +126,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
     val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
     val isNonMTDfBOrNonDigital: Option[Boolean] = retrieveIsNonMTDfBOrNonDigital(mandationStatus)
-    val customerInfoError: Boolean = accountDetails.isLeft
+    val partyType: Option[String] = retrievePartyType(accountDetails)
+    val customerInfoError: Boolean = accountDetails.isLeft || partyType.isEmpty
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
 
@@ -147,7 +148,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       pendingOptOut,
       deregDate,
       pendingDereg,
-      dateService.now()
+      dateService.now(),
+      partyType
     )
   }
 
@@ -198,6 +200,15 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       case Right(model) => model.deregistration.flatMap(_.effectDateOfCancellation)
       case Left(error) =>
         Logger.warn("[VatDetailsController][retrieveDeregDate] could not retrieve deregDate: " + error.toString)
+        None
+    }
+  }
+
+  private def retrievePartyType(accountDetails: HttpGetResult[CustomerInformation]): Option[String] = {
+    accountDetails match {
+      case Right(model) => model.partyType
+      case Left(error) =>
+        Logger.warn("[VatDetailsController][retrievePartyType] could not retrieve partyType: " + error.toString)
         None
     }
   }

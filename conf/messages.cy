@@ -201,6 +201,10 @@ deregPartial.pendingDeregistration.content = Mae’r cais i ganslo’ch cofrestr
 deregPartial.futureDeregistration.title = Eich cofrestriad TAW
 deregPartial.futureDeregistration.content = Bydd eich cofrestriad TAW yn cael ei ganslo ar {0}.
 deregPartial.futureDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor ffenestr neu dab newydd)
+deregPartial.vatGroup.title = Canslo cofrestriad TAW (yn agor ffenestr neu dab newydd)
+deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ganslo’r cofrestriad drwy ddefnyddio ffurflen VAT7.
+
+
 
 # Charge types
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
