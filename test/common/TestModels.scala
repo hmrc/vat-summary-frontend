@@ -108,19 +108,24 @@ object TestModels {
   )
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1")
+  )
+
+  val vatDetailsGroupModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some(PartyTypes.vatGroup)
   )
 
   val vatDetailsDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02")), currentDate = testDate
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02")), currentDate = testDate, partyType = Some("1")
   )
 
   val vatDetailsHistoricDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2017-02-02")), currentDate = testDate
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2017-02-02")), currentDate = testDate,
+    partyType = Some(PartyTypes.vatGroup)
   )
 
   val vatDetailsPendingDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate, partyType = Some("1")
   )
 
   val successfulAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(

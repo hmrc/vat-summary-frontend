@@ -19,6 +19,7 @@
 @import java.time.LocalDate
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import models.viewModels.VatDetailsViewModel
+@import common.PartyTypes
 
 @(details: VatDetailsViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User)
 
@@ -52,7 +53,7 @@
 }
 
 
-@pendingDeregistration()={
+@pendingDeregistration() = {
     <div class="column-one-third" id="cancel-vat">
         <h3 class="heading-small">
         @messages("deregPartial.pendingDeregistration.title")
@@ -61,11 +62,21 @@
     </div>
 }
 
+@vatGroupDeregistration() = {
+    <div class="column-one-third" id="cancel-vat">
+        <h3 class="heading-small">
+            <a href="@appConfig.govUkVat7Form" target="_blank">@messages("deregPartial.vatGroup.title")</a>
+        </h3>
+        <p>@messages("deregPartial.vatGroup.content")</p>
+    </div>
+}
+
 @{
-    (details.deregDate, details.pendingDereg) match {
-        case (Some(date), _) if date.isAfter(details.currentDate) => futureDeregistration(date)
-        case (Some(date), _) => historicDeregistration(date)
-        case (_, true) => pendingDeregistration
+    (details.deregDate, details.pendingDereg, details.partyType) match {
+        case (Some(date), _, _) if date.isAfter(details.currentDate) => futureDeregistration(date)
+        case (Some(date), _, _) => historicDeregistration(date)
+        case (_, true, _) => pendingDeregistration
+        case (_, _, Some(PartyTypes.vatGroup)) => vatGroupDeregistration()
         case _ => cancelRegistration
     }
 }

@@ -91,6 +91,7 @@ trait AppConfig extends ServicesConfig {
   val govUkHMRCUrl: String
   val govUkHearingImpairedUrl: String
   val govUkVatRegistrationUrl: String
+  val govUkVat7Form: String
   val abilityNetUrl: String
   val wcagGuidelinesUrl: String
   val eassUrl: String
@@ -246,6 +247,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   override lazy val govUkHMRCUrl: String = getString(Keys.govUkHMRCUrl)
   override lazy val govUkHearingImpairedUrl: String = getString(Keys.govUkHearingImpairedUrl)
   override lazy val govUkVatRegistrationUrl: String = getString(Keys.govUkVatRegistrationUrl)
+  override lazy val govUkVat7Form: String = getString(Keys.govUkVat7Form)
 
   override lazy val abilityNetUrl: String = getString(Keys.abilityNetUrl)
   override lazy val wcagGuidelinesUrl: String = getString(Keys.wcagGuidelinesUrl)

@@ -61,49 +61,56 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val nonMtdDetailsModel = VatDetailsViewModel(
     None,
     None,
     None,
     isNonMTDfBOrNonDigitalUser = Some(true),
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val hybridDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     isHybridUser = true,
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val overdueReturnDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2017-01-01"),
     Some("Cheapo Clothing"),
     returnObligationOverdue = true,
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val multipleReturnsDetailsModel = VatDetailsViewModel(
     Some("2017-01-01"),
     Some("2"),
     Some("Cheapo Clothing"),
     hasMultipleReturnObligations = true,
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val paymentErrorDetailsModel = VatDetailsViewModel(
     None,
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     paymentError = true,
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val returnErrorDetailsModel = VatDetailsViewModel(
     Some("2018-12-31"),
     None,
     Some("Cheapo Clothing"),
     returnObligationError = true,
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
   val bothErrorDetailsModel = VatDetailsViewModel(
     None,
@@ -114,7 +121,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     isNonMTDfBUser = None,
     isNonMTDfBOrNonDigitalUser = None,
     customerInfoError = true,
-    currentDate = testDate
+    currentDate = testDate,
+    partyType = Some("1")
   )
 
   "Rendering the VAT details page for an mtd user" should {
@@ -376,7 +384,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate))
+    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate, partyType = Some("1")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {

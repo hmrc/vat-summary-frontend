@@ -37,6 +37,8 @@ class DeregSectionSpec  extends ViewBaseSpec {
     val futureDeregTitle = "Your VAT registration"
     val futureDeregContent: String => String = date => s"Your VAT registration will be cancelled on $date."
     val futureDeregLink = "How to register for VAT (opens in new window or tab)."
+    val vatGroupTitle = "Cancel VAT registration (opens in a new window or tab)"
+    val vatGroupContent = "To disband VAT group, you need to cancel the registration using the VAT7 form."
   }
 
   "Rendering the partial" when {
@@ -77,6 +79,26 @@ class DeregSectionSpec  extends ViewBaseSpec {
 
           s"have the correct content" in {
             elementText("p") shouldBe DeregPartialMessages.pendingDeregContent
+          }
+        }
+      }
+
+      "user is a VAT Group" should {
+
+        lazy val view = deregSection(vatDetailsGroupModel)(messages, mockConfig, user)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "display a section for VAT group deregistration" which {
+
+          s"should have the correct title of ${DeregPartialMessages.vatGroupTitle}" in {
+            elementText("h3") shouldBe DeregPartialMessages.vatGroupTitle
+          }
+          s"link to ${mockConfig.govUkVat7Form}" in {
+            element("h3 > a").attr("href") shouldBe mockConfig.govUkVat7Form
+          }
+
+          s"have the correct content" in {
+            elementText("p") shouldBe DeregPartialMessages.vatGroupContent
           }
         }
       }

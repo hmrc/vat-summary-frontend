@@ -119,6 +119,7 @@ object ConfigKeys {
   val govUkHMRCUrl: String = "gov-uk.hmrcUrl"
   val govUkHearingImpairedUrl: String = "gov-uk.hearingImpairedUrl"
   val govUkVatRegistrationUrl: String = "gov-uk.vatRegistrationUrl"
+  val govUkVat7Form: String = "gov-uk.vat7Form"
 
   val abilityNetUrl: String = "accessibility.abilityNetUrl"
   val wcagGuidelinesUrl: String = "accessibility.wcagGuidelinesUrl"
