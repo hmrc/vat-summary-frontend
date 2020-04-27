@@ -37,7 +37,7 @@ class DeregSectionSpec  extends ViewBaseSpec {
     val futureDeregTitle = "Your VAT registration"
     val futureDeregContent: String => String = date => s"Your VAT registration will be cancelled on $date."
     val futureDeregLink = "How to register for VAT (opens in new window or tab)."
-    val vatGroupTitle = "Cancel Vat registration (opens in a new window or tab)"
+    val vatGroupTitle = "Cancel VAT registration (opens in a new window or tab)"
     val vatGroupContent = "To disband VAT group, you need to cancel the registration using the VAT7 form."
   }
 
