@@ -175,7 +175,7 @@ deregPartial.pendingDeregistration.content = The request to cancel your VAT regi
 deregPartial.futureDeregistration.title = Your VAT registration
 deregPartial.futureDeregistration.content = Your VAT registration will be cancelled on {0}.
 deregPartial.futureDeregistration.link = How to register for VAT (opens in new window or tab).
-deregPartial.vatGroup.title = Cancel Vat registration (opens in a new window or tab)
+deregPartial.vatGroup.title = Cancel VAT registration (opens in a new window or tab)
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
