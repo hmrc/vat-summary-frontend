@@ -16,9 +16,8 @@
 
 package testOnly.connectors
 
+import config.VatHeaderCarrierForPartialsConverter
 import javax.inject.Inject
-
-import config.{AppConfig, VatHeaderCarrierForPartialsConverter}
 import play.api.http.Status._
 import play.api.mvc.{AnyContent, Request}
 import uk.gov.hmrc.http.{HttpResponse, Upstream4xxResponse}
@@ -26,10 +25,11 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.HtmlPartialHttpReads
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class BtaStubConnector @Inject()(http: HttpClient, appConfig: AppConfig, hc: VatHeaderCarrierForPartialsConverter)
+class BtaStubConnector @Inject()(http: HttpClient,
+                                 hc: VatHeaderCarrierForPartialsConverter,
+                                 implicit val ec: ExecutionContext)
   extends HtmlPartialHttpReads {
 
   import hc._

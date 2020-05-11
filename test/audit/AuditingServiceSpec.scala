@@ -16,16 +16,16 @@
 
 package audit
 
-import config.FrontendAuditConnector
 import controllers.ControllerBaseSpec
 import org.scalatest.BeforeAndAfterEach
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 class AuditingServiceSpec extends ControllerBaseSpec with BeforeAndAfterEach {
 
   private trait Test {
 
-    lazy val mockAuditConnector: FrontendAuditConnector = mock[FrontendAuditConnector]
+    lazy val mockAuditConnector: AuditConnector = mock[AuditConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     def setupMocks(): Unit

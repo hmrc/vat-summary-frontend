@@ -40,7 +40,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
         .expects(*, *)
         .returns(Future.successful(partial))
 
-      new BtaStubService(mockConnector)
+      new BtaStubService(mockConnector, ec)
     }
 
     "request is successful" should {
@@ -91,7 +91,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
       val mockConnector = mock[BtaStubConnector]
 
       val partial = HtmlPartial.Success(None, Html("Success"))
-      lazy val service = new BtaStubService(mockConnector)
+      lazy val service = new BtaStubService(mockConnector, ec)
       lazy val result = service.handlePartial(partial)
 
       "return html" in {
@@ -104,7 +104,7 @@ class BtaStubServiceSpec extends ControllerBaseSpec {
       val mockConnector = mock[BtaStubConnector]
 
       val partial = HtmlPartial.Failure(Some(INTERNAL_SERVER_ERROR), "")
-      lazy val service = new BtaStubService(mockConnector)
+      lazy val service = new BtaStubService(mockConnector, ec)
       lazy val result = service.handlePartial(partial)
 
       "return error text" in {

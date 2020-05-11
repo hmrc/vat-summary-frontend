@@ -28,11 +28,12 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService, PaymentsService}
+import services.{AccountDetailsService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.errors.{AgentUnauthorised, PaymentsError, Unauthorised}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,21 +48,9 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   private trait MakePaymentDetailsTest {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
+    val paymentsError: PaymentsError = injector.instanceOf[PaymentsError]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -76,12 +65,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     def target: MakePaymentController = {
       setup()
       new MakePaymentController(
-        messages,
-        mockEnrolmentsAuthService,
+        enrolmentsAuthService,
         mockPaymentsService,
         mockAppConfig,
-        mockAuthorisedController,
-        mockAuditService)
+        authorisedController,
+        mockAuditService,
+        mcc,
+        ec,
+        paymentsError)
     }
   }
 
@@ -92,7 +83,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       "redirected when returned Right ServiceResponse" in new MakePaymentDetailsTest {
 
         val redirectUrl = "http://www.google.com"
-        val expectedRedirectLocation = Some(redirectUrl)
+        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
         val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {
@@ -112,7 +103,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
 
         val redirectUrl = "http://www.google.com"
-        val expectedRedirectLocation = Some(redirectUrl)
+        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
         val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {
@@ -179,7 +170,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       "redirected when returned Right ServiceResponse" in new MakePaymentDetailsTest {
 
         val redirectUrl = "http://www.google.com"
-        val expectedRedirectLocation = Some(redirectUrl)
+        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
         val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {
@@ -199,7 +190,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
 
         val redirectUrl = "http://www.google.com"
-        val expectedRedirectLocation = Some(redirectUrl)
+        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
         val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {

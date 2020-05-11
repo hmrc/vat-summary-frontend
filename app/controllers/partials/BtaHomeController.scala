@@ -21,32 +21,37 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc._
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, EnrolmentIdentifier, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.partials.btaHome.{ClaimEnrolment, PartialMigration, VatSection}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BtaHomeController @Inject()(val messagesApi: MessagesApi,
-                                  enrolmentsAuthService: EnrolmentsAuthService,
-                                  implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+class BtaHomeController @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
+                                  implicit val appConfig: AppConfig,
+                                  val mcc: MessagesControllerComponents,
+                                  implicit val ec: ExecutionContext,
+                                  claimEnrolmentView: ClaimEnrolment,
+                                  vatSectionView: VatSection,
+                                  partialMigrationView: PartialMigration)
+  extends FrontendController(mcc) with I18nSupport {
 
   def vatSection(): Action[AnyContent] = enrolledAction { implicit request => _ =>
-    Future.successful(Ok(views.html.partials.btaHome.vatSection()))
+    Future.successful(Ok(vatSectionView()))
   }
 
   def claimEnrolment(): Action[AnyContent] = enrolledActionNonMtd { implicit request =>
     user =>
-      Future.successful(Ok(views.html.partials.btaHome.claimEnrolment(user.vrn)))
+      Future.successful(Ok(claimEnrolmentView(user.vrn)))
   }
 
   def partialMigration(): Action[AnyContent] = enrolledActionNonMtd { implicit request => _ =>
-    Future.successful(Ok(views.html.partials.btaHome.partialMigration()))
+    Future.successful(Ok(partialMigrationView()))
   }
 
   private def enrolledAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>

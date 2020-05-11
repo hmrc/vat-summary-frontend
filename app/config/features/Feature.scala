@@ -22,5 +22,5 @@ class Feature(val key: String)(implicit config: Configuration) {
 
   def apply(value: Boolean): Unit = sys.props += key -> value.toString
 
-  def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
+  def apply(): Boolean = sys.props.get(key).fold(config.getOptional[Boolean](key).getOrElse(false))(_.toBoolean)
 }

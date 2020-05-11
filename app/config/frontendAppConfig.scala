@@ -18,17 +18,17 @@ package config
 
 import java.net.URLEncoder
 import java.util.Base64
+
 import config.features.Features
 import config.{ConfigKeys => Keys}
 import javax.inject.{Inject, Singleton}
-import play.api.Mode.Mode
 import play.api.i18n.Lang
 import play.api.mvc.Call
-import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.binders.ContinueUrl
-import uk.gov.hmrc.play.config.ServicesConfig
+import play.api.{Configuration, Environment, Mode}
+import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-trait AppConfig extends ServicesConfig {
+trait AppConfig {
   val appName: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
@@ -106,114 +106,112 @@ trait AppConfig extends ServicesConfig {
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val environment: Environment) extends AppConfig {
+class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: ServicesConfig) extends AppConfig {
 
-  override val mode: Mode = environment.mode
-
-  override val appName: String = getString("appName")
-  private lazy val contactHost: String = getString(Keys.contactFrontendHost)
+  override val appName: String = sc.getString("appName")
+  private lazy val contactHost: String = sc.getString(Keys.contactFrontendHost)
   override lazy val contactFormServiceIdentifier: String = "VATVC"
-  private lazy val contactFrontendService = baseUrl(Keys.contactFrontendService)
+  private lazy val contactFrontendService = sc.baseUrl(Keys.contactFrontendService)
   override lazy val a11yServiceIdentifier: String = "VATVCACCESSIBILITY"
   override lazy val reportA11yProblemUrl = s"$contactHost/contact/accessibility?service=$a11yServiceIdentifier"
   override lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl: String = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
   override lazy val feedbackFormPartialUrl: String = s"$contactFrontendService/contact/beta-feedback/form"
 
-  override lazy val authUrl: String = baseUrl("auth")
+  override lazy val authUrl: String = sc.baseUrl("auth")
 
   private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
-    .decode(runModeConfiguration.getString(key).getOrElse("")), "UTF-8"))
+    .decode(runModeConfiguration.getOptional[String](key).getOrElse("")), "UTF-8"))
     .map(_.split(",")).getOrElse(Array.empty).toSeq
 
-  override lazy val whitelistEnabled: Boolean = runModeConfiguration.getBoolean(Keys.whitelistEnabled).getOrElse(true)
+  override lazy val whitelistEnabled: Boolean = runModeConfiguration.getOptional[Boolean](Keys.whitelistEnabled).getOrElse(true)
   override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths).map(path => Call("GET", path))
-  override lazy val shutterPage: String = getString(Keys.whitelistShutterPage)
+  override lazy val shutterPage: String = sc.getString(Keys.whitelistShutterPage)
 
-  private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
-  override lazy val signInContinueBaseUrl: String = runModeConfiguration.getString(Keys.signInContinueBaseUrl).getOrElse("")
-  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.VatDetailsController.details().url).encodedUrl
-  private lazy val signInOrigin = getString("appName")
+  private lazy val signInBaseUrl: String = sc.getString(Keys.signInBaseUrl)
+  override lazy val signInContinueBaseUrl: String = runModeConfiguration.getOptional[String](Keys.signInContinueBaseUrl).getOrElse("")
+  private lazy val signInContinueUrl: String = SafeRedirectUrl(signInContinueBaseUrl + controllers.routes.VatDetailsController.details().url).encodedUrl
+  private lazy val signInOrigin = sc.getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
   override val features = new Features()(runModeConfiguration)
 
-  override lazy val vatSubscriptionBaseUrl: String = baseUrl("vat-subscription")
-  override lazy val vatApiBaseUrl: String = baseUrl("vat-api")
-  override lazy val financialDataBaseUrl: String = baseUrl("financial-transactions")
+  override lazy val vatSubscriptionBaseUrl: String = sc.baseUrl("vat-subscription")
+  override lazy val vatApiBaseUrl: String = sc.baseUrl("vat-api")
+  override lazy val financialDataBaseUrl: String = sc.baseUrl("financial-transactions")
 
-  override lazy val selfLookup: String = baseUrl("selfLookup")
+  override lazy val selfLookup: String = sc.baseUrl("selfLookup")
 
   override lazy val viewVatPartial: String = selfLookup + "/vat-summary-partials/bta-home"
   override lazy val claimEnrolmentPartial: String = selfLookup + "/vat-summary-partials/claim-enrolment"
   override lazy val partialMigrationPartial: String = selfLookup + "/vat-summary-partials/partial-migration"
 
-  private lazy val vatReturnsBaseUrl: String = getString(Keys.vatReturnsBase)
+  private lazy val vatReturnsBaseUrl: String = sc.getString(Keys.vatReturnsBase)
 
-  override lazy val vatObligationsBaseUrl: String = baseUrl(Keys.vatObligations)
+  override lazy val vatObligationsBaseUrl: String = sc.baseUrl(Keys.vatObligations)
 
-  override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + getString(Keys.vatSubmittedReturns)
-  override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + getString(Keys.vatReturnDeadlines)
-  override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
+  override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + sc.getString(Keys.vatSubmittedReturns)
+  override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + sc.getString(Keys.vatReturnDeadlines)
+  override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + sc.getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
 
-  private lazy val helpAndContactFrontendUrl: String = getString(Keys.helpAndContactFrontendBase)
+  private lazy val helpAndContactFrontendUrl: String = sc.getString(Keys.helpAndContactFrontendBase)
 
-  override lazy val btaBaseUrl: String = baseUrl(Keys.businessTaxAccountBase)
-  override lazy val btaHomeUrl: String = getString(Keys.businessTaxAccountHost) + getString(Keys.businessTaxAccountUrl)
-  override lazy val btaMessagesUrl: String = btaHomeUrl + getString(Keys.businessTaxAccountMessagesUrl)
-  override lazy val btaManageAccountUrl: String = btaHomeUrl + getString(Keys.businessTaxAccountManageAccountUrl)
-  override lazy val btaHelpAndContactUrl: String = helpAndContactFrontendUrl + getString(Keys.helpAndContactHelpUrl)
+  override lazy val btaBaseUrl: String = sc.baseUrl(Keys.businessTaxAccountBase)
+  override lazy val btaHomeUrl: String = sc.getString(Keys.businessTaxAccountHost) + sc.getString(Keys.businessTaxAccountUrl)
+  override lazy val btaMessagesUrl: String = btaHomeUrl + sc.getString(Keys.businessTaxAccountMessagesUrl)
+  override lazy val btaManageAccountUrl: String = btaHomeUrl + sc.getString(Keys.businessTaxAccountManageAccountUrl)
+  override lazy val btaHelpAndContactUrl: String = helpAndContactFrontendUrl + sc.getString(Keys.helpAndContactHelpUrl)
 
-  override lazy val paymentsServiceUrl: String = baseUrl(Keys.paymentsServiceBase)
-  override lazy val setupPaymentsJourneyPath: String = getString(Keys.setupPaymentsJourneyPath)
+  override lazy val paymentsServiceUrl: String = sc.baseUrl(Keys.paymentsServiceBase)
+  override lazy val setupPaymentsJourneyPath: String = sc.getString(Keys.setupPaymentsJourneyPath)
 
-  override lazy val directDebitServiceUrl: String = baseUrl(Keys.directDebitServiceBase)
-  override lazy val setupDirectDebitsJourneyPath: String = getString(Keys.setupDirectDebitJourneyPath)
-  override lazy val directDebitRedirectUrl: String = getString(Keys.directDebitRedirectUrl)
+  override lazy val directDebitServiceUrl: String = sc.baseUrl(Keys.directDebitServiceBase)
+  override lazy val setupDirectDebitsJourneyPath: String = sc.getString(Keys.setupDirectDebitJourneyPath)
+  override lazy val directDebitRedirectUrl: String = sc.getString(Keys.directDebitRedirectUrl)
 
-  private lazy val paymentsReturnBase: String = getString(Keys.paymentsReturnBase)
-  override lazy val paymentsReturnUrl: String = paymentsReturnBase + getString(Keys.paymentsReturnUrl)
-  override lazy val paymentsBackUrl: String = paymentsReturnBase + getString(Keys.paymentsBackUrl)
+  private lazy val paymentsReturnBase: String = sc.getString(Keys.paymentsReturnBase)
+  override lazy val paymentsReturnUrl: String = paymentsReturnBase + sc.getString(Keys.paymentsReturnUrl)
+  override lazy val paymentsBackUrl: String = paymentsReturnBase + sc.getString(Keys.paymentsBackUrl)
 
-  private lazy val unauthenticatedPaymentsBase: String = getString(Keys.unauthenticatedPaymentsBase)
-  override lazy val unauthenticatedPaymentsUrl: String = unauthenticatedPaymentsBase + getString(Keys.unauthenticatedPaymentsUrl)
+  private lazy val unauthenticatedPaymentsBase: String = sc.getString(Keys.unauthenticatedPaymentsBase)
+  override lazy val unauthenticatedPaymentsUrl: String = unauthenticatedPaymentsBase + sc.getString(Keys.unauthenticatedPaymentsUrl)
 
-  private lazy val directDebitReturnBase: String = getString(Keys.directDebitReturnBase)
-  override lazy val directDebitReturnUrl: String = directDebitReturnBase + getString(Keys.directDebitReturnUrl)
-  override lazy val directDebitBackUrl: String = directDebitReturnBase + getString(Keys.directDebitBackUrl)
+  private lazy val directDebitReturnBase: String = sc.getString(Keys.directDebitReturnBase)
+  override lazy val directDebitReturnUrl: String = directDebitReturnBase + sc.getString(Keys.directDebitReturnUrl)
+  override lazy val directDebitBackUrl: String = directDebitReturnBase + sc.getString(Keys.directDebitBackUrl)
 
-  private lazy val btaVatOverviewUrlBase: String = getString(Keys.btaVatOverviewUrlBase)
-  override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + getString(Keys.btaVatOverviewUrl)
+  private lazy val btaVatOverviewUrlBase: String = sc.getString(Keys.btaVatOverviewUrlBase)
+  override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + sc.getString(Keys.btaVatOverviewUrl)
 
-  override lazy val staticDateValue: String = getString(Keys.staticDateValue)
+  override lazy val staticDateValue: String = sc.getString(Keys.staticDateValue)
 
-  private lazy val surveyBaseUrl = getString(Keys.surveyHost) + getString(Keys.surveyUrl)
+  private lazy val surveyBaseUrl = sc.getString(Keys.surveyHost) + sc.getString(Keys.surveyUrl)
   override def surveyUrl(identifier: String): String = s"$surveyBaseUrl/$identifier"
 
-  private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
+  private lazy val governmentGatewayHost: String = sc.getString(Keys.governmentGatewayHost)
 
   override def signOutUrl(identifier: String): String =
     s"$governmentGatewayHost/gg/sign-out?continue=${surveyUrl(identifier)}"
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
-  private val mtdVatSignUpBaseUrl: String = getString(Keys.mtdVatSignUpBaseUrl)
-  override lazy val mtdVatReSignUpUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatReSignUpUrl)
-  override lazy val mtdVatClaimSubscriptionUrl: String = mtdVatSignUpBaseUrl + getString(Keys.mtdVatClaimSubscriptionUrl)
+  private val mtdVatSignUpBaseUrl: String = sc.getString(Keys.mtdVatSignUpBaseUrl)
+  override lazy val mtdVatReSignUpUrl: String = mtdVatSignUpBaseUrl + sc.getString(Keys.mtdVatReSignUpUrl)
+  override lazy val mtdVatClaimSubscriptionUrl: String = mtdVatSignUpBaseUrl + sc.getString(Keys.mtdVatClaimSubscriptionUrl)
 
-  override lazy val timeoutPeriod: Int = getString(Keys.timeoutPeriod).toInt
-  override lazy val timeoutCountdown: Int = getString(Keys.timeoutCountDown).toInt
+  override lazy val timeoutPeriod: Int = sc.getString(Keys.timeoutPeriod).toInt
+  override lazy val timeoutCountdown: Int = sc.getString(Keys.timeoutCountDown).toInt
 
   override val portalMakePaymentUrl: String => String = (vrn: String) => {
-    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalMakePaymentPostfix)}"
+    s"${sc.getString(Keys.portalPrefix)}/$vrn${sc.getString(Keys.portalMakePaymentPostfix)}"
   }
 
   override val portalPaymentHistoryUrl: String => String = (vrn: String) => {
-    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.portalPaymentHistoryPostfix)}"
+    s"${sc.getString(Keys.portalPrefix)}/$vrn${sc.getString(Keys.portalPaymentHistoryPostfix)}"
   }
 
   override val portalNonHybridPreviousPaymentsUrl: String => String = (vrn: String) => {
-    s"${getString(Keys.portalPrefix)}/$vrn${getString(Keys.nonHybridPreviousPaymentsUrl)}"
+    s"${sc.getString(Keys.portalPrefix)}/$vrn${sc.getString(Keys.nonHybridPreviousPaymentsUrl)}"
   }
 
   override def languageMap: Map[String, Lang] = Map(
@@ -223,43 +221,43 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
 
-  private val host: String = getString(Keys.host)
+  private val host: String = sc.getString(Keys.host)
 
   override def feedbackUrl(redirect: String): String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
-    s"&backUrl=${ContinueUrl(host + redirect).encodedUrl}"
+    s"&backUrl=${SafeRedirectUrl(host + redirect).encodedUrl}"
 
   // Agent Client Lookup
-  private lazy val platformHost = getString(Keys.host)
-  private lazy val agentClientLookupRedirectUrl: String => String = uri => ContinueUrl(platformHost + uri).encodedUrl
-  private lazy val agentClientLookupHost = getString(Keys.vatAgentClientLookupFrontendHost)
+  private lazy val platformHost = sc.getString(Keys.host)
+  private lazy val agentClientLookupRedirectUrl: String => String = uri => SafeRedirectUrl(platformHost + uri).encodedUrl
+  private lazy val agentClientLookupHost = sc.getString(Keys.vatAgentClientLookupFrontendHost)
   override lazy val agentClientLookupStartUrl: String => String = uri =>
     agentClientLookupHost +
-      getString(Keys.vatAgentClientLookupFrontendStartUrl) +
+      sc.getString(Keys.vatAgentClientLookupFrontendStartUrl) +
       s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
   override lazy val agentClientUnauthorisedUrl: String => String = uri =>
     agentClientLookupHost +
-      getString(Keys.vatAgentClientLookupFrontendUnauthorisedUrl) +
+      sc.getString(Keys.vatAgentClientLookupFrontendUnauthorisedUrl) +
       s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
-  override lazy val agentClientLookupActionUrl: String = agentClientLookupHost + getString(Keys.vatAgentClientLookupFrontendActionUrl)
+  override lazy val agentClientLookupActionUrl: String = agentClientLookupHost + sc.getString(Keys.vatAgentClientLookupFrontendActionUrl)
 
-  override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
-  override lazy val govUkAccessibilityUrl: String = getString(Keys.govUkAccessibilityUrl)
-  override lazy val govUkHMRCUrl: String = getString(Keys.govUkHMRCUrl)
-  override lazy val govUkHearingImpairedUrl: String = getString(Keys.govUkHearingImpairedUrl)
-  override lazy val govUkVatRegistrationUrl: String = getString(Keys.govUkVatRegistrationUrl)
-  override lazy val govUkVat7Form: String = getString(Keys.govUkVat7Form)
+  override lazy val agentServicesGovUkGuidance: String = sc.getString(Keys.govUkSetupAgentServices)
+  override lazy val govUkAccessibilityUrl: String = sc.getString(Keys.govUkAccessibilityUrl)
+  override lazy val govUkHMRCUrl: String = sc.getString(Keys.govUkHMRCUrl)
+  override lazy val govUkHearingImpairedUrl: String = sc.getString(Keys.govUkHearingImpairedUrl)
+  override lazy val govUkVatRegistrationUrl: String = sc.getString(Keys.govUkVatRegistrationUrl)
+  override lazy val govUkVat7Form: String = sc.getString(Keys.govUkVat7Form)
 
-  override lazy val abilityNetUrl: String = getString(Keys.abilityNetUrl)
-  override lazy val wcagGuidelinesUrl: String = getString(Keys.wcagGuidelinesUrl)
-  override lazy val eassUrl: String = getString(Keys.eassUrl)
-  override lazy val ecniUrl: String = getString(Keys.ecniUrl)
-  override lazy val dacUrl: String = getString(Keys.dacUrl)
+  override lazy val abilityNetUrl: String = sc.getString(Keys.abilityNetUrl)
+  override lazy val wcagGuidelinesUrl: String = sc.getString(Keys.wcagGuidelinesUrl)
+  override lazy val eassUrl: String = sc.getString(Keys.eassUrl)
+  override lazy val ecniUrl: String = sc.getString(Keys.ecniUrl)
+  override lazy val dacUrl: String = sc.getString(Keys.dacUrl)
 
-  override lazy val optOutFrontendUrl: String = getString(Keys.vatOptOutFrontendHost) + getString(Keys.vatOptOutFrontendStartUrl)
+  override lazy val optOutFrontendUrl: String = sc.getString(Keys.vatOptOutFrontendHost) + sc.getString(Keys.vatOptOutFrontendStartUrl)
 
-  override lazy val deregisterVatUrl: String = getString(Keys.deregisterVatHost) + getString(Keys.deregisterVatUrl)
+  override lazy val deregisterVatUrl: String = sc.getString(Keys.deregisterVatHost) + sc.getString(Keys.deregisterVatUrl)
 
-  override lazy val paymentsAndRepaymentsUrl: String = getString(Keys.vatRepaymentTrackerFrontendHost) + getString(Keys.vatRepaymentTrackerFrontendUrl)
+  override lazy val paymentsAndRepaymentsUrl: String = sc.getString(Keys.vatRepaymentTrackerFrontendHost) + sc.getString(Keys.vatRepaymentTrackerFrontendUrl)
 
-  override lazy val manageVatUrl: String = getString(Keys.manageVatHost) + getString(Keys.manageVatUrl)
+  override lazy val manageVatUrl: String = sc.getString(Keys.manageVatHost) + sc.getString(Keys.manageVatUrl)
 }

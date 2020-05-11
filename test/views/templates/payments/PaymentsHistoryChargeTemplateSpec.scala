@@ -23,9 +23,11 @@ import models.viewModels.PaymentsHistoryModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.payments.paymentsHistoryCharge
+import views.html.templates.payments.PaymentsHistoryCharge
 
 class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
+
+  val paymentsHistoryCharge: PaymentsHistoryCharge = injector.instanceOf[PaymentsHistoryCharge]
 
   object Selectors {
     val tableRow = "tr"

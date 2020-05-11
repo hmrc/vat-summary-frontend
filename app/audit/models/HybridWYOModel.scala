@@ -16,9 +16,9 @@
 
 package audit.models
 
+import config.AppConfig
 import models.User
 import play.api.libs.json.{JsValue, Json, Writes}
-import config.AppConfig
 
 case class HybridWYOModel(user: User)(implicit appConfig: AppConfig) extends ExtendedAuditModel {
 

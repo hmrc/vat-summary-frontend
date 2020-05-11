@@ -17,9 +17,12 @@
 package views.templates.payments
 
 import play.twirl.api.Html
+import views.html.templates.payments.PaymentsHistoryTabs
 import views.templates.TemplateBaseSpec
 
 class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
+
+  val paymentsHistoryTabs: PaymentsHistoryTabs = injector.instanceOf[PaymentsHistoryTabs]
 
   "The payment history tabs template" when {
 
@@ -53,7 +56,7 @@ class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
             |</ul>
           """.stripMargin
         )
-        val result = views.html.templates.payments.paymentsHistoryTabs(tabs, showPreviousPaymentsTab = true)
+        val result = paymentsHistoryTabs(tabs, showPreviousPaymentsTab = true)
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }
@@ -79,7 +82,7 @@ class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
              |</ul>
           """.stripMargin
         )
-        val result = views.html.templates.payments.paymentsHistoryTabs(tabs, showPreviousPaymentsTab = false)
+        val result = paymentsHistoryTabs(tabs, showPreviousPaymentsTab = false)
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }

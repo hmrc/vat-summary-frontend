@@ -16,22 +16,28 @@
 
 package testOnly.controllers
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import javax.inject.{Inject, Singleton}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EnrolmentsAuthService
 import testOnly.services.BtaStubService
+import testOnly.views.html.BtaStub
 import uk.gov.hmrc.auth.core.NoActiveSession
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.errors.SessionTimeout
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthService: EnrolmentsAuthService,
-                                  btaStubService: BtaStubService, implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+class BtaStubController @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
+                                  btaStubService: BtaStubService,
+                                  implicit val appConfig: AppConfig,
+                                  mcc: MessagesControllerComponents,
+                                  implicit val ec: ExecutionContext,
+                                  btaStub: BtaStub,
+                                  sessionTimeout: SessionTimeout)
+  extends FrontendController(mcc) with I18nSupport {
 
   val viewVatPartial: String = appConfig.viewVatPartial
   val claimEnrolmentPartial: String = appConfig.claimEnrolmentPartial
@@ -44,10 +50,10 @@ class BtaStubController @Inject()(val messagesApi: MessagesApi, enrolmentsAuthSe
   private def showPartial(partialUrl: String): Action[AnyContent] = Action.async { implicit request =>
     enrolmentsAuthService.authorised() {
       btaStubService.getPartial(partialUrl).map { partial =>
-        Ok(testOnly.views.html.btaStub(partial))
+        Ok(btaStub(partial))
       }
     }.recoverWith {
-      case _: NoActiveSession => Future.successful(Unauthorized(views.html.errors.sessionTimeout()))
+      case _: NoActiveSession => Future.successful(Unauthorized(sessionTimeout()))
     }
   }
 }

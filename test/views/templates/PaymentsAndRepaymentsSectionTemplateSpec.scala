@@ -20,16 +20,18 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
+import views.html.templates.PaymentsAndRepaymentsSection
 
 class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
 
+  val paymentsAndRepaymentsSection: PaymentsAndRepaymentsSection = injector.instanceOf[PaymentsAndRepaymentsSection]
   object Selectors {
     val paymentsAndRepaymentsHeading = "#payments-and-repayments h3"
     val paymentsAndRepaymentsLink = "#payments-and-repayments h3 a"
     val paymentsAndRepaymentsParagraph = "#payments-and-repayments p"
   }
 
-  def view: HtmlFormat.Appendable = views.html.templates.paymentsAndRepaymentsSection()
+  def view: HtmlFormat.Appendable = paymentsAndRepaymentsSection()
 
   implicit def document: Document = Jsoup.parse(view.body)
 

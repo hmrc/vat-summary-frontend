@@ -19,7 +19,6 @@ package connectors
 import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.FinancialTransactionsConstants
 import helpers.IntegrationBaseSpec
 import models.errors.BadRequestError
 import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnDebitCharge}

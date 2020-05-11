@@ -19,9 +19,11 @@ package views.templates.formatters.money
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.templates.formatters.money.PositiveNegative
 
 class moneyTemplatesSpec extends ViewBaseSpec {
 
+  val positiveNegative: PositiveNegative = injector.instanceOf[PositiveNegative]
   "Calling displayMoney" when {
 
     val positiveWholeValue = BigDecimal(3000)
@@ -31,7 +33,7 @@ class moneyTemplatesSpec extends ViewBaseSpec {
 
     "the value passed is positive and whole" should {
 
-      lazy val template = views.html.templates.formatters.money.positiveNegative(positiveWholeValue)
+      lazy val template = positiveNegative(positiveWholeValue)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "return a monetary whole value" in {
@@ -44,7 +46,7 @@ class moneyTemplatesSpec extends ViewBaseSpec {
 
     "the value passed is a positive decimal" should {
 
-      lazy val template = views.html.templates.formatters.money.positiveNegative(positiveDecimalValue)
+      lazy val template = positiveNegative(positiveDecimalValue)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "return a monetary whole value" in {
@@ -57,7 +59,7 @@ class moneyTemplatesSpec extends ViewBaseSpec {
 
     "the value passed is negative and whole" should {
 
-      lazy val template = views.html.templates.formatters.money.positiveNegative(negativeWholeValue)
+      lazy val template = positiveNegative(negativeWholeValue)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "return a monetary whole value" in {
@@ -70,7 +72,7 @@ class moneyTemplatesSpec extends ViewBaseSpec {
 
     "the value passed is a negative decimal" should {
 
-      lazy val template = views.html.templates.formatters.money.positiveNegative(negativeDecimalValue)
+      lazy val template = positiveNegative(negativeDecimalValue)
       lazy val document: Document = Jsoup.parse(template.body)
 
       "return a monetary whole value" in {

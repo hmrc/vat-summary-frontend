@@ -17,12 +17,10 @@
 package testOnly.controllers
 
 import common.TestModels._
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
-import controllers.{AuthorisedController, ControllerBaseSpec}
+import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService}
-import uk.gov.hmrc.auth.core.AuthConnector
+import testOnly.views.html.PortalStub
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,25 +31,13 @@ class PortalStubControllerSpec extends ControllerBaseSpec {
 
   "Calling the .show action" should {
 
-    val mockAuthConnector = mock[AuthConnector]
-
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(successfulAuthResult)
 
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAccountDetailsService = mock[AccountDetailsService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-    lazy val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
+    val portalStub: PortalStub = injector.instanceOf[PortalStub]
 
-    lazy val target = new PortalStubController(messages, mockEnrolmentsAuthService, mockAuthorisedController, mockAppConfig)
+    lazy val target = new PortalStubController(enrolmentsAuthService, authorisedController, mockAppConfig, mcc, portalStub)
     lazy val result = target.show("999999999")(fakeRequest)
 
     "return 200" in {

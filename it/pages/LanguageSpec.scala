@@ -46,7 +46,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         "return the page in English" in new Test {
 
-          val response: WSResponse = await(request().withHeaders("Cookie" -> "PLAY_LANG=en;").get())
+          val response: WSResponse = await(request().withHttpHeaders("Cookie" -> "PLAY_LANG=en;").get())
 
           lazy val document: Document = Jsoup.parse(response.body)
 
@@ -58,7 +58,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         "return the page in Welsh" in new Test {
 
-          val response: WSResponse = await(request().withHeaders("Cookie" -> "PLAY_LANG=cy;").get())
+          val response: WSResponse = await(request().withHttpHeaders("Cookie" -> "PLAY_LANG=cy;").get())
 
           lazy val document: Document = Jsoup.parse(response.body)
 

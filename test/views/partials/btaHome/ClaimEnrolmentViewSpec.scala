@@ -19,9 +19,11 @@ package views.partials.btaHome
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.partials.btaHome.ClaimEnrolment
 
 class ClaimEnrolmentViewSpec extends ViewBaseSpec {
 
+  val claimEnrolmentView: ClaimEnrolment = injector.instanceOf[ClaimEnrolment]
   "Rendering the claim enrolment partial" should {
 
     object Selectors {
@@ -32,7 +34,7 @@ class ClaimEnrolmentViewSpec extends ViewBaseSpec {
 
     val testVrn: String = "123456789"
 
-    lazy val view = views.html.partials.btaHome.claimEnrolment(testVrn)
+    lazy val view = claimEnrolmentView(testVrn)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {

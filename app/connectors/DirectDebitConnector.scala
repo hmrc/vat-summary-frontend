@@ -20,10 +20,10 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
+import play.api.Logger
 import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import play.api.Logger
 
 import scala.concurrent.{ExecutionContext, Future}
 

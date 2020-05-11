@@ -20,28 +20,55 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
+import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
-import play.filters.csrf.CSRF.Token
-import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
+import services.{AccountDetailsService, EnrolmentsAuthService}
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{SessionKeys => GovUKSessionKeys}
 import uk.gov.hmrc.play.test.UnitSpec
+import views.html.errors.{AgentUnauthorised, Unauthorised}
+
+import scala.concurrent.ExecutionContext
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
   lazy val injector: Injector = app.injector
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
+  lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
+  implicit lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en")))
   lazy val mockServiceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
+  val mcc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
+
+  implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+  val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
+  val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
+  val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
+  val hybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(
+    mockAccountDetailsService, mockServiceErrorHandler, mcc, ec)
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
+  val enrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+  val agentPredicate: AgentPredicate = new AgentPredicate(
+    enrolmentsAuthService, mcc, mockAppConfig, ec, agentUnauthorised)
+  val authorisedController: AuthorisedController = new AuthorisedController(
+    mcc,
+    enrolmentsAuthService,
+    hybridUserPredicate,
+    agentPredicate,
+    mockAppConfig,
+    ec,
+    unauthorised
+  )
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
@@ -52,20 +79,6 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)
 
-  implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
-
-    def addToken(): FakeRequest[T] = {
-
-      val csrfConfig = app.injector.instanceOf[CSRFConfigProvider].get
-      val csrfFilter = app.injector.instanceOf[CSRFFilter]
-      val token = csrfFilter.tokenProvider.generateToken
-
-      req.copyFakeRequest(tags = req.tags ++ Map(
-        Token.NameRequestTag -> csrfConfig.tokenName,
-        Token.RequestTag -> token
-      )).withHeaders(csrfConfig.headerName -> token)
-    }
-  }
 
   override def beforeEach(): Unit = {
     super.beforeEach()

@@ -18,9 +18,10 @@ package testOnly
 
 import config.FrontendAppConfig
 import javax.inject.Inject
-import play.api.{Configuration, Environment}
+import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
-class TestOnlyAppConfig @Inject()(env: Environment, config: Configuration) extends FrontendAppConfig(config, env) {
+class TestOnlyAppConfig @Inject()(config: Configuration, sc: ServicesConfig) extends FrontendAppConfig(config, sc) {
 
-  def dynamicStubUrl(serviceName: String): String = baseUrl(serviceName)
+  def dynamicStubUrl(serviceName: String): String = sc.baseUrl(serviceName)
 }

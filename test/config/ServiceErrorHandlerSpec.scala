@@ -24,13 +24,15 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.ViewBaseSpec
+import views.html.errors.StandardError
 
 class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOneAppPerSuite{
 
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  implicit val fakeError: StandardError = injector.instanceOf[StandardError]
 
-  val service: ServiceErrorHandler = new ServiceErrorHandler(messagesApi,mockAppConfig)
+  val service: ServiceErrorHandler = new ServiceErrorHandler(messagesApi,mockAppConfig, fakeError)
 
   "calling .notFoundTemplate " should {
 

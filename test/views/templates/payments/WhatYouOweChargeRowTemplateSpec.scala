@@ -22,8 +22,11 @@ import models.payments._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.templates.payments.WhatYouOweChargeRow
 
 class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
+
+  val whatYouOweChargeRow: WhatYouOweChargeRow = injector.instanceOf[WhatYouOweChargeRow]
 
   object Selectors {
     private val columnOne = ""
@@ -63,7 +66,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
       "payment has a return associated" should {
 
         val model = generateModel
-        lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
+        lazy val view = whatYouOweChargeRow(model, 0)
         lazy implicit val document: Document = Jsoup.parse(
           s"<table>${view.body}</table>"
         )
@@ -126,7 +129,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           isOverdue = false
         )
 
-        lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
+        lazy val view = whatYouOweChargeRow(model, 0)
         lazy implicit val document: Document = Jsoup.parse(
           s"<table>${view.body}</table>"
         )
@@ -150,7 +153,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           isOverdue = true
         )
       }
-      lazy val view = views.html.templates.payments.whatYouOweChargeRow(model, 0)
+      lazy val view = whatYouOweChargeRow(model, 0)
       lazy implicit val document: Document = Jsoup.parse(
         s"<table>${view.body}</table>"
       )

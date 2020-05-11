@@ -18,17 +18,20 @@ package views.certificate
 
 import java.time.LocalDate
 
+import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
 import models.Address
 import models.viewModels.VatCertificateViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
-import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
+import views.html.certificate.VatCertificate
 
 class VatCertificateViewSpec extends ViewBaseSpec {
 
   mockConfig.features.vatCertNSTPs(true)
+
+  val vatCertificateView: VatCertificate = injector.instanceOf[VatCertificate]
 
   object Selectors {
     val heading = "h1"
@@ -68,7 +71,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   "The VAT Certificate page" when {
 
     "Accessed by a non-represented user" should {
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model)
+      lazy val view = vatCertificateView(HtmlFormat.empty, model)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -81,7 +84,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     }
 
     "Accessed by a represented user" should {
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model)(messages, mockConfig, request, agentUser)
+      lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -106,7 +109,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
     "Accessed by a represented or non-represented user" should {
 
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model)(messages, mockConfig, request, user)
+      lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the about your registration card" that {
@@ -177,7 +180,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
     "the user doesn't have non-standard tax periods" should {
 
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, model)(messages, mockConfig, request, user)
+      lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the return details card" which {
@@ -202,7 +205,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
       "the vatCertNSTPs feature is on" should {
 
-        lazy val view = views.html.certificate.vatCertificate(
+        lazy val view = vatCertificateView(
           HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -222,7 +225,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
         "have the return details card" in {
           mockConfig.features.vatCertNSTPs(false)
-          lazy val view = views.html.certificate.vatCertificate(
+          lazy val view = vatCertificateView(
             HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
           elementText("#content > article > div:nth-child(6) > " +
@@ -231,7 +234,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
         "not have the non-standard return details card" in {
           mockConfig.features.vatCertNSTPs(false)
-          lazy val view = views.html.certificate.vatCertificate(
+          lazy val view = vatCertificateView(
             HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
           document.select(Selectors.cardClass).contains("Non-standard tax periods") shouldBe false
@@ -240,7 +243,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     }
 
     "accessed by a sole trader" should {
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, soleTrader)
+      lazy val view = vatCertificateView(HtmlFormat.empty, soleTrader)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -266,7 +269,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     }
 
     "accessed by a sole trader without a trading name" should {
-      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, soleTraderWithoutTradingName)
+      lazy val view = vatCertificateView(HtmlFormat.empty, soleTraderWithoutTradingName)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {

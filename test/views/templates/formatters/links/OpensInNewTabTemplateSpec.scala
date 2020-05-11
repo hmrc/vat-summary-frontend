@@ -17,10 +17,12 @@
 package views.templates.formatters.links
 
 import play.twirl.api.Html
-import views.html.templates.formatters.links.openInNewTab
+import views.html.templates.formatters.links.OpenInNewTab
 import views.templates.TemplateBaseSpec
 
 class OpensInNewTabTemplateSpec extends TemplateBaseSpec {
+
+  val openInNewTab: OpenInNewTab = injector.instanceOf[OpenInNewTab]
 
   "Calling openInNewTab" should {
 

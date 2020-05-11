@@ -23,10 +23,12 @@ import play.api.test.Helpers._
 import play.twirl.api.Html
 import services.EnrolmentsAuthService
 import testOnly.services.BtaStubService
+import testOnly.views.html.BtaStub
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.errors.SessionTimeout
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,8 +37,12 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
   private trait Test {
     val runMock: Boolean = true
     val authResult: Future[_]
+
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockService: BtaStubService = mock[BtaStubService]
+
+    val btaStub: BtaStub = injector.instanceOf[BtaStub]
+    val sessionTimeout: SessionTimeout = injector.instanceOf[SessionTimeout]
 
     def setup(): Any ={
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -53,7 +59,13 @@ class BtaStubControllerSpec extends ControllerBaseSpec {
 
     def target: BtaStubController = {
       setup()
-      new BtaStubController(messages, mockEnrolmentsAuthService, mockService, mockAppConfig)
+      new BtaStubController(mockEnrolmentsAuthService,
+        mockService,
+        mockAppConfig,
+        mcc,
+        ec,
+        btaStub,
+        sessionTimeout)
     }
   }
 

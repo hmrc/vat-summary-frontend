@@ -20,25 +20,25 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
+import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
-import models.{CustomerInformation, User}
 import models.errors.{DirectDebitStatusError, PaymentsError, UnknownError}
 import models.payments._
 import models.viewModels.OpenPaymentsViewModel
+import models.{CustomerInformation, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Request, Result}
-import play.api.test.Helpers._
+import play.api.test.Helpers.{redirectLocation, _}
+import play.twirl.api.Html
 import services._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import common.TestModels._
-import play.api.test.Helpers.redirectLocation
-import play.twirl.api.Html
+import views.html.errors.PaymentsError
+import views.html.payments.{NoPayments, OpenPayments}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,9 +47,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
   private trait Test {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
-
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
 
     def setupMocks(): Unit = {
@@ -78,7 +76,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       ddCollectionInProgress = false
     )
 
-    val paymentOnAccount = Payment(
+    val paymentOnAccount: PaymentNoPeriod = Payment(
       PaymentOnAccount,
       LocalDate.parse("2017-01-01"),
       BigDecimal("0"),
@@ -86,19 +84,20 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       ddCollectionInProgress = false
     )
 
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockDateService: DateService = mock[DateService]
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
+    val NoPayments: NoPayments = injector.instanceOf[NoPayments]
+    val mockPaymentsError: PaymentsError = injector.instanceOf[PaymentsError]
+    val openPayments: OpenPayments = injector.instanceOf[OpenPayments]
     val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
+      mcc,
+      enrolmentsAuthService,
+      hybridUserPredicate,
+      agentPredicate,
+      mockAppConfig,
+      ec,
+      unauthorised
     )
 
     val testUser: User = User("999999999")
@@ -107,14 +106,19 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     def target: OpenPaymentsController = {
       setupMocks()
       new OpenPaymentsController(
-        messages,
-        mockEnrolmentsAuthService,
+        enrolmentsAuthService,
         mockAuthorisedController,
         mockServiceInfoService,
         mockPaymentsService,
         mockDateService,
         mockAppConfig,
-        mockAuditService)
+        mockAuditService,
+        mcc,
+        ec,
+        NoPayments,
+        mockPaymentsError,
+        openPayments
+        )
     }
   }
 
@@ -414,7 +418,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 ddCollectionInProgress = true
               )
 
-              val expected = OpenPaymentsViewModel(
+              val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
                 Seq(OpenPaymentsModel(
                   testPayment.chargeType,
                   testPayment.outstandingAmount,
@@ -450,7 +454,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 ddCollectionInProgress = false
               )
 
-              val expected = OpenPaymentsViewModel(
+              val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
                 Seq(OpenPaymentsModel(
                   testPayment.chargeType,
                   testPayment.outstandingAmount,
@@ -487,7 +491,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
               ddCollectionInProgress = false
             )
 
-            val expected = OpenPaymentsViewModel(
+            val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
               Seq(OpenPaymentsModel(
                 testPayment.chargeType,
                 testPayment.outstandingAmount,
@@ -528,7 +532,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
               ddCollectionInProgress = false
             )
 
-            val expected = OpenPaymentsViewModel(
+            val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
               Seq(OpenPaymentsModel(
                 testPayment.chargeType,
                 testPayment.outstandingAmount,

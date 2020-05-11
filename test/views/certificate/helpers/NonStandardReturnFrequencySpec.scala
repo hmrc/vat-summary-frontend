@@ -20,8 +20,11 @@ import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.certificate.helpers.NonStandardReturnFrequency
 
 class NonStandardReturnFrequencySpec extends ViewBaseSpec {
+
+  val nonStandardReturnFrequencyView: NonStandardReturnFrequency = injector.instanceOf[NonStandardReturnFrequency]
 
   object Selectors {
     val heading = "h2"
@@ -31,7 +34,7 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
 
   "The Non-standard Tax Periods card" should {
 
-    lazy val view = views.html.certificate.helpers.nonStandardReturnFrequency(
+    lazy val view = nonStandardReturnFrequencyView(
       exampleNonStandardTaxPeriods, exampleNonNSTP)(messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

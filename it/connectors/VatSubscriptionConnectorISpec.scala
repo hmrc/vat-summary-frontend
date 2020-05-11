@@ -21,8 +21,8 @@ import java.time.LocalDate
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
-import models.errors.ServerSideError
 import models._
+import models.errors.ServerSideError
 import stubs.CustomerInfoStub
 import uk.gov.hmrc.http.HeaderCarrier
 

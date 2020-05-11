@@ -19,9 +19,11 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.errors.NotFound
 
 class NotFoundViewSpec extends ViewBaseSpec {
 
+  val notFoundView: NotFound = injector.instanceOf[NotFound]
   "Rendering the not found page" should {
 
     object Selectors {
@@ -29,7 +31,7 @@ class NotFoundViewSpec extends ViewBaseSpec {
       val instructions = "#content > .lede"
     }
 
-    lazy val view = views.html.errors.notFound()
+    lazy val view = notFoundView()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

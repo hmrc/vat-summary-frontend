@@ -30,17 +30,17 @@ import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations
 import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.vatDetails.Details
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsController @Inject()(val messagesApi: MessagesApi,
-                                     val enrolmentsAuthService: EnrolmentsAuthService,
+class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService,
                                      serviceInfoService: ServiceInfoService,
@@ -48,8 +48,11 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
                                      val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
                                      auditingService: AuditingService,
-                                     mandationStatusService: MandationStatusService)
-  extends FrontendController with I18nSupport {
+                                     mandationStatusService: MandationStatusService,
+                                     mcc: MessagesControllerComponents,
+                                     implicit val ec: ExecutionContext,
+                                     detailsView: Details)
+  extends FrontendController(mcc) with I18nSupport {
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
@@ -78,7 +81,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
           case _ => Seq()
         })
 
-        Ok(views.html.vatDetails.details(
+        Ok(detailsView(
           constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
         )).addingToSession(newSessionVariables: _*)
       }

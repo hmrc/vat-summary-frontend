@@ -1,0 +1,65 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.payments.OpenPaymentsModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.html.templates.formatters.money.DisplayMoney
+@import views.templates.payments.WhatYouOweChargeHelper
+
+@this(displayMoney: DisplayMoney)
+
+@(payment: OpenPaymentsModel, count: Int)(implicit messages: Messages, appConfig: config.AppConfig)
+
+@chargeDetails = @{new WhatYouOweChargeHelper(payment, messages)}
+@defining(chargeDetails.description()) { chargeDescription =>
+
+<div id="payment-@{count + 1}">
+
+<dl class="govuk-check-your-answers cya-questions-long what-you-owe-dl">
+    <div class="check-your-answer-row what-you-owe-row">
+        <dt class="cya-question what-you-owe-due-date">
+            <h2 class="bold heading-small what-you-owe-heading">@chargeDetails.title @chargeDescription.map { description => <div class="what-you-owe-subheading">@description</div> }</h2>
+            <div data-due="@(payment.due.toString)" class="form-hint">
+                @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
+                @if(payment.isOverdue) {
+                    <span class="inline"><strong class="task-overdue">@messages("common.overdue")</strong></span>
+                }
+            </div>
+        </dt>
+        <dd class="cya-answer what-you-owe-amount">
+            <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
+        </dd>
+        <dd class="cya-change what-you-owe-links">
+            <div>
+                <a href="@payment.makePaymentRedirect">
+                    <span>@chargeDetails.payLinkText</span>
+                    <span class="visuallyhidden">
+                    @displayMoney(payment.amount)
+                </span>
+                </a>
+            </div>
+
+            @if(chargeDetails.viewReturnEnabled) {
+            <a href="@appConfig.vatReturnUrl(payment.periodKey)">
+                <span class="visuallyhidden">@chargeDetails.viewReturnContext</span>
+                <span>@messages("openPayments.viewReturnLink")</span>
+            </a>
+            }
+        </dd>
+    </div>
+</dl>
+</div>
+}

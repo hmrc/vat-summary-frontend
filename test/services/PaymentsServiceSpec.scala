@@ -20,20 +20,22 @@ import java.time.LocalDate
 
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
-import models.{DirectDebitDetailsModel, ServiceResponse}
 import models.errors._
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
+import models.{DirectDebitDetailsModel, ServiceResponse}
 import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers {
+class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with GuiceOneAppPerSuite {
+
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   "Calling the .getOpenPayments function" when {
 

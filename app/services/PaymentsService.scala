@@ -20,10 +20,10 @@ import java.time.LocalDate
 
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
 import javax.inject.{Inject, Singleton}
-import models.{DirectDebitDetailsModel, ServiceResponse}
 import models.errors._
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
+import models.{DirectDebitDetailsModel, ServiceResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}

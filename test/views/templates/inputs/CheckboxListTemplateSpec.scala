@@ -19,7 +19,7 @@ package views.templates.inputs
 import forms.FeatureSwitchForm
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
-import views.html.templates.inputs.checkboxList
+import views.html.templates.inputs.CheckboxList
 import views.templates.TemplateBaseSpec
 
 class CheckboxListTemplateSpec extends TemplateBaseSpec {
@@ -27,6 +27,8 @@ class CheckboxListTemplateSpec extends TemplateBaseSpec {
   val question: String = "question"
   val choices: Seq[(String, String)] = Seq(("choice1", "value1"), ("choice2", "value2"), ("choice3", "value3"), ("choice4", "value4"))
   val subtext: Option[String] = Some("Select all that apply")
+
+  val checkboxList: CheckboxList = injector.instanceOf[CheckboxList]
 
   def generateExpectedCheckboxMarkup(choice: (String, String), checked: Boolean = false): String = {
     val (displayText, value) = choice

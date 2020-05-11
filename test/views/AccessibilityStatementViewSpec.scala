@@ -18,16 +18,18 @@ package views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.AccessibilityStatement
 
 class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
+  val accessibilityStatementView: AccessibilityStatement = injector.instanceOf[AccessibilityStatement]
   "The accessibility statement page" when {
 
     lazy val fakeUri: String = "/vat-through-software/vat-overview"
 
     "configured to be partially compliant" should {
 
-      lazy val view = views.html.accessibility_statement(fakeUri, fullyCompliant = false)
+      lazy val view = accessibilityStatementView(fakeUri, fullyCompliant = false)
       implicit lazy val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -367,7 +369,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
     "configured to be fully compliant" should {
 
-      lazy val view = views.html.accessibility_statement(fakeUri, fullyCompliant = true)
+      lazy val view = accessibilityStatementView(fakeUri, fullyCompliant = true)
       implicit lazy val document: Document = Jsoup.parse(view.body)
 
       "have a section on how accessible this service is" which {

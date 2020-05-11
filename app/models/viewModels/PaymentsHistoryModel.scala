@@ -19,9 +19,8 @@ package models.viewModels
 import java.time.LocalDate
 
 import common.FinancialTransactionsConstants
-import models.payments._
+import models.payments.{PaymentOnAccount, _}
 import play.api.libs.json._
-import models.payments.PaymentOnAccount
 
 case class PaymentsHistoryModel(chargeType: ChargeType,
                                 taxPeriodFrom: Option[LocalDate],

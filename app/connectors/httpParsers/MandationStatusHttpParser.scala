@@ -19,8 +19,8 @@ package connectors.httpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.MandationStatus
 import models.errors.{ServerSideError, UnexpectedStatusError}
-import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import play.api.http.Status._
+import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object MandationStatusHttpParser extends ResponseHttpParsers {
 

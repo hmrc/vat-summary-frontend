@@ -1,0 +1,57 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import java.time.LocalDate
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+
+@this()
+
+@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isNonMTDfBOrNonDigital: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
+
+
+<div class="tile tile-no-border">
+  <div id="next-return" class="tile-body">
+    <h2 class="heading-medium push--top">@messages("returnObligation.nextReturn")</h2>
+      <p>
+      @(obligationData, hasMultiple, isNonMTDfBOrNonDigital, isError) match {
+        case (_, _, _, true) => { @messages("vatDetails.error") }
+        case (_, _, None, _) => { @messages("vatDetails.error") }
+        case (Some(numOfObligations), true, Some(_), _) => { @messages("vatDetails.returnsDue", numOfObligations) }
+        case _ => {
+          @obligationData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("returnObligation.noReturn"))
+          @if(isOverdue){
+            <span>
+              <strong class="task-overdue" id="overdue-tag">@messages("common.overdue")</strong>
+            </span>
+          }
+        }
+      }
+        </p>
+
+    @isNonMTDfBOrNonDigital.map { nonMTDfBOrNonDigital =>
+      @if(nonMTDfBOrNonDigital) {
+        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
+          @messages("returnObligation.submit")
+        </a>
+      } else {
+        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
+          @messages("returnObligation.viewReturns")
+        </a>
+      }
+    }
+
+  </div>
+</div>

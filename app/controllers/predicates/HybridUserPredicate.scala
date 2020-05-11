@@ -20,15 +20,17 @@ import config.ServiceErrorHandler
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import services.AccountDetailsService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsService,
-                                    errorHandler: ServiceErrorHandler) extends FrontendController {
+                                    errorHandler: ServiceErrorHandler,
+                                    val mcc: MessagesControllerComponents,
+                                    implicit val ec: ExecutionContext) extends FrontendController(mcc) {
 
   def authoriseMigratedUserAction(f: Request[AnyContent] => User => Future[Result])
                                  (implicit request: Request[AnyContent], user: User): Future[Result] = {

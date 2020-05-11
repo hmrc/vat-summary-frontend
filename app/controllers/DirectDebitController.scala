@@ -22,20 +22,23 @@ import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
+import scala.concurrent.ExecutionContext
+
 @Singleton
-class DirectDebitController @Inject()(val messagesApi: MessagesApi,
+class DirectDebitController @Inject()(val mcc: MessagesControllerComponents,
                                       val enrolmentsAuthService: EnrolmentsAuthService,
                                       implicit val appConfig: AppConfig,
+                                      implicit val ec: ExecutionContext,
                                       paymentsService: PaymentsService,
                                       authorisedController: AuthorisedController,
                                       auditingService: AuditingService,
                                       serviceErrorHandler: ServiceErrorHandler)
-  extends FrontendController with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport {
 
   def directDebits(hasActiveDirectDebit: Option[Boolean] = None): Action[AnyContent] = authorisedController.authorisedAction {
     implicit request =>

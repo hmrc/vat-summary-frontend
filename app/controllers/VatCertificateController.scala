@@ -20,21 +20,25 @@ import common.SessionKeys
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.viewModels.VatCertificateViewModel
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountDetailsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.certificate.VatCertificate
+import views.html.errors.NotFound
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatCertificateController @Inject()(
-                                          val messagesApi: MessagesApi,
-                                          serviceInfoService: ServiceInfoService,
-                                          authorisedController: AuthorisedController,
-                                          accountDetailsService: AccountDetailsService
-                                        )(implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
+                                         authorisedController: AuthorisedController,
+                                         accountDetailsService: AccountDetailsService,
+                                         val mcc: MessagesControllerComponents,
+                                         vatCertificate: VatCertificate,
+                                         notFound: NotFound
+                                        )(implicit val appConfig: AppConfig,
+                                          implicit val ec: ExecutionContext)
+  extends FrontendController(mcc) with I18nSupport {
 
   def show(): Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user =>
@@ -42,7 +46,7 @@ class VatCertificateController @Inject()(
       serviceInfoService.getPartial.flatMap { serviceInfoContent =>
         accountDetailsService.getAccountDetails(vrn).map {
           case Right(customerInformation) =>
-            Ok(views.html.certificate.vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
+            Ok(vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
           case Left(_) =>
             InternalServerError
         }
@@ -55,7 +59,7 @@ class VatCertificateController @Inject()(
         Future.successful(Redirect(appConfig.agentClientLookupStartUrl(routes.VatCertificateController.show().url))
           .removingFromSession(SessionKeys.agentSessionVrn))
       } else {
-        Future.successful(NotFound(views.html.errors.notFound()))
+        Future.successful(NotFound(notFound()))
       }
   }
 
@@ -65,7 +69,7 @@ class VatCertificateController @Inject()(
         Future.successful(Redirect(appConfig.agentClientLookupActionUrl)
           .removingFromSession(SessionKeys.agentSessionVrn))
       } else {
-        Future.successful(NotFound(views.html.errors.notFound()))
+        Future.successful(NotFound(notFound()))
       }
   }
 }

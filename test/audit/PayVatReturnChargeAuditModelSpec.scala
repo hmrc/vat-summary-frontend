@@ -16,9 +16,9 @@
 
 package audit
 
-import _root_.models.payments.{PaymentDetailsModel,ReturnDebitCharge}
-import _root_.models.User
 import _root_.audit.models.PayVatReturnChargeAuditModel
+import _root_.models.User
+import _root_.models.payments.{PaymentDetailsModel, ReturnDebitCharge}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class PayVatReturnChargeAuditModelSpec extends UnitSpec {

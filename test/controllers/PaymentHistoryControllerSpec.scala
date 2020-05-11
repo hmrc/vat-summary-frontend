@@ -23,7 +23,6 @@ import audit.models.ExtendedAuditModel
 import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax}
 import config.ServiceErrorHandler
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
@@ -41,28 +40,32 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.errors.StandardError
+import views.html.payments.PaymentHistory
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-  val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-  val mockAuthConnector: AuthConnector = mock[AuthConnector]
+
+  val standardError: StandardError = injector.instanceOf[StandardError]
+  val paymentHistory: PaymentHistory = injector.instanceOf[PaymentHistory]
+
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val mockDateService: DateService = mock[DateService]
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   implicit val mockAuditService: AuditingService = mock[AuditingService]
-  val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-  val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-  val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-  val mockErrorHandler: ServiceErrorHandler = new ServiceErrorHandler(messages, mockAppConfig)
+
+  val mockErrorHandler: ServiceErrorHandler = new ServiceErrorHandler(messagesApi, mockAppConfig, standardError)
   val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-    messages,
-    mockEnrolmentsAuthService,
-    mockHybridUserPredicate,
-    mockAgentPredicate,
-    mockAppConfig
+    mcc,
+    enrolmentsAuthService,
+    hybridUserPredicate,
+    agentPredicate,
+    mockAppConfig,
+    ec,
+    unauthorised
   )
 
   lazy val fakeRequestWithEmptyDate: FakeRequest[AnyContentAsEmpty.type] =
@@ -157,14 +160,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     def target: PaymentHistoryController = {
       setup()
       new PaymentHistoryController(
-        messages,
         mockPaymentsService,
         mockAuthorisedController,
         mockDateService,
         mockServiceInfoService,
-        mockEnrolmentsAuthService,
+        enrolmentsAuthService,
         mockAccountDetailsService,
-        mockErrorHandler
+        mockErrorHandler,
+        mcc,
+        ec,
+        paymentHistory
       )
     }
   }

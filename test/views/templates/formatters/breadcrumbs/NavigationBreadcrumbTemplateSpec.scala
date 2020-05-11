@@ -17,10 +17,12 @@
 package views.templates.formatters.breadcrumbs
 
 import play.twirl.api.Html
-import views.html.templates.formatters.breadcrumbs.navigationBreadcrumb
+import views.html.templates.formatters.breadcrumbs.NavigationBreadcrumb
 import views.templates.TemplateBaseSpec
 
 class NavigationBreadcrumbTemplateSpec extends TemplateBaseSpec {
+
+  val navigationBreadcrumb: NavigationBreadcrumb = injector.instanceOf[NavigationBreadcrumb]
 
   "Calling navigationBreadcrumb" should {
 

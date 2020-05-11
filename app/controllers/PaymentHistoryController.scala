@@ -23,29 +23,32 @@ import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.{Inject, Singleton}
-import models.{ServiceResponse, User}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
+import models.{ServiceResponse, User}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request}
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.payments.PaymentHistory
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
-                                         val paymentsService: PaymentsService,
+class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
                                          authorisedController: AuthorisedController,
                                          dateService: DateService,
                                          serviceInfoService: ServiceInfoService,
                                          val enrolmentsAuthService: EnrolmentsAuthService,
                                          accountDetailsService: AccountDetailsService,
-                                         serviceErrorHandler: ServiceErrorHandler)
+                                         serviceErrorHandler: ServiceErrorHandler,
+                                         mcc: MessagesControllerComponents,
+                                         implicit  val ec: ExecutionContext,
+                                         paymentHistory: PaymentHistory)
                                         (implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
-  extends FrontendController with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport {
 
   def currentYear: Int = dateService.now().getYear
   def previousYear: Int = currentYear - 1
@@ -68,7 +71,7 @@ class PaymentHistoryController @Inject()(val messagesApi: MessagesApi,
         generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, migrationDate) match {
           case Some(model) =>
             auditEvent(user.vrn, model.transactions)
-            Ok(views.html.payments.paymentHistory(model, serviceInfoContent))
+            Ok(paymentHistory(model, serviceInfoContent))
           case None =>
             Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
             serviceErrorHandler.showInternalServerError

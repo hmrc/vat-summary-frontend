@@ -24,6 +24,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.partials.btaHome.{ClaimEnrolment, PartialMigration, VatSection}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,10 +41,20 @@ class BtaHomeControllerSpec extends ControllerBaseSpec {
     }
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+    val claimEnrolmentView: ClaimEnrolment = injector.instanceOf[ClaimEnrolment]
+    val vatSectionView: VatSection = injector.instanceOf[VatSection]
+    val partialMigrationView: PartialMigration = injector.instanceOf[PartialMigration]
 
     def target: BtaHomeController = {
       setup()
-      new BtaHomeController(messages, mockEnrolmentsAuthService, mockAppConfig)
+      new BtaHomeController(
+        mockEnrolmentsAuthService,
+        mockAppConfig,
+        mcc,
+        ec,
+        claimEnrolmentView,
+        vatSectionView,
+        partialMigrationView)
     }
   }
 

@@ -19,8 +19,11 @@ package views.templates
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
+import views.html.templates.BtaNavigationLinks
 
 class BtaNavigationLinksTemplateSpec extends TemplateBaseSpec {
+
+  val btaNavigationLinksView: BtaNavigationLinks = injector.instanceOf[BtaNavigationLinks]
 
   val btaHome = "Home"
   val btaMessages = "Messages"
@@ -29,7 +32,7 @@ class BtaNavigationLinksTemplateSpec extends TemplateBaseSpec {
 
   "btaNavigationLinks" should {
 
-    val view: Html = views.html.templates.btaNavigationLinks()(messages,mockAppConfig)
+    val view: Html = btaNavigationLinksView()(messages,mockAppConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
 

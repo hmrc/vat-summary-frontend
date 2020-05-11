@@ -19,21 +19,23 @@ package testOnly.controllers
 import config.AppConfig
 import controllers.AuthorisedController
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EnrolmentsAuthService
+import testOnly.views.html.PortalStub
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
-class PortalStubController @Inject()(val messagesApi: MessagesApi,
-                                     val enrolmentsAuthService: EnrolmentsAuthService,
+class PortalStubController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
                                      val authorisedController: AuthorisedController,
-                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                     implicit val appConfig: AppConfig,
+                                     mcc: MessagesControllerComponents,
+                                     portalStub: PortalStub) extends FrontendController(mcc) with I18nSupport {
 
   def show(vrn: String): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     _ =>
-      Future.successful(Ok(testOnly.views.html.portalStub()))
+      Future.successful(Ok(portalStub()))
   }
 
 }

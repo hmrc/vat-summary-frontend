@@ -19,26 +19,30 @@ package testOnly.controllers
 import common.SessionKeys
 import config.AppConfig
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
+import testOnly.views.html.agentClientLookup.{AgentAction, EnterVrn, Unauthorised}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class AgentClientLookupStubController @Inject()(val messagesApi: MessagesApi,
-                                                implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfig,
+                                                mcc: MessagesControllerComponents,
+                                                agentActionView: AgentAction,
+                                                enterVrnView: EnterVrn,
+                                                unauthorisedView: Unauthorised
+                                               )
+  extends FrontendController(mcc) with I18nSupport {
 
   def show(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.agentClientLookup.enterVrn(StubAgentClientLookupForm.form, redirectUrl))
+    Ok(enterVrnView(StubAgentClientLookupForm.form, redirectUrl))
   }
 
   def unauthorised: Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.agentClientLookup.unauthorised())
-      .removingFromSession(SessionKeys.agentSessionVrn)
+    Ok(unauthorisedView()).removingFromSession(SessionKeys.agentSessionVrn)
   }
 
   def agentAction: Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.agentClientLookup.agentAction())
+    Ok(agentActionView())
   }
 
 

@@ -25,12 +25,14 @@ import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial._
+import views.html.templates.BtaNavigationLinks
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ServiceInfoPartialConnector @Inject()(val http: HttpClient,
-                                            hcForPartials: VatHeaderCarrierForPartialsConverter)
+                                            hcForPartials: VatHeaderCarrierForPartialsConverter,
+                                            btaNavigationLinks: BtaNavigationLinks)
                                            (implicit val messagesApi: MessagesApi,
                                             val config: AppConfig) extends HtmlPartialHttpReads with I18nSupport {
   import hcForPartials._
@@ -40,10 +42,10 @@ class ServiceInfoPartialConnector @Inject()(val http: HttpClient,
   def getServiceInfoPartial()(implicit request: Request[_], executionContext: ExecutionContext): Future[Html] =
     http.GET[HtmlPartial](btaUrl) recover connectionExceptionsAsHtmlPartialFailure map {
       p =>
-        p.successfulContentOrElse(views.html.templates.btaNavigationLinks())
+        p.successfulContentOrElse(btaNavigationLinks())
     } recover {
       case _ =>
         Logger.warn(s"[ServiceInfoPartialConnector][getServiceInfoPartial] - Unexpected future failed error")
-        views.html.templates.btaNavigationLinks()
+        btaNavigationLinks()
     }
 }

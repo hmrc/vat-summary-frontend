@@ -19,8 +19,11 @@ package views.partials.covid
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.partials.covid.CovidMessage
 
 class CovidPartialViewSpec extends ViewBaseSpec {
+
+  val covidMessageView: CovidMessage = injector.instanceOf[CovidMessage]
   "Rendering the covid partial" should {
 
     object Selectors {
@@ -32,7 +35,7 @@ class CovidPartialViewSpec extends ViewBaseSpec {
       val bullet2 = "li:nth-child(2)"
     }
 
-    lazy val view = views.html.partials.covid.covidMessage()
+    lazy val view = covidMessageView()
     lazy val render: Document = Jsoup.parse(view.body)
 
     "have the correct header" in {

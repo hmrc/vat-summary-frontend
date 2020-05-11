@@ -25,10 +25,12 @@ import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.payments.OpenPayments
 import views.templates.payments.PaymentMessageHelper
 
 class OpenPaymentsViewSpec extends ViewBaseSpec {
 
+  val openPaymentsView: OpenPayments = injector.instanceOf[OpenPayments]
   object Selectors {
     val pageHeading = "h1"
     val paymentLink = "#payments a"
@@ -94,7 +96,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = Some(true)
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = views.html.payments.openPayments(user, viewModel)
+    lazy val view = openPaymentsView(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -226,7 +228,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = Some(false)
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = views.html.payments.openPayments(user, viewModel)
+    lazy val view = openPaymentsView(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the Pay now text" in {
@@ -257,7 +259,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = None
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = views.html.payments.openPayments(user, viewModel)
+    lazy val view = openPaymentsView(user, viewModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct text for the direct debit paragraph" in {
@@ -284,7 +286,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
         val hasDirectDebit = None
         val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-        lazy val view = views.html.payments.openPayments(user, viewModel)
+        lazy val view = openPaymentsView(user, viewModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
@@ -299,7 +301,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
         val hasDirectDebit = None
         val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-        lazy val view = views.html.payments.openPayments(user, viewModel)
+        lazy val view = openPaymentsView(user, viewModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         elementExtinct(Selectors.covidPartial)
@@ -331,7 +333,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       )
     }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
 
-      lazy val view = views.html.payments.openPayments(user, openPaymentsViewModel)
+      lazy val view = openPaymentsView(user, openPaymentsViewModel)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"contain a $chargeTypeTitle which" should {

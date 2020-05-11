@@ -23,23 +23,25 @@ import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments.{ChargeType, PaymentDetailsModel, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod}
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc._
 import services.{EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.errors.paymentsError
+import views.html.errors.PaymentsError
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MakePaymentController @Inject()(val messagesApi: MessagesApi,
-                                      val enrolmentsAuthService: EnrolmentsAuthService,
+class MakePaymentController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
                                       paymentsService: PaymentsService,
                                       implicit val appConfig: AppConfig,
                                       authorisedController: AuthorisedController,
-                                      auditingService: AuditingService)
-  extends FrontendController with I18nSupport {
+                                      auditingService: AuditingService,
+                                      val mcc: MessagesControllerComponents,
+                                      implicit val ec: ExecutionContext,
+                                      paymentsError: PaymentsError)
+  extends FrontendController(mcc) with I18nSupport {
 
   def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String): Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>

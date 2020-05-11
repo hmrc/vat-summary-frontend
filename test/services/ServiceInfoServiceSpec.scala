@@ -28,11 +28,10 @@ class ServiceInfoServiceSpec extends ControllerBaseSpec {
 
   val mockConnector: ServiceInfoPartialConnector = mock[ServiceInfoPartialConnector]
   val service: ServiceInfoService = new ServiceInfoService(mockConnector)
-  val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   val user: User = User("1231231231")
   val agentUser: User = User("1231231231", arn = Some("XAIT123123123"))
-  val validHtml = Html("<nav>btalink<nav>")
-  val htmlError = Html("error")
+  val validHtml: Html = Html("<nav>btalink<nav>")
+  val htmlError: Html = Html("error")
 
   "getServiceInfo Partial" should {
     "return bta Partial" in {

@@ -20,8 +20,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
+import views.html.templates.VatOptOutSection
 
 class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
+
+  val vatOptOutSection: VatOptOutSection = injector.instanceOf[VatOptOutSection]
 
   object Selectors {
     val vatOptOutSection = "#vat-optout"
@@ -32,7 +35,7 @@ class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
 
   "The vatOptOutSection" should {
 
-    val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(pendingOptOut = false)
+    val view: HtmlFormat.Appendable = vatOptOutSection(pendingOptOut = false)
     implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading" in {
@@ -49,7 +52,7 @@ class  VatOptOutSectionTemplateSpec extends ViewBaseSpec {
 
     "the user has an opt out request pending" should {
 
-      val view: HtmlFormat.Appendable = views.html.templates.vatOptOutSection(pendingOptOut = true)
+      val view: HtmlFormat.Appendable = vatOptOutSection(pendingOptOut = true)
       implicit val document: Document = Jsoup.parse(view.body)
 
       "not have a link to the opt out service" in {

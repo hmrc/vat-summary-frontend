@@ -22,21 +22,25 @@ import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc._
 import services._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.errors.Unauthorised
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuthorisedController @Inject()(val messagesApi: MessagesApi,
+class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      val hybridUserPredicate: HybridUserPredicate,
                                      val agentPredicate: AgentPredicate,
-                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                     implicit val appConfig: AppConfig,
+                                     implicit val ec: ExecutionContext,
+                                     unauthorised: Unauthorised) extends FrontendController(mcc) with I18nSupport {
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result],
                        checkMigrationStatus: Boolean = false,
@@ -61,10 +65,10 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
           case _: NoActiveSession => Future.successful(Redirect(appConfig.signInUrl))
           case _: InsufficientEnrolments =>
             Logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
-            Future.successful(Forbidden(views.html.errors.unauthorised()))
+            Future.successful(Forbidden(unauthorised()))
           case _: AuthorisationException =>
             Logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
-            Future.successful(Forbidden(views.html.errors.unauthorised()))
+            Future.successful(Forbidden(unauthorised()))
         }
   }
 
@@ -92,7 +96,7 @@ class AuthorisedController @Inject()(val messagesApi: MessagesApi,
       }
     } else {
       Logger.debug("[AuthPredicate][authoriseAsNonAgent] Non-agent with no HMRC-MTD-VAT enrolment. Rendering unauthorised view.")
-      Future.successful(Forbidden(views.html.errors.unauthorised()))
+      Future.successful(Forbidden(unauthorised()))
     }
   }
 

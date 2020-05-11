@@ -18,15 +18,17 @@ package testOnly.controllers
 
 import com.google.inject.Inject
 import play.api.libs.json.JsValue
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.connectors.DynamicStubConnector
 import testOnly.models.{DataModel, SchemaModel}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Success, Try}
 
-class DynamicStubController @Inject()(dynamicStubConnector: DynamicStubConnector) extends FrontendController {
+class DynamicStubController @Inject()(dynamicStubConnector: DynamicStubConnector,
+                                      mcc: MessagesControllerComponents,
+                                      implicit val ec: ExecutionContext) extends FrontendController(mcc) {
 
   def populateStub(serviceName: String): Action[JsValue] = Action.async(parse.tolerantJson) { implicit request =>
     Try(request.body.as[DataModel]) match {

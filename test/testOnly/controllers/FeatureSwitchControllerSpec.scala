@@ -16,20 +16,28 @@
 
 package testOnly.controllers
 
+import config.AppConfig
 import controllers.ControllerBaseSpec
+import mocks.MockAppConfig
 import play.api.http.Status
+import play.api.mvc.MessagesControllerComponents
+import play.api.test.CSRFTokenHelper._
 import play.api.test.Helpers._
+import testOnly.views.html.FeatureSwitch
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
-  private lazy val target = new FeatureSwitchController(messages, mockAppConfig)
+  override implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
+  override implicit val mcc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
+  implicit val featureSwitch: FeatureSwitch = injector.instanceOf[FeatureSwitch]
+  private lazy val target = new FeatureSwitchController
 
   "Calling the .featureSwitch action" should {
 
-    lazy val result = target.featureSwitch(fakeRequest.addToken())
+    lazy val result = target.featureSwitch(fakeRequest.withCSRFToken)
 
     "return 200" in {
-      status(result) shouldBe Status.OK
+      await(result.map(_.header.status)) shouldBe Status.OK
     }
 
     "return HTML" in {
@@ -43,10 +51,10 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
   "Calling the .submitFeatureSwitch action" should {
 
-    lazy val result = target.submitFeatureSwitch(fakeRequest.addToken())
+    lazy val result = target.submitFeatureSwitch(fakeRequest.withCSRFToken)
 
     "return 303" in {
-      status(result) shouldBe Status.SEE_OTHER
+      await(result.map(_.header.status)) shouldBe Status.SEE_OTHER
     }
 
     "redirect the user to the feature switch page" in {

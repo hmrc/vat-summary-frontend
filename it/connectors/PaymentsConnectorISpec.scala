@@ -23,8 +23,6 @@ import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
 import stubs.PaymentsStub
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 class PaymentsConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test {

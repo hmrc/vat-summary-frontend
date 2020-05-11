@@ -20,8 +20,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
+import views.html.templates.MtdSignupSection
 
 class MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
+
+  val mtdSignupSection: MtdSignupSection = injector.instanceOf[MtdSignupSection]
 
   object Selectors {
     val mtdSignupSection = "#mtd-signup"
@@ -32,7 +35,7 @@ class MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
 
   "The mtdSignupSection" when {
 
-    val view: HtmlFormat.Appendable = views.html.templates.mtdSignupSection(vrn = "123456789")
+    val view: HtmlFormat.Appendable = mtdSignupSection(vrn = "123456789")
     implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading" in {

@@ -20,10 +20,10 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import config.AppConfig
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
+import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs._
-import play.api.http.Status.BAD_REQUEST
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]

@@ -19,9 +19,11 @@ package views.partials.btaHome
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.partials.btaHome.PartialMigration
 
 class PartialMigrationViewSpec extends ViewBaseSpec {
 
+  val partialMigrationView: PartialMigration = injector.instanceOf[PartialMigration]
   "Rendering the partialMigration partial" should {
 
     object Selectors {
@@ -31,7 +33,7 @@ class PartialMigrationViewSpec extends ViewBaseSpec {
       val paragraph3 = "p:nth-of-type(3)"
     }
 
-    lazy val view = views.html.partials.btaHome.partialMigration()
+    lazy val view = partialMigrationView()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {

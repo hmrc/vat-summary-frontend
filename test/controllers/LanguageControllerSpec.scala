@@ -24,7 +24,7 @@ import play.api.test.Helpers._
 
 class LanguageControllerSpec extends ControllerBaseSpec {
 
-  val controller = new LanguageController(mockAppConfig, messages)
+  val controller = new LanguageController(mockAppConfig, mcc)
 
   "Calling the .switchToLanguage action" when {
 
@@ -37,7 +37,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "use the English language" in {
-        cookies(result).get(Play.langCookieName(messages)) shouldBe
+        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
           Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
       }
     }
@@ -51,7 +51,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "use the Welsh language" in {
-        cookies(result).get(Play.langCookieName(messages)) shouldBe
+        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
           Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = true))
       }
 
@@ -67,7 +67,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "keep the current language" in {
-        cookies(result).get(Play.langCookieName(messages)) shouldBe
+        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
           Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
       }
     }

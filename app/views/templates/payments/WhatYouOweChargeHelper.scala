@@ -25,10 +25,10 @@ import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
                                        implicit val messages: Messages) {
 
-  private def paymentMessageHelper()(implicit lang: play.api.i18n.Lang): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
+  private def paymentMessageHelper(): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
 
-  def description()(implicit lang: play.api.i18n.Lang): Option[String] = {
-    (payment, paymentMessageHelper.description) match {
+  def description(): Option[String] = {
+    (payment, paymentMessageHelper().description) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
         Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.periodFrom), Some(payment.periodTo)))
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
@@ -44,7 +44,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
     }
   }
 
-  val title: String = messages(paymentMessageHelper.title)
+  val title: String = messages(paymentMessageHelper().title)
 
   val payLinkText: String = messages("openPayments.makePayment")
 

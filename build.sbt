@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+import play.core.PlayVersion
+import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
-import play.core.PlayVersion
-import sbt.Tests.{Group, SubProcess}
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
@@ -55,23 +55,24 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "5.1.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.52.0-play-25",
-  "uk.gov.hmrc" %% "play-ui" % "8.8.0-play-25",
-  "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-25",
-  "uk.gov.hmrc" %% "play-whitelist-filter" % "3.1.0-play-25",
-  "uk.gov.hmrc" %% "play-language" % "3.4.0"
+  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
+  "uk.gov.hmrc" %% "play-partials" % "6.10.0-play-26",
+  "uk.gov.hmrc" %% "play-whitelist-filter" % "3.3.0-play-26",
+  "uk.gov.hmrc" %% "play-language" % "4.2.0-play-26",
+  "com.typesafe.play" %% "play-json-joda" % "2.6.0-RC1"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-25" % scope,
-  "org.scalatest" %% "scalatest" % "3.0.1" % scope,
+  "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
+  "org.scalatest" %% "scalatest" % "3.0.8" % scope,
   "org.pegdown" % "pegdown" % "1.6.0" % scope,
-  "org.jsoup" % "jsoup" % "1.10.3" % scope,
+  "org.jsoup" % "jsoup" % "1.13.1" % scope,
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % scope,
+  "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % scope,
   "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0" % scope,
-  "com.github.tomakehurst" % "wiremock" % "2.6.0" % scope
+  "com.github.tomakehurst" % "wiremock-jre8" % "2.26.3" % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
@@ -95,7 +96,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.11.11",
+    scalaVersion := "2.11.12",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),

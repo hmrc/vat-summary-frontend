@@ -18,17 +18,20 @@ package testOnly.controllers
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import testOnly.views.html.PaymentsStub
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class PaymentsStubController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+class PaymentsStubController @Inject()(implicit val appConfig: AppConfig,
+                                       mcc: MessagesControllerComponents,
+                                       paymentsStub: PaymentsStub)
+  extends FrontendController(mcc) with I18nSupport {
 
   def stub(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(testOnly.views.html.paymentsStub()))
+    Future.successful(Ok(paymentsStub()))
   }
 }

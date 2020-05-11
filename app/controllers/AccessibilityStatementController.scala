@@ -16,22 +16,25 @@
 
 package controllers
 
+import java.net.URI
+
 import config.AppConfig
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import java.net.URI
+import views.html.AccessibilityStatement
 
 import scala.concurrent.Future
 
 class AccessibilityStatementController @Inject()(authorisedController: AuthorisedController,
-                                                 val messagesApi: MessagesApi)
-                                                (implicit appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                                 val mcc: MessagesControllerComponents,
+                                                 accessibilityStatement: AccessibilityStatement)
+                                                (implicit appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user =>
       val refererUri = new URI(request.headers.get(REFERER).getOrElse("")).getPath
-      Future.successful(Ok(views.html.accessibility_statement(refererUri, fullyCompliant = true)))
+      Future.successful(Ok(accessibilityStatement(refererUri, fullyCompliant = true)))
   }
 }

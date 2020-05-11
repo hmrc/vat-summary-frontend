@@ -22,7 +22,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{Lang, Messages, MessagesApi}
+import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
@@ -45,7 +45,7 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfter
   val agentUser: User = User("999999999", arn = Some("XARN1234567"))
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
-  implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
+  implicit lazy val messages: MessagesImpl = MessagesImpl(Lang("en-GB"), messagesApi)
 
   def element(cssSelector: String)(implicit document: Document): Element = {
     val elements = document.select(cssSelector)

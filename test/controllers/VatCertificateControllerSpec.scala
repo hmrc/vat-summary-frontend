@@ -18,38 +18,29 @@ package controllers
 
 import common.SessionKeys
 import common.TestModels._
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.User
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Request
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services.{AccountDetailsService, EnrolmentsAuthService, ServiceInfoService}
+import services.ServiceInfoService
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.certificate.VatCertificate
+import views.html.errors.NotFound
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatCertificateControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
+   val vatCertificate: VatCertificate = injector.instanceOf[VatCertificate]
+    val notFound: NotFound = injector.instanceOf[NotFound]
 
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
@@ -78,7 +69,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
     def target: VatCertificateController = {
       setup()
-      new VatCertificateController(messages, mockServiceInfoService, mockAuthorisedController, mockAccountDetailsService)
+      new VatCertificateController(
+        mockServiceInfoService,
+        authorisedController,
+        mockAccountDetailsService,
+        mcc,
+        vatCertificate,
+        notFound)
     }
   }
 

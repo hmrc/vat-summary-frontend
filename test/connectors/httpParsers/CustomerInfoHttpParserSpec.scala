@@ -16,8 +16,8 @@
 
 package connectors.httpParsers
 
-import common.TestModels.customerInformationMax
 import common.TestJson.customerInfoJsonMax
+import common.TestModels.customerInformationMax
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 import models.errors._
 import play.api.http.Status

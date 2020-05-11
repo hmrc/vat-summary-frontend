@@ -19,8 +19,11 @@ package views.templates
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.templates.HistorySection
 
 class HistorySectionTemplateSpec extends ViewBaseSpec {
+
+  val historySection: HistorySection = injector.instanceOf[HistorySection]
 
   "The history section template" when {
 
@@ -33,7 +36,7 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
 
     "the user is Not Hybrid" should {
 
-      lazy val view = views.html.templates.historySection(isHybridUser = false)
+      lazy val view = historySection(isHybridUser = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'History' heading" in {
@@ -60,7 +63,7 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
 
     "the user is Hybrid" should {
 
-      lazy val view = views.html.templates.historySection(isHybridUser = true)
+      lazy val view = historySection(isHybridUser = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the past payments text" in {

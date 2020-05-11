@@ -19,9 +19,11 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.errors.PaymentsError
 
 class DirectDebitErrorViewSpec extends ViewBaseSpec {
 
+  val paymentsErrorView: PaymentsError = injector.instanceOf[PaymentsError]
   object Selectors {
     val heading = "h1"
     val message = "p:nth-of-type(1)"
@@ -29,7 +31,7 @@ class DirectDebitErrorViewSpec extends ViewBaseSpec {
 
   "Rendering the payments error page" should {
 
-    lazy val view = views.html.errors.paymentsError()
+    lazy val view = paymentsErrorView()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

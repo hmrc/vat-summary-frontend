@@ -27,6 +27,8 @@ import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
 import uk.gov.hmrc.play.test.UnitSpec
 
+import scala.concurrent.ExecutionContext
+
 trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite
   with BeforeAndAfterEach with BeforeAndAfterAll {
 
@@ -37,6 +39,7 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
   def formatSessionVrn: Option[String] => Map[String, String] =_.fold(Map.empty[String, String])(x => Map(SessionKeys.agentSessionVrn -> x))
 
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   def servicesConfig: Map[String, String] = Map(
     "microservice.services.auth.host" -> mockHost,
@@ -77,7 +80,7 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
 
   def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
     client.url(s"http://localhost:$port$appRouteContext$path")
-      .withHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
+      .withHttpHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
       .withFollowRedirects(false)
 
   def document(response: WSResponse): Document = Jsoup.parse(response.body)

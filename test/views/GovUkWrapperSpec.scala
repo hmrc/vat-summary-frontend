@@ -19,17 +19,19 @@ package views
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.GovUkWrapper
 
 class GovUkWrapperSpec extends ViewBaseSpec {
 
   val navTitleSelector = ".header__menu__proposition-name"
   val accessibilityFooterSelector = "#footer > div > div > div.footer-meta-inner > ul > li:nth-child(2) > a"
+  val govUkWrapper: GovUkWrapper = injector.instanceOf[GovUkWrapper]
 
-  "Calling .govuk_wrapper" when {
+  "Calling .govUkWrapper" when {
 
     "user is not known" should {
 
-      lazy val view = views.html.govuk_wrapper(mockConfig, "title", user = None)
+      lazy val view = govUkWrapper(mockConfig, "title", user = None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the default nav title 'Making Tax Digital for VAT'" in {
@@ -45,7 +47,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
       "user is an agent" should {
 
-        lazy val view = views.html.govuk_wrapper(mockConfig, "title", user = Some(User("999999999", arn = Some("XARN1234567"))))
+        lazy val view = govUkWrapper(mockConfig, "title", user = Some(User("999999999", arn = Some("XARN1234567"))))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have a nav title of 'Your client’s VAT details'" in {
@@ -59,7 +61,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
       "user is not an agent" should {
 
-        lazy val view = views.html.govuk_wrapper(mockConfig, "title", user = Some(User("999999999", arn = None)))
+        lazy val view = govUkWrapper(mockConfig, "title", user = Some(User("999999999", arn = None)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have a nav title of 'Business tax account'" in {
@@ -74,7 +76,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
     "the accessibility statement link has been provided in the footer links" should {
 
-      lazy val view = views.html.govuk_wrapper(mockConfig, "title", user = Some(User("999999999", arn = None)))
+      lazy val view = govUkWrapper(mockConfig, "title", user = Some(User("999999999", arn = None)))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct accessibility statement link" in {

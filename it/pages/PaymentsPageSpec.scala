@@ -22,8 +22,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, ServiceInfoStub}
 import stubs.CustomerInfoStub.customerInfoJson
+import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, ServiceInfoStub}
 
 class PaymentsPageSpec extends IntegrationBaseSpec {
 

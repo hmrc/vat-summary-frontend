@@ -20,7 +20,7 @@ import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{Lang, Messages, MessagesApi}
+import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
 import play.api.inject.Injector
 import play.twirl.api.Html
 import uk.gov.hmrc.play.test.UnitSpec
@@ -30,7 +30,8 @@ class TemplateBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuit
   val injector: Injector = app.injector
   val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit val mockAppConfig: MockAppConfig = new MockAppConfig(app.configuration)
-  lazy implicit val messages: Messages = Messages(Lang("en-GB"), messagesApi)
+  lazy implicit val messages: MessagesImpl = MessagesImpl(Lang("en-GB"), messagesApi)
+  lazy implicit val lang: Lang = injector.instanceOf[Lang]
 
   def formatHtml(body: Html): String = Jsoup.parseBodyFragment(s"\n$body\n").toString.trim
 }

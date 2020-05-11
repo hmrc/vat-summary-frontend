@@ -18,10 +18,12 @@ package views.templates.formatters.addresses
 
 import models.Address
 import play.twirl.api.Html
-import views.html.templates.formatters.addresses.fullAddress
+import views.html.templates.formatters.addresses.FullAddress
 import views.templates.TemplateBaseSpec
 
 class FullAddressSpec extends TemplateBaseSpec {
+
+  val fullAddress: FullAddress = injector.instanceOf[FullAddress]
 
   "The full address template" when {
 

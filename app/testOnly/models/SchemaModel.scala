@@ -16,7 +16,7 @@
 
 package testOnly.models
 
-import play.api.libs.json.{Format, JsValue, Json, OFormat}
+import play.api.libs.json.{JsValue, Json, OFormat}
 
 case class SchemaModel(
                         _id: String,

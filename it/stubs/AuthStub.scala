@@ -20,7 +20,6 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import play.api.http.Status._
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.auth.core.AffinityGroup
 
 object AuthStub extends WireMockMethods {
 

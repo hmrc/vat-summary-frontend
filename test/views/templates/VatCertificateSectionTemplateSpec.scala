@@ -20,8 +20,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
+import views.html.templates.VatCertificateSection
 
 class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
+
+  val vatCertificateSection: VatCertificateSection = injector.instanceOf[VatCertificateSection]
 
   "The vatCertificateSection" when {
 
@@ -30,7 +33,7 @@ class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
       val vatCertificateParagraph = "#vat-certificate p"
     }
 
-    def view: HtmlFormat.Appendable = views.html.templates.vatCertificateSection()
+    def view: HtmlFormat.Appendable = vatCertificateSection()
     implicit def document: Document = Jsoup.parse(view.body)
 
     "the vat certificate feature" should {

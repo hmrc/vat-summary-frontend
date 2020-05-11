@@ -16,13 +16,14 @@
 
 package views.templates.formatters.addresses
 
-import models.Address
+import models.{Address => AddressModel}
 import play.twirl.api.Html
-import views.html.templates.formatters.addresses.address
+import views.html.templates.formatters.addresses.AddressTemplate
 import views.templates.TemplateBaseSpec
 
 class AddressTemplateSpec extends TemplateBaseSpec {
 
+  val addressTemplate: AddressTemplate = injector.instanceOf[AddressTemplate]
   "The address template" when {
 
     "all lines are present" should {
@@ -31,7 +32,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val expected = Html("line1, line2, line3, line4").toString().trim
 
-        val result = address(Address(
+        val result = addressTemplate(AddressModel(
           "line1",
           Some("line2"),
           Some("line3"),
@@ -49,7 +50,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val expected = Html("line1, line2, line3").toString().trim
 
-        val result = address(Address(
+        val result = addressTemplate(AddressModel(
           "line1",
           Some("line2"),
           Some("line3"),
@@ -67,7 +68,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val expected = Html("line1, line2, line4").toString().trim
 
-        val result = address(Address(
+        val result = addressTemplate(AddressModel(
           "line1",
           Some("line2"),
           None,
@@ -85,7 +86,7 @@ class AddressTemplateSpec extends TemplateBaseSpec {
 
         val expected = Html("line1, line2").toString().trim
 
-        val result = address(Address(
+        val result = addressTemplate(AddressModel(
           "line1",
           Some("line2"),
           None,

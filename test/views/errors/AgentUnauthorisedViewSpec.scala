@@ -19,9 +19,11 @@ package views.errors
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.errors.AgentUnauthorised
 
 class AgentUnauthorisedViewSpec extends ViewBaseSpec {
 
+  val agentUnauthorisedView: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   "Rendering the agent unauthorised page" should {
 
     object Selectors {
@@ -31,7 +33,7 @@ class AgentUnauthorisedViewSpec extends ViewBaseSpec {
       val button = "#content .button"
     }
 
-    lazy val view = views.html.errors.agentUnauthorised()(request, messages, mockConfig)
+    lazy val view = agentUnauthorisedView()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

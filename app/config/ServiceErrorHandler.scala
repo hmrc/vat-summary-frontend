@@ -17,20 +17,23 @@
 package config
 
 import javax.inject.Inject
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.Results.InternalServerError
 import play.api.mvc.{Request, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import views.html.errors.StandardError
 
-class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi, appConfig: AppConfig) extends FrontendErrorHandler {
+class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi,
+                                    appConfig: AppConfig,
+                                    standardError: StandardError) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html = {
-    views.html.errors.standardError(appConfig, "standardError.title", "standardError.heading", "standardError.message")
+    standardError(appConfig, "standardError.title", "standardError.heading", "standardError.message")
   }
 
   def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(internalServerErrorTemplate)
 
   override def notFoundTemplate(implicit request: Request[_]): Html =
-    views.html.errors.standardError(appConfig, "notFound.title", "notFound.heading", "notFound.message")
+    standardError(appConfig, "notFound.title", "notFound.heading", "notFound.message")
 }

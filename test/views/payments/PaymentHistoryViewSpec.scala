@@ -24,8 +24,11 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
+import views.html.payments.PaymentHistory
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
+
+  val paymentHistoryView: PaymentHistory = injector.instanceOf[PaymentHistory]
 
   object Selectors {
     val pageHeading = "h1"
@@ -68,7 +71,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
   "The payments history page" should {
 
-    lazy val view: Html = views.html.payments.paymentHistory(model)
+    lazy val view: Html = paymentHistoryView(model)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

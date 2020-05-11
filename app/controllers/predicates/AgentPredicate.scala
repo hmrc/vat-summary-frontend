@@ -21,19 +21,22 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals.allEnrolments
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.allEnrolments
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.errors.AgentUnauthorised
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
-                               val messagesApi: MessagesApi,
-                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                               val mcc: MessagesControllerComponents,
+                               implicit val appConfig: AppConfig,
+                               implicit val ec: ExecutionContext,
+                               agentUnauthorised: AgentUnauthorised) extends FrontendController(mcc) with I18nSupport {
 
   def authoriseAsAgent(block: Request[AnyContent] => User => Future[Result])
                       (implicit request: Request[AnyContent]): Future[Result] = {
@@ -55,7 +58,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
                 case Some(arn) => block(request)(User(vrn, arn = Some(arn)))
                 case None =>
                   Logger.debug("[AgentPredicate][authoriseAsAgent] - Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
-                  Future.successful(Forbidden(views.html.errors.agentUnauthorised()))
+                  Future.successful(Forbidden(agentUnauthorised()))
               }
           } recover {
           case _: NoActiveSession =>

@@ -18,9 +18,9 @@ package audit
 
 import java.time.LocalDate
 
-import audit.models.ViewNextOpenVatObligationAuditModel
 import _root_.models.User
 import _root_.models.obligations.{VatReturnObligation, VatReturnObligations}
+import audit.models.ViewNextOpenVatObligationAuditModel
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ViewNextOpenVatObligationAuditModelSpec extends UnitSpec {

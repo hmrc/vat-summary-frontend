@@ -37,7 +37,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
   private trait Test {
 
     protected lazy val mockConnector: DynamicStubConnector = mock[DynamicStubConnector]
-    protected lazy val controller = new DynamicStubController(mockConnector)
+    protected lazy val controller = new DynamicStubController(mockConnector, mcc, ec)
 
     protected def setup(): Unit
 

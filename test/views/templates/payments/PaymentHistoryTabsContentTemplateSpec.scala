@@ -22,9 +22,13 @@ import models.User
 import models.payments.ReturnDebitCharge
 import models.viewModels.PaymentsHistoryModel
 import play.twirl.api.Html
+import views.html.templates.payments.{PaymentsHistoryCharge, PaymentsHistoryTabsContent}
 import views.templates.TemplateBaseSpec
 
 class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
+
+  val paymentsHistoryCharge: PaymentsHistoryCharge = injector.instanceOf[PaymentsHistoryCharge]
+  val paymentsHistoryTabsContent: PaymentsHistoryTabsContent = injector.instanceOf[PaymentsHistoryTabsContent]
 
   val currentYear = 2018
   val previousYear = 2017
@@ -60,7 +64,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |      </tr>
       |    </thead>
       |    <tbody>
-      |      ${views.html.templates.payments.paymentsHistoryCharge(transaction)}
+      |      ${paymentsHistoryCharge(transaction)}
       |    </tbody>
       |  </table>
       |</section>
@@ -95,7 +99,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
               val expectedMarkup = Html(sectionExampleWithoutPayment(currentYear))
 
-              val result = views.html.templates.payments.paymentsHistoryTabsContent(
+              val result = paymentsHistoryTabsContent(
                 singleYear, Seq.empty, showPreviousPaymentsTab = false, javascriptEnabled = true
               )
 
@@ -109,7 +113,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
               val expectedMarkup = Html(sectionExampleWithPayment)
 
-              val result = views.html.templates.payments.paymentsHistoryTabsContent(
+              val result = paymentsHistoryTabsContent(
                 singleYear, Seq(transaction), showPreviousPaymentsTab = false, javascriptEnabled = true
               )
 
@@ -127,7 +131,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
                 sectionExampleWithoutPayment(currentYear) + sectionExampleWithoutPayment(previousYear)
               )
 
-              val result = views.html.templates.payments.paymentsHistoryTabsContent(
+              val result = paymentsHistoryTabsContent(
                 multipleYears, Seq.empty, showPreviousPaymentsTab = false, javascriptEnabled = true
               )
 
@@ -141,7 +145,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
               val expectedMarkup = Html(sectionExampleWithPayment + sectionExampleWithoutPayment(previousYear))
 
-              val result = views.html.templates.payments.paymentsHistoryTabsContent(
+              val result = paymentsHistoryTabsContent(
                 multipleYears, Seq(transaction), showPreviousPaymentsTab = false, javascriptEnabled = true
               )
 
@@ -171,7 +175,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
             """.stripMargin
           )
 
-          val result = views.html.templates.payments.paymentsHistoryTabsContent(
+          val result = paymentsHistoryTabsContent(
             singleYear, Seq.empty, showPreviousPaymentsTab = true, javascriptEnabled = true
           )
 
@@ -202,7 +206,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
           """.stripMargin
         )
 
-        val result = views.html.templates.payments.paymentsHistoryTabsContent(
+        val result = paymentsHistoryTabsContent(
           singleYear, Seq.empty, showPreviousPaymentsTab = false, javascriptEnabled = false
         )
 

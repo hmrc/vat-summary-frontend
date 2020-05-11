@@ -20,17 +20,18 @@ import audit.AuditingService
 import audit.models.{HybridPHModel, HybridWYOModel}
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PortalController @Inject()(val messagesApi: MessagesApi,
-                                 authorisedController: AuthorisedController,
+class PortalController @Inject()(authorisedController: AuthorisedController,
                                  val auditingService: AuditingService,
-                                 implicit val appConfig: AppConfig) extends FrontendController with I18nSupport  {
+                                 implicit val appConfig: AppConfig,
+                                 val mcc: MessagesControllerComponents,
+                                 implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport  {
 
   def hybridWYO(): Action[AnyContent] = authorisedController.authorisedAction { implicit request => user =>
     auditingService.extendedAudit(HybridWYOModel(user), routes.VatDetailsController.details().url)

@@ -19,9 +19,12 @@ package testOnly.views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
+import testOnly.views.html.BtaStub
 import views.ViewBaseSpec
 
 class BtaStubViewSpec extends ViewBaseSpec {
+
+  val btaStub: BtaStub = injector.instanceOf[BtaStub]
 
   "Rendering the BTA landing page test harness" should {
 
@@ -31,7 +34,7 @@ class BtaStubViewSpec extends ViewBaseSpec {
     }
 
     val htmlPartial = Html("<h2>Partial</h2>")
-    lazy val view = testOnly.views.html.btaStub(htmlPartial)
+    lazy val view = btaStub(htmlPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

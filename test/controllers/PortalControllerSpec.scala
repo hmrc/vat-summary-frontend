@@ -19,12 +19,9 @@ package controllers
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import common.TestModels.successfulAuthResult
-import connectors.VatSubscriptionConnector
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, PaymentsService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -37,21 +34,7 @@ class PortalControllerSpec extends ControllerBaseSpec {
   private trait PortalControllerTest {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
-    val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -66,10 +49,11 @@ class PortalControllerSpec extends ControllerBaseSpec {
     def target: PortalController = {
       setup()
       new PortalController(
-        messages,
-        mockAuthorisedController,
+        authorisedController,
         mockAuditService,
-        mockAppConfig
+        mockAppConfig,
+        mcc,
+        ec
       )
     }
   }

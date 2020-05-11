@@ -19,23 +19,25 @@ package testOnly.controllers
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.DirectDebitDetailsModel
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.libs.json._
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.EnrolmentsAuthService
+import testOnly.views.html.DirectDebitStub
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class DirectDebitStubController @Inject()(val messagesApi: MessagesApi,
-                                          val enrolmentsAuthService: EnrolmentsAuthService,
-                                          implicit val appConfig: AppConfig)
+class DirectDebitStubController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
+                                          implicit val appConfig: AppConfig,
+                                          mcc: MessagesControllerComponents,
+                                          directDebitStub: DirectDebitStub)
 
-  extends FrontendController with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport {
 
   def stub(): Action[AnyContent] = Action.async { implicit request =>
-      Future.successful(Ok(testOnly.views.html.directDebitStub()))
+      Future.successful(Ok(directDebitStub()))
   }
 
   def startJourney(): Action[JsValue] = Action.async(parse.json) { implicit request =>

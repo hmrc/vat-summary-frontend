@@ -16,16 +16,15 @@
 
 package views.templates
 
-import java.time.LocalDate
-
 import common.TestModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.deregSection
+import views.html.templates.DeregSection
 
 class DeregSectionSpec  extends ViewBaseSpec {
 
+  val deregSection: DeregSection = injector.instanceOf[DeregSection]
   object DeregPartialMessages {
     val deregTitle = "Cancel VAT registration"
     val deregContent = "Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."

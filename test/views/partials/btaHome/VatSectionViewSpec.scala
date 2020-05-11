@@ -19,9 +19,11 @@ package views.partials.btaHome
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.partials.btaHome.VatSection
 
 class VatSectionViewSpec extends ViewBaseSpec {
 
+  val vatSectionView: VatSection = injector.instanceOf[VatSection]
   "Rendering the BTA partial" should {
 
     object Selectors {
@@ -31,7 +33,7 @@ class VatSectionViewSpec extends ViewBaseSpec {
       val viewVatLink = "a"
     }
 
-    lazy val view = views.html.partials.btaHome.vatSection()
+    lazy val view = vatSectionView()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct page heading" in {

@@ -19,21 +19,21 @@ package services
 import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.MandationStatus
+import models.errors.UnknownError
 import org.scalamock.scalatest.MockFactory
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
-import models.errors.UnknownError
-
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class MandationStatusServiceSpec extends UnitSpec with MockFactory {
+class MandationStatusServiceSpec extends UnitSpec with MockFactory with GuiceOneServerPerSuite {
 
   val mockConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
   val service: MandationStatusService = new MandationStatusService(mockConnector)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   val validMandationStatus = MandationStatus(
     "I'mmaWalkingHere"

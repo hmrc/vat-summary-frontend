@@ -34,7 +34,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
   private trait Test {
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    lazy val authResponse = Enrolments(
+    lazy val authResponse: Enrolments = Enrolments(
       Set(
         Enrolment(
           "HMRC-AS-AGENT",
@@ -46,8 +46,10 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
     lazy val mockAgentPredicate: AgentPredicate = new AgentPredicate(
       mockEnrolmentsAuthService,
-      messages,
-      mockAppConfig
+      mcc,
+      mockAppConfig,
+      ec,
+      agentUnauthorised
     )
 
     def target(request: Request[AnyContent]): Future[Result] = mockAgentPredicate.authoriseAsAgent({
@@ -82,7 +84,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
           "return 403" in new Test {
 
-            val otherEnrolment = Enrolments(
+            val otherEnrolment: Enrolments = Enrolments(
               Set(
                 Enrolment(
                   "OTHER-ENROLMENT",

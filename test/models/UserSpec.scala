@@ -16,7 +16,7 @@
 
 package models
 
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, EnrolmentIdentifier, Enrolments}
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class UserSpec extends UnitSpec {

@@ -20,16 +20,18 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
+import views.html.templates.UpdateVatDetailsSection
 
 class UpdateVatDetailsTemplateSpec extends ViewBaseSpec {
 
+  val updateVatDetailsSection: UpdateVatDetailsSection = injector.instanceOf[UpdateVatDetailsSection]
   "The updateVatDetailsSection" when {
 
     object Selectors {
       val updateVatDetails = "#update-vat-details"
     }
 
-    def view: HtmlFormat.Appendable = views.html.templates.updateVatDetailsSection()
+    def view: HtmlFormat.Appendable = updateVatDetailsSection()
     implicit def document: Document = Jsoup.parse(view.body)
 
     "the update Vat details feature" should {

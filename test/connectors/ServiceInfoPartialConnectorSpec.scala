@@ -19,20 +19,19 @@ package connectors
 import config.VatHeaderCarrierForPartialsConverter
 import controllers.ControllerBaseSpec
 import play.api.http.Status
-import play.api.i18n.{Lang, Messages}
 import play.twirl.api.Html
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.{Failure, Success}
+import views.html.templates.BtaNavigationLinks
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
   val header: VatHeaderCarrierForPartialsConverter = injector.instanceOf[VatHeaderCarrierForPartialsConverter]
-  implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
-  implicit val messagesImpl: Messages = Messages(Lang("en-GB"), messages)
-  val validHtml = Html("<nav>BTA lINK</nav>")
+  val btanl: BtaNavigationLinks = injector.instanceOf[BtaNavigationLinks]
+  val validHtml: Html = Html("<nav>BTA lINK</nav>")
 
   private trait Test {
     val result :Future[HtmlPartial] = Future.successful(Success(None,validHtml))
@@ -42,7 +41,7 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
       (httpClient.GET[HtmlPartial](_: String)(_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
         .stubs(*,*,*,*)
         .returns(result)
-      new ServiceInfoPartialConnector(httpClient, header)(messages, mockAppConfig)
+      new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
     }
 
   }
@@ -57,14 +56,14 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
     "a connectionExceptionsAsHtmlPartialFailure error is returned" should {
       "return the fall back partial" in new Test{
         override val result: Future[Failure] = Future.successful(Failure(Some(Status.GATEWAY_TIMEOUT)))
-        await(connector.getServiceInfoPartial()) shouldBe views.html.templates.btaNavigationLinks()
+        await(connector.getServiceInfoPartial()) shouldBe btanl()
       }
     }
 
     "an unexpected Exception is returned" should {
       "return the fall back partial" in new Test{
         override val result: Future[Failure] = Future.successful(Failure(Some(Status.INTERNAL_SERVER_ERROR)))
-        await(connector.getServiceInfoPartial()) shouldBe views.html.templates.btaNavigationLinks()
+        await(connector.getServiceInfoPartial()) shouldBe btanl()
       }
     }
 

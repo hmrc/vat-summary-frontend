@@ -16,35 +16,24 @@
 
 package controllers
 
-import java.net.URI
-
 import common.TestModels._
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import play.api.http.Status
-import services.{AccountDetailsService, EnrolmentsAuthService}
+import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments}
+import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.AccessibilityStatement
+import views.html.errors.Unauthorised
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
   trait Test {
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
+    val mockAccessibilityStatement: AccessibilityStatement = injector.instanceOf[AccessibilityStatement]
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
     def setup: Any =
@@ -55,7 +44,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
     def controller: AccessibilityStatementController = {
       setup
-      new AccessibilityStatementController(mockAuthorisedController, messages)
+      new AccessibilityStatementController(authorisedController, mcc, mockAccessibilityStatement)
     }
   }
 

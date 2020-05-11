@@ -18,9 +18,9 @@ package common
 
 import java.time.LocalDate
 
+import models._
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
-import models._
 import models.viewModels.VatDetailsViewModel
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~

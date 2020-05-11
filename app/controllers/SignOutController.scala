@@ -18,22 +18,22 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.AppConfig
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthorisationException}
-import uk.gov.hmrc.auth.core.retrieve.Retrievals
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SignOutController @Inject()(val messagesApi: MessagesApi,
-                                  enrolmentsAuthService: EnrolmentsAuthService)
+class SignOutController @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
+                                  val mcc: MessagesControllerComponents)
                                  (implicit val appConfig: AppConfig,
-                                  implicit val ec: ExecutionContext) extends BaseController with I18nSupport {
+                                  implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
     implicit val hc: HeaderCarrier =

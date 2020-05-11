@@ -21,29 +21,34 @@ import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
-import models.payments.{OpenPaymentsModel, Payment}
+import models.payments.{OpenPaymentsModel, Payment, PaymentOnAccount}
 import models.viewModels.OpenPaymentsViewModel
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
+import play.twirl.api.Html
 import services.{DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import models.payments.PaymentOnAccount
-import play.twirl.api.Html
+import views.html.errors.PaymentsError
+import views.html.payments.{NoPayments, OpenPayments}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OpenPaymentsController @Inject()(val messagesApi: MessagesApi,
-                                       val enrolmentsAuthService: EnrolmentsAuthService,
+class OpenPaymentsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
                                        authorisedController: AuthorisedController,
                                        serviceInfoService: ServiceInfoService,
                                        val paymentsService: PaymentsService,
                                        val dateService: DateService,
                                        implicit val appConfig: AppConfig,
-                                       auditingService: AuditingService)
-extends FrontendController with I18nSupport {
+                                       auditingService: AuditingService,
+                                       mcc: MessagesControllerComponents,
+                                       implicit val ec: ExecutionContext,
+                                       noPayments: NoPayments,
+                                       paymentsError: PaymentsError,
+                                       openPayments: OpenPayments)
+extends FrontendController(mcc) with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
     implicit user =>
@@ -60,17 +65,18 @@ extends FrontendController with I18nSupport {
       case Right(Some(payments)) =>
         val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), hasActiveDirectDebit)
         auditEvent(user, model.payments)
-        Ok(views.html.payments.openPayments(user, model, serviceInfoContent))
+        Ok(openPayments(user, model, serviceInfoContent))
       case Right(_) =>
         auditEvent(user, Seq.empty)
-        Ok(views.html.payments.noPayments(user, hasActiveDirectDebit, serviceInfoContent))
+        Ok(noPayments(user, hasActiveDirectDebit, serviceInfoContent))
       case Left(error) =>
         Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
-        InternalServerError(views.html.errors.paymentsError())
+        InternalServerError(paymentsError())
     }
   }
 
-  private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]): OpenPaymentsViewModel = {
+  private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean])(implicit request: Request[_]):
+  OpenPaymentsViewModel = {
     OpenPaymentsViewModel(
       payments.map { payment =>
         OpenPaymentsModel(

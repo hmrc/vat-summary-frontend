@@ -20,8 +20,11 @@ import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.templates.NextPaymentSection
 
 class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
+
+  val nextPaymentSection: NextPaymentSection = injector.instanceOf[NextPaymentSection]
 
   "The nextPaymentSection template" when {
 
@@ -38,7 +41,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
       "payment is not overdue" should {
 
-        lazy val view = views.html.templates.nextPaymentSection(
+        lazy val view = nextPaymentSection(
           Some("2017-03-08"),
           hasMultiple = false,
           isError = false,
@@ -66,7 +69,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
       "payment is overdue" should {
 
-        lazy val view = views.html.templates.nextPaymentSection(
+        lazy val view = nextPaymentSection(
           Some("2017-03-08"),
           hasMultiple = false,
           isError = false,
@@ -83,7 +86,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is no payment to display" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None,
+      lazy val view = nextPaymentSection(None,
         hasMultiple = false,
         isError = false,
         isHybridUser = false,
@@ -106,7 +109,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there is an error retrieving the payment" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None,
+      lazy val view = nextPaymentSection(None,
         hasMultiple = false,
         isError = true,
         isHybridUser = false,
@@ -130,7 +133,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "there are multiple payments to display" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(Some("2"),
+      lazy val view = nextPaymentSection(Some("2"),
         hasMultiple = true,
         isError = false,
         isHybridUser = false,
@@ -154,7 +157,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
     "the user is hybrid" should {
 
-      lazy val view = views.html.templates.nextPaymentSection(None,
+      lazy val view = nextPaymentSection(None,
         hasMultiple = false,
         isError = false,
         isHybridUser = true,

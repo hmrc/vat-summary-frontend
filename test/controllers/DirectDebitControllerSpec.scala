@@ -19,9 +19,6 @@ package controllers
 import audit.AuditingService
 import audit.models.AuditModel
 import common.TestModels.{agentAuthResult, successfulAuthResult}
-import config.ServiceErrorHandler
-import connectors.VatSubscriptionConnector
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.DirectDebitDetailsModel
 import models.errors.DirectDebitSetupError
 import org.jsoup.Jsoup
@@ -29,7 +26,7 @@ import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, MandationStatusService, PaymentsService}
+import services.PaymentsService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -41,22 +38,9 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
   private trait DirectDebitDetailsTest {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
+
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
-    val mockErrorHandler: ServiceErrorHandler = new ServiceErrorHandler(messages, mockAppConfig)
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -68,17 +52,17 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         .returns({})
     }
 
-
     def target: DirectDebitController = {
       setup()
       new DirectDebitController(
-        messages,
-        mockEnrolmentsAuthService,
+        mcc,
+        enrolmentsAuthService,
         mockAppConfig,
+        ec,
         mockPaymentsService,
-        mockAuthorisedController,
+        authorisedController,
         mockAuditService,
-        mockErrorHandler)
+        mockServiceErrorHandler)
     }
   }
 
@@ -91,7 +75,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
         mockAppConfig.features.useDirectDebitDummyPage(false)
 
         val redirectUrl = "http://google.com/"
-        val expectedRedirectLocation = Some(redirectUrl)
+        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
         val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {

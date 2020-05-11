@@ -20,7 +20,7 @@ package connectors.httpParsers
 import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 import models.errors._
 import play.api.http.Status
-import play.api.libs.json.{JsObject, Json, JsValue}
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.test.UnitSpec
 

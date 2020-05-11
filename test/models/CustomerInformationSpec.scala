@@ -16,8 +16,8 @@
 
 package models
 
-import common.TestModels.{customerInformationMax, customerInformationMin}
 import common.TestJson.{customerInfoJsonMax, customerInfoJsonMin}
+import common.TestModels.{customerInformationMax, customerInformationMin}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class CustomerInformationSpec extends UnitSpec {

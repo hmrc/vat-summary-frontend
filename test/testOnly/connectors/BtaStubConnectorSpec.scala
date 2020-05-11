@@ -56,7 +56,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
       .expects(*, *, *, *)
       .returns(generateResponse(response))
 
-    new BtaStubConnector(mockHttp, mockAppConfig, hc)
+    new BtaStubConnector(mockHttp, hc, ec)
   }
 
   "PartialsConnector .getPartial" when {

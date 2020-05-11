@@ -20,13 +20,12 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.AuditModel
+import common.FinancialTransactionsConstants._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
-import common.FinancialTransactionsConstants._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models._
-import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
+import models.errors.{BadRequestError, NextPaymentError, ObligationsError, _}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.viewModels.VatDetailsViewModel
@@ -40,7 +39,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import models.errors._
+import views.html.vatDetails.Details
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,15 +58,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
-    val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockHybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(mockAccountDetailsService, mockServiceErrorHandler)
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAgentPredicate: AgentPredicate = new AgentPredicate(mockEnrolmentsAuthService, messages, mockAppConfig)
     val mockMandationService: MandationStatusService = mock[MandationStatusService]
+
+    val detailsView: Details = injector.instanceOf[Details]
 
     def setup(needMandationCall: Boolean = true): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -103,28 +99,23 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      messages,
-      mockEnrolmentsAuthService,
-      mockHybridUserPredicate,
-      mockAgentPredicate,
-      mockAppConfig
-    )
-
     mockAppConfig.features.submitReturnFeatures(true)
 
     def target(needMandationCall: Boolean = true): VatDetailsController = {
       setup(needMandationCall)
-      new VatDetailsController(messages,
-        mockEnrolmentsAuthService,
+      new VatDetailsController(
+        enrolmentsAuthService,
         mockAppConfig,
         mockVatDetailsService,
         mockServiceInfoService,
-        mockAuthorisedController,
+        authorisedController,
         mockAccountDetailsService,
         mockDateService,
         mockAuditService,
-        mockMandationService)
+        mockMandationService,
+        mcc,
+        ec,
+        detailsView)
     }
   }
 
@@ -328,7 +319,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is both a payment and an obligation" should {
 
       "return a VatDetailsViewModel with both due dates" in new DetailsTest {
-        lazy val expected =
+        lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
           )
@@ -346,7 +337,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is a payment but no obligation" should {
 
       "return a VatDetailsViewModel with a payment due date and no obligation due date" in new DetailsTest {
-        lazy val expected =
+        lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
           )
@@ -364,7 +355,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is an obligation but no payment" should {
 
       "return a VatDetailsViewModel with an obligation due date and no payment due date" in new DetailsTest {
-        lazy val expected =
+        lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
           )
@@ -382,7 +373,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation or payment" should {
 
       "return a VatDetailsViewModel with no obligation due date and no payment due date" in new DetailsTest {
-        lazy val expected =
+        lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             None, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
           )
@@ -400,7 +391,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation, payment, or entity name" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, entity name or partyType" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate, partyType = None)
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate, partyType = None)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -416,7 +407,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in
         new DetailsTest {
-        lazy val expected = VatDetailsViewModel(
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, None, showSignUp = Some(true), customerInfoError = true, currentDate = testDate, partyType = None)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
@@ -430,8 +421,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is an error from VAT API" should {
       "return a VatDetailsViewModel with the returnError flag set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(
-          None, None, Some(entityName), returnObligationError = true, deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"))
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
+          None, None, Some(entityName), returnObligationError = true,
+          deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"))
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Right(None),
@@ -446,7 +438,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is an error from Financial Data API" should {
 
       "return a VatDetailsViewModel with the paymentError flag set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"))
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
@@ -462,7 +454,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is an error from both APIs" should {
 
       "return a VatDetailsViewModel with the returnError and paymentError flags set" in new DetailsTest {
-        lazy val expected = VatDetailsViewModel(
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None,
           None,
           Some(entityName),
@@ -488,7 +480,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         val overdueObligationDueDate: Option[String] = Some("2017-06-06")
         override val obligations: VatReturnObligations = overdueObligations
 
-        lazy val expected = VatDetailsViewModel(
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate,
           overdueObligationDueDate,
           Some(entityName),
@@ -529,7 +521,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsDataModel with the correct data" in new DetailsTest {
 
-        val expected = VatDetailsDataModel(
+        val expected: VatDetailsDataModel = VatDetailsDataModel(
           Some("2019-06-06"),
           hasMultiple = false,
           isOverdue = false,
@@ -564,7 +556,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           )
         )
 
-        val expected = VatDetailsDataModel(
+        val expected: VatDetailsDataModel = VatDetailsDataModel(
           Some("2"),
           hasMultiple = true,
           isOverdue = false,
@@ -680,7 +672,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         "return VatDetailsDataModel with overdue flag set to true" in new DetailsTest {
 
-          val expected = VatDetailsDataModel(
+          val expected: VatDetailsDataModel = VatDetailsDataModel(
             displayData = Some("2017-06-06"),
             hasMultiple = false,
             isOverdue = true,
@@ -696,7 +688,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         "return VatDetailsDataModel with overdue flag set to false" in new DetailsTest {
 
-          val expected = VatDetailsDataModel(
+          val expected: VatDetailsDataModel = VatDetailsDataModel(
             displayData = Some("2019-06-06"),
             hasMultiple = false,
             isOverdue = false,

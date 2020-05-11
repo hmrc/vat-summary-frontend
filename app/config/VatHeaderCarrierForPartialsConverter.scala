@@ -22,9 +22,8 @@ import uk.gov.hmrc.play.bootstrap.filters.frontend.crypto.SessionCookieCrypto
 import uk.gov.hmrc.play.partials.HeaderCarrierForPartialsConverter
 
 @Singleton
-class VatHeaderCarrierForPartialsConverter @Inject()(sessionCookieCrypto: SessionCookieCrypto) extends HeaderCarrierForPartialsConverter {
+class VatHeaderCarrierForPartialsConverter @Inject()(val sessionCookieCrypto: SessionCookieCrypto) extends HeaderCarrierForPartialsConverter {
 
-  override val crypto: (String) => String = cookie =>
-    sessionCookieCrypto.crypto.encrypt(PlainText(cookie)).value
-
+  def encryptCookieString(cookie: String): String = cookie
+  override val crypto: String => String = encryptCookieString
 }
