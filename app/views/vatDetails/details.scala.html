@@ -79,14 +79,21 @@
               @messages("vatDetails.customerInfo.error")
             </h3>
         } else {
-            @detailsViewModel.isNonMTDfBOrNonDigitalUser.map {
-                case true if appConfig.features.mtdSignUp() => {
-                    @views.html.templates.mtdSignupSection(user.vrn)
+            @detailsViewModel.isExempt match {
+                case Some(true) if appConfig.features.mergedMTDfBStatuses() => {
+                    @views.html.templates.exemptSection(user.vrn)
                 }
-                case false if appConfig.features.vatOptOutEnabled() => {
-                    @views.html.templates.vatOptOutSection(detailsViewModel.pendingOptOut)
+                case _ => {
+                    @detailsViewModel.isNonMTDfBOrNonDigitalUser.map {
+                        case true if appConfig.features.mtdSignUp() => {
+                            @views.html.templates.mtdSignupSection(user.vrn)
+                        }
+                        case false if appConfig.features.vatOptOutEnabled() => {
+                            @views.html.templates.vatOptOutSection(detailsViewModel.pendingOptOut)
+                        }
+                        case _ => {}
+                    }
                 }
-                case _ => {}
             }
             @views.html.templates.deregSection(detailsViewModel)
         }

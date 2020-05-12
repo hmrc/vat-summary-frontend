@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
-import common.FinancialTransactionsConstants.{nonDigital, nonMTDfB}
+import common.FinancialTransactionsConstants._
 import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -130,6 +130,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val customerInfoError: Boolean = accountDetails.isLeft || partyType.isEmpty
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
+    val isExempt: Option[Boolean] = retrieveIsExempt(mandationStatus)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -149,7 +150,8 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       deregDate,
       pendingDereg,
       dateService.now(),
-      partyType
+      partyType,
+      isExempt
     )
   }
 
@@ -163,19 +165,27 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
+  private[controllers] def retrieveIsOfStatus(mandationStatus: HttpGetResult[MandationStatus], expectedType: String*): Option[Boolean] = {
     mandationStatus.fold(
       _ => None,
-      result => Some(result.mandationStatus == nonMTDfB)
+      result => Some(expectedType match {
+        case statusSeq => statusSeq.foldRight(false) { (expectedMandation, currentStatus) =>
+          if(!currentStatus) result.mandationStatus == expectedMandation else true
+        }
+        case status :: Nil => result.mandationStatus == status
+        case _ => false
+      })
     )
   }
 
-  private def retrieveIsNonMTDfBOrNonDigital(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
-    mandationStatus.fold(
-      _ => None,
-      result => Some(result.mandationStatus == nonMTDfB || result.mandationStatus == nonDigital)
-    )
-  }
+  private def retrieveIsExempt(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] =
+    retrieveIsOfStatus(mandationStatus, mtdfbExempt)
+
+  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] =
+    retrieveIsOfStatus(mandationStatus, nonMTDfB)
+
+  private def retrieveIsNonMTDfBOrNonDigital(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] =
+    retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital): _*)
 
   private def retrieveHybridStatus(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
     accountDetails match {

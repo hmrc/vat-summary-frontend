@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package config.features
+@(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
 
-import play.api.Configuration
-
-class Feature(val key: String)(implicit config: Configuration) {
-
-  def apply(value: Boolean): Unit = sys.props += key -> value.toString
-
-  def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
-}
+    <div class="column-one-third" id="mtd-signup">
+        <h3 class="heading-small">
+            <a href="@{appConfig.mtdVatReSignUpUrl + vrn}">@messages("vatDetails.mtdSignup.link")</a>
+        </h3>
+        <p>@messages("vatDetails.exempt.description")</p>
+    </div>

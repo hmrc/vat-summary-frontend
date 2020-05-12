@@ -21,20 +21,20 @@ import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 
 @Singleton
-class Features @Inject()(config: Configuration) {
+class Features @Inject()(implicit config: Configuration) {
 
-  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature, config)
-  val vatCertNSTPs = new Feature(ConfigKeys.vatCertNSTPsFeature, config)
-  val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature, config)
-  val paymentsAndRepaymentsEnabled = new Feature(ConfigKeys.paymentsAndRepaymentsFeature, config)
-  val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature, config)
-  val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService, config)
-  val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature, config)
-  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature, config)
-  val submitReturnFeatures = new Feature(ConfigKeys.submitReturnFeatures, config)
-  val agentAccess = new Feature(ConfigKeys.agentAccessFeature, config)
-  val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature, config)
-  val ddCollectionInProgressEnabled = new Feature(ConfigKeys.ddCollectionInProgressFeature, config)
-  val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature, config)
-
+  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
+  val vatCertNSTPs = new Feature(ConfigKeys.vatCertNSTPsFeature)
+  val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
+  val paymentsAndRepaymentsEnabled = new Feature(ConfigKeys.paymentsAndRepaymentsFeature)
+  val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature)
+  val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService)
+  val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature)
+  val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
+  val submitReturnFeatures = new Feature(ConfigKeys.submitReturnFeatures)
+  val agentAccess = new Feature(ConfigKeys.agentAccessFeature)
+  val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature)
+  val ddCollectionInProgressEnabled = new Feature(ConfigKeys.ddCollectionInProgressFeature)
+  val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature)
+  val mergedMTDfBStatuses = new Feature(ConfigKeys.mergedMTDfBStatuses)
 }

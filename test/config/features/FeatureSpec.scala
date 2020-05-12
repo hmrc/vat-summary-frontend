@@ -23,7 +23,7 @@ import play.api.Configuration
 
 class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
-  private val features = new Features(app.injector.instanceOf[Configuration])
+  private val features = new Features()(app.injector.instanceOf[Configuration])
 
   override def beforeEach(): Unit = {
     super.beforeEach()

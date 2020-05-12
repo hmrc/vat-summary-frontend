@@ -68,6 +68,7 @@ vatDetails.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.returnsDue = You have {0} returns due
 vatDetails.paymentsDue = You have {0} payments due
 vatDetails.checkWhatYouOwe = Check what you owe and make a payment
+vatDetails.exempt.description = You must sign up to Making Tax Digital for VAT if you''re not exempt from VAT, and your taxable turnover exceeds the £85,000 threshold.
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
