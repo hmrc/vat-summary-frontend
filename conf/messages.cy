@@ -172,6 +172,7 @@ vatCertificate.aboutYourRegistration.title = Ynglŷn â’ch cofrestriad
 vatCertificate.aboutYourRegistration.vrn = Rhif Cofrestru TAW (VRN)
 vatCertificate.aboutYourRegistration.registrationDate = Dyddiad cofrestru
 vatCertificate.aboutYourRegistration.certificateDate = Dyddiad y dystysgrif
+vatCertificate.aboutYourRegistration.fullName = Enw llawn
 
 vatCertificate.aboutTheBusiness.title = Ynglŷn â’r busnes
 vatCertificate.aboutTheBusiness.businessName = Enw’r busnes

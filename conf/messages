@@ -146,6 +146,7 @@ vatCertificate.aboutYourRegistration.title = About your registration
 vatCertificate.aboutYourRegistration.vrn = VAT registration number (VRN)
 vatCertificate.aboutYourRegistration.registrationDate = Registration date
 vatCertificate.aboutYourRegistration.certificateDate = Certificate date
+vatCertificate.aboutYourRegistration.fullName = Full name
 
 vatCertificate.aboutTheBusiness.title = About the business
 vatCertificate.aboutTheBusiness.businessName = Business name

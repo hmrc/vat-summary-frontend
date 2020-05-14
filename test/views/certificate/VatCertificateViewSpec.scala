@@ -34,6 +34,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     val heading = "h1"
     val cardClass = ".card-full-container"
     val printButton = "button"
+    val fullNameSelector = ".card-full > dl:nth-child(2) > div > dd"
   }
 
   lazy val model = VatCertificateViewModel(
@@ -47,12 +48,22 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     Address("Line 1", Some("Line 2"), None, None, Some("TF4 3ER")),
     "returnPeriod.MM",
     None,
+    None,
     None
   )
 
   lazy val modelWithNSTP: VatCertificateViewModel = model.copy(
     nonStdTaxPeriods = Some(exampleNonStandardTaxPeriods),
-    firstNonNSTPPeriod = exampleNonNSTP)
+    firstNonNSTPPeriod = exampleNonNSTP
+  )
+
+  lazy val soleTrader: VatCertificateViewModel = model.copy(
+    businessName = Some("ABC Business"),
+    businessTypeMsgKey = "partyType.1",
+    fullName = Some("Sole Person")
+  )
+
+  lazy val soleTraderWithoutTradingName: VatCertificateViewModel = soleTrader.copy(tradingName = None)
 
   "The VAT Certificate page" when {
 
@@ -227,5 +238,58 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
       }
     }
+
+    "accessed by a sole trader" should {
+      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, soleTrader)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct title" in {
+        document.title shouldBe "Your VAT Certificate - Business tax account - GOV.UK"
+      }
+
+      "have the correct heading" in {
+        elementText(Selectors.heading) shouldBe "Your VAT Certificate"
+      }
+
+      "display the traders full name" in {
+        elementText(Selectors.fullNameSelector) shouldBe "Sole Person"
+      }
+
+      "display the traders trading name" in {
+        document.body().toString should include("Trading name")
+      }
+
+      "not display the business name" in {
+        document.body().toString shouldNot include("Business name")
+      }
+
+    }
+
+    "accessed by a sole trader without a trading name" should {
+      lazy val view = views.html.certificate.vatCertificate(HtmlFormat.empty, soleTraderWithoutTradingName)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct title" in {
+        document.title shouldBe "Your VAT Certificate - Business tax account - GOV.UK"
+      }
+
+      "have the correct heading" in {
+        elementText(Selectors.heading) shouldBe "Your VAT Certificate"
+      }
+
+      "display the traders full name" in {
+        elementText(Selectors.fullNameSelector) shouldBe "Sole Person"
+      }
+
+      "not display the traders trading name" in {
+        document.body().toString shouldNot include("Trading name")
+      }
+
+      "not display the business name" in {
+        document.body().toString shouldNot include("Business name")
+      }
+
+    }
+
   }
 }
