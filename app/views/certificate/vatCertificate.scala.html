@@ -67,9 +67,6 @@
         </div>
         <div class="column-full card-full">
             @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn)
-            @if(isSoleTrader && model.fullName.nonEmpty) {
-                @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get)
-            }
             @fieldRow(messages("vatCertificate.aboutYourRegistration.registrationDate"),
                 model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")))
             @fieldRow(messages("vatCertificate.aboutYourRegistration.certificateDate"), displayDate(model.certificateDate))
@@ -81,6 +78,9 @@
             <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
         </div>
         <div class="column-full card-full">
+            @if(isSoleTrader && model.fullName.nonEmpty) {
+                @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get)
+            }
             @if(!isSoleTrader) {
                 @fieldRow(messages("vatCertificate.aboutTheBusiness.businessName"), model.businessName.getOrElse(messages("common.notProvided")))
             }

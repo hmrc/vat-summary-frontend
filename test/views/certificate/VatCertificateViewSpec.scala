@@ -34,7 +34,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     val heading = "h1"
     val cardClass = ".card-full-container"
     val printButton = "button"
-    val fullNameSelector = ".card-full > dl:nth-child(2) > div > dd"
+    val fullNameSelector = "#content > article > div:nth-child(5) > div.column-full.card-full > dl:nth-child(1) > div > dd"
   }
 
   lazy val model = VatCertificateViewModel(
