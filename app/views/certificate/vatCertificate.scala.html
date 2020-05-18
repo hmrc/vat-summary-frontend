@@ -22,6 +22,23 @@
 
 @(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
 
+@fieldRow(title: String, content: Any) = {
+    <dl class="govuk-check-your-answers cya-questions-long">
+        <div>
+            <dt class="cya-question">
+             @title
+            </dt>
+            <dd class="cya-answer">
+             @content
+            </dd>
+        </div>
+    </dl>
+}
+
+@isSoleTrader = @{
+    model.businessTypeMsgKey.split('.').last == "1"
+}
+
 @views.html.main_template(
   if(user.isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
   appConfig = appConfig,
@@ -49,36 +66,10 @@
             <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutYourRegistration.title")</h2>
         </div>
         <div class="column-full card-full">
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutYourRegistration.vrn")
-                    </dt>
-                    <dd class="cya-answer">
-                        @model.vrn
-                    </dd>
-                </div>
-            </dl>
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutYourRegistration.registrationDate")
-                    </dt>
-                    <dd class="cya-answer">
-                        @{model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided"))}
-                    </dd>
-                </div>
-            </dl>
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutYourRegistration.certificateDate")
-                    </dt>
-                    <dd class="cya-answer">
-                        @displayDate(model.certificateDate)
-                    </dd>
-                </div>
-            </dl>
+            @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn)
+            @fieldRow(messages("vatCertificate.aboutYourRegistration.registrationDate"),
+                model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")))
+            @fieldRow(messages("vatCertificate.aboutYourRegistration.certificateDate"), displayDate(model.certificateDate))
         </div>
     </div>
 
@@ -87,56 +78,22 @@
             <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
         </div>
         <div class="column-full card-full">
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutTheBusiness.businessName")
-                    </dt>
-                    <dd class="cya-answer">
-                        @{model.businessName.getOrElse(messages("common.notProvided"))}
-                    </dd>
-                </div>
-            </dl>
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutTheBusiness.tradingName")
-                    </dt>
-                    <dd class="cya-answer">
-                        @{model.tradingName.getOrElse(messages("common.notProvided"))}
-                    </dd>
-                </div>
-            </dl>
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutTheBusiness.businessType")
-                    </dt>
-                    <dd class="cya-answer">
-                        @messages(model.businessTypeMsgKey)
-                    </dd>
-                </div>
-            </dl>
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutTheBusiness.tradeClassification")
-                    </dt>
-                    <dd class="cya-answer">
-                        @{model.tradeClassification}
-                    </dd>
-                </div>
-            </dl>
-            <dl class="govuk-check-your-answers cya-questions-long">
-                <div>
-                    <dt class="cya-question">
-                        @messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness")
-                    </dt>
-                    <dd class="cya-answer">
-                        @fullAddress(model.ppob)
-                    </dd>
-                </div>
-            </dl>
+            @if(isSoleTrader && model.fullName.nonEmpty) {
+                @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get)
+            }
+            @if(!isSoleTrader) {
+                @fieldRow(messages("vatCertificate.aboutTheBusiness.businessName"), model.businessName.getOrElse(messages("common.notProvided")))
+            }
+            @if(isSoleTrader) {
+                @if(model.tradingName.nonEmpty) {
+                    @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.get)
+                }
+            } else {
+                @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.getOrElse(messages("common.notProvided")))
+            }
+            @fieldRow(messages("vatCertificate.aboutTheBusiness.businessType"), messages(model.businessTypeMsgKey))
+            @fieldRow(messages("vatCertificate.aboutTheBusiness.tradeClassification"), model.tradeClassification)
+            @fieldRow(messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"), fullAddress(model.ppob))
         </div>
     </div>
 
