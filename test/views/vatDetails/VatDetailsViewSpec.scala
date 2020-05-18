@@ -64,19 +64,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     currentDate = testDate,
     partyType = Some("1")
   )
-  val exemptDetailsModel = VatDetailsViewModel(
-    Some("2018-12-31"),
-    Some("2018-12-31"),
-    Some("Cheapo Clothing"),
-    currentDate = testDate,
-    partyType = Some("1"),
-    isExempt = Some(true)
-  )
   val nonMtdDetailsModel = VatDetailsViewModel(
     None,
     None,
     None,
-    isNonMTDfBOrNonDigitalUser = Some(true),
+    showSignUp = Some(true),
     currentDate = testDate,
     partyType = Some("1")
   )
@@ -126,8 +118,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     paymentError = true,
     returnObligationError = true,
-    isNonMTDfBUser = None,
-    isNonMTDfBOrNonDigitalUser = None,
+    showSignUp = None,
     customerInfoError = true,
     currentDate = testDate,
     partyType = Some("1")
@@ -290,32 +281,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the VAT details page for an exempt user" should {
-
-    lazy val view = views.html.vatDetails.details(exemptDetailsModel)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "has the mtd sign up section" which {
-
-      lazy val mtdSignupSection = element(Selectors.mtdSignupSection)
-
-      "has the correct heading" in {
-        mtdSignupSection.select("h3").text() shouldBe "Sign up for Making Tax Digital for VAT"
-      }
-
-      "has a link to the vat-sign-up service" in {
-        mtdSignupSection.select("h3 a").attr("href") shouldBe s"/vat-through-software/sign-up/vat-number/${user.vrn}"
-      }
-
-      "has the correct paragraph" in {
-        mtdSignupSection.select("p").text() shouldBe
-          "You must sign up to Making Tax Digital for VAT if you're not exempt from VAT, and your taxable turnover exceeds the £85,000 threshold."
-      }
-
-    }
-
-  }
-
   "Rendering the VAT details page for a non mtd user" should {
 
     lazy val view = views.html.vatDetails.details(nonMtdDetailsModel, Html("<nav>BTA Links</nav>"))
@@ -334,8 +299,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has the correct paragraph" in {
-        mtdSignupSection.select("p").text() shouldBe "If your taxable turnover exceeds the VAT threshold, " +
-          "you must sign up to Making Tax Digital for VAT."
+        mtdSignupSection.select("p").text() shouldBe "You must sign up to Making Tax Digital for VAT if you're not exempt from " +
+          "VAT, and your taxable turnover exceeds the £85,000 threshold."
       }
     }
 
@@ -418,7 +383,14 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page without a next return or next payment" should {
 
-    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate, partyType = Some("1")))
+    lazy val view = views.html.vatDetails.details(VatDetailsViewModel(
+      paymentsData = None,
+      obligationData = None,
+      entityName = None,
+      customerInfoError = true,
+      currentDate = testDate,
+      partyType = Some("1"))
+    )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {

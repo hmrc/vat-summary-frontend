@@ -42,8 +42,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
         agentAccess = appConfig.features.agentAccess(),
         mtdSignUp = appConfig.features.mtdSignUp(),
         ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled(),
-        displayCovid = appConfig.features.displayCovidMessage(),
-        mergedMTDfBStatuses = appConfig.features.mergedMTDfBStatuses()
+        displayCovid = appConfig.features.displayCovidMessage()
       )
     )))
   }
@@ -69,7 +68,6 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi, implicit v
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
     appConfig.features.displayCovidMessage(model.displayCovid)
-    appConfig.features.mergedMTDfBStatuses(model.mergedMTDfBStatuses)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }

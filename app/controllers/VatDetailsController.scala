@@ -124,13 +124,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val pendingOptOut: Boolean =
       accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
-    val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
-    val isNonMTDfBOrNonDigital: Option[Boolean] = retrieveIsNonMTDfBOrNonDigital(mandationStatus)
     val partyType: Option[String] = retrievePartyType(accountDetails)
     val customerInfoError: Boolean = accountDetails.isLeft || partyType.isEmpty
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
-    val isExempt: Option[Boolean] = retrieveIsExempt(mandationStatus)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -143,15 +140,13 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
-      isNonMTDfB,
-      isNonMTDfBOrNonDigital,
+      retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital, mtdfbExempt): _*),
       customerInfoError,
       pendingOptOut,
       deregDate,
       pendingDereg,
       dateService.now(),
-      partyType,
-      isExempt
+      partyType
     )
   }
 
@@ -177,15 +172,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       })
     )
   }
-
-  private def retrieveIsExempt(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] =
-    retrieveIsOfStatus(mandationStatus, mtdfbExempt)
-
-  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] =
-    retrieveIsOfStatus(mandationStatus, nonMTDfB)
-
-  private def retrieveIsNonMTDfBOrNonDigital(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] =
-    retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital): _*)
 
   private def retrieveHybridStatus(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
     accountDetails match {

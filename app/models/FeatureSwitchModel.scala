@@ -28,5 +28,4 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               agentAccess: Boolean,
                               mtdSignUp: Boolean,
                               ddCollectionInProgress: Boolean,
-                              displayCovid: Boolean,
-                              mergedMTDfBStatuses: Boolean)
+                              displayCovid: Boolean)

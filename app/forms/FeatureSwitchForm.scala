@@ -36,8 +36,7 @@ object FeatureSwitchForm {
       ConfigKeys.agentAccessFeature -> boolean,
       ConfigKeys.mtdSignUpFeature -> boolean,
       ConfigKeys.ddCollectionInProgressFeature -> boolean,
-      ConfigKeys.displayCovidMessageFeature -> boolean,
-      ConfigKeys.mergedMTDfBStatuses -> boolean
+      ConfigKeys.displayCovidMessageFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

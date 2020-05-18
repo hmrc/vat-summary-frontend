@@ -36,5 +36,4 @@ class Features @Inject()(implicit config: Configuration) {
   val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature)
   val ddCollectionInProgressEnabled = new Feature(ConfigKeys.ddCollectionInProgressFeature)
   val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature)
-  val mergedMTDfBStatuses = new Feature(ConfigKeys.mergedMTDfBStatuses)
 }

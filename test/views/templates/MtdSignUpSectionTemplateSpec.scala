@@ -21,7 +21,7 @@ import org.jsoup.nodes.Document
 import play.twirl.api.HtmlFormat
 import views.ViewBaseSpec
 
-class  MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
+class MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val mtdSignupSection = "#mtd-signup"
@@ -30,7 +30,7 @@ class  MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
     val mtdSignupSectionParagraph = s"$mtdSignupSection > p:nth-child(2)"
   }
 
-  "The mtdSignupSection" should {
+  "The mtdSignupSection" when {
 
     val view: HtmlFormat.Appendable = views.html.templates.mtdSignupSection(vrn = "123456789")
     implicit val document: Document = Jsoup.parse(view.body)
@@ -45,8 +45,9 @@ class  MtdSignUpSectionTemplateSpec extends ViewBaseSpec {
     }
 
     "have the correct paragraph" in {
-      elementText(Selectors.mtdSignupSectionParagraph) shouldBe "If your taxable turnover exceeds the VAT threshold, " +
-        "you must sign up to Making Tax Digital for VAT."
+      elementText(Selectors.mtdSignupSectionParagraph) shouldBe "You must sign up to Making Tax Digital for VAT if you're not exempt " +
+        "from VAT, and your taxable turnover exceeds the £85,000 threshold."
     }
+
   }
 }
