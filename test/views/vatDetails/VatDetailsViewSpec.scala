@@ -299,7 +299,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has the correct paragraph" in {
-        mtdSignupSection.select("p").text() shouldBe "You must sign up to Making Tax Digital for VAT if you're not exempt from " +
+        mtdSignupSection.select("p").text() shouldBe "You must sign up to Making Tax Digital for VAT if you’re not exempt from " +
           "VAT, and your taxable turnover exceeds the £85,000 threshold."
       }
     }

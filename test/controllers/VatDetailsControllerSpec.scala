@@ -758,7 +758,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "the mandation status matches the expected status" in new DetailsTest {
         val mandationStatusToCompare: Either[Nothing, MandationStatus] = Right(MandationStatus("MTDfB"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompare, mtdfb) shouldBe Some(true)
+        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(true)
       }
 
       "the mandation status matches one of the expected statuses" in new DetailsTest {
@@ -767,8 +767,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         val controller: VatDetailsController = target(false)
 
-        controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq(mtdfb, mtdfbExempt): _*) shouldBe Some(true)
-        controller.retrieveIsOfStatus(mandationStatusToCompareExempt, Seq(mtdfb, mtdfbExempt): _*) shouldBe Some(true)
+        controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
+        controller.retrieveIsOfStatus(mandationStatusToCompareExempt, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
       }
 
     }
@@ -777,17 +777,17 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "the mandation status does not match the expected status" in new DetailsTest {
         val mandationStatusToCompare: Either[Nothing, MandationStatus] = Right(MandationStatus("someStatus"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompare, mtdfb) shouldBe Some(false)
+        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(false)
       }
 
       "the mandation status does not match any of the expected statuses" in new DetailsTest {
         val mandationStatusToCompareMtdfb: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus"): _*) shouldBe Some(false)
+        target(false).retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
       }
 
       "the expected mandation statuses list is empty" in new DetailsTest {
         val mandationStatusToCompare: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(): _*) shouldBe Some(false)
+        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
       }
 
     }
@@ -796,7 +796,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "an error is present" in new DetailsTest {
         val errorForTest: HttpGetResult[MandationStatus] = Left(UnknownError)
-        target(false).retrieveIsOfStatus(errorForTest, Seq(): _*) shouldBe None
+        target(false).retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
       }
 
     }

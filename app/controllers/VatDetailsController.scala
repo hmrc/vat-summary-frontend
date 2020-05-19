@@ -140,7 +140,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
-      retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital, mtdfbExempt): _*),
+      retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital, mtdfbExempt)),
       customerInfoError,
       pendingOptOut,
       deregDate,
@@ -160,16 +160,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private[controllers] def retrieveIsOfStatus(mandationStatus: HttpGetResult[MandationStatus], expectedType: String*): Option[Boolean] = {
+  private[controllers] def retrieveIsOfStatus(mandationStatus: HttpGetResult[MandationStatus], expectedType: Seq[String]): Option[Boolean] = {
     mandationStatus.fold(
       _ => None,
-      result => Some(expectedType match {
-        case statusSeq => statusSeq.foldRight(false) { (expectedMandation, currentStatus) =>
-          if(!currentStatus) result.mandationStatus == expectedMandation else true
-        }
-        case status :: Nil => result.mandationStatus == status
-        case _ => false
-      })
+      result => Some(expectedType.contains(result.mandationStatus))
     )
   }
 
