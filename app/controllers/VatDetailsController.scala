@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
-import common.FinancialTransactionsConstants.{nonDigital, nonMTDfB}
+import common.FinancialTransactionsConstants._
 import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -124,8 +124,6 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val pendingOptOut: Boolean =
       accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
-    val isNonMTDfB: Option[Boolean] = retrieveIsNonMTDfB(mandationStatus)
-    val isNonMTDfBOrNonDigital: Option[Boolean] = retrieveIsNonMTDfBOrNonDigital(mandationStatus)
     val partyType: Option[String] = retrievePartyType(accountDetails)
     val customerInfoError: Boolean = accountDetails.isLeft || partyType.isEmpty
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
@@ -142,8 +140,7 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
-      isNonMTDfB,
-      isNonMTDfBOrNonDigital,
+      retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital, mtdfbExempt)),
       customerInfoError,
       pendingOptOut,
       deregDate,
@@ -163,17 +160,10 @@ class VatDetailsController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  private def retrieveIsNonMTDfB(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
+  private[controllers] def retrieveIsOfStatus(mandationStatus: HttpGetResult[MandationStatus], expectedType: Seq[String]): Option[Boolean] = {
     mandationStatus.fold(
       _ => None,
-      result => Some(result.mandationStatus == nonMTDfB)
-    )
-  }
-
-  private def retrieveIsNonMTDfBOrNonDigital(mandationStatus: HttpGetResult[MandationStatus]): Option[Boolean] = {
-    mandationStatus.fold(
-      _ => None,
-      result => Some(result.mandationStatus == nonMTDfB || result.mandationStatus == nonDigital)
+      result => Some(expectedType.contains(result.mandationStatus))
     )
   }
 

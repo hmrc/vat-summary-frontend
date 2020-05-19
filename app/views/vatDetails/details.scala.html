@@ -55,7 +55,7 @@
           detailsViewModel.hasMultipleReturnObligations,
           detailsViewModel.returnObligationOverdue,
           detailsViewModel.returnObligationError,
-          detailsViewModel.isNonMTDfBOrNonDigitalUser
+          detailsViewModel.showSignUp
       )
 
       @views.html.templates.historySection(detailsViewModel.isHybridUser)
@@ -79,16 +79,16 @@
               @messages("vatDetails.customerInfo.error")
             </h3>
         } else {
-            @detailsViewModel.isNonMTDfBOrNonDigitalUser.map {
-                case true if appConfig.features.mtdSignUp() => {
+            @detailsViewModel.showSignUp match {
+                case Some(true) if appConfig.features.mtdSignUp() => {
                     @views.html.templates.mtdSignupSection(user.vrn)
                 }
-                case false if appConfig.features.vatOptOutEnabled() => {
+                case Some(false) if appConfig.features.vatOptOutEnabled() => {
                     @views.html.templates.vatOptOutSection(detailsViewModel.pendingOptOut)
                 }
                 case _ => {}
             }
-            @views.html.templates.deregSection(detailsViewModel)
         }
+        @views.html.templates.deregSection(detailsViewModel)
     </div>
 }

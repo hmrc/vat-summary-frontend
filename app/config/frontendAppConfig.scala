@@ -137,7 +137,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val signInOrigin = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
-  override val features = new Features(runModeConfiguration)
+  override val features = new Features()(runModeConfiguration)
 
   override lazy val vatSubscriptionBaseUrl: String = baseUrl("vat-subscription")
   override lazy val vatApiBaseUrl: String = baseUrl("vat-api")

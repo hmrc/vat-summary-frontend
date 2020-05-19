@@ -22,6 +22,7 @@ import audit.AuditingService
 import audit.models.AuditModel
 import common.TestModels._
 import common.{SessionKeys, TestModels}
+import common.FinancialTransactionsConstants._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models._
@@ -39,6 +40,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import models.errors._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -410,33 +412,17 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "there is no obligation, payment, entity name or partyType with a non-MTDfB user" should {
+    "there is no obligation, payment, entity name or partyType when the showSignUp flag is true" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in
         new DetailsTest {
         lazy val expected = VatDetailsViewModel(
-          None, None, None, isNonMTDfBUser = Some(true), isNonMTDfBOrNonDigitalUser = Some(true), customerInfoError = true, currentDate = testDate, partyType = None)
+          None, None, None, showSignUp = Some(true), customerInfoError = true, currentDate = testDate, partyType = None)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
           Right(customerInformationMin),
           Right(validNonMTDfBMandationStatus)
-        )
-        result shouldBe expected
-      }
-    }
-
-    "there is no obligation, payment, entity name or partyType with a non-Digital user" should {
-
-      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in
-        new DetailsTest {
-        lazy val expected = VatDetailsViewModel(
-          None, None, None, isNonMTDfBOrNonDigitalUser = Some(true), customerInfoError = true, currentDate = testDate, partyType = None)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Right(None),
-          Right(customerInformationMin),
-          Right(validNonDigitalMandationStatus)
         )
         result shouldBe expected
       }
@@ -764,5 +750,56 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         await(result) shouldBe Left(BadRequestError("", ""))
       }
     }
+  }
+
+  "Calling .retrieveIsOfType" should {
+
+    "return true" when {
+
+      "the mandation status matches the expected status" in new DetailsTest {
+        val mandationStatusToCompare: Either[Nothing, MandationStatus] = Right(MandationStatus("MTDfB"))
+        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(true)
+      }
+
+      "the mandation status matches one of the expected statuses" in new DetailsTest {
+        val mandationStatusToCompareMtdfb: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
+        val mandationStatusToCompareExempt: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB Exempt"))
+
+        val controller: VatDetailsController = target(false)
+
+        controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
+        controller.retrieveIsOfStatus(mandationStatusToCompareExempt, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
+      }
+
+    }
+
+    "return false" when {
+
+      "the mandation status does not match the expected status" in new DetailsTest {
+        val mandationStatusToCompare: Either[Nothing, MandationStatus] = Right(MandationStatus("someStatus"))
+        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(false)
+      }
+
+      "the mandation status does not match any of the expected statuses" in new DetailsTest {
+        val mandationStatusToCompareMtdfb: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
+        target(false).retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
+      }
+
+      "the expected mandation statuses list is empty" in new DetailsTest {
+        val mandationStatusToCompare: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
+        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
+      }
+
+    }
+
+    "return None" when {
+
+      "an error is present" in new DetailsTest {
+        val errorForTest: HttpGetResult[MandationStatus] = Left(UnknownError)
+        target(false).retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
+      }
+
+    }
+
   }
 }
