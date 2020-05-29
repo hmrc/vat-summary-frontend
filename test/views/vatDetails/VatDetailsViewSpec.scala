@@ -54,8 +54,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val historyPastReturns = "ul.list > li:nth-child(2) > a:nth-child(1)"
     val serviceInfoNav = ".service-info nav"
     val apiError = "h3:nth-child(2).heading-medium"
-    val vatOptOutLink = "#vat-optout"
-    val deregHeading = "#cancel-vat"
+    val vatOptOutSection = "#vat-optout"
+    val cancelVatSection = "#cancel-vat"
     val covidPartial = ".warning-banner"
   }
 
@@ -241,14 +241,15 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "have the opt out section" which {
 
-      lazy val optOutLink = element(Selectors.vatOptOutLink)
+      lazy val optOutSection = element(Selectors.vatOptOutSection)
 
       "has the correct heading" in {
-        optOutLink.select("h3").text() shouldBe "Opt out of Making Tax Digital for VAT"
+        optOutSection.select("h3").text() shouldBe "Opt out of Making Tax Digital for VAT"
       }
 
       "has the correct paragraph" in {
-        optOutLink.select("p").text() shouldBe "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
+        optOutSection.select("p").text() shouldBe
+          "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
       }
     }
 
@@ -265,17 +266,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "have the deregister for VAT section" which {
+    "have the cancel VAT section" which {
 
-      lazy val deregSection = element(Selectors.deregHeading)
+      lazy val cancelVatSection = element(Selectors.cancelVatSection)
 
       "has the correct heading" in {
-        deregSection.select("h3").text() shouldBe "Cancel VAT registration"
+        cancelVatSection.select("h3").text() shouldBe "Cancel VAT registration"
       }
 
       "has the correct paragraph" in {
-        deregSection.select("p").text() shouldBe
-          "Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered."
+        cancelVatSection.select("p").text() shouldBe "Cancel your VAT registration if you’re closing the business, " +
+          "transferring ownership or do not need to be VAT registered."
       }
     }
 
@@ -308,7 +309,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "not have the Opt out section" in {
-      elementExtinct(Selectors.vatOptOutLink)
+      elementExtinct(Selectors.vatOptOutSection)
     }
   }
 
@@ -339,7 +340,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         mockConfig.features.vatOptOutEnabled(false)
         lazy val view = details(detailsModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
-        elementExtinct(Selectors.vatOptOutLink)
+        elementExtinct(Selectors.vatOptOutSection)
       }
     }
 
@@ -499,7 +500,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       )
     }
 
-    "render Api graceful error message in Opt out section" in {
+    "render the graceful error message in place of the bottom row of tiles" in {
       elementText(Selectors.apiError) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
 
@@ -507,6 +508,13 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
     }
 
+    "not display the opt out section" in {
+      elementExtinct(Selectors.vatOptOutSection)
+    }
+
+    "not display the cancel VAT section" in {
+      elementExtinct(Selectors.cancelVatSection)
+    }
   }
 
   "Rendering the overview page" should {
@@ -521,7 +529,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
         document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
       }
-
     }
 
     "not display the covid message" when {
@@ -534,9 +541,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
         elementExtinct(Selectors.covidPartial)
       }
-
     }
-
   }
-
 }
