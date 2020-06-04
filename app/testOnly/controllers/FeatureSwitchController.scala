@@ -45,7 +45,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         agentAccess = appConfig.features.agentAccess(),
         mtdSignUp = appConfig.features.mtdSignUp(),
         ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled(),
-        displayCovid = appConfig.features.displayCovidMessage()
+        displayCovid = appConfig.features.displayCovidMessage(),
+        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept()
       )
     )))
   }
@@ -71,6 +72,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
     appConfig.features.displayCovidMessage(model.displayCovid)
+    appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
