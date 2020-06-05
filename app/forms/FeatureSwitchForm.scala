@@ -36,7 +36,8 @@ object FeatureSwitchForm {
       ConfigKeys.agentAccessFeature -> boolean,
       ConfigKeys.mtdSignUpFeature -> boolean,
       ConfigKeys.ddCollectionInProgressFeature -> boolean,
-      ConfigKeys.displayCovidMessageFeature -> boolean
+      ConfigKeys.displayCovidMessageFeature -> boolean,
+      ConfigKeys.missingTraderAddressIntercept -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
