@@ -103,6 +103,7 @@ trait AppConfig {
   val manageVatUrl: String
   val reportA11yProblemUrl: String
   val a11yServiceIdentifier: String
+  val missingTraderRedirectUrl: String
 }
 
 @Singleton
@@ -260,4 +261,5 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val paymentsAndRepaymentsUrl: String = sc.getString(Keys.vatRepaymentTrackerFrontendHost) + sc.getString(Keys.vatRepaymentTrackerFrontendUrl)
 
   override lazy val manageVatUrl: String = sc.getString(Keys.manageVatHost) + sc.getString(Keys.manageVatUrl)
+  override lazy val missingTraderRedirectUrl: String = sc.getString(Keys.manageVatHost) + sc.getString(Keys.missingTraderRedirectUrl)
 }

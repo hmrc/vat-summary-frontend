@@ -103,4 +103,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val paymentsAndRepaymentsUrl: String = "/vat-repayment-tracker/manage-or-track-vrt"
   override val reportA11yProblemUrl: String =
     "/contact/accessibility?service=VATVCACCESSIBILITY&userAction=/vat-through-software/vat-overview"
+  override val missingTraderRedirectUrl: String = "/missing-trader"
 }

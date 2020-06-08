@@ -316,10 +316,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             .expects(*, *, *)
             .returns(accountDetailsResponse)
          }
- 
+
          val result: Result = await(target.openPayments()(fakeRequest))
          val document: Document = Jsoup.parse(bodyOf(result))
- 
+
          document.select("h1").first().text() shouldBe "What you owe"
       }
     }
