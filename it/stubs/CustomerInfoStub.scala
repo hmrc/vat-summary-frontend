@@ -96,7 +96,8 @@ object CustomerInfoStub extends WireMockMethods {
     ),
     "changeIndicators" -> Json.obj(
       "deregister" -> false
-    )
+    ),
+    "missingTrader" -> false
   )
 
   private val errorJson = Json.obj(

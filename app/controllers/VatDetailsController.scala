@@ -23,6 +23,7 @@ import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVat
 import common.FinancialTransactionsConstants._
 import common.SessionKeys
 import config.AppConfig
+import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
 import models._
@@ -82,10 +83,18 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
             case _ => Seq()
           })
 
-        Ok(detailsView(
-          constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
-        )).addingToSession(newSessionVariables: _*)
+        if(redirectForMissingTrader(customerInfo)) {
+          Redirect(appConfig.missingTraderRedirectUrl)
+        } else {
+          Ok(detailsView(
+            constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
+          )).addingToSession(newSessionVariables: _*)
+        }
       }
+  }
+
+  private def redirectForMissingTrader(customerInfo: ResponseHttpParsers.HttpGetResult[CustomerInformation]) = {
+    customerInfo.fold(_ => false, details => appConfig.features.missingTraderAddressIntercept() && details.isMissingTrader)
   }
 
   private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {

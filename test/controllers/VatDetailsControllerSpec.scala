@@ -309,6 +309,26 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         await(bodyOf(result)).contains(messages("returnObligation.viewReturns")) shouldBe false
       }
     }
+
+    "user is a missing trader" should {
+
+      "redirect to the manage-vat-subscription-frontend missing trader URL" in new DetailsTest {
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
+          customerInformationMax.copy(isMissingTrader = true)
+        ))
+
+        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
+
+        mockAppConfig.features.missingTraderAddressIntercept(true)
+        lazy val result: Future[Result] = target().details()(fakeRequest)
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some("/missing-trader")
+      }
+
+    }
+
   }
 
   "Calling .constructViewModel with a VatDetailsModel" when {

@@ -83,7 +83,8 @@ object TestModels {
     Some(TaxPeriod(LocalDate.parse("2018-01-29"), LocalDate.parse("2018-01-31"))),
     Some("MTDfB Voluntary"),
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-    Some(ChangeIndicators(false))
+    Some(ChangeIndicators(false)),
+    isMissingTrader = false
   )
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
@@ -104,7 +105,8 @@ object TestModels {
     None,
     None,
     None,
-    None
+    None,
+    isMissingTrader = false
   )
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(

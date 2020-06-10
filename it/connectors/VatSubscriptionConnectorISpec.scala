@@ -61,7 +61,8 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some(TaxPeriod("2018-01-29", "2018-01-31")),
         Some("MTDfB Voluntary"),
         Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-        Some(ChangeIndicators(deregister = false))
+        Some(ChangeIndicators(deregister = false)),
+        isMissingTrader = false
       ))
 
       setupStubs()

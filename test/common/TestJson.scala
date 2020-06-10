@@ -75,7 +75,8 @@ object TestJson {
     ),
     "changeIndicators" -> Json.obj(
       "deregister" -> false
-    )
+    ),
+    "missingTrader" -> false
   )
 
   val customerInfoJsonMin: JsValue = Json.obj(
@@ -87,6 +88,7 @@ object TestJson {
         "line1" -> "Bedrock Quarry"
       )
     ),
-    "primaryMainCode" -> "10410"
+    "primaryMainCode" -> "10410",
+    "missingTrader" -> false
   )
 }

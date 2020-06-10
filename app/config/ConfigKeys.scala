@@ -130,4 +130,5 @@ object ConfigKeys {
 
   val manageVatHost: String = "manage-vat-subscription-frontend.host"
   val manageVatUrl: String = "manage-vat-subscription-frontend.url"
+  val missingTraderRedirectUrl = "manage-vat-subscription-frontend.missingTraderUrl"
 }

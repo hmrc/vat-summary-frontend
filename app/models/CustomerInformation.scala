@@ -34,7 +34,8 @@ case class CustomerInformation(organisationName: Option[String],
                                firstNonNSTPPeriod: Option[TaxPeriod],
                                pendingMandationStatus: Option[String],
                                deregistration: Option[Deregistration],
-                               changeIndicators: Option[ChangeIndicators]) {
+                               changeIndicators: Option[ChangeIndicators],
+                               isMissingTrader: Boolean) {
 
   def entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
@@ -67,6 +68,7 @@ object CustomerInformation {
     (JsPath \\ "firstNonNSTPPeriod").readNullable[TaxPeriod] and
     (JsPath \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None)) and
     (JsPath \ "deregistration").readNullable[Deregistration] and
-    (JsPath \ "changeIndicators").readNullable[ChangeIndicators]
+    (JsPath \ "changeIndicators").readNullable[ChangeIndicators] and
+    (JsPath \ "missingTrader").read[Boolean]
   )(CustomerInformation.apply _)
 }
