@@ -3,6 +3,7 @@ common.overdue = hwyr
 common.newTab = (yn agor mewn tab newydd)
 common.fullStop = .
 common.notProvided = Heb ddarparu
+common.warning = Rhybudd
 
 base.back = Yn ôl
 base.signOut = Allgofnodi

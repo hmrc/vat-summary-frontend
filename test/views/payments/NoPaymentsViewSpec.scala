@@ -37,7 +37,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-    val covidPartial = ".warning-banner"
+    val covidPartial = "div.grid-row.form-group.flex-container"
   }
 
   override val user: User = User("123456789")
@@ -152,7 +152,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
+        document.select(Selectors.covidPartial).toString should include("You can no longer delay VAT payments because of coronavirus (COVID-19)")
       }
 
     }

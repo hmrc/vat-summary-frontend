@@ -48,7 +48,6 @@
         links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
         currentPage = messages("vatDetails.title")
     )
-    @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
     <header class="page-heading push--top">
       <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
        <span class="form-hint">@messages("vatDetails.vrn", user.vrn)<br>
@@ -57,6 +56,9 @@
          }
        </span>
     </header>
+
+    @if(appConfig.features.displayCovidMessage()) { @covidMessage(pageIsFullWidth = true) }
+
     <div class="flex-container grid-row">
       @nextPaymentSection(
           detailsViewModel.paymentsData,
