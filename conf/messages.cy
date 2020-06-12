@@ -420,9 +420,9 @@ global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – 
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 
-covid.line1 = Gohirio TAW yn sgil coronafeirws (COVID-19)
-covid.line2 = Os oes gennych daliadau TAW sydd i’w talu rhwng 20 Mawrth a 30 Mehefin 2020, gallwch ddewis gwneud un o’r canlynol:
-covid.line3 = gohirio’r taliadau heb dalu llog na chosbau
-covid.line4 = talu’r TAW sy’n ddyledus, fel arfer
-covid.line5 = Mae’n rhaid i chi barhau i gyflwyno’ch Ffurflenni TAW fel arfer. Os dewiswch ohirio’ch taliad TAW, mae’n rhaid i chi dalu’r TAW sy’n ddyledus ar neu cyn 31 Mawrth 2021. Does dim rhaid i chi roi gwybod i CThEM eich bod yn gohirio’ch taliad TAW.
-covid.line6 = Os ydych fel arfer yn talu drwy Ddebyd Uniongyrchol, mae’n rhaid i chi gysylltu â’ch banc i’w ganslo cyn gynted â phosibl.
+covid.line1 = Ni allwch ohirio taliadau TAW mwyach oherwydd coronafeirws (COVID-19)
+covid.line2 = Mae’n rhaid i filiau TAW sydd â dyddiad talu ar neu ar ôl 1 Gorffennaf 2020 gael eu talu ar amser.
+covid.line3 = Os ydych wedi canslo’ch Debyd Uniongyrchol, dylech ei ailsefydlu er mwyn i chi beidio â methu taliad.
+covid.line4 = Os na allwch dalu, cysylltwch â ni cyn gynted â phosibl
+covid.line5 = Hyd yn oed os yw eich busnes wedi cau dros dro, mae’n dal yn rhaid i chi gyflwyno Ffurflenni TAW.
+covid.line6 = Mae gennych hyd at 31 Mawrth 2021 i dalu biliau TAW a oedd yn ddyledus rhwng 20 Mawrth a 30 Mehefin 2020.
