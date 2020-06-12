@@ -139,7 +139,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
     val pendingOptOut: Boolean =
       accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
     val partyType: Option[String] = retrievePartyType(accountDetails)
-    val customerInfoError: Boolean = accountDetails.isLeft || partyType.isEmpty
+    val customerInfoError: Boolean = accountDetails.isLeft
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
 
@@ -206,11 +206,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
   private def retrievePartyType(accountDetails: HttpGetResult[CustomerInformation]): Option[String] =
     accountDetails match {
-      case Right(model) =>
-        if (model.partyType.isEmpty) {
-          Logger.warn("[VatDetailsController][retrievePartyType] - No party type was found on record")
-        }
-        model.partyType
+      case Right(model) => model.partyType
       case Left(_) => None
     }
 

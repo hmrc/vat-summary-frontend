@@ -411,7 +411,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation, payment, or entity name" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, entity name or partyType" in new DetailsTest {
-        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(None, None, None, customerInfoError = true, currentDate = testDate, partyType = None)
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -428,7 +428,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in
         new DetailsTest {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, None, showSignUp = Some(true), customerInfoError = true, currentDate = testDate, partyType = None)
+          None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -516,21 +516,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
 
         result shouldBe expected
-      }
-    }
-
-    "the partyType is not returned" should {
-
-      "set the customerInfoError to true" in new DetailsTest {
-
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Right(None),
-          Right(customerInformationMax.copy(partyType = None)),
-          Right(validMandationStatus)
-        )
-
-        result.customerInfoError shouldBe true
       }
     }
   }
