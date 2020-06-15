@@ -16,14 +16,30 @@
 
 @this()
 
-@()(implicit messages: Messages)
-<section class="panel warning-banner nudge">
-    <h3 class="heading-medium">@messages("covid.line1")</h3>
-    <p>@messages("covid.line2")</p>
-    <ul class="list list-bullet">
-        <li>@messages("covid.line3")</li>
-        <li>@messages("covid.line4")</li>
-    </ul>
-    <p>@messages("covid.line5")</p>
-    <div class="panel panel-border-wide">@messages("covid.line6")</div>
-</section>
+@(pageIsFullWidth: Boolean = false)(implicit messages: Messages)
+
+<div class="grid-row form-group flex-container">
+
+    <div @if(pageIsFullWidth){class="warning-banner"}>
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">@messages("common.warning")</span>
+            </i>
+
+            <p><strong class="bold-small">@messages("covid.line1")</strong></p>
+        </div>
+
+        <div class="panel panel-border-wide">
+            <ul>
+                <li>@messages("covid.line2")</li>
+                <li>
+                    @messages("covid.line3")
+                    <a href="https://www.gov.uk/difficulties-paying-hmrc">@messages("covid.line4")</a>@messages("common.fullStop")
+                </li>
+                <li>@messages("covid.line5")</li>
+                <li>@messages("covid.line6")</li>
+            </ul>
+        </div>
+    </div>
+
+</div>

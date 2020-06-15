@@ -65,8 +65,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
-
-    val covidPartial = ".warning-banner"
+    val covidPartial = "div.grid-row.form-group.flex-container"
   }
 
   override val user = User("1111")
@@ -289,7 +288,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         lazy val view = openPaymentsView(user, viewModel)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString should include("Coronavirus (COVID 19) VAT deferral")
+        document.select(Selectors.covidPartial).toString should include("You can no longer delay VAT payments because of coronavirus (COVID-19)")
       }
 
     }

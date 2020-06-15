@@ -40,9 +40,12 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
     )
 
     <div class="grid-row">
-        @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
+
         <div class="column-two-thirds">
             <h1 class="heading-xlarge">@messages("noPayments.heading")</h1>
+
+            @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
+
             <div class="form-group" id="noPaymentsDetail">
                 <h2 class="lede">@messages("noPayments.oweNothing")</h2>
                 <p>

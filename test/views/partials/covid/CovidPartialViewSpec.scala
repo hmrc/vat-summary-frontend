@@ -27,44 +27,48 @@ class CovidPartialViewSpec extends ViewBaseSpec {
   "Rendering the covid partial" should {
 
     object Selectors {
-      val header = "h3"
-      val mainBody = "p:nth-child(2)"
-      val message1 = "p:nth-child(4)"
-      val message2 = "div.panel"
-      val bullet1 = "li:nth-child(1)"
-      val bullet2 = "li:nth-child(2)"
+      val icon = ".icon"
+      val header = "p"
+      val line1 = "li:nth-of-type(1)"
+      val line2 = "li:nth-of-type(2)"
+      val line2Link = "li:nth-of-type(2) > a"
+      val line3 = "li:nth-of-type(3)"
+      val line4 = "li:nth-of-type(4)"
     }
 
     lazy val view = covidMessageView()
-    lazy val render: Document = Jsoup.parse(view.body)
+    implicit lazy val render: Document = Jsoup.parse(view.body)
+
+    "have alternate content for the icon" in {
+      elementText(Selectors.icon) shouldBe "Warning"
+    }
 
     "have the correct header" in {
-      render.select(Selectors.header).text() shouldBe "Coronavirus (COVID 19) VAT deferral"
+      elementText(Selectors.header) shouldBe "You can no longer delay VAT payments because of coronavirus (COVID-19)"
     }
 
     "have the correct first message" in {
-      render.select(Selectors.mainBody).text() shouldBe "If you have VAT payments that are due between 20 March and 30 June 2020, you can choose to:"
+      elementText(Selectors.line1) shouldBe "VAT bills that have a payment date on or after 1 July 2020 must be paid on time."
     }
 
-    "have a list of items" which {
+    "have the correct second message" which {
 
-      "has the first item correct" in {
-        render.select(Selectors.bullet1).text() shouldBe "defer them without paying interest or penalties"
+      "has the correct text" in {
+        elementText(Selectors.line2) shouldBe "If you cancelled your Direct Debit, set it up again so you don’t miss a payment. " +
+          "Contact us as soon as possible if you cannot pay."
       }
 
-      "has the second item correct" in {
-        render.select(Selectors.bullet2).text() shouldBe "pay the VAT due as normal"
+      "has a link to a gov page" in {
+        element(Selectors.line2Link).attr("href") shouldBe "https://www.gov.uk/difficulties-paying-hmrc"
       }
     }
 
-    "have the correct message1" in {
-      render.select(Selectors.message1).text() shouldBe "You must continue to submit your returns as normal. " +
-        "If you choose to defer your VAT payment, you must pay the VAT due on or before 31 March 2021. You do not need " +
-        "to tell HMRC that you are deferring your VAT payment."
+    "have the correct third message" in {
+      elementText(Selectors.line3) shouldBe "You still need to submit VAT Returns, even if your business has temporarily closed."
     }
 
-    "have the correct message2" in {
-      render.select(Selectors.message2).text() shouldBe "If you normally pay by Direct Debit, you must contact your bank to cancel it as soon as possible."
+    "have the correct fourth message" in {
+      elementText(Selectors.line4) shouldBe "You have until 31 March 2021 to pay VAT bills that were due between 20 March and 30 June 2020."
     }
 
   }

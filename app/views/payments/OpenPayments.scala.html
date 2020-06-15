@@ -41,13 +41,14 @@
     controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
     currentPage = messages("openPayments.title")
   )
-  @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
 
   <div class="grid-row column-two-thirds">
 
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
-    <div class="payments">
+  @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
+
+      <div class="payments">
       <div class="section">
           @model.payments.zipWithIndex.map { case(payment, count) =>
               @whatYouOweChargeRow(payment, count)
