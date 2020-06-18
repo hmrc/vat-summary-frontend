@@ -114,7 +114,7 @@ object Payment {
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "outstandingAmount").read[BigDecimal] and
     (JsPath \ "periodKey").readNullable[String] and
-    (JsPath \ "items")(0).\("DDCollectionInProgress").read[Boolean].or(Reads.pure(false))
+    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
   )(Payment.createPayment _)
 
 }

@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class DirectDebitAuditModelSpec extends UnitSpec {
         
-  val directDebitDetails = DirectDebitDetailsModel(
+  val directDebitDetails: DirectDebitDetailsModel = DirectDebitDetailsModel(
     userId = "123456789",
     userIdType = "VRN",
     returnUrl = "return-url",
