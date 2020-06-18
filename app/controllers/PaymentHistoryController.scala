@@ -45,7 +45,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
                                          serviceErrorHandler: ServiceErrorHandler,
                                          mcc: MessagesControllerComponents,
                                          implicit  val ec: ExecutionContext,
-                                         paymentHistory: PaymentHistory)
+                                         paymentHistoryView: PaymentHistory)
                                         (implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
   extends FrontendController(mcc) with I18nSupport {
@@ -71,7 +71,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
         generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, migrationDate) match {
           case Some(model) =>
             auditEvent(user.vrn, model.transactions)
-            Ok(paymentHistory(model, serviceInfoContent))
+            Ok(paymentHistoryView(model, serviceInfoContent))
           case None =>
             Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
             serviceErrorHandler.showInternalServerError
@@ -114,7 +114,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
         val migratedThisYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
         val tabOne: Int = currentYear
         val tabTwo: Option[Int] = if(migratedThisYear) None else Some(previousYear)
-        val transactions = yearOneTrans ++ yearTwoTrans
+        val transactions = (yearOneTrans ++ yearTwoTrans).distinct
         Some(PaymentsHistoryViewModel(
           tabOne,
           tabTwo,
