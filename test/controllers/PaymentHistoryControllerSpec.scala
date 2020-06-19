@@ -89,6 +89,13 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
           amount        = exampleAmount,
           clearedDate   = Some(LocalDate.parse("2018-05-01"))
+        ),
+        PaymentsHistoryModel(
+          chargeType    = ReturnDebitCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
+          amount        = exampleAmount,
+          clearedDate   = Some(LocalDate.parse("2018-05-01"))
         )
       ))
     val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] =
@@ -106,6 +113,13 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           taxPeriodTo   = Some(LocalDate.parse("2017-04-01")),
           amount        = exampleAmount,
           clearedDate   = Some(LocalDate.parse("2017-05-01"))
+        ),
+        PaymentsHistoryModel(
+          chargeType    = ReturnDebitCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
+          amount        = exampleAmount,
+          clearedDate   = Some(LocalDate.parse("2018-05-01"))
         )
       ))
 
@@ -382,7 +396,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             currentYear,
             None,
             previousPaymentsTab = false,
-            serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct
           ))
         }
       }
@@ -396,7 +410,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             currentYear,
             Some(currentYear - 1),
             previousPaymentsTab = false,
-            serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct
           ))
         }
       }
