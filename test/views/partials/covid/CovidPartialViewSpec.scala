@@ -44,18 +44,20 @@ class CovidPartialViewSpec extends ViewBaseSpec {
     }
 
     "have the correct header" in {
-      elementText(Selectors.header) shouldBe "You can no longer delay VAT payments because of coronavirus (COVID-19)"
+      elementText(Selectors.header) shouldBe "We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19). " +
+        "The VAT deferral period ends on 30 June 2020."
     }
 
     "have the correct first message" in {
-      elementText(Selectors.line1) shouldBe "VAT bills that have a payment date on or after 1 July 2020 must be paid on time."
+      elementText(Selectors.line1) shouldBe "VAT bills with a payment due date on or after 1 July 2020 must be paid on time and in full."
     }
 
     "have the correct second message" which {
 
       "has the correct text" in {
-        elementText(Selectors.line2) shouldBe "If you cancelled your Direct Debit, set it up again so you don’t miss a payment. " +
-          "Contact us as soon as possible if you cannot pay."
+        elementText(Selectors.line2) shouldBe "If you cancelled your Direct Debit, set it up again so you do not miss a payment. Contact our " +
+          "Payment Support Service as soon as possible if you cannot pay. You might be able to set up a Time to Pay agreement if you’re struggling " +
+          "to pay a tax bill."
       }
 
       "has a link to a gov page" in {
@@ -70,6 +72,5 @@ class CovidPartialViewSpec extends ViewBaseSpec {
     "have the correct fourth message" in {
       elementText(Selectors.line4) shouldBe "You have until 31 March 2021 to pay VAT bills that were due between 20 March and 30 June 2020."
     }
-
   }
 }

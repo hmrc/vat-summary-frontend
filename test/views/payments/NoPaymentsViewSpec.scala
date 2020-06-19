@@ -152,7 +152,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString should include("You can no longer delay VAT payments because of coronavirus (COVID-19)")
+        document.select(Selectors.covidPartial).toString should include("We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19).")
       }
 
     }
