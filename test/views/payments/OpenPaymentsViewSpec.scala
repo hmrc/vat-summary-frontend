@@ -18,7 +18,7 @@ package views.payments
 
 import java.time.LocalDate
 
-import common.MessageLookup.PaymentMessages
+import common.MessageLookup.{PaymentMessages, CovidMessages}
 import models.User
 import models.payments._
 import models.viewModels.OpenPaymentsViewModel
@@ -95,7 +95,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = Some(true)
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = openPaymentsView(user, viewModel)
+    lazy val view = openPaymentsView(user, viewModel, preCovidDeadline = true)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -227,7 +227,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = Some(false)
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = openPaymentsView(user, viewModel)
+    lazy val view = openPaymentsView(user, viewModel, preCovidDeadline = true)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the Pay now text" in {
@@ -258,7 +258,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val hasDirectDebit = None
     val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = openPaymentsView(user, viewModel)
+    lazy val view = openPaymentsView(user, viewModel, preCovidDeadline = true)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct text for the direct debit paragraph" in {
@@ -285,10 +285,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
         val hasDirectDebit = None
         val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-        lazy val view = openPaymentsView(user, viewModel)
+        lazy val view = openPaymentsView(user, viewModel, preCovidDeadline = true)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString should include("You can no longer delay VAT payments because of coronavirus (COVID-19)")
+        document.select(Selectors.covidPartial).toString should include(CovidMessages.headingPreEnd)
       }
 
     }
@@ -300,7 +300,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
         val hasDirectDebit = None
         val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-        lazy val view = openPaymentsView(user, viewModel)
+        lazy val view = openPaymentsView(user, viewModel, preCovidDeadline = true)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         elementExtinct(Selectors.covidPartial)
@@ -332,7 +332,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       )
     }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
 
-      lazy val view = openPaymentsView(user, openPaymentsViewModel)
+      lazy val view = openPaymentsView(user, openPaymentsViewModel, preCovidDeadline = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"contain a $chargeTypeTitle which" should {
