@@ -16,7 +16,7 @@
 
 @this()
 
-@(pageIsFullWidth: Boolean = false)(implicit messages: Messages)
+@(preCovidDeadline: Boolean, pageIsFullWidth: Boolean = false)(implicit messages: Messages)
 
 <div class="grid-row form-group flex-container">
 
@@ -26,7 +26,12 @@
                 <span class="visually-hidden">@messages("common.warning")</span>
             </i>
 
-            <p><strong class="bold-small">@messages("covid.line1")</strong></p>
+            <p>
+                <strong class="bold-small">
+                    @messages("covid.line1")
+                    @{if(preCovidDeadline) messages("covid.line1.1") else messages("covid.line1.2")}
+                </strong>
+            </p>
         </div>
 
         <div class="panel panel-border-wide">

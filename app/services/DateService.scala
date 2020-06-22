@@ -30,4 +30,6 @@ class DateService @Inject()(appConfig: config.AppConfig) {
       LocalDate.now()
     }
   }
+
+  def isPreCovidDeadline(): Boolean = if(now().isAfter(LocalDate.of(2020,6,30))) false else true
 }

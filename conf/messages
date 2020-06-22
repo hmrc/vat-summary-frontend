@@ -387,10 +387,12 @@ a11yStatement.testCarriedOut.2 = Digital Accessibility Centre
 a11yStatement.testCarriedOut.3 = The full service was tested by HMRC and included disabled users.
 a11yStatement.pagePrepared = This page was prepared on 20 September 2019. It was last updated on 20 September 2019.
 
-covid.line1 = We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19). The VAT deferral period ends on 30 June 2020.
+covid.line1 = We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19).
+covid.line1.1 = The VAT deferral period ends on 30 June 2020.
+covid.line1.2 = The VAT deferral period ended on 30 June 2020.
 covid.line2 = VAT bills with a payment due date on or after 1 July 2020 must be paid on time and in full.
 covid.line3.1 = If you cancelled your Direct Debit, set it up again so you do not miss a payment. Contact our
 covid.line3.2 = Payment Support Service
 covid.line3.3 = as soon as possible if you cannot pay. You might be able to set up a Time to Pay agreement if you’re struggling to pay a tax bill.
 covid.line4 = You still need to submit VAT Returns, even if your business has temporarily closed.
-covid.line5 = You have until 31 March 2021 to pay VAT bills that were due between 20 March and 30 June 2020.
+covid.line5 = You have until 31 March 2021 to pay VAT bills that were due between 20 March 2020 and 30 June 2020.

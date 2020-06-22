@@ -16,6 +16,7 @@
 
 package views.partials.covid
 
+import common.MessageLookup.CovidMessages._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -36,41 +37,51 @@ class CovidPartialViewSpec extends ViewBaseSpec {
       val line4 = "li:nth-of-type(4)"
     }
 
-    lazy val view = covidMessageView()
-    implicit lazy val render: Document = Jsoup.parse(view.body)
+    "The covid partial pre end of June 2020" should {
 
-    "have alternate content for the icon" in {
-      elementText(Selectors.icon) shouldBe "Warning"
-    }
+      lazy val view = covidMessageView(preCovidDeadline = true)
+      implicit lazy val render: Document = Jsoup.parse(view.body)
 
-    "have the correct header" in {
-      elementText(Selectors.header) shouldBe "We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19). " +
-        "The VAT deferral period ends on 30 June 2020."
-    }
-
-    "have the correct first message" in {
-      elementText(Selectors.line1) shouldBe "VAT bills with a payment due date on or after 1 July 2020 must be paid on time and in full."
-    }
-
-    "have the correct second message" which {
-
-      "has the correct text" in {
-        elementText(Selectors.line2) shouldBe "If you cancelled your Direct Debit, set it up again so you do not miss a payment. Contact our " +
-          "Payment Support Service as soon as possible if you cannot pay. You might be able to set up a Time to Pay agreement if you’re struggling " +
-          "to pay a tax bill."
+      "have alternate content for the icon" in {
+        elementText(Selectors.icon) shouldBe "Warning"
       }
 
-      "has a link to a gov page" in {
-        element(Selectors.line2Link).attr("href") shouldBe "https://www.gov.uk/difficulties-paying-hmrc"
+      "have the correct header" in {
+        elementText(Selectors.header) shouldBe headingPreEnd
+      }
+
+      "have the correct first message" in {
+        elementText(Selectors.line1) shouldBe line1
+      }
+
+      "have the correct second message" which {
+
+        "has the correct text" in {
+          elementText(Selectors.line2) shouldBe line2
+        }
+
+        "has a link to a gov page" in {
+          element(Selectors.line2Link).attr("href") shouldBe "https://www.gov.uk/difficulties-paying-hmrc"
+        }
+      }
+
+      "have the correct third message" in {
+        elementText(Selectors.line3) shouldBe line3
+      }
+
+      "have the correct fourth message" in {
+        elementText(Selectors.line4) shouldBe line4
       }
     }
 
-    "have the correct third message" in {
-      elementText(Selectors.line3) shouldBe "You still need to submit VAT Returns, even if your business has temporarily closed."
-    }
+    "The covid partial post end of June 2020" should {
 
-    "have the correct fourth message" in {
-      elementText(Selectors.line4) shouldBe "You have until 31 March 2021 to pay VAT bills that were due between 20 March and 30 June 2020."
+      lazy val view = covidMessageView(preCovidDeadline = false)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct card heading" in {
+        elementText("strong") shouldBe headingPostEnd
+      }
     }
   }
 }

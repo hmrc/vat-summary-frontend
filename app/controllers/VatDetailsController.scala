@@ -87,7 +87,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           Redirect(appConfig.missingTraderRedirectUrl)
         } else {
           Ok(detailsView(
-            constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), serviceInfoContent
+            constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), dateService.isPreCovidDeadline(), serviceInfoContent
           )).addingToSession(newSessionVariables: _*)
         }
       }

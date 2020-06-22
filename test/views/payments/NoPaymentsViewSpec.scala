@@ -16,6 +16,7 @@
 
 package views.payments
 
+import common.MessageLookup.CovidMessages.headingPreEnd
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -46,7 +47,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the user has a direct debit" should {
 
-      lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
+      lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -113,7 +114,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the user does not have a direct debit" should {
 
-      lazy val view = noPaymentsView(user, hasDirectDebit = Some(false))
+      lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct message regarding setting up a direct debit" in {
@@ -133,7 +134,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the call to the direct debit service fails" should {
 
-      lazy val view = noPaymentsView(user, hasDirectDebit = None)
+      lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display a direct debit message" in {
@@ -149,10 +150,10 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       "the display covid feature switch is on" in {
         mockConfig.features.displayCovidMessage(true)
 
-        lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
+        lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString should include("We previously set out that you could delay (defer) paying VAT because of coronavirus (COVID-19).")
+        document.select(Selectors.covidPartial).toString should include(headingPreEnd)
       }
 
     }
@@ -162,7 +163,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       "the display covid feature switch is off" in {
         mockConfig.features.displayCovidMessage(false)
 
-        lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
+        lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         elementExtinct(Selectors.covidPartial)

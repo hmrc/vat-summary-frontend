@@ -47,7 +47,7 @@ class OpenPaymentsController @Inject()(val enrolmentsAuthService: EnrolmentsAuth
                                        implicit val ec: ExecutionContext,
                                        noPayments: NoPayments,
                                        paymentsError: PaymentsError,
-                                       openPayments: OpenPayments)
+                                       openPaymentsPage: OpenPayments)
 extends FrontendController(mcc) with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
@@ -65,10 +65,10 @@ extends FrontendController(mcc) with I18nSupport {
       case Right(Some(payments)) =>
         val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), hasActiveDirectDebit)
         auditEvent(user, model.payments)
-        Ok(openPayments(user, model, serviceInfoContent))
+        Ok(openPaymentsPage(user, model, dateService.isPreCovidDeadline(), serviceInfoContent))
       case Right(_) =>
         auditEvent(user, Seq.empty)
-        Ok(noPayments(user, hasActiveDirectDebit, serviceInfoContent))
+        Ok(noPayments(user, dateService.isPreCovidDeadline(), hasActiveDirectDebit, serviceInfoContent))
       case Left(error) =>
         Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
         InternalServerError(paymentsError())
