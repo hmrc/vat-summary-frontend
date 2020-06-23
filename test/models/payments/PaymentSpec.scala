@@ -114,7 +114,7 @@ class PaymentSpec extends UnitSpec {
         "items" -> Json.arr(
           Json.obj(
             "dueDate" -> dueDate,
-            "DDCollectionInProgress" -> true
+            "DDcollectionInProgress" -> true
           )
         ),
         "outstandingAmount" -> 0,
