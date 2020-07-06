@@ -22,4 +22,5 @@ object SessionKeys {
   val agentSessionVrn = "CLIENT_VRN"
 
   val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
+  val inFlightContactKey: String = "inFlightContactDetailsChange"
 }

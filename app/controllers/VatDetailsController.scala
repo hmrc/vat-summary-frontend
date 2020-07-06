@@ -110,7 +110,9 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           case Right(details) => details.emailAddress match {
             case Some(email) =>
               email.email match {
-                case Some(emailAddress) => Redirect(appConfig.verifyEmailUrl).addingToSession(SessionKeys.prepopulationEmailKey -> emailAddress)
+                case Some(emailAddress) => Redirect(appConfig.verifyEmailUrl).addingToSession(
+                  SessionKeys.prepopulationEmailKey -> emailAddress, SessionKeys.inFlightContactKey -> "false"
+                )
                 case _ =>
                   logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Email address not returned from vat-subscription.")
                   serviceErrorHandler.showInternalServerError
