@@ -24,6 +24,7 @@ case class CustomerInformation(organisationName: Option[String],
                                lastName: Option[String],
                                tradingName: Option[String],
                                businessAddress: Address,
+                               emailAddress: Option[Email],
                                isHybridUser: Boolean,
                                customerMigratedToETMPDate: Option[String],
                                registrationDate: Option[String],
@@ -58,6 +59,7 @@ object CustomerInformation {
     (JsPath \ "customerDetails" \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
     (JsPath \ "customerDetails" \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
     (JsPath \ "ppob").read[Address] and
+    (JsPath \ "ppob" \ "contactDetails").readNullable[Email].orElse(Reads.pure(None)) and
     (JsPath \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true)) and
     (JsPath \\ "customerMigratedToETMPDate").readNullable[String] and
     (JsPath \\ "vatRegistrationDate").readNullable[String] and

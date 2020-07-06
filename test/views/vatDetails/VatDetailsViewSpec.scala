@@ -58,6 +58,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatOptOutSection = "#vat-optout"
     val cancelVatSection = "#cancel-vat"
     val covidPartial = ".warning-banner"
+    val unverifiedMessageSelector = "#unverified-email-notice"
   }
 
   override implicit val user: User = User("123456789")
@@ -66,7 +67,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("2018-12-31"),
     Some("Cheapo Clothing"),
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    userEmailVerified = true
   )
   val nonMtdDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     None,
@@ -126,6 +128,14 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     customerInfoError = true,
     currentDate = testDate,
     partyType = Some("1")
+  )
+  val unverifiedUserDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentDate = testDate,
+    partyType = Some("1"),
+    userEmailVerified = true
   )
 
   "Rendering the VAT details page for an mtd user" should {
@@ -284,6 +294,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "not have the mtd signup section" in {
       elementExtinct(Selectors.mtdSignupSection)
     }
+
+    "not have the unverified email content" in {
+      elementExtinct(Selectors.unverifiedMessageSelector)
+    }
   }
 
   "Rendering the VAT details page for a non mtd user" should {
@@ -321,6 +335,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
     }
+  }
+
+  "Rendering the VAT details page for a user with an unverified email address" should {
+
+    "display the text asking user to verify email" in {
+      lazy val view = details(detailsModel.copy(userEmailVerified = false), preCovidDeadline = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      allElementsOf(Selectors.unverifiedMessageSelector).right.nonEmpty shouldBe true
+      element(Selectors.unverifiedMessageSelector).wholeText().contains("You need to confirm your email address.") shouldBe true
+    }
+
   }
 
   "Rendering the VAT details page" when {

@@ -37,6 +37,21 @@
 
 @(detailsViewModel: VatDetailsViewModel, preCovidDeadline: Boolean, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
+@unverifiedUserEmailContent = {
+    @if(!detailsViewModel.userEmailVerified && appConfig.features.r17Content()) {
+        <p class="notice" id="unverified-email-notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">
+                @messages("emailVerification.message.1")
+                <a href="@{controllers.routes.VatDetailsController.detailsRedirectToEmailVerification}">@messages("emailVerification.message.2")</a>
+                @messages("emailVerification.message.3")
+            </strong>
+        </p>
+    }
+}
+
 @mainTemplate(
     title = messages("vatDetails.title"),
     appConfig = appConfig,
@@ -82,6 +97,9 @@
     <div>
       <h2 class="heading-large">@messages("vatDetails.manageYourVat")</h2>
     </div>
+
+    @unverifiedUserEmailContent
+
     <div class="grid-row">
       @updateVatDetailsSection()
       @if(appConfig.features.paymentsAndRepaymentsEnabled() && !detailsViewModel.customerInfoError && !detailsViewModel.isHybridUser) {

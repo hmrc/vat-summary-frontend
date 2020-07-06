@@ -396,3 +396,7 @@ covid.line3.2 = Payment Support Service
 covid.line3.3 = as soon as possible if you cannot pay. You might be able to set up a Time to Pay agreement if you’re struggling to pay a tax bill.
 covid.line4 = You still need to submit VAT Returns, even if your business has temporarily closed.
 covid.line5 = You have until 31 March 2021 to pay VAT bills that were due between 20 March 2020 and 30 June 2020.
+
+emailVerification.message.1 = You need to confirm your email address.
+emailVerification.message.2 = Resend the email
+emailVerification.message.3 = to confirm it.

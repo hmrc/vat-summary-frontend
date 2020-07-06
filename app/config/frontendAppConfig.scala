@@ -104,6 +104,7 @@ trait AppConfig {
   val reportA11yProblemUrl: String
   val a11yServiceIdentifier: String
   val missingTraderRedirectUrl: String
+  val verifyEmailUrl: String
 }
 
 @Singleton
@@ -262,4 +263,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override lazy val manageVatUrl: String = sc.getString(Keys.manageVatHost) + sc.getString(Keys.manageVatUrl)
   override lazy val missingTraderRedirectUrl: String = sc.getString(Keys.manageVatHost) + sc.getString(Keys.missingTraderRedirectUrl)
+
+  private val vatCorrespondenceUrl =
+    sc.getString(Keys.vatCorrespondenceHost) + ":" + sc.getString(Keys.vatCorrespondencePort) + sc.getString(Keys.vatCorrespondenceContext)
+  override val verifyEmailUrl: String = vatCorrespondenceUrl + sc.getString(Keys.verifyEmailEndPoint)
 }

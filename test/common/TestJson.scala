@@ -40,7 +40,8 @@ object TestJson {
       "contactDetails" -> Json.obj(
         "primaryPhoneNumber" -> "01632 982028",
         "mobileNumber" -> "07700 900018",
-        "emailAddress" -> "bettylucknexttime@gmail.com"
+        "emailAddress" -> "bettylucknexttime@gmail.com",
+        "emailVerified" -> true
       )
     ),
     "bankDetails" -> Json.obj(

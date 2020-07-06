@@ -21,7 +21,7 @@ import config.AppConfig
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
 import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs._
 
@@ -47,6 +47,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
 
       "return 200 and 'View returns deadline'" in new Test {
         appConfig.features.submitReturnFeatures(true)
+        appConfig.features.r17Content(true)
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -56,9 +57,11 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           FinancialDataStub.stubOutstandingTransactions
           ServiceInfoStub.stubServiceInfoPartial
         }
+
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
         response.body.contains("View return deadlines") shouldBe true
+        response.body.contains("You need to confirm your email address") shouldBe false
       }
 
       "return 200 and 'Submit VAT Return' when Non MTDfB" in {
@@ -98,6 +101,27 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           response.body.contains("Submit return") shouldBe false
           response.body.contains("View return deadlines") shouldBe false
         }
+      }
+
+      "return 200 when user's email is not verified" in new Test {
+        appConfig.features.submitReturnFeatures(true)
+        appConfig.features.r17Content(true)
+
+        val customerDataToUse: JsValue = CustomerInfoStub.customerInfoJson(isPartialMigration = false, hasVerifiedEmail = false)
+
+        override def setupStubs(): StubMapping = {
+          AuthStub.authorised()
+          obligationsStub.stubOutstandingObligations
+          CustomerInfoStub.stubCustomerInfo(customerDataToUse)
+          CustomerInfoStub.stubCustomerMandationStatus()
+          FinancialDataStub.stubOutstandingTransactions
+          ServiceInfoStub.stubServiceInfoPartial
+        }
+
+        val response: WSResponse = await(request().get())
+
+        response.status shouldBe Status.OK
+        response.body.contains("You need to confirm your email address") shouldBe true
       }
     }
 

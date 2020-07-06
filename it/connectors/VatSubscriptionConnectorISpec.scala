@@ -48,6 +48,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some("Jones"),
         Some("Cheapo Clothing"),
         Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB")),
+        Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
         isHybridUser = false,
         Some("2017-05-05"),
         Some("2017-01-01"),

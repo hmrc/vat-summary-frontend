@@ -117,7 +117,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockMandationService,
         mcc,
         ec,
-        detailsView)
+        detailsView,
+        mockServiceErrorHandler
+      )
     }
   }
 
@@ -335,6 +337,55 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   }
 
+  "Calling .detailsRedirectToEmailVerification" should {
+
+    "redirect to email verification" when {
+
+      "All relevant information is returned from vat-subscription" in new DetailsTest {
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
+          customerInformationMax
+        ))
+
+        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
+      }
+
+    }
+
+    "return an internal server error" when {
+
+      "account details is an error" in new DetailsTest {
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Left(
+          UnknownError
+        ))
+
+        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "no email information is returned in customer information" in new DetailsTest {
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
+          customerInformationMax.copy(emailAddress = None)
+        ))
+
+        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "the email address is empty" in new DetailsTest {
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
+          customerInformationMax.copy(emailAddress = Some(Email(None, None)))
+        ))
+
+        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+    }
+
+  }
+
   "Calling .constructViewModel with a VatDetailsModel" when {
 
     lazy val paymentDueDate: Option[String] = Some("2019-03-03")
@@ -345,7 +396,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with both due dates" in new DetailsTest {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
+            paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
@@ -363,7 +414,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with a payment due date and no obligation due date" in new DetailsTest {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
+            paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
@@ -381,7 +432,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with an obligation due date and no payment due date" in new DetailsTest {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
+            None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
@@ -399,7 +450,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with no obligation due date and no payment due date" in new DetailsTest {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            None, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7")
+            None, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
@@ -415,7 +466,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "there is no obligation, payment, or entity name" should {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, entity name or partyType" in new DetailsTest {
-        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None)
+        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -432,7 +483,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in
         new DetailsTest {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None)
+          None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
@@ -447,7 +498,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with the returnError flag set" in new DetailsTest {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, Some(entityName), returnObligationError = true,
-          deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"))
+          deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Right(None),
@@ -463,7 +514,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsViewModel with the paymentError flag set" in new DetailsTest {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"))
+          None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Left(NextPaymentError),
@@ -486,7 +537,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           paymentError = true,
           deregDate = Some(LocalDate.parse("2020-01-01")),
           currentDate = testDate,
-          partyType = Some("7"))
+          partyType = Some("7"),
+          userEmailVerified = true)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Left(NextPaymentError),
@@ -511,7 +563,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           returnObligationOverdue = true,
           deregDate = Some(LocalDate.parse("2020-01-01")),
           currentDate = testDate,
-          partyType = Some("7"))
+          partyType = Some("7"),
+          userEmailVerified = true)
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
@@ -522,6 +575,52 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         result shouldBe expected
       }
     }
+  }
+
+  "Calling .retrieveEmailVerifiedIfExist" should {
+
+    "return true" when {
+
+      "account details returns an error" in new DetailsTest {
+        target().retrieveEmailVerifiedIfExist(Left(UnknownError)) shouldBe true
+      }
+
+      "customer information does not contain any email information" in new DetailsTest {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = None)
+
+        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+      }
+
+      "no email is returned, regardless of validation status" in new DetailsTest {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(None, Some(true))))
+
+        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+      }
+
+      "the email is verified" in new DetailsTest {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@adf.com"), Some(true))))
+
+        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+      }
+
+    }
+
+    "return false" when {
+
+      "the email is not verified" in new DetailsTest {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), Some(false))))
+
+        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
+      }
+
+      "no verification is returned" in new DetailsTest {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), None)))
+
+        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
+      }
+
+    }
+
   }
 
   "Calling .getObligationDetails" when {
