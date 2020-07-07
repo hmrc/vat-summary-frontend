@@ -69,6 +69,12 @@ object TestJson {
     "partyType" -> "7",
     "primaryMainCode" -> "10410",
     "pendingChanges" -> Json.obj(
+      "ppob" -> Json.obj(
+        "address" -> Json.obj(
+          "line1" -> "10 Digital Lane"
+        ),
+        "websiteAddress" -> "asdf.com"
+      ),
       "mandationStatus" -> "MTDfB Voluntary"
     ),
     "deregistration" -> Json.obj(

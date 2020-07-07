@@ -110,9 +110,11 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           case Right(details) => details.emailAddress match {
             case Some(email) =>
               email.email match {
-                case Some(emailAddress) => Redirect(appConfig.verifyEmailUrl).addingToSession(
-                  SessionKeys.prepopulationEmailKey -> emailAddress, SessionKeys.inFlightContactKey -> "false"
-                )
+                case Some(emailAddress) =>
+                  val sessionValues: Seq[(String, String)] = Seq(SessionKeys.prepopulationEmailKey -> emailAddress) ++
+                    (if(details.hasPendingPpobChanges) Seq() else Seq(SessionKeys.inFlightContactKey -> "false"))
+
+                  Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*)
                 case _ =>
                   logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Email address not returned from vat-subscription.")
                   serviceErrorHandler.showInternalServerError
