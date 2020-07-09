@@ -29,4 +29,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               mtdSignUp: Boolean,
                               ddCollectionInProgress: Boolean,
                               displayCovid: Boolean,
-                              missingTraderAddressIntercept: Boolean)
+                              missingTraderAddressIntercept: Boolean,
+                              r17Content: Boolean)

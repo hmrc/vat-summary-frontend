@@ -23,6 +23,8 @@ GET        /time-out                                                            
 #Language Controller
 GET        /language/:lang                                                                         controllers.LanguageController.switchToLanguage(lang: String)
 
+#Vat-correspondence redirect
+GET        /send-verificatiion                                                                      controllers.VatDetailsController.detailsRedirectToEmailVerification
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                                                                           controllers.Assets.at(path="/public", file)

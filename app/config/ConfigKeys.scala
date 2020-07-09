@@ -44,6 +44,7 @@ object ConfigKeys {
   val ddCollectionInProgressFeature: String = "features.ddCollectionInProgress.enabled"
   val displayCovidMessageFeature: String = "features.displayCovid.enabled"
   val missingTraderAddressIntercept: String = "features.missingTraderAddressIntercept.enabled"
+  val r17Content: String = "features.r17Content.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"
@@ -131,4 +132,9 @@ object ConfigKeys {
   val manageVatHost: String = "manage-vat-subscription-frontend.host"
   val manageVatUrl: String = "manage-vat-subscription-frontend.url"
   val missingTraderRedirectUrl = "manage-vat-subscription-frontend.missingTraderUrl"
+
+  val vatCorrespondenceHost: String = "microservice.services.vat-correspondence-frontend.host"
+  val vatCorrespondencePort: String = "microservice.services.vat-correspondence-frontend.port"
+  val vatCorrespondenceContext: String = "microservice.services.vat-correspondence-frontend.context"
+  val verifyEmailEndPoint: String = "microservice.services.vat-correspondence-frontend.endpoints.verifyEmail"
 }

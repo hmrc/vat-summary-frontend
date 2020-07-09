@@ -37,4 +37,5 @@ class Features @Inject()(implicit config: Configuration) {
   val ddCollectionInProgressEnabled = new Feature(ConfigKeys.ddCollectionInProgressFeature)
   val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature)
   val missingTraderAddressIntercept = new Feature(ConfigKeys.missingTraderAddressIntercept)
+  val r17Content = new Feature(ConfigKeys.r17Content)
 }

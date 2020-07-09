@@ -22,7 +22,7 @@ import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import common.FinancialTransactionsConstants._
 import common.SessionKeys
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.{Inject, Singleton}
@@ -30,6 +30,7 @@ import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
+import org.slf4j
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
@@ -52,8 +53,11 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
                                      mandationStatusService: MandationStatusService,
                                      mcc: MessagesControllerComponents,
                                      implicit val ec: ExecutionContext,
-                                     detailsView: Details)
+                                     detailsView: Details,
+                                     serviceErrorHandler: ServiceErrorHandler)
   extends FrontendController(mcc) with I18nSupport {
+
+  val logger: slf4j.Logger = Logger.logger
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
@@ -66,9 +70,11 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
         serviceInfoContent <- serviceInfoService.getPartial
-        mandationStatus <- if(appConfig.features.submitReturnFeatures()) {
+        mandationStatus <- if (appConfig.features.submitReturnFeatures()) {
           retrieveMandationStatus(user.vrn)
-        } else { Future.successful(Right(MandationStatus("Disabled"))) }
+        } else {
+          Future.successful(Right(MandationStatus("Disabled")))
+        }
       } yield {
         val migratedDate = (request.session.get(SessionKeys.migrationToETMP), customerInfo) match {
           case (Some(date), _) => date
@@ -83,12 +89,43 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
             case _ => Seq()
           })
 
-        if(redirectForMissingTrader(customerInfo)) {
+        if (redirectForMissingTrader(customerInfo)) {
           Redirect(appConfig.missingTraderRedirectUrl)
         } else {
           Ok(detailsView(
             constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), dateService.isPreCovidDeadline(), serviceInfoContent
           )).addingToSession(newSessionVariables: _*)
+        }
+      }
+  }
+
+  def detailsRedirectToEmailVerification: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
+    implicit user =>
+      val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
+
+      for {
+        accountDetails <- accountDetailsCall
+      } yield {
+        accountDetails match {
+          case Right(details) => details.emailAddress match {
+            case Some(email) =>
+              email.email match {
+                case Some(emailAddress) =>
+                  val sessionValues: Seq[(String, String)] = Seq(SessionKeys.prepopulationEmailKey -> emailAddress) ++
+                    (if(details.hasPendingPpobChanges) Seq() else Seq(SessionKeys.inFlightContactKey -> "false"))
+
+                  Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*)
+                case _ =>
+                  logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Email address not returned from vat-subscription.")
+                  serviceErrorHandler.showInternalServerError
+              }
+            case _ =>
+              logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Email status not returned from vat-subscription.")
+              serviceErrorHandler.showInternalServerError
+          }
+          case Left(_) =>
+            logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Could not retrieve account details.")
+            serviceErrorHandler.showInternalServerError
         }
       }
   }
@@ -160,10 +197,24 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       deregDate,
       pendingDereg,
       dateService.now(),
-      partyType
+      partyType,
+      retrieveEmailVerifiedIfExist(accountDetails)
     )
   }
 
+
+  private[controllers] def retrieveEmailVerifiedIfExist(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
+    accountDetails.fold(_ => true, customerInfo =>
+      customerInfo.emailAddress match {
+        case Some(emailInformation) =>
+          (emailInformation.email, emailInformation.emailVerified) match {
+            case (Some(_), Some(verified)) => verified
+            case (Some(_), None) => false
+            case _ => true
+          }
+        case _ => true
+      })
+  }
 
   def retrieveMandationStatus(vrn: String)
                              (implicit request: Request[AnyContent]): Future[HttpGetResult[MandationStatus]] = {

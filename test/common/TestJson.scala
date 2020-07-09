@@ -40,7 +40,8 @@ object TestJson {
       "contactDetails" -> Json.obj(
         "primaryPhoneNumber" -> "01632 982028",
         "mobileNumber" -> "07700 900018",
-        "emailAddress" -> "bettylucknexttime@gmail.com"
+        "emailAddress" -> "bettylucknexttime@gmail.com",
+        "emailVerified" -> true
       )
     ),
     "bankDetails" -> Json.obj(
@@ -68,6 +69,12 @@ object TestJson {
     "partyType" -> "7",
     "primaryMainCode" -> "10410",
     "pendingChanges" -> Json.obj(
+      "ppob" -> Json.obj(
+        "address" -> Json.obj(
+          "line1" -> "10 Digital Lane"
+        ),
+        "websiteAddress" -> "asdf.com"
+      ),
       "mandationStatus" -> "MTDfB Voluntary"
     ),
     "deregistration" -> Json.obj(

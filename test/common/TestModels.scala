@@ -70,6 +70,7 @@ object TestModels {
     Some("Jones"),
     Some(entityName),
     address,
+    emailAddress = Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
     isHybridUser = false,
     Some("2017-05-05"),
     Some("2017-01-01"),
@@ -84,7 +85,8 @@ object TestModels {
     Some("MTDfB Voluntary"),
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     Some(ChangeIndicators(false)),
-    isMissingTrader = false
+    isMissingTrader = false,
+    hasPendingPpobChanges = true
   )
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
@@ -95,6 +97,7 @@ object TestModels {
     None,
     None,
     Address("Bedrock Quarry", None, None, None, None),
+    None,
     isHybridUser = false,
     None,
     None,
@@ -106,7 +109,8 @@ object TestModels {
     None,
     None,
     None,
-    isMissingTrader = false
+    isMissingTrader = false,
+    hasPendingPpobChanges = false
   )
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(

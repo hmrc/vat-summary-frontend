@@ -14,13 +14,30 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object SessionKeys {
-  val migrationToETMP = "customerMigratedToETMPDate"
-  val mandationStatus = "mtdVatMandationStatus"
-  val agentSessionVrn = "CLIENT_VRN"
+import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.play.test.UnitSpec
 
-  val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
-  val inFlightContactKey: String = "inFlightContactDetailsChange"
+class EmailSpec extends UnitSpec {
+
+  val correctMaxJson: JsObject = Json.obj(
+    "emailAddress" -> "asdf@asdf.com",
+    "emailVerified" -> true
+  )
+
+  val correctMinJson: JsObject = Json.obj()
+
+  "Email" should {
+
+    "correctly parse from max json" in {
+      correctMaxJson.as[Email] shouldBe Email(Some("asdf@asdf.com"), Some(true))
+    }
+
+    "correctly parse from min json" in {
+      correctMinJson.as[Email] shouldBe Email(None, None)
+    }
+
+  }
+
 }

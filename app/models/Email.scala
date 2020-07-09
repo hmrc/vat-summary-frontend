@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object SessionKeys {
-  val migrationToETMP = "customerMigratedToETMPDate"
-  val mandationStatus = "mtdVatMandationStatus"
-  val agentSessionVrn = "CLIENT_VRN"
+import play.api.libs.json.{JsPath, Reads, __}
 
-  val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
-  val inFlightContactKey: String = "inFlightContactDetailsChange"
+case class Email(
+                  email: Option[String],
+                  emailVerified: Option[Boolean]
+                )
+
+object Email {
+
+  val emailPath: JsPath = __ \ "emailAddress"
+  val emailVerifiedPath: JsPath = __ \ "emailVerified"
+
+  implicit val reads: Reads[Email] = for {
+    emailAddress <- emailPath.readNullable[String]
+    emailVerified <- emailVerifiedPath.readNullable[Boolean]
+  } yield Email(emailAddress, emailVerified)
+
 }

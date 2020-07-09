@@ -26,7 +26,7 @@ object CustomerInfoStub extends WireMockMethods {
   private val customerInfoUri = "/vat-subscription/([0-9]+)/full-information"
   private val customerMandationStatusUri = "/vat-subscription/([0-9]+)/mandation-status"
 
-  def stubCustomerInfo(customerInfo: JsValue = customerInfoJson(isPartialMigration = false)): StubMapping = {
+  def stubCustomerInfo(customerInfo: JsValue = customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true)): StubMapping = {
     when(method = GET, uri = customerInfoUri)
       .thenReturn(status = OK, body = customerInfo)
   }
@@ -41,7 +41,7 @@ object CustomerInfoStub extends WireMockMethods {
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
   }
 
-  def customerInfoJson(isPartialMigration: Boolean): JsValue = Json.obj(
+  def customerInfoJson(isPartialMigration: Boolean, hasVerifiedEmail: Boolean): JsValue = Json.obj(
     "customerDetails" -> Json.obj(
       "organisationName" -> "Cheapo Clothing Ltd",
       "firstName" -> "Betty",
@@ -61,7 +61,8 @@ object CustomerInfoStub extends WireMockMethods {
       "contactDetails" -> Json.obj(
         "primaryPhoneNumber" -> "01632 982028",
         "mobileNumber" -> "07700 900018",
-        "emailAddress" -> "bettylucknexttime@gmail.com"
+        "emailAddress" -> "bettylucknexttime@gmail.com",
+        "emailVerified" -> hasVerifiedEmail
       )
     ),
     "bankDetails" -> Json.obj(

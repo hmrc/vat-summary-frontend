@@ -106,7 +106,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = true))
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = true, hasVerifiedEmail = true))
         }
 
         val response: WSResponse = await(request().get())
