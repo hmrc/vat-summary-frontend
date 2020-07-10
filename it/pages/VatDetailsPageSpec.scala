@@ -20,9 +20,9 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import config.AppConfig
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
-import play.api.http.Status.BAD_REQUEST
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
+import stubs.CustomerInfoStub.{customerInfoJson, customerInfoJsonNonMtdfb}
 import stubs._
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
@@ -52,8 +52,9 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           obligationsStub.stubOutstandingObligations
-          CustomerInfoStub.stubCustomerInfo()
-          CustomerInfoStub.stubCustomerMandationStatus()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+            isPartialMigration = false,
+            hasVerifiedEmail = true))
           FinancialDataStub.stubOutstandingTransactions
           ServiceInfoStub.stubServiceInfoPartial
         }
@@ -71,8 +72,10 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
           override def setupStubs(): StubMapping = {
             AuthStub.authorised()
             obligationsStub.stubOutstandingObligations
-            CustomerInfoStub.stubCustomerInfo()
-            CustomerInfoStub.stubCustomerMandationStatus(Json.obj("mandationStatus" -> "Non MTDfB"))
+            CustomerInfoStub.stubCustomerInfo(customerInfoJsonNonMtdfb(
+              isPartialMigration = false,
+              hasVerifiedEmail = true)
+            )
             FinancialDataStub.stubOutstandingTransactions
             ServiceInfoStub.stubServiceInfoPartial
           }
@@ -83,37 +86,18 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         }
       }
 
-      "return 200 when mandation status not returned" in {
-        appConfig.features.submitReturnFeatures(true)
-
-        new Test {
-          override def setupStubs(): StubMapping = {
-            AuthStub.authorised()
-            obligationsStub.stubOutstandingObligations
-            CustomerInfoStub.stubCustomerInfo()
-            CustomerInfoStub.stubCustomerMandationStatus(Json.obj("code" -> "AN ERROR", "errorResponse" -> "HAS OCCURRED"), BAD_REQUEST)
-            FinancialDataStub.stubOutstandingTransactions
-            ServiceInfoStub.stubServiceInfoPartial
-          }
-
-          val response: WSResponse = await(request().get())
-          response.status shouldBe Status.OK
-          response.body.contains("Submit return") shouldBe false
-          response.body.contains("View return deadlines") shouldBe false
-        }
-      }
-
       "return 200 when user's email is not verified" in new Test {
         appConfig.features.submitReturnFeatures(true)
         appConfig.features.r17Content(true)
 
-        val customerDataToUse: JsValue = CustomerInfoStub.customerInfoJson(isPartialMigration = false, hasVerifiedEmail = false)
+        val customerDataToUse: JsValue = CustomerInfoStub.customerInfoJson(
+          isPartialMigration = false,
+          hasVerifiedEmail = false)
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
           obligationsStub.stubOutstandingObligations
           CustomerInfoStub.stubCustomerInfo(customerDataToUse)
-          CustomerInfoStub.stubCustomerMandationStatus()
           FinancialDataStub.stubOutstandingTransactions
           ServiceInfoStub.stubServiceInfoPartial
         }

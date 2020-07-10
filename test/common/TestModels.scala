@@ -86,7 +86,8 @@ object TestModels {
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     Some(ChangeIndicators(false)),
     isMissingTrader = false,
-    hasPendingPpobChanges = false
+    hasPendingPpobChanges = false,
+    mandationStatus = "MTDfB"
   )
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
@@ -110,8 +111,13 @@ object TestModels {
     None,
     None,
     isMissingTrader = false,
-    hasPendingPpobChanges = false
+    hasPendingPpobChanges = false,
+    mandationStatus = "MTDfB"
   )
+
+  val customerInformationMTDfBExempt: CustomerInformation = customerInformationMin.copy(mandationStatus = "MTDfB Exempt")
+  val customerInformationNonMTDfB: CustomerInformation = customerInformationMin.copy(mandationStatus = "Non MTDfB")
+  val customerInformationJunkStatus: CustomerInformation = customerInformationMin.copy(mandationStatus = "Some Status")
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1")
@@ -168,18 +174,6 @@ object TestModels {
     agentEnrolments,
     Some(Agent)
   ))
-
-  val validMandationStatus: MandationStatus = MandationStatus(
-    "MTDfB"
-  )
-
-  val validNonMTDfBMandationStatus: MandationStatus = MandationStatus(
-    "Non MTDfB"
-  )
-
-  val validNonDigitalMandationStatus: MandationStatus = MandationStatus(
-    "Non Digital"
-  )
 
   val exampleNonStandardTaxPeriods: Seq[TaxPeriod] = Seq(
       TaxPeriod("2018-12-29", "2018-12-30"),

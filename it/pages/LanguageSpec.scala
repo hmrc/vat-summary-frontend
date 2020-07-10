@@ -20,6 +20,7 @@ import helpers.IntegrationBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.libs.ws.{WSRequest, WSResponse}
+import stubs.CustomerInfoStub.customerInfoJson
 import stubs._
 
 class LanguageSpec extends IntegrationBaseSpec {
@@ -30,8 +31,10 @@ class LanguageSpec extends IntegrationBaseSpec {
     def request(): WSRequest = {
       AuthStub.authorised()
       obligationsStub.stubOutstandingObligations
-      CustomerInfoStub.stubCustomerInfo()
-      CustomerInfoStub.stubCustomerMandationStatus()
+      CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+        isPartialMigration = false,
+        hasVerifiedEmail = true)
+      )
       FinancialDataStub.stubOutstandingTransactions
       ServiceInfoStub.stubServiceInfoPartial
       buildRequest("/vat-overview")

@@ -49,7 +49,6 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
                                      val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
                                      auditingService: AuditingService,
-                                     mandationStatusService: MandationStatusService,
                                      mcc: MessagesControllerComponents,
                                      implicit val ec: ExecutionContext,
                                      detailsView: Details,
@@ -67,11 +66,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
         serviceInfoContent <- serviceInfoService.getPartial
-        mandationStatus <- if (appConfig.features.submitReturnFeatures()) {
-          retrieveMandationStatus(user.vrn)
-        } else {
-          Future.successful(Right(MandationStatus("Disabled")))
-        }
+        mandationStatus = retrieveMandationStatus(customerInfo)
       } yield {
         val migratedDate = (request.session.get(SessionKeys.migrationToETMP), customerInfo) match {
           case (Some(date), _) => date
@@ -82,7 +77,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
         val newSessionVariables: Seq[(String, String)] =
           Seq(SessionKeys.migrationToETMP -> migratedDate) ++ (mandationStatus match {
-            case Right(status) => Seq(SessionKeys.mandationStatus -> status.mandationStatus)
+            case Some(info) => Seq(SessionKeys.mandationStatus -> info)
             case _ => Seq()
           })
 
@@ -90,7 +85,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           Redirect(appConfig.missingTraderRedirectUrl)
         } else {
           Ok(detailsView(
-            constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus),
+            constructViewModel(nextReturn, nextPayment, customerInfo),
             dateService.isPreCovidDeadline(),
             serviceInfoContent
           )).addingToSession(newSessionVariables: _*)
@@ -161,8 +156,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               payments: ServiceResponse[Option[Payments]],
-                                              accountDetails: HttpGetResult[CustomerInformation],
-                                              mandationStatus: HttpGetResult[MandationStatus]): VatDetailsViewModel = {
+                                              accountDetails: HttpGetResult[CustomerInformation]): VatDetailsViewModel = {
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments)
@@ -186,7 +180,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       paymentModel.isOverdue,
       paymentModel.hasError,
       isHybridUser,
-      retrieveIsOfStatus(mandationStatus, Seq(nonMTDfB, nonDigital, mtdfbExempt)),
+      retrieveIsOfStatus(accountDetails, Seq(nonMTDfB, nonDigital, mtdfbExempt)),
       customerInfoError,
       pendingOptOut,
       deregDate,
@@ -196,7 +190,6 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       retrieveEmailVerifiedIfExist(accountDetails)
     )
   }
-
 
   private[controllers] def retrieveEmailVerifiedIfExist(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
     accountDetails match {
@@ -211,19 +204,22 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
     }
   }
 
-  def retrieveMandationStatus(vrn: String)
-                             (implicit request: Request[AnyContent]): Future[HttpGetResult[MandationStatus]] = {
+  def retrieveMandationStatus(customerInfo: HttpGetResult[CustomerInformation])
+                             (implicit request: Request[AnyContent]): Option[String] = {
     val mtdMandationSessionKey = SessionKeys.mandationStatus
 
     request.session.get(mtdMandationSessionKey) match {
-      case Some(value) => Future.successful(Right(MandationStatus(value)))
-      case _ => mandationStatusService.getMandationStatus(vrn)
+      case Some(value) => Some(value)
+      case _ => customerInfo match {
+        case Right(info) => Some(info.mandationStatus)
+        case _ => None
+      }
     }
   }
 
-  private[controllers] def retrieveIsOfStatus(mandationStatus: HttpGetResult[MandationStatus],
+  private[controllers] def retrieveIsOfStatus(customerInfo: HttpGetResult[CustomerInformation],
                                               expectedType: Seq[String]): Option[Boolean] =
-    mandationStatus.fold(
+    customerInfo.fold(
       _ => None,
       result => Some(expectedType.contains(result.mandationStatus))
     )

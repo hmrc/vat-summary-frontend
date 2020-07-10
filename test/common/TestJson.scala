@@ -83,7 +83,8 @@ object TestJson {
     "changeIndicators" -> Json.obj(
       "deregister" -> false
     ),
-    "missingTrader" -> false
+    "missingTrader" -> false,
+    "mandationStatus" -> "MTDfB"
   )
 
   val customerInfoJsonMin: JsValue = Json.obj(
@@ -96,6 +97,7 @@ object TestJson {
       )
     ),
     "primaryMainCode" -> "10410",
-    "missingTrader" -> false
+    "missingTrader" -> false,
+    "mandationStatus" -> "MTDfB"
   )
 }
