@@ -133,8 +133,7 @@ object ConfigKeys {
   val manageVatUrl: String = "manage-vat-subscription-frontend.url"
   val missingTraderRedirectUrl = "manage-vat-subscription-frontend.missingTraderUrl"
 
-  val vatCorrespondenceHost: String = "microservice.services.vat-correspondence-frontend.host"
-  val vatCorrespondencePort: String = "microservice.services.vat-correspondence-frontend.port"
-  val vatCorrespondenceContext: String = "microservice.services.vat-correspondence-frontend.context"
-  val verifyEmailEndPoint: String = "microservice.services.vat-correspondence-frontend.endpoints.verifyEmail"
+  val vatCorrespondenceHost: String = "vat-correspondence-details-frontend.host"
+  val vatCorrespondenceContext: String = "vat-correspondence-details-frontend.context"
+  val verifyEmailEndPoint: String = "vat-correspondence-details-frontend.endpoints.verifyEmail"
 }

@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 object TestModels {
 
-  val testDate = LocalDate.parse("2018-05-01")
+  val testDate: LocalDate = LocalDate.parse("2018-05-01")
 
   val payments: Payments = Payments(Seq(Payment(
     ReturnDebitCharge,
@@ -86,7 +86,7 @@ object TestModels {
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
     Some(ChangeIndicators(false)),
     isMissingTrader = false,
-    hasPendingPpobChanges = true
+    hasPendingPpobChanges = false
   )
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
