@@ -598,29 +598,35 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
 
       "the email is verified" in new DetailsTest {
-        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@adf.com"), Some(true))))
+        val customerInfo: CustomerInformation =
+          customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@adf.com"), Some(true))))
 
         target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
       }
 
+      "there is a pending PPOB section" in new DetailsTest {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(hasPendingPpobChanges = true)
+
+        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+      }
     }
 
     "return false" when {
 
       "the email is not verified" in new DetailsTest {
-        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), Some(false))))
+        val customerInfo: CustomerInformation =
+          customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), Some(false))))
 
         target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
       }
 
       "no verification is returned" in new DetailsTest {
-        val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), None)))
+        val customerInfo: CustomerInformation =
+          customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), None)))
 
         target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
       }
-
     }
-
   }
 
   "Calling .getObligationDetails" when {

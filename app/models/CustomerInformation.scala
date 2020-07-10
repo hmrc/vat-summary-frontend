@@ -16,6 +16,7 @@
 
 package models
 
+import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 case class CustomerInformation(organisationName: Option[String],
@@ -53,49 +54,25 @@ case class CustomerInformation(organisationName: Option[String],
 }
 
 object CustomerInformation {
-  implicit val customerInformationReads: Reads[CustomerInformation] = {
-    for {
-      organisationName <- (__ \ "customerDetails" \ "organisationName").readNullable[String].orElse(Reads.pure(None))
-      firstName <- (__ \ "customerDetails" \ "firstName").readNullable[String].orElse(Reads.pure(None))
-      lastName <- (__ \ "customerDetails" \ "lastName").readNullable[String].orElse(Reads.pure(None))
-      tradingName <- (__ \ "customerDetails" \ "tradingName").readNullable[String].orElse(Reads.pure(None))
-      ppob <- (__ \ "ppob").read[Address]
-      contactDetails <- (__ \ "ppob" \ "contactDetails").readNullable[Email].orElse(Reads.pure(None))
-      isPartialMigration <- (__ \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true))
-      customerMigratedToEtmpDate <- (__ \\ "customerMigratedToETMPDate").readNullable[String].orElse(Reads.pure(None))
-      vatRegistrationDate <- (__ \\ "vatRegistrationDate").readNullable[String].orElse(Reads.pure(None))
-      partyType <- (__ \ "partyType").readNullable[String].orElse(Reads.pure(None))
-      primaryMainCode <- (__ \ "primaryMainCode").read[String]
-      stdReturnPeriod <- (__ \\ "stdReturnPeriod").readNullable[String].orElse(Reads.pure(None))
-      nonStdReturnPeriod <- (__ \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]].orElse(Reads.pure(None))
-      firstNonNSTPeriod <- (__ \\ "firstNonNSTPPeriod").readNullable[TaxPeriod].orElse(Reads.pure(None))
-      mandationStatus <- (__ \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None))
-      deregistration <- (__ \ "deregistration").readNullable[Deregistration].orElse(Reads.pure(None))
-      changeIndicators <- (__ \ "changeIndicators").readNullable[ChangeIndicators].orElse(Reads.pure(None))
-      missingTrader <- (__ \ "missingTrader").read[Boolean]
-      hasPendingPpobChanges <- (__ \ "pendingChanges" \ "ppob").readNullable[JsObject].orElse(Reads.pure(None)).map(_.nonEmpty)
-    } yield {
-      CustomerInformation(
-        organisationName,
-        firstName,
-        lastName,
-        tradingName,
-        ppob,
-        contactDetails,
-        isPartialMigration,
-        customerMigratedToEtmpDate,
-        vatRegistrationDate,
-        partyType,
-        primaryMainCode,
-        stdReturnPeriod,
-        nonStdReturnPeriod,
-        firstNonNSTPeriod,
-        mandationStatus,
-        deregistration,
-        changeIndicators,
-        missingTrader,
-        hasPendingPpobChanges
-      )
-    }
-  }
+  implicit val customerInformationReads: Reads[CustomerInformation] = (
+    (__ \ "customerDetails" \ "organisationName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "customerDetails" \ "firstName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "customerDetails" \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "customerDetails" \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "ppob").read[Address] and
+    (__ \ "ppob" \ "contactDetails").readNullable[Email].orElse(Reads.pure(None)) and
+    (__ \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true)) and
+    (__ \\ "customerMigratedToETMPDate").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \\ "vatRegistrationDate").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "partyType").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "primaryMainCode").read[String] and
+    (__ \\ "stdReturnPeriod").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]].orElse(Reads.pure(None)) and
+    (__ \\ "firstNonNSTPPeriod").readNullable[TaxPeriod].orElse(Reads.pure(None)) and
+    (__ \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "deregistration").readNullable[Deregistration].orElse(Reads.pure(None)) and
+    (__ \ "changeIndicators").readNullable[ChangeIndicators].orElse(Reads.pure(None)) and
+    (__ \ "missingTrader").read[Boolean] and
+    (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true))
+  )(CustomerInformation.apply _)
 }

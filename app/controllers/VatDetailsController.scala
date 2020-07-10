@@ -30,7 +30,6 @@ import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
-import org.slf4j
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
@@ -56,8 +55,6 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
                                      detailsView: Details,
                                      serviceErrorHandler: ServiceErrorHandler)
   extends FrontendController(mcc) with I18nSupport {
-
-  val logger: slf4j.Logger = Logger.logger
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
@@ -93,7 +90,9 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           Redirect(appConfig.missingTraderRedirectUrl)
         } else {
           Ok(detailsView(
-            constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus), dateService.isPreCovidDeadline(), serviceInfoContent
+            constructViewModel(nextReturn, nextPayment, customerInfo, mandationStatus),
+            dateService.isPreCovidDeadline(),
+            serviceInfoContent
           )).addingToSession(newSessionVariables: _*)
         }
       }
@@ -101,32 +100,28 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
   def detailsRedirectToEmailVerification: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
-      val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
+      accountDetailsService.getAccountDetails(user.vrn).map {
+        case Right(details) => details.emailAddress match {
+          case Some(email) =>
+            email.email match {
+              case Some(emailAddress) =>
+                val sessionValues: Seq[(String, String)] = Seq(SessionKeys.prepopulationEmailKey -> emailAddress) ++
+                  (if(details.hasPendingPpobChanges) Seq() else Seq(SessionKeys.inFlightContactKey -> "false"))
 
-      for {
-        accountDetails <- accountDetailsCall
-      } yield {
-        accountDetails match {
-          case Right(details) => details.emailAddress match {
-            case Some(email) =>
-              email.email match {
-                case Some(emailAddress) =>
-                  val sessionValues: Seq[(String, String)] = Seq(SessionKeys.prepopulationEmailKey -> emailAddress) ++
-                    (if(details.hasPendingPpobChanges) Seq() else Seq(SessionKeys.inFlightContactKey -> "false"))
-
-                  Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*)
-                case _ =>
-                  logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Email address not returned from vat-subscription.")
-                  serviceErrorHandler.showInternalServerError
-              }
-            case _ =>
-              logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Email status not returned from vat-subscription.")
-              serviceErrorHandler.showInternalServerError
-          }
-          case Left(_) =>
-            logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Could not retrieve account details.")
+                Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*)
+              case _ =>
+                Logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
+                  "Email address not returned from vat-subscription.")
+                serviceErrorHandler.showInternalServerError
+            }
+          case _ =>
+            Logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
+              "Email status not returned from vat-subscription.")
             serviceErrorHandler.showInternalServerError
         }
+        case Left(_) =>
+          Logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Could not retrieve account details.")
+          serviceErrorHandler.showInternalServerError
       }
   }
 
@@ -204,16 +199,16 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
 
   private[controllers] def retrieveEmailVerifiedIfExist(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
-    accountDetails.fold(_ => true, customerInfo =>
-      customerInfo.emailAddress match {
-        case Some(emailInformation) =>
-          (emailInformation.email, emailInformation.emailVerified) match {
-            case (Some(_), Some(verified)) => verified
-            case (Some(_), None) => false
-            case _ => true
-          }
-        case _ => true
-      })
+    accountDetails match {
+      case Right(details) =>
+        details.emailAddress match {
+          case _ if details.hasPendingPpobChanges => true
+          case Some(Email(Some(_), Some(verified))) => verified
+          case Some(Email(Some(_), None)) => false
+          case _ => true
+        }
+      case _ => true
+    }
   }
 
   def retrieveMandationStatus(vrn: String)
