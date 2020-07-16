@@ -43,7 +43,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+            isPartialMigration = false,
+            hasVerifiedEmail = true)
+          )
           FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubOutstandingTransactions
         }
@@ -56,7 +59,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+            isPartialMigration = false,
+            hasVerifiedEmail = true)
+          )
           FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubOutstandingTransactions
         }
@@ -74,7 +80,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
       "return 200" in new Test {
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+            isPartialMigration = false,
+            hasVerifiedEmail = true)
+          )
           FinancialDataStub.stubSuccessfulDirectDebit
           FinancialDataStub.stubNoPayments
         }
@@ -87,7 +96,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+            isPartialMigration = false,
+            hasVerifiedEmail = true)
+          )
           FinancialDataStub.stubNoPayments
           FinancialDataStub.stubSuccessfulDirectDebit
         }
@@ -106,7 +118,10 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
-          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = true, hasVerifiedEmail = true))
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+            isPartialMigration = true,
+            hasVerifiedEmail = true)
+          )
         }
 
         val response: WSResponse = await(request().get())

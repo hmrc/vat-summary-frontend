@@ -21,7 +21,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.play.language.LanguageUtils
 
 @Singleton
 class LanguageController @Inject()(val appConfig: AppConfig,

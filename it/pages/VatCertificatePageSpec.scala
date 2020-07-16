@@ -20,6 +20,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
+import stubs.CustomerInfoStub.customerInfoJson
 import stubs.{AuthStub, CustomerInfoStub, ServiceInfoStub}
 
 class VatCertificatePageSpec extends IntegrationBaseSpec {
@@ -29,7 +30,10 @@ class VatCertificatePageSpec extends IntegrationBaseSpec {
 
     def request(isAgent: Boolean = false): WSRequest = {
       setupStubs()
-      CustomerInfoStub.stubCustomerInfo()
+      CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+        isPartialMigration = false,
+        hasVerifiedEmail = true)
+      )
 
       if (isAgent) {
         buildRequest("/vat-certificate", formatSessionVrn(Some("1112221112")))

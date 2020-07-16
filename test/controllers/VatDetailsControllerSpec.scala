@@ -25,7 +25,7 @@ import common.TestModels._
 import common.{SessionKeys, TestModels}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models._
-import models.errors.{BadRequestError, NextPaymentError, ObligationsError, _}
+import models.errors.{NextPaymentError, ObligationsError, _}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.viewModels.VatDetailsViewModel
@@ -54,18 +54,16 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val vatServiceReturnsResult: Future[ServiceResponse[Option[VatReturnObligations]]] = Future.successful(Right(Some(obligations)))
     val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] = Future.successful(Right(Some(payments)))
     val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(customerInformationMax))
-    val mandationStatusServiceResult: Future[HttpGetResult[MandationStatus]] = Future.successful(Right(validMandationStatus))
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
     val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val mockMandationService: MandationStatusService = mock[MandationStatusService]
 
     val detailsView: Details = injector.instanceOf[Details]
 
-    def setup(needMandationCall: Boolean = true): Any = {
+    def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
         .returns(authResult)
@@ -93,18 +91,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
         .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
-
-      if(needMandationCall) {
-        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returning(mandationStatusServiceResult).anyNumberOfTimes()
-      }
     }
 
     mockAppConfig.features.submitReturnFeatures(true)
 
-    def target(needMandationCall: Boolean = true): VatDetailsController = {
-      setup(needMandationCall)
+    def target(): VatDetailsController = {
+      setup()
       new VatDetailsController(
         enrolmentsAuthService,
         mockAppConfig,
@@ -114,7 +106,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockAccountDetailsService,
         mockDateService,
         mockAuditService,
-        mockMandationService,
         mcc,
         ec,
         detailsView,
@@ -158,16 +149,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         private val result = target().details()(fakeRequestWithSession)
         session(result).get(SessionKeys.mandationStatus) shouldBe Some("Non MTDfB")
-      }
-
-      "not put the mandation status in the session if there is an error" in new DetailsTest {
-        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returning(Future.successful(Left(BadRequestError("", ""))))
-
-        private val result = target(false).details()(fakeRequestWithSession)
-        session(result).get(SessionKeys.mandationStatus) shouldBe None
-
       }
     }
 
@@ -242,7 +223,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
           Future.successful(Right(customerInformationHybrid))
 
-        override def setup(needMandationCall: Boolean = true): Unit = {
+        override def setup(): Unit = {
 
           (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
             .stubs(*,*,*)
@@ -271,10 +252,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *, *)
             .returns({})
-
-          (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returning(mandationStatusServiceResult).once()
         }
 
         val result: Future[Result] = target().details()(fakeRequest)
@@ -283,7 +260,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
 
     "the submit return feature switch is turned off" should {
-      "the View Returns link should be displayed" in new DetailsTest {
+      "display the View Returns link" in new DetailsTest {
         mockAppConfig.features.submitReturnFeatures(false)
         lazy val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe OK
@@ -293,26 +270,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the submit return feature switch is turned on" should {
       "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
-        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
+          .returns(Future.successful(Right(customerInformationNonMTDfB)))
 
         mockAppConfig.features.submitReturnFeatures(true)
         lazy val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe OK
         await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe true
-      }
-
-      "return a VatDetailsViewModel as a MTDfB user if no mandation status is returned" in new DetailsTest {
-        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(BadRequestError("AN ERROR", "HAS OCCURRED"))))
-
-        mockAppConfig.features.submitReturnFeatures(true)
-        lazy val result: Future[Result] = target().details()(fakeRequest)
-        status(result) shouldBe OK
-        await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe false
-        await(bodyOf(result)).contains(messages("returnObligation.viewReturns")) shouldBe false
       }
     }
 
@@ -322,17 +287,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
           customerInformationMax.copy(isMissingTrader = true)
         ))
-
-        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(MandationStatus("Non MTDfB"))))
-
         mockAppConfig.features.missingTraderAddressIntercept(true)
         lazy val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/missing-trader")
       }
-
     }
 
   }
@@ -401,8 +360,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -419,8 +377,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(Some(payments)),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -437,8 +394,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(None),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -455,8 +411,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -470,8 +425,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
-          Right(customerInformationMin),
-          Right(validMandationStatus)
+          Right(customerInformationMin)
         )
 
         result shouldBe expected
@@ -487,8 +441,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Right(None),
-          Right(customerInformationMin),
-          Right(validNonMTDfBMandationStatus)
+          Right(customerInformationMTDfBExempt)
         )
         result shouldBe expected
       }
@@ -502,8 +455,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Right(None),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -518,8 +470,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(None),
           Left(NextPaymentError),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -542,8 +493,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Left(ObligationsError),
           Left(NextPaymentError),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -568,8 +518,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = target().constructViewModel(
           Right(Some(obligations)),
           Right(Some(payments)),
-          Right(customerInformationMax),
-          Right(validMandationStatus)
+          Right(customerInformationMax)
         )
 
         result shouldBe expected
@@ -816,62 +765,20 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .retrieveMandationStatus" should {
-
-    "return a mandation status" when {
-
-      "it is available in session" in new DetailsTest {
-        implicit val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
-          "mtdVatMandationStatus" -> "Non MTDfB"
-        )
-
-        val result: Future[HttpGetResult[MandationStatus]] = target(false).retrieveMandationStatus("111111111")(fakeRequestWithSession)
-
-        await(result) shouldBe Right(MandationStatus("Non MTDfB"))
-      }
-
-      "it is needs to be collected from the mandation service" in new DetailsTest {
-        implicit val fakeRequestWithEmptySession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession()
-
-        override def setup(needMandationCall: Boolean): Any = {
-          (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returning(Future.successful(Right(validNonMTDfBMandationStatus))).once()
-        }
-
-        val result: Future[HttpGetResult[MandationStatus]] = target().retrieveMandationStatus("111111111")(fakeRequestWithEmptySession)
-
-        await(result) shouldBe Right(MandationStatus("Non MTDfB"))
-      }
-    }
-
-    "return a HTTP error" when {
-
-      "one is received from the mandation service layer" in new DetailsTest {
-        (mockMandationService.getMandationStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returning(Future.successful(Left(BadRequestError("", ""))))
-
-        val result: Future[HttpGetResult[MandationStatus]] = target(false).retrieveMandationStatus("111111111")(fakeRequest)
-        await(result) shouldBe Left(BadRequestError("", ""))
-      }
-    }
-  }
-
-  "Calling .retrieveIsOfType" should {
+  "Calling .retrieveIsOfStatus" should {
 
     "return true" when {
 
-      "the mandation status matches the expected status" in new DetailsTest {
-        val mandationStatusToCompare: Either[Nothing, MandationStatus] = Right(MandationStatus("MTDfB"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(true)
+      "the mandation status in the CustomerInformation matches the expected status" in new DetailsTest {
+        val customerInfoToCompare: Either[Nothing, CustomerInformation] = Right(customerInformationMin)
+        target().retrieveIsOfStatus(customerInfoToCompare, Seq(mtdfb)) shouldBe Some(true)
       }
 
-      "the mandation status matches one of the expected statuses" in new DetailsTest {
-        val mandationStatusToCompareMtdfb: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
-        val mandationStatusToCompareExempt: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB Exempt"))
+      "the mandation status in the CustomerInformation matches one of the expected statuses" in new DetailsTest {
+        val mandationStatusToCompareMtdfb: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
+        val mandationStatusToCompareExempt: HttpGetResult[CustomerInformation] = Right(customerInformationMTDfBExempt)
 
-        val controller: VatDetailsController = target(false)
+        val controller: VatDetailsController = target()
 
         controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
         controller.retrieveIsOfStatus(mandationStatusToCompareExempt, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
@@ -882,18 +789,18 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "return false" when {
 
       "the mandation status does not match the expected status" in new DetailsTest {
-        val mandationStatusToCompare: Either[Nothing, MandationStatus] = Right(MandationStatus("someStatus"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(false)
+        val mandationStatusToCompare: Either[Nothing, CustomerInformation] = Right(customerInformationJunkStatus)
+        target().retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(false)
       }
 
       "the mandation status does not match any of the expected statuses" in new DetailsTest {
-        val mandationStatusToCompareMtdfb: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
+        val mandationStatusToCompareMtdfb: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
+        target().retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
       }
 
       "the expected mandation statuses list is empty" in new DetailsTest {
-        val mandationStatusToCompare: HttpGetResult[MandationStatus] = Right(MandationStatus("MTDfB"))
-        target(false).retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
+        val mandationStatusToCompare: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
+        target().retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
       }
 
     }
@@ -901,8 +808,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "return None" when {
 
       "an error is present" in new DetailsTest {
-        val errorForTest: HttpGetResult[MandationStatus] = Left(UnknownError)
-        target(false).retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
+        val errorForTest: HttpGetResult[CustomerInformation] = Left(UnknownError)
+        target().retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
       }
 
     }

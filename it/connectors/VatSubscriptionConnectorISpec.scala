@@ -19,11 +19,11 @@ package connectors
 import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import helpers.IntegrationBaseSpec
 import models._
 import models.errors.ServerSideError
 import stubs.CustomerInfoStub
+import stubs.CustomerInfoStub.customerInfoJson
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +40,9 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
   "calling getCustomerInfo" should {
 
     "return a user's customer information" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo()
+      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerInfo(
+        customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true)
+      )
 
       val expected = Right(CustomerInformation(
         Some("Cheapo Clothing Ltd"),
@@ -64,6 +66,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
         Some(ChangeIndicators(deregister = false)),
         isMissingTrader = false,
+        mandationStatus = "MTDfB",
         hasPendingPpobChanges = false
       ))
 
@@ -81,36 +84,6 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
 
       setupStubs()
       private val result = await(connector.getCustomerInfo("1111"))
-
-      result shouldEqual expected
-    }
-  }
-
-  "calling getCustomerMandationStatus" should {
-
-    "return a user's mandation status" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubCustomerMandationStatus()
-
-      val expected = Right(
-        MandationStatus(
-          "MTDfB Mandated"
-        )
-      )
-
-      setupStubs()
-      private val result: HttpGetResult[MandationStatus] = await(connector.getCustomerMandationStatus("1111"))
-
-      result shouldEqual expected
-    }
-
-    "return an HttpError if one is received" in new Test {
-      override def setupStubs(): StubMapping = CustomerInfoStub.stubErrorFromApi("/vat-subscription/([0-9]+)/mandation-status")
-
-      val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
-      val expected = Left(ServerSideError("500", message))
-
-      setupStubs()
-      private val result = await(connector.getCustomerMandationStatus("1111"))
 
       result shouldEqual expected
     }

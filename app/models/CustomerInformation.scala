@@ -37,7 +37,8 @@ case class CustomerInformation(organisationName: Option[String],
                                deregistration: Option[Deregistration],
                                changeIndicators: Option[ChangeIndicators],
                                isMissingTrader: Boolean,
-                               hasPendingPpobChanges: Boolean) {
+                               hasPendingPpobChanges: Boolean,
+                               mandationStatus: String) {
 
   def entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
@@ -73,6 +74,7 @@ object CustomerInformation {
     (__ \ "deregistration").readNullable[Deregistration].orElse(Reads.pure(None)) and
     (__ \ "changeIndicators").readNullable[ChangeIndicators].orElse(Reads.pure(None)) and
     (__ \ "missingTrader").read[Boolean] and
-    (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true))
+    (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true)) and
+    (__ \ "mandationStatus").read[String]
   )(CustomerInformation.apply _)
 }
