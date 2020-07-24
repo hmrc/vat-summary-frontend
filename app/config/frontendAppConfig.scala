@@ -179,9 +179,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   private lazy val unauthenticatedPaymentsBase: String = sc.getString(Keys.unauthenticatedPaymentsBase)
   override lazy val unauthenticatedPaymentsUrl: String = unauthenticatedPaymentsBase + sc.getString(Keys.unauthenticatedPaymentsUrl)
 
-  private lazy val directDebitReturnBase: String = sc.getString(Keys.directDebitReturnBase)
-  override lazy val directDebitReturnUrl: String = directDebitReturnBase + sc.getString(Keys.directDebitReturnUrl)
-  override lazy val directDebitBackUrl: String = directDebitReturnBase + sc.getString(Keys.directDebitBackUrl)
+  override lazy val directDebitReturnUrl: String = host + sc.getString(Keys.directDebitReturnUrl)
+  override lazy val directDebitBackUrl: String = host + sc.getString(Keys.directDebitBackUrl)
 
   private lazy val btaVatOverviewUrlBase: String = sc.getString(Keys.btaVatOverviewUrlBase)
   override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + sc.getString(Keys.btaVatOverviewUrl)
