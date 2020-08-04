@@ -26,6 +26,18 @@ sealed case class PaymentMessageHelper(name: String, title: String, description:
 
 //scalastyle:off
 object PaymentMessageHelper {
+  object DefaultInterest extends PaymentMessageHelper(
+    VatDefaultInterest.value,
+    "chargeType.defaultInterestTitle",
+    Some("chargeType.defaultAndFurtherInterestDescription")
+  )
+
+  object FurtherInterest extends PaymentMessageHelper(
+    VatFurtherInterest.value,
+    "chargeType.furtherInterestTitle",
+    Some("chargeType.defaultAndFurtherInterestDescription")
+  )
+
   object VatReturnCreditCharge extends PaymentMessageHelper(
     ReturnCreditCharge.value,
     "chargeType.vatReturnCreditChargeTitle",
@@ -327,6 +339,8 @@ object PaymentMessageHelper {
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(
+    DefaultInterest,
+    FurtherInterest,
     VatReturnDebitCharge,
     VatReturnCreditCharge,
     VatOfficerAssessmentCreditCharge,

@@ -209,6 +209,9 @@ deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ga
 
 
 # Charge types
+chargeType.defaultInterestTitle = Llog diffygdalu
+chargeType.furtherInterestTitle = Llog pellach
+chargeType.defaultAndFurtherInterestDescription = yn seiliedig ar ein hasesiad o’ch treth ar gyfer y cyfnod {0}
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
 chargeType.vatReturnCreditChargeDescription = ar gyfer eich Ffurflen TAW {0}
 chargeType.vatReturnDebitChargeTitle = Ffurflen TAW

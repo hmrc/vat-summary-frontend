@@ -24,6 +24,12 @@ sealed trait ChargeType {
   val value: String
   override def toString: String = value
 }
+case object VatDefaultInterest extends ChargeType {
+  override val value: String = "VAT Default Interest"
+}
+case object VatFurtherInterest extends ChargeType {
+  override val value: String = "VAT Further Interest"
+}
 case object ReturnDebitCharge extends ChargeType {
   override val value: String = "VAT Return Debit Charge"
 }
@@ -178,6 +184,11 @@ object ChargeType {
 
   val logger = Logger(getClass.getSimpleName)
 
+  val positiveOrNegativeChargeTypes: Set[ChargeType] = Set(
+    VatDefaultInterest,
+    VatFurtherInterest
+  )
+
   val allChargeTypes: Set[ChargeType] = Set(
     ReturnDebitCharge,
     ReturnCreditCharge,
@@ -230,7 +241,7 @@ object ChargeType {
     PaymentOnAccountInstalments,
     UnallocatedPayment,
     Refund
-  )
+  ) ++ positiveOrNegativeChargeTypes
 
   def apply: String => ChargeType = input => {
     allChargeTypes.find { chargeType =>
