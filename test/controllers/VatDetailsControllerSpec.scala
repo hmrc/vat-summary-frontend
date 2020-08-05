@@ -293,7 +293,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         redirectLocation(result) shouldBe Some("/missing-trader")
       }
     }
-
   }
 
   "Calling .detailsRedirectToEmailVerification" should {
@@ -811,8 +810,32 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         val errorForTest: HttpGetResult[CustomerInformation] = Left(UnknownError)
         target().retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
       }
+    }
+  }
 
+  "Calling .redirectForMissingTrader" when {
+
+    "the user is a missing trader and has no inflight changes" should {
+
+      "return true" in new DetailsTest {
+        target().redirectForMissingTrader(Right(customerInformationMax.copy(isMissingTrader = true))) shouldBe true
+      }
     }
 
+    "the user is a missing trader and has an inflight PPOB change" should {
+
+      "return false" in new DetailsTest {
+        target().redirectForMissingTrader(Right(
+          customerInformationMax.copy(isMissingTrader = true, hasPendingPpobChanges = true)
+        )) shouldBe false
+      }
+    }
+
+    "the user is not a missing trader" should {
+
+      "return false" in new DetailsTest {
+        target().redirectForMissingTrader(Right(customerInformationMax)) shouldBe false
+      }
+    }
   }
 }
