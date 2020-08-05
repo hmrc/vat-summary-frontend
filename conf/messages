@@ -72,11 +72,13 @@ vatDetails.checkWhatYouOwe = Check what you owe and make a payment
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
+returnObligation.nextReturns = Returns due
 returnObligation.viewReturns = View return deadlines
 returnObligation.submit = Submit VAT Return
 
 payment.noPayment = No payments due right now
 payment.nextPayment = Next payment due
+payment.nextPayments = Payments due
 payment.check = Check what you owe
 payment.afterSubmitted = After you have submitted a return, it can take 24 hours for what you owe to show here.
 payment.stillMake = You can still

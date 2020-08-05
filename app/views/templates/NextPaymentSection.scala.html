@@ -29,7 +29,12 @@
 
 <div class ="tile tile-no-border">
   <div id="payments" class="tile-body">
-    <h2 class="heading-medium push--top">@messages("payment.nextPayment")</h2>
+    <h2 class="heading-medium push--top">@(hasMultiple) match {
+        case (true) => {@messages("payment.nextPayments")}
+        case (false) => {@messages("payment.nextPayment")}
+        }
+
+    </h2>
 
     @if(isHybridUser) {
       @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))
