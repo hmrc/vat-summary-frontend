@@ -142,7 +142,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
-        elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
+        elementText(Selectors.nextPaymentDueHeading) shouldBe "Payments due"
       }
 
       "display the 'payments due' message" in {
