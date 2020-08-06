@@ -98,11 +98,13 @@ vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
 
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i’w chyflwyno
+returnObligation.nextReturns = Ffurflenni TAW sy’n ddyledus
 returnObligation.viewReturns = Bwrw golwg dros ddyddiadau cau ar gyfer Ffurflenni TAW
 returnObligation.submit = Cyflwyno Ffurflen TAW
 
 payment.noPayment = Nid oes taliadau’n ddyledus nawr
 payment.nextPayment = Taliad nesaf yn ddyledus
+payment.nextPayments = Taliadau sy’n ddyledus
 payment.check = Gwirio’r hyn sydd arnoch
 payment.afterSubmitted = Ar ôl i chi gyflwyno Ffurflen TAW, gall gymryd 24 awr i’r hyn sydd arnoch gael ei ddangos yma.
 payment.stillMake = Mae’n dal yn bosibl i chi

@@ -24,7 +24,11 @@
 
 <div class="tile tile-no-border">
   <div id="next-return" class="tile-body">
-    <h2 class="heading-medium push--top">@messages("returnObligation.nextReturn")</h2>
+    <h2 class="heading-medium push--top">@(hasMultiple) match {
+        case (true) => {@messages("returnObligation.nextReturns")}
+        case (false) => {@messages("returnObligation.nextReturn")}
+        }
+    </h2>
       <p>
       @(obligationData, hasMultiple, isNonMTDfBOrNonDigital, isError) match {
         case (_, _, _, true) => { @messages("vatDetails.error") }
