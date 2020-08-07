@@ -92,7 +92,7 @@ vatDetails.viewPastPayments.link = Bwrw golwg dros daliadau blaenorol
 vatDetails.viewPastReturns.link = Bwrw golwg dros Ffurflenni TAW blaenorol
 vatDetails.vrn = Rhif Cofrestru TAW (VRN): {0}
 vatDetails.error = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
-vatDetails.returnsDue = Mae gennych {0} o Ffurflenni TAW i’w cyflwyno
+vatDetails.returnsDue = Mae gennych {0} o Ffurflenni TAW sy’n ddyledus
 vatDetails.paymentsDue = Mae gennych {0} o daliadau’n ddyledus
 vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
 
