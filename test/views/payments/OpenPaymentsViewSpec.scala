@@ -280,16 +280,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "display the covid message" when {
 
-      "the display covid feature switch is on" in {
-        mockConfig.features.displayCovidMessage(true)
-
-        val hasDirectDebit = None
-        val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-        lazy val view = openPaymentsView(user, viewModel, preCovidDeadline = true)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        document.select(Selectors.covidPartial).toString should include(CovidMessages.headingPreEnd)
-      }
 
     }
 

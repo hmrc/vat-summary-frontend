@@ -16,7 +16,7 @@
 
 package views.payments
 
-import common.MessageLookup.CovidMessages.headingPreEnd
+
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -145,18 +145,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
   "Rendering the no payments page" should {
 
-    "display the covid message" when {
-
-      "the display covid feature switch is on" in {
-        mockConfig.features.displayCovidMessage(true)
-
-        lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        document.select(Selectors.covidPartial).toString should include(headingPreEnd)
-      }
-
-    }
 
     "not display the covid message" when {
 

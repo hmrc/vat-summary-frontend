@@ -554,18 +554,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the overview page" should {
 
-    "display the covid message" when {
-
-      "the display covid feature switch is on" in {
-        mockConfig.features.displayCovidMessage(true)
-
-        lazy val view = details(detailsModel, preCovidDeadline = true, Html("<nav>BTA Links</nav>"))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        document.select(Selectors.covidPartial).toString should include(headingPreEnd)
-      }
-    }
-
     "not display the covid message" when {
 
       "the display covid feature switch is off" in {
