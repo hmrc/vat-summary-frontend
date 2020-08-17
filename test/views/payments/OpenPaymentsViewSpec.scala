@@ -279,7 +279,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
   "Rendering the open payments page" should {
 
-    "the display covid feature switch is on" should {
+    "when the display covid feature switch is on" should {
       mockConfig.features.displayCovidMessage(true)
 
       val hasDirectDebit = None
