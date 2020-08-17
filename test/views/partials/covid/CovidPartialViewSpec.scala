@@ -25,30 +25,25 @@ import views.html.partials.covid.CovidMessage
 class CovidPartialViewSpec extends ViewBaseSpec {
 
   val covidMessageView: CovidMessage = injector.instanceOf[CovidMessage]
-  "Rendering the covid partial" should {
+
+  "Rendering the covid message" should {
 
     object Selectors {
-      val icon = ".icon"
       val line1 = "li:nth-of-type(1)"
       val line2 = "li:nth-of-type(2)"
     }
 
-    "The covid partial pre end of June 2020" should {
-
-      lazy val view = covidMessageView(preCovidDeadline = true)
+      lazy val view = covidMessageView()
       implicit lazy val render: Document = Jsoup.parse(view.body)
 
       "have the correct first message" in {
         elementText(Selectors.line1) shouldBe line1
       }
 
-      "have the correct second message" which {
-
-        "has the correct text" in {
+        "has the correct second message" in {
           elementText(Selectors.line2) shouldBe line2
         }
 
-      }
+
     }
-  }
 }

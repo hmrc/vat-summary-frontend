@@ -27,7 +27,7 @@
       covidMessage: CovidMessage,
       whatYouOweChargeRow: WhatYouOweChargeRow)
 
-@(user: User, model: OpenPaymentsViewModel, preCovidDeadline: Boolean, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(user: User, model: OpenPaymentsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(
     title = messages("openPayments.title"),
@@ -46,7 +46,7 @@
 
   <h1 class="heading-xlarge">@messages("openPayments.heading")</h1>
 
-  @if(appConfig.features.displayCovidMessage()) { @covidMessage(preCovidDeadline) }
+  @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
 
       <div class="payments">
       <div class="section">

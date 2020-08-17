@@ -35,7 +35,7 @@
       vatOptOutSection: VatOptOutSection,
       deregSection: DeregSection)
 
-@(detailsViewModel: VatDetailsViewModel, preCovidDeadline: Boolean, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+@(detailsViewModel: VatDetailsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @unverifiedUserEmailContent = {
   @if(!detailsViewModel.userEmailVerified && appConfig.features.r17Content()) {

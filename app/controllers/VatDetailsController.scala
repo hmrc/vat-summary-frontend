@@ -86,7 +86,6 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
         } else {
           Ok(detailsView(
             constructViewModel(nextReturn, nextPayment, customerInfo),
-            dateService.isPreCovidDeadline(),
             serviceInfoContent
           )).addingToSession(newSessionVariables: _*)
         }
