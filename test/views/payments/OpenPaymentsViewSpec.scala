@@ -277,9 +277,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the open payments page" should {
+  "Rendering the open payments page" when {
 
-    "when the display covid feature switch is on" should {
+    "the display covid feature switch is on" should {
       mockConfig.features.displayCovidMessage(true)
 
       val hasDirectDebit = None
@@ -297,9 +297,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     }
 
-    "not display the covid message" when {
+      "the display covid feature switch is off" should {
 
-      "the display covid feature switch is off" in {
+        "not display the covid message" in {
+
         mockConfig.features.displayCovidMessage(false)
 
         val hasDirectDebit = None
