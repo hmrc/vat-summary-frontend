@@ -102,6 +102,6 @@ object MessageLookup {
 
 
     val line1: String = "If you deferred paying VAT that was due between 20 March 2020 and 30 June 2020, you must pay it in full by 31 March 2021."
-    val line2: String = "You can pay deferred VAT in part or in full anytime up to 31 March 2021."
+    val line2: String = "You can pay deferred VAT in part or in full any time up to 31 March 2021."
   }
 }

@@ -393,7 +393,7 @@ a11yStatement.testCarriedOut.3 = The full service was tested by HMRC and include
 a11yStatement.pagePrepared = This page was prepared on 20 September 2019. It was last updated on 20 September 2019.
 
 covid.line1 = If you deferred paying VAT that was due between 20 March 2020 and 30 June 2020, you must pay it in full by 31 March 2021.
-covid.line2 = You can pay deferred VAT in part or in full anytime up to 31 March 2021.
+covid.line2 = You can pay deferred VAT in part or in full any time up to 31 March 2021.
 
 emailVerification.message.1 = You need to confirm your email address.
 emailVerification.message.2 = Resend the email
