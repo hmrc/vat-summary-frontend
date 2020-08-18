@@ -21,11 +21,6 @@ object ConfigKeys {
   val contactFrontendHost: String = "contact-frontend.host"
   val contactFrontendService: String = "contact-frontend"
 
-  val whitelistEnabled: String = "whitelist.enabled"
-  val whitelistedIps: String = "whitelist.allowedIps"
-  val whitelistExcludedPaths: String = "whitelist.excludedPaths"
-  val whitelistShutterPage: String = "whitelist.shutter-page-url"
-
   val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
