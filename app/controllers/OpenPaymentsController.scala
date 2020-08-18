@@ -65,10 +65,10 @@ extends FrontendController(mcc) with I18nSupport {
       case Right(Some(payments)) =>
         val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), hasActiveDirectDebit)
         auditEvent(user, model.payments)
-        Ok(openPaymentsPage(user, model, dateService.isPreCovidDeadline(), serviceInfoContent))
+        Ok(openPaymentsPage(user, model, serviceInfoContent))
       case Right(_) =>
         auditEvent(user, Seq.empty)
-        Ok(noPayments(user, dateService.isPreCovidDeadline(), hasActiveDirectDebit, serviceInfoContent))
+        Ok(noPayments(user, hasActiveDirectDebit, serviceInfoContent))
       case Left(error) =>
         Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
         InternalServerError(paymentsError())

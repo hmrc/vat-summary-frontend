@@ -53,7 +53,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     def setupMocks(): Unit = {
       (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
 
-      (mockDateService.isPreCovidDeadline: () => Boolean).stubs().returns(true)
 
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)

@@ -70,7 +70,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
 
-      (mockDateService.isPreCovidDeadline: () => Boolean).stubs().returns(true)
 
       (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
@@ -235,7 +234,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
 
-          (mockDateService.isPreCovidDeadline: () => Boolean).stubs().returns(true)
 
           (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *)

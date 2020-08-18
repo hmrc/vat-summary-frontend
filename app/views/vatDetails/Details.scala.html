@@ -17,14 +17,12 @@
 @import models.viewModels.VatDetailsViewModel
 @import views.html.templates.formatters.breadcrumbs._
 @import views.html.templates.formatters.links._
-@import views.html.partials.covid.CovidMessage
 @import views.html.templates._
 @import java.time.LocalDate
 @import play.twirl.api.HtmlFormat
 
 @this(mainTemplate: MainTemplate,
       navigationBreadcrumb: NavigationBreadcrumb,
-      covidMessage: CovidMessage,
       nextPaymentSection: NextPaymentSection,
       nextReturnSection: NextReturnSection,
       historySection: HistorySection,
@@ -35,7 +33,7 @@
       vatOptOutSection: VatOptOutSection,
       deregSection: DeregSection)
 
-@(detailsViewModel: VatDetailsViewModel, preCovidDeadline: Boolean, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+@(detailsViewModel: VatDetailsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @unverifiedUserEmailContent = {
   @if(!detailsViewModel.userEmailVerified && appConfig.features.r17Content()) {
@@ -73,7 +71,7 @@
        </span>
     </header>
 
-    @if(appConfig.features.displayCovidMessage()) { @covidMessage(preCovidDeadline, pageIsFullWidth = true) }
+
 
     <div class="flex-container grid-row">
       @nextPaymentSection(

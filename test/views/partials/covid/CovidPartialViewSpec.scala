@@ -25,63 +25,25 @@ import views.html.partials.covid.CovidMessage
 class CovidPartialViewSpec extends ViewBaseSpec {
 
   val covidMessageView: CovidMessage = injector.instanceOf[CovidMessage]
-  "Rendering the covid partial" should {
+
+  "Rendering the covid message" should {
 
     object Selectors {
-      val icon = ".icon"
-      val header = "p"
       val line1 = "li:nth-of-type(1)"
       val line2 = "li:nth-of-type(2)"
-      val line2Link = "li:nth-of-type(2) > a"
-      val line3 = "li:nth-of-type(3)"
-      val line4 = "li:nth-of-type(4)"
     }
 
-    "The covid partial pre end of June 2020" should {
-
-      lazy val view = covidMessageView(preCovidDeadline = true)
+      lazy val view = covidMessageView()
       implicit lazy val render: Document = Jsoup.parse(view.body)
-
-      "have alternate content for the icon" in {
-        elementText(Selectors.icon) shouldBe "Warning"
-      }
-
-      "have the correct header" in {
-        elementText(Selectors.header) shouldBe headingPreEnd
-      }
 
       "have the correct first message" in {
         elementText(Selectors.line1) shouldBe line1
       }
 
-      "have the correct second message" which {
-
-        "has the correct text" in {
+        "has the correct second message" in {
           elementText(Selectors.line2) shouldBe line2
         }
 
-        "has a link to a gov page" in {
-          element(Selectors.line2Link).attr("href") shouldBe "https://www.gov.uk/difficulties-paying-hmrc"
-        }
-      }
 
-      "have the correct third message" in {
-        elementText(Selectors.line3) shouldBe line3
-      }
-
-      "have the correct fourth message" in {
-        elementText(Selectors.line4) shouldBe line4
-      }
     }
-
-    "The covid partial post end of June 2020" should {
-
-      lazy val view = covidMessageView(preCovidDeadline = false)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct card heading" in {
-        elementText("strong") shouldBe headingPostEnd
-      }
-    }
-  }
 }

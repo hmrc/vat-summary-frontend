@@ -16,34 +16,16 @@
 
 @this()
 
-@(preCovidDeadline: Boolean, pageIsFullWidth: Boolean = false)(implicit messages: Messages)
+@(pageIsFullWidth: Boolean = false)(implicit messages: Messages)
 
 <div class="grid-row form-group flex-container">
 
     <div @if(pageIsFullWidth){class="warning-banner"}>
-        <div class="notice">
-            <i class="icon icon-important">
-                <span class="visually-hidden">@messages("common.warning")</span>
-            </i>
-
-            <p>
-                <strong class="bold-small">
-                    @messages("covid.line1")
-                    @{if(preCovidDeadline) messages("covid.line1.1") else messages("covid.line1.2")}
-                </strong>
-            </p>
-        </div>
 
         <div class="panel panel-border-wide">
             <ul>
+                <li style="margin-bottom:10px">@messages("covid.line1")</li>
                 <li>@messages("covid.line2")</li>
-                <li>
-                    @messages("covid.line3.1")
-                    <a href="https://www.gov.uk/difficulties-paying-hmrc">@messages("covid.line3.2")</a>
-                    @messages("covid.line3.3")
-                </li>
-                <li>@messages("covid.line4")</li>
-                <li>@messages("covid.line5")</li>
             </ul>
         </div>
     </div>

@@ -16,7 +16,8 @@
 
 package views.payments
 
-import common.MessageLookup.CovidMessages.headingPreEnd
+
+import common.MessageLookup.CovidMessages
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -38,7 +39,8 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-    val covidPartial = "div.grid-row.form-group.flex-container"
+    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > ul > li:nth-child(1)"
+    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > ul > li:nth-child(2)"
   }
 
   override val user: User = User("123456789")
@@ -47,7 +49,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the user has a direct debit" should {
 
-      lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
+      lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -114,7 +116,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the user does not have a direct debit" should {
 
-      lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(false))
+      lazy val view = noPaymentsView(user,  hasDirectDebit = Some(false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct message regarding setting up a direct debit" in {
@@ -134,7 +136,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "the call to the direct debit service fails" should {
 
-      lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = None)
+      lazy val view = noPaymentsView(user, hasDirectDebit = None)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not display a direct debit message" in {
@@ -147,15 +149,21 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     "display the covid message" when {
 
-      "the display covid feature switch is on" in {
+      "the display covid feature switch is on" should  {
         mockConfig.features.displayCovidMessage(true)
 
-        lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
+        lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        document.select(Selectors.covidPartial).toString should include(headingPreEnd)
-      }
+        "have the correct first message" in {
+          elementText(Selectors.covidPartialLine1) should include(CovidMessages.line1)
+        }
 
+        "have the correct second message" in {
+          elementText(Selectors.covidPartialLine2) should include(CovidMessages.line2)
+        }
+
+      }
     }
 
     "not display the covid message" when {
@@ -163,10 +171,11 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       "the display covid feature switch is off" in {
         mockConfig.features.displayCovidMessage(false)
 
-        lazy val view = noPaymentsView(user, preCovidDeadline = true, hasDirectDebit = Some(true))
+        lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        elementExtinct(Selectors.covidPartial)
+        elementExtinct(Selectors.covidPartialLine1)
+        elementExtinct(Selectors.covidPartialLine2)
       }
 
     }

@@ -425,12 +425,5 @@ global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – 
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 
-covid.line1 = Gwnaethom nodi ynghynt y gallech ohirio talu TAW oherwydd coronafeirws (COVID-19).
-covid.line1.1 = Mae’r cyfnod gohirio TAW yn dod i ben ar 30 Mehefin 2020.
-covid.line1.2 = Daeth y cyfnod gohirio TAW i ben ar 30 Mehefin 2020.
-covid.line2 = Mae’n rhaid i filiau TAW sydd â dyddiad talu dyledus ar neu ar ôl 1 Gorffennaf 2020 gael eu talu’n llawn ac mewn pryd.
-covid.line3.1 = Os gwnaethoch ganslo’ch Debyd Uniongyrchol, dylech ei ailsefydlu er mwyn i chi beidio â methu taliad. Cysylltwch â
-covid.line3.2 = Gwasanaeth Cwsmeriaid Cymraeg CThEM
-covid.line3.3 = cyn gynted â phosibl os na allwch dalu. Efallai y byddwch yn gallu sefydlu trefniant Amser i Dalu os ydych yn ei chael hi’n anodd talu bil treth.
-covid.line4 = Hyd yn oed os yw’ch busnes wedi cau dros dro, mae’n dal i fod yn rhaid i chi gyflwyno Ffurflenni TAW.
-covid.line5 = Mae gennych hyd at 31 Mawrth 2021 i dalu biliau TAW a oedd yn ddyledus rhwng 20 Mawrth 2020 a 30 Mehefin 2020.
+covid.line1 = Os gwnaethoch ohirio talu TAW a oedd yn ddyledus rhwng 20 Mawrth 2020 a 30 Mehefin 2020, mae’n rhaid i chi ei thalu’n llawn erbyn 31 Mawrth 2021.
+covid.line2 = Gallwch wneud taliadau rhannol neu dalu’r swm llawn ar unrhyw adeg rhwng nawr a 31 Mawrth 2021.

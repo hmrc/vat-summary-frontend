@@ -23,7 +23,7 @@
     covidMessage: CovidMessage,
     navigationBreadcrumb: NavigationBreadcrumb)
 
-@(user: models.User, preCovidDeadline: Boolean, hasDirectDebit: Option[Boolean], serviceInfoContent: Html = HtmlFormat.empty)(
+@(user: models.User, hasDirectDebit: Option[Boolean], serviceInfoContent: Html = HtmlFormat.empty)(
 implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
   @mainTemplate(
@@ -44,7 +44,7 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
         <div class="column-two-thirds">
             <h1 class="heading-xlarge">@messages("noPayments.heading")</h1>
 
-            @if(appConfig.features.displayCovidMessage()) { @covidMessage(preCovidDeadline) }
+            @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
 
             <div class="form-group" id="noPaymentsDetail">
                 <h2 class="lede">@messages("noPayments.oweNothing")</h2>
