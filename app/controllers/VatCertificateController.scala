@@ -16,7 +16,6 @@
 
 package controllers
 
-import common.SessionKeys
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.viewModels.VatCertificateViewModel
@@ -25,19 +24,17 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountDetailsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.certificate.VatCertificate
-import views.html.errors.NotFound
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
                                          authorisedController: AuthorisedController,
                                          accountDetailsService: AccountDetailsService,
-                                         val mcc: MessagesControllerComponents,
-                                         vatCertificate: VatCertificate,
-                                         notFound: NotFound
-                                        )(implicit val appConfig: AppConfig,
-                                          implicit val ec: ExecutionContext)
+                                         mcc: MessagesControllerComponents,
+                                         vatCertificate: VatCertificate)
+                                        (implicit appConfig: AppConfig,
+                                         ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport {
 
   def show(): Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
@@ -50,26 +47,6 @@ class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
           case Left(_) =>
             InternalServerError
         }
-      }
-  }
-
-  def changeClient: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
-    user =>
-      if (user.isAgent) {
-        Future.successful(Redirect(appConfig.agentClientLookupStartUrl(routes.VatCertificateController.show().url))
-          .removingFromSession(SessionKeys.agentSessionVrn))
-      } else {
-        Future.successful(NotFound(notFound()))
-      }
-  }
-
-  def changeClientAction: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
-    user =>
-      if (user.isAgent) {
-        Future.successful(Redirect(appConfig.agentClientLookupActionUrl)
-          .removingFromSession(SessionKeys.agentSessionVrn))
-      } else {
-        Future.successful(NotFound(notFound()))
       }
   }
 }

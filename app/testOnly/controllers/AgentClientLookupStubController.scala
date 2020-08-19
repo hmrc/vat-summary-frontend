@@ -22,12 +22,12 @@ import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
-import testOnly.views.html.agentClientLookup.{AgentAction, EnterVrn, Unauthorised}
+import testOnly.views.html.agentClientLookup.{AgentHub, EnterVrn, Unauthorised}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfig,
                                                 mcc: MessagesControllerComponents,
-                                                agentActionView: AgentAction,
+                                                agentHubView: AgentHub,
                                                 enterVrnView: EnterVrn,
                                                 unauthorisedView: Unauthorised
                                                )
@@ -41,10 +41,9 @@ class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfi
     Ok(unauthorisedView()).removingFromSession(SessionKeys.agentSessionVrn)
   }
 
-  def agentAction: Action[AnyContent] = Action { implicit request =>
-    Ok(agentActionView())
+  def agentHub: Action[AnyContent] = Action { implicit request =>
+    Ok(agentHubView())
   }
-
 
   def post: Action[AnyContent] = Action { implicit request =>
     StubAgentClientLookupForm.form.bindFromRequest().fold(

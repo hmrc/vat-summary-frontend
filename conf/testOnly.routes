@@ -11,35 +11,35 @@
 
 # Add all the application routes to the prod.routes file
 
-GET         /vat-through-software/test-only/feature-switch                     @testOnly.controllers.FeatureSwitchController.featureSwitch
-POST        /vat-through-software/test-only/feature-switch                     @testOnly.controllers.FeatureSwitchController.submitFeatureSwitch
+GET         /vat-through-software/test-only/feature-switch                     testOnly.controllers.FeatureSwitchController.featureSwitch
+POST        /vat-through-software/test-only/feature-switch                     testOnly.controllers.FeatureSwitchController.submitFeatureSwitch
 
 # NOCSRF
-POST        /vat-through-software/test-only/populate-schema/:serviceName       @testOnly.controllers.DynamicStubController.populateSchema(serviceName: String)
+POST        /vat-through-software/test-only/populate-schema/:serviceName       testOnly.controllers.DynamicStubController.populateSchema(serviceName: String)
 
 # NOCSRF
-POST        /vat-through-software/test-only/populate-stub/:serviceName         @testOnly.controllers.DynamicStubController.populateStub(serviceName: String)
+POST        /vat-through-software/test-only/populate-stub/:serviceName         testOnly.controllers.DynamicStubController.populateStub(serviceName: String)
 
 # NOCSRF
-DELETE      /vat-through-software/test-only/clear-stub/:serviceName            @testOnly.controllers.DynamicStubController.clearStub(serviceName: String)
+DELETE      /vat-through-software/test-only/clear-stub/:serviceName            testOnly.controllers.DynamicStubController.clearStub(serviceName: String)
 
 # NOCSRF
-DELETE      /vat-through-software/test-only/clear-schemas/:serviceName         @testOnly.controllers.DynamicStubController.clearSchemas(serviceName: String)
+DELETE      /vat-through-software/test-only/clear-schemas/:serviceName         testOnly.controllers.DynamicStubController.clearSchemas(serviceName: String)
 
 
-GET         /vat-through-software/test-only/payments-stub                      @testOnly.controllers.PaymentsStubController.stub
-GET         /vat-through-software/test-only/direct-debit-stub                  @testOnly.controllers.DirectDebitStubController.stub
+GET         /vat-through-software/test-only/payments-stub                      testOnly.controllers.PaymentsStubController.stub
+GET         /vat-through-software/test-only/direct-debit-stub                  testOnly.controllers.DirectDebitStubController.stub
 
-GET         /vat-through-software/test-only/bta-stub/view-vat-partial          @testOnly.controllers.BtaStubController.viewVat
-GET         /vat-through-software/test-only/bta-stub/claim-enrolment-partial   @testOnly.controllers.BtaStubController.claimEnrolment
-GET         /vat-through-software/test-only/bta-stub/partial-migration-partial @testOnly.controllers.BtaStubController.partialMigration
+GET         /vat-through-software/test-only/bta-stub/view-vat-partial          testOnly.controllers.BtaStubController.viewVat
+GET         /vat-through-software/test-only/bta-stub/claim-enrolment-partial   testOnly.controllers.BtaStubController.claimEnrolment
+GET         /vat-through-software/test-only/bta-stub/partial-migration-partial testOnly.controllers.BtaStubController.partialMigration
 
-GET         /vat-through-software/test-only/:vrn/portal-stub                   @testOnly.controllers.PortalStubController.show(vrn: String)
+GET         /vat-through-software/test-only/:vrn/portal-stub                   testOnly.controllers.PortalStubController.show(vrn: String)
 
 GET         /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.show(redirectUrl: String)
 POST        /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.post
 GET         /vat-through-software/test-only/vaclf-stub-unauth                  testOnly.controllers.AgentClientLookupStubController.unauthorised
-GET         /vat-through-software/test-only/vaclf-stub-agent-action            testOnly.controllers.AgentClientLookupStubController.agentAction
+GET         /vat-through-software/test-only/vaclf-stub-agent-hub               testOnly.controllers.AgentClientLookupStubController.agentHub
 
 # NOCSRF
 POST        /vat-through-software/test-only/direct-debit-backend/start-journey @testOnly.controllers.DirectDebitStubController.startJourney

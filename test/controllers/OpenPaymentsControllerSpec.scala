@@ -280,12 +280,12 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
       "user is an Agent" should {
 
-        "redirect to Agent Action page" in new Test {
+        "redirect to Agent Hub page" in new Test {
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
           val result: Future[Result] = target.openPayments()(fakeRequest)
 
           status(result) shouldBe Status.SEE_OTHER
-          redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupActionUrl)
+          redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
         }
       }
 
