@@ -44,7 +44,7 @@ implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], u
 }
 
 @isSoleTrader = @{
-    model.businessTypeMsgKey.split('.').last == "1"
+    List("1", "Z1").contains(model.businessTypeMsgKey.split('.').last)
 }
 
 @mainTemplate(

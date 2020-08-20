@@ -66,6 +66,12 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     fullName = Some("Sole Person")
   )
 
+  lazy val individual: VatCertificateViewModel = model.copy(
+    businessName = Some("ABC Business"),
+    businessTypeMsgKey = "partyType.Z1",
+    fullName = Some("Andy Vidual")
+  )
+
   lazy val soleTraderWithoutTradingName: VatCertificateViewModel = soleTrader.copy(tradingName = None)
 
   "The VAT Certificate page" when {
@@ -266,6 +272,31 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         document.body().toString shouldNot include("Business name")
       }
 
+    }
+
+    "accessed by an individual" should {
+      lazy val view = vatCertificateView(HtmlFormat.empty, individual)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct title" in {
+        document.title shouldBe "Your VAT Certificate - Business tax account - GOV.UK"
+      }
+
+      "have the correct heading" in {
+        elementText(Selectors.heading) shouldBe "Your VAT Certificate"
+      }
+
+      "display the traders full name" in {
+        elementText(Selectors.fullNameSelector) shouldBe "Andy Vidual"
+      }
+
+      "display the traders trading name" in {
+        document.body().toString should include("Trading name")
+      }
+
+      "not display the business name" in {
+        document.body().toString shouldNot include("Business name")
+      }
     }
 
     "accessed by a sole trader without a trading name" should {
