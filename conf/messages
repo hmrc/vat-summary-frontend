@@ -142,7 +142,7 @@ paymentsHistory.backToTop = Back to top
 
 #VAT certificate
 vatCertificate.title = Your VAT Certificate
-vatCertificate.agentTitle = Your client''s VAT Certificate
+vatCertificate.agentTitle = Your client’s VAT Certificate
 vatCertificate.print = Print certificate
 
 vatCertificate.aboutYourRegistration.title = About your registration
@@ -200,8 +200,8 @@ chargeType.vatErrorCorrectionCreditChargeTitle =  Error correction repayment fro
 chargeType.vatErrorCorrectionChargeDescription = for correcting your {0} return
 chargeType.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 chargeType.vatRepaymentSupplementDescription = we took too long to repay your {0} return
-chargeType.OADefaultInterestTitle = VAT officer''s assessment interest
-chargeType.OADefaultInterestDescription = interest charged on the officer''s assessment
+chargeType.OADefaultInterestTitle = VAT officer’s assessment interest
+chargeType.OADefaultInterestDescription = interest charged on the officer’s assessment
 chargeType.bnpRegPre2010ChargeTitle = Penalty for late registration
 chargeType.bnpRegPre2010ChargeDescription = because you should have been registered for VAT earlier
 chargeType.bnpRegPost2010ChargeTitle = Penalty for late registration

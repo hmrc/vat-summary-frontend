@@ -93,11 +93,11 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        document.title shouldBe "Your client's VAT Certificate - Your client’s VAT details - GOV.UK"
+        document.title shouldBe "Your client’s VAT Certificate - Your client’s VAT details - GOV.UK"
       }
 
       "have the correct heading" in {
-        elementText(Selectors.heading) shouldBe "Your client's VAT Certificate"
+        elementText(Selectors.heading) shouldBe "Your client’s VAT Certificate"
       }
 
       "have a back link" which {
