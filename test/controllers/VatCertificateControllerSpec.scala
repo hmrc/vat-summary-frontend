@@ -31,7 +31,6 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.certificate.VatCertificate
-import views.html.errors.NotFound
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,8 +38,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
-   val vatCertificate: VatCertificate = injector.instanceOf[VatCertificate]
-    val notFound: NotFound = injector.instanceOf[NotFound]
+    val vatCertificate: VatCertificate = injector.instanceOf[VatCertificate]
 
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
@@ -74,8 +72,8 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         authorisedController,
         mockAccountDetailsService,
         mcc,
-        vatCertificate,
-        notFound)
+        vatCertificate
+      )
     }
   }
 
@@ -241,118 +239,6 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         }
 
         private val result = target.show()(fakeRequest)
-        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
-      }
-    }
-  }
-
-  "The changeClient() action" when {
-    "the user is non-agent" should {
-      "return Not Found (404)" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        private val result = target.changeClient()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2223334443"))
-        status(result) shouldBe Status.NOT_FOUND
-      }
-
-      "return HTML" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        private val result = target.changeClient()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2223334443"))
-        contentType(result) shouldBe Some("text/html")
-      }
-    }
-
-    "the user is an agent" should {
-      "redirect the user to the VACLUFE" in new Test {
-
-        override def setup(): Unit = {
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(agentAuthResult)
-            .noMoreThanOnce()
-
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(Future.successful(agentEnrolments))
-            .noMoreThanOnce()
-        }
-
-        private val result = target.changeClient()(fakeRequest)
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("agent-client-lookup-start-url//")
-      }
-
-    }
-
-    "the user is not signed in" should {
-
-      "return SEE_OTHER" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-        private val result = target.changeClient()(fakeRequest)
-
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to sign in" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-        private val result = target.changeClient()(fakeRequest)
-
-        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
-      }
-    }
-  }
-
-  "The changeClientAction() action" when {
-    "the user is non-agent" should {
-      "return Not Found (404)" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        private val result = target.changeClientAction()(fakeRequest)
-        status(result) shouldBe Status.NOT_FOUND
-      }
-
-      "return HTML" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        private val result = target.changeClientAction()(fakeRequest)
-        contentType(result) shouldBe Some("text/html")
-      }
-    }
-
-    "the user is an agent" should {
-      "redirect the user to the VACLUFE" in new Test {
-        override def setup(): Unit = {
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(agentAuthResult)
-            .noMoreThanOnce()
-
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(Future.successful(agentEnrolments))
-            .noMoreThanOnce()
-        }
-
-        private val result = target.changeClientAction()(fakeRequest)
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("agent-client-lookup-start-url//")
-      }
-
-    }
-
-    "the user is not signed in" should {
-      "return SEE_OTHER" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-        private val result = target.changeClientAction()(fakeRequest)
-
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to sign in" in new Test {
-        override val customerInfoCallExpected: Boolean = false
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-        private val result = target.changeClientAction()(fakeRequest)
-
         redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }

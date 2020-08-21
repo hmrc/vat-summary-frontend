@@ -55,7 +55,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
               agentPredicate.authoriseAsAgent(block)
             } else {
               Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
-              Future.successful(Redirect(appConfig.agentClientLookupActionUrl))
+              Future.successful(Redirect(appConfig.agentClientLookupHubUrl))
             }
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, checkMigrationStatus)
           case _ =>

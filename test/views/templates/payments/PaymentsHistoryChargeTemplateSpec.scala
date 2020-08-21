@@ -309,11 +309,11 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "VAT officer's assessment interest"
+        elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment interest"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "interest charged on the officer's assessment"
+        elementText(Selectors.description) shouldBe "interest charged on the officer’s assessment"
       }
     }
 

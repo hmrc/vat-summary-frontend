@@ -52,7 +52,7 @@ object MessageLookup {
         case VatErrorCorrectionDebitCharge.name => ("Error correction payment", s"for correcting your $datePeriod return")
         case VatErrorCorrectionCreditCharge.name => ("Error correction repayment from HMRC", s"for correcting your $datePeriod return")
         case VatRepaymentSupplement.name => ("Late repayment compensation from HMRC", s"we took too long to repay your $datePeriod return")
-        case OADefaultInterest.name => ("VAT officer's assessment interest", s"interest charged on the officer's assessment")
+        case OADefaultInterest.name => ("VAT officer’s assessment interest", s"interest charged on the officer’s assessment")
         case VatBnpRegPre2010Charge.name => ("Penalty for late registration", "because you should have been registered for VAT earlier")
         case VatBnpRegPost2010Charge.name => ("Penalty for late registration", "because you should have been registered for VAT earlier")
         case VatFtnMatPre2010Charge.name => ("Failure to notify penalty", "you did not tell us you are no longer exempt from VAT registration")

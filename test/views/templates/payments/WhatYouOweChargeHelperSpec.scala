@@ -67,7 +67,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
       val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), messages)
 
       "return the description of the charge" in {
-        helper.description shouldBe Some("interest charged on the officer's assessment")
+        helper.description shouldBe Some("interest charged on the officer’s assessment")
       }
     }
 

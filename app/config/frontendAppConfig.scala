@@ -80,7 +80,7 @@ trait AppConfig {
   def feedbackUrl(redirect: String): String
   val agentClientLookupStartUrl: String => String
   val agentClientUnauthorisedUrl: String => String
-  val agentClientLookupActionUrl: String
+  val agentClientLookupHubUrl: String
   val agentServicesGovUkGuidance: String
   val govUkAccessibilityUrl: String
   val govUkHMRCUrl: String
@@ -225,7 +225,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
     agentClientLookupHost +
       sc.getString(Keys.vatAgentClientLookupFrontendUnauthorisedUrl) +
       s"?redirectUrl=${agentClientLookupRedirectUrl(uri)}"
-  override lazy val agentClientLookupActionUrl: String = agentClientLookupHost + sc.getString(Keys.vatAgentClientLookupFrontendActionUrl)
+  override lazy val agentClientLookupHubUrl: String = agentClientLookupHost + sc.getString(Keys.vatAgentClientLookupFrontendHubUrl)
 
   override lazy val agentServicesGovUkGuidance: String = sc.getString(Keys.govUkSetupAgentServices)
   override lazy val govUkAccessibilityUrl: String = sc.getString(Keys.govUkAccessibilityUrl)

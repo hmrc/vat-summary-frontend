@@ -38,9 +38,10 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     val cardClass = ".card-full-container"
     val printButton = "button"
     val fullNameSelector = "#content > article > div:nth-child(5) > div.column-full.card-full > dl:nth-child(1) > div > dd"
+    val backLink = ".link-back"
   }
 
-  lazy val model = VatCertificateViewModel(
+  lazy val model: VatCertificateViewModel = VatCertificateViewModel(
     "5555555555",
     Some(LocalDate.parse("2017-01-01")),
     LocalDate.parse("2018-01-01"),
@@ -76,7 +77,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
   "The VAT Certificate page" when {
 
-    "Accessed by a non-represented user" should {
+    "accessed by a principal user" should {
       lazy val view = vatCertificateView(HtmlFormat.empty, model)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -87,33 +88,37 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       "have the correct heading" in {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
+
+      "not have a back link" in {
+        elementExtinct(Selectors.backLink)
+      }
     }
 
-    "Accessed by a represented user" should {
+    "accessed by an agent user" should {
       lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        document.title shouldBe "Your client's VAT Certificate - Your client’s VAT details - GOV.UK"
+        document.title shouldBe "Your client’s VAT Certificate - Your client’s VAT details - GOV.UK"
       }
 
       "have the correct heading" in {
-        elementText(Selectors.heading) shouldBe "Your client's VAT Certificate"
+        elementText(Selectors.heading) shouldBe "Your client’s VAT Certificate"
       }
 
-      "have a link to change client" that {
-        lazy val link = document.select("#content > article > p:nth-child(8) > a")
+      "have a back link" which {
+
         "has the correct text" in {
-          link.text() shouldBe "Change client"
+          elementText(Selectors.backLink) shouldBe "Back"
         }
-        "has the correct link" in {
-          link.attr("href") shouldBe "/vat-through-software/vat-certificate/change-client-vat-number"
+
+        "has the correct href" in {
+          element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
         }
       }
-
     }
 
-    "Accessed by a represented or non-represented user" should {
+    "accessed by a principal or agent user" should {
 
       lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -184,7 +189,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user doesn't have non-standard tax periods" should {
+    "accessed by a user with standard tax periods" should {
 
       lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -199,7 +204,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           row.select("dt").text() shouldBe "VAT Return dates"
           row.select("dd").text() shouldBe "Every month"
         }
-
       }
 
       "not have the non-standard tax periods card" in {
@@ -207,7 +211,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user has non-standard tax periods" when {
+    "accessed by a user with non-standard tax periods" when {
 
       "the vatCertNSTPs feature is on" should {
 
@@ -322,8 +326,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       "not display the business name" in {
         document.body().toString shouldNot include("Business name")
       }
-
     }
-
   }
 }

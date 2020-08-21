@@ -142,7 +142,7 @@ paymentsHistory.backToTop = Back to top
 
 #VAT certificate
 vatCertificate.title = Your VAT Certificate
-vatCertificate.agentTitle = Your client''s VAT Certificate
+vatCertificate.agentTitle = Your client’s VAT Certificate
 vatCertificate.print = Print certificate
 
 vatCertificate.aboutYourRegistration.title = About your registration
@@ -164,8 +164,6 @@ vatCertificate.nstp.title = Non-standard tax periods
 vatCertificate.nstp.p1 = If you do not renew your non-standard tax periods, an additional period ({0} to {1}) will be added.
 vatCertificate.nstp.p2 = This will cover the time between your last non-standard tax period and the start of your standard tax periods.
 vatCertificate.nstp.dateFromTo = {0} to {1}
-vatCertificate.backToClientOptions = Back to your client options
-vatCertificate.changeClient = Change client
 vatCertificate.logo = HMRC_Logo
 
 #Vat Overview Partials
@@ -202,8 +200,8 @@ chargeType.vatErrorCorrectionCreditChargeTitle =  Error correction repayment fro
 chargeType.vatErrorCorrectionChargeDescription = for correcting your {0} return
 chargeType.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 chargeType.vatRepaymentSupplementDescription = we took too long to repay your {0} return
-chargeType.OADefaultInterestTitle = VAT officer''s assessment interest
-chargeType.OADefaultInterestDescription = interest charged on the officer''s assessment
+chargeType.OADefaultInterestTitle = VAT officer’s assessment interest
+chargeType.OADefaultInterestDescription = interest charged on the officer’s assessment
 chargeType.bnpRegPre2010ChargeTitle = Penalty for late registration
 chargeType.bnpRegPre2010ChargeDescription = because you should have been registered for VAT earlier
 chargeType.bnpRegPost2010ChargeTitle = Penalty for late registration

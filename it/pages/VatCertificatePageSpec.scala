@@ -62,7 +62,7 @@ class VatCertificatePageSpec extends IntegrationBaseSpec {
         override def setupStubs(): StubMapping = AuthStub.agentAuthorised()
         val response: WSResponse = await(request(true).get())
         response.status shouldBe Status.OK
-        response.body.contains("Your client&#x27;s VAT Certificate<") shouldBe true
+        response.body.contains("Your client’s VAT Certificate") shouldBe true
       }
     }
   }
