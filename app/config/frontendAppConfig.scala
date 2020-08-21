@@ -17,14 +17,13 @@
 package config
 
 import java.net.URLEncoder
-import java.util.Base64
 
 import config.features.Features
 import config.{ConfigKeys => Keys}
 import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
-import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -32,10 +31,6 @@ trait AppConfig {
   val appName: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
-  val whitelistEnabled: Boolean
-  val whitelistedIps: Seq[String]
-  val whitelistExcludedPaths: Seq[Call]
-  val shutterPage: String
   val authUrl: String
   val signInUrl: String
   val signInContinueBaseUrl: String
@@ -121,15 +116,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val feedbackFormPartialUrl: String = s"$contactFrontendService/contact/beta-feedback/form"
 
   override lazy val authUrl: String = sc.baseUrl("auth")
-
-  private def whitelistConfig(key: String): Seq[String] = Some(new String(Base64.getDecoder
-    .decode(runModeConfiguration.getOptional[String](key).getOrElse("")), "UTF-8"))
-    .map(_.split(",")).getOrElse(Array.empty).toSeq
-
-  override lazy val whitelistEnabled: Boolean = runModeConfiguration.getOptional[Boolean](Keys.whitelistEnabled).getOrElse(true)
-  override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
-  override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths).map(path => Call("GET", path))
-  override lazy val shutterPage: String = sc.getString(Keys.whitelistShutterPage)
 
   private lazy val signInBaseUrl: String = sc.getString(Keys.signInBaseUrl)
   override lazy val signInContinueBaseUrl: String = runModeConfiguration.getOptional[String](Keys.signInContinueBaseUrl).getOrElse("")
