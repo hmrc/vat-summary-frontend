@@ -122,6 +122,31 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           clearedDate   = Some(LocalDate.parse("2018-05-01"))
         )
       ))
+    val serviceResultYearThree: ServiceResponse[Seq[PaymentsHistoryModel]] =
+      Right(Seq(
+        PaymentsHistoryModel(
+          chargeType    = ReturnDebitCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2016-01-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2016-02-01")),
+          amount        = exampleAmount,
+          clearedDate   = Some(LocalDate.parse("2016-03-01"))
+        ),
+        PaymentsHistoryModel(
+          chargeType    = ReturnDebitCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2016-08-01")),
+          amount        = exampleAmount,
+          clearedDate   = Some(LocalDate.parse("2016-09-01"))
+        ),
+        PaymentsHistoryModel(
+          chargeType    = ReturnDebitCharge,
+          taxPeriodFrom = Some(LocalDate.parse("2016-09-01")),
+          taxPeriodTo   = Some(LocalDate.parse("2016-10-01")),
+          amount        = exampleAmount,
+          clearedDate   = Some(LocalDate.parse("2016-11-01"))
+        )
+      ))
+    val emptyResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(Seq())
 
     val currentYear: Int = 2018
     val paymentsServiceCall: Boolean = false
@@ -368,17 +393,46 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the migration year is not equal to the current year" should {
+    "the migration year is the previous year" should {
 
       "return a sequence of the current year and previous year" in new Test {
         target.getValidYears(user.vrn, Some(LocalDate.parse("2017-12-12"))) shouldBe Seq(currentYear, currentYear - 1)
       }
     }
 
+    "the migration year is two years ago" should {
+
+      "return a sequence of the current year and the two years prior" in new Test {
+        target.getValidYears(user.vrn, Some(LocalDate.parse("2016-12-12"))) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
+      }
+    }
+
     "the migration year could not be retrieved" should {
 
       "return a sequence of the current year and previous year" in new Test {
-        target.getValidYears(user.vrn, None) shouldBe Seq(currentYear, currentYear - 1)
+        target.getValidYears(user.vrn, None) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
+      }
+    }
+  }
+
+  "Calling .isLast24Months" should {
+    "return true" when {
+      "the provided date is younger than 24 months" in new Test {
+        val (year, month, day): (Int, Int, Int) = (2016, 6, 1)
+        target.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe true
+      }
+      "the provided date is exactly 24 months ago" in new Test {
+        val (year, month, day): (Int, Int, Int) = (2016, 5, 1)
+        target.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe true
+      }
+      "no date is provided" in new Test {
+        target.isLast24Months(None) shouldBe true
+      }
+    }
+    "return false" when {
+      "the provided date is older than 24 months" in new Test {
+        val (year, month, day): (Int, Int, Int) = (2016, 4, 1)
+        target.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe false
       }
     }
   }
@@ -391,9 +445,10 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         "return a PaymentsHistoryViewModel with the correct information" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, Some(LocalDate.parse("2018-01-01"))
+            serviceResultYearOne, serviceResultYearTwo, emptyResult, showPreviousPaymentsTab = false, Some(LocalDate.parse("2018-01-01"))
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
+            None,
             None,
             previousPaymentsTab = false,
             (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct
@@ -401,16 +456,32 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the customer was not migrated in the current year" should {
+      "the customer was migrated in the previous year" should {
 
         "return a PaymentsHistoryViewModel with the correct information" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, Some(LocalDate.parse("2017-12-12"))
+            serviceResultYearOne, serviceResultYearTwo, emptyResult, showPreviousPaymentsTab = false, Some(LocalDate.parse("2017-01-01"))
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             Some(currentYear - 1),
+            None,
             previousPaymentsTab = false,
             (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct
+          ))
+        }
+      }
+
+      "the customer was migrated two years ago" should {
+
+        "return a PaymentsHistoryViewModel with the correct information" in new Test {
+          target.generateViewModel(
+            serviceResultYearOne, serviceResultYearTwo, serviceResultYearThree, showPreviousPaymentsTab = false, Some(LocalDate.parse("2016-12-12"))
+          ) shouldBe Some(PaymentsHistoryViewModel(
+            currentYear,
+            Some(currentYear - 1),
+            Some(currentYear - 2),
+            previousPaymentsTab = false,
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct
           ))
         }
       }
@@ -421,7 +492,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       "return None" in new Test {
         override val serviceResultYearOne = Left(VatLiabilitiesError)
         target.generateViewModel(
-          serviceResultYearOne, serviceResultYearTwo, showPreviousPaymentsTab = false, None
+          serviceResultYearOne, serviceResultYearTwo, serviceResultYearThree, showPreviousPaymentsTab = false, None
         ) shouldBe None
       }
     }

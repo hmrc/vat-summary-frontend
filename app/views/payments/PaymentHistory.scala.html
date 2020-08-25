@@ -26,6 +26,10 @@
 
 @(model: PaymentsHistoryViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
+@additionalYears = @{
+    (model.tabTwo.fold(Seq[Int]())(year=>Seq(year)) ++ model.tabThree.fold(Seq[Int]())(year=>Seq(year+1, year))).distinct
+}
+
 @mainTemplate(
   title = messages("paymentsHistory.title"),
   appConfig = appConfig,
@@ -44,27 +48,12 @@
       <h1 id="top" class="heading-xlarge">@messages("paymentsHistory.title")</h1>
 
       <div class="tabbed">
-        @model.tabTwo match {
-          case Some(yearTwo) => {
-            @paymentsHistoryTabs(Seq(model.tabOne, yearTwo), model.previousPaymentsTab)
-            @paymentsHistoryTabsContent(Seq(model.tabOne, yearTwo), model.transactions, model.previousPaymentsTab, javascriptEnabled = true)
-          }
-          case None => {
-            @paymentsHistoryTabs(Seq(model.tabOne), model.previousPaymentsTab)
-            @paymentsHistoryTabsContent(Seq(model.tabOne), model.transactions, model.previousPaymentsTab, javascriptEnabled = true)
-          }
-        }
+        @paymentsHistoryTabs(Seq(model.tabOne) ++ additionalYears, model.previousPaymentsTab)
+        @paymentsHistoryTabsContent(Seq(model.tabOne) ++ additionalYears, model.transactions, model.previousPaymentsTab, javascriptEnabled = true)
       </div>
 
       <noscript>
-        @model.tabTwo match {
-          case Some(yearTwo) => {
-            @paymentsHistoryTabsContent(Seq(model.tabOne, yearTwo), model.transactions, model.previousPaymentsTab, javascriptEnabled = false)
-          }
-          case None => {
-            @paymentsHistoryTabsContent(Seq(model.tabOne), model.transactions, model.previousPaymentsTab, javascriptEnabled = false)
-          }
-        }
+        @paymentsHistoryTabsContent(Seq(model.tabOne) ++ additionalYears, model.transactions, model.previousPaymentsTab, javascriptEnabled = false)
       </noscript>
     </div>
   </div>

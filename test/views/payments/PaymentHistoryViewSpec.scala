@@ -40,6 +40,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val tabOne = "#content > article > div.grid-row > div > div > ul > li:nth-child(1) > a"
     val tabTwo = "#content > article > div.grid-row > div > div > ul > li:nth-child(2) > a"
     val tabThree = "#content > article > div.grid-row > div > div > ul > li:nth-child(3) > a"
+    val tabFour = "#content > article > div.grid-row > div > div > ul > li:nth-child(4) > a"
     val currentYearSubheading = "#2018 > h2"
     val previousYearSubheading = "#2017 > h2"
     val previousYearNoPayments = "#2017 > p"
@@ -59,6 +60,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
   val model: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
     currentYear,
     Some(currentYear - 1),
+    Some(currentYear - 2),
     previousPaymentsTab = true,
     Seq(PaymentsHistoryModel(
       chargeType = ReturnDebitCharge,
@@ -113,8 +115,12 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       elementText(Selectors.tabTwo) shouldBe (currentYear - 1).toString
     }
 
+    "display a tab for 2 years ago" in {
+      elementText(Selectors.tabThree) shouldBe (currentYear - 2).toString
+    }
+
     "display a previous payments tab" in {
-      elementText(Selectors.tabThree) shouldBe "Previous payments"
+      elementText(Selectors.tabFour) shouldBe "Previous payments"
     }
 
     "have the current year subheading" in {

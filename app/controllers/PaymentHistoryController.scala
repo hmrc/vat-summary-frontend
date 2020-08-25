@@ -66,9 +66,12 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
         paymentsServiceYearTwo <-
           if (validYears.contains(previousYear)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head) }
           else { Future.successful(Right(Seq.empty)) }
+        paymentsServiceYearThree <-
+          if (validYears.contains(currentYear - 2)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(2).head) }
+          else { Future.successful(Right(Seq.empty)) }
       } yield {
         val showPreviousPaymentsTab: Boolean = migratedWithin15Months && user.hasNonMtdVat
-        generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, showPreviousPaymentsTab, migrationDate) match {
+        generateViewModel(paymentsServiceYearOne, paymentsServiceYearTwo, paymentsServiceYearThree, showPreviousPaymentsTab, migrationDate) match {
           case Some(model) =>
             auditEvent(user.vrn, model.transactions)
             Ok(paymentHistoryView(model, serviceInfoContent))
@@ -102,26 +105,40 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
                                          migrationDate: Option[LocalDate])(implicit user: User): Seq[Int] =
     migrationDate match {
       case Some(date) if date.getYear == currentYear => Seq(currentYear)
-      case _ => Seq(currentYear, previousYear)
+      case Some(date) if date.getYear == previousYear => Seq(currentYear, previousYear)
+      case _ => Seq(currentYear, previousYear, currentYear - 2)
     }
 
   private[controllers] def generateViewModel(paymentsServiceYearOne: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              paymentsServiceYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]],
+                                             paymentsServiceYearThree: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              showPreviousPaymentsTab: Boolean,
                                              customerMigratedToETMPDate: Option[LocalDate]): Option[PaymentsHistoryViewModel] =
-    (paymentsServiceYearOne, paymentsServiceYearTwo) match {
-      case (Right(yearOneTrans), Right(yearTwoTrans)) =>
+    (paymentsServiceYearOne, paymentsServiceYearTwo, paymentsServiceYearThree) match {
+      case (Right(yearOneTrans), Right(yearTwoTrans), Right(yearThreeTrans)) =>
         val migratedThisYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
+        val migratedPreviousYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == previousYear)
         val tabOne: Int = currentYear
         val tabTwo: Option[Int] = if(migratedThisYear) None else Some(previousYear)
-        val transactions = (yearOneTrans ++ yearTwoTrans).distinct
+        val tabThree: Option[Int] = if(migratedPreviousYear || migratedThisYear) None else Some(previousYear - 1)
+        val transactions = (yearOneTrans ++ yearTwoTrans ++ yearThreeTrans).distinct
+          .filter(model => isLast24Months(model.clearedDate))
         Some(PaymentsHistoryViewModel(
           tabOne,
           tabTwo,
+          tabThree,
           showPreviousPaymentsTab,
           transactions
         ))
       case _ => None
+  }
+
+  private[controllers] def isLast24Months(input: Option[LocalDate]): Boolean = {
+    val monthsToCheck: Int = 24
+    val currentDate: LocalDate = dateService.now()
+    input.fold(true) { inputDate =>
+      inputDate.isAfter(currentDate.minusMonths(monthsToCheck)) || inputDate.isEqual(currentDate.minusMonths(monthsToCheck))
+    }
   }
 
   private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel])
