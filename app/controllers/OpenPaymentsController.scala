@@ -29,7 +29,7 @@ import play.api.mvc._
 import play.twirl.api.Html
 import services.{DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, OpenPayments}
 
@@ -75,7 +75,7 @@ extends FrontendController(mcc) with I18nSupport {
     }
   }
 
-  private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean])(implicit request: Request[_]):
+  private[controllers] def getModel(payments: Seq[Payment], hasActiveDirectDebit: Option[Boolean]):
   OpenPaymentsViewModel = {
     OpenPaymentsViewModel(
       payments.map { payment =>

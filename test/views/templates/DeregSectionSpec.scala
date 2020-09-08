@@ -46,7 +46,7 @@ class DeregSectionSpec  extends ViewBaseSpec {
 
       "user is not pending deregistration" when {
 
-        lazy val view = deregSection(vatDetailsModel)(messages, mockConfig, user)
+        lazy val view = deregSection(vatDetailsModel)(messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for cancelling registration" which {
@@ -67,7 +67,7 @@ class DeregSectionSpec  extends ViewBaseSpec {
 
       "user is pending deregistration" should {
 
-        lazy val view = deregSection(vatDetailsPendingDeregModel)(messages, mockConfig, user)
+        lazy val view = deregSection(vatDetailsPendingDeregModel)(messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for pending deregistration" which {
@@ -84,7 +84,7 @@ class DeregSectionSpec  extends ViewBaseSpec {
 
       "user is a VAT Group" should {
 
-        lazy val view = deregSection(vatDetailsGroupModel)(messages, mockConfig, user)
+        lazy val view = deregSection(vatDetailsGroupModel)(messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display a section for VAT group deregistration" which {
@@ -109,7 +109,7 @@ class DeregSectionSpec  extends ViewBaseSpec {
 
         "display the historic dereg partial" which {
 
-          lazy val view = deregSection(vatDetailsHistoricDeregModel)(messages, mockConfig, user)
+          lazy val view = deregSection(vatDetailsHistoricDeregModel)(messages, mockConfig)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${DeregPartialMessages.historicDeregTitle}" in {
@@ -130,7 +130,7 @@ class DeregSectionSpec  extends ViewBaseSpec {
 
         "display a section for future registration" which {
 
-          lazy val view = deregSection(vatDetailsDeregModel)(messages, mockConfig, user)
+          lazy val view = deregSection(vatDetailsDeregModel)(messages, mockConfig)
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           s"should have the correct title of ${DeregPartialMessages.futureDeregTitle}" in {

@@ -26,7 +26,6 @@ import stubs.CustomerInfoStub
 import stubs.CustomerInfoStub.customerInfoJson
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
 

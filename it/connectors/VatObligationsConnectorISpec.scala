@@ -27,7 +27,6 @@ import play.api.libs.json.Json
 import stubs.VatObligationsStub
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 

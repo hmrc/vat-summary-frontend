@@ -23,7 +23,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
 import testOnly.views.html.agentClientLookup.{AgentHub, EnterVrn, Unauthorised}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfig,
                                                 mcc: MessagesControllerComponents,

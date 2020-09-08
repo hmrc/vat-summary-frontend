@@ -30,7 +30,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.payments.PaymentHistory
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -102,7 +102,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
     }
 
   private[controllers] def getValidYears(vrn: String,
-                                         migrationDate: Option[LocalDate])(implicit user: User): Seq[Int] =
+                                         migrationDate: Option[LocalDate]): Seq[Int] =
     migrationDate match {
       case Some(date) if date.getYear == currentYear => Seq(currentYear)
       case Some(date) if date.getYear == previousYear => Seq(currentYear, previousYear)
