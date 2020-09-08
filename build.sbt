@@ -15,6 +15,7 @@
  */
 
 import play.core.PlayVersion
+import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
@@ -25,6 +26,7 @@ val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
+RoutesKeys.routesImport := Seq.empty
 
 lazy val coverageSettings: Seq[Setting[_]] = {
   import scoverage.ScoverageKeys
@@ -55,11 +57,11 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.7.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.54.0-play-26",
-  "uk.gov.hmrc" %% "play-ui" % "8.9.0-play-26",
-  "uk.gov.hmrc" %% "play-partials" % "6.10.0-play-26",
-  "uk.gov.hmrc" %% "play-language" % "4.2.0-play-26",
+  "uk.gov.hmrc" %% "bootstrap-frontend-play-26" % "2.24.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.55.0-play-26",
+  "uk.gov.hmrc" %% "play-ui" % "8.11.0-play-26",
+  "uk.gov.hmrc" %% "play-partials" % "6.11.0-play-26",
+  "uk.gov.hmrc" %% "play-language" % "4.3.0-play-26",
   "com.typesafe.play" %% "play-json-joda" % "2.6.14"
 )
 
@@ -79,7 +81,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
     Group(
       test.name,
       Seq(test),
-      SubProcess(ForkOptions(runJVMOptions = Seq("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
+      SubProcess(ForkOptions().withRunJVMOptions(Vector("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
     )
 }
 
@@ -95,7 +97,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(
     Keys.fork in Test := true,
     javaOptions in Test += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.11.12",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),

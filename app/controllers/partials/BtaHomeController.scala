@@ -26,7 +26,7 @@ import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, EnrolmentIdentifier, NoActiveSession}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.partials.btaHome.{ClaimEnrolment, PartialMigration, VatSection}
 
 import scala.concurrent.{ExecutionContext, Future}

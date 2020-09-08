@@ -62,7 +62,7 @@ object OpenPaymentsModel {
   )
 
   def apply(payment: Payment,
-            isOverdue: Boolean)(implicit messages: Messages): OpenPaymentsModel = payment match {
+            isOverdue: Boolean): OpenPaymentsModel = payment match {
     case payment: PaymentWithPeriod => OpenPaymentsModelWithPeriod(
       payment.chargeType,
       payment.outstandingAmount,

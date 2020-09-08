@@ -21,7 +21,7 @@ import play.api.libs.json.JsValue
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.connectors.DynamicStubConnector
 import testOnly.models.{DataModel, SchemaModel}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Success, Try}
