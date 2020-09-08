@@ -33,7 +33,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
   val excludedPackages = Seq(
     "<empty>",
-    "Reverse.*",
+    ".*Reverse.*",
     ".*standardError*.*",
     ".*govuk_wrapper*.*",
     ".*main_template*.*",
