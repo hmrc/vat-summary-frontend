@@ -35,6 +35,6 @@ class AccessibilityStatementController @Inject()(authorisedController: Authorise
   def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user =>
       val refererUri = new URI(request.headers.get(REFERER).getOrElse("")).getPath
-      Future.successful(Ok(accessibilityStatement(refererUri, fullyCompliant = true)))
+      Future.successful(Ok(accessibilityStatement(refererUri, fullyCompliant = false)))
   }
 }
