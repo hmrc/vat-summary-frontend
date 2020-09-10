@@ -172,10 +172,13 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has a bullet list of service difficulties" in {
           elementText("#how-accessible > ul") shouldBe
-            "On the ‘Payment History’ and ‘Past Returns’ pages, when the tabs are clicked, the user is not told that " +
-              "the page had been refreshed " +
-              "On the ‘Payment History’ and ‘Past Returns’ pages, when the user clicks on a tab, the page focus is sent " +
-              "to the top of the page"
+            "On some pages the menu toggle in the banner on a small screen disappears when clicked. Also, when JS is " +
+              "disabled, the menu toggle is not hidden " +
+            "On some pages the hints and error hints may not read out correctly when using a screen reader " +
+            "On some pages the language selector and back links cannot be skipped using assistive technologies " +
+            "On pages ‘Your business details‘ and ‘Confirm your email address‘ the back options are not consistent " +
+            "On all pages the ”Business tax account” service name is contained in the navigation landmark"
+
         }
       }
 
@@ -321,15 +324,22 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has the correct first paragraph" in {
           elementText("#non-compliance > p") shouldBe
-            "All of these accessibility problems will be fixed at the end of January 2020."
+            "All of these accessibility problems will be fixed at the end of December 2020."
         }
 
         "has a bullet list of service difficulties" in {
           elementText("#non-compliance > ul") shouldBe
-            "On the ‘Payment History’ and ‘Past Returns’ pages, when the tabs are clicked, the user is not told that " +
-              "the page had been refreshed This doesn’t meet WCAG 2.1 success criterion 4.1.2 Name, Role, Value (A) " +
-              "On the ‘Payment History’ and ‘Past Returns’ pages, when the user clicks on a tab, the page focus is sent " +
-              "to the top of the page This doesn’t meet WCAG 2.1 success criterion 2.4.3 Focus Order (A)"
+            "On some pages the menu toggle in the banner on a small screen disappears when clicked. Also, when JS is " +
+              "disabled, the menu toggle is not hidden, this does not meet Understanding Success Criterion 1.3.1: " +
+              "Info and Relationships (A) " +
+            "On some pages the hints and error hints may not read out correctly when using a screen reader, this does " +
+              "not meet Understanding Success Criterion 3.3.2: Labels or Instructions (A) " +
+            "On some pages the language selector and back links cannot be skipped using assistive technologies, this " +
+              "does not meet Understanding Success Criterion 2.4.1: Bypass Blocks (A) " +
+            "On pages ‘Your business details‘ and ‘Confirm your email address‘ the back options are not consistent, " +
+              "this does not meet Understanding Success Criterion 3.2.3: Consistent Navigation (AA) " +
+            "On all pages the ‘Business tax account‘ service name is contained in the navigation landmark, this does " +
+              "not meet Understanding Success Criterion 1.3.1: Info and Relationships (A)"
         }
       }
 
@@ -341,7 +351,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has the correct first paragraph" in {
           elementText("#how-we-tested > p:nth-of-type(1)") shouldBe
-            "The service was last tested on 3 September 2019 and was checked for compliance with WCAG 2.1 AA."
+            "The service was last tested on 24 August 2020 and was checked for compliance with WCAG 2.1 AA."
         }
 
         "has a second paragraph" which {
@@ -362,7 +372,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has the correct third paragraph" in {
           elementText("#how-we-tested > p:nth-of-type(3)") shouldBe
-            "This page was prepared on 20 September 2019. It was last updated on 20 September 2019."
+            "This page was prepared on 20 September 2019. It was last updated on 11 September 2020."
         }
       }
     }
