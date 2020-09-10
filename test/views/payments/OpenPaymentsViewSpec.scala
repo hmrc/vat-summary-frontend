@@ -65,8 +65,9 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
-    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > ul > li:nth-child(1)"
-    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > ul > li:nth-child(2)"
+    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(1)"
+    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(2)"
+    val covidPartialLine3 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(3)"
   }
 
   override val user = User("1111")
@@ -293,6 +294,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       "have the correct second message" in {
         elementText(Selectors.covidPartialLine2) should include (CovidMessages.line2)
+      }
+
+      "have the correct third message" in {
+        elementText(Selectors.covidPartialLine3) should include (CovidMessages.line3)
       }
 
     }

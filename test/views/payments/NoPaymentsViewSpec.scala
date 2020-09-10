@@ -39,8 +39,9 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
     val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > ul > li:nth-child(1)"
-    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > ul > li:nth-child(2)"
+    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(1)"
+    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(2)"
+    val covidPartialLine3 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(3)"
   }
 
   override val user: User = User("123456789")
@@ -161,6 +162,10 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
         "have the correct second message" in {
           elementText(Selectors.covidPartialLine2) should include(CovidMessages.line2)
+        }
+
+        "have the correct third message" in {
+          elementText(Selectors.covidPartialLine3) should include(CovidMessages.line3)
         }
 
       }

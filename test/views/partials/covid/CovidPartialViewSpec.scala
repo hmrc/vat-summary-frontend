@@ -29,8 +29,9 @@ class CovidPartialViewSpec extends ViewBaseSpec {
   "Rendering the covid message" should {
 
     object Selectors {
-      val line1 = "li:nth-of-type(1)"
-      val line2 = "li:nth-of-type(2)"
+      val line1 = "p:nth-of-type(1)"
+      val line2 = "p:nth-of-type(2)"
+      val line3 = "p:nth-of-type(3)"
     }
 
       lazy val view = covidMessageView()
@@ -40,10 +41,13 @@ class CovidPartialViewSpec extends ViewBaseSpec {
         elementText(Selectors.line1) shouldBe line1
       }
 
-        "has the correct second message" in {
-          elementText(Selectors.line2) shouldBe line2
-        }
+      "have the correct second message" in {
+        elementText(Selectors.line2) shouldBe line2
+      }
 
+      "have the correct third message" in {
+        elementText(Selectors.line3) shouldBe line3
+      }
 
     }
 }
