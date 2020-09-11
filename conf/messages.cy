@@ -209,6 +209,8 @@ deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ga
 
 
 # Charge types
+chargeType.indirectRevRecoveryTitle = Adennill taliadau
+chargeType.indirectRevRecoveryDescription = er mwyn adennill ad-daliad a wnaed i chi mewn camgymeriad
 chargeType.defaultInterestTitle = Llog diffygdalu
 chargeType.furtherInterestTitle = Llog pellach
 chargeType.defaultAndFurtherInterestDescription = yn seiliedig ar ein hasesiad o’ch treth ar gyfer y cyfnod {0}

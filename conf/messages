@@ -181,6 +181,8 @@ deregPartial.vatGroup.title = Cancel VAT registration (opens in a new window or 
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
+chargeType.indirectRevRecoveryTitle = Payment recovery
+chargeType.indirectRevRecoveryDescription = to recover a payment made to you in error
 chargeType.defaultInterestTitle = Default interest
 chargeType.furtherInterestTitle = Further interest
 chargeType.defaultAndFurtherInterestDescription = based on our assessment of your tax for the period {0}

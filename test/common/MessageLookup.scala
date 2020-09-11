@@ -41,6 +41,7 @@ object MessageLookup {
       val datePeriod = if(useLongDateFormat) datePeriodLong else datePeriodShort
 
       chargeType match {
+        case IndirectTaxRevenueRecovery.name => ("Payment recovery", "to recover a payment made to you in error")
         case DefaultInterest.name => ("Default interest", s"based on our assessment of your tax for the period $datePeriod")
         case FurtherInterest.name => ("Further interest", s"based on our assessment of your tax for the period $datePeriod")
         case VatReturnCreditCharge.name => ("Repayment from HMRC", s"for your $datePeriod return")
