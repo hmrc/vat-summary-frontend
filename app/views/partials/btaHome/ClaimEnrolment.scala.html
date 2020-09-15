@@ -16,7 +16,7 @@
 
 @this()
 
-@(vrn: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
 
 <section id="section-vat" class="section divider--bottom">
   <h2 id="vat-claim-enrolment-heading" class="heading-medium">@messages("partials.btaHome.claimEnrolment.heading")</h2>

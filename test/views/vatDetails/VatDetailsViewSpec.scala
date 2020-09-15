@@ -17,7 +17,6 @@
 package views.vatDetails
 
 import common.TestModels.testDate
-import common.MessageLookup.CovidMessages._
 import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup

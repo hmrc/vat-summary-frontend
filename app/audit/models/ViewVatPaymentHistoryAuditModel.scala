@@ -28,14 +28,14 @@ case class ViewVatPaymentHistoryAuditModel(vrn: String,
 
   override val transactionName: String = "view-payment-history"
 
-  private case class PaymentHistoryDetails(vrn: String,
+  case class PaymentHistoryDetails(vrn: String,
                                            chargeType: String,
                                            periodFrom: Option[LocalDate],
                                            periodTo: Option[LocalDate],
                                            clearingDate: Option[LocalDate],
                                            paymentAmount: BigDecimal)
 
-  private implicit val auditPaymentsHistoryWrites: Writes[PaymentHistoryDetails] = Json.writes[PaymentHistoryDetails]
+  implicit val auditPaymentsHistoryWrites: Writes[PaymentHistoryDetails] = Json.writes[PaymentHistoryDetails]
 
   private case class AuditDetail(vrn: String, payments: Seq[PaymentHistoryDetails])
   private implicit val auditDetailWrites: Writes[AuditDetail] = Json.writes[AuditDetail]

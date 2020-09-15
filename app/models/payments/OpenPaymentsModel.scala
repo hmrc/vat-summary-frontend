@@ -18,7 +18,6 @@ package models.payments
 
 import java.time.LocalDate
 
-import play.api.i18n.Messages
 import play.api.libs.json.{Json, Writes}
 
 

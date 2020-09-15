@@ -20,7 +20,7 @@ import config.VatHeaderCarrierForPartialsConverter
 import javax.inject.Inject
 import play.api.http.Status._
 import play.api.mvc.{AnyContent, Request}
-import uk.gov.hmrc.http.{HttpClient, HttpReads, HttpResponse, Upstream4xxResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.{HttpClient, HttpReads, HttpResponse, UpstreamErrorResponse}
 import uk.gov.hmrc.play.partials.HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial.HtmlPartialHttpReads
 import uk.gov.hmrc.http.HttpReads.Implicits
@@ -41,7 +41,7 @@ class BtaStubConnector @Inject()(http: HttpClient,
       .recover {
         case ex: UpstreamErrorResponse
           if ex.statusCode == UNAUTHORIZED || ex.statusCode == FORBIDDEN =>
-          HttpResponse(ex.statusCode, responseString = Some(ex.message))
+          HttpResponse(ex.statusCode, ex.message.toString)
       }
     result.map(p => read("GET", partialUrl, p))
   }

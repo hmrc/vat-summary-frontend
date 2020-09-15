@@ -53,8 +53,8 @@ class AgentPredicateSpec extends ControllerBaseSpec {
     )
 
     def target(request: Request[AnyContent]): Future[Result] = mockAgentPredicate.authoriseAsAgent({
-      implicit request =>
-        implicit user =>
+      _ =>
+        _ =>
           Ok("welcome")
     })(request)
   }

@@ -40,7 +40,7 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
            |}
         """.stripMargin
 
-      val httpResponse = HttpResponse(Status.CREATED, responseJson = Some(Json.parse(json)))
+      val httpResponse = HttpResponse(Status.CREATED, Json.parse(json).toString())
 
       val expected = Right(redirectUrl)
 
@@ -66,7 +66,7 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(
         Status.BAD_REQUEST,
-        responseJson = Some(Json.parse(errorBody)))
+        Json.parse(errorBody).toString())
 
       val result = PaymentsRedirectUrlReads.read("", "", httpResponse)
 

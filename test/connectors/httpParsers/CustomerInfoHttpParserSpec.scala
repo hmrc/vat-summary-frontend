@@ -33,7 +33,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
       val httpResponse = HttpResponse(
         Status.OK,
-        responseJson = Some(customerInfoJsonMax)
+        customerInfoJsonMax.toString()
       )
 
       val expected = Right(customerInformationMax)
@@ -47,12 +47,12 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
     "the HTTP response status is BAD_REQUEST (400) (single error)" should {
 
-      val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
         Json.obj(
           "code" -> "INVALID",
           "message" -> "Fail!"
-        )
-      ))
+        ).toString()
+      )
 
       val expected = Left(BadRequestError(
         code = "INVALID",
@@ -69,7 +69,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
     "the HTTP response status is BAD_REQUEST (400) (multiple errors)" should {
 
-      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
+      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST,
         Json.obj(
           "code" -> "400",
           "message" -> "Fail!",
@@ -83,8 +83,8 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
               "message" -> "Fail!"
             )
           )
-        )
-      ))
+        ).toString()
+      )
 
       val errors = Seq(ApiSingleError("INVALID", "Fail!"), ApiSingleError("INVALID_2", "Fail!"))
 
@@ -99,12 +99,12 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
 
     "the HTTP response status is BAD_REQUEST (400) (unknown error)" should {
 
-      val httpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
+      val httpResponse = HttpResponse(Status.BAD_REQUEST,
         Json.obj(
           "foo" -> "INVALID",
           "bar" -> "Fail!"
-        )
-      ))
+        ).toString()
+      )
 
       val expected = Left(UnknownError)
 
@@ -122,7 +122,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
         "message" -> "GATEWAY_TIMEOUT"
       )
 
-      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
       val expected = Left(ServerSideError("504", httpResponse.body))
       val result = CustomerInfoReads.read("", "", httpResponse)
 
@@ -138,7 +138,7 @@ class CustomerInfoHttpParserSpec extends UnitSpec {
         "message" -> "CONFLCIT"
       )
 
-      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
       val expected = Left(UnexpectedStatusError(Status.CONFLICT.toString, httpResponse.body))
       val result = CustomerInfoReads.read("", "", httpResponse)
 

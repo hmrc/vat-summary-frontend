@@ -32,7 +32,7 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
 
     "the http response status is 200 OK" should {
 
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(
+      val httpResponse = HttpResponse(Status.OK,
         Json.obj(
           "obligations" -> Json.arr(
             Json.obj(
@@ -43,8 +43,8 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
               "periodKey" -> "#001"
             )
           )
-        )
-      ))
+        ).toString()
+      )
 
       val expected = Right(VatReturnObligations(Seq(
         VatReturnObligation(
@@ -66,7 +66,7 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
 
     "the http response status is 404 NOT_FOUND" should {
 
-      val httpResponse = HttpResponse(Status.NOT_FOUND)
+      val httpResponse = HttpResponse(Status.NOT_FOUND, "")
 
       val expected = Right(VatReturnObligations(Seq.empty))
 
@@ -80,10 +80,10 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
     "the http response status is 400 BAD_REQUEST (single error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "code" -> "VRN_INVALID",
           "message" -> "Fail!"
-        ))
+        ).toString()
       )
 
       val expected = Left(BadRequestError(
@@ -100,7 +100,7 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
 
     "the HTTP response status is BAD_REQUEST (400) (multiple errors)" should {
 
-      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST, responseJson = Some(
+      val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST,
         Json.obj(
           "code" -> "400",
           "message" -> "Fail!",
@@ -114,8 +114,8 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
               "message" -> "Fail!"
             )
           )
-        )
-      ))
+        ).toString()
+      )
 
       val errors = Seq(ApiSingleError("INVALID", "Fail!"), ApiSingleError("INVALID_2", "Fail!"))
 
@@ -131,10 +131,10 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
     "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "foo" -> "INVALID",
           "bar" -> "Fail!"
-        ))
+        ).toString()
       )
 
       val expected = Left(UnknownError)
@@ -153,7 +153,7 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
         "message" -> "GATEWAY_TIMEOUT"
       )
 
-      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
       val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
       val result = VatReturnsReads.read("", "", httpResponse)
 
@@ -169,7 +169,7 @@ class VatReturnObligationsHttpParserSpec extends UnitSpec {
         "message" -> "CONFLCIT"
       )
 
-      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
       val expected = Left(UnexpectedStatusError(Status.CONFLICT.toString, httpResponse.body))
       val result = VatReturnsReads.read("", "", httpResponse)
 

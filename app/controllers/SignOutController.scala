@@ -51,7 +51,7 @@ class SignOutController @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     }
   }
 
-  val timeout: Action[AnyContent] = Action { implicit request =>
+  val timeout: Action[AnyContent] = Action {
     Redirect(appConfig.unauthorisedSignOutUrl)
   }
 }

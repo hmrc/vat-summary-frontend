@@ -35,7 +35,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
     "the http response status is 200 OK and there are valid charge types" should {
 
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(
+      val httpResponse = HttpResponse(Status.OK,
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
@@ -496,8 +496,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               )
             )
           )
-        )
-      ))
+        ).toString()
+      )
 
       val expected = Right(Payments(Seq(
         PaymentWithPeriod(
@@ -813,7 +813,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
     }
 
     "the http response is 200 OK and there are no valid charge types" should {
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(
+      val httpResponse = HttpResponse(Status.OK,
         Json.obj(
           "financialTransactions" -> Json.arr(
             Json.obj(
@@ -822,8 +822,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "outstandingAmount" -> 99
             )
           )
-        )
-      ))
+        ).toString()
+      )
 
       val expected = Right(Payments(Seq.empty))
 
@@ -836,7 +836,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
 
     "the http response status is 404 NOT_FOUND" should {
 
-      val httpResponse = HttpResponse(Status.NOT_FOUND, None)
+      val httpResponse = HttpResponse(Status.NOT_FOUND, "")
 
       val expected = Right(Payments(Seq.empty))
 
@@ -850,10 +850,10 @@ class PaymentsHttpParserSpec extends UnitSpec {
     "the http response status is 400 BAD_REQUEST (single error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "code" -> "VRN_INVALID",
           "reason" -> "Fail!"
-        ))
+        ).toString()
       )
 
       val expected = Left(BadRequestError(
@@ -871,7 +871,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
     "a http response of 400 BAD_REQUEST (multiple errors)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "failures" -> Json.arr(
             Json.obj(
               "code" -> "INVALID DATE FROM",
@@ -882,7 +882,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "reason" -> "Bad date to"
             )
           )
-        ))
+        ).toString()
       )
 
       val errors = Seq(ApiSingleError("INVALID DATE FROM", "Bad date from"), ApiSingleError("INVALID DATE TO", "Bad date to"))
@@ -899,10 +899,10 @@ class PaymentsHttpParserSpec extends UnitSpec {
     "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "foo" -> "INVALID",
           "bar" -> "Fail!"
-        ))
+        ).toString()
       )
 
       val expected = Left(UnknownError)
@@ -922,7 +922,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         "message" -> "GATEWAY_TIMEOUT"
       )
 
-      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
       val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 
@@ -938,7 +938,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
         "message" -> "CONFLICT"
       )
 
-      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
       val expected = Left(UnexpectedStatusError("409", httpResponse.body))
       val result = PaymentsReads.read("", "", httpResponse)
 

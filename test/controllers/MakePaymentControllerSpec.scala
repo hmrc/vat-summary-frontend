@@ -19,8 +19,6 @@ package controllers
 import audit.AuditingService
 import audit.models.AuditModel
 import common.TestModels.{agentAuthResult, successfulAuthResult}
-import connectors.VatSubscriptionConnector
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import models.errors.PaymentSetupError
 import models.payments.PaymentDetailsModel
 import org.jsoup.Jsoup
@@ -28,12 +26,12 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.{AccountDetailsService, EnrolmentsAuthService, PaymentsService}
+import services.PaymentsService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.errors.{AgentUnauthorised, PaymentsError, Unauthorised}
+import views.html.errors.PaymentsError
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -101,10 +99,6 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       }
 
       "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
-
-        val redirectUrl = "http://www.google.com"
-        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
-        val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {
           super.setup()
@@ -188,10 +182,6 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       }
 
       "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
-
-        val redirectUrl = "http://www.google.com"
-        val expectedRedirectLocation: Option[String] = Some(redirectUrl)
-        val serviceResponse = Right(redirectUrl)
 
         override def setup(): Any = {
           super.setup()
