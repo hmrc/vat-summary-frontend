@@ -21,7 +21,7 @@ import controllers.ControllerBaseSpec
 import play.api.http.Status._
 import play.twirl.api.Html
 import uk.gov.hmrc.http._
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -38,15 +38,15 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
       if(res.status >= 200 && res.status <= 399) {
         Future.successful(res)
       } else if(res.status >= 400 && res.status <= 499) {
-        Future.failed(Upstream4xxResponse(
+        Future.failed(UpstreamErrorResponse(
           message = res.body,
-          upstreamResponseCode = res.status,
+          statusCode = res.status,
           reportAs = res.status
         ))
       } else {
-        Future.failed(Upstream5xxResponse(
+        Future.failed(UpstreamErrorResponse(
           message = res.body,
-          upstreamResponseCode = res.status,
+          statusCode = res.status,
           reportAs = res.status
         ))
       }
@@ -63,7 +63,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
     "200 is returned" should {
 
-      lazy val connector = setup(HttpResponse(OK, responseString = Some("content")))
+      lazy val connector = setup(HttpResponse(OK, "content"))
 
       lazy val result = connector.getPartial(testPartial)
 
@@ -74,7 +74,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
     "401 is returned" should {
 
-      lazy val connector = setup(HttpResponse(UNAUTHORIZED, responseString = Some("response")))
+      lazy val connector = setup(HttpResponse(UNAUTHORIZED, "response"))
 
       lazy val result = connector.getPartial(testPartial)
 
@@ -85,7 +85,7 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
 
     "403 is returned" should {
 
-      lazy val connector = setup(HttpResponse(FORBIDDEN, responseString = Some("response")))
+      lazy val connector = setup(HttpResponse(FORBIDDEN, "response"))
 
       lazy val result = connector.getPartial(testPartial)
 

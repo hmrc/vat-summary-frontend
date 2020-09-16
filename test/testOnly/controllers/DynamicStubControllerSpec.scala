@@ -85,7 +85,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         override def setup(): Unit = {
           (mockConnector.populateSchema(_: SchemaModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(schema, *, *, *)
-            .returning(HttpResponse(OK))
+            .returning(HttpResponse(OK, ""))
         }
 
         setup()
@@ -101,7 +101,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
           override def setup(): Unit = {
             (mockConnector.populateSchema(_: SchemaModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(schema,*,*,*)
-              .returning(HttpResponse(BAD_REQUEST))
+              .returning(HttpResponse(BAD_REQUEST, ""))
           }
 
           setup()
@@ -130,7 +130,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
             override protected def setup(): Unit = {
               (mockConnector.clearSchemas(_: String)(_: HeaderCarrier, _:ExecutionContext))
                 .expects(*,*,*)
-                .returning(HttpResponse(OK))
+                .returning(HttpResponse(OK, ""))
             }
 
             setup()
@@ -146,7 +146,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
             override protected def setup(): Unit = {
               (mockConnector.clearSchemas(_: String)(_: HeaderCarrier, _: ExecutionContext))
                 .expects(*,*,*)
-                .returning(HttpResponse(INTERNAL_SERVER_ERROR))
+                .returning(HttpResponse(INTERNAL_SERVER_ERROR, ""))
             }
 
             setup()
@@ -169,7 +169,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         override def setup(): Unit = {
           (mockConnector.populateStub(_: DataModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(data,*,*,*)
-            .returning(HttpResponse(OK))
+            .returning(HttpResponse(OK, ""))
         }
 
         setup()
@@ -188,7 +188,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         override def setup(): Unit = {
           (mockConnector.populateStub(_: DataModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(data,*,*,*)
-            .returning(HttpResponse(BAD_REQUEST))
+            .returning(HttpResponse(BAD_REQUEST, ""))
         }
 
         setup()
@@ -219,7 +219,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         override protected def setup(): Unit = {
           (mockConnector.clearStub(_: String)(_: HeaderCarrier, _:ExecutionContext))
             .expects(*,*,*)
-            .returning(HttpResponse(OK))
+            .returning(HttpResponse(OK, ""))
         }
 
         setup()
@@ -235,7 +235,7 @@ class DynamicStubControllerSpec extends ControllerBaseSpec {
         override protected def setup(): Unit = {
           (mockConnector.clearStub(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*,*,*)
-            .returning(HttpResponse(INTERNAL_SERVER_ERROR))
+            .returning(HttpResponse(INTERNAL_SERVER_ERROR, ""))
         }
 
         setup()

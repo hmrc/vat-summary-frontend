@@ -19,7 +19,7 @@ package config.filters
 import javax.inject.Inject
 import play.api.http.DefaultHttpFilters
 import play.filters.csrf.CSRFFilter
-import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
+import uk.gov.hmrc.play.bootstrap.frontend.filters.FrontendFilters
 
 class ServiceFilters @Inject()(defaultFilters: FrontendFilters, excludingCSRFFilter: ExcludingCSRFFilter)
   extends DefaultHttpFilters({

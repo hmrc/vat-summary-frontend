@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class PaymentsHistoryHttpParserSpec extends UnitSpec {
 
-  val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK, Some(Json.parse(
+  val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK, Json.parse(
     s"""{
        |    "idType" : "VRN",
        |    "idNumber" : "555555555",
@@ -390,7 +390,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
        |      }
        |    ]
        |  }""".stripMargin
-  )))
+  ).toString())
 
   val expected: Either[Nothing, Seq[PaymentsHistoryModel]] = Right(Seq(
     PaymentsHistoryModel(
@@ -493,7 +493,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
   }
 
   "the http response is 200 OK and there are no valid charge types" should {
-    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK, Some(Json.parse(
+    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK,Json.parse(
       s"""{
          |    "idType" : "VRN",
          |    "idNumber" : 555555555,
@@ -556,7 +556,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
          |    ]
          |  }""".stripMargin
 
-    )))
+    ).toString())
 
     val expected: Either[Nothing, Seq[Nothing]] = Right(Seq.empty)
 
@@ -569,7 +569,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
 
   "the http response status is 404 NOT_FOUND" should {
 
-    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.NOT_FOUND, None)
+    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.NOT_FOUND, "")
 
     val expected: Either[Nothing, Seq[Nothing]] = Right(Seq.empty)
 
@@ -583,10 +583,10 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
   "the http response status is 400 BAD_REQUEST (single error)" should {
 
     val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST,
-      responseJson = Some(Json.obj(
+      Json.obj(
         "code" -> "VRN_INVALID",
         "reason" -> "Fail!"
-      ))
+      ).toString()
     )
 
     val expected: Either[BadRequestError, Nothing] = Left(BadRequestError(
@@ -604,7 +604,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
   "a http response of 400 BAD_REQUEST (multiple errors)" should {
 
     val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST,
-      responseJson = Some(Json.obj(
+      Json.obj(
         "failures" -> Json.arr(
           Json.obj(
             "code" -> "INVALID DATE FROM",
@@ -615,7 +615,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
             "reason" -> "Bad date to"
           )
         )
-      ))
+      ).toString()
     )
 
     val errors: Seq[ApiSingleError] = Seq(ApiSingleError("INVALID DATE FROM", "Bad date from"), ApiSingleError("INVALID DATE TO", "Bad date to"))
@@ -632,10 +632,10 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
   "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
 
     val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.BAD_REQUEST,
-      responseJson = Some(Json.obj(
+      Json.obj(
         "foo" -> "INVALID",
         "bar" -> "Fail!"
-      ))
+      ).toString()
     )
 
     val expected: Either[UnknownError.type, Nothing] = Left(UnknownError)
@@ -654,7 +654,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       "message" -> "GATEWAY_TIMEOUT"
     )
 
-    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
     val expected: Either[ServerSideError, Nothing] = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
     val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 
@@ -670,7 +670,7 @@ class PaymentsHistoryHttpParserSpec extends UnitSpec {
       "message" -> "CONFLICT"
     )
 
-    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.CONFLICT, Some(body))
+    val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.CONFLICT, body.toString())
     val expected: Either[UnexpectedStatusError, Nothing] = Left(UnexpectedStatusError("409", httpResponse.body))
     val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 

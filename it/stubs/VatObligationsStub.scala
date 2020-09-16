@@ -33,7 +33,7 @@ class VatObligationsStub(vatObligationsServiceEnabled: Boolean) extends WireMock
   private val dateRegex = "([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))"
 
   private implicit def obligationsWrites: Writes[VatReturnObligations] = Json.writes[VatReturnObligations]
-  private implicit def obligationWrites: Writes[VatReturnObligation] = Json.writes[VatReturnObligation]
+  implicit def obligationWrites: Writes[VatReturnObligation] = Json.writes[VatReturnObligation]
 
   def stubAllObligations: StubMapping = {
     when(method = GET, uri = obligationsUri, queryParams = Map(

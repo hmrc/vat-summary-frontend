@@ -17,16 +17,13 @@
 package controllers
 
 import common.TestModels._
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import play.api.http.Status
-import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.AccessibilityStatement
-import views.html.errors.Unauthorised
 
 import scala.concurrent.{ExecutionContext, Future}
 

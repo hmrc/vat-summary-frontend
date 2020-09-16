@@ -16,7 +16,6 @@
 
 package views.templates
 
-import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -28,7 +27,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
   "The nextPaymentSection template" when {
 
-    implicit val user: User = User("999999999")
+
 
     object Selectors {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"

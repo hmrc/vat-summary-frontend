@@ -16,7 +16,6 @@
 
 @import views.html.templates.formatters.links._
 @import java.time.LocalDate
-@import config.AppConfig
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
 @this(openInNewTab: OpenInNewTab)
@@ -25,7 +24,7 @@
   hasMultiple: Boolean,
   isError: Boolean,
   isHybridUser: Boolean,
-  isOverdue: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User)
+  isOverdue: Boolean)(implicit messages: Messages)
 
 <div class ="tile tile-no-border">
   <div id="payments" class="tile-body">

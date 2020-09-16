@@ -16,7 +16,7 @@
 
 @this(displayMoney: DisplayMoney)
 
-@(value: BigDecimal)(implicit messages: Messages)
+@(value: BigDecimal)
 
 @if(value < 0){
     +@displayMoney(value.abs)

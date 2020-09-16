@@ -18,7 +18,6 @@ package models.payments
 
 import java.time.LocalDate
 
-import play.api.i18n.Messages
 import play.api.libs.json.{Json, Writes}
 
 
@@ -62,7 +61,7 @@ object OpenPaymentsModel {
   )
 
   def apply(payment: Payment,
-            isOverdue: Boolean)(implicit messages: Messages): OpenPaymentsModel = payment match {
+            isOverdue: Boolean): OpenPaymentsModel = payment match {
     case payment: PaymentWithPeriod => OpenPaymentsModelWithPeriod(
       payment.chargeType,
       payment.outstandingAmount,

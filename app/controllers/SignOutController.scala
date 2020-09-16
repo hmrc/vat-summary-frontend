@@ -25,7 +25,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthorisationException}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -51,7 +51,7 @@ class SignOutController @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     }
   }
 
-  val timeout: Action[AnyContent] = Action { implicit request =>
+  val timeout: Action[AnyContent] = Action {
     Redirect(appConfig.unauthorisedSignOutUrl)
   }
 }

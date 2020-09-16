@@ -30,7 +30,7 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
 
     "the http response status is 200 OK" should {
 
-      val httpResponse = HttpResponse(Status.OK, responseJson = Some(Json.parse("true")))
+      val httpResponse = HttpResponse(Status.OK, Json.parse("true").toString())
 
       val expected = Right(true)
 
@@ -43,9 +43,9 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
 
     "the http response status is 404 NOT_FOUND" should {
 
-      val httpResponse = HttpResponse(Status.NOT_FOUND, None)
+      val httpResponse = HttpResponse(Status.NOT_FOUND, "")
 
-      val expected = Left(UnexpectedStatusError("404", null))
+      val expected = Left(UnexpectedStatusError("404", ""))
 
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 
@@ -57,10 +57,10 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
     "the http response status is 400 BAD_REQUEST (single error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "code" -> "VRN_INVALID",
           "reason" -> "Fail!"
-        ))
+        ).toString()
       )
 
       val expected = Left(BadRequestError(
@@ -78,10 +78,10 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
     "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        responseJson = Some(Json.obj(
+        Json.obj(
           "foo" -> "INVALID",
           "bar" -> "Fail!"
-        ))
+        ).toString()
       )
 
       val expected = Left(UnknownError)
@@ -101,7 +101,7 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
         "message" -> "GATEWAY_TIMEOUT"
       )
 
-      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, Some(body))
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
       val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 
@@ -117,7 +117,7 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
         "message" -> "CONFLCIT"
       )
 
-      val httpResponse = HttpResponse(Status.CONFLICT, Some(body))
+      val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
       val expected = Left(UnexpectedStatusError("409", httpResponse.body))
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 

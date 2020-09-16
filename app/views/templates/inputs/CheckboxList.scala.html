@@ -16,7 +16,7 @@
 
 @this()
 
-@(field: Field, question: String, choices: Seq[(String, String)], subtext: Option[String] = None, selectedChoices: Seq[String] = Seq())(implicit messages: Messages)
+@(field: Field, question: String, choices: Seq[(String, String)], subtext: Option[String] = None, selectedChoices: Seq[String] = Seq())
 
 @items = @{
   choices.map {

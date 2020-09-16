@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import play.api.Logger
 @import config.AppConfig
 @import java.time.LocalDate
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
@@ -23,7 +22,7 @@
 
 @this()
 
-@(details: VatDetailsViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User)
+@(details: VatDetailsViewModel)(implicit messages: Messages, appConfig: AppConfig)
 
 @cancelRegistration = {
     <div id="cancel-vat" class="column-one-third">

@@ -22,7 +22,7 @@ import models.User
 import play.api.Logger
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import services.AccountDetailsService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 

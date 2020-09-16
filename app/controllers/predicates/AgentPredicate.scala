@@ -26,7 +26,7 @@ import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.allEnrolments
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.AgentUnauthorised
 
 import scala.concurrent.{ExecutionContext, Future}

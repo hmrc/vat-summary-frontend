@@ -24,7 +24,7 @@ import services.EnrolmentsAuthService
 import testOnly.services.BtaStubService
 import testOnly.views.html.BtaStub
 import uk.gov.hmrc.auth.core.NoActiveSession
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.SessionTimeout
 
 import scala.concurrent.{ExecutionContext, Future}

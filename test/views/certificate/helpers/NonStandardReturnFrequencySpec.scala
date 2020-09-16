@@ -35,7 +35,7 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
   "The Non-standard Tax Periods card" should {
 
     lazy val view = nonStandardReturnFrequencyView(
-      exampleNonStandardTaxPeriods, exampleNonNSTP)(messages, mockConfig)
+      exampleNonStandardTaxPeriods, exampleNonNSTP)(messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     lazy val card = document.select(Selectors.cardClass).get(0)
