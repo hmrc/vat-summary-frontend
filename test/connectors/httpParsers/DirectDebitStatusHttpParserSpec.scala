@@ -43,9 +43,9 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
 
     "the http response status is 404 NOT_FOUND" should {
 
-      val httpResponse = HttpResponse(Status.NOT_FOUND, None)
+      val httpResponse = HttpResponse(Status.NOT_FOUND, "")
 
-      val expected = Left(UnexpectedStatusError("404", null))
+      val expected = Left(UnexpectedStatusError("404", ""))
 
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 

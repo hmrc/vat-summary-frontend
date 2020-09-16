@@ -23,7 +23,7 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 class AuditingServiceSpec extends ControllerBaseSpec with BeforeAndAfterEach {
 
-  private trait Test {
+  trait Test {
 
     lazy val mockAuditConnector: AuditConnector = mock[AuditConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
