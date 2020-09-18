@@ -174,7 +174,6 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
           elementText("#how-accessible > ul") shouldBe
             "On some pages the menu toggle in the banner on a small screen disappears when clicked. Also, when JS is " +
               "disabled, the menu toggle is not hidden " +
-            "On some pages the hints and error hints may not read out correctly when using a screen reader " +
             "On some pages the language selector and back links cannot be skipped using assistive technologies " +
             "On pages ‘Your business details’ and ‘Confirm your email address’ the back options are not consistent " +
             "On all pages the “Business tax account” service name is contained in the navigation landmark"
@@ -332,8 +331,6 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
             "On some pages the menu toggle in the banner on a small screen disappears when clicked. Also, when JS is " +
               "disabled, the menu toggle is not hidden, this does not meet Understanding Success Criterion 1.3.1: " +
               "Info and Relationships (A) " +
-            "On some pages the hints and error hints may not read out correctly when using a screen reader, this does " +
-              "not meet Understanding Success Criterion 3.3.2: Labels or Instructions (A) " +
             "On some pages the language selector and back links cannot be skipped using assistive technologies, this " +
               "does not meet Understanding Success Criterion 2.4.1: Bypass Blocks (A) " +
             "On pages ‘Your business details’ and ‘Confirm your email address’ the back options are not consistent, " +
