@@ -68,29 +68,6 @@
                     class="visuallyhidden"> @messages("payment.evenIfNotShown")</span></a>.
         </p>
 
-      <h2 id="direct-debits" class="heading-small">@messages("openPayments.directDebit.heading")</h2>
-      <div id="check-direct-debit" class="form-group">
-          <p>
-              @model.hasDirectDebit match {
-                  case Some(hasDD) => {
-                      @messages("openPayments.directDebitYouCan")
-                      @if(hasDD) {
-                          <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitViewAndUpdate")</a>.
-                        } else {
-                          <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitSetUp")</a>
-                          @messages("openPayments.directDebitPayReturn")
-                         }
-                      }
-                  case None => {
-                      @messages("openPayments.directDebitAlreadySetUp")
-                      @messages("openPayments.directDebitYouCan")
-                      <a href="@controllers.routes.DirectDebitController.directDebits(model.hasDirectDebit)">@messages("openPayments.directDebitLinkText")</a>
-                      @messages("openPayments.directDebitNotSure")
-                  }
-              }
-          </p>
-      </div>
-
     </div>
   </div>
 

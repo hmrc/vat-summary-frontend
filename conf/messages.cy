@@ -126,14 +126,10 @@ openPayments.incorrect = Os yw’r hyn sydd arnoch yn anghywir, dylech wirio a a
 openPayments.correctErrors = gywiro gwallau ar eich Ffurflen TAW (yn agor mewn tab newydd)
 openPayments.whatOweHelp.heading = Mae’r hyn sydd arnaf yn anghywir neu ar goll
 openPayments.directDebitAlreadySetUp = Os ydych eisoes wedi trefnu Debyd Uniongyrchol, nid oes angen i chi dalu nawr.
-openPayments.directDebitYouCan = Gallwch
 openPayments.directDebitLinkText = fwrw golwg dros eich Debydau Uniongyrchol
 openPayments.directDebitNotSure = os nad ydych yn siŵr.
-openPayments.directDebitSetUp = sefydlu Debyd Uniongyrchol
-openPayments.directDebitPayReturn = i dalu’ch Ffurflenni TAW.
 openPayments.directDebitViewAndUpdate = newid, dileu neu fwrw golwg dros eich Debyd Uniongyrchol
 openPayments.youPayByDirectDebit = Rydych yn talu drwy Ddebyd Uniongyrchol
-openPayments.directDebit.heading = Debydau Uniongyrchol
 openPayments.vatReturn = ar gyfer y cyfnod {0}
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 

@@ -58,7 +58,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val processingTime = "#processing-time"
     val whatOweMissing = "#what-you-owe-missing"
-    val directDebit = "#direct-debits"
     val directDebitText = "#check-direct-debit p:nth-of-type(1)"
     val directDebitLink = "#check-direct-debit a:nth-of-type(1)"
     val helpText = "div > p:nth-child(4)"
@@ -189,22 +188,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "render the correct heading for the direct debits" in {
-      elementText(Selectors.directDebit) shouldBe "Direct Debits"
-    }
-
-    "render the correct text for the direct debits" in {
-      elementText(Selectors.directDebitText) shouldBe "You can view, change or cancel your Direct Debit."
-    }
-
-    "render the correct link text for the direct debits" in {
-      elementText(Selectors.directDebitLink) shouldBe "view, change or cancel your Direct Debit"
-    }
-
-    "have the correct link destination to the direct debits service" in {
-      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
-    }
-
     "render the correct heading for what I owe is incorrect or missing" in {
       elementText(Selectors.whatOweMissing) shouldBe "What I owe is incorrect or missing"
     }
@@ -240,41 +223,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       element(Selectors.payLink(1)).attr("href") should endWith(
         "200000000001/3/2001/VAT%20Return%20Debit%20Charge/2001-04-08"
       )
-    }
-
-    "render the correct text for the direct debit paragraph" in {
-      elementText(Selectors.directDebitText) shouldBe
-        "You can set up a Direct Debit to pay your VAT Returns."
-    }
-
-    "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitLink) shouldBe "set up a Direct Debit"
-    }
-
-    "have the correct link destination to the direct debits service" in {
-      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=false"
-    }
-  }
-
-  "Rendering the open payments page when the direct debit service can not be reached" should {
-
-    val hasDirectDebit = None
-    val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = openPaymentsView(user, viewModel)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "render the correct text for the direct debit paragraph" in {
-      elementText(Selectors.directDebitText) shouldBe
-        "If you have already set up a Direct Debit, you do not need to pay now. " +
-          "You can view your Direct Debits if you are not sure."
-    }
-
-    "render the correct check direct debit link text" in {
-      elementText(Selectors.directDebitLink) shouldBe "view your Direct Debits"
-    }
-
-    "have the correct link destination to the direct debits service" in {
-      element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit"
     }
   }
 
