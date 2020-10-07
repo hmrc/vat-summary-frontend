@@ -58,8 +58,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     val processingTime = "#processing-time"
     val whatOweMissing = "#what-you-owe-missing"
-    val directDebitText = "#check-direct-debit p:nth-of-type(1)"
-    val directDebitLink = "#check-direct-debit a:nth-of-type(1)"
     val helpText = "div > p:nth-child(4)"
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
