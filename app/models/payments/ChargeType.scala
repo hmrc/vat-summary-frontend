@@ -122,7 +122,7 @@ case object InaccuraciesAssessmentsPenCharge extends ChargeType {
   override val value: String = "VAT Inaccuracy Assessments pen"
 }
 case object InaccuraciesReturnReplacedCharge extends ChargeType {
-  override val value: String = "VAT Inaccuracy rturn replaced"
+  override val value: String = "VAT Inaccuracy return replaced"
 }
 case object WrongDoingPenaltyCharge extends ChargeType {
   override val value: String = "VAT Wrong Doing Penalty"
