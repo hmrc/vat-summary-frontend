@@ -52,25 +52,6 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
                   @messages("payment.stillMake")
                   <a target="_blank" href="@appConfig.unauthenticatedPaymentsUrl">@messages("payment.stillMakeLink")</a>.
                 </p>
-              @hasDirectDebit.map { directDebit =>
-                @if(directDebit) {
-                <p>
-                  @messages("noPayments.youCanAlso")
-                  <a target="_blank"
-                     href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)">
-                    @messages("noPayments.viewDirectDebit")</a>.
-                </p>
-                } else {
-                <p>
-                  @messages("noPayments.youCanAlso")
-                  <a target="_blank"
-                     href="@controllers.routes.DirectDebitController.directDebits(hasDirectDebit)">
-                    @messages("noPayments.setUpDirectDebit")
-                  </a>
-                  @messages("noPayments.forYourVatReturns")
-                </p>
-                }
-              }
             </div>
         </div>
     </div>
