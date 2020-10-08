@@ -128,10 +128,6 @@ openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfno
 noPayments.heading = Yr hyn sydd arnoch
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
-noPayments.youCanAlso = Gallwch hefyd
-noPayments.viewDirectDebit = fwrw golwg dros fanylion o’ch Debyd Uniongyrchol (yn agor mewn tab newydd)
-noPayments.setUpDirectDebit = sefydlu Debyd Uniongyrchol (yn agor mewn tab newydd)
-noPayments.forYourVatReturns = ar gyfer eich Ffurflenni TAW.
 
 paymentsError.title = Mae problem gyda’r gwasanaeth
 paymentsError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth.

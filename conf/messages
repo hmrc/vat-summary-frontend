@@ -102,10 +102,6 @@ openPayments.errorCorrectionReturnContext = that you corrected for the period {0
 noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
-noPayments.youCanAlso = You can also
-noPayments.viewDirectDebit = view your Direct Debit details (opens in a new tab)
-noPayments.setUpDirectDebit = set up a Direct Debit (opens in a new tab)
-noPayments.forYourVatReturns = for your VAT Returns.
 
 paymentsError.title = There is a problem with the service
 paymentsError.heading = Sorry, there is a problem with the service

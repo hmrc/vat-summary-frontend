@@ -32,8 +32,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val secondaryHeading = "h2"
     val noPaymentsDetail = "#noPaymentsDetail p:nth-of-type(1)"
     val paymentLink = "#noPaymentsDetail p:nth-of-type(1) a"
-    val directDebitMessage = "#noPaymentsDetail p:nth-of-type(2)"
-    val directDebitLink = "#noPaymentsDetail p:nth-of-type(2) a"
     val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
     val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
@@ -47,8 +45,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   override val user: User = User("123456789")
 
   "Rendering the no payments page" when {
-
-    "the user has a direct debit" should {
 
       lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -79,18 +75,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         element(Selectors.paymentLink).attr("href") shouldBe "unauthenticated-payments-url"
       }
 
-      "have the correct message regarding viewing a direct debit" in {
-        elementText(Selectors.directDebitMessage) shouldBe "You can also view your Direct Debit details (opens in a new tab)."
-      }
-
-      "have the correct link text regarding viewing a direct debit" in {
-        elementText(Selectors.directDebitLink) shouldBe "view your Direct Debit details (opens in a new tab)"
-      }
-
-      "have the correct link destination regarding viewing a direct debit" in {
-        element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=true"
-      }
-
       "render breadcrumbs which" should {
 
         "have the text 'Business tax account'" in {
@@ -114,37 +98,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         }
       }
     }
-
-    "the user does not have a direct debit" should {
-
-      lazy val view = noPaymentsView(user,  hasDirectDebit = Some(false))
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct message regarding setting up a direct debit" in {
-        elementText(Selectors.directDebitMessage) shouldBe
-          "You can also set up a Direct Debit (opens in a new tab) for your VAT Returns."
-      }
-
-      "have the correct link text regarding setting up a direct debit" in {
-        elementText(Selectors.directDebitLink) shouldBe "set up a Direct Debit (opens in a new tab)"
-      }
-
-      "have the correct link destination regarding setting up a direct debit" in {
-        element(Selectors.directDebitLink).attr("href") shouldBe "/vat-through-software/direct-debit?status=false"
-      }
-
-    }
-
-    "the call to the direct debit service fails" should {
-
-      lazy val view = noPaymentsView(user, hasDirectDebit = None)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "not display a direct debit message" in {
-        intercept[org.scalatest.exceptions.TestFailedException](element(Selectors.directDebitMessage))
-      }
-    }
-  }
 
   "Rendering the no payments page" should {
 
