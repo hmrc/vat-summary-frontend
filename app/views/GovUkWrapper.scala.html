@@ -55,6 +55,9 @@
 }
 
 @scriptElement = {
+    <!--[if !IE]>-->
+    <script type="text/javascript" src="@appConfig.trackingConsentUrl"></script>
+    <!--<![endif]-->
   <script type="text/javascript" src='@routes.Assets.at("javascript/vat-v1.1.js")'></script>
 
   <script>

@@ -130,4 +130,6 @@ object ConfigKeys {
   val vatCorrespondenceHost: String = "vat-correspondence-details-frontend.host"
   val vatCorrespondenceContext: String = "vat-correspondence-details-frontend.context"
   val verifyEmailEndPoint: String = "vat-correspondence-details-frontend.endpoints.verifyEmail"
+
+  val trackingConsentUrl: String = "tracking-consent-frontend.url"
 }
