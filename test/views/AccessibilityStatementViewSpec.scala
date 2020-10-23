@@ -172,13 +172,48 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has a bullet list of service difficulties" in {
           elementText("#how-accessible > ul") shouldBe
-            "On some pages the menu toggle in the banner on a small screen disappears when clicked. Also, when JS is " +
-              "disabled, the menu toggle is not hidden " +
-            "On some pages the hints and error hints may not read out correctly when using a screen reader " +
-            "On some pages the language selector and back links cannot be skipped using assistive technologies " +
-            "On pages ‘Your business details’ and ‘Confirm your email address’ the back options are not consistent " +
-            "On all pages the “Business tax account” service name is contained in the navigation landmark"
-
+            "The menu toggle in the banner on a screen that has been reduced from full size disappears when clicked. " +
+            "The language selector and back links are currently not bypassed using the skip link and " +
+              "cannot be bypassed with assistive technology. " +
+            "The form element legend has been incorrectly nested. This may make it more difficult for assistive " +
+              "technologies to read the content accurately and without crashing. " +
+            "The ‘aria-describedby’ attribute is not pointing to an element in the same document. This may cause " +
+              "assistive technologies to behave unexpectedly. " +
+            "The ‘hints and error’ hints have been created with incorrect markup. This may cause assistive " +
+              "technologies to behave unexpectedly. " +
+          "‘Tooltip’ has been incorrectly included in the error summary. This may cause assistive technologies " +
+              "to behave unexpectedly. " +
+          "There is no keyboard focus on radio buttons when the user chooses high contrast mode. This may " +
+              "make the screen difficult to use for keyboard only users. " +
+          "The ‘yes/no’ option has been repeated in the HTML code unnecessarily which may cause errors for " +
+              "assistive technologies. " +
+          "The error summary in some pages featuring currency inputs does not automatically link to " +
+              "the currency input field. " +
+          "There is a duplicate form group ID on the ‘How are the business’s VAT accounts prepared?’ page. This " +
+              "may cause assistive technologies to behave unexpectedly. " +
+          "Radio button hints on the ‘How are the business’s VAT accounts prepared?’ page have been incorrectly " +
+            "marked up and may not work correctly with assistive technologies. " +
+          "The input mode for digits and dates on pages that have whole number input fields has not been set to " +
+              "numeric. This may make it more difficult if using a mobile device. " +
+          "Error messages regarding years are not clear. This may cause confusion if the user has not " +
+            "input a 4-digit year. " +
+          "The navigation landmarks that are used by assistive technologies are not correctly placed in " +
+            "the ‘Your business details page’. This may not work correctly with assistive technologies. " +
+          "The HTML markup code is not correct on the ‘We’ve had a problem delivering mail to this address’ page. " +
+            "This may cause assistive technologies to behave unexpectedly. " +
+          "The HTML markup code is not correct on the ‘You have submitted a VAT Return’ page. This may cause " +
+            "assistive technologies to behave unexpectedly. " +
+          "The Welsh language link on the ‘You have confirmed the business address’ page does not work correctly. " +
+          "The ‘Continue’ button on the ‘You have confirmed the business address’ page does not work as intended. " +
+          "The page ‘We’ve had a problem delivering mail to this address’ has incorrect page markup. This may " +
+              "cause assistive technologies to behave unexpectedly. " +
+          "The ‘Submit VAT Returns’ page has errors with the way that hints were implemented for assisted " +
+              "technologies. This may lead to unnecessary noise when using a screen reader. " +
+          "The ‘Submit VAT Returns’ page has errors with the way that the HTML code elements were nested. This may " +
+            "cause assistive technologies to behave unexpectedly. " +
+          "The keyboard focus for the second button is the wrong colour on the ‘Submit VAT Returns’ page’. " +
+          "The ‘Your business details’ page contains some hidden elements that may not be correctly implemented " +
+              "and may not be ignored. This may cause assistive technologies to behave unexpectedly."
         }
       }
 
@@ -324,22 +359,70 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has the correct first paragraph" in {
           elementText("#non-compliance > p") shouldBe
-            "All of these accessibility problems will be fixed at the end of December 2020."
+            "All of these accessibility problems will be fixed at the end of May 2021."
         }
 
         "has a bullet list of service difficulties" in {
           elementText("#non-compliance > ul") shouldBe
-            "On some pages the menu toggle in the banner on a small screen disappears when clicked. Also, when JS is " +
-              "disabled, the menu toggle is not hidden, this does not meet Understanding Success Criterion 1.3.1: " +
-              "Info and Relationships (A) " +
-            "On some pages the hints and error hints may not read out correctly when using a screen reader, this does " +
-              "not meet Understanding Success Criterion 3.3.2: Labels or Instructions (A) " +
-            "On some pages the language selector and back links cannot be skipped using assistive technologies, this " +
-              "does not meet Understanding Success Criterion 2.4.1: Bypass Blocks (A) " +
-            "On pages ‘Your business details’ and ‘Confirm your email address’ the back options are not consistent, " +
-              "this does not meet Understanding Success Criterion 3.2.3: Consistent Navigation (AA) " +
-            "On all pages the “Business tax account” service name is contained in the navigation landmark, this does " +
-              "not meet Understanding Success Criterion 1.3.1: Info and Relationships (A)"
+           "The menu toggle in the banner on a screen that has been reduced from full size disappears when clicked. " +
+             "This does not meet WCAG 2.1: Understanding Success Criterion 1.3.1: Info and Relationships (A). " +
+          "The language selector and back links are currently not bypassed using the skip link or possible to bypass " +
+          "with assistive technology. This doesnt meet WCAG 2.1 failure: Understanding Success " +
+             "Criterion 2.4.1: Bypass Blocks (A). " +
+          "The form element legend has been incorrectly nested. This may make it more difficult for assistive " +
+             "technologies to read the content accurately and without crashing. This does not meet WCAG 2.1: " +
+             "Understanding Success Criterion 4.1.1: Parsing (A). " +
+          "The ‘aria-describedby’ attribute is not pointing to an element in the same document. This may cause " +
+             "assistive technologies to behave unexpectedly. This does not meet WCAG 2.1: Understanding Success " +
+             "Criterion 4.1.1: Parsing (A). " +
+          "The hints and error hints have been created with incorrect markup. This may cause assistive technologies " +
+             "to behave unexpectedly. This does not meet WCAG 2.1: Understanding Success Criterion " +
+             "3.3.2: Labels or Instructions (A). " +
+          "‘Tooltip’ has been incorrectly included in the error summary. This may cause assistive technologies to " +
+             "behave unexpectedly. This does not meet WCAG 2.1: Understanding Success Criterion 4.1.1: Parsing. " +
+          "There is no keyboard focus on radio buttons when the user chooses high contrast mode. This may make the " +
+             "screen difficult to user for keyboard only users. This does not meet WCAG 2.1: 2.4.7: Focus visible. " +
+          "The ‘yes/no’ option has been repeated in the HTML code unnecessarily which may cause errors for assistive " +
+             "technologies. This doesnt meet WCAG 2.1: Understanding Success Criterion 4.1.1: Parsing. " +
+          "The error summary in some pages featuring currency inputs does not automatically link to the currency " +
+             "input field. This does not meet WCAG 2.1: Understanding Success Criterion 3.3.1: Error Identification. " +
+          "There is a duplicate form group ID on the ‘How are the business’s VAT accounts prepared?’ page. This may " +
+             "cause assistive technologies to behave unexpectedly. This does not meet WCAG 2.1: Understanding " +
+             "Success Criterion 4.1.1: Parsing. " +
+          "Radio button hints on the ‘How are the business’s VAT accounts prepared?’ page have been incorrectly " +
+             "marked up and may not work correctly with assistive technologies. This is a failure of WCAG 2.1: " +
+             "Understanding Success Criterion 3.3.2: Labels or Instructions. " +
+          "The inputmode for digits and dates on pages that have whole number input fields has not been set to " +
+             "numeric, this may make it more difficult if using a mobile device. This does not meet WCAG 2.1: " +
+             "Understanding Success Criterion 1.3.5: Identify Input Purpose (AA). " +
+          "Error messages regarding years are not clear. This may cause confusion if the user has not input a 4 " +
+             "digit year, this does not meet WCAG 2.1: Understanding Success Criterion 2.4.4: " +
+             "Link Purpose (In Context). " +
+          "The navigation landmarks that are used by assistive technologies are not correctly placed in the " +
+          "‘Your business details’ page’. This may not work correctly with assistive technologies. This does not " +
+             "meet WCAG 2.1: Understanding Success Criterion 2.4.1: Bypass Blocks. " +
+          "The HTML markup code is not correct on the ‘We’ve had a problem delivering mail to this address’ page. " +
+             "This may cause assistive technologies to behave unexpectedly. This does not meet WCAG 2.1 failure: " +
+             "Understanding Success Criterion 4.1.1: Parsing. " +
+          "The HTML markup code is not correct on the ‘You have submitted a VAT Return’ page. This may cause " +
+             "assistive technologies to behave unexpectedly. This does not meet WCAG 2.1: Understanding Success " +
+             "Criterion 4.1.1: Parsing. " +
+          "The Welsh language link on the ‘You have confirmed the business address’ page does not work correctly. " +
+             "This does not meet WCAG 2.1: Understanding Success Criterion 2.4.4: Link Purpose (In Context). " +
+          "The page ‘We’ve had a problem delivering mail to this address’ has incorrect page markup. This may cause " +
+             "assistive technologies to behave unexpectedly. This does not meet WCAG 2.1: Understanding Success " +
+             "Criterion 3.3.2: Labels or Instructions. " +
+          "The ‘Submit VAT Returns’ page has errors with the way that hints were implemented for assisted " +
+             "technologies. This may lead to unnecessary noise when using a screen reader. This does not meet " +
+             "WCAG 2.1: Understanding Success Criterion 3.3.2: Labels or Instructions. " +
+          "The ‘Submit VAT Returns’ page has errors with the way that the HTML code elements were nested. This may " +
+             "cause assistive technologies to behave unexpectedly. This does not meet WCAG 2.1 failure: " +
+             "Understanding Success Criterion 4.1.1: Parsing. " +
+          "On the ‘Submit VAT Returns’ page the keyboard focus for the second button is the wrong colour. This does " +
+             "not meet WCAG 2.1: 2.4.7 – Focus visible. " +
+          "The ‘Your business details’ page contains some hidden elements that may not be correctly implemented " +
+             "and may not be ignored. This may cause assistive technologies to behave unexpectedly. This does not " +
+             "meet WCAG 2.1 failure: Understanding Success Criterion 4.1.2: Name, Role, Value."
         }
       }
 
@@ -351,7 +434,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has the correct first paragraph" in {
           elementText("#how-we-tested > p:nth-of-type(1)") shouldBe
-            "The service was last tested on 24 August 2020 and was checked for compliance with WCAG 2.1 AA."
+            "The service was last tested on 29 September 2020 and was checked for compliance with WCAG 2.1 AA."
         }
 
         "has a second paragraph" which {
@@ -372,7 +455,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
 
         "has the correct third paragraph" in {
           elementText("#how-we-tested > p:nth-of-type(3)") shouldBe
-            "This page was prepared on 20 September 2019. It was last updated on 11 September 2020."
+            "This page was prepared on 20 September 2019. It was last updated on 22 October 2020."
         }
       }
     }
