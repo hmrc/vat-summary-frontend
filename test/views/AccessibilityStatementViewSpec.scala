@@ -367,7 +367,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
            "The menu toggle in the banner on a screen that has been reduced from full size disappears when clicked. " +
              "This does not meet WCAG 2.1: Understanding Success Criterion 1.3.1: Info and Relationships (A). " +
           "The language selector and back links are currently not bypassed using the skip link or possible to bypass " +
-          "with assistive technology. This doesnt meet WCAG 2.1 failure: Understanding Success " +
+          "with assistive technology. This doesn’t meet WCAG 2.1 failure: Understanding Success " +
              "Criterion 2.4.1: Bypass Blocks (A). " +
           "The form element legend has been incorrectly nested. This may make it more difficult for assistive " +
              "technologies to read the content accurately and without crashing. This does not meet WCAG 2.1: " +
@@ -383,7 +383,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
           "There is no keyboard focus on radio buttons when the user chooses high contrast mode. This may make the " +
              "screen difficult to user for keyboard only users. This does not meet WCAG 2.1: 2.4.7: Focus visible. " +
           "The ‘yes/no’ option has been repeated in the HTML code unnecessarily which may cause errors for assistive " +
-             "technologies. This doesnt meet WCAG 2.1: Understanding Success Criterion 4.1.1: Parsing. " +
+             "technologies. This doesn’t meet WCAG 2.1: Understanding Success Criterion 4.1.1: Parsing. " +
           "The error summary in some pages featuring currency inputs does not automatically link to the currency " +
              "input field. This does not meet WCAG 2.1: Understanding Success Criterion 3.3.1: Error Identification. " +
           "There is a duplicate form group ID on the ‘How are the business’s VAT accounts prepared?’ page. This may " +
