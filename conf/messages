@@ -418,7 +418,7 @@ a11yStatement.testCarriedOut.2 = Digital Accessibility Centre
 a11yStatement.testCarriedOut.3 = The full service was tested by HMRC and included disabled users.
 a11yStatement.pagePrepared = This page was prepared on 20 September 2019. It was last updated on 22 October 2020.
 
-covid.line1 = If you chose to defer your VAT payment as a result of coronavirus, you should play the VAT on or before 31 March 2021 if you are able to.
+covid.line1 = If you chose to defer your VAT payment as a result of coronavirus, you should pay the VAT on or before 31 March 2021 if you are able to.
 covid.line2 = For those that opt-in to the VAT Deferral New Payment Scheme, this means that your VAT liabilities due between 20 March and 30 June 2020, will now need to be paid by 31 March 2022.
 covid.line3 = More details on the scheme will be published in due course.
 
