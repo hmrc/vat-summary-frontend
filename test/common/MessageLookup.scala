@@ -100,8 +100,8 @@ object MessageLookup {
   }
 
   object CovidMessages {
-    val line1: String = "If you deferred paying VAT that was due between 20 March 2020 and 30 June 2020, you must pay it in full by 31 March 2021."
-    val line2: String = "You can pay deferred VAT in part or in full any time up to the deadline."
-    val line3: String = "We will apply payments against the deferred VAT period on 31 March 2021."
+    val line1: String = "If you chose to defer your VAT payment as a result of coronavirus, you should pay the VAT on or before 31 March 2021 if you are able to."
+    val line2: String = "For those that opt-in to the VAT Deferral New Payment Scheme, this means that your VAT liabilities due between 20 March and 30 June 2020, will now need to be paid by 31 March 2022."
+    val line3: String = "More details on the scheme will be published in due course."
   }
 }

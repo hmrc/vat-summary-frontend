@@ -451,6 +451,6 @@ global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – 
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 
-covid.line1 = Os gwnaethoch ohirio talu TAW a oedd yn ddyledus rhwng 20 Mawrth 2020 a 30 Mehefin 2020, mae’n rhaid i chi ei thalu’n llawn erbyn 31 Mawrth 2021.
-covid.line2 = Gallwch dalu TAW sydd wedi’i gohirio yn rhannol neu’n llawn ar unrhyw adeg cyn y dyddiad cau.
-covid.line3 = Byddwn yn rhoi taliadau yn erbyn y cyfnod TAW sydd wedi’i ohirio ar 31 Mawrth 2021.
+covid.line1 = Os gwnaethoch ddewis gohirio’ch taliad TAW o ganlyniad i goronafeirws, dylech dalu’r TAW ar 31 Mawrth 2021 neu cyn hynny, os gallwch wneud hynny.
+covid.line2 = I’r rhai sy’n optio i mewn i’r Cynllun Gohirio Taliadau TAW newydd, mae hyn yn golygu bydd angen talu’ch rhwymedigaethau TAW a oedd yn ddyledus rhwng 20 Mawrth a 30 Mehefin 2020 erbyn 31 Mawrth 2022.
+covid.line3 = Bydd rhagor o fanylion am y cynllun yn cael eu cyhoeddi maes o law.
