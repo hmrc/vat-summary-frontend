@@ -102,4 +102,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
     "/contact/accessibility?service=VATVCACCESSIBILITY&userAction=/vat-through-software/vat-overview"
   override val missingTraderRedirectUrl: String = "/missing-trader"
   override val verifyEmailUrl: String = "/verify-email"
+  override val gtmContainer: String = "x"
 }

@@ -31,8 +31,7 @@
       reportAProblemLink: ReportAProblemLink,
       mainContent: MainContent,
       hmrcGovUkTemplate: GovUkTemplate,
-      userResearchBanner: UserResearchBanner
-      )
+      userResearchBanner: UserResearchBanner)
 
 @(appConfig: AppConfig,
   title: String,
@@ -55,9 +54,12 @@
 }
 
 @scriptElement = {
-    <!--[if !IE]>-->
-    <script type="text/javascript" src="@appConfig.trackingConsentUrl"></script>
-    <!--<![endif]-->
+  <!--[if !IE]>-->
+  <script type="text/javascript"
+          src="@appConfig.trackingConsentUrl"
+          id="tracking-consent-script-tag"
+          data-gtm-container="@appConfig.gtmContainer"></script>
+  <!--<![endif]-->
   <script type="text/javascript" src='@routes.Assets.at("javascript/vat-v1.1.js")'></script>
 
   <script>
@@ -170,5 +172,6 @@ appConfig.reportAProblemNonJSUrl)}
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(headContent, bodyEnd,
-insideHeader, afterHeader, footerTop, Some(footerLinksContent), true)(content)
+@hmrcGovUkTemplate(Some(pageTitle), bodyClasses)(
+  headContent, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinksContent), nav = true
+)(content)
