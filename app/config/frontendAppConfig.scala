@@ -100,7 +100,6 @@ trait AppConfig {
   val a11yServiceIdentifier: String
   val missingTraderRedirectUrl: String
   val verifyEmailUrl: String
-  val trackingConsentUrl: String
   val gtmContainer: String
 }
 
@@ -190,8 +189,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override lazy val timeoutPeriod: Int = sc.getString(Keys.timeoutPeriod).toInt
   override lazy val timeoutCountdown: Int = sc.getString(Keys.timeoutCountDown).toInt
-
-  val trackingConsentUrl: String = sc.getString(Keys.trackingConsentUrl)
 
   override val portalMakePaymentUrl: String => String = (vrn: String) => {
     s"${sc.getString(Keys.portalPrefix)}/$vrn${sc.getString(Keys.portalMakePaymentPostfix)}"
