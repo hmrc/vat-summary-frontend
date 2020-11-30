@@ -180,8 +180,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   private lazy val governmentGatewayHost: String = sc.getString(Keys.governmentGatewayHost)
 
   override def signOutUrl(identifier: String): String =
-    s"$governmentGatewayHost/gg/sign-out?continue=${surveyUrl(identifier)}"
-  override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
+    s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=${surveyUrl(identifier)}"
+  override lazy val unauthorisedSignOutUrl: String =
+    s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$signInContinueUrl"
 
   private val mtdVatSignUpBaseUrl: String = sc.getString(Keys.mtdVatSignUpBaseUrl)
   override lazy val mtdVatReSignUpUrl: String = mtdVatSignUpBaseUrl + sc.getString(Keys.mtdVatReSignUpUrl)
