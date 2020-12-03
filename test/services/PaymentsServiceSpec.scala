@@ -68,6 +68,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
           LocalDate.parse("2008-11-29"),
           BigDecimal("21.22"),
           "",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
         val payment2 = PaymentWithPeriod(
@@ -77,6 +78,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
           LocalDate.parse("2008-12-01"),
           BigDecimal("21.22"),
           "",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
         val payment3 = PaymentWithPeriod(
@@ -86,6 +88,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
           LocalDate.parse("2009-01-01"),
           BigDecimal("21.22"),
           "",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
         val payment4 = PaymentWithPeriod(
@@ -95,6 +98,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
           LocalDate.parse("2008-11-30"),
           BigDecimal("21.22"),
           "",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
 
@@ -117,6 +121,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
           LocalDate.parse("2008-12-06"),
           BigDecimal("-1000"),
           "",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )))
         override val responseFromFinancialDataConnector = Right(payments)
@@ -162,16 +167,20 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
     val taxPeriodMonth: Int = 2
     val taxPeriodYear: Int = 2018
     val dueDate: String = "2018-08-08"
+    val chargeReference: Option[String] = Some("XD002750002155")
+    val vatPeriodEnding: String = "2018-08-08"
 
     val paymentDetails = PaymentDetailsModelWithPeriod("vat",
       "123456789",
       amountInPence,
       taxPeriodMonth,
       taxPeriodYear,
+      vatPeriodEnding,
       "http://domain/path",
       "http://domain/return-path",
       ReturnDebitCharge,
-      dueDate
+      dueDate,
+      chargeReference
     )
 
     "setting up the payments journey is successful" should {

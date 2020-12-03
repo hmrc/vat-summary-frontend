@@ -41,7 +41,10 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   val testMonth: Int = 2
   val testYear: Int = 2018
   val testChargeType: String = "VAT Return Debit Charge"
+  val testNonReturnChargeType: String = "VAT Default Interest"
   val testDueDate: String = "2018-08-08"
+  val testChargeReference: String = "XD002750002155"
+  val testVatPeriodEnding: String = "2018-08-08"
 
   private trait MakePaymentDetailsTest {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
@@ -78,7 +81,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
     "the user is logged in" should {
 
-      "redirected when returned Right ServiceResponse" in new MakePaymentDetailsTest {
+      "redirect when returned Right ServiceResponse" in new MakePaymentDetailsTest {
 
         val redirectUrl = "http://www.google.com"
         val expectedRedirectLocation: Option[String] = Some(redirectUrl)
@@ -92,13 +95,17 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(serviceResponse))
         }
 
-        lazy val result: Future[Result] = target.makePaymentNoPeriod(testAmountInPence, testChargeType, testDueDate)(fakeRequestWithSession)
+        lazy val result: Future[Result] = target.makePaymentNoPeriod(
+          testAmountInPence,
+          testNonReturnChargeType,
+          testDueDate,
+          testChargeReference)(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe expectedRedirectLocation
       }
 
-      "Internal Service Error when Left returned" in new MakePaymentDetailsTest {
+      "Internal Server Error when Left returned" in new MakePaymentDetailsTest {
 
         override def setup(): Any = {
           super.setup()
@@ -108,7 +115,11 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(Left(PaymentSetupError)))
         }
 
-        lazy val result: Future[Result] = target.makePaymentNoPeriod(testAmountInPence, testChargeType, testDueDate)(fakeRequestWithSession)
+        lazy val result: Future[Result] = target.makePaymentNoPeriod(
+          testAmountInPence,
+          testNonReturnChargeType,
+          testDueDate,
+          testChargeReference)(fakeRequestWithSession)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         Jsoup.parse(bodyOf(result)).title shouldBe "There is a problem with the service - Business tax account - GOV.UK"
@@ -122,7 +133,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(request)
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(request)
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
 
@@ -137,7 +155,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(request)
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(request)
 
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
 
@@ -149,7 +174,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
       "redirect to Agent Hub page" in new MakePaymentDetailsTest {
         override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
-        val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequest)
+        val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(fakeRequest)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
@@ -175,7 +207,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(serviceResponse))
         }
 
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequestWithSession)
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe expectedRedirectLocation
@@ -191,7 +230,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
             .returns(Future.successful(Left(PaymentSetupError)))
         }
 
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(fakeRequestWithSession)
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(fakeRequestWithSession)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
@@ -204,7 +250,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(request)
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(request)
 
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
 
@@ -219,7 +272,14 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           ("amountInPence", "10000"),
           ("taxPeriodMonth", "02"),
           ("taxPeriodYear", "2018"))
-        lazy val result: Future[Result] = target.makePayment(testAmountInPence, testMonth, testYear, testChargeType, testDueDate)(request)
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(request)
 
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
 

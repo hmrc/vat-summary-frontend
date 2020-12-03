@@ -32,15 +32,17 @@ class PaymentsConnector @Inject()(http: HttpClient,
                                   appConfig: AppConfig,
                                   metrics: MetricsService) {
 
-  private[connectors] lazy val setupUrl: String = appConfig.paymentsServiceUrl + appConfig.setupPaymentsJourneyPath
+  private[connectors] def vatUrl(chargeType: String): String =
+    appConfig.paymentsServiceUrl + appConfig.payViewAndChange + chargeType + "/journey/start"
 
   def setupJourney(data: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[String]] = {
 
     import connectors.httpParsers.PaymentsRedirectUrlHttpParser.PaymentsRedirectUrlReads
 
     val timer = metrics.postSetupPaymentsJourneyTimer.time()
+    val url = vatUrl(data.chargeType.toPathElement)
 
-    http.POST(setupUrl, data)
+    http.POST(url, data)
       .map {
         case url@Right(_) =>
           timer.stop()
@@ -51,4 +53,5 @@ class PaymentsConnector @Inject()(http: HttpClient,
           httpError
       }
   }
+
 }

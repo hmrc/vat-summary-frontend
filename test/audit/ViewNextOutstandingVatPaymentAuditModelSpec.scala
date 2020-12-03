@@ -34,6 +34,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         LocalDate.parse("2017-03-08"),
         9999,
         Some("#001"),
+        chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false
       )
     )
@@ -48,6 +49,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         LocalDate.parse("2017-03-08"),
         9999,
         Some("#001"),
+        chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false
       ),
       Payment(
@@ -57,6 +59,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
         LocalDate.parse("2017-05-08"),
         7777,
         Some("#002"),
+        chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false
       )
     )

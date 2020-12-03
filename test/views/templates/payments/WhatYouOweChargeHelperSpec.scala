@@ -38,6 +38,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     BigDecimal(100.00),
     LocalDate.parse("2018-03-03"),
     "18AA",
+    Some("XD002750002155"),
     isOverdue = false
   )
 

@@ -27,6 +27,7 @@ sealed trait OpenPaymentsModel {
   val due: LocalDate
   val periodKey: String
   val isOverdue: Boolean
+  val chargeReference: Option[String]
   def makePaymentRedirect: String
 }
 
@@ -45,6 +46,7 @@ object OpenPaymentsModel {
     periodFrom,
     periodTo,
     periodKey,
+    None,
     isOverdue
   )
 
@@ -57,6 +59,7 @@ object OpenPaymentsModel {
     amount,
     due,
     periodKey,
+    None,
     isOverdue
   )
 
@@ -69,6 +72,7 @@ object OpenPaymentsModel {
       payment.periodFrom,
       payment.periodTo,
       payment.periodKey,
+      payment.chargeReference,
       isOverdue
     )
     case payment: PaymentNoPeriod => OpenPaymentsModelNoPeriod(
@@ -76,6 +80,7 @@ object OpenPaymentsModel {
       payment.outstandingAmount,
       payment.due,
       payment.periodKey,
+      payment.chargeReference,
       isOverdue
     )
   }
@@ -92,14 +97,17 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        periodFrom: LocalDate,
                                        periodTo: LocalDate,
                                        periodKey: String,
+                                       chargeReference: Option[String],
                                        isOverdue: Boolean) extends OpenPaymentsModel {
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (amount * 100).toLong,
     taxPeriodMonth = periodTo.getMonthValue,
     taxPeriodYear = periodTo.getYear,
+    vatPeriodEnding = periodTo.toString,
     chargeType.value,
-    dueDate = due.toString
+    dueDate = due.toString,
+    chargeReference = chargeReference.getOrElse("noCR")
   ).url
 
 }
@@ -120,12 +128,14 @@ case class OpenPaymentsModelNoPeriod(chargeType: ChargeType,
                                      amount: BigDecimal,
                                      due: LocalDate,
                                      periodKey: String,
+                                     chargeReference: Option[String],
                                      isOverdue: Boolean) extends OpenPaymentsModel {
 
   override def makePaymentRedirect: String = controllers.routes.MakePaymentController.makePaymentNoPeriod(
     amountInPence = (amount * 100).toLong,
     chargeType.value,
-    dueDate = due.toString
+    dueDate = due.toString,
+    chargeReference = chargeReference.getOrElse("noCR")
   ).url
 
 }

@@ -19,7 +19,7 @@ package connectors
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.errors.UnexpectedStatusError
-import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
+import models.payments.{ChargeType, PaymentDetailsModel, ReturnDebitCharge}
 import stubs.PaymentsStub
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -34,8 +34,10 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
 
   "calling setupJourney valid data" should {
 
+    val testChargeType: ChargeType = ReturnDebitCharge
+
     "return redirect URL" in new Test {
-      override def setupStubs(): StubMapping = PaymentsStub.stubPaymentsJourneyInfo
+      override def setupStubs(): StubMapping = PaymentsStub.stubPaymentsJourneyInfo(testChargeType.toPathElement)
 
       val expected = Right("http://www.google.com")
 
@@ -47,10 +49,12 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
           amountInPence = 0,
           taxPeriodMonth = 0,
           taxPeriodYear = 0,
+          vatPeriodEnding = "1970-01-01",
           returnUrl = "",
           backUrl = "",
-          chargeType = ReturnDebitCharge,
-          dueDate = ""
+          chargeType = testChargeType,
+          dueDate = "",
+          chargeReference = None
         )
       ))
 
@@ -58,7 +62,7 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
     }
 
     "return an error" in new Test {
-      override def setupStubs(): StubMapping = PaymentsStub.stubErrorFromApi
+      override def setupStubs(): StubMapping = PaymentsStub.stubErrorFromApi(testChargeType.toPathElement)
 
       val expected = Left(UnexpectedStatusError("500", "blah"))
 
@@ -70,10 +74,12 @@ class PaymentsConnectorISpec extends IntegrationBaseSpec {
           0,
           0,
           0,
+          "1970-01-01",
           "",
           "",
-          ReturnDebitCharge,
-          ""
+          testChargeType,
+          "",
+          None
         )
       ))
 

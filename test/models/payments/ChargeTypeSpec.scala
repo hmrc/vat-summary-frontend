@@ -70,4 +70,12 @@ class ChargeTypeSpec extends UnitSpec {
       }
     }
   }
+
+  "The charge type .toPathElement method" should {
+
+    "correctly hyphenate and lowercase a string" in {
+      ChargeType.apply("VAT Further Interest").toPathElement shouldBe "vat-further-interest"
+    }
+
+  }
 }

@@ -16,6 +16,7 @@
 
 package models.payments
 
+import helpers.JsonObjectSugar
 import play.api.libs.json._
 
 sealed trait PaymentDetailsModel {
@@ -37,19 +38,23 @@ object PaymentDetailsModel {
             amountInPence: Long,
             taxPeriodMonth: Int,
             taxPeriodYear: Int,
+            vatPeriodEnding: String,
             returnUrl: String,
             backUrl: String,
             chargeType: ChargeType,
-            dueDate: String): PaymentDetailsModel =
+            dueDate: String,
+            chargeReference: Option[String]): PaymentDetailsModel =
     PaymentDetailsModelWithPeriod(taxType,
     taxReference,
     amountInPence,
     taxPeriodMonth,
     taxPeriodYear,
+    vatPeriodEnding,
     returnUrl,
     backUrl,
     chargeType,
-    dueDate
+    dueDate,
+    chargeReference
     )
 
   def apply(taxType: String,
@@ -58,14 +63,16 @@ object PaymentDetailsModel {
             returnUrl: String,
             backUrl: String,
             chargeType: ChargeType,
-            dueDate: String): PaymentDetailsModel =
+            dueDate: String,
+            chargeReference: Option[String]): PaymentDetailsModel =
     PaymentDetailsModelNoPeriod(taxType,
       taxReference,
       amountInPence,
       returnUrl,
       backUrl,
       chargeType,
-      dueDate
+      dueDate,
+      chargeReference
     )
 
   implicit val writes: Writes[PaymentDetailsModel] = Writes {
@@ -79,10 +86,12 @@ case class PaymentDetailsModelWithPeriod(taxType: String,
                                          amountInPence: Long,
                                          taxPeriodMonth: Int,
                                          taxPeriodYear: Int,
+                                         vatPeriodEnding: String,
                                          returnUrl: String,
                                          backUrl: String,
                                          chargeType: ChargeType,
-                                         dueDate: String) extends PaymentDetailsModel {
+                                         dueDate: String,
+                                         chargeReference: Option[String] = None) extends PaymentDetailsModel {
 
   val auditDetail = Map(
     "taxType" -> taxType,
@@ -98,21 +107,15 @@ case class PaymentDetailsModelWithPeriod(taxType: String,
 
 }
 
-object PaymentDetailsModelWithPeriod {
+object PaymentDetailsModelWithPeriod extends JsonObjectSugar {
 
   implicit val writes: Writes[PaymentDetailsModelWithPeriod] = Writes { paymentDetail =>
-    Json.obj(
-      "taxType" -> paymentDetail.taxType,
-      "reference" -> paymentDetail.taxReference,
+    jsonObjNoNulls(
+      "vrn" -> paymentDetail.taxReference,
+      "chargeReference" -> paymentDetail.chargeReference,
       "amountInPence" -> paymentDetail.amountInPence,
-      "extras" -> Json.obj(
-        "vatPeriod" -> Json.obj(
-          "month" -> paymentDetail.taxPeriodMonth,
-          "year" -> paymentDetail.taxPeriodYear
-        ),
-        "chargeType" -> paymentDetail.chargeType.value,
-        "dueDate" -> paymentDetail.dueDate
-      ),
+      "dueDate" -> paymentDetail.dueDate,
+      "vatPeriodEnding" -> paymentDetail.vatPeriodEnding,
       "returnUrl" -> paymentDetail.returnUrl,
       "backUrl" -> paymentDetail.backUrl
     )
@@ -125,7 +128,8 @@ case class PaymentDetailsModelNoPeriod(taxType: String,
                                        returnUrl: String,
                                        backUrl: String,
                                        chargeType: ChargeType,
-                                       dueDate: String) extends PaymentDetailsModel {
+                                       dueDate: String,
+                                       chargeReference: Option[String] = None) extends PaymentDetailsModel {
 
   val auditDetail = Map(
     "taxType" -> taxType,
@@ -139,19 +143,16 @@ case class PaymentDetailsModelNoPeriod(taxType: String,
 
 }
 
-object PaymentDetailsModelNoPeriod {
+object PaymentDetailsModelNoPeriod extends JsonObjectSugar {
 
   implicit val writes: Writes[PaymentDetailsModelNoPeriod] = Writes { paymentDetail =>
-    Json.obj(
-      "taxType" -> paymentDetail.taxType,
-      "reference" -> paymentDetail.taxReference,
+    jsonObjNoNulls(
+      "vrn" -> paymentDetail.taxReference,
       "amountInPence" -> paymentDetail.amountInPence,
-      "extras" -> Json.obj(
-        "chargeType" -> paymentDetail.chargeType.value,
-        "dueDate" -> paymentDetail.dueDate
-      ),
+      "dueDate" -> paymentDetail.dueDate,
       "returnUrl" -> paymentDetail.returnUrl,
-      "backUrl" -> paymentDetail.backUrl
+      "backUrl" -> paymentDetail.backUrl,
+      "chargeReference" -> paymentDetail.chargeReference
     )
   }
 }

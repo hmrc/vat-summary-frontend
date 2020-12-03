@@ -47,7 +47,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2017-10-25")
               ),
               "outstandingAmount" -> 1000.50,
-              "periodKey" -> "#001"
+              "periodKey" -> "#001",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Return Charge",
@@ -58,7 +59,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2018-10-25")
               ),
               "outstandingAmount" -> 1000.51,
-              "periodKey" -> "#002"
+              "periodKey" -> "#002",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Officer's Assessment",
@@ -69,7 +71,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2017-10-25")
               ),
               "outstandingAmount" -> 1000.52,
-              "periodKey" -> "#003"
+              "periodKey" -> "#003",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Officer's Assessment",
@@ -80,7 +83,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2017-10-25")
               ),
               "outstandingAmount" -> 1000.53,
-              "periodKey" -> "#004"
+              "periodKey" -> "#004",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> CentralAssessmentCharge,
@@ -91,7 +95,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2016-10-25")
               ),
               "outstandingAmount" -> 1000.25,
-              "periodKey" -> "#005"
+              "periodKey" -> "#005",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> DefaultSurcharge,
@@ -102,7 +107,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.27,
-              "periodKey" -> "#006"
+              "periodKey" -> "#006",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Error Correction",
@@ -113,7 +119,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.29,
-              "periodKey" -> "#007"
+              "periodKey" -> "#007",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Error Correction",
@@ -124,7 +131,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#007"
+              "periodKey" -> "#007",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> AAInterestCharge,
@@ -135,7 +143,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#008"
+              "periodKey" -> "#008",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT AA Return Charge",
@@ -146,7 +155,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#009"
+              "periodKey" -> "#009",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT AA Return Charge",
@@ -157,7 +167,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#010"
+              "periodKey" -> "#010",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Annual Accounting",
@@ -168,7 +179,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#011"
+              "periodKey" -> "#011",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> "VAT Annual Accounting",
@@ -179,7 +191,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#012"
+              "periodKey" -> "#012",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> OADefaultInterestCharge,
@@ -190,7 +203,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.30,
-              "periodKey" -> "#018"
+              "periodKey" -> "#018",
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> AACharge,
@@ -205,7 +219,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2016-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> OAFurtherInterestCharge,
@@ -220,7 +235,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2016-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> BnpRegPre2010Charge,
@@ -235,7 +251,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2015-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> BnpRegPost2010Charge,
@@ -250,7 +267,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2015-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> FtnMatPre2010Charge,
@@ -265,7 +283,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2014-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> FtnMatPost2010Charge,
@@ -280,7 +299,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2013-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> MiscPenaltyCharge,
@@ -295,7 +315,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2012-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> FtnEachPartnerCharge,
@@ -310,7 +331,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2011-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> MpPre2009Charge,
@@ -325,7 +347,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2010-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> MpRepeatedPre2009Charge,
@@ -340,7 +363,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2009-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> CivilEvasionPenaltyCharge,
@@ -355,7 +379,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> VatOAInaccuraciesFrom2009,
@@ -370,7 +395,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2017-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> InaccuraciesAssessmentsPenCharge,
@@ -385,7 +411,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> InaccuraciesReturnReplacedCharge,
@@ -400,7 +427,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> CarterPenaltyCharge,
@@ -415,7 +443,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> WrongDoingPenaltyCharge,
@@ -428,7 +457,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> FailureToSubmitRCSLCharge,
@@ -441,7 +471,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> FailureToNotifyRCSLCharge,
@@ -454,7 +485,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> paymentOnAccountInstalmentsMainType,
@@ -467,7 +499,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> paymentOnAccountReturnChargeMainType,
@@ -480,7 +513,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
               "mainType" -> paymentOnAccountReturnChargeMainType,
@@ -493,7 +527,8 @@ class PaymentsHttpParserSpec extends UnitSpec {
                   "dueDate" -> "2008-09-27",
                   "amount" -> 50.00
                 )
-              )
+              ),
+              "chargeReference" -> "XD002750002155"
             )
           )
         ).toString()
@@ -507,6 +542,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.50),
           periodKey = "#001",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -516,6 +552,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2018-10-25"),
           outstandingAmount = BigDecimal(1000.51),
           periodKey = "#002",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -525,6 +562,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.52),
           periodKey = "#003",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -534,6 +572,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.53),
           periodKey = "#004",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -543,6 +582,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2016-10-25"),
           outstandingAmount = BigDecimal(1000.25),
           periodKey = "#005",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -552,6 +592,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
           periodKey = "#006",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -561,6 +602,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.29),
           periodKey = "#007",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -570,6 +612,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#007",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -579,6 +622,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#008",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -588,6 +632,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#009",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -597,6 +642,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#010",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -606,6 +652,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#011",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -615,6 +662,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#012",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -624,6 +672,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
           periodKey = "#018",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -633,6 +682,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#009",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -642,6 +692,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#010",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -651,6 +702,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#019",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -660,6 +712,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#011",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -669,6 +722,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2014-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#012",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -678,6 +732,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2013-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#013",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -687,6 +742,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2012-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#014",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -696,6 +752,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2011-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#015",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -705,6 +762,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2010-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#016",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -714,6 +772,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2009-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#017",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -723,6 +782,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = "#018",
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -732,6 +792,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2017-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#020"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -741,6 +802,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -750,6 +812,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -759,6 +822,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -766,6 +830,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -773,6 +838,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -780,6 +846,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -787,6 +854,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -794,6 +862,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         Payment(
@@ -801,6 +870,7 @@ class PaymentsHttpParserSpec extends UnitSpec {
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
+          chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         )
       )))

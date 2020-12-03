@@ -49,7 +49,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           due = LocalDate.parse("2019-01-15"),
           outstandingAmount = 10000,
           periodKey = "15AC",
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          chargeReference = Some("XD002750002155")
         ),
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
@@ -58,7 +59,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           due = LocalDate.parse("2019-01-16"),
           outstandingAmount = 10000,
           periodKey = "15AC",
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          chargeReference = Some("XD002750002155")
         )
       )))
 

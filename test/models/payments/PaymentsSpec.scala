@@ -32,6 +32,7 @@ class PaymentsSpec extends UnitSpec {
       LocalDate.parse("2017-03-08"),
       9999,
       "#001",
+      Some("XD002750002155"),
       ddCollectionInProgress = false
     )
 
@@ -42,7 +43,8 @@ class PaymentsSpec extends UnitSpec {
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
-        |"periodKey":"#001"
+        |"periodKey":"#001",
+        |"chargeReference": "XD002750002155"
         |}"""
         .stripMargin.replace("\n", "")
 
@@ -64,6 +66,7 @@ class PaymentsSpec extends UnitSpec {
           LocalDate.parse("2017-03-08"),
           9999,
           "#001",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
@@ -73,6 +76,7 @@ class PaymentsSpec extends UnitSpec {
           LocalDate.parse("2017-05-08"),
           7777,
           "#002",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
       )
@@ -86,14 +90,16 @@ class PaymentsSpec extends UnitSpec {
         |"taxPeriodTo":"2017-03-01",
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
-        |"periodKey":"#001"
+        |"periodKey":"#001",
+        |"chargeReference": "XD002750002155"
         |},{
         |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
         |"taxPeriodTo":"2017-04-01",
         |"items":[{"dueDate":"2017-05-08"}, {"dueDate":"2017-05-09"}],
         |"outstandingAmount":7777,
-        |"periodKey":"#002"
+        |"periodKey":"#002",
+        |"chargeReference": "XD002750002155"
         |}]}"""
         .stripMargin.replace("\n", "")
 

@@ -56,12 +56,12 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     }
   }
 
-
-  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] =
+  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] = {
     paymentsConnector.setupJourney(journeyDetails).map {
       case Right(url) => Right(url)
       case Left(_) => Left(PaymentSetupError)
     }
+  }
 
   def setupDirectDebitJourney(directDebitJourneyDetails: DirectDebitDetailsModel)
                              (implicit  hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] =

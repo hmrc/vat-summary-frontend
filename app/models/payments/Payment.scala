@@ -38,6 +38,7 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              due: LocalDate,
                              outstandingAmount: BigDecimal,
                              periodKey: String,
+                             chargeReference: Option[String],
                              ddCollectionInProgress: Boolean) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
@@ -53,6 +54,7 @@ case class PaymentNoPeriod(chargeType: ChargeType,
                            due: LocalDate,
                            outstandingAmount: BigDecimal,
                            periodKey: String,
+                           chargeReference: Option[String],
                            ddCollectionInProgress: Boolean) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
@@ -70,10 +72,11 @@ object Payment {
                             due: LocalDate,
                             outstandingAmount: BigDecimal,
                             periodKey: Option[String],
+                            chargeReference: Option[String],
                             ddCollectionInProgress: Boolean): Payment =
     (periodFrom, periodTo) match {
-      case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey, ddCollectionInProgress)
-      case (None, None) => apply(chargeType, due, outstandingAmount, periodKey, ddCollectionInProgress)
+      case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress)
+      case (None, None) => apply(chargeType, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress)
       case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
   }
 
@@ -83,6 +86,7 @@ object Payment {
             due: LocalDate,
             outstandingAmount: BigDecimal,
             periodKey: Option[String],
+            chargeReference: Option[String],
             ddCollectionInProgress: Boolean): PaymentWithPeriod =
     PaymentWithPeriod(
       chargeType,
@@ -91,6 +95,7 @@ object Payment {
       due,
       outstandingAmount,
       periodKey.getOrElse("0000"),
+      chargeReference,
       ddCollectionInProgress
     )
 
@@ -98,12 +103,14 @@ object Payment {
             due: LocalDate,
             outstandingAmount: BigDecimal,
             periodKey: Option[String],
+            chargeReference: Option[String],
             ddCollectionInProgress: Boolean): PaymentNoPeriod =
     PaymentNoPeriod(
       chargeType,
       due,
       outstandingAmount,
       periodKey.getOrElse("0000"),
+      chargeReference,
       ddCollectionInProgress
     )
 
@@ -114,6 +121,7 @@ object Payment {
     (JsPath \ "items")(0).\("dueDate").read[LocalDate] and
     (JsPath \ "outstandingAmount").read[BigDecimal] and
     (JsPath \ "periodKey").readNullable[String] and
+    (JsPath \ "chargeReference").readNullable[String] and
     (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
   )(Payment.createPayment _)
 

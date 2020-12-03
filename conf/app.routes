@@ -7,8 +7,8 @@ GET        /payment-history                                                     
 GET        /vat-certificate                                                                        controllers.VatCertificateController.show
 GET        /accessibility-statement                                                                controllers.AccessibilityStatementController.show
 
-GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:chargeType/:dueDate        controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String)
-GET        /make-payment/:amountInPence/:chargeType/:dueDate                                       controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String)
+GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:vatPeriodEnding/:chargeType/:dueDate/:chargeReference        controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, vatPeriodEnding: String, chargeType: String, dueDate: String, chargeReference: String)
+GET        /make-payment/:amountInPence/:chargeType/:dueDate/:chargeReference                                                        controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String, chargeReference: String)
 
 #Portal hand-off Routes
 GET        /portal-what-you-owe                                                                    controllers.PortalController.hybridWYO

@@ -61,7 +61,7 @@ object ConfigKeys {
   val vatReturn: String = "view-vat-returns-frontend.returnUrl"
 
   val paymentsServiceBase: String = "pay-api"
-  val setupPaymentsJourneyPath: String = "microservice.services.pay-api.endpoints.setupJourney"
+  val payViewAndChangePath: String = "microservice.services.pay-api.endpoints.payViewAndChange"
 
   val paymentsReturnBase: String = "payments-frontend.returnHost"
   val paymentsReturnUrl: String = "payments-frontend.returnUrl"
