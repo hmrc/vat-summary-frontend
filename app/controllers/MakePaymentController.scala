@@ -69,7 +69,7 @@ class MakePaymentController @Inject()(val enrolmentsAuthService: EnrolmentsAuthS
               Some(chargeReference)
             } else {
               None
-            },
+            }
         )
 
         makePaymentHandoff(paymentDetails)
