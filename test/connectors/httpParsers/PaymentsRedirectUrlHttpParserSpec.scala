@@ -34,9 +34,8 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
       val json =
         s"""
            |{
-           |  "links": {
-           |    "nextUrl": "$redirectUrl"
-           |  }
+           |  "journeyId": "592d4a09cdc8e04b00021459",
+           |  "nextUrl": "$redirectUrl"
            |}
         """.stripMargin
 
@@ -54,14 +53,10 @@ class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
     "the HTTP response status is not OK (!200)" should {
 
       val errorBody =
-        """{
-          |  "errors": [
-          |    {
-          |      "code": "INVALID_TAXTYPE",
-          |      "message": "The tax type is invalid",
-          |      "path": "/taxType"
-          |    }
-          |  ]
+        """
+          |{
+          |  "statusCode": 400,
+          |  "message": "'amount' This field is mandatory."
           |}""".stripMargin
 
       val httpResponse = HttpResponse(
