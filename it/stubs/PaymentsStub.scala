@@ -37,9 +37,8 @@ object PaymentsStub extends WireMockMethods {
 
   private val journeyInfo = Json.parse(
     """{
-      |  "links": {
-      |   "nextUrl": "http://www.google.com"
-      |  }
+      |  "journeyId": "592d4a09cdc8e04b00021459",
+      |  "nextUrl": "http://www.google.com"
       |}""".stripMargin
   )
 
