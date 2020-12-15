@@ -22,47 +22,75 @@ import uk.gov.hmrc.play.test.UnitSpec
 class PaymentDetailsModelSpec extends UnitSpec {
 
   "PaymentDetailsModel.apply" when {
-    "given taxPeriod details when converted to JSON" should {
-      "result in the correct JSON format" in {
-        val payment = PaymentDetailsModel(
-          taxType = "vat",
-          taxReference = "123456789",
-          amountInPence = 123456,
-          taxPeriodMonth = 3,
-          taxPeriodYear = 2018,
-          returnUrl = "https://www.tax.service.gov.uk/mtdfb-page",
-          backUrl = "https://www.tax.service.gov.uk/mtdfb-page2",
-          chargeType = ReturnDebitCharge,
-          dueDate = "2018-08-08"
-        )
+    "not given a chargeReference" when {
+      "given taxPeriod details when converted to JSON" should {
+        "result in the correct JSON format" in {
+          val payment = PaymentDetailsModel(
+            taxType = "vat",
+            taxReference = "123456789",
+            amountInPence = 123456,
+            taxPeriodMonth = 3,
+            taxPeriodYear = 2018,
+            vatPeriodEnding = "2018-08-08",
+            returnUrl = "https://www.tax.service.gov.uk/mtdfb-page",
+            backUrl = "https://www.tax.service.gov.uk/mtdfb-page2",
+            chargeType = ReturnDebitCharge,
+            dueDate = "2018-08-08",
+            chargeReference = None
+          )
 
-        val expectedJson = Json.parse(
-          """
-            |{
-            |  "taxType": "vat",
-            |  "reference": "123456789",
-            |  "amountInPence": 123456,
-            |  "extras" : {
-            |    "vatPeriod" : {
-            |      "month" : 3,
-            |      "year" : 2018
-            |    },
-            |    "chargeType": "VAT Return Debit Charge",
-            |    "dueDate": "2018-08-08"
-            |  },
-            |  "returnUrl": "https://www.tax.service.gov.uk/mtdfb-page",
-            |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
-            |}
+          val expectedJson = Json.parse(
+            """
+              |{
+              |  "vrn": "123456789",
+              |  "amountInPence": 123456,
+              |  "dueDate": "2018-08-08",
+              |  "vatPeriodEnding": "2018-08-08",
+              |  "returnUrl": "https://www.tax.service.gov.uk/mtdfb-page",
+              |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
+              |}
           """.stripMargin
-        )
+          )
 
-        val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
+          val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
 
-        actualJson shouldBe expectedJson
+          actualJson shouldBe expectedJson
+        }
+      }
+
+      "not given taxPeriod details when converted to JSON" should {
+        "result in the correct JSON format" in {
+          val payment = PaymentDetailsModel(
+            taxType = "vat",
+            taxReference = "123456789",
+            amountInPence = 123456,
+            returnUrl = "https://www.tax.service.gov.uk/mtdfb-page",
+            backUrl = "https://www.tax.service.gov.uk/mtdfb-page2",
+            chargeType = ReturnDebitCharge,
+            dueDate = "2018-08-08",
+            chargeReference = None
+          )
+
+          val expectedJson = Json.parse(
+            """
+              |{
+              |  "vrn": "123456789",
+              |  "amountInPence": 123456,
+              |  "dueDate": "2018-08-08",
+              |  "returnUrl": "https://www.tax.service.gov.uk/mtdfb-page",
+              |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
+              |}
+          """.stripMargin
+          )
+
+          val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
+
+          actualJson shouldBe expectedJson
+        }
       }
     }
 
-    "not given taxPeriod details when converted to JSON" should {
+    "given a chargeReference" should {
       "result in the correct JSON format" in {
         val payment = PaymentDetailsModel(
           taxType = "vat",
@@ -71,21 +99,19 @@ class PaymentDetailsModelSpec extends UnitSpec {
           returnUrl = "https://www.tax.service.gov.uk/mtdfb-page",
           backUrl = "https://www.tax.service.gov.uk/mtdfb-page2",
           chargeType = ReturnDebitCharge,
-          dueDate = "2018-08-08"
+          dueDate = "2018-08-08",
+          chargeReference = Some("XD002750002155")
         )
 
         val expectedJson = Json.parse(
           """
             |{
-            |  "taxType": "vat",
-            |  "reference": "123456789",
+            |  "vrn": "123456789",
             |  "amountInPence": 123456,
-            |  "extras" : {
-            |    "chargeType": "VAT Return Debit Charge",
-            |    "dueDate": "2018-08-08"
-            |  },
+            |  "dueDate": "2018-08-08",
             |  "returnUrl": "https://www.tax.service.gov.uk/mtdfb-page",
-            |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2"
+            |  "backUrl": "https://www.tax.service.gov.uk/mtdfb-page2",
+            |  "chargeReference": "XD002750002155"
             |}
           """.stripMargin
         )

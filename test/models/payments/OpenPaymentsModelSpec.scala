@@ -31,6 +31,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
+      chargeReference = None,
       ddCollectionInProgress = false
     ),
     isOverdue = false
@@ -42,6 +43,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
+      chargeReference = None,
       ddCollectionInProgress = false
     ),
     isOverdue = false
@@ -134,7 +136,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         openPaymentsModelNoPeriod.makePaymentRedirect shouldBe controllers.routes.MakePaymentController.makePaymentNoPeriod(
           30000,
           "VAT OA Debit Charge",
-          "2003-04-05"
+          "2003-04-05",
+          "noCR"
         ).url
       }
     }
@@ -146,6 +149,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         due = LocalDate.parse("2003-04-05"),
         amount = 300.00,
         periodKey = "#003",
+        chargeReference = Some("XD002750002155"),
         isOverdue = false
       )
 
@@ -174,8 +178,10 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
           30000,
           3,
           2001,
+          "2001-03-31",
           "VAT OA Debit Charge",
-          "2003-04-05"
+          "2003-04-05",
+          "noCR"
         ).url
       }
     }
@@ -189,6 +195,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         periodTo = LocalDate.parse("2001-03-31"),
         amount = 300.00,
         periodKey = "#003",
+        chargeReference = Some("XD002750002155"),
         isOverdue = false
       )
 

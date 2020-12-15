@@ -39,6 +39,7 @@ object TestModels {
     LocalDate.parse("2019-03-03"),
     1,
     Some("#001"),
+    chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false
   )))
 

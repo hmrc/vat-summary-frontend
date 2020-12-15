@@ -29,10 +29,12 @@ class PayVatReturnChargeAuditModelSpec extends UnitSpec {
     77777,
     10,
     2018,
+    "2018-01-01",
     "/homepage",
     "/vat-overview",
     ReturnDebitCharge,
-    "2018-01-01"
+    "2018-01-01",
+    chargeReference = None
   )
 
   val user = User("999999999")

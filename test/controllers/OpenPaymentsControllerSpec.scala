@@ -74,6 +74,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       LocalDate.parse("2017-01-01"),
       BigDecimal("10000"),
       Some("ABCD"),
+      chargeReference = Some("XD002750002155"),
       ddCollectionInProgress = false
     )
 
@@ -82,6 +83,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       LocalDate.parse("2017-01-01"),
       BigDecimal("0"),
       None,
+      chargeReference = Some("XD002750002155"),
       ddCollectionInProgress = false
     )
 
@@ -416,6 +418,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 due = LocalDate.parse("2017-01-01"),
                 BigDecimal("10000"),
                 Some("ABCD"),
+                chargeReference = None,
                 ddCollectionInProgress = true
               )
 
@@ -452,6 +455,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 due = LocalDate.parse("2017-01-01"),
                 BigDecimal("10000"),
                 Some("ABCD"),
+                chargeReference = None,
                 ddCollectionInProgress = false
               )
 
@@ -489,6 +493,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
               due = LocalDate.parse("2020-01-01"),
               BigDecimal("10000"),
               Some("ABCD"),
+              chargeReference = None,
               ddCollectionInProgress = false
             )
 
@@ -530,6 +535,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
               due = LocalDate.parse("2017-01-01"),
               BigDecimal("10000"),
               Some("ABCD"),
+              chargeReference = None,
               ddCollectionInProgress = false
             )
 

@@ -21,7 +21,7 @@ import audit.models.PayVatReturnChargeAuditModel
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
-import models.payments.{ChargeType, PaymentDetailsModel, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod}
+import models.payments._
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -43,7 +43,13 @@ class MakePaymentController @Inject()(val enrolmentsAuthService: EnrolmentsAuthS
                                       paymentsError: PaymentsError)
   extends FrontendController(mcc) with I18nSupport {
 
-  def makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, chargeType: String, dueDate: String): Action[AnyContent] =
+  def makePayment(amountInPence: Long,
+                  taxPeriodMonth: Int,
+                  taxPeriodYear: Int,
+                  vatPeriodEnding: String,
+                  chargeType: String,
+                  dueDate: String,
+                  chargeReference: String): Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>
       implicit user =>
 
@@ -53,31 +59,56 @@ class MakePaymentController @Inject()(val enrolmentsAuthService: EnrolmentsAuthS
           amountInPence = amountInPence,
           taxPeriodMonth = taxPeriodMonth,
           taxPeriodYear = taxPeriodYear,
+          vatPeriodEnding = vatPeriodEnding,
           returnUrl = appConfig.paymentsReturnUrl,
           backUrl = appConfig.paymentsBackUrl,
           chargeType = ChargeType.apply(chargeType),
-          dueDate = dueDate
+          dueDate = dueDate,
+          chargeReference =
+            if (!(chargeReference == "noCR") && !isReturn(ChargeType.apply(chargeType))) {
+              Some(chargeReference)
+            } else {
+              None
+            },
         )
 
         makePaymentHandoff(paymentDetails)
     }
 
-  def makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String): Action[AnyContent] =
+  private def isReturn(chargeType: ChargeType): Boolean = chargeType match {
+    case ReturnDebitCharge => true
+    case _ => false
+  }
+
+  def makePaymentNoPeriod(amountInPence: Long,
+                          chargeType: String,
+                          dueDate: String,
+                          chargeReference: String): Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>
       implicit user =>
+        if(!isReturn(ChargeType.apply(chargeType)) && !(chargeReference == "noCR")) {
+          val paymentDetails = PaymentDetailsModelNoPeriod(
+            taxType = "vat",
+            taxReference = user.vrn,
+            amountInPence = amountInPence,
+            returnUrl = appConfig.paymentsReturnUrl,
+            backUrl = appConfig.paymentsBackUrl,
+            chargeType = ChargeType.apply(chargeType),
+            dueDate = dueDate,
+            chargeReference = Some(chargeReference)
+          )
 
-        val paymentDetails = PaymentDetailsModelNoPeriod(
-          taxType = "vat",
-          taxReference = user.vrn,
-          amountInPence = amountInPence,
-          returnUrl = appConfig.paymentsReturnUrl,
-          backUrl = appConfig.paymentsBackUrl,
-          chargeType = ChargeType.apply(chargeType),
-          dueDate = dueDate
-        )
+          makePaymentHandoff(paymentDetails)
 
-        makePaymentHandoff(paymentDetails)
-
+        } else if(chargeReference == "noCR") {
+          Logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs a charge " +
+            "reference, but this payment does not have one")
+          Future.successful(InternalServerError)
+        } else {
+          Logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs to have " +
+            "period information")
+          Future.successful(InternalServerError)
+        }
     }
 
   private def makePaymentHandoff(paymentDetails: PaymentDetailsModel)(implicit request: Request[_],

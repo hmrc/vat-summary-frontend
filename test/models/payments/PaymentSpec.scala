@@ -42,7 +42,8 @@ class PaymentSpec extends UnitSpec {
             )
           ),
           "outstandingAmount" -> 9999,
-          "periodKey" -> "#001"
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155"
         )
 
         val paymentWithPeriodModel = PaymentWithPeriod(
@@ -52,6 +53,7 @@ class PaymentSpec extends UnitSpec {
           due = LocalDate.parse(dueDate),
           outstandingAmount = 9999,
           periodKey = "#001",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
         paymentJson.as[Payment] shouldBe paymentWithPeriodModel
@@ -69,7 +71,8 @@ class PaymentSpec extends UnitSpec {
             )
           ),
           "outstandingAmount" -> -9999,
-          "periodKey" -> "#001"
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155"
         )
 
         val paymentNoPeriodModel = PaymentNoPeriod(
@@ -77,6 +80,7 @@ class PaymentSpec extends UnitSpec {
           due = LocalDate.parse(dueDate),
           outstandingAmount = -9999,
           periodKey = "#001",
+          Some("XD002750002155"),
           ddCollectionInProgress = false
         )
         paymentJson.as[Payment] shouldBe paymentNoPeriodModel
@@ -95,7 +99,8 @@ class PaymentSpec extends UnitSpec {
             )
           ),
           "outstandingAmount" -> 9999,
-          "periodKey" -> "#001"
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155"
         )
 
         val exception = intercept[Exception] {
@@ -118,7 +123,8 @@ class PaymentSpec extends UnitSpec {
           )
         ),
         "outstandingAmount" -> 0,
-        "periodKey" -> "#001"
+        "periodKey" -> "#001",
+        "chargeReference" -> "XD002750002155"
       )
 
       val model = PaymentWithPeriod(
@@ -128,6 +134,7 @@ class PaymentSpec extends UnitSpec {
         due = LocalDate.parse(dueDate),
         outstandingAmount = 0,
         periodKey = "#001",
+        Some("XD002750002155"),
         ddCollectionInProgress = true
       )
 

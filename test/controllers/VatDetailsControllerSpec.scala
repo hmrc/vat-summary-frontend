@@ -648,6 +648,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 due = LocalDate.parse("2017-01-01"),
                 BigDecimal("10000"),
                 Some("ABCD"),
+                chargeReference = Some("XD002750002155"),
                 ddCollectionInProgress = true
               )
 
@@ -668,6 +669,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 due = LocalDate.parse("2017-01-01"),
                 BigDecimal("10000"),
                 Some("ABCD"),
+                chargeReference = Some("XD002750002155"),
                 ddCollectionInProgress = false
               )
 
@@ -689,6 +691,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
               due = LocalDate.parse("2020-01-01"),
               BigDecimal("10000"),
               Some("ABCD"),
+              chargeReference = Some("XD002750002155"),
               ddCollectionInProgress = false
             )
 
@@ -712,6 +715,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
               due = LocalDate.parse("2017-01-01"),
               BigDecimal("10000"),
               Some("ABCD"),
+              chargeReference = Some("XD002750002155"),
               ddCollectionInProgress = false
             )
 

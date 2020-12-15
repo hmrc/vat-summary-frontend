@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package connectors
+package helpers
 
-import controllers.ControllerBaseSpec
-import mocks.MockMetricsService
-import uk.gov.hmrc.http.HttpClient
+import play.api.libs.json.{JsNull, JsObject, Json}
 
-class PaymentsConnectorSpec extends ControllerBaseSpec {
+trait JsonObjectSugar {
 
-  "The payments connector" should {
+  def jsonObjNoNulls(fields: (String, Json.JsValueWrapper)*): JsObject =
+    JsObject(Json.obj(fields:_*).fields.filterNot(_._2 == JsNull))
 
-    val connector = new PaymentsConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
-
-    "generate the correct endpoint URL" in {
-
-      connector.vatUrl("vat-return-debit-charge") shouldEqual
-        "/pay-api/view-and-change/vat/vat-return-debit-charge/journey/start"
-
-    }
-  }
 }

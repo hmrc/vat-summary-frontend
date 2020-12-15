@@ -22,7 +22,12 @@ import play.api.libs.json._
 
 sealed trait ChargeType {
   val value: String
+
   override def toString: String = value
+
+  def toPathElement: String = {
+    value.map(_.toLower).replace(' ', '-')
+  }
 }
 
 case object VatIndirectTaxRevenueRecovery extends ChargeType {

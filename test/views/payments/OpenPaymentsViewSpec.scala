@@ -77,6 +77,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       periodFrom = LocalDate.parse("2001-01-01"),
       periodTo = LocalDate.parse("2001-03-31"),
       periodKey = "#001",
+      chargeReference = Some("XD002750002155"),
       isOverdue = false
     ),
     OpenPaymentsModelWithPeriod(
@@ -86,6 +87,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2003-01-01"),
       LocalDate.parse("2003-03-31"),
       "#003",
+      chargeReference = Some("XD002750002155"),
       isOverdue = false
     )
   )
@@ -181,7 +183,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
       "render the correct Pay now link" in {
         element(Selectors.payLink(2)).attr("href") should endWith(
-          "30000/3/2003/VAT%20AA%20Default%20Interest/2003-04-05"
+          "30000/3/2003/2003-03-31/VAT%20AA%20Default%20Interest/2003-04-05/XD002750002155"
         )
       }
     }
@@ -219,7 +221,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct link to Pay now" in {
       element(Selectors.payLink(1)).attr("href") should endWith(
-        "200000000001/3/2001/VAT%20Return%20Debit%20Charge/2001-04-08"
+        "200000000001/3/2001/2001-03-31/VAT%20Return%20Debit%20Charge/2001-04-08/XD002750002155"
       )
     }
   }
@@ -279,6 +281,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
             periodFrom = LocalDate.parse("2018-01-01"),
             periodTo = LocalDate.parse("2018-02-01"),
             periodKey = "#001",
+            chargeReference = Some("XD002750002155"),
             isOverdue = false
           )),
           hasDirectDebit = Some(false)

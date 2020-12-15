@@ -23,15 +23,15 @@ import play.api.libs.json.Json
 
 object PaymentsStub extends WireMockMethods {
 
-  private val setupJourneyUrl = "/payment/start"
+  private def setupJourneyUrl(chargeType: String) = s"/pay-api/view-and-change/vat/$chargeType/journey/start"
 
-  def stubPaymentsJourneyInfo: StubMapping = {
-    when(method = POST, uri = setupJourneyUrl)
+  def stubPaymentsJourneyInfo(chargeType: String): StubMapping = {
+    when(method = POST, uri = setupJourneyUrl(chargeType))
       .thenReturn(status = CREATED, body = journeyInfo)
   }
 
-  def stubErrorFromApi: StubMapping = {
-    when(method = POST, uri = setupJourneyUrl)
+  def stubErrorFromApi(chargeType: String): StubMapping = {
+    when(method = POST, uri = setupJourneyUrl(chargeType))
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorBody)
   }
 

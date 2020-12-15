@@ -52,7 +52,7 @@ trait AppConfig {
   val btaManageAccountUrl: String
   val btaHelpAndContactUrl: String
   val paymentsServiceUrl: String
-  val setupPaymentsJourneyPath: String
+  val payViewAndChange: String
   val paymentsReturnUrl: String
   val paymentsBackUrl: String
   val unauthenticatedPaymentsUrl: String
@@ -153,7 +153,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val btaHelpAndContactUrl: String = helpAndContactFrontendUrl + sc.getString(Keys.helpAndContactHelpUrl)
 
   override lazy val paymentsServiceUrl: String = sc.baseUrl(Keys.paymentsServiceBase)
-  override lazy val setupPaymentsJourneyPath: String = sc.getString(Keys.setupPaymentsJourneyPath)
+  override lazy val payViewAndChange: String = sc.getString(Keys.payViewAndChangePath)
 
   override lazy val directDebitServiceUrl: String = sc.baseUrl(Keys.directDebitServiceBase)
   override lazy val setupDirectDebitsJourneyPath: String = sc.getString(Keys.setupDirectDebitJourneyPath)
