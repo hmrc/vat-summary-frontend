@@ -17,6 +17,7 @@
 package controllers
 
 import common.{EnrolmentKeys => Keys}
+import common.SessionKeys
 import config.AppConfig
 import controllers.predicates.{AgentPredicate, HybridUserPredicate}
 import javax.inject.{Inject, Singleton}
@@ -30,6 +31,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.Unauthorised
+import config.ServiceErrorHandler
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,6 +40,8 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
                                      val hybridUserPredicate: HybridUserPredicate,
                                      val agentPredicate: AgentPredicate,
+                                     val accountDetailsService: AccountDetailsService,
+                                     val serviceErrorHandler: ServiceErrorHandler,
                                      implicit val appConfig: AppConfig,
                                      implicit val ec: ExecutionContext,
                                      unauthorised: Unauthorised) extends FrontendController(mcc) with I18nSupport {
@@ -83,13 +87,24 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
       vatEnrolments.collectFirst {
         case Enrolment(Keys.mtdVatEnrolmentKey, EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn) :: _, status, _) =>
 
-          val user = User(vrn, status == Keys.activated, containsNonMtdVat)
+          implicit val user = User(vrn, status == Keys.activated, containsNonMtdVat)
 
-          if(checkMigrationStatus) {
-            hybridUserPredicate.authoriseMigratedUserAction(block)(request, user)
-          } else {
-            block(request)(user)
+          request.session.get(SessionKeys.insolventWithoutAccessKey) match {
+            case Some("true") => Future.successful(Forbidden(unauthorised()))
+            case Some("false") => checkMigration(block, checkMigrationStatus)
+            case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
+              case Right(details) if details.isInsolventWithoutAccess =>
+                Logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
+                Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
+              case Right(_) =>
+                Logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
+                checkMigration(block, checkMigrationStatus)
+              case _ =>
+                Logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
+                Future.successful(serviceErrorHandler.showInternalServerError)
+            }
           }
+
       } getOrElse {
         Logger.warn("[AuthPredicate][authoriseAsNonAgent] Non-agent with invalid VRN")
         Future.successful(InternalServerError)
@@ -109,4 +124,13 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
     block,
     allowAgentAccess = appConfig.features.agentAccess()
   )
+
+  def checkMigration(block: Request[AnyContent] => User => Future[Result], checkMigrationStatus: Boolean)
+                    (implicit request: Request[AnyContent], user: User): Future[Result] =
+
+    if(checkMigrationStatus) {
+      hybridUserPredicate.authoriseMigratedUserAction(block)(request, user)
+    } else {
+      block(request)(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
+    }
 }

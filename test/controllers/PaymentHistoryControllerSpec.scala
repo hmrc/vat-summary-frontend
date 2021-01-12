@@ -63,6 +63,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     enrolmentsAuthService,
     hybridUserPredicate,
     agentPredicate,
+    mockAccountDetailsService,
+    mockServiceErrorHandler,
     mockAppConfig,
     ec,
     unauthorised

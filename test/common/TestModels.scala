@@ -88,8 +88,12 @@ object TestModels {
     Some(ChangeIndicators(false)),
     isMissingTrader = false,
     hasPendingPpobChanges = false,
-    mandationStatus = "MTDfB"
+    mandationStatus = "MTDfB",
+    isInsolvent = false,
+    continueToTrade = Option(true)
   )
+
+  val customerInformationInsolvent: CustomerInformation = customerInformationMax.copy(isInsolvent = true, continueToTrade = Option(false))
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
 
@@ -113,8 +117,12 @@ object TestModels {
     None,
     isMissingTrader = false,
     hasPendingPpobChanges = false,
-    mandationStatus = "MTDfB"
+    mandationStatus = "MTDfB",
+    isInsolvent = false,
+    continueToTrade = Option(true)
   )
+
+  val customerDetailsInsolvent: CustomerInformation = customerInformationMax.copy(isInsolvent = true, continueToTrade = Some(false))
 
   val customerInformationMTDfBExempt: CustomerInformation = customerInformationMin.copy(mandationStatus = "MTDfB Exempt")
   val customerInformationNonMTDfB: CustomerInformation = customerInformationMin.copy(mandationStatus = "Non MTDfB")

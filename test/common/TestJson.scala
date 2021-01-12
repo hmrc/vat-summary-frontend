@@ -28,7 +28,9 @@ object TestJson {
       "tradingName" -> "Cheapo Clothing",
       "isPartialMigration" ->  false,
       "vatRegistrationDate" -> "2017-01-01",
-      "customerMigratedToETMPDate" -> "2017-05-05"
+      "customerMigratedToETMPDate" -> "2017-05-05",
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(
@@ -89,7 +91,9 @@ object TestJson {
 
   val customerInfoJsonMin: JsValue = Json.obj(
     "customerDetails" -> Json.obj(
-      "isPartialMigration" ->  false
+      "isPartialMigration" ->  false,
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(

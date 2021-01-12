@@ -49,7 +49,7 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
-  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false")
 
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
@@ -65,6 +65,8 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
     enrolmentsAuthService,
     hybridUserPredicate,
     agentPredicate,
+    mockAccountDetailsService,
+    mockServiceErrorHandler,
     mockAppConfig,
     ec,
     unauthorised
@@ -75,6 +77,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
     GovUKSessionKeys.authToken -> "Bearer Token",
     SessionKeys.migrationToETMP -> "2018-01-01"
   )
+
+  lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
 
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)

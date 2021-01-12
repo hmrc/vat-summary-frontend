@@ -98,6 +98,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       enrolmentsAuthService,
       hybridUserPredicate,
       agentPredicate,
+      mockAccountDetailsService,
+      mockServiceErrorHandler,
       mockAppConfig,
       ec,
       unauthorised

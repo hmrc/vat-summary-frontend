@@ -66,7 +66,9 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some(ChangeIndicators(deregister = false)),
         isMissingTrader = false,
         mandationStatus = "MTDfB",
-        hasPendingPpobChanges = false
+        hasPendingPpobChanges = false,
+        isInsolvent = false,
+        continueToTrade = Some(true)
       ))
 
       setupStubs()

@@ -52,6 +52,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
       "return 200" in new Test {
         private val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
+
       }
     }
 
