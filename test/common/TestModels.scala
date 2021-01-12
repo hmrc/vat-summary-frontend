@@ -122,8 +122,6 @@ object TestModels {
     continueToTrade = Option(true)
   )
 
-  val customerDetailsInsolvent: CustomerInformation = customerInformationMax.copy(isInsolvent = true, continueToTrade = Some(false))
-
   val customerInformationMTDfBExempt: CustomerInformation = customerInformationMin.copy(mandationStatus = "MTDfB Exempt")
   val customerInformationNonMTDfB: CustomerInformation = customerInformationMin.copy(mandationStatus = "Non MTDfB")
   val customerInformationJunkStatus: CustomerInformation = customerInformationMin.copy(mandationStatus = "Some Status")
