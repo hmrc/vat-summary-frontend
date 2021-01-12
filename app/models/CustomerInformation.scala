@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,9 @@ case class CustomerInformation(organisationName: Option[String],
                                changeIndicators: Option[ChangeIndicators],
                                isMissingTrader: Boolean,
                                hasPendingPpobChanges: Boolean,
-                               mandationStatus: String) {
+                               mandationStatus: String,
+                               isInsolvent: Boolean,
+                               continueToTrade: Option[Boolean]) {
 
   def entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
@@ -46,6 +48,11 @@ case class CustomerInformation(organisationName: Option[String],
       case (None, None, None, orgName) => orgName
       case _ => tradingName
     }
+
+  def isInsolventWithoutAccess: Boolean = continueToTrade match {
+    case Some(false) => isInsolvent
+    case _ => false
+  }
 
   val partyTypeMessageKey: String = partyType.fold("common.notProvided")(x => s"partyType.$x")
   val returnPeriodMessageKey: String = returnPeriod.fold("common.notProvided"){
@@ -75,6 +82,9 @@ object CustomerInformation {
     (__ \ "changeIndicators").readNullable[ChangeIndicators].orElse(Reads.pure(None)) and
     (__ \ "missingTrader").read[Boolean] and
     (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true)) and
-    (__ \ "mandationStatus").read[String]
+    (__ \ "mandationStatus").read[String] and
+    (__ \ "customerDetails" \ "isInsolvent").read[Boolean] and
+    (__ \ "customerDetails" \ "continueToTrade").readNullable[Boolean]
+
   )(CustomerInformation.apply _)
 }

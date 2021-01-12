@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package models
 
 import common.TestJson.{customerInfoJsonMax, customerInfoJsonMin}
-import common.TestModels.{customerInformationMax, customerInformationMin}
+import common.TestModels.{customerInformationInsolvent, customerInformationMax, customerInformationMin}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class CustomerInformationSpec extends UnitSpec {
@@ -137,6 +137,23 @@ class CustomerInformationSpec extends UnitSpec {
       "return the message key for 'Not provided'" in {
         customerInformationMin.returnPeriodMessageKey shouldBe "common.notProvided"
       }
+    }
+  }
+
+  "calling .isInsolventWithoutAccess" should {
+
+    "return true when the user is insolvent and not continuing to trade" in {
+      customerInformationInsolvent.isInsolventWithoutAccess shouldBe true
+    }
+
+    "return false when the user is insolvent but is continuing to trade" in {
+      customerInformationInsolvent.copy(continueToTrade = Some(true)).isInsolventWithoutAccess shouldBe false
+    }
+
+    "return false when the user is not insolvent, regardless of the continueToTrade flag" in {
+      customerInformationMax.isInsolventWithoutAccess shouldBe false
+      customerInformationMax.copy(continueToTrade = Some(false)).isInsolventWithoutAccess shouldBe false
+      customerInformationMax.copy(continueToTrade = None).isInsolventWithoutAccess shouldBe false
     }
   }
 }

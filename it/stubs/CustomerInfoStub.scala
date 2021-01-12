@@ -43,7 +43,9 @@ object CustomerInfoStub extends WireMockMethods {
       "tradingName" -> "Cheapo Clothing",
       "isPartialMigration" ->  isPartialMigration,
       "vatRegistrationDate" -> "2017-01-01",
-      "customerMigratedToETMPDate" -> "2017-05-05"
+      "customerMigratedToETMPDate" -> "2017-05-05",
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(
@@ -104,7 +106,9 @@ object CustomerInfoStub extends WireMockMethods {
       "tradingName" -> "Cheapo Clothing",
       "isPartialMigration" ->  isPartialMigration,
       "vatRegistrationDate" -> "2017-01-01",
-      "customerMigratedToETMPDate" -> "2017-05-05"
+      "customerMigratedToETMPDate" -> "2017-05-05",
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(

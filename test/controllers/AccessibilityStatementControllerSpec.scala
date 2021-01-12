@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
       "return 200" in new Test {
         private val result = controller.show(fakeRequest)
         status(result) shouldBe Status.OK
+
       }
     }
 

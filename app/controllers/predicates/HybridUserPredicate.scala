@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import play.api.Logger
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Request, Result}
 import services.AccountDetailsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import common.SessionKeys
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +39,7 @@ class HybridUserPredicate @Inject()(val accountDetailsService: AccountDetailsSer
       case Right(userDetails) if userDetails.isHybridUser =>
         Logger.debug("[HybridCheckPredicate][bounceHybridToHome] User has a partial migration. Redirecting to Overview page")
         Future.successful(Redirect(controllers.routes.VatDetailsController.details()))
-      case Right(_) => f(request)(user)
+      case Right(_) => f(request)(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
       case Left(error) =>
         Logger.warn(s"[HybridCheckPredicate][bounceHybridToHome] Error returned from accountDetailsService: $error")
         Future.successful(errorHandler.showInternalServerError)

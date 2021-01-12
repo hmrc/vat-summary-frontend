@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,8 +88,12 @@ object TestModels {
     Some(ChangeIndicators(false)),
     isMissingTrader = false,
     hasPendingPpobChanges = false,
-    mandationStatus = "MTDfB"
+    mandationStatus = "MTDfB",
+    isInsolvent = false,
+    continueToTrade = Option(true)
   )
+
+  val customerInformationInsolvent: CustomerInformation = customerInformationMax.copy(isInsolvent = true, continueToTrade = Option(false))
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
 
@@ -113,7 +117,9 @@ object TestModels {
     None,
     isMissingTrader = false,
     hasPendingPpobChanges = false,
-    mandationStatus = "MTDfB"
+    mandationStatus = "MTDfB",
+    isInsolvent = false,
+    continueToTrade = Option(true)
   )
 
   val customerInformationMTDfBExempt: CustomerInformation = customerInformationMin.copy(mandationStatus = "MTDfB Exempt")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,9 @@ object TestJson {
       "tradingName" -> "Cheapo Clothing",
       "isPartialMigration" ->  false,
       "vatRegistrationDate" -> "2017-01-01",
-      "customerMigratedToETMPDate" -> "2017-05-05"
+      "customerMigratedToETMPDate" -> "2017-05-05",
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(
@@ -89,7 +91,9 @@ object TestJson {
 
   val customerInfoJsonMin: JsValue = Json.obj(
     "customerDetails" -> Json.obj(
-      "isPartialMigration" ->  false
+      "isPartialMigration" ->  false,
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(
