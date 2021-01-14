@@ -63,7 +63,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         .returns({})
 
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
-        .stubs(*,*,*)
+        .stubs(*, *, *)
         .returns(serviceInfoServiceResult)
     }
 
@@ -123,7 +123,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         NoPayments,
         mockPaymentsError,
         openPayments
-        )
+      )
     }
   }
 
@@ -317,17 +317,17 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
               .expects(*, *, *)
               .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
 
-          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *)
-            .returns(accountDetailsResponse)
-         }
+            (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(accountDetailsResponse)
+          }
 
-         val result: Result = await(target.openPayments()(fakeRequest))
-         val document: Document = Jsoup.parse(bodyOf(result))
+          val result: Result = await(target.openPayments()(fakeRequest))
+          val document: Document = Jsoup.parse(bodyOf(result))
 
-         document.select("h1").first().text() shouldBe "What you owe"
+          document.select("h1").first().text() shouldBe "What you owe"
+        }
       }
-    }
 
       "an error occurs upstream" should {
 
@@ -558,6 +558,15 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             result shouldBe expected
           }
         }
+      }
+    }
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403 (Forbidden)" in new Test {
+
+        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+        private val result = target.openPayments()(insolventRequest)
+        status(result) shouldBe Status.FORBIDDEN
       }
     }
   }
