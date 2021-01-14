@@ -290,11 +290,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     "the user is insolvent and not continuing to trade" should {
 
       "return 403 (Forbidden)" in new MakePaymentDetailsTest {
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
-          ("amountInPence", "10000"),
-          ("taxPeriodMonth", "02"),
-          ("taxPeriodYear", "2018"))
+        authResult
         lazy val result: Future[Result] = target.makePayment(
           testAmountInPence,
           testMonth,

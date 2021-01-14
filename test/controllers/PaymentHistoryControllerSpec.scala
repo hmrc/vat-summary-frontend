@@ -319,7 +319,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+        authResult
         val result: Future[Result] = target.paymentHistory()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
       }

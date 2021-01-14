@@ -100,19 +100,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
   "the user is insolvent and not continuing to trade" should {
 
     "return 403 (Forbidden)" in new Test {
-      override val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.successful(new ~(
-        otherEnrolment,
-        Some(Individual)
-      ))
-
-      override def setup: Any = {
-        super.setup
-        (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *)
-          .returns(Future.successful(otherEnrolment))
-          .noMoreThanOnce()
-      }
-
+      authResult
       private val result = controller.show(insolventRequest)
 
       status(result) shouldBe Status.FORBIDDEN

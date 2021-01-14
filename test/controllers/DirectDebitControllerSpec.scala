@@ -162,7 +162,7 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
   "the user is insolvent and not continuing to trade" should {
 
     "return 403 (Forbidden)" in new DirectDebitDetailsTest {
-      override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+      authResult
       lazy val result: Future[Result] = target.directDebits()(insolventRequest)
 
           status(result) shouldBe Status.FORBIDDEN

@@ -25,10 +25,9 @@ import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.Status
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.{Action, AnyContent, AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import services.{AccountDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core.AuthConnector
@@ -96,16 +95,5 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
     super.afterEach()
     mockAppConfig.features.agentAccess(true)
     mockAppConfig.features.ddCollectionInProgressEnabled(true)
-  }
-
-  def insolvencyCheck(controllerAction: Action[AnyContent]): Unit = {
-
-    "the user is insolvent and not continuing to trade" should {
-
-      "return 403 (Forbidden)" in {
-        val result = controllerAction(insolventRequest)
-        status(result) shouldBe Status.FORBIDDEN
-      }
-    }
   }
 }
