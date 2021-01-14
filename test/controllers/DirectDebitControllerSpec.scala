@@ -158,4 +158,13 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "the user is insolvent and not continuing to trade" should {
+
+    "return 403 (Forbidden)" in new DirectDebitDetailsTest {
+      lazy val result: Future[Result] = target.directDebits()(insolventRequest)
+
+          status(result) shouldBe Status.FORBIDDEN
+    }
+  }
 }

@@ -60,6 +60,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
       "return 200" in new Test {
         override val authResult: Future[Enrolments ~ Option[AffinityGroup]] = agentAuthResult
+
         override def setup: Any = {
           super.setup
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
@@ -81,6 +82,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
           otherEnrolment,
           Some(Individual)
         ))
+
         override def setup: Any = {
           super.setup
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
@@ -93,6 +95,14 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
         status(result) shouldBe Status.FORBIDDEN
       }
+    }
+  }
+  "the user is insolvent and not continuing to trade" should {
+
+    "return 403 (Forbidden)" in new Test {
+      private val result = controller.show(insolventRequest)
+
+      status(result) shouldBe Status.FORBIDDEN
     }
   }
 }

@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax}
+import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax, successfulAuthResult}
 import config.ServiceErrorHandler
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{UnknownError, VatLiabilitiesError}
@@ -312,6 +312,15 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         private val result: Result = await(target.paymentHistory()(fakeRequestWithSession))
         val document: Document = Jsoup.parse(bodyOf(result))
         document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
+      }
+    }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403 (Forbidden)" in new Test {
+        override val authCall = true
+        val result: Future[Result] = target.paymentHistory()(insolventRequest)
+        status(result) shouldBe Status.FORBIDDEN
       }
     }
   }

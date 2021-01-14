@@ -286,6 +286,22 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403 (Forbidden)" in new MakePaymentDetailsTest {
+        lazy val result: Future[Result] = target.makePayment(
+          testAmountInPence,
+          testMonth,
+          testYear,
+          testVatPeriodEnding,
+          testChargeType,
+          testDueDate,
+          testChargeReference)(insolventRequest)
+
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
   }
 }
 
