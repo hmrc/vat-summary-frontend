@@ -100,7 +100,6 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
   "the user is insolvent and not continuing to trade" should {
 
     "return 403 (Forbidden)" in new Test {
-      authResult
       private val result = controller.show(insolventRequest)
 
       status(result) shouldBe Status.FORBIDDEN

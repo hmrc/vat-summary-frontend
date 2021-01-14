@@ -319,7 +319,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
         override val authCall = true
-        authResult
         val result: Future[Result] = target.paymentHistory()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
       }

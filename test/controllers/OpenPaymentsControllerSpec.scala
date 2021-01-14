@@ -564,7 +564,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
 
-        authResult
         private val result = target.openPayments()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
       }
