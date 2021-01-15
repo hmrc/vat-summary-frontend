@@ -44,14 +44,17 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
       )
 
       val expected = Right(CustomerInformation(
-        Some("Cheapo Clothing Ltd"),
-        Some("Betty"),
-        Some("Jones"),
-        Some("Cheapo Clothing"),
+        CustomerDetails(
+          Some("Betty"),
+          Some("Jones"),
+          Some("Cheapo Clothing"),
+          Some("Cheapo Clothing Ltd")
+        ),
         Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB")),
         Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
         isHybridUser = false,
         Some("2017-05-05"),
+        Some("2017-05-06"),
         Some("2017-01-01"),
         Some("7"),
         "10410",

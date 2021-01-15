@@ -19,14 +19,12 @@ package models
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class CustomerInformation(organisationName: Option[String],
-                               firstName: Option[String],
-                               lastName: Option[String],
-                               tradingName: Option[String],
+case class CustomerInformation(details: CustomerDetails,
                                businessAddress: Address,
                                emailAddress: Option[Email],
                                isHybridUser: Boolean,
                                customerMigratedToETMPDate: Option[String],
+                               hybridToFullMigrationDate: Option[String],
                                registrationDate: Option[String],
                                partyType: Option[String],
                                sicCode: String,
@@ -42,12 +40,10 @@ case class CustomerInformation(organisationName: Option[String],
                                isInsolvent: Boolean,
                                continueToTrade: Option[Boolean]) {
 
-  def entityName: Option[String] =
-    (firstName, lastName, tradingName, organisationName) match {
-      case (Some(first), Some(last), None, None) => Some(s"$first $last")
-      case (None, None, None, orgName) => orgName
-      case _ => tradingName
-    }
+  def extractDate: Option[String] = hybridToFullMigrationDate match {
+    case Some(_) => hybridToFullMigrationDate
+    case _ => customerMigratedToETMPDate
+  }
 
   def isInsolventWithoutAccess: Boolean = continueToTrade match {
     case Some(false) => isInsolvent
@@ -63,14 +59,12 @@ case class CustomerInformation(organisationName: Option[String],
 
 object CustomerInformation {
   implicit val customerInformationReads: Reads[CustomerInformation] = (
-    (__ \ "customerDetails" \ "organisationName").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "customerDetails" \ "firstName").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "customerDetails" \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "customerDetails" \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "customerDetails").read[CustomerDetails] and
     (__ \ "ppob").read[Address] and
     (__ \ "ppob" \ "contactDetails").readNullable[Email].orElse(Reads.pure(None)) and
     (__ \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true)) and
     (__ \\ "customerMigratedToETMPDate").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \\ "hybridToFullMigrationDate").readNullable[String].orElse(Reads.pure(None)) and
     (__ \\ "vatRegistrationDate").readNullable[String].orElse(Reads.pure(None)) and
     (__ \ "partyType").readNullable[String].orElse(Reads.pure(None)) and
     (__ \ "primaryMainCode").read[String] and

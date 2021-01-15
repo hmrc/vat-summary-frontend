@@ -41,39 +41,29 @@ class CustomerInformationSpec extends UnitSpec {
     }
   }
 
-  "Calling .entityName" when {
+  ".extractDate" when {
 
-    "the model contains a trading name" should {
+    "hybridToFullMigrationDate is available" should {
 
-      "return the trading name" in {
-        val result: Option[String] = customerInformationMax.entityName
-        result shouldBe Some("Cheapo Clothing")
+      "return the date from hybridToFullMigrationDate" in {
+        val customerInfo = customerInformationMax
+        customerInfo.extractDate shouldBe customerInfo.hybridToFullMigrationDate
       }
     }
 
-    "the model does not contain a trading name or organisation name" should {
+    "hybridToFullMigrationDate is missing" should {
 
-      "return the first and last name" in {
-        val customerInfoSpecific = customerInformationMax.copy(tradingName = None, organisationName = None)
-        val result: Option[String] = customerInfoSpecific.entityName
-        result shouldBe Some("Betty Jones")
+      "return customerMigratedToETMPDate" in {
+        val customerInfo = customerInformationMax.copy(hybridToFullMigrationDate = None)
+        customerInfo.extractDate shouldBe customerInfo.customerMigratedToETMPDate
       }
     }
 
-    "the model does not contain a trading name, first name or last name" should {
+    "hybridToFullMigrationDate and customerMigratedToETMPDate are unavailable" should {
 
-      "return the organisation name" in {
-        val customerInfoSpecific = customerInformationMax.copy(tradingName = None, firstName = None, lastName = None)
-        val result: Option[String] = customerInfoSpecific.entityName
-        result shouldBe Some("Cheapo Clothing Ltd")
-      }
-    }
-
-    "the model does not contains a trading name, organisation name, or individual names" should {
-
-      "return None" in {
-        val result: Option[String] = customerInformationMin.entityName
-        result shouldBe None
+      "return customerMigratedToETMPDate" in {
+        val customerInfo = customerInformationMax.copy(customerMigratedToETMPDate = None, hybridToFullMigrationDate = None)
+        customerInfo.extractDate shouldBe customerInfo.customerMigratedToETMPDate
       }
     }
   }

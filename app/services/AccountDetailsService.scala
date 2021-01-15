@@ -35,7 +35,7 @@ class AccountDetailsService @Inject()(connector: VatSubscriptionConnector) {
 
   def getEntityName(vrn: String) (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[String]]] =
     connector.getCustomerInfo(vrn).map {
-      case Right(model: CustomerInformation) => Right(model.entityName)
+      case Right(model: CustomerInformation) => Right(model.details.entityName)
       case Left(_) => Left(CustomerInformationError)
     }
 }

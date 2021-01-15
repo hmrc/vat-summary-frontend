@@ -37,14 +37,14 @@ case class VatCertificateViewModel(
 
 object VatCertificateViewModel {
   def fromCustomerInformation(vrn: String, customerInformation: CustomerInformation): VatCertificateViewModel = {
-    val customerFullName: Option[String] = (customerInformation.firstName, customerInformation.lastName) match {
+    val customerFullName: Option[String] = (customerInformation.details.firstName, customerInformation.details.lastName) match {
       case (Some(firstName), Some(secondName)) => Some(s"$firstName $secondName")
       case _ => None
     }
 
     VatCertificateViewModel(
       vrn, customerInformation.registrationDate.map(LocalDate.parse(_)), LocalDate.now(),
-      customerInformation.organisationName, customerInformation.tradingName,
+      customerInformation.details.organisationName, customerInformation.details.tradingName,
       customerInformation.partyTypeMessageKey, customerInformation.sicCode,
       customerInformation.businessAddress, customerInformation.returnPeriodMessageKey,
       customerInformation.nonStdTaxPeriods, customerInformation.firstNonNSTPPeriod,

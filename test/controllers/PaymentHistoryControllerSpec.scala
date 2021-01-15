@@ -379,8 +379,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         "return the date" in new Test {
           override val accountDetailsCall: Boolean = true
           override val accountDetailsResponse: HttpGetResult[CustomerInformation] =
-            Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2015-05-05")))
-          await(target.getMigratedToETMPDate(fakeRequest, user)) shouldBe Some(LocalDate.parse("2015-05-05"))
+            Right(customerInformationMax)
+          await(target.getMigratedToETMPDate(fakeRequest, user)) shouldBe Some(LocalDate.parse("2017-05-06"))
         }
       }
 
