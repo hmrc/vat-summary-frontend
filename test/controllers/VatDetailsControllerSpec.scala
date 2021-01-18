@@ -134,7 +134,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "put a customerMigratedToETMPDate key into the session" in new DetailsTest {
         private val result = target().details()(fakeRequest)
-        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-05")
+        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-06")
       }
 
       "put a mandation status in the session" in new DetailsTest {

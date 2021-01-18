@@ -65,15 +65,27 @@ object TestModels {
   val entityName: String = "Cheapo Clothing"
   val currentYear: Int = 2018
 
-  val customerInformationMax: CustomerInformation = CustomerInformation(
-    Some("Cheapo Clothing Ltd"),
+  val customerDetailsMax: CustomerDetails = CustomerDetails(
     Some("Betty"),
     Some("Jones"),
     Some(entityName),
+    Some("Cheapo Clothing Ltd")
+  )
+
+  val customerDetailsMin: CustomerDetails = CustomerDetails(
+    None,
+    None,
+    None,
+    None
+  )
+
+  val customerInformationMax: CustomerInformation = CustomerInformation(
+    customerDetailsMax,
     address,
     emailAddress = Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
     isHybridUser = false,
     Some("2017-05-05"),
+    Some("2017-05-06"),
     Some("2017-01-01"),
     Some("7"),
     "10410",
@@ -98,13 +110,11 @@ object TestModels {
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
 
   val customerInformationMin: CustomerInformation = CustomerInformation(
-    None,
-    None,
-    None,
-    None,
+    customerDetailsMin,
     Address("Bedrock Quarry", None, None, None, None),
     None,
     isHybridUser = false,
+    None,
     None,
     None,
     None,

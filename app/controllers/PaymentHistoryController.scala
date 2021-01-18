@@ -87,10 +87,11 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
       case Some(date) if date.nonEmpty => Future.successful(Some(LocalDate.parse(date)))
       case Some(_) => Future.successful(None)
       case None => accountDetailsService.getAccountDetails(user.vrn) map {
-        case Right(details) => details.customerMigratedToETMPDate.map(LocalDate.parse)
+        case Right(details) => details.extractDate.map(LocalDate.parse)
         case Left(_) => None
       }
     }
+
 
   private[controllers] def customerMigratedWithin15M(migrationDate: Option[LocalDate]): Boolean =
     migrationDate match {

@@ -28,6 +28,7 @@ object TestJson {
       "tradingName" -> "Cheapo Clothing",
       "isPartialMigration" ->  false,
       "vatRegistrationDate" -> "2017-01-01",
+      "hybridToFullMigrationDate" -> "2017-05-06",
       "customerMigratedToETMPDate" -> "2017-05-05",
       "isInsolvent" -> false,
       "continueToTrade" -> true
@@ -104,4 +105,19 @@ object TestJson {
     "missingTrader" -> false,
     "mandationStatus" -> "MTDfB"
   )
+
+  val customerDetailsJsonMax: JsValue = Json.obj(
+    "organisationName" -> "Cheapo Clothing Ltd",
+    "firstName" -> "Betty",
+    "lastName" -> "Jones",
+    "tradingName" -> "Cheapo Clothing",
+    "isPartialMigration" ->  false,
+    "vatRegistrationDate" -> "2017-01-01",
+    "hybridToFullMigrationDate" -> "2017-05-06",
+    "customerMigratedToETMPDate" -> "2017-05-05",
+    "isInsolvent" -> false,
+    "continueToTrade" -> true
+  )
+
+  val customerDetailsJsonMin: JsValue = Json.obj()
 }

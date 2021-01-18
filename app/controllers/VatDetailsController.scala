@@ -70,7 +70,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       } yield {
         val migratedDate = (request.session.get(SessionKeys.migrationToETMP), customerInfo) match {
           case (Some(date), _) => date
-          case (None, Right(details)) => details.customerMigratedToETMPDate.getOrElse("")
+          case (None, Right(details)) => details.extractDate.getOrElse("")
           case (None, Left(_)) => ""
         }
         auditEvents(user, nextReturn, nextPayment)
@@ -235,10 +235,10 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
   private def retrieveDisplayedName(accountDetails: HttpGetResult[CustomerInformation]): Option[String] =
     accountDetails match {
       case Right(model) =>
-        if (model.entityName.isEmpty) {
+        if (model.details.entityName.isEmpty) {
           Logger.warn("[VatDetailsController][retrieveDisplayedName] - No entity name was found on record")
         }
-        model.entityName
+        model.details.entityName
       case Left(_) => None
     }
 
