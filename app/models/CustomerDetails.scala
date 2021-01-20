@@ -23,22 +23,35 @@ case class CustomerDetails(
                            firstName: Option[String],
                            lastName: Option[String],
                            tradingName: Option[String],
-                           organisationName: Option[String]
+                           organisationName: Option[String],
+                           isInsolvent: Boolean,
+                           continueToTrade: Option[Boolean],
+                           insolvencyType: Option[String],
+                           insolvencyDate: Option[String]
                           ) {
 
-  def entityName: Option[String] =
+  val entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
       case (Some(first), Some(last), None, None) => Some(s"$first $last")
       case (None, None, None, orgName) => orgName
       case _ => tradingName
     }
+
+  val isInsolventWithoutAccess: Boolean = continueToTrade match {
+    case Some(false) => isInsolvent
+    case _ => false
+  }
 }
 
 object CustomerDetails {
   implicit val customerDetailsReads: Reads[CustomerDetails] = (
     (__ \ "firstName").readNullable[String].orElse(Reads.pure(None)) and
-      (__ \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
-      (__ \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
-      (__ \ "organisationName").readNullable[String].orElse(Reads.pure(None))
+    (__ \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "organisationName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "isInsolvent").read[Boolean] and
+    (__ \ "continueToTrade").readNullable[Boolean] and
+    (__ \ "insolvencyType").readNullable[String] and
+    (__ \ "insolvencyDate").readNullable[String]
   )(CustomerDetails.apply _)
 }

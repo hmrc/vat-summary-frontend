@@ -87,13 +87,13 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
       vatEnrolments.collectFirst {
         case Enrolment(Keys.mtdVatEnrolmentKey, EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn) :: _, status, _) =>
 
-          implicit val user = User(vrn, status == Keys.activated, containsNonMtdVat)
+          implicit val user: User = User(vrn, status == Keys.activated, containsNonMtdVat)
 
           request.session.get(SessionKeys.insolventWithoutAccessKey) match {
             case Some("true") => Future.successful(Forbidden(unauthorised()))
             case Some("false") => checkMigration(block, checkMigrationStatus)
             case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
-              case Right(details) if details.isInsolventWithoutAccess =>
+              case Right(response) if response.details.isInsolventWithoutAccess =>
                 Logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
                 Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
               case Right(_) =>
