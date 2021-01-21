@@ -19,6 +19,8 @@ package models
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
+import java.time.LocalDate
+
 case class CustomerDetails(
                            firstName: Option[String],
                            lastName: Option[String],
@@ -41,6 +43,13 @@ case class CustomerDetails(
     case Some(false) => isInsolvent
     case _ => false
   }
+
+  def insolvencyDateFutureUserBlocked(today: LocalDate): Boolean =
+    (isInsolvent, insolvencyType, insolvencyDate, continueToTrade) match {
+      case (_, Some("12") | Some("13"), _, _) => false
+      case (true, Some(_), Some(date), Some(true)) if LocalDate.parse(date).isAfter(today) => true
+      case _ => false
+    }
 }
 
 object CustomerDetails {
