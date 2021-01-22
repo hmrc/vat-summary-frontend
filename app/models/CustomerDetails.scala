@@ -46,7 +46,7 @@ case class CustomerDetails(
 
   def insolvencyDateFutureUserBlocked(today: LocalDate): Boolean =
     (isInsolvent, insolvencyType, insolvencyDate, continueToTrade) match {
-      case (_, Some("12") | Some("13"), _, _) => false
+      case (_, Some(inType), _, _) if Seq("07", "12", "13", "14").contains(inType) => false
       case (true, Some(_), Some(date), Some(true)) if LocalDate.parse(date).isAfter(today) => true
       case _ => false
     }

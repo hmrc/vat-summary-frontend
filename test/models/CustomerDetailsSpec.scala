@@ -106,14 +106,11 @@ class CustomerDetailsSpec extends ControllerBaseSpec {
       customerDetailsInsolventFuture.insolvencyDateFutureUserBlocked(today) shouldBe true
     }
 
-    "return false when the user is of type 12, regardless of other flags" in {
-      mockDateServiceCall()
-      customerDetailsInsolventFuture.copy(insolvencyType = Some("12")).insolvencyDateFutureUserBlocked(today) shouldBe false
-    }
-
-    "return false when the user is of type 13, regardless of other flags" in {
-      mockDateServiceCall()
-      customerDetailsInsolventFuture.copy(insolvencyType = Some("13")).insolvencyDateFutureUserBlocked(today) shouldBe false
+    "return false when the user is of a permitted insolvency type, regardless of other flags" in {
+      Seq("07", "12", "13", "14").foreach { value =>
+        mockDateServiceCall()
+        customerDetailsInsolventFuture.copy(insolvencyType = Some(value)).insolvencyDateFutureUserBlocked(today) shouldBe false
+      }
     }
 
     "return false when the user has some insolvency fields but does not meet the full criteria" in {
