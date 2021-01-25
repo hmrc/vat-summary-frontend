@@ -51,8 +51,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
 
     def setupMocks(): Unit = {
-      (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
-
+      mockDateServiceCall()
 
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
@@ -87,32 +86,19 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       ddCollectionInProgress = false
     )
 
-    val mockDateService: DateService = mock[DateService]
     val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
     val NoPayments: NoPayments = injector.instanceOf[NoPayments]
     val mockPaymentsError: PaymentsError = injector.instanceOf[PaymentsError]
     val openPayments: OpenPayments = injector.instanceOf[OpenPayments]
-    val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-      mcc,
-      enrolmentsAuthService,
-      hybridUserPredicate,
-      agentPredicate,
-      mockAccountDetailsService,
-      mockServiceErrorHandler,
-      mockAppConfig,
-      ec,
-      unauthorised
-    )
 
-    val testUser: User = User("999999999")
     implicit val hc: HeaderCarrier = HeaderCarrier()
 
     def target: OpenPaymentsController = {
       setupMocks()
       new OpenPaymentsController(
         enrolmentsAuthService,
-        mockAuthorisedController,
+        authorisedController,
         mockServiceInfoService,
         mockPaymentsService,
         mockDateService,
@@ -409,9 +395,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             "return payments that are not overdue" in new Test {
 
-              override def setupMocks(): Unit = (
-                mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
-              )
+              override def setupMocks(): Unit = mockDateServiceCall()
 
               val testPayment: PaymentWithPeriod = Payment(
                 ReturnDebitCharge,
@@ -446,9 +430,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             "return payments that are overdue" in new Test {
 
-              override def setupMocks(): Unit = (
-                mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
-              )
+              override def setupMocks(): Unit = mockDateServiceCall()
 
               val testPayment: PaymentWithPeriod = Payment(
                 ReturnDebitCharge,
@@ -484,9 +466,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
           "return payments that are not overdue" in new Test {
 
-            override def setupMocks(): Unit = (
-              mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
-            )
+            override def setupMocks(): Unit = mockDateServiceCall()
 
             val testPayment: PaymentWithPeriod = Payment(
               ReturnDebitCharge,
@@ -526,9 +506,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             mockAppConfig.features.ddCollectionInProgressEnabled(false)
 
-            override def setupMocks(): Unit = (
-              mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01")
-            )
+            override def setupMocks(): Unit = mockDateServiceCall()
 
             val testPayment: PaymentWithPeriod = Payment(
               ReturnDebitCharge,

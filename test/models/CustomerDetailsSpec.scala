@@ -17,10 +17,14 @@
 package models
 
 import common.TestJson.{customerDetailsJsonMax, customerDetailsJsonMin}
-import common.TestModels.{customerDetailsMax, customerDetailsMin}
-import uk.gov.hmrc.play.test.UnitSpec
+import common.TestModels.{customerDetailsInsolvent, customerDetailsInsolventFuture, customerDetailsMax, customerDetailsMin}
+import controllers.ControllerBaseSpec
 
-class CustomerDetailsSpec extends UnitSpec {
+import java.time.LocalDate
+
+class CustomerDetailsSpec extends ControllerBaseSpec {
+
+  val today: LocalDate = LocalDate.parse("2018-05-01")
 
   "A CustomerDetails object" when {
 
@@ -78,4 +82,45 @@ class CustomerDetailsSpec extends UnitSpec {
     }
   }
 
+  "calling .isInsolventWithoutAccess" should {
+
+    "return true when the user is insolvent and not continuing to trade" in {
+      customerDetailsInsolvent.isInsolventWithoutAccess shouldBe true
+    }
+
+    "return false when the user is insolvent but is continuing to trade" in {
+      customerDetailsInsolvent.copy(continueToTrade = Some(true)).isInsolventWithoutAccess shouldBe false
+    }
+
+    "return false when the user is not insolvent, regardless of the continueToTrade flag" in {
+      customerDetailsMax.isInsolventWithoutAccess shouldBe false
+      customerDetailsMax.copy(continueToTrade = Some(false)).isInsolventWithoutAccess shouldBe false
+      customerDetailsMax.copy(continueToTrade = None).isInsolventWithoutAccess shouldBe false
+    }
+  }
+
+  "calling .insolvencyDateFutureUserBlocked" should {
+
+    "return true when the user is insolvent, continuing to trade, insolvency type not 12 or 13, insolvency date in the future" in {
+      mockDateServiceCall()
+      customerDetailsInsolventFuture.insolvencyDateFutureUserBlocked(today) shouldBe true
+    }
+
+    "return false when the user is of a permitted insolvency type, regardless of other flags" in {
+      Seq("07", "12", "13", "14").foreach { value =>
+        mockDateServiceCall()
+        customerDetailsInsolventFuture.copy(insolvencyType = Some(value)).insolvencyDateFutureUserBlocked(today) shouldBe false
+      }
+    }
+
+    "return false when the user has some insolvency fields but does not meet the full criteria" in {
+      mockDateServiceCall()
+      customerDetailsInsolvent.insolvencyDateFutureUserBlocked(today) shouldBe false
+    }
+
+    "return false when the user has no insolvency criteria" in {
+      mockDateServiceCall()
+      customerDetailsMin.insolvencyDateFutureUserBlocked(today) shouldBe false
+    }
+  }
 }

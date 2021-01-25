@@ -18,8 +18,6 @@ package controllers
 
 import common.SessionKeys
 import common.TestModels.{customerInformationInsolvent, customerInformationMax}
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.CustomerInformation
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Request, Result}
@@ -43,12 +41,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
         Ok("welcome")
   })(request)
 
-  def mockCustomerInfo(accountDetailsResponse: Future[HttpGetResult[CustomerInformation]]):Any =
-    (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *)
-      .returns(accountDetailsResponse)
-
-  def mockAuth (authResponse: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
+  def mockAuth(authResponse: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
   (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
     .expects(*, *, *, *)
     .returns(authResponse)

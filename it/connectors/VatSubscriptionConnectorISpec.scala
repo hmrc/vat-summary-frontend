@@ -48,7 +48,11 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           Some("Betty"),
           Some("Jones"),
           Some("Cheapo Clothing"),
-          Some("Cheapo Clothing Ltd")
+          Some("Cheapo Clothing Ltd"),
+          isInsolvent = false,
+          Some(true),
+          Some("01"),
+          Some("2018-01-01")
         ),
         Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB")),
         Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
@@ -69,9 +73,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some(ChangeIndicators(deregister = false)),
         isMissingTrader = false,
         mandationStatus = "MTDfB",
-        hasPendingPpobChanges = false,
-        isInsolvent = false,
-        continueToTrade = Some(true)
+        hasPendingPpobChanges = false
       ))
 
       setupStubs()

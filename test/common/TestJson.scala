@@ -20,19 +20,23 @@ import play.api.libs.json.{JsValue, Json}
 
 object TestJson {
 
+  val customerDetailsJsonMax: JsValue = Json.obj(
+    "organisationName" -> "Cheapo Clothing Ltd",
+    "firstName" -> "Betty",
+    "lastName" -> "Jones",
+    "tradingName" -> "Cheapo Clothing",
+    "isPartialMigration" ->  false,
+    "vatRegistrationDate" -> "2017-01-01",
+    "hybridToFullMigrationDate" -> "2017-05-06",
+    "customerMigratedToETMPDate" -> "2017-05-05",
+    "isInsolvent" -> false,
+    "continueToTrade" -> true,
+    "insolvencyType" -> "01",
+    "insolvencyDate" -> "2018-01-01"
+  )
+
   val customerInfoJsonMax: JsValue = Json.obj(
-    "customerDetails" -> Json.obj(
-      "organisationName" -> "Cheapo Clothing Ltd",
-      "firstName" -> "Betty",
-      "lastName" -> "Jones",
-      "tradingName" -> "Cheapo Clothing",
-      "isPartialMigration" ->  false,
-      "vatRegistrationDate" -> "2017-01-01",
-      "hybridToFullMigrationDate" -> "2017-05-06",
-      "customerMigratedToETMPDate" -> "2017-05-05",
-      "isInsolvent" -> false,
-      "continueToTrade" -> true
-    ),
+    "customerDetails" -> customerDetailsJsonMax,
     "ppob" -> Json.obj(
       "address" -> Json.obj(
         "line1" -> "Bedrock Quarry",
@@ -93,8 +97,7 @@ object TestJson {
   val customerInfoJsonMin: JsValue = Json.obj(
     "customerDetails" -> Json.obj(
       "isPartialMigration" ->  false,
-      "isInsolvent" -> false,
-      "continueToTrade" -> true
+      "isInsolvent" -> false
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(
@@ -106,18 +109,7 @@ object TestJson {
     "mandationStatus" -> "MTDfB"
   )
 
-  val customerDetailsJsonMax: JsValue = Json.obj(
-    "organisationName" -> "Cheapo Clothing Ltd",
-    "firstName" -> "Betty",
-    "lastName" -> "Jones",
-    "tradingName" -> "Cheapo Clothing",
-    "isPartialMigration" ->  false,
-    "vatRegistrationDate" -> "2017-01-01",
-    "hybridToFullMigrationDate" -> "2017-05-06",
-    "customerMigratedToETMPDate" -> "2017-05-05",
-    "isInsolvent" -> false,
-    "continueToTrade" -> true
+  val customerDetailsJsonMin: JsValue = Json.obj(
+    "isInsolvent" -> false
   )
-
-  val customerDetailsJsonMin: JsValue = Json.obj()
 }

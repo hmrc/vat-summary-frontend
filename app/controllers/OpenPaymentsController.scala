@@ -50,7 +50,7 @@ class OpenPaymentsController @Inject()(val enrolmentsAuthService: EnrolmentsAuth
                                        openPaymentsPage: OpenPayments)
 extends FrontendController(mcc) with I18nSupport {
 
-  def openPayments(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
+  def openPayments(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
       for {
         directDebitStatus <- paymentsService.getDirectDebitStatus(user.vrn)

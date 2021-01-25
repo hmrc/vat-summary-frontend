@@ -58,7 +58,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
-    val mockDateService: DateService = mock[DateService]
     val mockAuditService: AuditingService = mock[AuditingService]
 
     val detailsView: Details = injector.instanceOf[Details]
@@ -68,8 +67,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .stubs(*, *, *, *)
         .returns(authResult)
 
-      (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
-
+      mockDateServiceCall()
 
       (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
@@ -232,8 +230,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             .stubs(*, *, *, *)
             .returns(authResult)
 
-          (mockDateService.now: () => LocalDate).stubs().returns(LocalDate.parse("2018-05-01"))
-
+          mockDateServiceCall()
 
           (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *)

@@ -35,6 +35,7 @@ object CustomerInfoStub extends WireMockMethods {
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = errorJson)
   }
 
+  //noinspection ScalaStyle
   def customerInfoJson(isPartialMigration: Boolean, hasVerifiedEmail: Boolean): JsValue = Json.obj(
     "customerDetails" -> Json.obj(
       "organisationName" -> "Cheapo Clothing Ltd",
@@ -46,7 +47,9 @@ object CustomerInfoStub extends WireMockMethods {
       "hybridToFullMigrationDate" -> "2017-05-06",
       "customerMigratedToETMPDate" -> "2017-05-05",
       "isInsolvent" -> false,
-      "continueToTrade" -> true
+      "continueToTrade" -> true,
+      "insolvencyType" -> "01",
+      "insolvencyDate" -> "2018-01-01"
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(
@@ -99,6 +102,7 @@ object CustomerInfoStub extends WireMockMethods {
     "mandationStatus" -> "MTDfB"
   )
 
+  //noinspection ScalaStyle
   def customerInfoJsonNonMtdfb(isPartialMigration: Boolean, hasVerifiedEmail: Boolean): JsValue = Json.obj(
     "customerDetails" -> Json.obj(
       "organisationName" -> "Cheapo Clothing Ltd",
@@ -109,7 +113,9 @@ object CustomerInfoStub extends WireMockMethods {
       "vatRegistrationDate" -> "2017-01-01",
       "customerMigratedToETMPDate" -> "2017-05-05",
       "isInsolvent" -> false,
-      "continueToTrade" -> true
+      "continueToTrade" -> true,
+      "insolvencyType" -> "01",
+      "insolvencyDate" -> "2018-01-01"
     ),
     "ppob" -> Json.obj(
       "address" -> Json.obj(

@@ -20,8 +20,10 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, Materializer}
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import mocks.MockAppConfig
+import models.CustomerInformation
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -29,13 +31,14 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
-import services.{AccountDetailsService, EnrolmentsAuthService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core.AuthConnector
-import uk.gov.hmrc.http.{SessionKeys => GovUKSessionKeys}
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.errors.{AgentUnauthorised, Unauthorised}
 
-import scala.concurrent.ExecutionContext
+import java.time.LocalDate
+import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
@@ -54,8 +57,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
   val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
-  val hybridUserPredicate: HybridUserPredicate = new HybridUserPredicate(
-    mockAccountDetailsService, mockServiceErrorHandler, mcc, ec)
+  val mockDateService: DateService = mock[DateService]
+  val financialPredicate: FinancialPredicate = new FinancialPredicate(
+    mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val enrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   val agentPredicate: AgentPredicate = new AgentPredicate(
@@ -63,7 +67,7 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   val authorisedController: AuthorisedController = new AuthorisedController(
     mcc,
     enrolmentsAuthService,
-    hybridUserPredicate,
+    financialPredicate,
     agentPredicate,
     mockAccountDetailsService,
     mockServiceErrorHandler,
@@ -96,4 +100,14 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
     mockAppConfig.features.agentAccess(true)
     mockAppConfig.features.ddCollectionInProgressEnabled(true)
   }
+
+  def mockCustomerInfo(accountDetailsResponse: Future[HttpGetResult[CustomerInformation]]):Any =
+    (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returns(accountDetailsResponse)
+
+  def mockDateServiceCall(): Any =
+    (mockDateService.now: () => LocalDate)
+    .stubs()
+    .returns(LocalDate.parse("2018-05-01"))
 }

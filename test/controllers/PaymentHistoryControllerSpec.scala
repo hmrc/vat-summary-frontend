@@ -20,8 +20,7 @@ import java.time.LocalDate
 
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax, successfulAuthResult}
-import config.ServiceErrorHandler
+import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
@@ -53,22 +52,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   val paymentHistory: PaymentHistory = injector.instanceOf[PaymentHistory]
 
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
-  val mockDateService: DateService = mock[DateService]
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   implicit val mockAuditService: AuditingService = mock[AuditingService]
-
-  val mockErrorHandler: ServiceErrorHandler = new ServiceErrorHandler(messagesApi, mockAppConfig, standardError)
-  val mockAuthorisedController: AuthorisedController = new AuthorisedController(
-    mcc,
-    enrolmentsAuthService,
-    hybridUserPredicate,
-    agentPredicate,
-    mockAccountDetailsService,
-    mockServiceErrorHandler,
-    mockAppConfig,
-    ec,
-    unauthorised
-  )
 
   lazy val fakeRequestWithEmptyDate: FakeRequest[AnyContentAsEmpty.type] =
     fakeRequest.withSession("customerMigratedToETMPDate" -> "")
@@ -163,9 +148,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     def setup(): Any = {
-      (mockDateService.now: () => LocalDate)
-        .stubs()
-        .returns(LocalDate.parse("2018-05-01"))
+      mockDateServiceCall()
 
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
         .stubs(*,*,*)
@@ -202,12 +185,12 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       setup()
       new PaymentHistoryController(
         mockPaymentsService,
-        mockAuthorisedController,
+        authorisedController,
         mockDateService,
         mockServiceInfoService,
         enrolmentsAuthService,
         mockAccountDetailsService,
-        mockErrorHandler,
+        mockServiceErrorHandler,
         mcc,
         ec,
         paymentHistory

@@ -19,7 +19,7 @@ package controllers
 import common.{EnrolmentKeys => Keys}
 import common.SessionKeys
 import config.AppConfig
-import controllers.predicates.{AgentPredicate, HybridUserPredicate}
+import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
                                      val enrolmentsAuthService: EnrolmentsAuthService,
-                                     val hybridUserPredicate: HybridUserPredicate,
+                                     val financialPredicate: FinancialPredicate,
                                      val agentPredicate: AgentPredicate,
                                      val accountDetailsService: AccountDetailsService,
                                      val serviceErrorHandler: ServiceErrorHandler,
@@ -47,7 +47,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
                                      unauthorised: Unauthorised) extends FrontendController(mcc) with I18nSupport {
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result],
-                       checkMigrationStatus: Boolean = false,
+                       financialRequest: Boolean = false,
                        allowAgentAccess: Boolean = false): Action[AnyContent] = Action.async {
     implicit request =>
 
@@ -61,7 +61,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
               Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
               Future.successful(Redirect(appConfig.agentClientLookupHubUrl))
             }
-          case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, checkMigrationStatus)
+          case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, financialRequest)
           case _ =>
             Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
             Future.successful(InternalServerError)
@@ -76,7 +76,9 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
         }
   }
 
-  private def authoriseAsNonAgent(block: Request[AnyContent] => User => Future[Result], enrolments: Enrolments, checkMigrationStatus: Boolean)
+  private def authoriseAsNonAgent(block: Request[AnyContent] => User => Future[Result],
+                                  enrolments: Enrolments,
+                                  financialRequest: Boolean)
                                  (implicit request: Request[AnyContent]): Future[Result] = {
 
     val vatEnrolments: Set[Enrolment] = User.extractVatEnrolments(enrolments)
@@ -87,18 +89,18 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
       vatEnrolments.collectFirst {
         case Enrolment(Keys.mtdVatEnrolmentKey, EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn) :: _, status, _) =>
 
-          implicit val user = User(vrn, status == Keys.activated, containsNonMtdVat)
+          implicit val user: User = User(vrn, status == Keys.activated, containsNonMtdVat)
 
           request.session.get(SessionKeys.insolventWithoutAccessKey) match {
             case Some("true") => Future.successful(Forbidden(unauthorised()))
-            case Some("false") => checkMigration(block, checkMigrationStatus)
+            case Some("false") => checkHybridAndInsolvency(block, financialRequest)
             case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
-              case Right(details) if details.isInsolventWithoutAccess =>
+              case Right(response) if response.details.isInsolventWithoutAccess =>
                 Logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
                 Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
               case Right(_) =>
                 Logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
-                checkMigration(block, checkMigrationStatus)
+                checkHybridAndInsolvency(block, financialRequest)
               case _ =>
                 Logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
                 Future.successful(serviceErrorHandler.showInternalServerError)
@@ -115,9 +117,9 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
     }
   }
 
-  def authorisedMigratedUserAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
+  def financialAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
     block,
-    checkMigrationStatus = true
+    financialRequest = true
   )
 
   def authorisedActionAllowAgents(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
@@ -125,11 +127,10 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
     allowAgentAccess = appConfig.features.agentAccess()
   )
 
-  def checkMigration(block: Request[AnyContent] => User => Future[Result], checkMigrationStatus: Boolean)
-                    (implicit request: Request[AnyContent], user: User): Future[Result] =
-
-    if(checkMigrationStatus) {
-      hybridUserPredicate.authoriseMigratedUserAction(block)(request, user)
+  def checkHybridAndInsolvency(block: Request[AnyContent] => User => Future[Result], financialRequest: Boolean)
+                              (implicit request: Request[AnyContent], user: User): Future[Result] =
+    if(financialRequest) {
+      financialPredicate.authoriseFinancialAction(block)(request, user)
     } else {
       block(request)(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
     }

@@ -53,7 +53,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
   def currentYear: Int = dateService.now().getYear
   def previousYear: Int = currentYear - 1
 
-  def paymentHistory(): Action[AnyContent] = authorisedController.authorisedMigratedUserAction { implicit request =>
+  def paymentHistory(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
       for {
         migrationDate <- getMigratedToETMPDate

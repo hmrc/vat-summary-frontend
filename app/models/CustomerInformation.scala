@@ -36,18 +36,11 @@ case class CustomerInformation(details: CustomerDetails,
                                changeIndicators: Option[ChangeIndicators],
                                isMissingTrader: Boolean,
                                hasPendingPpobChanges: Boolean,
-                               mandationStatus: String,
-                               isInsolvent: Boolean,
-                               continueToTrade: Option[Boolean]) {
+                               mandationStatus: String) {
 
   def extractDate: Option[String] = hybridToFullMigrationDate match {
     case Some(_) => hybridToFullMigrationDate
     case _ => customerMigratedToETMPDate
-  }
-
-  def isInsolventWithoutAccess: Boolean = continueToTrade match {
-    case Some(false) => isInsolvent
-    case _ => false
   }
 
   val partyTypeMessageKey: String = partyType.fold("common.notProvided")(x => s"partyType.$x")
@@ -76,9 +69,8 @@ object CustomerInformation {
     (__ \ "changeIndicators").readNullable[ChangeIndicators].orElse(Reads.pure(None)) and
     (__ \ "missingTrader").read[Boolean] and
     (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true)) and
-    (__ \ "mandationStatus").read[String] and
-    (__ \ "customerDetails" \ "isInsolvent").read[Boolean] and
-    (__ \ "customerDetails" \ "continueToTrade").readNullable[Boolean]
+    (__ \ "mandationStatus").read[String]
+
 
   )(CustomerInformation.apply _)
 }
