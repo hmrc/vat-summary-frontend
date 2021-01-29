@@ -193,6 +193,8 @@ deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ga
 
 
 # Charge types
+chargeType.repaymentSupplementRecTitle = Adennill atodiad ad-dalu
+chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd i chi
 chargeType.indirectRevRecoveryTitle = Adennill taliadau
 chargeType.indirectRevRecoveryDescription = er mwyn adennill ad-daliad a wnaed i chi mewn camgymeriad
 chargeType.defaultInterestTitle = Llog diffygdalu
