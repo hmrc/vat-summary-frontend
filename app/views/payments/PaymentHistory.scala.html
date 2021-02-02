@@ -24,7 +24,8 @@
       paymentsHistoryTabs: PaymentsHistoryTabs,
       paymentsHistoryTabsContent: PaymentsHistoryTabsContent)
 
-@(model: PaymentsHistoryViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+@(model: PaymentsHistoryViewModel,
+  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @additionalYears = @{
     (model.tabTwo.fold(Seq[Int]())(year=>Seq(year)) ++ model.tabThree.fold(Seq[Int]())(year=>Seq(year+1, year))).distinct
@@ -46,6 +47,10 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <h1 id="top" class="heading-xlarge">@messages("paymentsHistory.title")</h1>
+
+      @if(model.showInsolvencyContent) {
+        <div class="panel panel-border-wide form-group">@messages("paymentsHistory.insolvencyNotice")</div>
+      }
 
       <div class="tabbed">
         @paymentsHistoryTabs(Seq(model.tabOne) ++ additionalYears, model.previousPaymentsTab)

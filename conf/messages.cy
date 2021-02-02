@@ -149,6 +149,7 @@ paymentsHistory.previousPayments.youCan = Gallwch
 paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol (yn agor tab newydd)
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
 paymentsHistory.backToTop = Nôl i’r brig
+paymentsHistory.insolvencyNotice = Ni allwch fwrw golwg dros daliadau a wnaed cyn dyddiad yr ansolfedd.
 
 #VAT certificate
 vatCertificate.title = Eich tystysgrif TAW
