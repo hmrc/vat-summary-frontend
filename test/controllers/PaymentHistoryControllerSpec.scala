@@ -17,10 +17,9 @@
 package controllers
 
 import java.time.LocalDate
-
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
-import common.TestModels.{agentAuthResult, customerInformationHybrid, customerInformationMax}
+import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
@@ -161,9 +160,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
 
       if (accountDetailsCall) {
-        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(accountDetailsResponse)
+        mockCustomerInfo(accountDetailsResponse)
       }
 
       if (paymentsServiceCall) {
@@ -267,7 +264,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "redirect to VAT overview page" in new NoPaymentsCallsTest {
         override val accountDetailsResponse: Right[Nothing, CustomerInformation] = Right(customerInformationHybrid)
-        private val result = target.paymentHistory()(fakeRequestWithSession)
+        private val result = target.paymentHistory()(fakeRequest)
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
@@ -277,7 +274,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return Internal Server Error" in new NoPaymentsCallsTest {
         override val accountDetailsResponse: HttpGetResult[CustomerInformation] = Left(UnknownError)
-        private val result = target.paymentHistory()(fakeRequestWithSession)
+        private val result = target.paymentHistory()(fakeRequest)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
@@ -341,39 +338,51 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   "Calling .getMigratedToETMPDate" when {
 
-    "the ETMP migration date is already in session" should {
+    "the account details service response contains customer info" should {
 
       "return the date" in new Test {
-        await(target.getMigratedToETMPDate(fakeRequestWithSession, user)) shouldBe Some(LocalDate.parse("2018-01-01"))
+        await(target.getMigratedToETMPDate(Right(customerInformationMax))) shouldBe Some(LocalDate.parse("2017-05-06"))
       }
     }
 
-    "an empty value is in session" should {
+    "the account details service response contains an error" should {
 
       "return None" in new Test {
-        await(target.getMigratedToETMPDate(fakeRequestWithEmptyDate, user)) shouldBe None
+        await(target.getMigratedToETMPDate(Left(UnknownError))) shouldBe None
+      }
+    }
+  }
+
+  "Calling .showInsolventContent" when {
+
+    "the account details service response contains customer info" when {
+
+      "the user is insolvent and not exempt from restrictions" should {
+
+        "return true" in new Test {
+          await(target.showInsolventContent(Right(customerInformationInsolventTrading))) shouldBe true
+        }
+      }
+
+      "the user is insolvent and exempt from restrictions" should {
+
+        "return false" in new Test {
+          await(target.showInsolventContent(Right(customerInformationInsolventTradingExempt))) shouldBe false
+        }
+      }
+
+      "the user is not insolvent" should {
+
+        "return false" in new Test {
+          await(target.showInsolventContent(Right(customerInformationMax))) shouldBe false
+        }
       }
     }
 
-    "no value is in session" when {
+    "the account details service response contains an error" should {
 
-      "the account details service returns a successful result" should {
-
-        "return the date" in new Test {
-          override val accountDetailsCall: Boolean = true
-          override val accountDetailsResponse: HttpGetResult[CustomerInformation] =
-            Right(customerInformationMax)
-          await(target.getMigratedToETMPDate(fakeRequest, user)) shouldBe Some(LocalDate.parse("2017-05-06"))
-        }
-      }
-
-      "the account details service returns a failure" should {
-
-        "return None" in new Test {
-          override val accountDetailsCall: Boolean = true
-          override val accountDetailsResponse: HttpGetResult[CustomerInformation] = Left(UnknownError)
-          await(target.getMigratedToETMPDate(fakeRequest, user)) shouldBe None
-        }
+      "return false" in new Test {
+        await(target.showInsolventContent(Left(UnknownError))) shouldBe false
       }
     }
   }
@@ -383,28 +392,28 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     "the migration year is equal to the current year" should {
 
       "return a sequence of just the current year" in new Test {
-        target.getValidYears(user.vrn, Some(LocalDate.parse("2018-01-01"))) shouldBe Seq(currentYear)
+        target.getValidYears(Some(LocalDate.parse("2018-01-01"))) shouldBe Seq(currentYear)
       }
     }
 
     "the migration year is the previous year" should {
 
       "return a sequence of the current year and previous year" in new Test {
-        target.getValidYears(user.vrn, Some(LocalDate.parse("2017-12-12"))) shouldBe Seq(currentYear, currentYear - 1)
+        target.getValidYears(Some(LocalDate.parse("2017-12-12"))) shouldBe Seq(currentYear, currentYear - 1)
       }
     }
 
     "the migration year is two years ago" should {
 
       "return a sequence of the current year and the two years prior" in new Test {
-        target.getValidYears(user.vrn, Some(LocalDate.parse("2016-12-12"))) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
+        target.getValidYears(Some(LocalDate.parse("2016-12-12"))) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
       }
     }
 
     "the migration year could not be retrieved" should {
 
       "return a sequence of the current year and previous year" in new Test {
-        target.getValidYears(user.vrn, None) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
+        target.getValidYears(None) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
       }
     }
   }
@@ -439,13 +448,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         "return a PaymentsHistoryViewModel with the correct information" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, emptyResult, showPreviousPaymentsTab = false, Some(LocalDate.parse("2018-01-01"))
+            serviceResultYearOne,
+            serviceResultYearTwo,
+            emptyResult,
+            showPreviousPaymentsTab = false,
+            Some(LocalDate.parse("2018-01-01")),
+            showInsolvencyContent = false
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             None,
             None,
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
+            showInsolvencyContent = false
           ))
         }
       }
@@ -454,13 +469,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         "return a PaymentsHistoryViewModel with the correct information" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, emptyResult, showPreviousPaymentsTab = false, Some(LocalDate.parse("2017-01-01"))
+            serviceResultYearOne,
+            serviceResultYearTwo,
+            emptyResult,
+            showPreviousPaymentsTab = false,
+            Some(LocalDate.parse("2017-01-01")),
+            showInsolvencyContent = false
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             Some(currentYear - 1),
             None,
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
+            showInsolvencyContent = false
           ))
         }
       }
@@ -469,13 +490,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         "return a PaymentsHistoryViewModel with the correct information" in new Test {
           target.generateViewModel(
-            serviceResultYearOne, serviceResultYearTwo, serviceResultYearThree, showPreviousPaymentsTab = false, Some(LocalDate.parse("2016-12-12"))
+            serviceResultYearOne,
+            serviceResultYearTwo,
+            serviceResultYearThree,
+            showPreviousPaymentsTab = false,
+            Some(LocalDate.parse("2016-12-12")),
+            showInsolvencyContent = false
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct,
+            showInsolvencyContent = false
           ))
         }
       }
@@ -486,7 +513,12 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       "return None" in new Test {
         override val serviceResultYearOne = Left(VatLiabilitiesError)
         target.generateViewModel(
-          serviceResultYearOne, serviceResultYearTwo, serviceResultYearThree, showPreviousPaymentsTab = false, None
+          serviceResultYearOne,
+          serviceResultYearTwo,
+          serviceResultYearThree,
+          showPreviousPaymentsTab = false,
+          None,
+          showInsolvencyContent = false
         ) shouldBe None
       }
     }

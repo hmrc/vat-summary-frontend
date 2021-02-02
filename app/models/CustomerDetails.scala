@@ -44,9 +44,11 @@ case class CustomerDetails(
     case _ => false
   }
 
+  val exemptInsolvencyTypes = Seq("07", "12", "13", "14")
+
   def insolvencyDateFutureUserBlocked(today: LocalDate): Boolean =
     (isInsolvent, insolvencyType, insolvencyDate, continueToTrade) match {
-      case (_, Some(inType), _, _) if Seq("07", "12", "13", "14").contains(inType) => false
+      case (_, Some(inType), _, _) if exemptInsolvencyTypes.contains(inType) => false
       case (true, Some(_), Some(date), Some(true)) if LocalDate.parse(date).isAfter(today) => true
       case _ => false
     }

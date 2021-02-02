@@ -88,6 +88,9 @@ object TestModels {
   )
 
   val customerDetailsInsolvent: CustomerDetails = customerDetailsMax.copy(isInsolvent = true, continueToTrade = Some(false))
+  val customerDetailsInsolventTrading: CustomerDetails = customerDetailsMax.copy(isInsolvent = true)
+  val customerDetailsInsolventTradingExempt: CustomerDetails =
+    customerDetailsMax.copy(isInsolvent = true, insolvencyType = Some("07"))
   val customerDetailsInsolventFuture: CustomerDetails = customerDetailsMax.copy(
     isInsolvent = true, insolvencyDate = Some("2019-01-01")
   )
@@ -117,6 +120,10 @@ object TestModels {
   )
 
   val customerInformationInsolvent: CustomerInformation = customerInformationMax.copy(details = customerDetailsInsolvent)
+  val customerInformationInsolventTrading: CustomerInformation =
+    customerInformationMax.copy(details = customerDetailsInsolventTrading)
+  val customerInformationInsolventTradingExempt: CustomerInformation =
+    customerInformationMax.copy(details = customerDetailsInsolventTradingExempt)
   val customerInformationInsolventFuture: CustomerInformation =
     customerInformationMax.copy(details = customerDetailsInsolventFuture)
 

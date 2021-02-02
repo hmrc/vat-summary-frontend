@@ -52,6 +52,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableChargeType = "tr td:nth-of-type(2) span.bold"
     val descriptionTableContent = "tr td:nth-of-type(2) span:nth-of-type(2)"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
+    val insolvencyBanner = ".panel"
   }
 
   val currentYear = 2018
@@ -68,114 +69,133 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
       amount = exampleAmount,
       clearedDate = Some(LocalDate.parse(s"2018-03-01"))
-    ))
+    )),
+    showInsolvencyContent = false
   )
 
-  "The payments history page" should {
+  "The payments history page" when {
 
-    lazy val view: Html = paymentHistoryView(model)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "the user is not insolvent" should {
 
-    "have the correct document title" in {
-      document.title shouldBe "Payment history - Business tax account - GOV.UK"
-    }
+      lazy val view: Html = paymentHistoryView(model)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Payment history"
-    }
-
-    "render breadcrumbs" which {
-
-      "have the text 'Business tax account'" in {
-        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+      "have the correct document title" in {
+        document.title shouldBe "Payment history - Business tax account - GOV.UK"
       }
 
-      "link to bta" in {
-        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe "Payment history"
       }
 
-      "have the text 'Your VAT account'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
-      }
+      "render breadcrumbs" which {
 
-      s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-        element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
-      }
-
-      "have the text 'Payment history'" in {
-        elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
-      }
-    }
-
-    "display a current year tab" in {
-      elementText(Selectors.tabOne) shouldBe currentYear.toString
-    }
-
-    "display a previous year tab" in {
-      elementText(Selectors.tabTwo) shouldBe (currentYear - 1).toString
-    }
-
-    "display a tab for 2 years ago" in {
-      elementText(Selectors.tabThree) shouldBe (currentYear - 2).toString
-    }
-
-    "display a previous payments tab" in {
-      elementText(Selectors.tabFour) shouldBe "Previous payments"
-    }
-
-    "have the current year subheading" in {
-      elementText(Selectors.currentYearSubheading) shouldBe currentYear.toString
-    }
-
-    "have the previous year subheading" in {
-      elementText(Selectors.previousYearSubheading) shouldBe (currentYear - 1).toString
-    }
-
-    "have the previous payments subheading" in {
-      elementText(Selectors.prevPaymentsSubheading) shouldBe "Previous payments"
-    }
-
-    "have the correct current year tab content" which {
-
-      "has the correct amount in the charge row" in {
-        elementText(Selectors.amountPaidTableContent) shouldBe "- £100"
-      }
-
-      "has the correct title in the charge row" in {
-        elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
-      }
-
-      "has the correct description in the charge row" in {
-        elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
-      }
-
-      "has the correct date in the charge row" in {
-        elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
-      }
-    }
-
-    "have the correct previous year tab content" in {
-      elementText(Selectors.previousYearNoPayments) shouldBe
-        "You have not made or received any payments using the new VAT service this year."
-    }
-
-    "have the correct previous payments tab content" which {
-
-      "has the correct message" in {
-        elementText(Selectors.prevPaymentsParagraph) shouldBe "You can view your previous payments " +
-          "(opens in new tab) if you made payments before joining Making Tax Digital."
-      }
-
-      "has a link to the old VAT portal" which {
-
-        "has the correct link text" in {
-          elementText(Selectors.prevPaymentsLink) shouldBe "view your previous payments (opens in new tab)"
+        "have the text 'Business tax account'" in {
+          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
         }
 
-        "has the correct link href" in {
-          element(Selectors.prevPaymentsLink).attr("href") shouldBe
-            mockConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)
+        "link to bta" in {
+          element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
         }
+
+        "have the text 'Your VAT account'" in {
+          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
+        }
+
+        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        }
+
+        "have the text 'Payment history'" in {
+          elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
+        }
+      }
+
+      "display a current year tab" in {
+        elementText(Selectors.tabOne) shouldBe currentYear.toString
+      }
+
+      "display a previous year tab" in {
+        elementText(Selectors.tabTwo) shouldBe (currentYear - 1).toString
+      }
+
+      "display a tab for 2 years ago" in {
+        elementText(Selectors.tabThree) shouldBe (currentYear - 2).toString
+      }
+
+      "display a previous payments tab" in {
+        elementText(Selectors.tabFour) shouldBe "Previous payments"
+      }
+
+      "have the current year subheading" in {
+        elementText(Selectors.currentYearSubheading) shouldBe currentYear.toString
+      }
+
+      "have the previous year subheading" in {
+        elementText(Selectors.previousYearSubheading) shouldBe (currentYear - 1).toString
+      }
+
+      "have the previous payments subheading" in {
+        elementText(Selectors.prevPaymentsSubheading) shouldBe "Previous payments"
+      }
+
+      "have the correct current year tab content" which {
+
+        "has the correct amount in the charge row" in {
+          elementText(Selectors.amountPaidTableContent) shouldBe "- £100"
+        }
+
+        "has the correct title in the charge row" in {
+          elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
+        }
+
+        "has the correct description in the charge row" in {
+          elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
+        }
+
+        "has the correct date in the charge row" in {
+          elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
+        }
+      }
+
+      "have the correct previous year tab content" in {
+        elementText(Selectors.previousYearNoPayments) shouldBe
+          "You have not made or received any payments using the new VAT service this year."
+      }
+
+      "have the correct previous payments tab content" which {
+
+        "has the correct message" in {
+          elementText(Selectors.prevPaymentsParagraph) shouldBe "You can view your previous payments " +
+            "(opens in new tab) if you made payments before joining Making Tax Digital."
+        }
+
+        "has a link to the old VAT portal" which {
+
+          "has the correct link text" in {
+            elementText(Selectors.prevPaymentsLink) shouldBe "view your previous payments (opens in new tab)"
+          }
+
+          "has the correct link href" in {
+            element(Selectors.prevPaymentsLink).attr("href") shouldBe
+              mockConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)
+          }
+        }
+      }
+
+      "not display the insolvency banner" in {
+        elementExtinct(Selectors.insolvencyBanner)
+      }
+    }
+
+    "the user is insolvent" should {
+
+      val insolventViewModel = model.copy(showInsolvencyContent = true)
+      lazy val view: Html = paymentHistoryView(insolventViewModel)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the insolvency banner" in {
+        elementText(Selectors.insolvencyBanner) shouldBe "You cannot view payments made before the insolvency date."
       }
     }
   }

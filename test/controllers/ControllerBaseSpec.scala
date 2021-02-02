@@ -79,7 +79,8 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
     GovUKSessionKeys.authToken -> "Bearer Token",
-    SessionKeys.migrationToETMP -> "2018-01-01"
+    SessionKeys.migrationToETMP -> "2018-01-01",
+    SessionKeys.financialAccess -> "true"
   )
 
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
