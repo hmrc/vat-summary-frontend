@@ -25,6 +25,8 @@ import java.time.LocalDate
 class CustomerDetailsSpec extends ControllerBaseSpec {
 
   val today: LocalDate = LocalDate.parse("2018-05-01")
+  val exemptInsolvencyTypes: Seq[String] = customerDetailsMax.exemptInsolvencyTypes
+  val blockedInsolvencyTypes: Seq[String] = customerDetailsMax.blockedInsolvencyTypes
 
   "A CustomerDetails object" when {
 
@@ -82,20 +84,48 @@ class CustomerDetailsSpec extends ControllerBaseSpec {
     }
   }
 
-  "calling .isInsolventWithoutAccess" should {
+  "calling .isInsolventWithoutAccess" when {
 
-    "return true when the user is insolvent and not continuing to trade" in {
-      customerDetailsInsolvent.isInsolventWithoutAccess shouldBe true
+    "the user is insolvent and has an exempt insolvency type" should {
+
+      "return false" in {
+        exemptInsolvencyTypes.foreach { value =>
+          customerDetailsInsolvent.copy(insolvencyType = Some(value)).isInsolventWithoutAccess shouldBe false
+        }
+      }
     }
 
-    "return false when the user is insolvent but is continuing to trade" in {
-      customerDetailsInsolvent.copy(continueToTrade = Some(true)).isInsolventWithoutAccess shouldBe false
+    "the user is insolvent and has a blocked insolvency type" should {
+
+      "return true" in {
+        blockedInsolvencyTypes.foreach { value =>
+          customerDetailsInsolvent.copy(insolvencyType = Some(value)).isInsolventWithoutAccess shouldBe true
+        }
+      }
     }
 
-    "return false when the user is not insolvent, regardless of the continueToTrade flag" in {
-      customerDetailsMax.isInsolventWithoutAccess shouldBe false
-      customerDetailsMax.copy(continueToTrade = Some(false)).isInsolventWithoutAccess shouldBe false
-      customerDetailsMax.copy(continueToTrade = None).isInsolventWithoutAccess shouldBe false
+    "the user is insolvent and has an insolvency type with no associated rules" when {
+
+      "the user is continuing to trade" should {
+
+        "return false" in {
+          customerDetailsInsolvent.copy(continueToTrade = Some(true)).isInsolventWithoutAccess shouldBe false
+        }
+      }
+
+      "the user is not continuing to trade" should {
+
+        "return true" in {
+          customerDetailsInsolvent.isInsolventWithoutAccess shouldBe true
+        }
+      }
+    }
+
+    "the user is not insolvent" should {
+
+      "return false" in {
+        customerDetailsMax.isInsolventWithoutAccess shouldBe false
+      }
     }
   }
 
@@ -106,8 +136,8 @@ class CustomerDetailsSpec extends ControllerBaseSpec {
       customerDetailsInsolventFuture.insolvencyDateFutureUserBlocked(today) shouldBe true
     }
 
-    "return false when the user is of a permitted insolvency type, regardless of other flags" in {
-      Seq("07", "12", "13", "14").foreach { value =>
+    "return false when the user is of an exempt insolvency type, regardless of other flags" in {
+      exemptInsolvencyTypes.foreach { value =>
         mockDateServiceCall()
         customerDetailsInsolventFuture.copy(insolvencyType = Some(value)).insolvencyDateFutureUserBlocked(today) shouldBe false
       }
@@ -124,3 +154,4 @@ class CustomerDetailsSpec extends ControllerBaseSpec {
     }
   }
 }
+
