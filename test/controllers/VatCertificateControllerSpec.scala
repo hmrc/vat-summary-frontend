@@ -72,7 +72,8 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         authorisedController,
         mockAccountDetailsService,
         mcc,
-        vatCertificate
+        vatCertificate,
+        mockServiceErrorHandler
       )
     }
   }
