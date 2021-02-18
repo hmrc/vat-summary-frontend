@@ -66,13 +66,10 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     def target: MakePaymentController = {
       setup()
       new MakePaymentController(
-        enrolmentsAuthService,
         mockPaymentsService,
-        mockAppConfig,
         authorisedController,
         mockAuditService,
         mcc,
-        ec,
         paymentsError)
     }
   }

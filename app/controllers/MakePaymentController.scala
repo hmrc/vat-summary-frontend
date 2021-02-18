@@ -25,7 +25,7 @@ import models.payments._
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{EnrolmentsAuthService, PaymentsService}
+import services.PaymentsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.PaymentsError
@@ -33,14 +33,13 @@ import views.html.errors.PaymentsError
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class MakePaymentController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
-                                      paymentsService: PaymentsService,
-                                      implicit val appConfig: AppConfig,
+class MakePaymentController @Inject()(paymentsService: PaymentsService,
                                       authorisedController: AuthorisedController,
                                       auditingService: AuditingService,
-                                      val mcc: MessagesControllerComponents,
-                                      implicit val ec: ExecutionContext,
+                                      mcc: MessagesControllerComponents,
                                       paymentsError: PaymentsError)
+                                     (implicit ec: ExecutionContext,
+                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
   def makePayment(amountInPence: Long,
@@ -103,11 +102,11 @@ class MakePaymentController @Inject()(val enrolmentsAuthService: EnrolmentsAuthS
         } else if(chargeReference == "noCR") {
           Logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs a charge " +
             "reference, but this payment does not have one")
-          Future.successful(InternalServerError)
+          Future.successful(InternalServerError(paymentsError()))
         } else {
           Logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs to have " +
             "period information")
-          Future.successful(InternalServerError)
+          Future.successful(InternalServerError(paymentsError()))
         }
     }
 

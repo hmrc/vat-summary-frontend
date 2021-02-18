@@ -16,7 +16,8 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
+
 import javax.inject.{Inject, Singleton}
 import models.viewModels.VatCertificateViewModel
 import play.api.i18n.I18nSupport
@@ -32,7 +33,8 @@ class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
                                          authorisedController: AuthorisedController,
                                          accountDetailsService: AccountDetailsService,
                                          mcc: MessagesControllerComponents,
-                                         vatCertificate: VatCertificate)
+                                         vatCertificate: VatCertificate,
+                                         serviceErrorHandler: ServiceErrorHandler)
                                         (implicit appConfig: AppConfig,
                                          ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport {
@@ -45,7 +47,7 @@ class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
           case Right(customerInformation) =>
             Ok(vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
           case Left(_) =>
-            InternalServerError
+            serviceErrorHandler.showInternalServerError
         }
       }
   }

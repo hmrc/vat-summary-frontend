@@ -64,7 +64,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, financialRequest)
           case _ =>
             Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
-            Future.successful(InternalServerError)
+            Future.successful(serviceErrorHandler.showInternalServerError)
         } recoverWith {
           case _: NoActiveSession => Future.successful(Redirect(appConfig.signInUrl))
           case _: InsufficientEnrolments =>
@@ -109,7 +109,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
 
       } getOrElse {
         Logger.warn("[AuthPredicate][authoriseAsNonAgent] Non-agent with invalid VRN")
-        Future.successful(InternalServerError)
+        Future.successful(serviceErrorHandler.showInternalServerError)
       }
     } else {
       Logger.debug("[AuthPredicate][authoriseAsNonAgent] Non-agent with no HMRC-MTD-VAT enrolment. Rendering unauthorised view.")
