@@ -26,19 +26,20 @@
   isHybridUser: Boolean,
   isOverdue: Boolean)(implicit messages: Messages)
 
-<div class ="tile tile-no-border">
+<div class="tile tile-no-border">
   <div id="payments" class="tile-body">
-    <h2 class="heading-medium push--top">@(hasMultiple) match {
-        case (true) => {@messages("payment.nextPayments")}
-        case (false) => {@messages("payment.nextPayment")}
-        }
-
+    <h2 class="govuk-heading-m push--top">@(hasMultiple) match {
+      case (true) => {@messages("payment.nextPayments")}
+      case (false) => {@messages("payment.nextPayment")}
+      }
     </h2>
 
     @if(isHybridUser) {
-      @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))
+      <p class="govuk-body">
+        @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))
+      </p>
     } else {
-      <p>
+      <p class="govuk-body">
       @(paymentsData, hasMultiple, isError) match {
         case (_, _, true) => { @messages("vatDetails.error") }
         case (Some(numOfPayments), true, _) => { @messages("vatDetails.paymentsDue", numOfPayments)}
@@ -46,15 +47,15 @@
           @paymentsData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("payment.noPayment"))
           @if(isOverdue){
             <span>
-                <strong class="task-overdue">@messages("common.overdue")</strong>
+              <strong class="task-overdue">@messages("common.overdue")</strong>
             </span>
           }
         }
       }
       </p>
 
-      <p>
-        <a href="@{controllers.routes.OpenPaymentsController.openPayments().url}">
+      <p class="govuk-body">
+        <a class="govuk-link" href="@{controllers.routes.OpenPaymentsController.openPayments().url}">
           @messages("payment.check")
         </a>
       </p>

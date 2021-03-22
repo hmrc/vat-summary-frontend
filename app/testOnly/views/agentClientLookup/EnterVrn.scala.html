@@ -19,36 +19,40 @@
 @import uk.gov.hmrc.play.views.html.helpers
 
 @this(mainTemplate: MainTemplate,
-      input: helpers.Input)
+      input: helpers.Input,
+        govukButton: GovukButton,
+        govukInput: GovukInput)
 
-@(form: Form[StubAgentClientLookupModel], redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[StubAgentClientLookupModel],
+  redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = "Stub Agent Client Lookup Frontend", bodyClasses = None, appConfig = appConfig) {
+@mainTemplate(title = "Stub Agent Client Lookup Frontend", appConfig = appConfig) {
 
-    @helper.form(action = testOnly.controllers.routes.AgentClientLookupStubController.post) {
-        @CSRF.formField
+  @helper.form(action = testOnly.controllers.routes.AgentClientLookupStubController.post) {
+    @CSRF.formField
 
-        <fieldset>
+      <fieldset class="govuk-fieldset">
 
-            <h2>Client VRN</h2>
+        @govukInput(Input(
+          name = "vrn",
+          id = "vrn",
+          label = Label(
+            content = Text("Client VRN"),
+            isPageHeading = true,
+            classes = "govuk-label--m"
+          ),
+          classes = "form-control govuk-!-width-one-third"
+        ))
 
-            <div class="form-field">
-                @input(
-                    form("vrn"),
-                    '_label -> "Client VRN",
-                    '_labelTextClass -> "form-label visuallyhidden",
-                    '_inputClass -> "form-control input--no-spinner"
-                )
-            </div>
+        @govukButton(Button(
+          content = Text("Submit"),
+          attributes = Map("type" -> "submit")
+        ))
 
-        </fieldset>
+      </fieldset>
 
-        <div class="form-group">
-            <button class="button" type="submit" id="continue-button">Submit</button>
-        </div>
+    <label class="govuk-label"><h4 class="govuk-heading-s">RedirectUrl:</h4></label>
+    <input class="govuk-body" type="text" name="redirectUrl" id="redirectUrl" value="@redirectUrl" style="width:100%;border:none;" readonly>
 
-        <label><h4>RedirectUrl:</h4></label>
-        <input type="text" name="redirectUrl" id="redirectUrl" value="@redirectUrl" style="width:100%;border:none;" readonly>
-
-    }
+  }
 }

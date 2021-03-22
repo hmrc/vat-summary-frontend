@@ -30,6 +30,13 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     val heading = "h2"
     val cardClass = ".card-full-container"
     val printButton = "button"
+    val firstYear = "#year-2018"
+    val secondYear = "#year-2019"
+    val firstPeriod = "div.govuk-body:nth-child(2) > dd"
+    val secondPeriod = "dl.govuk-grid-column-full > div:nth-child(3) > dd"
+    val thirdPeriod = "div.govuk-body:nth-child(5) > dd"
+    val finalPeriod = "div.govuk-body:nth-child(6) > dd"
+    def nthParagraph: Int => String = n => s"p:nth-child($n)"
   }
 
   "The Non-standard Tax Periods card" should {
@@ -38,42 +45,43 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
       exampleNonStandardTaxPeriods, exampleNonNSTP)(messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    lazy val card = document.select(Selectors.cardClass).get(0)
-
     "have the correct heading" in {
-      card.select(Selectors.heading).text() shouldBe "Non-standard tax periods"
+      elementText(Selectors.heading) shouldBe "Non-standard tax periods"
     }
+
     "have the correct first paragraph" in {
-      card.select("p:nth-child(2)").text() shouldBe "If you do not renew your non-standard tax periods, " +
+      elementText(Selectors.nthParagraph(2)) shouldBe "If you do not renew your non-standard tax periods, " +
         "an additional period (6 January 2019 to 31 January 2019) will be added."
     }
+
     "have the correct second paragraph" in {
-      card.select("p:nth-child(3)").text() shouldBe "This will cover the time between your last non-standard tax " +
+      elementText(Selectors.nthParagraph(3)) shouldBe "This will cover the time between your last non-standard tax " +
         "period and the start of your standard tax periods."
     }
+
     "have a 2018 year" in {
-      val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-      row.select("dt").get(0).text() shouldBe "2018"
+      elementText(Selectors.firstYear) shouldBe "2018"
     }
+
     "have the first non-standard tax period without years" in {
-      val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-      row.select("dd").get(0).text() shouldBe "29 December to 30 December"
+      elementText(Selectors.firstPeriod) shouldBe "29 December to 30 December"
     }
+
     "have the second non-standard tax period with years" in {
-      val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-      row.select("dd").get(1).text() shouldBe "31 December 2018 to 1 January 2019"
+      elementText(Selectors.secondPeriod) shouldBe "31 December 2018 to 1 January 2019"
     }
+
     "have a 2019 year" in {
-      val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-      row.select("dt").get(1).text() shouldBe "2019"
+      elementText(Selectors.secondYear) shouldBe "2019"
     }
+
     "have the third non-standard tax period without years" in {
-      val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-      row.select("dd").get(2).text() shouldBe "2 January to 3 January"
+      elementText(Selectors.thirdPeriod) shouldBe "2 January to 3 January"
     }
+
     "have the final non-standard tax period without years" in {
-      val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-      row.select("dd").get(3).text() shouldBe "4 January to 5 January"
+      elementText(Selectors.finalPeriod) shouldBe "4 January to 5 January"
     }
+
   }
 }

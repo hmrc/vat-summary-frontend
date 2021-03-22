@@ -25,59 +25,73 @@
 @(details: VatDetailsViewModel)(implicit messages: Messages, appConfig: AppConfig)
 
 @cancelRegistration = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-            <a href="@appConfig.deregisterVatUrl">@messages("deregPartial.cancelRegistration.title")</a>
-        </h3>
-        <p>@messages("deregPartial.cancelRegistration.content")</p>
-    </div>
+  <div id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+      <a class="govuk-link" href="@appConfig.deregisterVatUrl">@messages("deregPartial.cancelRegistration.title")</a>
+    </h3>
+    <p class="govuk-body">@messages("deregPartial.cancelRegistration.content")</p>
+  </div>
 }
 
 @historicDeregistration(date: LocalDate) = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-        @messages("deregPartial.historicDeregistration.title")
-        </h3>
-        <p>@messages("deregPartial.historicDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@appConfig.govUkVatRegistrationUrl" target="_blank">@messages("deregPartial.historicDeregistration.link")</a></p>
-    </div>
+  <div id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-padding-bottom-1">
+      @messages("deregPartial.historicDeregistration.title")
+    </h3>
+    <p class="govuk-body">@messages("deregPartial.historicDeregistration.content", displayDate(date))</p>
+    <p class="govuk-body">
+      <a class="govuk-link"
+         id="agent-services-link"
+         href="@appConfig.govUkVatRegistrationUrl"
+         rel="noreferrer noopener"
+         target="_blank">@messages("deregPartial.historicDeregistration.link")</a>
+    </p>
+  </div>
 }
 
 @futureDeregistration(date: LocalDate) = {
-    <div id="cancel-vat" class="column-one-third">
-        <h3 class="heading-small">
-        @messages("deregPartial.futureDeregistration.title")
-        </h3>
-        <p>@messages("deregPartial.futureDeregistration.content", displayDate(date))</p>
-        <p><a id="agent-services-link" href="@appConfig.govUkVatRegistrationUrl" target="_blank">@messages("deregPartial.futureDeregistration.link")</a></p>
-    </div>
+  <div id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-padding-bottom-1">
+      @messages("deregPartial.futureDeregistration.title")
+    </h3>
+    <p class="govuk-body">@messages("deregPartial.futureDeregistration.content", displayDate(date))</p>
+    <p class="govuk-body">
+      <a class="govuk-link"
+         id="agent-services-link"
+         href="@appConfig.govUkVatRegistrationUrl"
+         rel="noreferrer noopener"
+         target="_blank">@messages("deregPartial.futureDeregistration.link")</a>
+    </p>
+  </div>
 }
 
 
 @pendingDeregistration() = {
-    <div class="column-one-third" id="cancel-vat">
-        <h3 class="heading-small">
-        @messages("deregPartial.pendingDeregistration.title")
-        </h3>
-        <p>@messages("deregPartial.pendingDeregistration.content")</p>
-    </div>
+  <div id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-padding-bottom-1">
+      @messages("deregPartial.pendingDeregistration.title")
+    </h3>
+    <p class="govuk-body">@messages("deregPartial.pendingDeregistration.content")</p>
+  </div>
 }
 
 @vatGroupDeregistration() = {
-    <div class="column-one-third" id="cancel-vat">
-        <h3 class="heading-small">
-            <a href="@appConfig.govUkVat7Form" target="_blank">@messages("deregPartial.vatGroup.title")</a>
-        </h3>
-        <p>@messages("deregPartial.vatGroup.content")</p>
-    </div>
+  <div id="cancel-vat">
+    <h3 class="govuk-heading-s govuk-!-padding-bottom-1">
+      <a class="govuk-link" href="@appConfig.govUkVat7Form" rel="noreferrer noopener" target="_blank">
+        @messages("deregPartial.vatGroup.title")
+      </a>
+    </h3>
+    <p class="govuk-body">@messages("deregPartial.vatGroup.content")</p>
+  </div>
 }
 
 @{
-    (details.deregDate, details.pendingDereg, details.partyType) match {
-        case (Some(date), _, _) if date.isAfter(details.currentDate) => futureDeregistration(date)
-        case (Some(date), _, _) => historicDeregistration(date)
-        case (_, true, _) => pendingDeregistration
-        case (_, _, Some(PartyTypes.vatGroup)) => vatGroupDeregistration()
-        case _ => cancelRegistration
-    }
+  (details.deregDate, details.pendingDereg, details.partyType) match {
+    case (Some(date), _, _) if date.isAfter(details.currentDate) => futureDeregistration(date)
+    case (Some(date), _, _) => historicDeregistration(date)
+    case (_, true, _) => pendingDeregistration
+    case (_, _, Some(PartyTypes.vatGroup)) => vatGroupDeregistration()
+    case _ => cancelRegistration
+  }
 }

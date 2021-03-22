@@ -18,17 +18,17 @@
 
 @(years: Seq[Int], showPreviousPaymentsTab: Boolean)(implicit messages: Messages)
 
-<ul>
+<ul class="govuk-tabs__list">
   @for(year <- years) {
-    <li class="tablinks">
-      <a href="#@year">
+    <li class="govuk-tabs__list-item@if(year == years.head){ govuk-tabs__list-item--selected}">
+      <a class="govuk-tabs__tab" href="#year-@{year}">
         @year
       </a>
     </li>
   }
   @if(showPreviousPaymentsTab) {
-    <li class="tablinks">
-      <a href="#@messages("paymentsHistory.previousPayments.heading")">
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#previous-payments">
         @messages("paymentsHistory.previousPayments.heading")
       </a>
     </li>

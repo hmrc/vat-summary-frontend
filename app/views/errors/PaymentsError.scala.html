@@ -14,26 +14,15 @@
  * limitations under the License.
  *@
 
-@this(govUkWrapper: GovUkWrapper)
+@this(mainTemplate: MainTemplate)
 
 @()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages, user: User)
 
-@contentHeader = {
-  <h1>@messages("paymentsError.heading")</h1>
-}
-
-@mainContent = {
-  <p class="lede">@messages("paymentsError.message")</p>
-  <p id="pay-now-content">
+@mainTemplate(title = messages("paymentsError.title"), appConfig = appConfig, user = Some(user)) {
+  <h1 class="govuk-heading-l">@messages("paymentsError.heading")</h1>
+  <p class="govuk-body-l">@messages("paymentsError.message")</p>
+  <p class="govuk-body" id="pay-now-content">
     @messages("paymentsError.payNowOne")
-    <a href="@appConfig.unauthenticatedPaymentsUrl">@messages("paymentsError.payNowTwo")</a>.
+    <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl">@messages("paymentsError.payNowTwo")</a>.
   </p>
 }
-
-@govUkWrapper(appConfig = appConfig,
-  title = messages("paymentsError.title"),
-  contentHeader = Some(contentHeader),
-  mainBody = mainContent,
-  user = Some(user)
-)
-

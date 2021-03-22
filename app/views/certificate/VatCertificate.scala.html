@@ -15,36 +15,40 @@
  *@
 
 @import models.viewModels.VatCertificateViewModel
-@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
-@import views.html.templates.formatters.addresses._
-@import views.html.templates.formatters.breadcrumbs._
-@import views.html.certificate.helpers._
 @import play.twirl.api._
+@import views.html.certificate.helpers._
+@import views.html.templates.formatters.addresses._
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
 @this(mainTemplate: MainTemplate,
       fullAddress: FullAddress,
       standardReturnFrequency: StandardReturnFrequency,
       nonStandardReturnFrequency: NonStandardReturnFrequency,
-      navigationBreadcrumb: NavigationBreadcrumb)
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton)
 
-@(serviceInfoContent: Html = HtmlFormat.empty, model: VatCertificateViewModel)(
-implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], user: User)
+@(serviceInfoContent: Html = HtmlFormat.empty,
+  model: VatCertificateViewModel)(implicit messages: Messages,
+                                           appConfig: config.AppConfig,
+                                           request: Request[_],
+                                           user: User)
 
 @fieldRow(title: String, content: Any) = {
-    <dl class="govuk-check-your-answers cya-questions-long">
-        <div>
-            <dt class="cya-question">
-             @title
-            </dt>
-            <dd class="cya-answer">
-             @content
-            </dd>
-        </div>
-    </dl>
+  <dl class="govuk-summary-list">
+    <div class="govuk-summary-list__row">
+      <dt class="govuk-summary-list__key govuk-!-font-weight-bold">
+        @title
+      </dt>
+      <dd class="govuk-summary-list__value">
+        @content
+      </dd>
+    </div>
+  </dl>
 }
 
 @isSoleTrader = @{
-    List("1", "Z1").contains(model.businessTypeMsgKey.split('.').last)
+  List("1", "Z1").contains(model.businessTypeMsgKey.split('.').last)
 }
 
 @mainTemplate(
@@ -53,70 +57,84 @@ implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], u
   user = Some(user),
   serviceInfoContent = serviceInfoContent
 ) {
-    @if(!user.isAgent) {
-        @navigationBreadcrumb(
-            links = Map(
-                appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
-                controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
-            currentPage = messages("vatCertificate.title")
+  @if(!user.isAgent) {
+    @govukBreadcrumbs(Breadcrumbs(
+      items = Seq(
+        BreadcrumbsItem(
+          content = Text(messages("breadcrumbs.bta")),
+          href = Some(appConfig.btaHomeUrl)
+        ),
+        BreadcrumbsItem(
+          content = Text(messages("vatDetails.title")),
+          href = Some(controllers.routes.VatDetailsController.details().url)
+        ),
+        BreadcrumbsItem(
+          content = Text(messages("vatCertificate.title"))
         )
-    } else {
-        <a class="link-back" href='@appConfig.agentClientLookupHubUrl'>@messages("base.back")</a>
-    }
-    <h1 class="heading-xlarge">@if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
+      )
+    ))
+  } else {
+    @govukBackLink(BackLink(
+      href = appConfig.agentClientLookupHubUrl,
+      content = Text(messages("base.back"))
+    ))
+  }
+  <h1 class="govuk-heading-xl">@if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
 
-    <div class="cert-header">
-        <img src='@routes.Assets.at("images/"+messages("vatCertificate.logo")+".png")' alt="HMRC Logo">
+  <div class="cert-header">
+    <img src='@routes.Assets.at("images/"+messages("vatCertificate.logo")+".png")' alt="HMRC Logo">
+  </div>
+
+  <div class="card-full-container govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-m card-heading">@messages("vatCertificate.aboutYourRegistration.title")</h2>
     </div>
-
-    <div class="card-full-container column-full">
-        <div class="column-two-thirds">
-            <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutYourRegistration.title")</h2>
-        </div>
-        <div class="column-full card-full">
-            @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn)
-            @fieldRow(messages("vatCertificate.aboutYourRegistration.registrationDate"),
-                model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")))
-            @fieldRow(messages("vatCertificate.aboutYourRegistration.certificateDate"), displayDate(model.certificateDate))
-        </div>
+    <div class="govuk-grid-column-full card-full">
+      @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn)
+      @fieldRow(messages("vatCertificate.aboutYourRegistration.registrationDate"),
+        model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")))
+      @fieldRow(messages("vatCertificate.aboutYourRegistration.certificateDate"), displayDate(model.certificateDate))
     </div>
+  </div>
 
-    <div class="card-full-container column-full">
-        <div class="column-two-thirds">
-            <h2 class="heading-medium card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
-        </div>
-        <div class="column-full card-full">
-            @if(isSoleTrader && model.fullName.nonEmpty) {
-                @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get)
-            }
-            @if(!isSoleTrader) {
-                @fieldRow(messages("vatCertificate.aboutTheBusiness.businessName"), model.businessName.getOrElse(messages("common.notProvided")))
-            }
-            @if(isSoleTrader) {
-                @if(model.tradingName.nonEmpty) {
-                    @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.get)
-                }
-            } else {
-                @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.getOrElse(messages("common.notProvided")))
-            }
-            @fieldRow(messages("vatCertificate.aboutTheBusiness.businessType"), messages(model.businessTypeMsgKey))
-            @fieldRow(messages("vatCertificate.aboutTheBusiness.tradeClassification"), model.tradeClassification.getOrElse(messages("common.notProvided")))
-            @fieldRow(messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"), fullAddress(model.ppob))
-        </div>
+  <div class="card-full-container govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-m card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
     </div>
-
-    @{
-        if(!appConfig.features.vatCertNSTPs()) {
-            standardReturnFrequency(model.returnPeriodMsgKey)
-        } else {
-            model.nonStdTaxPeriods.fold {
-                standardReturnFrequency(model.returnPeriodMsgKey)
-            }{ nonStdReturnPeriods =>
-                nonStandardReturnFrequency(nonStdReturnPeriods, model.firstNonNSTPPeriod)
-            }
+    <div class="govuk-grid-column-full card-full">
+      @if(isSoleTrader && model.fullName.nonEmpty) {
+        @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get)
+      }
+      @if(!isSoleTrader) {
+        @fieldRow(messages("vatCertificate.aboutTheBusiness.businessName"), model.businessName.getOrElse(messages("common.notProvided")))
+      }
+      @if(isSoleTrader) {
+        @if(model.tradingName.nonEmpty) {
+          @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.get)
         }
-    }
+      } else {
+        @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.getOrElse(messages("common.notProvided")))
+      }
+      @fieldRow(messages("vatCertificate.aboutTheBusiness.businessType"), messages(model.businessTypeMsgKey))
+      @fieldRow(messages("vatCertificate.aboutTheBusiness.tradeClassification"), model.tradeClassification)
+      @fieldRow(messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"), fullAddress(model.ppob))
+    </div>
+  </div>
 
-    <button class="button"
-            onclick="javascript:window.print()">@messages("vatCertificate.print")</button>
+  @{
+    if(!appConfig.features.vatCertNSTPs()) {
+      standardReturnFrequency(model.returnPeriodMsgKey)
+    } else {
+      model.nonStdTaxPeriods.fold {
+          standardReturnFrequency(model.returnPeriodMsgKey)
+      }{ nonStdReturnPeriods =>
+          nonStandardReturnFrequency(nonStdReturnPeriods, model.firstNonNSTPPeriod)
+      }
+    }
+  }
+
+  @govukButton(Button(
+    content = Text(messages("vatCertificate.print")),
+    attributes = Map("onclick" -> "javascript:window.print()")
+  ))
 }

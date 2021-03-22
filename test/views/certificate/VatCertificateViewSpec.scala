@@ -36,9 +36,35 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   object Selectors {
     val heading = "h1"
     val cardClass = ".card-full-container"
-    val printButton = "button"
-    val fullNameSelector = "#content > article > div:nth-child(5) > div.column-full.card-full > dl:nth-child(1) > div > dd"
-    val backLink = ".link-back"
+    val aboutYourRegHeading = ".govuk-grid-column-two-thirds > h2"
+    val vrnRow = "#content > div:nth-child(4) > .govuk-grid-column-full > dl:nth-child(1) > div"
+    val vrnTitle = s"$vrnRow > dt"
+    val vrn = s"$vrnRow > dd"
+    val regDateRow = "#content > div:nth-child(4) > .govuk-grid-column-full dl:nth-of-type(2) > div"
+    val regDateTitle = s"$regDateRow > dt"
+    val regDate = s"$regDateRow > dd"
+    val certDateRow = "#content > div:nth-child(4) > .govuk-grid-column-full dl:nth-of-type(3) > div"
+    val certDateTitle = s"$certDateRow > dt"
+    val certDate = s"$certDateRow > dd"
+    val aboutTheBusinessHeading = "#content > div:nth-child(5) > div.govuk-grid-column-two-thirds > h2"
+    val businessNameRow = "#content > div:nth-child(5) > div.govuk-grid-column-full.card-full > dl:nth-child(1) > div"
+    val businessNameTitle = s"$businessNameRow > dt"
+    val businessName = s"$businessNameRow > dd"
+    val tradingNameRow = "#content > div:nth-child(5) > div.govuk-grid-column-full.card-full > dl:nth-child(2) > div"
+    val tradingNameTitle = s"$tradingNameRow > dt"
+    val tradingName = s"$tradingNameRow > dd"
+    val businessTypeRow = "#content > div:nth-child(5) > div.govuk-grid-column-full.card-full > dl:nth-child(3) > div"
+    val businessTypeTitle = s"$businessTypeRow > dt"
+    val businessType = s"$businessTypeRow > dd"
+    val tradeClassificationRow = "#content > div:nth-child(5) > div.govuk-grid-column-full.card-full > dl:nth-child(4) > div"
+    val tradeClassificationTitle = s"$tradeClassificationRow > dt"
+    val tradeClassification = s"$tradeClassificationRow > dd"
+    val ppobRow = "#content > div:nth-child(5) > div.govuk-grid-column-full.card-full > dl:nth-child(5) > div"
+    val ppobRowTitle = s"$ppobRow > dt"
+    val ppob = s"$ppobRow > dd"
+    val printButton = ".govuk-button"
+    val fullNameSelector = "#content > div:nth-child(5) > .govuk-grid-column-full > dl:nth-child(1) > div > dd"
+    val backLink = ".govuk-back-link"
   }
 
   lazy val model: VatCertificateViewModel = VatCertificateViewModel(
@@ -124,56 +150,57 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the about your registration card" that {
-        lazy val card = document.select(Selectors.cardClass).first()
+
         "contains the correct heading" in {
-          card.select("h2").text() shouldBe "About your registration"
+          elementText(Selectors.aboutYourRegHeading) shouldBe "About your registration"
         }
-        "contains the VRN" in {
-          val vrnRow = card.select(".govuk-check-your-answers:nth-of-type(1)")
-          vrnRow.select("dt").text() shouldBe "VAT registration number (VRN)"
-          vrnRow.select("dd").text() shouldBe "5555555555"
+
+        "contains the VRN row" in {
+          elementText(Selectors.vrnTitle) shouldBe "VAT registration number (VRN)"
+          elementText(Selectors.vrn) shouldBe "5555555555"
         }
+
         "contains the registration date" in {
-          val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          regDateRow.select("dt").text() shouldBe "Registration date"
-          regDateRow.select("dd").text() shouldBe s"1 January 2017"
+          elementText(Selectors.regDateTitle) shouldBe "Registration date"
+          elementText(Selectors.regDate) shouldBe "1 January 2017"
         }
+
         "contains the certificate date" in {
-          val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(3)")
-          certDateRow.select("dt").text() shouldBe "Certificate date"
-          certDateRow.select("dd").text() shouldBe s"1 January 2018"
+          elementText(Selectors.certDateTitle) shouldBe "Certificate date"
+          elementText(Selectors.certDate) shouldBe "1 January 2018"
         }
+
       }
 
       "have the about the business card" that {
-        lazy val card = document.select(Selectors.cardClass).get(1)
+
         "contains the correct heading" in {
-          card.select("h2").text() shouldBe "About the business"
+          elementText(Selectors.aboutTheBusinessHeading) shouldBe "About the business"
         }
+
         "contains the business name" in {
-          val vrnRow = card.select(".govuk-check-your-answers:nth-of-type(1)")
-          vrnRow.select("dt").text() shouldBe "Business name"
-          vrnRow.select("dd").text() shouldBe "Not provided"
+          elementText(Selectors.businessNameTitle) shouldBe "Business name"
+          elementText(Selectors.businessName) shouldBe "Not provided"
         }
+
         "contains the trading name" in {
-          val regDateRow = card.select(".govuk-check-your-answers:nth-of-type(2)")
-          regDateRow.select("dt").text() shouldBe "Trading name"
-          regDateRow.select("dd").text() shouldBe s"ABC Traders"
+          elementText(Selectors.tradingNameTitle) shouldBe "Trading name"
+          elementText(Selectors.tradingName) shouldBe "ABC Traders"
         }
+
         "contains the business type" in {
-          val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(3)")
-          certDateRow.select("dt").text() shouldBe "Business type"
-          certDateRow.select("dd").text() shouldBe s"Organisation"
+          elementText(Selectors.businessTypeTitle) shouldBe "Business type"
+          elementText(Selectors.businessType) shouldBe "Organisation"
         }
+
         "contains the trade classification" in {
-          val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(4)")
-          certDateRow.select("dt").text() shouldBe "Trade classification (SIC code)"
-          certDateRow.select("dd").text() shouldBe s"6602"
+          elementText(Selectors.tradeClassificationTitle) shouldBe "Trade classification (SIC code)"
+          elementText(Selectors.tradeClassification) shouldBe "6602"
         }
+
         "contains the address" in {
-          val certDateRow = card.select(".govuk-check-your-answers:nth-of-type(5)")
-          certDateRow.select("dt").text() shouldBe "Principal place of business address"
-          certDateRow.select("dd").text() shouldBe s"Line 1 Line 2 TF4 3ER"
+          elementText(Selectors.ppobRowTitle) shouldBe "Principal place of business address"
+          elementText(Selectors.ppob) shouldBe "Line 1 Line 2 TF4 3ER"
         }
       }
 
@@ -199,11 +226,12 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         "contains the correct heading" in {
           card.select("h2").text() shouldBe "Return details"
         }
+
         "contains the return frequency" in {
-          val row = card.select(".govuk-check-your-answers:nth-of-type(1)")
-          row.select("dt").text() shouldBe "VAT Return dates"
-          row.select("dd").text() shouldBe "Every month"
+          document.select("#stp-dt").text() shouldBe "VAT Return dates"
+          document.select("#stp-dd").text() shouldBe "Every month"
         }
+
       }
 
       "not have the non-standard tax periods card" in {
@@ -238,8 +266,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           lazy val view = vatCertificateView(
             HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
           lazy implicit val document: Document = Jsoup.parse(view.body)
-          elementText("#content > article > div:nth-child(6) > " +
-            "div.column-two-thirds > h2") shouldBe "Return details"
+          elementText("div.govuk-grid-column-full:nth-child(1) > h2:nth-child(1)") shouldBe "Return details"
         }
 
         "not have the non-standard return details card" in {
@@ -264,16 +291,16 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
 
-      "display the traders full name" in {
+      "display the trader's full name" in {
         elementText(Selectors.fullNameSelector) shouldBe "Sole Person"
       }
 
-      "display the traders trading name" in {
-        document.body().toString should include("Trading name")
+      "display the trader's trading name" in {
+        elementText(Selectors.tradingName) shouldBe "ABC Traders"
       }
 
       "not display the business name" in {
-        document.body().toString shouldNot include("Business name")
+        elementText(Selectors.businessName) shouldNot include("Business name")
       }
 
     }
@@ -290,16 +317,16 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
 
-      "display the traders full name" in {
+      "display the trader's full name" in {
         elementText(Selectors.fullNameSelector) shouldBe "Andy Vidual"
       }
 
-      "display the traders trading name" in {
-        document.body().toString should include("Trading name")
+      "display the trader's trading name" in {
+        elementText(Selectors.tradingName) shouldBe "ABC Traders"
       }
 
       "not display the business name" in {
-        document.body().toString shouldNot include("Business name")
+        elementText(Selectors.businessName) shouldNot include("Business name")
       }
     }
 
@@ -320,11 +347,11 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "not display the traders trading name" in {
-        document.body().toString shouldNot include("Trading name")
+        elementText(Selectors.tradingName) shouldNot be("Trading name")
       }
 
       "not display the business name" in {
-        document.body().toString shouldNot include("Business name")
+        elementText(Selectors.businessName) shouldNot be("Business name")
       }
     }
   }

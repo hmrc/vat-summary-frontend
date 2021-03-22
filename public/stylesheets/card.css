@@ -35,27 +35,18 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
 }
 
 .card-full-width {
-    flex-basis: 100%;
-    margin-right: 0%;
+  flex-basis: 100%;
+  margin-right: 0%;
 }
 
 .card {
-    border: 1px solid #dee0e2;
-    font-size: 16px;
-    background-color: #f3f2f1;
+  border: 1px solid #dee0e2;
+  font-size: 16px;
+  background-color: #f3f2f1;
 }
 
 .card .card-heading {
     margin-top: 0;
-}
-
-.card .card-body {
-    border-bottom: 1px solid #dee0e2;
-    padding: 12px;
-}
-
-.card .card-body *:last-child {
-    margin-bottom: 0;
 }
 
 .card-full-container {
@@ -69,8 +60,18 @@ html[data-useragent*='MSIE 10.0'] .flex-container .card {
     margin-bottom: 10px;
 }
 
+.card .card-body {
+  border-bottom: 1px solid #dee0e2;
+  padding: 12px;
+}
+
+.card .card-body *:last-child {
+  margin-bottom: 0;
+}
+
 table td:last-child.amount {
     padding-right: 16px;
+    text-align: right;
 }
 
 .card-full-container .card-body {
@@ -100,7 +101,7 @@ table td:last-child.amount {
     text-align: left;
 }
 
-.govuk-check-your-answers{
+.govuk-check-your-answers {
     padding-bottom: 15px
 }
 

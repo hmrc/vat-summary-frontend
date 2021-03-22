@@ -47,167 +47,140 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
   val sectionExampleWithPayment: String =
     s"""
-      |<section id="$currentYear" class="tabcontent" role="tabpanel">
-      |  <h2 class="heading-medium">$currentYear</h2>
-      |  <table>
-      |    <thead>
-      |      <tr>
-      |        <th scope="col">
-      |          <div class="visuallyhidden">Payment received</div>
-      |        </th>
-      |        <th scope="col">
-      |          <div class="visuallyhidden">Description</div>
-      |        </th>
-      |        <th class="numeric" scope="col">
-      |          <div class="visuallyhidden">Amount</div>
-      |        </th>
+      |<div id="year-$currentYear" class="govuk-tabs__panel">
+      |  <h2 class="govuk-heading-m">$currentYear</h2>
+      |  <table class="govuk-table">
+      |    <thead class="govuk-table__head">
+      |      <tr class="govuk-table__row">
+      |        <th class="govuk-table__header govuk-visually-hidden" scope="col"> Payment received </th>
+      |        <th class="govuk-table__header govuk-visually-hidden" scope="col"> Description </th>
+      |        <th class="numeric govuk-table__header govuk-visually-hidden" scope="col"> Amount </th>
       |      </tr>
       |    </thead>
-      |    <tbody>
+      |    <tbody class="govuk-table__body">
       |      ${paymentsHistoryCharge(transaction)}
       |    </tbody>
       |  </table>
-      |</section>
+      |</div>
     """.stripMargin
 
-  def sectionExampleWithoutPayment(year: Int, javascriptEnabled: Boolean = true): String = {
+  def sectionExampleWithoutPayment(year: Int, divClassHidden: Boolean = false): String = {
+    val hiddenDivClass: String =
+      if(divClassHidden) {" govuk-tabs__panel--hidden"}
+      else {""}
     val sectionAttributes: String =
-      if(javascriptEnabled) {
-        s"""id="$year" class="tabcontent" role="tabpanel""""
-      } else {
-        s"""id="nonJS-$year""""
-      }
+        s"""id="year-$year" class="govuk-tabs__panel$hiddenDivClass""""
     s"""
-      |<section $sectionAttributes>
-      |  <h2 class="heading-medium">$year</h2>
-      |  <p>You have not made or received any payments using the new VAT service this year.</p>
-      |</section>
+      |<div $sectionAttributes>
+      |  <h2 class="govuk-heading-m">$year</h2>
+      |  <p class="govuk-body">You have not made or received any payments using the new VAT service this year.</p>
+      |</div>
+      """.stripMargin
+  }
+
+  val noScriptSection: String = {
+    """
+    |<noscript>
+    |  <div>
+    |    <a href="#top" class="govuk-link">
+    |      <svg class="arrow input--radio-inline" width="13" height="15" viewBox="0 -5 13 15">
+    |        <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
+    |      </svg><span>Back to top</span>
+    |    </a>
+    |  </div>
+    |</noscript>
     """.stripMargin
   }
 
   "The payment history tabs content template" when {
 
-    "javascript is enabled" when {
+    "the showPreviousPaymentsTab boolean is set to false" when {
 
-      "the showPreviousPaymentsTab boolean is set to false" when {
+      "there is one year" when {
 
-        "there is one year" when {
+        "there are no transactions" should {
 
-          "there are no transactions" should {
+          "render the correct HTML" in {
 
-            "render the correct HTML" in {
+            val expectedMarkup = Html(sectionExampleWithoutPayment(currentYear) + noScriptSection)
 
-              val expectedMarkup = Html(sectionExampleWithoutPayment(currentYear))
+            val result = paymentsHistoryTabsContent(
+              singleYear, Seq.empty, showPreviousPaymentsTab = false
+            )
 
-              val result = paymentsHistoryTabsContent(
-                singleYear, Seq.empty, showPreviousPaymentsTab = false, javascriptEnabled = true
-              )
-
-              formatHtml(result) shouldBe formatHtml(expectedMarkup)
-            }
-          }
-
-          "there are some transactions" should {
-
-            "render the correct HTML" in {
-
-              val expectedMarkup = Html(sectionExampleWithPayment)
-
-              val result = paymentsHistoryTabsContent(
-                singleYear, Seq(transaction), showPreviousPaymentsTab = false, javascriptEnabled = true
-              )
-
-              formatHtml(result) shouldBe formatHtml(expectedMarkup)
-            }
+            formatHtml(result) shouldBe formatHtml(expectedMarkup)
           }
         }
 
-        "there are two years" should {
+        "there are some transactions" should {
 
-          "there are no transactions" should {
+          "render the correct HTML" in {
 
-            "render the correct HTML" in {
-              val expectedMarkup = Html(
-                sectionExampleWithoutPayment(currentYear) + sectionExampleWithoutPayment(previousYear)
-              )
+            val expectedMarkup = Html(sectionExampleWithPayment + noScriptSection)
 
-              val result = paymentsHistoryTabsContent(
-                multipleYears, Seq.empty, showPreviousPaymentsTab = false, javascriptEnabled = true
-              )
+            val result = paymentsHistoryTabsContent(
+              singleYear, Seq(transaction), showPreviousPaymentsTab = false
+            )
 
-              formatHtml(result) shouldBe formatHtml(expectedMarkup)
-            }
-          }
-
-          "there are some transactions" should {
-
-            "render the correct HTML" in {
-
-              val expectedMarkup = Html(sectionExampleWithPayment + sectionExampleWithoutPayment(previousYear))
-
-              val result = paymentsHistoryTabsContent(
-                multipleYears, Seq(transaction), showPreviousPaymentsTab = false, javascriptEnabled = true
-              )
-
-              formatHtml(result) shouldBe formatHtml(expectedMarkup)
-            }
+            formatHtml(result) shouldBe formatHtml(expectedMarkup)
           }
         }
       }
 
-      "the showPreviousPaymentsTab boolean is set to true" should {
+      "there are two years" when {
 
-        "render the correct HTML" in {
+        "there are no transactions" should {
 
-          val expectedMarkup = Html(
-            sectionExampleWithoutPayment(currentYear) +
-            s"""
-              |<section id="previous-payments" class="tabcontent" role="tabpanel">
-              |  <h2 class="heading-medium">Previous payments</h2>
-              |  <p>
-              |    You can
-              |    <a href="${mockAppConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)}">
-              |      view your previous payments (opens in new tab)
-              |    </a>
-              |    if you made payments before joining Making Tax Digital.
-              |  </p>
-              |</section>
-            """.stripMargin
-          )
+          "render the correct HTML" in {
+            val expectedMarkup = Html(
+              sectionExampleWithoutPayment(currentYear) + sectionExampleWithoutPayment(previousYear, divClassHidden = true) + noScriptSection
+            )
 
-          val result = paymentsHistoryTabsContent(
-            singleYear, Seq.empty, showPreviousPaymentsTab = true, javascriptEnabled = true
-          )
+            val result = paymentsHistoryTabsContent(
+              multipleYears, Seq.empty, showPreviousPaymentsTab = false
+            )
 
-          formatHtml(result) shouldBe formatHtml(expectedMarkup)
+            formatHtml(result) shouldBe formatHtml(expectedMarkup)
+          }
+        }
+
+        "there are some transactions" should {
+
+          "render the correct HTML" in {
+
+            val expectedMarkup = Html(sectionExampleWithPayment + sectionExampleWithoutPayment(previousYear, divClassHidden = true) + noScriptSection)
+
+            val result = paymentsHistoryTabsContent(
+              multipleYears, Seq(transaction), showPreviousPaymentsTab = false
+            )
+
+            formatHtml(result) shouldBe formatHtml(expectedMarkup)
+          }
         }
       }
     }
 
-    "javascript is disabled" should {
+    "the showPreviousPaymentsTab boolean is set to true" should {
 
       "render the correct HTML" in {
 
         val expectedMarkup = Html(
+          sectionExampleWithoutPayment(currentYear) +
           s"""
-             |<p>
-             |  <a href="#nonJS-$currentYear">$currentYear</a>
-             |</p>
-          """.stripMargin +
-          sectionExampleWithoutPayment(currentYear, javascriptEnabled = false) +
-          s"""
-            |<div>
-            |  <a href="#top" class="back-to-top-link">
-            |    <svg class="arrow input--radio-inline" width="13" height="15" viewBox="0 -5 13 15">
-            |      <path fill="currentColor" d="M6.5 0L0 6.5 1.4 8l4-4v12.7h2V4l4.3 4L13 6.4z"></path>
-            |    </svg><span>Back to top</span>
-            |  </a>
+            |<div id="previous-payments" class="govuk-tabs__panel">
+            |  <h2 class="govuk-heading-m">Previous payments</h2>
+            |  <p class="govuk-body">
+            |    You can
+            |    <a class="govuk-link" rel="noreferrer noopener" href="${mockAppConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)}" target="_blank">view your previous payments (opens in a new tab)</a>
+            |    if you made payments before joining Making Tax Digital.
+            |  </p>
             |</div>
           """.stripMargin
+          + noScriptSection
         )
 
         val result = paymentsHistoryTabsContent(
-          singleYear, Seq.empty, showPreviousPaymentsTab = false, javascriptEnabled = false
+          singleYear, Seq.empty, showPreviousPaymentsTab = true
         )
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)

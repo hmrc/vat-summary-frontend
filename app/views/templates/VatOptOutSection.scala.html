@@ -18,12 +18,14 @@
 
 @(pendingOptOut: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
-    <div class="column-one-third" id="vat-optout">
-      @if(pendingOptOut) {
-        <h3 class="heading-small">@messages("vatDetails.vatOptOut.link")</h3>
-        <p>@messages("vatDetails.vatOptOut.pending")</p>
-      } else {
-        <h3 class="heading-small"><a href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a></h3>
-        <p>@messages("vatDetails.vatOptOut.info")</p>
-      }
-    </div>
+<div id="vat-optout">
+  @if(pendingOptOut) {
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">@messages("vatDetails.vatOptOut.link")</h3>
+    <p class="govuk-body">@messages("vatDetails.vatOptOut.pending")</p>
+  } else {
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+      <a class="govuk-link" href="@appConfig.optOutFrontendUrl">@messages("vatDetails.vatOptOut.link")</a>
+    </h3>
+    <p class="govuk-body">@messages("vatDetails.vatOptOut.info")</p>
+  }
+</div>

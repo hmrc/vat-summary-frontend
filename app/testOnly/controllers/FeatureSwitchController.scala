@@ -22,7 +22,7 @@ import javax.inject.Inject
 import models.FeatureSwitchModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import testOnly.views.html.FeatureSwitch
+import testOnly.views.html.featureSwitch.FeatureSwitch
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,

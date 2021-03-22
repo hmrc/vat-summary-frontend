@@ -32,12 +32,15 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
   object Selectors {
     val tableRow = "tr"
     val clearedDate = "tr td:nth-of-type(1)"
-    val chargeTitle = "tr td:nth-of-type(2) span.bold"
+    val chargeTitle = "tr:nth-child(1) > td:nth-child(2) > span:nth-child(1)"
     val description = "tr td:nth-of-type(2) span:nth-of-type(2)"
     val amount = "tr td:nth-of-type(3)"
     val errorText = "tr td:nth-of-type(2)"
     val thirdTableElement = "tr td:nth-of-type(3)"
   }
+
+  val chargeRowClass = " govuk-table__row"
+  val repaymentChargeRowClass = s"repayment$chargeRowClass"
 
   "The chargeTypes template" when {
 
@@ -81,7 +84,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -109,7 +112,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {
@@ -137,7 +140,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -165,7 +168,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {
@@ -193,7 +196,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -221,7 +224,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -249,7 +252,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe "repayment govuk-table__row"
       }
 
       "display the correct charge title" in {
@@ -277,7 +280,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {
@@ -305,7 +308,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -333,7 +336,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -361,7 +364,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -389,7 +392,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -418,7 +421,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -447,7 +450,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -476,7 +479,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {
@@ -504,7 +507,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -532,7 +535,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -561,7 +564,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -590,7 +593,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -619,7 +622,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -647,7 +650,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
     }
 
@@ -667,7 +670,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "unallocated"
+        element(Selectors.tableRow).attr("class") shouldBe s"unallocated$chargeRowClass"
       }
 
       "display the correct charge title" in {
@@ -699,7 +702,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {
@@ -731,7 +734,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -759,7 +762,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -787,7 +790,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {
@@ -815,7 +818,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -843,7 +846,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -871,7 +874,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
       }
 
       "display the correct charge title" in {
@@ -899,7 +902,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment"
+        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
       }
 
       "display the correct charge title" in {

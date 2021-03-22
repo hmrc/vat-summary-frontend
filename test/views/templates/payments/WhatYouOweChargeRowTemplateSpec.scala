@@ -29,22 +29,19 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
   val whatYouOweChargeRow: WhatYouOweChargeRow = injector.instanceOf[WhatYouOweChargeRow]
 
   object Selectors {
-    private val columnOne = ""
-    val title = s"h2"
-    val due = s"$columnOne dt > div"
+    val title = "#payment-1 > dl > div > dt > p"
+    val due = "#payment-1 > dl > div > dt > div"
 
-    private val columnTwo = "dd:nth-of-type(1)"
-    val amount = s"$columnTwo > span"
-    val amountData = s"$columnTwo > span[data-amount]"
+    val amount = "#payment-1 > dl > div > .govuk-summary-list__value > span"
+    val amountData = "#payment-1 > dl > div > .govuk-summary-list__value > span[data-amount]"
 
-    private val columnThree = "dd:nth-of-type(2)"
-    val payLink = s"$columnThree > div > a:nth-of-type(1)"
-    val payText = s"$payLink > span:nth-of-type(1)"
-    val directDebitText = s"$columnThree span"
+    val payLink = "#payment-1 > dl > div > dd.govuk-summary-list__actions.what-you-owe-links.nowrap > a"
+    val payText = s"$payLink > span:nth-child(1)"
+    val directDebitText = s"tr > td:nth-child(3) > p > a > span:nth-of-type(2)"
     val payHiddenContent = s"$payLink > span:nth-of-type(2)"
-    val viewReturnLink = s"$columnThree > a"
+    val viewReturnLink = "#payment-1 > dl > div > dd.govuk-summary-list__actions.what-you-owe-links.nowrap > p > a"
     val viewReturnText = s"$viewReturnLink > span:nth-of-type(2)"
-    val viewReturnHiddenContent = s"$viewReturnLink span:nth-of-type(1)"
+    val viewReturnHiddenContent = s"$viewReturnLink > span:nth-of-type(1)"
   }
 
   "Rendering the view" when {
@@ -80,11 +77,11 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           elementText(Selectors.due) shouldBe "due by 3 Mar 2018"
         }
 
-        "display the correct owed amount as a negative" in {
+        "display the correct owed amount" in {
           elementText(Selectors.amount) shouldBe "£100"
         }
 
-        "display the correct amount data attribute as a negative" in {
+        "display the correct amount data attribute" in {
           elementText(Selectors.amountData) shouldBe "£100"
         }
 

@@ -14,28 +14,13 @@
  * limitations under the License.
  *@
 
-@this()
+@this(banner: HmrcUserResearchBanner)
 
 @(appConfig: config.AppConfig)(implicit messages: Messages)
 
 @if(appConfig.features.userResearchBanner()) {
-    <div class="js-hidden notice-banner" id="notice-banner">
-        <div class="centered-content">
-            <div class="notice-banner__wrapper grid-layout soft--sides">
-                <div class="grid-layout__column--2-3">
-                    <h3 class="notice-banner__content">@messages("userResearch.heading")</h3>
-                    <a class="notice-banner__content"
-                        href="https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34">
-                        @messages("userResearch.enterSurvey")
-                    </a>
-                </div>
-                <div class="grid-layout__column--1-3 text--right">
-                    <a class="notice-banner__close notice-banner__content" href="#">
-                        <span>@messages("userResearch.close")</span>
-                        <span class="visuallyhidden">@messages("userResearch.close.context")</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+  @banner(UserResearchBanner(
+    language = if(messages.lang.code == "cy") Cy else En,
+    url = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34"
+  ))
 }

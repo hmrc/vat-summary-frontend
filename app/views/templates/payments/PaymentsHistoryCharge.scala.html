@@ -25,32 +25,35 @@
 @(transaction: PaymentsHistoryModel)(implicit messages: Messages)
 
 @chargeType = @{
-    if(ChargeType.positiveOrNegativeChargeTypes.contains(transaction.chargeType) && transaction.amount < 0) {
-      PaymentMessageHelper.getChargeType(transaction.chargeType.value).copy(id = "repayment")
-    } else {
-      PaymentMessageHelper.getChargeType(transaction.chargeType.value)
-    }
+  if(ChargeType.positiveOrNegativeChargeTypes.contains(transaction.chargeType) && transaction.amount < 0) {
+    PaymentMessageHelper.getChargeType(transaction.chargeType.value).copy(id = "repayment")
+  } else {
+    PaymentMessageHelper.getChargeType(transaction.chargeType.value)
+  }
 }
 
 @transaction.clearedDate match {
 
   case Some(date) => {
-    <tr class="@chargeType.id">
-      <td class="nowrap" valign="top">@displayDate(date, useShortDayFormat = true)</td>
-      <td><span class="bold">@messages(s"${chargeType.title}")</span>
+    <tr class="@chargeType.id govuk-table__row">
+      <td class="govuk-table__cell nowrap">@displayDate(date, useShortDayFormat = true)</td>
+      <td class="govuk-table__cell govuk-!-font-weight-bold">
+        <span>
+          @messages(s"${chargeType.title}")
+        </span>
         @chargeType.description.map { description =>
-          <span class="form-hint">
+          <span class="govuk-hint">
             @PaymentMessageHelper.getFullDescription(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
           </span>
         }
       </td>
-      <td class="numeric nowrap amount
+      <td class="numeric amount nowrap govuk-table__cell
         @if(transaction.amount < 0 && !chargeType.name.equals(UnallocatedPayment.value) ||
-        chargeType.name.equals(Refund.value))  {repayment-money}" valign="top">
+        chargeType.name.equals(Refund.value))  {repayment-money}">
           @if(chargeType.name equals UnallocatedPayment.value) {
-              @positiveNegative(transaction.amount.abs)
+            @positiveNegative(transaction.amount.abs)
           } else {
-              @positiveNegative(transaction.amount)
+            @positiveNegative(transaction.amount)
           }
       </td>
     </tr>

@@ -18,12 +18,12 @@
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = "Portal stub page", bodyClasses = None, appConfig = appConfig) {
+@mainTemplate(title = "Portal stub page", appConfig = appConfig) {
 
-    <h1>Portal stub page</h1>
+  <h1 class="govuk-heading-l">Portal stub page</h1>
 
-    <p>This is a test-only page.</p>
+  <p class="govuk-body">This is a test-only page.</p>
 
-    <a id="return" href="/vat-through-software/vat-overview">Return to VAT</a>
+  <a class="govuk-link" id="return" href="/vat-through-software/vat-overview">Return to VAT</a>
 
 }

@@ -33,7 +33,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val header = ".page-heading"
-    val entityNameHeading = ".form-hint > p:nth-child(2)"
+    val entityNameHeading = "span.govuk-caption-m:nth-of-type(2)"
     val nextPaymentHeading = "#payments h2"
     val nextPayment = "#payments p"
     val nextReturnHeading = "#next-return h2"
@@ -43,17 +43,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatCertificate = "#vat-certificate"
     val updateVatDetails = "#update-vat-details"
     val submittedReturns = "#submitted-returns"
-    val vatRegNo = ".form-hint"
-    val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
-    val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
-    val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
+    val vatRegNo = ".govuk-caption-m"
+    val btaBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(1)"
+    val btaBreadcrumbLink = ".govuk-breadcrumbs__link"
+    val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2)"
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
     val historyHeading = "#history > h2"
-    val historyPastPayments = "ul.list > li:nth-child(1) > a:nth-child(1)"
-    val historyPastReturns = "ul.list > li:nth-child(2) > a:nth-child(1)"
-    val serviceInfoNav = ".service-info nav"
-    val apiError = "h3:nth-child(2).heading-medium"
+    val historyPastPayments = ".govuk-list > li:nth-child(1) > p > a"
+    val historyPastReturns = ".govuk-list > li:nth-child(2) > p > a"
+    val serviceInfoNav = ".govuk-width-container > .govuk-body"
+    val apiError = "h3:nth-child(2).govuk-heading-m"
     val vatOptOutSection = "#vat-optout"
     val cancelVatSection = "#cancel-vat"
     val covidPartial = ".warning-banner"
@@ -156,7 +156,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
       }
 
-      "have the text 'VAT'" in {
+      "have the text 'Your VAT account'" in {
         elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
       }
     }
@@ -166,7 +166,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct entity name" in {
-      elementText(Selectors.entityNameHeading) shouldBe detailsModel.entityName.getOrElse("Fail")
+      elementText(Selectors.entityNameHeading) shouldBe "Cheapo Clothing"
     }
 
     "have the correct VRN message" in {

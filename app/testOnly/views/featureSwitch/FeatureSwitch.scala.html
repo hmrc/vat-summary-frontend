@@ -1,0 +1,49 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import helper.CSRF
+@import testOnly.views.featureSwitch.FeatureSwitchItems
+
+@this(mainTemplate: MainTemplate,
+      govukButton: GovukButton,
+      govukCheckboxes: GovukCheckboxes,
+      featureSwitchItems: FeatureSwitchItems)
+
+@(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
+@mainTemplate(title = "Feature switches", appConfig = appConfig) {
+
+  @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
+    @CSRF.formField
+
+    @govukCheckboxes(Checkboxes(
+      name = "feature-switch",
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text("Features"),
+          classes = "govuk-fieldset__legend govuk-fieldset__legend--l",
+          isPageHeading = true
+        )),
+      )),
+      items = featureSwitchItems.items(form)
+    ))
+
+    @govukButton(Button(
+      content = Text("Submit"),
+      inputType = Some("submit")
+    ))
+  }
+}

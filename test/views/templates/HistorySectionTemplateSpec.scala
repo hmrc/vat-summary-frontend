@@ -28,10 +28,9 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
   "The history section template" when {
 
     object Selectors {
-      val viewPastPayments = ".list > li:nth-child(1) > a:nth-child(1)"
-      val viewPastReturns = ".list > li:nth-child(2) > a:nth-child(1)"
-      val historyHeading = "#history > h2:nth-child(1)"
-
+      val viewPastPayments = ".govuk-list:nth-child(2) > li:nth-child(1) > p > a"
+      val viewPastReturns = ".govuk-list:nth-child(2) > li:nth-child(2) > p > a"
+      val historyHeading = "#history > h2"
     }
 
     "the user is Not Hybrid" should {
@@ -46,7 +45,6 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
       "display the past payments text" in {
         elementText(Selectors.viewPastPayments) shouldBe "View past payments"
       }
-
 
       "have a link to the payment history" in {
         element(Selectors.viewPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory().url
@@ -70,10 +68,17 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.viewPastPayments) shouldBe "View past payments (opens in a new tab)"
       }
 
-      "have a link to the portal via the PortalController" in {
-        element(Selectors.viewPastPayments).attr("href") shouldBe "/vat-through-software/portal-payment-history"
-      }
+      "have a link to the portal via the PortalController" which {
 
+        "has the correct href" in {
+          element(Selectors.viewPastPayments).attr("href") shouldBe "/vat-through-software/portal-payment-history"
+        }
+
+        "opens in a new tab" in {
+          element(Selectors.viewPastPayments).attr("target") shouldBe "_blank"
+        }
+
+      }
     }
   }
 

@@ -28,7 +28,7 @@ class NotFoundViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
-      val instructions = "#content > .lede"
+      val instructions = "#content > .govuk-body-l"
     }
 
     lazy val view = notFoundView()
