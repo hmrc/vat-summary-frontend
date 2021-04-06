@@ -25,7 +25,6 @@ case class CustomerInformation(details: CustomerDetails,
                                isHybridUser: Boolean,
                                customerMigratedToETMPDate: Option[String],
                                hybridToFullMigrationDate: Option[String],
-                               registrationDate: Option[String],
                                partyType: Option[String],
                                sicCode: String,
                                returnPeriod: Option[String],
@@ -58,7 +57,6 @@ object CustomerInformation {
     (__ \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true)) and
     (__ \\ "customerMigratedToETMPDate").readNullable[String].orElse(Reads.pure(None)) and
     (__ \\ "hybridToFullMigrationDate").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \\ "vatRegistrationDate").readNullable[String].orElse(Reads.pure(None)) and
     (__ \ "partyType").readNullable[String].orElse(Reads.pure(None)) and
     (__ \ "primaryMainCode").read[String] and
     (__ \\ "stdReturnPeriod").readNullable[String].orElse(Reads.pure(None)) and
@@ -70,7 +68,5 @@ object CustomerInformation {
     (__ \ "missingTrader").read[Boolean] and
     (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true)) and
     (__ \ "mandationStatus").read[String]
-
-
   )(CustomerInformation.apply _)
 }

@@ -52,14 +52,14 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
           isInsolvent = false,
           Some(true),
           Some("01"),
-          Some("2018-01-01")
+          Some("2018-01-01"),
+          Some("2017-01-01")
         ),
         Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB")),
         Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
         isHybridUser = false,
         Some("2017-05-05"),
         Some("2017-05-06"),
-        Some("2017-01-01"),
         Some("7"),
         "10410",
         Some("MM"),
