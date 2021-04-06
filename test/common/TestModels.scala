@@ -73,7 +73,8 @@ object TestModels {
     isInsolvent = false,
     Some(true),
     Some("01"),
-    Some("2018-01-01")
+    Some("2018-01-01"),
+    Some("2017-01-01")
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
@@ -82,6 +83,7 @@ object TestModels {
     None,
     None,
     isInsolvent = false,
+    None,
     None,
     None,
     None
@@ -102,7 +104,6 @@ object TestModels {
     isHybridUser = false,
     Some("2017-05-05"),
     Some("2017-05-06"),
-    Some("2017-01-01"),
     Some("7"),
     "10410",
     Some("MM"),
@@ -134,7 +135,6 @@ object TestModels {
     Address("Bedrock Quarry", None, None, None, None),
     None,
     isHybridUser = false,
-    None,
     None,
     None,
     None,

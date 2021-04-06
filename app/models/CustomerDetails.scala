@@ -21,16 +21,15 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-case class CustomerDetails(
-                           firstName: Option[String],
+case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            tradingName: Option[String],
                            organisationName: Option[String],
                            isInsolvent: Boolean,
                            continueToTrade: Option[Boolean],
                            insolvencyType: Option[String],
-                           insolvencyDate: Option[String]
-                          ) {
+                           insolvencyDate: Option[String],
+                           vatRegistrationDate: Option[String]) {
 
   val entityName: Option[String] =
     (firstName, lastName, tradingName, organisationName) match {
@@ -66,6 +65,7 @@ object CustomerDetails {
     (__ \ "isInsolvent").read[Boolean] and
     (__ \ "continueToTrade").readNullable[Boolean] and
     (__ \ "insolvencyType").readNullable[String] and
-    (__ \ "insolvencyDate").readNullable[String]
+    (__ \ "insolvencyDate").readNullable[String] and
+    (__ \ "effectiveRegistrationDate").readNullable[String]
   )(CustomerDetails.apply _)
 }
