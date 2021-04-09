@@ -64,7 +64,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
-         |            }
+           |            }
            |        ]
            |      },
            |      {
@@ -91,7 +91,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-03-10"
-         |            }
+           |            }
            |        ]
            |      }
            |    ]
@@ -819,6 +819,49 @@ class PaymentsHistoryModelSpec extends UnitSpec {
 
         s"return $Refund as the charge type " in {
           Json.fromJson(testJson)(reads) shouldBe JsSuccess(expectedSeq)
+        }
+      }
+      "Clearing reason is filled with Allocated to Charge" should {
+        val testJson: JsValue = Json.parse(
+          s"""{
+             |    "idType" : "VRN",
+             |    "idNumber" : "555555555",
+             |    "regimeType" : "VATC",
+             |    "processingDate" : "2018-03-07T09:30:00.000Z",
+             |    "financialTransactions" : [
+             |      {
+             |        "chargeType" : "$PaymentOnAccount",
+             |        "mainType" : "Payment on account",
+             |        "businessPartner" : "0",
+             |        "contractAccountCategory" : "99",
+             |        "contractAccount" : "X",
+             |        "contractObjectType" : "ABCD",
+             |        "contractObject" : "0",
+             |        "sapDocumentNumber" : "0",
+             |        "sapDocumentNumberItem" : "0",
+             |        "mainTransaction" : "1234",
+             |        "subTransaction" : "5678",
+             |        "originalAmount" : -5050,
+             |        "items" : [
+             |          {
+             |            "subItem": "000",
+             |            "amount": -5050,
+             |            "paymentReference": "654378944",
+             |            "paymentAmount": -5050,
+             |            "paymentMethod": "BANK GIRO RECEIPTS",
+             |            "paymentLot": "RP11",
+             |            "paymentLotItem": "000001",
+             |            "dueDate": "2018-12-04",
+             |            "clearingDate": "2017-12-04",
+             |            "clearingReason": "Allocated to Charge"
+             |          }
+             |        ]
+             |      }
+             |    ]
+             |  }""".stripMargin
+        )
+        "return an empty seq" in {
+         Json.fromJson(testJson)(reads) shouldBe JsSuccess(Seq())
         }
       }
     }
