@@ -64,7 +64,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
-         |            }
+           |          }
            |        ]
            |      },
            |      {
@@ -91,7 +91,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-03-10"
-         |            }
+           |          }
            |        ]
            |      }
            |    ]
@@ -157,8 +157,8 @@ class PaymentsHistoryModelSpec extends UnitSpec {
            |        ]
            |      },
            |      {
-           |        "chargeType" : "$DefaultSurcharge",
-           |        "mainType" : "$DefaultSurcharge",
+           |        "chargeType" : "$DebitDefaultSurcharge",
+           |        "mainType" : "VAT Default Surcharge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -304,7 +304,7 @@ class PaymentsHistoryModelSpec extends UnitSpec {
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
-          chargeType = DefaultSurcharge,
+          chargeType = DebitDefaultSurcharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
           amount = 150,

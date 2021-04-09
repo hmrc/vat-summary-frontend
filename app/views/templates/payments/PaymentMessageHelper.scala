@@ -79,10 +79,17 @@ object PaymentMessageHelper {
     "chargeType.vatCentralAssessmentTitle",
     Some("chargeType.vatCentralAssessmentDescription"))
 
-  object VatDefaultSurcharge extends PaymentMessageHelper(
-    DefaultSurcharge.value,
+  object VatDebitDefaultSurcharge extends PaymentMessageHelper(
+    DebitDefaultSurcharge.value,
     "chargeType.vatDefaultSurchargeTitle",
     Some("chargeType.vatDefaultSurchargeDescription"))
+
+  object VatCreditDefaultSurcharge extends PaymentMessageHelper(
+    CreditDefaultSurcharge.value,
+    "chargeType.vatDefaultSurchargeTitle",
+    Some("chargeType.vatDefaultSurchargeDescription"),
+    "repayment"
+  )
 
   object VatErrorCorrectionDebitCharge extends PaymentMessageHelper(
     ErrorCorrectionDebitCharge.value,
@@ -360,7 +367,8 @@ object PaymentMessageHelper {
     VatOfficerAssessmentCreditCharge,
     VatOfficerAssessmentDebitCharge,
     VatCentralAssessment,
-    VatDefaultSurcharge,
+    VatDebitDefaultSurcharge,
+    VatCreditDefaultSurcharge,
     VatErrorCorrectionDebitCharge,
     VatErrorCorrectionCreditCharge,
     VatRepaymentSupplement,
