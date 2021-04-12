@@ -52,8 +52,9 @@ class BtaStubConnectorSpec extends ControllerBaseSpec {
       }
     }
 
-    (mockHttp.GET[HttpResponse](_: String)(_: HttpReads[HttpResponse], _: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *, *)
+    (mockHttp.GET[HttpResponse](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
+      (_: HttpReads[HttpResponse], _: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *, *, *)
       .returns(generateResponse(response))
 
     new BtaStubConnector(mockHttp, hc, ec)
