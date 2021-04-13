@@ -39,7 +39,7 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
     lazy val connector: ServiceInfoPartialConnector = {
 
       (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-        (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
+                                  (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
         .stubs(*,*,*,*,*,*)
         .returns(result)
       new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
