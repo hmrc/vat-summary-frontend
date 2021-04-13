@@ -99,14 +99,26 @@ class PaymentsHttpParserSpec extends UnitSpec {
               "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
-              "mainType" -> DefaultSurcharge,
-              "chargeType" -> DefaultSurcharge,
-              "taxPeriodFrom" -> "2015-12-01",
-              "taxPeriodTo" -> "2014-01-01",
+              "mainType" -> DebitDefaultSurcharge,
+              "chargeType" -> DebitDefaultSurcharge,
+              "taxPeriodFrom" -> "2014-12-01",
+              "taxPeriodTo" -> "2015-01-01",
               "items" -> Json.arr(
                 Json.obj("dueDate" -> "2015-10-25")
               ),
               "outstandingAmount" -> 1000.27,
+              "periodKey" -> "#006",
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "mainType" -> CreditDefaultSurcharge,
+              "chargeType" -> CreditDefaultSurcharge,
+              "taxPeriodFrom" -> "2014-12-01",
+              "taxPeriodTo" -> "2015-01-01",
+              "items" -> Json.arr(
+                Json.obj("dueDate" -> "2015-10-25")
+              ),
+              "outstandingAmount" -> -1000.27,
               "periodKey" -> "#006",
               "chargeReference" -> "XD002750002155"
             ),
@@ -586,11 +598,21 @@ class PaymentsHttpParserSpec extends UnitSpec {
           ddCollectionInProgress = false
         ),
         PaymentWithPeriod(
-          DefaultSurcharge,
-          periodFrom = LocalDate.parse("2015-12-01"),
-          periodTo = LocalDate.parse("2014-01-01"),
+          DebitDefaultSurcharge,
+          periodFrom = LocalDate.parse("2014-12-01"),
+          periodTo = LocalDate.parse("2015-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
+          periodKey = "#006",
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        PaymentWithPeriod(
+          CreditDefaultSurcharge,
+          periodFrom = LocalDate.parse("2014-12-01"),
+          periodTo = LocalDate.parse("2015-01-01"),
+          due = LocalDate.parse("2015-10-25"),
+          outstandingAmount = BigDecimal(-1000.27),
           periodKey = "#006",
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
