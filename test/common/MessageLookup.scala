@@ -50,7 +50,7 @@ object MessageLookup {
         case VatOfficerAssessmentCreditCharge.name => ("VAT officer’s assessment", "for overpaying by this amount")
         case VatOfficerAssessmentDebitCharge.name => ("VAT officer’s assessment", "for underpaying by this amount")
         case VatCentralAssessment.name => ("Estimate", s"for your $datePeriod return")
-        case VatDefaultSurcharge.name => ("Surcharge", s"for late payment of your $datePeriod return")
+        case VatDebitDefaultSurcharge.name | VatCreditDefaultSurcharge.name => ("Surcharge", s"for late payment of your $datePeriod return")
         case VatErrorCorrectionDebitCharge.name => ("Error correction payment", s"for correcting your $datePeriod return")
         case VatErrorCorrectionCreditCharge.name => ("Error correction repayment from HMRC", s"for correcting your $datePeriod return")
         case VatRepaymentSupplement.name => ("Late repayment compensation from HMRC", s"we took too long to repay your $datePeriod return")

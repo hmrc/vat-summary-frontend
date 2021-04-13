@@ -205,10 +205,38 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       }
     }
 
-    "there is a vat default surcharge charge" should {
+    "there is a VAT Debit Default Surcharge charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        DefaultSurcharge,
+        DebitDefaultSurcharge,
+        Some(LocalDate.parse("2018-01-12")),
+        Some(LocalDate.parse("2018-03-23")),
+        123456,
+        Some(LocalDate.parse("2018-02-14"))
+      )
+
+      lazy val template = paymentsHistoryCharge(model)
+      lazy implicit val document: Document = Jsoup.parse(
+        s"<table>${template.body}</table>"
+      )
+
+      "display the correct table row class" in {
+        element(Selectors.tableRow).attr("class") shouldBe ""
+      }
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Surcharge"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for late payment of your 12 Jan to 23 Mar 2018 return"
+      }
+    }
+
+    "there is a VAT Credit Default Surcharge charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        CreditDefaultSurcharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
         -123456,
@@ -221,7 +249,7 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
       )
 
       "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe ""
+        element(Selectors.tableRow).attr("class") shouldBe "repayment"
       }
 
       "display the correct charge title" in {

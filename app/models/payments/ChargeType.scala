@@ -60,8 +60,11 @@ case object OADefaultInterestCharge extends ChargeType {
 case object OAFurtherInterestCharge extends ChargeType {
   override val value: String = "VAT OA Further Interest"
 }
-case object DefaultSurcharge extends ChargeType {
-  override val value: String = "VAT Default Surcharge"
+case object DebitDefaultSurcharge extends ChargeType {
+  override val value: String = "VAT Debit Default Surcharge"
+}
+case object CreditDefaultSurcharge extends ChargeType {
+  override val value: String = "VAT Credit Default Surcharge"
 }
 case object CentralAssessmentCharge extends ChargeType {
   override val value: String = "VAT Central Assessment"
@@ -208,7 +211,8 @@ object ChargeType {
     ReturnCreditCharge,
     OACreditCharge,
     OADebitCharge,
-    DefaultSurcharge,
+    DebitDefaultSurcharge,
+    CreditDefaultSurcharge,
     CentralAssessmentCharge,
     ErrorCorrectionCreditCharge,
     ErrorCorrectionDebitCharge,
