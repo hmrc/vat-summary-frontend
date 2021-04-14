@@ -23,7 +23,7 @@ import play.twirl.api.Html
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial
-import uk.gov.hmrc.play.partials.HtmlPartial.{Failure, Success}
+import uk.gov.hmrc.play.partials.HtmlPartial._
 import views.html.templates.BtaNavigationLinks
 
 import scala.concurrent.{ExecutionContext, Future}
