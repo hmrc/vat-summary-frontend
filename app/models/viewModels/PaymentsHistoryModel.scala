@@ -30,7 +30,7 @@ case class PaymentsHistoryModel(chargeType: ChargeType,
 
 object PaymentsHistoryModel {
 
-  val allocatedCharge : String = "Allocated to Charge"
+  val allocatedCharge : String = "allocated to charge"
 
   implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
 
@@ -49,7 +49,7 @@ object PaymentsHistoryModel {
           val chargeType: ChargeType =  ChargeType.apply((transaction \ FinancialTransactionsConstants.chargeType).as[String])
 
           val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction)
-            .filterNot(_.clearingReason.contains(allocatedCharge)) map {
+            .filterNot(_.clearingReason.map(_.toLowerCase).contains(allocatedCharge))map {
             subItem => generatePaymentModel(chargeType, subItem, transaction)
           }
 
