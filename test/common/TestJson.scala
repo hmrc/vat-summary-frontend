@@ -104,7 +104,6 @@ object TestJson {
         "line1" -> "Bedrock Quarry"
       )
     ),
-    "primaryMainCode" -> "10410",
     "missingTrader" -> false,
     "mandationStatus" -> "MTDfB"
   )

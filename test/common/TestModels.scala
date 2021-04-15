@@ -105,7 +105,7 @@ object TestModels {
     Some("2017-05-05"),
     Some("2017-05-06"),
     Some("7"),
-    "10410",
+    Some("10410"),
     Some("MM"),
     Some(List(
       TaxPeriod(LocalDate.parse("2018-01-01"), LocalDate.parse("2018-01-15")),
@@ -138,7 +138,7 @@ object TestModels {
     None,
     None,
     None,
-    "10410",
+    None,
     None,
     None,
     None,
