@@ -45,7 +45,7 @@ object VatCertificateViewModel {
     VatCertificateViewModel(
       vrn, customerInformation.details.vatRegistrationDate.map(LocalDate.parse(_)), LocalDate.now(),
       customerInformation.details.organisationName, customerInformation.details.tradingName,
-      customerInformation.partyTypeMessageKey, customerInformation.sicCode,
+      customerInformation.partyTypeMessageKey, customerInformation.sicCodeMessageKey,
       customerInformation.businessAddress, customerInformation.returnPeriodMessageKey,
       customerInformation.nonStdTaxPeriods, customerInformation.firstNonNSTPPeriod,
       customerFullName

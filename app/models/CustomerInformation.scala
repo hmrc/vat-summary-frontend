@@ -26,7 +26,7 @@ case class CustomerInformation(details: CustomerDetails,
                                customerMigratedToETMPDate: Option[String],
                                hybridToFullMigrationDate: Option[String],
                                partyType: Option[String],
-                               sicCode: String,
+                               sicCode: Option[String],
                                returnPeriod: Option[String],
                                nonStdTaxPeriods: Option[Seq[TaxPeriod]],
                                firstNonNSTPPeriod: Option[TaxPeriod],
@@ -43,6 +43,7 @@ case class CustomerInformation(details: CustomerDetails,
   }
 
   val partyTypeMessageKey: String = partyType.fold("common.notProvided")(x => s"partyType.$x")
+  val sicCodeMessageKey: String = partyType.fold("common.notProvided")(x => x)
   val returnPeriodMessageKey: String = returnPeriod.fold("common.notProvided"){
     case x @ ("MM" | "MA" | "MB" | "MC") => s"returnPeriod.$x"
     case _ => "returnPeriod.nonStandard"
@@ -58,7 +59,7 @@ object CustomerInformation {
     (__ \\ "customerMigratedToETMPDate").readNullable[String].orElse(Reads.pure(None)) and
     (__ \\ "hybridToFullMigrationDate").readNullable[String].orElse(Reads.pure(None)) and
     (__ \ "partyType").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "primaryMainCode").read[String] and
+    (__ \ "primaryMainCode").readNullable[String] and
     (__ \\ "stdReturnPeriod").readNullable[String].orElse(Reads.pure(None)) and
     (__ \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]].orElse(Reads.pure(None)) and
     (__ \\ "firstNonNSTPPeriod").readNullable[TaxPeriod].orElse(Reads.pure(None)) and

@@ -61,7 +61,7 @@ class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {
         Some("2017-05-05"),
         Some("2017-05-06"),
         Some("7"),
-        "10410",
+        Some("10410"),
         Some("MM"),
         Some(List(
           TaxPeriod("2018-01-01", "2018-01-15"),
