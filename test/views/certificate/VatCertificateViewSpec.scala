@@ -48,7 +48,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     None,
     Some("ABC Traders"),
     "partyType.11",
-    "6602",
+    Some("6602"),
     Address("Line 1", Some("Line 2"), None, None, Some("TF4 3ER")),
     "returnPeriod.MM",
     None,
