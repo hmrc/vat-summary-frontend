@@ -43,7 +43,6 @@ case class CustomerInformation(details: CustomerDetails,
   }
 
   val partyTypeMessageKey: String = partyType.fold("common.notProvided")(x => s"partyType.$x")
-  val sicCodeMessageKey: String = partyType.fold("common.notProvided")(x => x)
   val returnPeriodMessageKey: String = returnPeriod.fold("common.notProvided"){
     case x @ ("MM" | "MA" | "MB" | "MC") => s"returnPeriod.$x"
     case _ => "returnPeriod.nonStandard"

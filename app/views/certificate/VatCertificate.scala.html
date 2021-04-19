@@ -100,7 +100,7 @@ implicit messages: Messages, appConfig: config.AppConfig, request: Request[_], u
                 @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.getOrElse(messages("common.notProvided")))
             }
             @fieldRow(messages("vatCertificate.aboutTheBusiness.businessType"), messages(model.businessTypeMsgKey))
-            @fieldRow(messages("vatCertificate.aboutTheBusiness.tradeClassification"), model.tradeClassification)
+            @fieldRow(messages("vatCertificate.aboutTheBusiness.tradeClassification"), model.tradeClassification.getOrElse(messages("common.notProvided")))
             @fieldRow(messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"), fullAddress(model.ppob))
         </div>
     </div>
