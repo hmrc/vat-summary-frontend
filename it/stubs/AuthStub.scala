@@ -93,8 +93,4 @@ object AuthStub extends WireMockMethods {
   private def successfulAuthResponse(affinityGroup: String, enrolments: JsObject*): JsObject = {
     Json.obj("allEnrolments" -> enrolments, "affinityGroup" -> affinityGroup)
   }
-
-  def partialsAuthResponse(enrolments: JsObject*): JsObject = {
-    Json.obj("authorisedEnrolments" -> enrolments)
-  }
 }

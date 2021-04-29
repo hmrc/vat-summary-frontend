@@ -21,18 +21,6 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
 
-  "The route for the BTA partial" should {
-    "be /vat-summary-partials/bta-home" in {
-      controllers.partials.routes.BtaHomeController.vatSection().url shouldBe "/vat-summary-partials/bta-home"
-    }
-  }
-
-  "The route for the partialMigration partial" should {
-    "be /vat-summary-partials/bta-home" in {
-      controllers.partials.routes.BtaHomeController.partialMigration().url shouldBe "/vat-summary-partials/partial-migration"
-    }
-  }
-
   "The route for the VAT details controller" should {
     "be /vat-through-software/vat-overview" in {
       controllers.routes.VatDetailsController.details().url shouldBe "/vat-through-software/vat-overview"

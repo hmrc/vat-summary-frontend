@@ -60,20 +60,6 @@ userResearch.enterSurvey = Cymerwch ran yn ein harolwg
 userResearch.close = Dim diolch
 userResearch.close.context = Nid wyf eisiau cymryd rhan yn yr arolwg
 
-partials.btaHome.vatSection.reporting.heading = TAW – Troi Treth yn Ddigidol
-partials.btaHome.vatSection.deadlines = Gallwch fwrw golwg dros yr hyn sydd arnoch, dyddiadau cau’ch Ffurflen TAW, hanes eich taliadau, Ffurflenni TAW a gyflwynwyd yn flaenorol a gwneud taliadau TAW.
-partials.btaHome.vatSection.updateDetails = Gallwch hefyd ddiweddaru rhywfaint o’ch manylion TAW.
-partials.btaHome.vatSection.viewVatDetails = Bwrw golwg dros eich manylion TAW
-
-partials.btaHome.claimEnrolment.heading = Your agent has signed you up to Making Tax Digital for VAT
-partials.btaHome.claimEnrolment.mandationInfo = O fis Ebrill 2019 ymlaen, bydd yn rhaid i fusnesau sydd wedi’u cofrestru ar gyfer TAW, ac sydd â throsiant gwerth £85,000 neu fwy, ddefnyddio meddalwedd trydydd parti berthnasol i gyflwyno’u Ffurflenni TAW.
-partials.btaHome.claimEnrolment.addEnrolment = Ychwanegu Troi Treth yn Ddigidol ar gyfer TAW at fy nghyfrif
-
-partials.btaHome.partialMigration.heading = Mae’ch cyfrif Troi Treth yn Ddigidol ar gyfer TAW wrthi’n cael ei greu
-partials.btaHome.partialMigration.line1 = Cawsoch eich cofrestru’n ddiweddar ar gyfer y gwasanaeth newydd, Troi Treth yn Ddigidol. Mae hyn er mwyn sicrhau eich bod yn gallu cyflwyno’ch Ffurflenni TAW i CThEM gan ddefnyddio meddalwedd gydweddol.
-partials.btaHome.partialMigration.line2 = Bydd yn cymryd hyd at 72 awr i greu’ch cyfrif.
-partials.btaHome.partialMigration.line3 = Dewch yn ôl yn nes ymlaen.
-
 vatDetails.title = Eich cyfrif TAW
 vatDetails.manageYourVat = Rheoli’ch TAW
 vatDetails.vatCertificate.view = Bwrw golwg dros eich tystysgrif TAW a’i hargraffu.

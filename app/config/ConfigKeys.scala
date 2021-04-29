@@ -50,9 +50,6 @@ object ConfigKeys {
   val helpAndContactFrontendBase: String = "help-and-contact-frontend.host"
   val helpAndContactHelpUrl: String = "help-and-contact-frontend.helpUrl"
 
-  val btaVatOverviewUrlBase: String = "business-tax-account.vatSummaryHost"
-  val btaVatOverviewUrl: String = "business-tax-account.vatSummaryUrl"
-
   val vatObligations: String = "vat-obligations"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
@@ -84,7 +81,6 @@ object ConfigKeys {
 
   val mtdVatSignUpBaseUrl: String = "vat-sign-up-frontend.host"
   val mtdVatReSignUpUrl: String = "vat-sign-up-frontend.reSignUpUrl"
-  val mtdVatClaimSubscriptionUrl: String = "vat-sign-up-frontend.claimSubscriptionUrl"
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountDown: String = "timeout.countDown"
