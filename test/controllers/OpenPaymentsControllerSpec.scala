@@ -295,10 +295,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         "return the payments view" in new Test {
           override def setupMocks(): Unit = {
             super.setupMocks()
-            (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-              .expects(*, *, *)
-              .returns(Left(DirectDebitStatusError))
-
             (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
               .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
