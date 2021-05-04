@@ -40,9 +40,6 @@ trait AppConfig {
   val vatSubscriptionBaseUrl: String
   val financialDataBaseUrl: String
   val selfLookup: String
-  val viewVatPartial: String
-  val claimEnrolmentPartial: String
-  val partialMigrationPartial: String
   val vatSubmittedReturnsUrl: String
   val vatReturnDeadlinesUrl: String
   def vatReturnUrl(periodKey: String): String
@@ -58,14 +55,12 @@ trait AppConfig {
   val unauthenticatedPaymentsUrl: String
   val directDebitReturnUrl: String
   val directDebitBackUrl: String
-  val btaVatOverviewUrl: String
   val feedbackFormPartialUrl: String
   val contactFormServiceIdentifier: String
   val staticDateValue: String
   def surveyUrl(identifier: String): String
   def signOutUrl(identifier: String): String
   val mtdVatReSignUpUrl: String
-  val mtdVatClaimSubscriptionUrl: String
   val unauthorisedSignOutUrl: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
@@ -132,10 +127,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override lazy val selfLookup: String = sc.baseUrl("selfLookup")
 
-  override lazy val viewVatPartial: String = selfLookup + "/vat-summary-partials/bta-home"
-  override lazy val claimEnrolmentPartial: String = selfLookup + "/vat-summary-partials/claim-enrolment"
-  override lazy val partialMigrationPartial: String = selfLookup + "/vat-summary-partials/partial-migration"
-
   private lazy val vatReturnsBaseUrl: String = sc.getString(Keys.vatReturnsBase)
 
   override lazy val vatObligationsBaseUrl: String = sc.baseUrl(Keys.vatObligations)
@@ -169,9 +160,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val directDebitReturnUrl: String = host + sc.getString(Keys.directDebitReturnUrl)
   override lazy val directDebitBackUrl: String = host + sc.getString(Keys.directDebitBackUrl)
 
-  private lazy val btaVatOverviewUrlBase: String = sc.getString(Keys.btaVatOverviewUrlBase)
-  override lazy val btaVatOverviewUrl: String = btaVatOverviewUrlBase + sc.getString(Keys.btaVatOverviewUrl)
-
   override lazy val staticDateValue: String = sc.getString(Keys.staticDateValue)
 
   private lazy val surveyBaseUrl = sc.getString(Keys.surveyHost) + sc.getString(Keys.surveyUrl)
@@ -186,7 +174,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   private val mtdVatSignUpBaseUrl: String = sc.getString(Keys.mtdVatSignUpBaseUrl)
   override lazy val mtdVatReSignUpUrl: String = mtdVatSignUpBaseUrl + sc.getString(Keys.mtdVatReSignUpUrl)
-  override lazy val mtdVatClaimSubscriptionUrl: String = mtdVatSignUpBaseUrl + sc.getString(Keys.mtdVatClaimSubscriptionUrl)
 
   override lazy val timeoutPeriod: Int = sc.getString(Keys.timeoutPeriod).toInt
   override lazy val timeoutCountdown: Int = sc.getString(Keys.timeoutCountDown).toInt

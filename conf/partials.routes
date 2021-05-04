@@ -1,3 +1,0 @@
-GET        /bta-home               controllers.partials.BtaHomeController.vatSection
-GET        /claim-enrolment        controllers.partials.BtaHomeController.claimEnrolment
-GET        /partial-migration      controllers.partials.BtaHomeController.partialMigration

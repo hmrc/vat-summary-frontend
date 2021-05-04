@@ -34,20 +34,6 @@ userResearch.enterSurvey = Enter our survey
 userResearch.close = No thanks
 userResearch.close.context = I do not want to enter the survey
 
-partials.btaHome.vatSection.reporting.heading = VAT - Making Tax Digital
-partials.btaHome.vatSection.deadlines = You can view what you owe, your return deadlines, your payment history, previously submitted returns and make VAT payments.
-partials.btaHome.vatSection.updateDetails = You can also update some of your VAT details.
-partials.btaHome.vatSection.viewVatDetails = View your VAT details
-
-partials.btaHome.claimEnrolment.heading = Your agent has signed you up to Making Tax Digital for VAT
-partials.btaHome.claimEnrolment.mandationInfo = From April 2019, VAT registered businesses with a turnover of £85,000 or above must use relevant third party software to submit their VAT Returns.
-partials.btaHome.claimEnrolment.addEnrolment = Add Making Tax Digital for VAT to my account
-
-partials.btaHome.partialMigration.heading = Your Making Tax Digital for VAT account is being set up
-partials.btaHome.partialMigration.line1 = You were recently signed up to the new Making Tax Digital service. This is so you can submit your VAT Returns to HMRC using compatible software.
-partials.btaHome.partialMigration.line2 = It will take up to 72 hours for your account to be set up.
-partials.btaHome.partialMigration.line3 = Check back again later.
-
 vatDetails.title = Your VAT account
 vatDetails.manageYourVat = Manage your VAT
 vatDetails.vatCertificate.view = View and print your VAT certificate.
