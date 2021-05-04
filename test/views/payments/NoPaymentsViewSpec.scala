@@ -32,14 +32,14 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val secondaryHeading = "h2"
     val noPaymentsDetail = "#noPaymentsDetail p:nth-of-type(1)"
     val paymentLink = "#noPaymentsDetail p:nth-of-type(1) a"
-    val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
-    val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
-    val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
-    val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
-    val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
-    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(1)"
-    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(2)"
-    val covidPartialLine3 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(3)"
+    val btaBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(1)"
+    val btaBreadcrumbLink = "div.govuk-breadcrumbs li:nth-of-type(1) a"
+    val vatBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(2)"
+    val vatBreadcrumbLink = "div.govuk-breadcrumbs li:nth-of-type(2) a"
+    val paymentBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(3)"
+    val covidPartialLine1 = "div.govuk-inset-text > p:nth-of-type(1)"
+    val covidPartialLine2 = "div.govuk-inset-text > p:nth-of-type(2)"
+    val covidPartialLine3 = "div.govuk-inset-text > p:nth-of-type(3)"
   }
 
   override val user: User = User("123456789")

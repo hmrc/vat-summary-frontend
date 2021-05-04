@@ -14,21 +14,24 @@
  * limitations under the License.
  *@
 
-@import views.html.templates.formatters.breadcrumbs.NavigationBreadcrumb
-@import views.html.templates.payments._
 @import models.viewModels.PaymentsHistoryViewModel
 @import play.twirl.api.HtmlFormat
+@import views.html.templates.payments._
 
 @this(mainTemplate: MainTemplate,
-      navigationBreadcrumb: NavigationBreadcrumb,
       paymentsHistoryTabs: PaymentsHistoryTabs,
-      paymentsHistoryTabsContent: PaymentsHistoryTabsContent)
+      paymentsHistoryTabsContent: PaymentsHistoryTabsContent,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukTabs: GovukTabs)
 
 @(model: PaymentsHistoryViewModel,
-  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
+                                                        messages: Messages,
+                                                        appConfig: config.AppConfig,
+                                                        user: User)
 
 @additionalYears = @{
-    (model.tabTwo.fold(Seq[Int]())(year=>Seq(year)) ++ model.tabThree.fold(Seq[Int]())(year=>Seq(year+1, year))).distinct
+  (model.tabTwo.fold(Seq[Int]())(year=>Seq(year)) ++ model.tabThree.fold(Seq[Int]())(year=>Seq(year+1, year))).distinct
 }
 
 @mainTemplate(
@@ -37,29 +40,38 @@
   serviceInfoContent = serviceInfoContent,
   user = Some(user)) {
 
-  @navigationBreadcrumb(
-    links = Map(
-    appConfig.btaHomeUrl -> messages("breadcrumbs.bta"),
-    controllers.routes.VatDetailsController.details().url -> messages("vatDetails.title")),
-    currentPage = messages("paymentsHistory.title")
-  )
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details().url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("paymentsHistory.title"))
+      )
+    )
+  ))
 
-  <div class="grid-row">
-    <div class="column-two-thirds">
-      <h1 id="top" class="heading-xlarge">@messages("paymentsHistory.title")</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 id="top" class="govuk-heading-xl">@messages("paymentsHistory.title")</h1>
 
       @if(model.showInsolvencyContent) {
-        <div class="panel panel-border-wide form-group">@messages("paymentsHistory.insolvencyNotice")</div>
+        <div class="govuk-inset-text govuk-form-group">@messages("paymentsHistory.insolvencyNotice")</div>
       }
 
-      <div class="tabbed">
+      <div class="govuk-tabs" data-module="govuk-tabs">
         @paymentsHistoryTabs(Seq(model.tabOne) ++ additionalYears, model.previousPaymentsTab)
-        @paymentsHistoryTabsContent(Seq(model.tabOne) ++ additionalYears, model.transactions, model.previousPaymentsTab, javascriptEnabled = true)
+        @paymentsHistoryTabsContent(
+          Seq(model.tabOne) ++ additionalYears,
+          model.transactions,
+          model.previousPaymentsTab
+        )
       </div>
-
-      <noscript>
-        @paymentsHistoryTabsContent(Seq(model.tabOne) ++ additionalYears, model.transactions, model.previousPaymentsTab, javascriptEnabled = false)
-      </noscript>
     </div>
   </div>
 }

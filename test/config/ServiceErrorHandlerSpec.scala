@@ -38,7 +38,7 @@ class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOn
 
     object Selectors {
       val pageHeading = "h1"
-      val message = ".lede"
+      val message = ".govuk-body-l"
     }
     lazy val view=service.notFoundTemplate
     lazy implicit val document: Document = Jsoup.parse(view.body)

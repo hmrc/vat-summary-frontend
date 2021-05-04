@@ -19,17 +19,21 @@
 
 @this()
 
-@(obligationData: Option[String], hasMultiple: Boolean, isOverdue: Boolean, isError: Boolean, isNonMTDfBOrNonDigital: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
+@(obligationData: Option[String],
+  hasMultiple: Boolean,
+  isOverdue: Boolean,
+  isError: Boolean,
+  isNonMTDfBOrNonDigital: Option[Boolean])(implicit messages: Messages, appConfig: config.AppConfig)
 
 
 <div class="tile tile-no-border">
   <div id="next-return" class="tile-body">
-    <h2 class="heading-medium push--top">@(hasMultiple) match {
-        case (true) => {@messages("returnObligation.nextReturns")}
-        case (false) => {@messages("returnObligation.nextReturn")}
-        }
+    <h2 class="govuk-heading-m push--top">@(hasMultiple) match {
+      case (true) => {@messages("returnObligation.nextReturns")}
+      case (false) => {@messages("returnObligation.nextReturn")}
+    }
     </h2>
-      <p>
+      <p class="govuk-body">
       @(obligationData, hasMultiple, isNonMTDfBOrNonDigital, isError) match {
         case (_, _, _, true) => { @messages("vatDetails.error") }
         case (_, _, None, _) => { @messages("vatDetails.error") }
@@ -47,13 +51,15 @@
 
     @isNonMTDfBOrNonDigital.map { nonMTDfBOrNonDigital =>
       @if(nonMTDfBOrNonDigital) {
-        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
-          @messages("returnObligation.submit")
-        </a>
+        <p class="govuk-body">
+          <a class="govuk-link" id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
+            @messages("returnObligation.submit")
+        </a></p>
       } else {
-        <a id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
+        <p class="govuk-body">
+        <a class="govuk-link" id="vat-returns-link" href="@{appConfig.vatReturnDeadlinesUrl}">
           @messages("returnObligation.viewReturns")
-        </a>
+        </a></p>
       }
     }
 

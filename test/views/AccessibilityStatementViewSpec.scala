@@ -43,7 +43,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
       "have an introduction section" which {
 
         "has the correct lede paragraph" in {
-          elementText(".lede") shouldBe "This accessibility statement explains how accessible this service is, " +
+          elementText(".govuk-body-l") shouldBe "This accessibility statement explains how accessible this service is, " +
             "what to do if you have difficulty using it, and how to report accessibility problems with the service."
         }
 

@@ -29,7 +29,7 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
     object Selectors {
       val pageHeading = "h1"
       val subheading = "h2"
-      val instructions = "#content > article > p"
+      val instructions = "p.govuk-body"
       val signInLink = s"$instructions > a"
     }
 

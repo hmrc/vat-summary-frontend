@@ -35,36 +35,33 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val pageHeading = "h1"
     val paymentLink = "#payments a"
     val correctErrorLink = "div > p:nth-child(4) > a"
-    val btaBreadcrumb = "div.breadcrumbs li:nth-of-type(1)"
-    val btaBreadcrumbLink = "div.breadcrumbs li:nth-of-type(1) a"
-    val vatBreadcrumb = "div.breadcrumbs li:nth-of-type(2)"
-    val vatBreadcrumbLink = "div.breadcrumbs li:nth-of-type(2) a"
-    val paymentBreadcrumb = "div.breadcrumbs li:nth-of-type(3)"
+    val btaBreadcrumb = "li.govuk-breadcrumbs__list-item > a"
+    val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2) > a"
+    val paymentBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3)"
 
-    private val columnOne: Int => String = row => s"#payment-$row"
-    val title: Int => String = row => s"${columnOne(row)} dt > h2"
-    val description: Int => String = row => s"${columnOne(row)} div:nth-of-type(1)"
-    val due: Int => String = row =>s"${columnOne(row)} > dl > div > dt > div"
+    private val columnOne: Int => String = row => s"#payment-$row > dl > div > dt"
+    val title: Int => String = row => s"${columnOne(row)} > p"
+    val description: Int => String = row => s"${columnOne(row)} > p > span"
+    val due: Int => String = row =>s"${columnOne(row)} > div"
 
-    private val columnTwo: Int => String = row => s"#payment-$row dd:nth-of-type(1)"
+    private val columnTwo: Int => String = row => s"#payment-$row > dl > div > dd:nth-child(2)"
     val amount: Int => String = row => s"${columnTwo(row)} > span"
 
-    private val columnThree: Int => String = row => s"#payment-$row dd:nth-of-type(2)"
-    val payLink: Int => String = row => s"${columnThree(row)} > div > a:nth-of-type(1)"
-    val payText: Int => String = row => s"${payLink(row)} > span:nth-of-type(1)"
+    private val columnThree: Int => String = row => s"#payment-$row > dl > div > dd:nth-child(3)"
+    val payLink: Int => String = row => s"${columnThree(row)} > a"
+    val payText: Int => String = row => s"${payLink(row)} > span"
     val payByDirectDebit: Int => String = row => s"${columnThree(row)} span"
-    val viewReturnLink: Int => String = row => s"${columnThree(row)} > a"
-    val viewReturnText: Int => String = row => s"${viewReturnLink(row)} > span:nth-of-type(2)"
-
+    val viewReturn: Int => String = row => s"${columnThree(row)} > p > a"
+    val viewReturnText: Int => String = row => s"${columnThree(row)} > p > a > span:nth-of-type(2)"
     val processingTime = "#processing-time"
     val whatOweMissing = "#what-you-owe-missing"
     val helpText = "div > p:nth-child(4)"
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
-    val covidPartialLine1 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(1)"
-    val covidPartialLine2 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(2)"
-    val covidPartialLine3 = "div.grid-row.form-group.flex-container > div > div > p:nth-child(3)"
+    val covidPartialLine1 = ".govuk-inset-text > p:nth-of-type(1)"
+    val covidPartialLine2 = ".govuk-inset-text > p:nth-of-type(2)"
+    val covidPartialLine3 = ".govuk-inset-text > p:nth-of-type(3)"
   }
 
   override val user = User("1111")
@@ -114,7 +111,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "link to bta" in {
-        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+        element(Selectors.btaBreadcrumb).attr("href") shouldBe "bta-url"
       }
 
       "have the text 'VAT'" in {
@@ -122,7 +119,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-        element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
       }
 
       s"link to https://www.gov.uk/vat-corrections" in {
@@ -157,7 +154,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       }
 
       "render the correct view return link" in {
-        element(Selectors.viewReturnLink(1)).attr("href") shouldBe "/submitted/%23001"
+        element(Selectors.viewReturn(1)).attr("href") shouldBe "/submitted/%23001"
       }
     }
 

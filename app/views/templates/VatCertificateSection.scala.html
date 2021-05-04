@@ -18,10 +18,13 @@
 
 @()(implicit messages: Messages)
 
-<div class="column-one-third" id="vat-certificate">
+<div id="vat-certificate">
 
-    <h3 class="heading-small"><a href="@controllers.routes.VatCertificateController.show().url">@messages("vatDetails.vatCertificate.link")</a></h3>
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+    <a class="govuk-link" href="@controllers.routes.VatCertificateController.show().url">
+      @messages("vatDetails.vatCertificate.link")</a>
+  </h3>
 
-    <p>@messages("vatDetails.vatCertificate.view")</p>
+  <p class="govuk-body">@messages("vatDetails.vatCertificate.view")</p>
 
 </div>

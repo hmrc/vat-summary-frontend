@@ -68,7 +68,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
             Logger.debug(s"[AgentPredicate][authoriseAsAgent] - Agent does not have delegated authority for Client. " +
               s"Redirecting to ${appConfig.agentClientUnauthorisedUrl(request.uri)}")
             Redirect(appConfig.agentClientUnauthorisedUrl(request.uri))
-        }
+          }
       case None =>
         Logger.debug(s"[AuthPredicate][authoriseAsAgent] - No Client VRN in session. Redirecting to ${appConfig.agentClientLookupStartUrl(request.uri)}")
         Future.successful(Redirect(appConfig.agentClientLookupStartUrl(request.uri)))

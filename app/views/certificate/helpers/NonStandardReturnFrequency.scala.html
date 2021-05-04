@@ -19,52 +19,48 @@
 @this()
 
 @(nonStdTaxPeriods: Seq[TaxPeriod],
-        firstNonNSTPPeriod: Option[TaxPeriod])(implicit messages: Messages)
+  firstNonNSTPPeriod: Option[TaxPeriod])(implicit messages: Messages)
 
-    <div id="nstp-card" class="card-full-container column-full">
-        <div class="column-full">
-            <h2 class="heading-medium card-heading">@messages("vatCertificate.nstp.title")</h2>
-            <p>
-                @firstNonNSTPPeriod.map(
-                    taxPeriod => {
-                        messages("vatCertificate.nstp.p1", displayDate(taxPeriod.periodStart),
-                          displayDate(date = taxPeriod.periodEnd))
-                    }
-                )
-            </p>
-            <p>@messages("vatCertificate.nstp.p2")</p>
-            <dl class="govuk-check-your-answers cya-questions-long">
+<div id="nstp-card" class="card-full-container govuk-grid-column-full">
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m card-heading">@messages("vatCertificate.nstp.title")</h2>
+    <p class="govuk-body">
+      @firstNonNSTPPeriod.map(
+        taxPeriod => {
+          messages("vatCertificate.nstp.p1", displayDate(taxPeriod.periodStart),
+            displayDate(date = taxPeriod.periodEnd))
+        }
+      )
+    </p>
+    <p class="govuk-body">@messages("vatCertificate.nstp.p2")</p>
+  </div>
 
-            @for(taxYear <- nonStdTaxPeriods.map(period => period.periodStart.getYear).distinct) {
-                <div class="check-your-answer-row">
-                    <div>
-                        <dt class="cya-question">
-                        @taxYear
-                        </dt>
-                    </div>
-                </div>
-                @for(taxPeriod <- nonStdTaxPeriods.filter(_.periodStart.getYear == taxYear)) {
-                    <div class="check-your-answer-row">
-                        <div>
-                            <dd class="cya-answer">
-                                @{
-                                    if(taxPeriod.periodStart.getYear != taxPeriod.periodEnd.getYear) {
-                                        messages("vatCertificate.nstp.dateFromTo",
-                                          displayDate(taxPeriod.periodStart),
-                                          displayDate(taxPeriod.periodEnd)
-                                        )
-                                    } else {
-                                        messages("vatCertificate.nstp.dateFromTo",
-                                          displayDate(taxPeriod.periodStart, showYear = false),
-                                          displayDate(taxPeriod.periodEnd, showYear = false)
-                                        )
-                                    }
-                                }
-                            </dd>
-                        </div>
-                    </div>
-                }
-            }
-            </dl>
-        </div>
+  <dl class="govuk-grid-column-full govuk-summary-list">
+    @for(taxYear <- nonStdTaxPeriods.map(period => period.periodStart.getYear).distinct) {
+    <div class="govuk-!-margin-bottom-0 govuk-summary-list__row">
+      <dt id="year-@taxYear" class="govuk-summary-list__key govuk-!-font-weight-bold govuk-!-padding-top-5">
+        @taxYear
+      </dt>
     </div>
+      @for(taxPeriod <- nonStdTaxPeriods.filter(_.periodStart.getYear == taxYear)) {
+      <div class="govuk-body govuk-!-margin-bottom-0">
+        <dd class="govuk-summary-list__value">
+          @{
+            if(taxPeriod.periodStart.getYear != taxPeriod.periodEnd.getYear) {
+              messages("vatCertificate.nstp.dateFromTo",
+                displayDate(taxPeriod.periodStart),
+                displayDate(taxPeriod.periodEnd)
+              )
+            } else {
+              messages("vatCertificate.nstp.dateFromTo",
+                displayDate(taxPeriod.periodStart, showYear = false),
+                displayDate(taxPeriod.periodEnd, showYear = false)
+              )
+            }
+          }
+        </dd>
+      </div>
+      }
+    }
+  </dl>
+</div>

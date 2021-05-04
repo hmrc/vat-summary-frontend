@@ -14,20 +14,18 @@
  * limitations under the License.
  *@
 
-@this()
+@this(govukInsetText: GovukInsetText)
 
-@(pageIsFullWidth: Boolean = false)(implicit messages: Messages)
+@()(implicit messages: Messages)
 
-<div class="grid-row form-group flex-container">
+<div class="govuk-grid-row govuk-form-group flex-container">
 
-  <div @if(pageIsFullWidth){class="warning-banner" }>
-
-    <div class="panel panel-border-wide">
-      <p>@messages("covid.line1")</p>
-      <p>@messages("covid.line2")</p>
-      <p>@messages("covid.line3")</p>
-    </div>
-
-  </div>
+  @govukInsetText(InsetText(
+    content = HtmlContent(
+      s"""<p class="govuk-body">${messages("covid.line1")}</p>""" +
+      s"""<p class="govuk-body">${messages("covid.line2")}</p>""" +
+      s"""<p class="govuk-body">${messages("covid.line3")}</p>"""
+    )
+  ))
 
 </div>

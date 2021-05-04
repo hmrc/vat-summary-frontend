@@ -15,12 +15,10 @@
  *@
 
 @import models.viewModels.VatDetailsViewModel
-@import views.html.templates.formatters.breadcrumbs._
 @import views.html.templates._
 @import play.twirl.api.HtmlFormat
 
 @this(mainTemplate: MainTemplate,
-      navigationBreadcrumb: NavigationBreadcrumb,
       nextPaymentSection: NextPaymentSection,
       nextReturnSection: NextReturnSection,
       historySection: HistorySection,
@@ -29,99 +27,120 @@
       vatCertificateSection: VatCertificateSection,
       mtdSignupSection: MtdSignupSection,
       vatOptOutSection: VatOptOutSection,
-      deregSection: DeregSection)
+      deregSection: DeregSection,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukWarningText: GovukWarningText)
 
-@(detailsViewModel: VatDetailsViewModel, serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+@(detailsViewModel: VatDetailsViewModel,
+  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
+                                                        messages: Messages,
+                                                        appConfig: config.AppConfig,
+                                                        user: User)
 
 @unverifiedUserEmailContent = {
   @if(!detailsViewModel.userEmailVerified && appConfig.features.r17Content()) {
-    <p class="notice" id="unverified-email-notice">
-      <i class="icon icon-important">
-        <span class="visually-hidden">@messages("common.warning")</span>
-      </i>
-      <strong class="bold-small">
+    <div class="govuk-warning-text" id="unverified-email-notice">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">@messages("common.warning")</span>
         @messages("emailVerification.message.1")
-        <a href="@{controllers.routes.VatDetailsController.detailsRedirectToEmailVerification}">
+        <a class="govuk-link" href="@{controllers.routes.VatDetailsController.detailsRedirectToEmailVerification}">
           @messages("emailVerification.message.2")</a>
         @messages("emailVerification.message.3")
       </strong>
-    </p>
+    </div>
   }
 }
 
 @mainTemplate(
-    title = messages("vatDetails.title"),
-    appConfig = appConfig,
-    serviceInfoContent = serviceInfoContent,
-    user = Some(user)
+  title = messages("vatDetails.title"),
+  appConfig = appConfig,
+  serviceInfoContent = serviceInfoContent,
+  user = Some(user)
 ) {
 
-    @navigationBreadcrumb(
-        links = Map(appConfig.btaHomeUrl -> messages("breadcrumbs.bta")),
-        currentPage = messages("vatDetails.title")
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title"))
+      )
     )
-    <header class="page-heading push--top">
-      <h1 class="heading-xlarge">@messages("vatDetails.title")</h1>
-       <span class="form-hint">@messages("vatDetails.vrn", user.vrn)<br>
-         @detailsViewModel.entityName.map { entityName =>
-           <p>@entityName</p>
-         }
-       </span>
-    </header>
+  ))
 
+  <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("vatDetails.title")</h1>
+  <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)
+  </span>
+  @detailsViewModel.entityName.map { entityName =>
+    <span class="govuk-caption-m govuk-!-margin-bottom-6">@entityName</span>
+  }
 
+  <div class="flex-container govuk-grid-row">
+    @nextPaymentSection(
+      detailsViewModel.paymentsData,
+      detailsViewModel.hasMultiplePayments,
+      detailsViewModel.paymentError,
+      detailsViewModel.isHybridUser,
+      detailsViewModel.paymentOverdue
+    )
 
-    <div class="flex-container grid-row">
-      @nextPaymentSection(
-          detailsViewModel.paymentsData,
-          detailsViewModel.hasMultiplePayments,
-          detailsViewModel.paymentError,
-          detailsViewModel.isHybridUser,
-          detailsViewModel.paymentOverdue
-      )
+    @nextReturnSection(
+      detailsViewModel.obligationData,
+      detailsViewModel.hasMultipleReturnObligations,
+      detailsViewModel.returnObligationOverdue,
+      detailsViewModel.returnObligationError,
+      detailsViewModel.showSignUp
+    )
 
-      @nextReturnSection(
-          detailsViewModel.obligationData,
-          detailsViewModel.hasMultipleReturnObligations,
-          detailsViewModel.returnObligationOverdue,
-          detailsViewModel.returnObligationError,
-          detailsViewModel.showSignUp
-      )
+    @historySection(detailsViewModel.isHybridUser)
+  </div>
 
-      @historySection(detailsViewModel.isHybridUser)
-    </div>
+  <div>
+    <h2 class="govuk-heading-l">@messages("vatDetails.manageYourVat")</h2>
+  </div>
 
-    <div>
-      <h2 class="heading-large">@messages("vatDetails.manageYourVat")</h2>
-    </div>
+  @unverifiedUserEmailContent
 
-    @unverifiedUserEmailContent
-
-    <div class="grid-row">
+  <div class="govuk-grid-row govuk-!-margin-bottom-4">
+    <div class="govuk-grid-column-one-third">
       @updateVatDetailsSection()
-      @if(appConfig.features.paymentsAndRepaymentsEnabled() && !detailsViewModel.customerInfoError && !detailsViewModel.isHybridUser) {
+    </div>
+    @if(appConfig.features.paymentsAndRepaymentsEnabled() && !detailsViewModel.customerInfoError && !detailsViewModel.isHybridUser) {
+      <div class="govuk-grid-column-one-third">
         @paymentsAndRepaymentsSection()
-      }
+      </div>
+    }
+    <div class="govuk-grid-column-one-third">
       @vatCertificateSection()
     </div>
+  </div>
 
-    <div class="grid-row">
-        @if(detailsViewModel.customerInfoError) {
-            <hr>
-            <h3 class="heading-medium">
-              @messages("vatDetails.customerInfo.error")
-            </h3>
-        } else {
-            @detailsViewModel.showSignUp match {
-                case Some(true) if appConfig.features.mtdSignUp() => {
-                    @mtdSignupSection(user.vrn)
-                }
-                case Some(false) if appConfig.features.vatOptOutEnabled() => {
-                    @vatOptOutSection(detailsViewModel.pendingOptOut)
-                }
-                case _ => {}
-            }
-            @deregSection(detailsViewModel)
+  <div class="govuk-grid-row">
+    @if(detailsViewModel.customerInfoError) {
+      <div class="govuk-grid-column-one-third">
+        <hr>
+        <h3 class="govuk-heading-m">
+          @messages("vatDetails.customerInfo.error")
+        </h3>
+      </div>
+    } else {
+      <div class="govuk-grid-column-one-third">
+        @detailsViewModel.showSignUp match {
+          case Some(true) if appConfig.features.mtdSignUp() => {
+            @mtdSignupSection(user.vrn)
+          }
+          case Some(false) if appConfig.features.vatOptOutEnabled() => {
+            @vatOptOutSection(detailsViewModel.pendingOptOut)
+          }
+          case _ => {}
         }
-    </div>
+      </div>
+      <div class="govuk-grid-column-one-third">
+        @deregSection(detailsViewModel)
+      </div>
+    }
+  </div>
 }

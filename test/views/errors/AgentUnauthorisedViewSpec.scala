@@ -28,9 +28,9 @@ class AgentUnauthorisedViewSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
-      val instructions = "article p"
-      val instructionsLink = "article p > a"
-      val button = "#content .button"
+      val instructions = "p.govuk-body"
+      val instructionsLink = "p.govuk-body > a"
+      val button = ".govuk-button"
     }
 
     lazy val view = agentUnauthorisedView()(request, messages, mockConfig)
