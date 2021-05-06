@@ -40,6 +40,7 @@ object ConfigKeys {
   val displayCovidMessageFeature: String = "features.displayCovid.enabled"
   val missingTraderAddressIntercept: String = "features.missingTraderAddressIntercept.enabled"
   val r17Content: String = "features.r17Content.enabled"
+  val directDebitInterrupt: String = "features.directDebitInterrupt.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"

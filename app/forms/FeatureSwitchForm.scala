@@ -38,7 +38,8 @@ object FeatureSwitchForm {
       ConfigKeys.ddCollectionInProgressFeature -> boolean,
       ConfigKeys.displayCovidMessageFeature -> boolean,
       ConfigKeys.missingTraderAddressIntercept -> boolean,
-      ConfigKeys.r17Content -> boolean
+      ConfigKeys.r17Content -> boolean,
+      ConfigKeys.directDebitInterrupt -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

@@ -30,4 +30,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               ddCollectionInProgress: Boolean,
                               displayCovid: Boolean,
                               missingTraderAddressIntercept: Boolean,
-                              r17Content: Boolean)
+                              r17Content: Boolean,
+                              directDebitInterrupt: Boolean)
