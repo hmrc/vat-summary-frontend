@@ -36,8 +36,8 @@
         head = Some(Seq(
           HeadCell(content = Text(messages("paymentsHistory.date"))),
           HeadCell(content = Text(messages("paymentsHistory.description"))),
-          HeadCell(content = Text(messages("paymentsHistory.youPaid"))),
-          HeadCell(content = Text(messages("paymentsHistory.paidYou")))
+          HeadCell(content = Text(messages("paymentsHistory.youPaid")), format = Some("numeric")),
+          HeadCell(content = Text(messages("paymentsHistory.paidYou")), format = Some("numeric"))
         )),
         rows = transactions
                 .filter(_.clearedDate.getOrElse("").toString.contains(year.toString))
@@ -47,8 +47,14 @@
               Seq(
                 TableRow(content = Text(displayDate(date, useShortDayFormat = true, showYear = false))),
                 TableRow(content = HtmlContent(paymentsHistoryChargeDescription(transaction))),
-                TableRow(content = HtmlContent(displayMoney(if(transaction.amount > 0) transaction.amount else 0))),
-                TableRow(content = HtmlContent(displayMoney(if(transaction.amount < 0) transaction.amount.abs else 0)))
+                TableRow(
+                  content = HtmlContent(displayMoney(if(transaction.amount > 0) transaction.amount else 0)),
+                  format = Some("numeric")
+                ),
+                TableRow(
+                  content = HtmlContent(displayMoney(if(transaction.amount < 0) transaction.amount.abs else 0)),
+                  format = Some("numeric")
+                )
               )
             case None => Seq()
           }

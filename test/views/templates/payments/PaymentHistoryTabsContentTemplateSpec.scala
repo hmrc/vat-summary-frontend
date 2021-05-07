@@ -58,8 +58,8 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |      <tr class="govuk-table__row">
       |        <th scope="col" class="govuk-table__header">Date</th>
       |        <th scope="col" class="govuk-table__header">Payment description</th>
-      |        <th scope="col" class="govuk-table__header">You paid HMRC</th>
-      |        <th scope="col" class="govuk-table__header">HMRC paid you</th>
+      |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">You paid HMRC</th>
+      |        <th scope="col" class="govuk-table__header govuk-table__header--numeric">HMRC paid you</th>
       |      </tr>
       |    </thead>
       |    <tbody class="govuk-table__body">
@@ -68,8 +68,12 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |        <td class="govuk-table__cell">
       |          ${paymentsHistoryChargeDescription(if(repayment) repaymentTransaction else paymentTransaction)}
       |        </td>
-      |        <td class="govuk-table__cell"> £${if(repayment) "0" else examplePaymentAmount} </td>
-      |        <td class="govuk-table__cell"> £${if(repayment) exampleRepaymentAmount.abs else "0"} </td>
+      |        <td class="govuk-table__cell govuk-table__cell--numeric">
+      |          £${if(repayment) "0" else examplePaymentAmount}
+      |        </td>
+      |        <td class="govuk-table__cell govuk-table__cell--numeric">
+      |          £${if(repayment) exampleRepaymentAmount.abs else "0"}
+      |        </td>
       |      </tr>
       |    </tbody>
       |  </table>
