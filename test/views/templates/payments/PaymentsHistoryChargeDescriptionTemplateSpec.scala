@@ -23,50 +23,19 @@ import models.viewModels.PaymentsHistoryModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.payments.PaymentsHistoryCharge
+import views.html.templates.payments.PaymentsHistoryChargeDescription
 
-class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
+class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
-  val paymentsHistoryCharge: PaymentsHistoryCharge = injector.instanceOf[PaymentsHistoryCharge]
+  val paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription =
+    injector.instanceOf[PaymentsHistoryChargeDescription]
 
   object Selectors {
-    val tableRow = "tr"
-    val clearedDate = "tr td:nth-of-type(1)"
-    val chargeTitle = "tr:nth-child(1) > td:nth-child(2) > span:nth-child(1)"
-    val description = "tr td:nth-of-type(2) span:nth-of-type(2)"
-    val amount = "tr td:nth-of-type(3)"
-    val errorText = "tr td:nth-of-type(2)"
-    val thirdTableElement = "tr td:nth-of-type(3)"
+    val chargeTitle = "span:nth-of-type(1)"
+    val description = "span:nth-of-type(2)"
   }
 
-  val chargeRowClass = " govuk-table__row"
-  val repaymentChargeRowClass = s"repayment$chargeRowClass"
-
-  "The chargeTypes template" when {
-
-    "there is a valid charge type" should {
-
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        ReturnDebitCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct clearing date" in {
-        elementText(Selectors.clearedDate) shouldBe "14 Feb 2018"
-      }
-
-      "display the correct amount" in {
-        elementText(Selectors.amount) shouldBe "- £123,456"
-      }
-    }
+  "The PaymentsHistoryChargeDescription template" when {
 
     "there is a vat return debit charge" should {
 
@@ -78,14 +47,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Return"
@@ -106,14 +69,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Repayment from HMRC"
@@ -134,14 +91,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment"
@@ -162,14 +113,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment"
@@ -190,14 +135,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Estimate"
@@ -218,14 +157,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Surcharge"
@@ -246,14 +179,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe "repayment govuk-table__row"
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Surcharge"
@@ -274,14 +201,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Error correction repayment from HMRC"
@@ -302,14 +223,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Error correction payment"
@@ -330,14 +245,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-02-14"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment interest"
@@ -358,14 +267,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-04-18"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment further interest"
@@ -386,14 +289,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Additional assessment"
@@ -415,14 +312,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Additional assessment interest"
@@ -444,14 +335,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Additional assessment further interest"
@@ -473,14 +358,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-05-01"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Statutory interest"
@@ -501,14 +380,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-15"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Inaccuracies penalty"
@@ -529,14 +402,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-15"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Misdeclaration penalty"
@@ -558,14 +425,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-15"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Misdeclaration repeat penalty"
@@ -587,14 +448,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Inaccuracies penalty"
@@ -616,14 +471,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Wrongdoing penalty"
@@ -644,13 +493,15 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Overpayment partial refund"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "partial repayment for period 12 Sep to 13 Oct 2018"
       }
     }
 
@@ -664,14 +515,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe s"unallocated$chargeRowClass"
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Unallocated payment"
@@ -679,10 +524,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "you made an overpayment, you can have this refunded or leave it on account"
-      }
-
-      "display the correct amount as a negative" in {
-        elementText(Selectors.amount) shouldBe "- £500"
       }
     }
 
@@ -696,14 +537,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Refund payment from HMRC"
@@ -711,10 +546,6 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "as you requested a refund on an overpayment you made"
-      }
-
-      "have the correct CSS applied" in {
-        element(Selectors.thirdTableElement).attr("class") should include("repayment-money")
       }
     }
 
@@ -728,14 +559,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Payment on account instalment"
@@ -756,14 +581,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Payment on account balance"
@@ -784,14 +603,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Payment on account repayment"
@@ -812,14 +625,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Annual accounting monthly instalment"
@@ -840,14 +647,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Annual accounting quarterly instalment"
@@ -868,14 +669,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe chargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Annual accounting balance"
@@ -896,14 +691,8 @@ class PaymentsHistoryChargeTemplateSpec extends ViewBaseSpec {
         Some(LocalDate.parse("2018-10-16"))
       )
 
-      lazy val template = paymentsHistoryCharge(model)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${template.body}</table>"
-      )
-
-      "display the correct table row class" in {
-        element(Selectors.tableRow).attr("class") shouldBe repaymentChargeRowClass
-      }
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
         elementText(Selectors.chargeTitle) shouldBe "Annual accounting repayment"

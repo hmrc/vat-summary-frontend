@@ -126,9 +126,6 @@ standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 standardError.message = Rhowch gynnig arall arni yn nes ymlaen.
 
 paymentsHistory.title = Hanes taliadau
-paymentsHistory.paymentReceivedTitle = Taliad wedi dod i law
-paymentsHistory.descriptionTitle = Disgrifiad
-paymentsHistory.amountTitle = Swm
 paymentsHistory.noCurrentYearHistory = Nid ydych wedi cael na gwneud unrhyw daliadau gan ddefnyddio’r gwasanaeth TAW newydd y flwyddyn hon.
 paymentsHistory.previousPayments.heading = Taliadau blaenorol
 paymentsHistory.previousPayments.youCan = Gallwch
@@ -136,6 +133,11 @@ paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich tal
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
 paymentsHistory.backToTop = Nôl i’r brig
 paymentsHistory.insolvencyNotice = Ni allwch fwrw golwg dros daliadau a wnaed cyn dyddiad yr ansolfedd.
+paymentsHistory.whatYouOwe = Cael gwybod a oes unrhyw beth arnoch i CThEM
+paymentsHistory.date = Dyddiad
+paymentsHistory.description = Disgrifiad o’r taliad
+paymentsHistory.youPaid = Rydych chi wedi talu CThEM
+paymentsHistory.paidYou = Gwnaeth CThEM eich talu
 
 #VAT certificate
 vatCertificate.title = Eich tystysgrif TAW

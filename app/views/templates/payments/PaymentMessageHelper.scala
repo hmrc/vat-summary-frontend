@@ -22,7 +22,7 @@ import models.payments._
 import play.api.i18n.Messages
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
-sealed case class PaymentMessageHelper(name: String, title: String, description: Option[String], id: String = "")
+sealed case class PaymentMessageHelper(name: String, title: String, description: Option[String])
 
 //scalastyle:off
 object PaymentMessageHelper {
@@ -53,8 +53,7 @@ object PaymentMessageHelper {
   object VatReturnCreditCharge extends PaymentMessageHelper(
     ReturnCreditCharge.value,
     "chargeType.vatReturnCreditChargeTitle",
-    Some("chargeType.vatReturnCreditChargeDescription"),
-    "repayment"
+    Some("chargeType.vatReturnCreditChargeDescription")
   )
 
   object VatReturnDebitCharge extends PaymentMessageHelper(
@@ -65,8 +64,7 @@ object PaymentMessageHelper {
   object VatOfficerAssessmentCreditCharge extends PaymentMessageHelper(
     OACreditCharge.value,
     "chargeType.officerAssessmentChargeTitle",
-    Some("chargeType.officerAssessmentCreditChargeDescription"),
-    "repayment"
+    Some("chargeType.officerAssessmentCreditChargeDescription")
   )
 
   object VatOfficerAssessmentDebitCharge extends PaymentMessageHelper(
@@ -87,8 +85,7 @@ object PaymentMessageHelper {
   object VatCreditDefaultSurcharge extends PaymentMessageHelper(
     CreditDefaultSurcharge.value,
     "chargeType.vatDefaultSurchargeTitle",
-    Some("chargeType.vatDefaultSurchargeDescription"),
-    "repayment"
+    Some("chargeType.vatDefaultSurchargeDescription")
   )
 
   object VatErrorCorrectionDebitCharge extends PaymentMessageHelper(
@@ -100,15 +97,13 @@ object PaymentMessageHelper {
   object VatErrorCorrectionCreditCharge extends PaymentMessageHelper(
     ErrorCorrectionCreditCharge.value,
     "chargeType.vatErrorCorrectionCreditChargeTitle",
-    Some("chargeType.vatErrorCorrectionChargeDescription"),
-    "repayment"
+    Some("chargeType.vatErrorCorrectionChargeDescription")
   )
 
   object VatRepaymentSupplement extends PaymentMessageHelper(
     RepaymentSupplement.value,
     "chargeType.vatRepaymentSupplementTitle",
-    Some("chargeType.vatRepaymentSupplementDescription"),
-    "repayment"
+    Some("chargeType.vatRepaymentSupplementDescription")
   )
 
   object OADefaultInterest extends PaymentMessageHelper(
@@ -192,15 +187,13 @@ object PaymentMessageHelper {
   object VatAAReturnCreditCharge extends PaymentMessageHelper(
     AAReturnCreditCharge.value,
     "chargeType.VatAnnualAccountReturnCreditChargeTitle",
-    Some("chargeType.VatAnnualAccountReturnCreditChargeDescription"),
-    "repayment"
+    Some("chargeType.VatAnnualAccountReturnCreditChargeDescription")
   )
 
   object VatStatutoryInterestCharge extends PaymentMessageHelper(
     StatutoryInterestCharge.value,
     "chargeType.VatStatutoryInterestTitle",
-    Some("chargeType.VatStatutoryInterestDescription"),
-    "repayment"
+    Some("chargeType.VatStatutoryInterestDescription")
   )
 
   object VatSecurityDepositRequest extends PaymentMessageHelper(
@@ -314,8 +307,7 @@ object PaymentMessageHelper {
   object VatCreditReturnOffsetCharge extends PaymentMessageHelper(
     CreditReturnOffsetCharge.value,
     "chargeType.vatCreditReturnOffsetChargeTitle",
-    Some("chargeType.vatCreditReturnOffsetChargeDescription"),
-    "repayment"
+    Some("chargeType.vatCreditReturnOffsetChargeDescription")
   )
 
   object ProtectiveAssessmentCharge extends PaymentMessageHelper(
@@ -327,15 +319,13 @@ object PaymentMessageHelper {
   object UnallocatedPaymentCharge extends PaymentMessageHelper(
     UnallocatedPayment.value,
     "chargeType.unallocatedPaymentTitle",
-    Some("chargeType.unallocatedPaymentDescription"),
-    "unallocated"
+    Some("chargeType.unallocatedPaymentDescription")
   )
 
   object RefundsCharge extends PaymentMessageHelper(
     Refund.value,
     "chargeType.refundTitle",
-    Some("chargeType.refundDescription"),
-    "repayment"
+    Some("chargeType.refundDescription")
   )
 
   object VATPOAInstalmentCharge extends PaymentMessageHelper(
@@ -353,8 +343,7 @@ object PaymentMessageHelper {
   object VATPOAReturnCreditCharge extends PaymentMessageHelper(
     PaymentOnAccountReturnCreditCharge.value,
     "chargeType.POAReturnCreditChargeTitle",
-    Some("chargeType.POAChargeDescription"),
-    "repayment"
+    Some("chargeType.POAChargeDescription")
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(

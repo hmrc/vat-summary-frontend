@@ -14,12 +14,20 @@
  * limitations under the License.
  *@
 
-@this(displayMoney: DisplayMoney)
+@import models.viewModels.PaymentsHistoryModel
+@import views.templates.payments.PaymentMessageHelper
 
-@(value: BigDecimal)
+@this()
 
-@if(value < 0){
-    +@displayMoney(value.abs)
-}else{
-    -@displayMoney(value.abs)
+@(transaction: PaymentsHistoryModel)(implicit messages: Messages)
+
+@chargeType = @{
+  PaymentMessageHelper.getChargeType(transaction.chargeType.value)
+}
+
+<span class="govuk-!-font-weight-bold">@messages(s"${chargeType.title}")</span>
+@chargeType.description.map { description =>
+  <span class="govuk-hint">
+    @PaymentMessageHelper.getFullDescription(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
+  </span>
 }

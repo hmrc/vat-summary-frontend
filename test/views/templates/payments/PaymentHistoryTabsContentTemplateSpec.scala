@@ -17,48 +17,60 @@
 package views.templates.payments
 
 import java.time.LocalDate
-
 import models.User
-import models.payments.ReturnDebitCharge
+import models.payments.{ReturnCreditCharge, ReturnDebitCharge}
 import models.viewModels.PaymentsHistoryModel
+import org.jsoup.Jsoup
 import play.twirl.api.Html
-import views.html.templates.payments.{PaymentsHistoryCharge, PaymentsHistoryTabsContent}
+import views.html.templates.payments.{PaymentsHistoryChargeDescription, PaymentsHistoryTabsContent}
 import views.templates.TemplateBaseSpec
 
 class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
-  val paymentsHistoryCharge: PaymentsHistoryCharge = injector.instanceOf[PaymentsHistoryCharge]
+  val paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription =
+    injector.instanceOf[PaymentsHistoryChargeDescription]
   val paymentsHistoryTabsContent: PaymentsHistoryTabsContent = injector.instanceOf[PaymentsHistoryTabsContent]
 
-  val currentYear = 2018
-  val previousYear = 2017
-  val exampleAmount = 100
+  val currentYear: Int = 2018
+  val previousYear: Int = 2017
+  val examplePaymentAmount: Int = 100
+  val exampleRepaymentAmount: Int = -200
   val singleYear: Seq[Int] = Seq(currentYear)
   val multipleYears: Seq[Int] = Seq(currentYear, previousYear)
   implicit val user: User = User("999999999")
 
-  val transaction: PaymentsHistoryModel = PaymentsHistoryModel(
+  val paymentTransaction: PaymentsHistoryModel = PaymentsHistoryModel(
     chargeType = ReturnDebitCharge,
     taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
     taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
-    amount = exampleAmount,
+    amount = examplePaymentAmount,
     clearedDate = Some(LocalDate.parse(s"2018-03-01"))
   )
 
-  val sectionExampleWithPayment: String =
+  val repaymentTransaction: PaymentsHistoryModel =
+    paymentTransaction.copy(chargeType = ReturnCreditCharge, amount = exampleRepaymentAmount)
+
+  def sectionExampleWithPayment(repayment: Boolean = false): String =
     s"""
       |<div id="year-$currentYear" class="govuk-tabs__panel">
-      |  <h2 class="govuk-heading-m">$currentYear</h2>
       |  <table class="govuk-table">
       |    <thead class="govuk-table__head">
       |      <tr class="govuk-table__row">
-      |        <th class="govuk-table__header govuk-visually-hidden" scope="col"> Payment received </th>
-      |        <th class="govuk-table__header govuk-visually-hidden" scope="col"> Description </th>
-      |        <th class="numeric govuk-table__header govuk-visually-hidden" scope="col"> Amount </th>
+      |        <th scope="col" class="govuk-table__header">Date</th>
+      |        <th scope="col" class="govuk-table__header">Payment description</th>
+      |        <th scope="col" class="govuk-table__header">You paid HMRC</th>
+      |        <th scope="col" class="govuk-table__header">HMRC paid you</th>
       |      </tr>
       |    </thead>
       |    <tbody class="govuk-table__body">
-      |      ${paymentsHistoryCharge(transaction)}
+      |      <tr class="govuk-table__row">
+      |        <td class="govuk-table__cell">1 Mar</td>
+      |        <td class="govuk-table__cell">
+      |          ${paymentsHistoryChargeDescription(if(repayment) repaymentTransaction else paymentTransaction)}
+      |        </td>
+      |        <td class="govuk-table__cell"> £${if(repayment) "0" else examplePaymentAmount} </td>
+      |        <td class="govuk-table__cell"> £${if(repayment) exampleRepaymentAmount.abs else "0"} </td>
+      |      </tr>
       |    </tbody>
       |  </table>
       |</div>
@@ -72,7 +84,6 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
         s"""id="year-$year" class="govuk-tabs__panel$hiddenDivClass""""
     s"""
       |<div $sectionAttributes>
-      |  <h2 class="govuk-heading-m">$year</h2>
       |  <p class="govuk-body">You have not made or received any payments using the new VAT service this year.</p>
       |</div>
       """.stripMargin
@@ -112,17 +123,59 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
           }
         }
 
-        "there are some transactions" should {
+        "there is a transaction where the user paid HMRC" should {
 
           "render the correct HTML" in {
 
-            val expectedMarkup = Html(sectionExampleWithPayment + noScriptSection)
+            val expectedMarkup = Html(sectionExampleWithPayment() + noScriptSection)
 
             val result = paymentsHistoryTabsContent(
-              singleYear, Seq(transaction), showPreviousPaymentsTab = false
+              singleYear, Seq(paymentTransaction), showPreviousPaymentsTab = false
             )
 
             formatHtml(result) shouldBe formatHtml(expectedMarkup)
+          }
+        }
+
+        "there is a transaction where HMRC paid the user" should {
+
+          "render the correct HTML" in {
+
+            val expectedMarkup = Html(
+              sectionExampleWithPayment(repayment = true) +
+              sectionExampleWithoutPayment(previousYear, divClassHidden = true) +
+              noScriptSection
+            )
+
+            val result = paymentsHistoryTabsContent(
+              multipleYears, Seq(repaymentTransaction), showPreviousPaymentsTab = false
+            )
+
+            formatHtml(result) shouldBe formatHtml(expectedMarkup)
+          }
+        }
+
+        "there are multiple transactions not in the expected order" should {
+
+          "sort the transactions by cleared date (descending order)" in {
+
+            val transactions = Seq(
+              paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-04-01"))),
+              paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-02-01"))),
+              paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-11-01"))),
+              paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-07-01"))),
+            )
+
+            val result = paymentsHistoryTabsContent(
+              multipleYears, transactions, showPreviousPaymentsTab = false
+            )
+
+            val document = Jsoup.parse(result.body)
+
+            document.select("tr.govuk-table__row:nth-child(1) > td:nth-child(1)").text() shouldBe "1 Nov"
+            document.select("tr.govuk-table__row:nth-child(2) > td:nth-child(1)").text() shouldBe "1 Jul"
+            document.select("tr.govuk-table__row:nth-child(3) > td:nth-child(1)").text() shouldBe "1 Apr"
+            document.select("tr.govuk-table__row:nth-child(4) > td:nth-child(1)").text() shouldBe "1 Feb"
           }
         }
       }
@@ -148,10 +201,14 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
           "render the correct HTML" in {
 
-            val expectedMarkup = Html(sectionExampleWithPayment + sectionExampleWithoutPayment(previousYear, divClassHidden = true) + noScriptSection)
+            val expectedMarkup = Html(
+              sectionExampleWithPayment() +
+              sectionExampleWithoutPayment(previousYear, divClassHidden = true) +
+              noScriptSection
+            )
 
             val result = paymentsHistoryTabsContent(
-              multipleYears, Seq(transaction), showPreviousPaymentsTab = false
+              multipleYears, Seq(paymentTransaction), showPreviousPaymentsTab = false
             )
 
             formatHtml(result) shouldBe formatHtml(expectedMarkup)
@@ -168,10 +225,12 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
           sectionExampleWithoutPayment(currentYear) +
           s"""
             |<div id="previous-payments" class="govuk-tabs__panel">
-            |  <h2 class="govuk-heading-m">Previous payments</h2>
             |  <p class="govuk-body">
             |    You can
-            |    <a class="govuk-link" rel="noreferrer noopener" href="${mockAppConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)}" target="_blank">view your previous payments (opens in a new tab)</a>
+            |    <a class="govuk-link"
+            |       rel="noreferrer noopener"
+            |       href="${mockAppConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)}"
+            |       target="_blank">view your previous payments (opens in a new tab)</a>
             |    if you made payments before joining Making Tax Digital.
             |  </p>
             |</div>

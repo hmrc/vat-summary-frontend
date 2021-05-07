@@ -41,10 +41,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val tabTwo = "li.govuk-tabs__list-item:nth-child(2) a"
     val tabThree = "li.govuk-tabs__list-item:nth-child(3) a"
     val tabFour = "li.govuk-tabs__list-item:nth-child(4) a"
-    val currentYearSubheading = "#year-2018 > h2"
-    val previousYearSubheading = "#year-2017 > h2"
     val previousYearNoPayments = "#year-2017 > p"
-    val prevPaymentsSubheading = "#previous-payments > h2"
     val prevPaymentsParagraph = "#previous-payments > p"
     val prevPaymentsLink: String = prevPaymentsParagraph + " > a"
     val paymentDateTableHeading = "tr th:nth-of-type(1) div"
@@ -52,7 +49,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val descriptionTableChargeType = "tr:nth-child(1) > td > span:nth-child(1)"
     val descriptionTableContent = "td.govuk-table__cell:nth-child(2) span.govuk-hint"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
+    val amountRepaidTableContent = "tr td:nth-of-type(4)"
     val insolvencyBanner = "div.govuk-form-group"
+    val whatYouOweLink = "p.govuk-body:nth-child(2) > a:nth-child(1)"
+    def columnHeaading(col: Int): String = s".govuk-table__header:nth-of-type($col)"
   }
 
   val currentYear = 2018
@@ -86,6 +86,17 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe "Payment history"
+      }
+
+      "have the link to check what you owe" which {
+
+        "has the correct text" in {
+          elementText(Selectors.whatYouOweLink) shouldBe "Find out if you owe anything to HMRC"
+        }
+
+        "has the correct href" in {
+          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments().url
+        }
       }
 
       "render breadcrumbs" which {
@@ -127,34 +138,39 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         elementText(Selectors.tabFour) shouldBe "Previous payments"
       }
 
-      "have the current year subheading" in {
-        elementText(Selectors.currentYearSubheading) shouldBe currentYear.toString
-      }
-
-      "have the previous year subheading" in {
-        elementText(Selectors.previousYearSubheading) shouldBe (currentYear - 1).toString
-      }
-
-      "have the previous payments subheading" in {
-        elementText(Selectors.prevPaymentsSubheading) shouldBe "Previous payments"
-      }
-
       "have the correct current year tab content" which {
 
-        "has the correct amount in the charge row" in {
-          elementText(Selectors.amountPaidTableContent) shouldBe "- £100"
+        "has the correct heading in the first column" in {
+          elementText(Selectors.columnHeaading(1)) shouldBe "Date"
         }
 
-        "has the correct title in the charge row" in {
+        "has the correct heading in the second column" in {
+          elementText(Selectors.columnHeaading(2)) shouldBe "Payment description"
+        }
+
+        "has the correct heading in the third column" in {
+          elementText(Selectors.columnHeaading(3)) shouldBe "You paid HMRC"
+        }
+
+        "has the correct heading in the fourth column" in {
+          elementText(Selectors.columnHeaading(4)) shouldBe "HMRC paid you"
+        }
+
+        "has the correct date in the first column" in {
+          elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar"
+        }
+
+        "has the correct charge description in the second column" in {
           elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
-        }
-
-        "has the correct description in the charge row" in {
           elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
         }
 
-        "has the correct date in the charge row" in {
-          elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar 2018"
+        "has the correct payment amount in the third column" in {
+          elementText(Selectors.amountPaidTableContent) shouldBe "£100"
+        }
+
+        "has the correct repayment amount in the fourth column" in {
+          elementText(Selectors.amountRepaidTableContent) shouldBe "£0"
         }
       }
 
