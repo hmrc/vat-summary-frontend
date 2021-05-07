@@ -14,13 +14,12 @@
  * limitations under the License.
  *@
 
-@this(standardError: StandardError)
+@this(mainTemplate: MainTemplate)
 
-@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages)
+@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
 
-@standardError(
-  appConfig,
-  messages("notFound.title"),
-  messages("notFound.heading"),
-  messages("notFound.message")
-)
+@mainTemplate(title = messages("directDebitInterrupt.title"), appConfig = appConfig) {
+
+  <h1 class="govuk-heading-l">@messages("directDebitInterrupt.existingDD")</h1>
+
+}

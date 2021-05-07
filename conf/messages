@@ -137,6 +137,11 @@ vatCertificate.nstp.p2 = This will cover the time between your last non-standard
 vatCertificate.nstp.dateFromTo = {0} to {1}
 vatCertificate.logo = HMRC_Logo
 
+#Direct debit interrupt
+directDebitInterrupt.title = Direct debit interrupt screen
+directDebitInterrupt.noDD = Direct debit interrupt screen for migrated users with no existing DD
+directDebitInterrupt.existingDD = Direct debit interrupt screen for migrated users with an existing DD
+
 #Vat Overview Partials
 deregPartial.cancelRegistration.title = Cancel VAT registration
 deregPartial.cancelRegistration.content = Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
