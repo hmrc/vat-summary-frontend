@@ -100,9 +100,6 @@ standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 
 paymentsHistory.title = Payment history
-paymentsHistory.paymentReceivedTitle = Payment received
-paymentsHistory.descriptionTitle = Description
-paymentsHistory.amountTitle = Amount
 paymentsHistory.noCurrentYearHistory = You have not made or received any payments using the new VAT service this year.
 paymentsHistory.previousPayments.heading = Previous payments
 paymentsHistory.previousPayments.youCan = You can
@@ -110,6 +107,11 @@ paymentsHistory.previousPayments.viewPreviousPayments = view your previous payme
 paymentsHistory.previousPayments.beforeMtd = if you made payments before joining Making Tax Digital.
 paymentsHistory.backToTop = Back to top
 paymentsHistory.insolvencyNotice = You cannot view payments made before the insolvency date.
+paymentsHistory.whatYouOwe = Find out if you owe anything to HMRC
+paymentsHistory.date = Date
+paymentsHistory.description = Payment description
+paymentsHistory.youPaid = You paid HMRC
+paymentsHistory.paidYou = HMRC paid you
 
 #VAT certificate
 vatCertificate.title = Your VAT Certificate

@@ -19,8 +19,6 @@ import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
-import uk.gov.hmrc.versioning.SbtGitVersioning
-import uk.gov.hmrc.SbtAutoBuildPlugin
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
@@ -94,7 +92,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 }
 
 lazy val microservice: Project = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins: _*)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9152)
   .settings(majorVersion := 0)

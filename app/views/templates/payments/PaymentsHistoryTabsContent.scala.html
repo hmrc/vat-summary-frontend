@@ -17,44 +17,43 @@
 @import config.AppConfig
 @import models.viewModels.PaymentsHistoryModel
 @import views.html.templates.formatters.links.OpenInNewTab
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.html.templates.formatters.money.DisplayMoney
 
 @this(govukTable: GovukTable,
-      paymentsHistoryCharge: PaymentsHistoryCharge,
-        openInNewTab: OpenInNewTab)
+      paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription,
+      openInNewTab: OpenInNewTab,
+      displayMoney: DisplayMoney)
 
 @(years: Seq[Int],
   transactions: Seq[PaymentsHistoryModel],
-  showPreviousPaymentsTab: Boolean
-  )(implicit messages: Messages, appConfig: AppConfig, user: User)
+  showPreviousPaymentsTab: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User)
 
 @for(year <- years) {
   <div id="year-@year" class="govuk-tabs__panel@if(year != years.head) { govuk-tabs__panel--hidden}">
-    <h2 class="govuk-heading-m">@year</h2>
     @if(transactions.exists(_.clearedDate.getOrElse("").toString.contains(year.toString))) {
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header govuk-visually-hidden" scope="col">
-            @messages("paymentsHistory.paymentReceivedTitle")
-          </th>
-
-          <th class="govuk-table__header govuk-visually-hidden" scope="col">
-            @messages("paymentsHistory.descriptionTitle")
-          </th>
-
-          <th class="numeric govuk-table__header govuk-visually-hidden" scope="col">
-            @messages("paymentsHistory.amountTitle")
-          </th>
-        </tr>
-      </thead>
-
-      <tbody class="govuk-table__body">
-        @for(transaction <- transactions.filter(_.clearedDate.getOrElse("").toString.contains(year.toString))) {
-          @paymentsHistoryCharge(transaction)
+      @govukTable(Table(
+        head = Some(Seq(
+          HeadCell(content = Text(messages("paymentsHistory.date"))),
+          HeadCell(content = Text(messages("paymentsHistory.description"))),
+          HeadCell(content = Text(messages("paymentsHistory.youPaid"))),
+          HeadCell(content = Text(messages("paymentsHistory.paidYou")))
+        )),
+        rows = transactions
+                .filter(_.clearedDate.getOrElse("").toString.contains(year.toString))
+                .sortBy(_.clearedDate.toString).reverse.map { transaction =>
+          transaction.clearedDate match {
+            case Some(date) =>
+              Seq(
+                TableRow(content = Text(displayDate(date, useShortDayFormat = true, showYear = false))),
+                TableRow(content = HtmlContent(paymentsHistoryChargeDescription(transaction))),
+                TableRow(content = HtmlContent(displayMoney(if(transaction.amount > 0) transaction.amount else 0))),
+                TableRow(content = HtmlContent(displayMoney(if(transaction.amount < 0) transaction.amount.abs else 0)))
+              )
+            case None => Seq()
+          }
         }
-      </tbody>
-    </table>
-
+      ))
     } else {
       <p class="govuk-body">@messages("paymentsHistory.noCurrentYearHistory")</p>
     }
@@ -63,7 +62,6 @@
 
 @if(showPreviousPaymentsTab) {
   <div id="previous-payments" class="govuk-tabs__panel">
-    <h2 class="govuk-heading-m">@messages("paymentsHistory.previousPayments.heading")</h2>
     <p class="govuk-body">
       @messages("paymentsHistory.previousPayments.youCan")
       @openInNewTab(
