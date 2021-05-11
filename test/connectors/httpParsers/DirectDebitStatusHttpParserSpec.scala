@@ -16,8 +16,8 @@
 
 package connectors.httpParsers
 
-
 import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
+import models.DirectDebitStatus
 import models.errors._
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
@@ -30,10 +30,9 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
 
     "the http response status is 200 OK" should {
 
-      val httpResponse = HttpResponse(Status.OK, Json.parse("true").toString())
-
-      val expected = Right(true)
-
+      val jsonResponse = Json.obj("directDebitMandateFound" -> false)
+      val httpResponse = HttpResponse(Status.OK, jsonResponse.toString())
+      val expected = Right(DirectDebitStatus(directDebitMandateFound = false, None))
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 
       "return a DirectDebitStatus instance" in {
@@ -44,9 +43,7 @@ class DirectDebitStatusHttpParserSpec extends UnitSpec {
     "the http response status is 404 NOT_FOUND" should {
 
       val httpResponse = HttpResponse(Status.NOT_FOUND, "")
-
       val expected = Left(UnexpectedStatusError("404", ""))
-
       val result = DirectDebitStatusReads.read("", "", httpResponse)
 
       "return a 404 error" in {

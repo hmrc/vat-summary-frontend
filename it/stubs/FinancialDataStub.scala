@@ -56,13 +56,20 @@ object FinancialDataStub extends WireMockMethods {
 
   def stubSuccessfulDirectDebit: StubMapping = {
     when(method = GET, uri = financialDataDirectDebitUri)
-      .thenReturn(status = OK, body = true)
+      .thenReturn(status = OK, body = DDStatusJson)
   }
 
   def stubInvalidVrnDirectDebit: StubMapping = {
     when(method = GET, uri = financialDataDirectDebitUri)
       .thenReturn(BAD_REQUEST, body = invalidVrn)
   }
+
+  private val DDStatusJson: JsValue = Json.obj(
+    "directDebitMandateFound" -> true,
+    "directDebitDetails" -> Json.arr(
+      Json.obj("dateCreated" -> "2018-01-01")
+    )
+  )
 
   private val paidTransactions: JsValue = Json.parse(
     s"""{

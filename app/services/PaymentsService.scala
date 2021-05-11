@@ -17,13 +17,13 @@
 package services
 
 import java.time.LocalDate
-
 import connectors.{DirectDebitConnector, FinancialDataConnector, PaymentsConnector}
+
 import javax.inject.{Inject, Singleton}
 import models.errors._
 import models.payments.{PaymentDetailsModel, Payments}
 import models.viewModels.PaymentsHistoryModel
-import models.{DirectDebitDetailsModel, ServiceResponse}
+import models.{DirectDebitDetailsModel, DirectDebitStatus, ServiceResponse}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,7 +56,8 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     }
   }
 
-  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] = {
+  def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] = {
     paymentsConnector.setupJourney(journeyDetails).map {
       case Right(url) => Right(url)
       case Left(_) => Left(PaymentSetupError)
@@ -70,7 +71,8 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
       case Left(_) => Left(DirectDebitSetupError)
     }
 
-  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Boolean]] =
+  def getDirectDebitStatus(vrn: String)
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[DirectDebitStatus]] =
     financialDataConnector.getDirectDebitStatus(vrn) map {
       case Right(directDebitStatus) => Right(directDebitStatus)
       case Left(_) => Left(DirectDebitStatusError)

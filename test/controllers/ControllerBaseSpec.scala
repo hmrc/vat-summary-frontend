@@ -94,6 +94,7 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
     super.beforeEach()
     mockAppConfig.features.agentAccess(true)
     mockAppConfig.features.ddCollectionInProgressEnabled(true)
+    mockAppConfig.features.directDebitInterrupt(true)
   }
 
   override def afterEach(): Unit = {

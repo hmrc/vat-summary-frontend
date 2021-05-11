@@ -17,9 +17,10 @@
 package connectors
 
 import java.time.LocalDate
-
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import models.DirectDebitStatus
+
 import javax.inject.{Inject, Singleton}
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
@@ -82,7 +83,8 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       }
   }
 
-  def getDirectDebitStatus(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Boolean]] = {
+  def getDirectDebitStatus(vrn: String)
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[DirectDebitStatus]] = {
 
     import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 
