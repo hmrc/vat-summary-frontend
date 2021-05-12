@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import common.FinancialTransactionsConstants._
@@ -25,17 +24,20 @@ import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+
 import javax.inject.{Inject, Singleton}
 import models._
+import models.errors.DirectDebitStatusError
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
 import play.api.Logger
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.html.interrupt.{DDInterruptExistingDD, DDInterruptNoDD}
 import views.html.vatDetails.Details
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -45,6 +47,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
                                      implicit val appConfig: AppConfig,
                                      vatDetailsService: VatDetailsService,
                                      serviceInfoService: ServiceInfoService,
+                                     paymentsService: PaymentsService,
                                      authorisedController: AuthorisedController,
                                      val accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
@@ -52,6 +55,8 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
                                      mcc: MessagesControllerComponents,
                                      implicit val ec: ExecutionContext,
                                      detailsView: Details,
+                                     ddInterruptNoDDView: DDInterruptNoDD,
+                                     ddInterruptExistingDDView: DDInterruptExistingDD,
                                      serviceErrorHandler: ServiceErrorHandler)
   extends FrontendController(mcc) with I18nSupport {
 
@@ -60,34 +65,41 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
       val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn, dateService.now())
       lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user.vrn)
+      lazy val directDebitStatusCall = paymentsService.getDirectDebitStatus(user.vrn)
 
       for {
         customerInfo <- accountDetailsCall
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
+        directDebitStatus <-
+          if(appConfig.features.directDebitInterrupt()) directDebitStatusCall
+          else Future.successful(Left(DirectDebitStatusError))
         serviceInfoContent <- serviceInfoService.getPartial
-        mandationStatus = retrieveMandationStatus(customerInfo)
       } yield {
-        val migratedDate = (request.session.get(SessionKeys.migrationToETMP), customerInfo) match {
-          case (Some(date), _) => date
-          case (None, Right(details)) => details.extractDate.getOrElse("")
-          case (None, Left(_)) => ""
-        }
+
         auditEvents(user, nextReturn, nextPayment)
 
-        val newSessionVariables: Seq[(String, String)] =
-          Seq(SessionKeys.migrationToETMP -> migratedDate) ++ (mandationStatus match {
-            case Some(info) => Seq(SessionKeys.mandationStatus -> info)
-            case _ => Seq()
-          })
+        val newSessionVariables: Seq[(String, String)] = customerInfo match {
+          case Right(details) => Seq(
+            SessionKeys.migrationToETMP -> details.customerMigratedToETMPDate.getOrElse(""),
+            SessionKeys.mandationStatus -> details.mandationStatus
+          )
+          case Left(_) => Seq()
+        }
 
-        if (redirectForMissingTrader(customerInfo)) {
-          Redirect(appConfig.missingTraderRedirectUrl)
-        } else {
-          Ok(detailsView(
-            constructViewModel(nextReturn, nextPayment, customerInfo),
-            serviceInfoContent
-          )).addingToSession(newSessionVariables: _*)
+        val hasNotViewedDDInterrupt = request.session.get(SessionKeys.viewedDDInterrupt).isEmpty
+
+        (redirectForMissingTrader(customerInfo), ddInterrupt(customerInfo, directDebitStatus)) match {
+          case (true, _) => Redirect(appConfig.missingTraderRedirectUrl)
+          case (false, InterruptNoDD) if hasNotViewedDDInterrupt =>
+            Ok(ddInterruptNoDDView()).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+          case (false, InterruptExistingDD) if hasNotViewedDDInterrupt =>
+            Ok(ddInterruptExistingDDView()).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+          case _ =>
+            Ok(detailsView(
+              constructViewModel(nextReturn, nextPayment, customerInfo),
+              serviceInfoContent
+            )).addingToSession(newSessionVariables: _*)
         }
       }
   }
@@ -124,6 +136,23 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       _ => false,
       details => appConfig.features.missingTraderAddressIntercept() && details.isMissingTrader && !details.hasPendingPpobChanges
     )
+  }
+
+  private[controllers] def ddInterrupt(customerInfo: HttpGetResult[CustomerInformation],
+                                       directDebitStatus: ServiceResponse[DirectDebitStatus]): DDInterruptResult = {
+
+    val migrationDate: Option[LocalDate] = customerInfo.fold(_ => None, _.customerMigratedToETMPDate.map(LocalDate.parse))
+    val ddStatus: Option[Boolean] = directDebitStatus.fold(_ => None, dd => Some(dd.directDebitMandateFound))
+    val ddDates: Option[Seq[DDIDetails]] = directDebitStatus.fold(_ => None, _.directDebitDetails)
+    val monthLimit: Int = 4
+
+    (appConfig.features.directDebitInterrupt(), migrationDate, ddStatus, ddDates) match {
+      case (true, Some(migDate), _, _) if migDate.plusMonths(monthLimit).isBefore(dateService.now()) => BypassInterrupt
+      case (true, Some(_), Some(false), _) => InterruptNoDD
+      case (true, Some(migDate), Some(true), Some(dates))
+        if dates.exists(ddi => LocalDate.parse(ddi.dateCreated).compareTo(migDate) <= 0) => InterruptExistingDD
+      case _ => BypassInterrupt
+    }
   }
 
   private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {
@@ -203,19 +232,6 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           case _ => true
         }
       case _ => true
-    }
-  }
-
-  def retrieveMandationStatus(customerInfo: HttpGetResult[CustomerInformation])
-                             (implicit request: Request[AnyContent]): Option[String] = {
-    val mtdMandationSessionKey = SessionKeys.mandationStatus
-
-    request.session.get(mtdMandationSessionKey) match {
-      case Some(value) => Some(value)
-      case _ => customerInfo match {
-        case Right(info) => Some(info.mandationStatus)
-        case _ => None
-      }
     }
   }
 

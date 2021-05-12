@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object SessionKeys {
-  val migrationToETMP = "customerMigratedToETMPDate"
-  val mandationStatus = "mtdVatMandationStatus"
-  val agentSessionVrn = "CLIENT_VRN"
+sealed trait DDInterruptResult
 
-  val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
-  val inFlightContactKey: String = "inFlightContactDetailsChange"
-  val insolventWithoutAccessKey: String = "insolventWithoutAccess"
-  val financialAccess: String = "vatSummaryFinancialAccess"
-  val viewedDDInterrupt: String = "vatSummaryHasViewedDDInterrupt"
-}
+case object InterruptNoDD extends DDInterruptResult
+case object InterruptExistingDD extends DDInterruptResult
+case object BypassInterrupt extends DDInterruptResult

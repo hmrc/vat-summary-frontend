@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object SessionKeys {
-  val migrationToETMP = "customerMigratedToETMPDate"
-  val mandationStatus = "mtdVatMandationStatus"
-  val agentSessionVrn = "CLIENT_VRN"
+import play.api.libs.json.{Format, Json}
 
-  val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
-  val inFlightContactKey: String = "inFlightContactDetailsChange"
-  val insolventWithoutAccessKey: String = "insolventWithoutAccess"
-  val financialAccess: String = "vatSummaryFinancialAccess"
-  val viewedDDInterrupt: String = "vatSummaryHasViewedDDInterrupt"
+case class DDIDetails(dateCreated: String)
+
+object DDIDetails {
+  implicit val format: Format[DDIDetails] = Json.format[DDIDetails]
+}
+
+case class DirectDebitStatus(directDebitMandateFound: Boolean, directDebitDetails: Option[Seq[DDIDetails]])
+
+object DirectDebitStatus {
+  implicit val format: Format[DirectDebitStatus] = Json.format[DirectDebitStatus]
 }

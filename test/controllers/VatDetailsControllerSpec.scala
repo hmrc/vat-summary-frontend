@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-
 import audit.AuditingService
 import audit.models.AuditModel
 import common.FinancialTransactionsConstants._
@@ -30,8 +29,7 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsEmpty, Request, Result}
-import play.api.test.FakeRequest
+import play.api.mvc.{Request, Result}
 import play.api.test.Helpers._
 import play.twirl.api.Html
 import services._
@@ -39,6 +37,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.interrupt.{DDInterruptExistingDD, DDInterruptNoDD}
 import views.html.vatDetails.Details
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,16 +50,20 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     val payments: Payments = TestModels.payments
 
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
-    val vatServiceReturnsResult: Future[ServiceResponse[Option[VatReturnObligations]]] = Future.successful(Right(Some(obligations)))
-    val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] = Future.successful(Right(Some(payments)))
-    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(customerInformationMax))
+    val vatServiceReturnsResult: Future[ServiceResponse[Option[VatReturnObligations]]] =
+      Future.successful(Right(Some(obligations)))
+    val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] =
+      Future.successful(Right(Some(payments)))
+    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+      Future.successful(Right(customerInformationMax))
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
+    val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+      Future.successful(Right(DirectDebitStatus(directDebitMandateFound = false, None)))
 
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
     val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-
-    val detailsView: Details = injector.instanceOf[Details]
+    val mockPaymentsService: PaymentsService = mock[PaymentsService]
 
     def setup(): Any = {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
@@ -88,6 +91,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
         .stubs(*,*,*)
         .returns(serviceInfoServiceResult)
+
+      (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *)
+        .returns(ddResult)
     }
 
     mockAppConfig.features.submitReturnFeatures(true)
@@ -99,13 +106,16 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockAppConfig,
         mockVatDetailsService,
         mockServiceInfoService,
+        mockPaymentsService,
         authorisedController,
         mockAccountDetailsService,
         mockDateService,
         mockAuditService,
         mcc,
         ec,
-        detailsView,
+        injector.instanceOf[Details],
+        injector.instanceOf[DDInterruptNoDD],
+        injector.instanceOf[DDInterruptExistingDD],
         mockServiceErrorHandler
       )
     }
@@ -113,62 +123,32 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
   "Calling the details action" when {
 
-    "the user is logged in and does not have a customerMigratedToETMPDate in session" should {
+    "the user is logged in and does not meet the criteria to see an interrupt screen" should {
 
-      "return 200" in new DetailsTest {
-        private val result = target().details()(fakeRequest)
-        status(result) shouldBe Status.OK
+      object Test extends DetailsTest { lazy val result: Future[Result] = target().details()(fakeRequest) }
+
+      "return 200" in {
+        status(Test.result) shouldBe Status.OK
       }
 
-      "return HTML" in new DetailsTest {
-        private val result = target().details()(fakeRequest)
-        contentType(result) shouldBe Some("text/html")
+      "return HTML" in {
+        contentType(Test.result) shouldBe Some("text/html")
       }
 
-      "return charset utf-8" in new DetailsTest {
-        private val result = target().details()(fakeRequest)
-        charset(result) shouldBe Some("utf-8")
+      "return charset utf-8" in {
+        charset(Test.result) shouldBe Some("utf-8")
       }
 
-      "put a customerMigratedToETMPDate key into the session" in new DetailsTest {
-        private val result = target().details()(fakeRequest)
-        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-06")
+      "return the VAT overview view" in {
+        await(bodyOf(Test.result)).contains("Your VAT account") shouldBe true
       }
 
-      "put a mandation status in the session" in new DetailsTest {
-        private val result = target().details()(fakeRequest)
-        session(result).get(SessionKeys.mandationStatus) shouldBe Some("MTDfB")
+      "put a customerMigratedToETMPDate key into the session" in {
+        session(Test.result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-05")
       }
 
-      "not overwrite the mandation status in the session" in new DetailsTest {
-        val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(
-          SessionKeys.mandationStatus -> "Non MTDfB")
-
-        private val result = target().details()(fakeRequestWithSession)
-        session(result).get(SessionKeys.mandationStatus) shouldBe Some("Non MTDfB")
-      }
-    }
-
-    "the user is logged in and has a customerMigratedToETMPDate in session" should {
-
-      "return 200" in new DetailsTest {
-        private val result = target().details()(fakeRequestWithSession)
-        status(result) shouldBe Status.OK
-      }
-
-      "return HTML" in new DetailsTest {
-        private val result = target().details()(fakeRequestWithSession)
-        contentType(result) shouldBe Some("text/html")
-      }
-
-      "return charset utf-8" in new DetailsTest {
-        private val result = target().details()(fakeRequestWithSession)
-        charset(result) shouldBe Some("utf-8")
-      }
-
-      "not overwrite the customerMigratedToETMPDate value in the session" in new DetailsTest {
-        private val result = target().details()(fakeRequestWithSession)
-        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2018-01-01")
+      "put a mandation status in the session" in {
+        session(Test.result).get(SessionKeys.mandationStatus) shouldBe Some("MTDfB")
       }
     }
 
@@ -247,6 +227,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *, *)
             .returns({})
+
+          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *)
+            .returns(ddResult)
         }
 
         val result: Future[Result] = target().details()(fakeRequest)
@@ -265,9 +249,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the submit return feature switch is turned on" should {
       "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
-        (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Right(customerInformationNonMTDfB)))
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+          Future.successful(Right(customerInformationNonMTDfB))
 
         mockAppConfig.features.submitReturnFeatures(true)
         lazy val result: Future[Result] = target().details()(fakeRequest)
@@ -276,7 +259,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "user is a missing trader" should {
+    "the user is a missing trader" should {
 
       "redirect to the manage-vat-subscription-frontend missing trader URL" in new DetailsTest {
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
@@ -286,6 +269,115 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/missing-trader")
+      }
+    }
+
+    "the user meets the criteria for the DD interrupt screen" when {
+
+      "they have no DD" when {
+
+        "they have viewed the interrupt screen already in this session" should {
+
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] =
+              target().details()(fakeRequest.withSession(SessionKeys.viewedDDInterrupt -> "true"))
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+          }
+
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the VAT overview view" in {
+            await(bodyOf(Test.result)).contains("Your VAT account") shouldBe true
+          }
+        }
+
+        "they have not viewed the interrupt screen in this session" should {
+
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] = target().details()(fakeRequest)
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+          }
+
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the no DD interrupt view" in {
+            await(bodyOf(Test.result))
+              .contains("Direct debit interrupt screen for migrated users with no existing DD") shouldBe true
+          }
+
+          "add the 'viewedDDInterrupt' session key to the session" in {
+            session(Test.result).data.get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+          }
+        }
+      }
+
+      "they have an existing DD" when {
+
+        "they have viewed the interrupt screen already in this session" should {
+
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] =
+              target().details()(fakeRequest.withSession(SessionKeys.viewedDDInterrupt -> "true"))
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+            override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+              Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
+          }
+
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the VAT overview view" in {
+            await(bodyOf(Test.result)).contains("Your VAT account") shouldBe true
+          }
+        }
+
+        "they have not viewed the interrupt screen in this session" should {
+
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] = target().details()(fakeRequest)
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+            override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+              Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
+          }
+
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the existing DD interrupt view" in {
+            await(bodyOf(Test.result))
+              .contains("Direct debit interrupt screen for migrated users with an existing DD") shouldBe true
+          }
+
+          "add the 'viewedDDInterrupt' session key to the session" in {
+            session(Test.result).data.get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+          }
+        }
       }
     }
   }
@@ -834,6 +926,119 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return false" in new DetailsTest {
         target().redirectForMissingTrader(Right(customerInformationMax)) shouldBe false
+      }
+    }
+  }
+
+  "Calling .ddInterrupt" when {
+
+    val ddStatusFalse = DirectDebitStatus(directDebitMandateFound = false, Some(Seq(DDIDetails("2018-01-01"))))
+    val ddStatusTrue = DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-01"))))
+    val customerMigratedWithin4M = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
+
+    "the migration date is over 4 months in the past" should {
+
+      "return BypassInterrupt" in new DetailsTest {
+        target().ddInterrupt(Right(customerInformationMax), Right(ddStatusFalse)) shouldBe BypassInterrupt
+      }
+    }
+
+    "the migration date is within 4 months and DD mandate is set to false" should {
+
+      "return InterruptNoDD" in new DetailsTest {
+        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusFalse)) shouldBe InterruptNoDD
+      }
+    }
+
+    "the migration date is within 4 months and DD mandate is set to true" when {
+
+      "there are no DD details" should {
+
+        "return BypassInterrupt" in new DetailsTest {
+          val ddNoDates: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = None)
+          target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddNoDates)) shouldBe BypassInterrupt
+        }
+      }
+
+      "there is one set of DD details" when {
+
+        "the DD creation date is before the migration date" should {
+
+          "return InterruptExistingDD" in new DetailsTest {
+            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusTrue)) shouldBe InterruptExistingDD
+          }
+        }
+
+        "the DD creation date is after the migration date" should {
+
+          "return BypassInterrupt" in new DetailsTest {
+            val ddAfterMig: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-06-01"))))
+            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddAfterMig)) shouldBe BypassInterrupt
+          }
+        }
+
+        "the DD creation date is the same day as the migration date" should {
+
+          "return InterruptExistingDD" in new DetailsTest {
+            val ddSameDay: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-04-01"))))
+            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddSameDay)) shouldBe InterruptExistingDD
+          }
+        }
+      }
+
+      "there are multiple sets of DD Details" when {
+
+        "at least one of the DD creation dates is before the migration date" should {
+
+          "return InterruptExistingDD" in new DetailsTest {
+            val ddBeforeMig: DirectDebitStatus =
+              ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-01-01"), DDIDetails("2018-07-01"))))
+            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddBeforeMig)) shouldBe InterruptExistingDD
+          }
+        }
+
+        "all of the DD creation dates are after the migration date" should {
+
+          "return BypassInterrupt" in new DetailsTest {
+            val ddAfterMig: DirectDebitStatus =
+              ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-06-01"), DDIDetails("2018-07-01"))))
+            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddAfterMig)) shouldBe BypassInterrupt
+          }
+        }
+      }
+    }
+
+    "no migration date was returned" should {
+
+      "return BypassInterrupt, regardless of the DD response" in new DetailsTest {
+        target().ddInterrupt(Right(customerInformationMin), Right(ddStatusFalse)) shouldBe BypassInterrupt
+        target().ddInterrupt(Right(customerInformationMin), Right(ddStatusTrue)) shouldBe BypassInterrupt
+      }
+    }
+
+    "the customer info API response was an error" should {
+
+      "return BypassInterrupt, regardless of the DD response" in new DetailsTest {
+        target().ddInterrupt(Left(UnknownError), Right(ddStatusFalse)) shouldBe BypassInterrupt
+        target().ddInterrupt(Left(UnknownError), Right(ddStatusTrue)) shouldBe BypassInterrupt
+      }
+    }
+
+    "the DD API response was an error" should {
+
+      "return BypassInterrupt, regardless of the customer info response" in new DetailsTest {
+        target().ddInterrupt(Right(customerInformationMax), Left(DirectDebitStatusError)) shouldBe BypassInterrupt
+        target().ddInterrupt(Right(customerMigratedWithin4M), Left(DirectDebitStatusError)) shouldBe BypassInterrupt
+      }
+    }
+
+    "the DD interrupt feature switch is off" should {
+
+      "return BypassInterrupt, regardless of the two API responses" in new DetailsTest {
+        mockAppConfig.features.directDebitInterrupt(false)
+        target().ddInterrupt(Right(customerInformationMax), Right(ddStatusFalse)) shouldBe BypassInterrupt
+        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusFalse)) shouldBe BypassInterrupt
+        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusTrue)) shouldBe BypassInterrupt
       }
     }
   }
