@@ -272,57 +272,112 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the user meets the criteria for the DD interrupt screen (no current DD)" should {
+    "the user meets the criteria for the DD interrupt screen" when {
 
-      object Test extends DetailsTest {
-        lazy val result: Future[Result] = target().details()(fakeRequest)
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-          Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+      "they have no DD" when {
+
+        "they have viewed the interrupt screen already in this session" should {
+
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] =
+              target().details()(fakeRequest.withSession(SessionKeys.viewedDDInterrupt -> "true"))
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+          }
+
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the VAT overview view" in {
+            await(bodyOf(Test.result)).contains("Your VAT account") shouldBe true
+          }
+        }
+
+        "they have not viewed the interrupt screen in this session" should {
+
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] = target().details()(fakeRequest)
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+          }
+
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the no DD interrupt view" in {
+            await(bodyOf(Test.result))
+              .contains("Direct debit interrupt screen for migrated users with no existing DD") shouldBe true
+          }
+
+          "add the 'viewedDDInterrupt' session key to the session" in {
+            session(Test.result).data.get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+          }
+        }
       }
 
-      "return 200" in {
-        status(Test.result) shouldBe Status.OK
-      }
+      "they have an existing DD" when {
 
-      "return HTML" in {
-        contentType(Test.result) shouldBe Some("text/html")
-      }
+        "they have viewed the interrupt screen already in this session" should {
 
-      "return charset utf-8" in {
-        charset(Test.result) shouldBe Some("utf-8")
-      }
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] =
+              target().details()(fakeRequest.withSession(SessionKeys.viewedDDInterrupt -> "true"))
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+            override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+              Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
+          }
 
-      "return the no DD interrupt view" in {
-        await(bodyOf(Test.result))
-          .contains("Direct debit interrupt screen for migrated users with no existing DD") shouldBe true
-      }
-    }
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
 
-    "the user meets the criteria for the DD interrupt screen (existing DD)" should {
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
 
-      object Test extends DetailsTest {
-        lazy val result: Future[Result] = target().details()(fakeRequest)
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-          Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
-        override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
-          Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
-      }
+          "return the VAT overview view" in {
+            await(bodyOf(Test.result)).contains("Your VAT account") shouldBe true
+          }
+        }
 
-      "return 200" in {
-        status(Test.result) shouldBe Status.OK
-      }
+        "they have not viewed the interrupt screen in this session" should {
 
-      "return HTML" in {
-        contentType(Test.result) shouldBe Some("text/html")
-      }
+          object Test extends DetailsTest {
+            lazy val result: Future[Result] = target().details()(fakeRequest)
+            override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+              Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+            override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+              Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
+          }
 
-      "return charset utf-8" in {
-        charset(Test.result) shouldBe Some("utf-8")
-      }
+          "return 200" in {
+            status(Test.result) shouldBe Status.OK
+          }
 
-      "return the existing DD interrupt view" in {
-        await(bodyOf(Test.result))
-          .contains("Direct debit interrupt screen for migrated users with an existing DD") shouldBe true
+          "return HTML" in {
+            contentType(Test.result) shouldBe Some("text/html")
+          }
+
+          "return the existing DD interrupt view" in {
+            await(bodyOf(Test.result))
+              .contains("Direct debit interrupt screen for migrated users with an existing DD") shouldBe true
+          }
+
+          "add the 'viewedDDInterrupt' session key to the session" in {
+            session(Test.result).data.get(SessionKeys.viewedDDInterrupt) shouldBe Some("true")
+          }
+        }
       }
     }
   }

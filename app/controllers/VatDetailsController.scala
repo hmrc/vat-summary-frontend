@@ -27,6 +27,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 
 import javax.inject.{Inject, Singleton}
 import models._
+import models.errors.DirectDebitStatusError
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
@@ -64,13 +65,15 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
       val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
       val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn, dateService.now())
       lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user.vrn)
-      val directDebitStatusCall = paymentsService.getDirectDebitStatus(user.vrn)
+      lazy val directDebitStatusCall = paymentsService.getDirectDebitStatus(user.vrn)
 
       for {
         customerInfo <- accountDetailsCall
         nextReturn <- returnObligationsCall
         nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
-        directDebitStatus <- directDebitStatusCall
+        directDebitStatus <-
+          if(appConfig.features.directDebitInterrupt()) directDebitStatusCall
+          else Future.successful(Left(DirectDebitStatusError))
         serviceInfoContent <- serviceInfoService.getPartial
       } yield {
 
@@ -84,11 +87,15 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
           case Left(_) => Seq()
         }
 
+        val hasNotViewedDDInterrupt = request.session.get(SessionKeys.viewedDDInterrupt).isEmpty
+
         (redirectForMissingTrader(customerInfo), ddInterrupt(customerInfo, directDebitStatus)) match {
           case (true, _) => Redirect(appConfig.missingTraderRedirectUrl)
-          case (false, InterruptNoDD) => Ok(ddInterruptNoDDView())
-          case (false, InterruptExistingDD) => Ok(ddInterruptExistingDDView())
-          case (false, BypassInterrupt) =>
+          case (false, InterruptNoDD) if hasNotViewedDDInterrupt =>
+            Ok(ddInterruptNoDDView()).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+          case (false, InterruptExistingDD) if hasNotViewedDDInterrupt =>
+            Ok(ddInterruptExistingDDView()).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+          case _ =>
             Ok(detailsView(
               constructViewModel(nextReturn, nextPayment, customerInfo),
               serviceInfoContent
