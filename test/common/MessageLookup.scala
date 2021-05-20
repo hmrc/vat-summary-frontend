@@ -105,4 +105,22 @@ object MessageLookup {
     val line2: String = "For those that opt-in to the VAT Deferral New Payment Scheme, this means that your VAT liabilities due between 20 March and 30 June 2020, will now need to be paid by 31 March 2022."
     val line3: String = "More details on the scheme will be published in due course."
   }
+
+  object DDInterruptMessages {
+    val backLinkText: String = "Back"
+    val pageTitle: String = "You need to check your payment method - VAT - GOV.UK"
+    val title: String = "You need to check your payment method"
+    val detailsSummary: String = "Why am I seeing this message?"
+    val detailsText: String = "You have been transferred to HMRC’s new online system for submitting your VAT returns. " +
+      "If you previously paid your VAT bill by Direct Debit, your Direct Debit has been cancelled."
+    val para1: String = "To continue to pay your VAT by Direct Debit, " +
+      "you must set up a new Direct Debit at least 3 working days before your VAT Return payment is due. " +
+      "If you do not pay your VAT Return on time, you may incur a penalty."
+    val para2: String = "If you do not have time to set up a new Direct Debit before your next VAT payment is due, " +
+      "or you prefer to pay using an alternative payment method, you will be able to do this in the " +
+      "’payments and repayments’ section of your VAT account."
+    val para3: String = "If you have already set up a payment method you can continue to your VAT account."
+    val setupButtonText: String = "Set up a new Direct Debit"
+    val continueButtonText: String = "Continue to your VAT account"
+  }
 }

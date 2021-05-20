@@ -14,12 +14,61 @@
  * limitations under the License.
  *@
 
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate,
+        govukDetails: GovukDetails,
+        govukButton: GovukButton,
+        govukBackLink: GovukBackLink)
 
 @()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
 
-@mainTemplate(title = messages("directDebitInterrupt.title"), appConfig = appConfig) {
+@mainTemplate(title = messages("directDebitInterrupt.noDD.title"), appConfig = appConfig) {
 
-  <h1 class="govuk-heading-l">@messages("directDebitInterrupt.noDD")</h1>
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+
+      @govukBackLink(BackLink(
+        href = appConfig.btaHomeUrl
+      ))
+
+      <h1 class="govuk-heading-l">@messages("directDebitInterrupt.noDD.title")</h1>
+
+      @govukDetails(Details(
+        summary = Text(messages("directDebitInterrupt.noDD.details1")),
+        content = Text(
+          messages("directDebitInterrupt.noDD.details2") + " " +
+          messages("directDebitInterrupt.noDD.details3")
+        )
+      ))
+
+      <p class="govuk-body">
+        @messages("directDebitInterrupt.noDD.body1")
+        @messages("directDebitInterrupt.noDD.body2")
+        @messages("directDebitInterrupt.noDD.body3")
+      </p>
+
+      <p class="govuk-body">
+        @messages("directDebitInterrupt.noDD.body4")
+        @messages("directDebitInterrupt.noDD.body5")
+        @messages("directDebitInterrupt.noDD.body6")
+      </p>
+
+      <p class="govuk-body">
+        @messages("directDebitInterrupt.noDD.body7")
+      </p>
+
+      @govukButton(Button(
+        href = Some(appConfig.paymentsAndRepaymentsUrl),
+        content = Text(messages("directDebitInterrupt.noDD.setupButton"))
+      ))
+      @govukButton(Button(
+        href = Some(controllers.routes.VatDetailsController.details().url),
+        content = Text(messages("directDebitInterrupt.noDD.continueButton")),
+        classes = "govuk-button--secondary"
+      ))
+
+    </div>
+
+  </div>
 
 }
