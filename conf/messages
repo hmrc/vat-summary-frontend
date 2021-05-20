@@ -152,9 +152,12 @@ directDebitInterrupt.noDD.body5 = or you prefer to pay using an alternative paym
 directDebitInterrupt.noDD.body6 = ’payments and repayments’ section of your VAT account.
 directDebitInterrupt.noDD.body7 = If you have already set up a payment method you can continue to your VAT account.
 directDebitInterrupt.noDD.setupButton = Set up a new Direct Debit
-directDebitInterrupt.noDD.continueButton = Continue to your VAT account
-
-directDebitInterrupt.existingDD = Direct debit interrupt screen for migrated users with an existing DD
+directDebitInterrupt.existingDD.title = You need to validate your details for Direct Debit
+directDebitInterrupt.existingDD.info = You have been transferred to HMRC’s new online system for submitting your VAT returns. Your Service user name and number will change. The updated details will be sent to you as a secure message.
+directDebitInterrupt.existingDD.para1 = You currently pay via Direct Debit and your Acknowledgement Screens tell you how much you need to pay and when.
+directDebitInterrupt.existingDD.para2 = To continue receiving prompts to log into your Acknowledgement Screens and review the information you need to validate your email address.
+directDebitInterrupt.existingDD.validateButton = Validate your email
+directDebitInterrupt.continueButton = Continue to your VAT account
 
 #Vat Overview Partials
 deregPartial.cancelRegistration.title = Cancel VAT registration
