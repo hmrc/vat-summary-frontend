@@ -140,8 +140,20 @@ vatCertificate.nstp.dateFromTo = {0} to {1}
 vatCertificate.logo = HMRC_Logo
 
 #Direct debit interrupt
-directDebitInterrupt.title = Direct debit interrupt screen
-directDebitInterrupt.noDD = Direct debit interrupt screen for migrated users with no existing DD
+directDebitInterrupt.noDD.title = You need to check your payment method
+directDebitInterrupt.noDD.details1 = Why am I seeing this message?
+directDebitInterrupt.noDD.details2 = You have been transferred to HMRC’s new online system for submitting your VAT returns.
+directDebitInterrupt.noDD.details3 = If you previously paid your VAT bill by Direct Debit, your Direct Debit has been cancelled.
+directDebitInterrupt.noDD.body1 = To continue to pay your VAT by Direct Debit,
+directDebitInterrupt.noDD.body2 = you must set up a new Direct Debit at least 3 working days before your VAT Return payment is due.
+directDebitInterrupt.noDD.body3 = If you do not pay your VAT Return on time, you may incur a penalty.
+directDebitInterrupt.noDD.body4 = If you do not have time to set up a new Direct Debit before your next VAT payment is due,
+directDebitInterrupt.noDD.body5 = or you prefer to pay using an alternative payment method, you will be able to do this in the
+directDebitInterrupt.noDD.body6 = ’payments and repayments’ section of your VAT account.
+directDebitInterrupt.noDD.body7 = If you have already set up a payment method you can continue to your VAT account.
+directDebitInterrupt.noDD.setupButton = Set up a new Direct Debit
+directDebitInterrupt.noDD.continueButton = Continue to your VAT account
+
 directDebitInterrupt.existingDD = Direct debit interrupt screen for migrated users with an existing DD
 
 #Vat Overview Partials

@@ -316,7 +316,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           "return the no DD interrupt view" in {
             await(bodyOf(Test.result))
-              .contains("Direct debit interrupt screen for migrated users with no existing DD") shouldBe true
+              .contains("You need to check your payment method") shouldBe true
           }
 
           "add the 'viewedDDInterrupt' session key to the session" in {

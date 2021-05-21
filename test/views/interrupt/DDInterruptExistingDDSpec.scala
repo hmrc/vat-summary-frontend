@@ -37,7 +37,8 @@ class DDInterruptExistingDDSpec extends ViewBaseSpec {
 
     "have the correct title" in {
 
-      elementText(Selectors.title) shouldBe "Direct debit interrupt screen - VAT - GOV.UK"
+      elementText(Selectors.title) shouldBe
+        "Direct debit interrupt screen for migrated users with an existing DD - VAT - GOV.UK"
 
     }
 
