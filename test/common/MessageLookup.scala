@@ -106,7 +106,7 @@ object MessageLookup {
     val line3: String = "More details on the scheme will be published in due course."
   }
 
-  object DDInterruptMessages {
+  object noDDInterruptMessages {
     val backLinkText: String = "Back"
     val pageTitle: String = "You need to check your payment method - VAT - GOV.UK"
     val title: String = "You need to check your payment method"
@@ -121,6 +121,19 @@ object MessageLookup {
       "’payments and repayments’ section of your VAT account."
     val para3: String = "If you have already set up a payment method you can continue to your VAT account."
     val setupButtonText: String = "Set up a new Direct Debit"
+    val continueButtonText: String = "Continue to your VAT account"
+  }
+
+  object existingDDInterruptMessages {
+    val backLinkText: String = "Back"
+    val pageTitle: String = "You need to validate your details for Direct Debit - VAT - GOV.UK"
+    val title: String = "You need to validate your details for Direct Debit"
+    val insetText: String = "You have been transferred to HMRC’s new online system for submitting your VAT returns. " +
+      "Your Service user name and number will change. The updated details will be sent to you as a secure message."
+    val para1: String = "You currently pay via Direct Debit and your Acknowledgement Screens tell you how much you need to pay and when."
+    val para2: String = "To continue receiving prompts to log into your Acknowledgement Screens and review " +
+      "the information you need to validate your email address."
+    val validateButtonText: String = "Validate your email"
     val continueButtonText: String = "Continue to your VAT account"
   }
 }

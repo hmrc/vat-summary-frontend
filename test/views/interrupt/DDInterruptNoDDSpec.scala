@@ -20,7 +20,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.html.interrupt.DDInterruptNoDD
-import common.MessageLookup.DDInterruptMessages
+import common.MessageLookup.noDDInterruptMessages
 
 class DDInterruptNoDDSpec extends ViewBaseSpec {
 
@@ -51,47 +51,47 @@ class DDInterruptNoDDSpec extends ViewBaseSpec {
       }
 
       "has the correct text" in {
-        elementText(Selectors.backLink) shouldBe DDInterruptMessages.backLinkText
+        elementText(Selectors.backLink) shouldBe noDDInterruptMessages.backLinkText
       }
 
     }
 
     "have the correct page title" in {
-      elementText(Selectors.title) shouldBe DDInterruptMessages.pageTitle
+      elementText(Selectors.title) shouldBe noDDInterruptMessages.pageTitle
     }
 
     "have the correct h1 text" in {
-      elementText(Selectors.text) shouldBe DDInterruptMessages.title
+      elementText(Selectors.text) shouldBe noDDInterruptMessages.title
     }
 
     "have a progressive disclosure section" that {
 
       "has the correct summary" in {
-        elementText(Selectors.detailsSummary) shouldBe DDInterruptMessages.detailsSummary
+        elementText(Selectors.detailsSummary) shouldBe noDDInterruptMessages.detailsSummary
       }
 
       "has the correct content" in {
-        elementText(Selectors.detailsText) shouldBe DDInterruptMessages.detailsText
+        elementText(Selectors.detailsText) shouldBe noDDInterruptMessages.detailsText
       }
 
     }
 
     "have the correct paragraph 1 text" in {
-      elementText(Selectors.para1) shouldBe DDInterruptMessages.para1
+      elementText(Selectors.para1) shouldBe noDDInterruptMessages.para1
     }
 
     "have the correct paragraph 2 text" in {
-      elementText(Selectors.para2) shouldBe DDInterruptMessages.para2
+      elementText(Selectors.para2) shouldBe noDDInterruptMessages.para2
     }
 
     "have the correct paragraph 3 text" in {
-      elementText(Selectors.para3) shouldBe DDInterruptMessages.para3
+      elementText(Selectors.para3) shouldBe noDDInterruptMessages.para3
     }
 
     "have a button to set up a direct debit" that {
 
       "has the correct text" in {
-        elementText(Selectors.setupButton) shouldBe DDInterruptMessages.setupButtonText
+        elementText(Selectors.setupButton) shouldBe noDDInterruptMessages.setupButtonText
       }
 
       "has the correct href" in {
@@ -102,7 +102,7 @@ class DDInterruptNoDDSpec extends ViewBaseSpec {
     "have a button to continue to the VAT account" that {
 
       "has the correct text" in {
-        elementText(Selectors.continueButton) shouldBe DDInterruptMessages.continueButtonText
+        elementText(Selectors.continueButton) shouldBe noDDInterruptMessages.continueButtonText
       }
 
       "has the correct href" in {
