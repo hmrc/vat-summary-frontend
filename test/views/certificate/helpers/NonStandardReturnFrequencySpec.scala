@@ -32,10 +32,10 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     val printButton = "button"
     val firstYear = "#year-2018"
     val secondYear = "#year-2019"
-    val firstPeriod = "div.govuk-body:nth-child(2) > dd"
-    val secondPeriod = "dl.govuk-grid-column-full > div:nth-child(3) > dd"
-    val thirdPeriod = "div.govuk-body:nth-child(5) > dd"
-    val finalPeriod = "div.govuk-body:nth-child(6) > dd"
+    val firstPeriod = "#nstp-card > div.govuk-grid-column-full.govuk-body > dl > dd:nth-child(2)"
+    val secondPeriod = "#nstp-card > div.govuk-grid-column-full.govuk-body > dl > dd:nth-child(3)"
+    val thirdPeriod = "#nstp-card > div.govuk-grid-column-full.govuk-body > dl > dd:nth-child(5)"
+    val fourthPeriod = "#nstp-card > div.govuk-grid-column-full.govuk-body > dl > dd:nth-child(6)"
     def nthParagraph: Int => String = n => s"p:nth-child($n)"
   }
 
@@ -79,8 +79,8 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
       elementText(Selectors.thirdPeriod) shouldBe "2 January to 3 January"
     }
 
-    "have the final non-standard tax period without years" in {
-      elementText(Selectors.finalPeriod) shouldBe "4 January to 5 January"
+    "have the fourth non-standard tax period without years" in {
+      elementText(Selectors.fourthPeriod) shouldBe "4 January to 5 January"
     }
 
   }
