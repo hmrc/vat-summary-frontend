@@ -29,25 +29,36 @@ class CovidPartialViewSpec extends ViewBaseSpec {
   "Rendering the covid message" should {
 
     object Selectors {
-      val line1 = "p:nth-of-type(1)"
-      val line2 = "p:nth-of-type(2)"
-      val line3 = "p:nth-of-type(3)"
+      val heading = ".govuk-warning-text__text"
+      val line1 = ".govuk-inset-text > p:nth-of-type(1)"
+      val line1Link = ".govuk-inset-text > p > a"
+      val line2 = ".govuk-inset-text > p:nth-of-type(2)"
     }
 
-      lazy val view = covidMessageView()
-      implicit lazy val render: Document = Jsoup.parse(view.body)
+    lazy val view = covidMessageView()
+    implicit lazy val render: Document = Jsoup.parse(view.body)
 
-      "have the correct first message" in {
+    "have the correct warning heading" in {
+      elementText(Selectors.heading) shouldBe heading
+    }
+
+    "have the correct first message" which {
+
+      "has the correct text" in {
         elementText(Selectors.line1) shouldBe line1
       }
 
-      "have the correct second message" in {
-        elementText(Selectors.line2) shouldBe line2
+      "has the correct link text" in {
+        elementText(Selectors.line1Link) shouldBe line1LinkText
       }
 
-      "have the correct third message" in {
-        elementText(Selectors.line3) shouldBe line3
+      "has the correct link destination" in {
+        element(Selectors.line1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
       }
+    }
 
+    "have the correct second message" in {
+      elementText(Selectors.line2) shouldBe line2
+    }
     }
 }

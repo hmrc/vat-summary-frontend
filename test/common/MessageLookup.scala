@@ -101,9 +101,12 @@ object MessageLookup {
   }
 
   object CovidMessages {
-    val line1: String = "If you chose to defer your VAT payment as a result of coronavirus, you should pay the VAT on or before 31 March 2021 if you are able to."
-    val line2: String = "For those that opt-in to the VAT Deferral New Payment Scheme, this means that your VAT liabilities due between 20 March and 30 June 2020, will now need to be paid by 31 March 2022."
-    val line3: String = "More details on the scheme will be published in due course."
+    val heading: String = "Paying deferred VAT: the new payment scheme"
+    val line1LinkText: String = "VAT deferral new payment scheme (opens in new tab)"
+    val line1: String = "If you deferred paying VAT that was due between 20 March 2020 and 30 June 2020, you may be " +
+      s"able to join the $line1LinkText."
+    val line2: String = "Instead of paying the full amount of your deferred VAT immediately, you can pay in " +
+      "smaller, interest free instalments. The number of instalments depends on when you join the scheme."
   }
 
   object noDDInterruptMessages {
