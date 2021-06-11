@@ -96,6 +96,7 @@ trait AppConfig {
   val missingTraderRedirectUrl: String
   val verifyEmailUrl: String
   val gtmContainer: String
+  val govUkVatDeferralUrl: String
 }
 
 @Singleton
@@ -222,6 +223,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val govUkHearingImpairedUrl: String = sc.getString(Keys.govUkHearingImpairedUrl)
   override lazy val govUkVatRegistrationUrl: String = sc.getString(Keys.govUkVatRegistrationUrl)
   override lazy val govUkVat7Form: String = sc.getString(Keys.govUkVat7Form)
+  override lazy val govUkVatDeferralUrl: String = sc.getString(Keys.govUkVatDeferralUrl)
 
   override lazy val abilityNetUrl: String = sc.getString(Keys.abilityNetUrl)
   override lazy val wcagGuidelinesUrl: String = sc.getString(Keys.wcagGuidelinesUrl)

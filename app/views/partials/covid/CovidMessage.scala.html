@@ -14,18 +14,26 @@
  * limitations under the License.
  *@
 
-@this(govukInsetText: GovukInsetText)
+@import config.AppConfig
 
-@()(implicit messages: Messages)
+@this(govukInsetText: GovukInsetText, govukWarningText: GovukWarningText)
+
+@()(implicit messages: Messages, appConfig: AppConfig)
+
+@insetTextContent = {
+  @govukWarningText(WarningText(
+    content = Text(messages("covid.heading"))
+  ))
+  <p class="govuk-body">
+    @messages("covid.line1")
+    <a class="govuk-link" target="_blank" rel="noreferrer noopener"
+       href="@appConfig.govUkVatDeferralUrl">@messages("covid.line1.link")</a>@messages("common.fullStop")
+  </p>
+  <p class="govuk-body">@messages("covid.line2")</p>
+}
 
 <div class="govuk-grid-row govuk-form-group flex-container">
-
   @govukInsetText(InsetText(
-    content = HtmlContent(
-      s"""<p class="govuk-body">${messages("covid.line1")}</p>""" +
-      s"""<p class="govuk-body">${messages("covid.line2")}</p>""" +
-      s"""<p class="govuk-body">${messages("covid.line3")}</p>"""
-    )
+    content = HtmlContent(insetTextContent)
   ))
-
 </div>

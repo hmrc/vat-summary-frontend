@@ -59,12 +59,13 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
-    val covidPartialLine1 = ".govuk-inset-text > p:nth-of-type(1)"
-    val covidPartialLine2 = ".govuk-inset-text > p:nth-of-type(2)"
-    val covidPartialLine3 = ".govuk-inset-text > p:nth-of-type(3)"
+    val covidHeading = ".govuk-warning-text__text"
+    val covidPartialLine1 = "div.govuk-inset-text > p:nth-of-type(1)"
+    val covidPartialLine1Link = "div.govuk-inset-text > p > a"
+    val covidPartialLine2 = "div.govuk-inset-text > p:nth-of-type(2)"
   }
 
-  override val user = User("1111")
+  override val user: User = User("1111")
   val noPayment: Seq[Nothing] = Seq()
   val payments: Seq[OpenPaymentsModelWithPeriod] = Seq(
     OpenPaymentsModelWithPeriod(
@@ -233,18 +234,28 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       lazy val view = openPaymentsView(user, viewModel)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct first message" in {
-        elementText(Selectors.covidPartialLine1) should include(CovidMessages.line1)
+      "have the correct warning heading" in {
+        elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
+      }
+
+      "have the correct first message" which {
+
+        "has the correct text" in {
+          elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
+        }
+
+        "has the correct link text" in {
+          elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
+        }
+
+        "has the correct link destination" in {
+          element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
+        }
       }
 
       "have the correct second message" in {
-        elementText(Selectors.covidPartialLine2) should include (CovidMessages.line2)
+        elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
       }
-
-      "have the correct third message" in {
-        elementText(Selectors.covidPartialLine3) should include (CovidMessages.line3)
-      }
-
     }
 
       "the display covid feature switch is off" should {
