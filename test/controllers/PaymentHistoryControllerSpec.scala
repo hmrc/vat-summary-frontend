@@ -138,19 +138,24 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     val paymentsServiceCall: Boolean = false
     val authCall: Boolean = false
     val accountDetailsCall: Boolean = false
-    val enrolments: Set[Enrolment] = Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), ""))
-    lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
+    val enrolments: Set[Enrolment] = Set(
+      Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), ""),
+      Enrolment("HMCE-VATDEC-ORG", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
+    )
+
+    lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.successful(new ~(
       Enrolments(enrolments),
       Some(Individual)
     ))
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
+    val accountDetailsResponseNoMigratedDate: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
     def setup(): Any = {
       mockDateServiceCall()
 
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
-        .stubs(*,*,*)
+        .stubs(*, *, *)
         .returns(serviceInfoServiceResult)
 
       if (authCall) {
@@ -230,7 +235,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return SEE_OTHER" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
+        override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.failed(MissingBearerToken())
         val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
 
         status(result) shouldBe Status.SEE_OTHER
@@ -242,7 +247,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
+        override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.failed(InsufficientEnrolments())
         val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
         status(result) shouldBe Status.FORBIDDEN
       }
@@ -252,7 +257,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "redirect to Agent Hub page" in new Test {
         override val authCall = true
-        override lazy val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
+        override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = agentAuthResult
         val result: Future[Result] = target.paymentHistory()(fakeRequest)
 
         status(result) shouldBe Status.SEE_OTHER
@@ -301,6 +306,32 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val authCall = true
         val result: Future[Result] = target.paymentHistory()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user has a VATDEC enrolment and no customerMigratedToETMPDate" should {
+
+      "return 200" in new AllCallsTest {
+        override val accountDetailsCall: Boolean = false
+        (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *).noMoreThanOnce()
+          .returns(emptyResult)
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+        val result: Future[Result] = target.paymentHistory()(fakeRequest)
+        status(result) shouldBe OK
+      }
+
+      "render the Previous Payments tab" in new AllCallsTest {
+        override val accountDetailsCall: Boolean = false
+        (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *).noMoreThanOnce()
+          .returns(emptyResult)
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+        val result: Future[Result] = target.paymentHistory()(fakeRequest)
+        val document: Document = Jsoup.parse(bodyOf(result))
+        document.select("li.govuk-tabs__list-item:nth-child(4)").text() shouldBe "Previous payments"
       }
     }
   }
