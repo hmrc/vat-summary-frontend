@@ -55,25 +55,25 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-26" % "4.2.0",
-  "uk.gov.hmrc"       %% "play-frontend-govuk"        % "0.71.0-play-26",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "0.58.0-play-26",
-  "uk.gov.hmrc"       %% "govuk-template"             % "5.65.0-play-26",
-  "uk.gov.hmrc"       %% "play-ui"                    % "9.1.0-play-26",
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-26" % "5.4.0",
+  "uk.gov.hmrc"       %% "play-frontend-govuk"        % "0.77.0-play-26",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "0.76.0-play-26",
+  "uk.gov.hmrc"       %% "govuk-template"             % "5.68.0-play-26",
+  "uk.gov.hmrc"       %% "play-ui"                    % "9.6.0-play-26",
   "uk.gov.hmrc"       %% "play-partials"              % "7.1.0-play-26",
-  "uk.gov.hmrc"       %% "play-language"              % "4.12.0-play-26",
-  "com.typesafe.play" %% "play-json-joda"             % "2.6.14"
+  "uk.gov.hmrc"       %% "play-language"              % "5.1.0-play-26",
+  "com.typesafe.play" %% "play-json-joda"             % "2.9.2"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"             %% "hmrctest"                     % "3.9.0-play-26"     % scope,
-  "org.scalatest"           %% "scalatest"                    % "3.0.8"             % scope,
+  "org.scalatest"           %% "scalatest"                    % "3.0.9"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
   "org.jsoup"               %  "jsoup"                        % "1.13.1"            % scope,
   "com.typesafe.play"       %% "play-test"                    % PlayVersion.current % scope,
   "org.scalatestplus.play"  %% "scalatestplus-play"           % "3.1.3"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
-  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope
+  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.28.1"            % scope
 )
 
 TwirlKeys.templateImports ++= Seq(
