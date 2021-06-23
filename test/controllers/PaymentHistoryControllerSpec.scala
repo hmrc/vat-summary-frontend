@@ -190,7 +190,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockServiceErrorHandler,
         mcc,
         ec,
-        paymentHistory
+        paymentHistory,
+        ddInterruptPredicate
       )
     }
   }

@@ -37,7 +37,6 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.interrupt.{DDInterruptExistingDD, DDInterruptNoDD}
 import views.html.vatDetails.Details
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -106,7 +105,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockAppConfig,
         mockVatDetailsService,
         mockServiceInfoService,
-        mockPaymentsService,
         authorisedController,
         mockAccountDetailsService,
         mockDateService,
@@ -114,9 +112,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mcc,
         ec,
         injector.instanceOf[Details],
-        injector.instanceOf[DDInterruptNoDD],
-        injector.instanceOf[DDInterruptExistingDD],
-        mockServiceErrorHandler
+        mockServiceErrorHandler,
+        ddInterruptPredicate
       )
     }
   }
@@ -930,116 +927,116 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .ddInterrupt" when {
-
-    val ddStatusFalse = DirectDebitStatus(directDebitMandateFound = false, Some(Seq(DDIDetails("2018-01-01"))))
-    val ddStatusTrue = DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-01"))))
-    val customerMigratedWithin4M = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
-
-    "the migration date is over 4 months in the past" should {
-
-      "return BypassInterrupt" in new DetailsTest {
-        target().ddInterrupt(Right(customerInformationMax), Right(ddStatusFalse)) shouldBe BypassInterrupt
-      }
-    }
-
-    "the migration date is within 4 months and DD mandate is set to false" should {
-
-      "return InterruptNoDD" in new DetailsTest {
-        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusFalse)) shouldBe InterruptNoDD
-      }
-    }
-
-    "the migration date is within 4 months and DD mandate is set to true" when {
-
-      "there are no DD details" should {
-
-        "return BypassInterrupt" in new DetailsTest {
-          val ddNoDates: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = None)
-          target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddNoDates)) shouldBe BypassInterrupt
-        }
-      }
-
-      "there is one set of DD details" when {
-
-        "the DD creation date is before the migration date" should {
-
-          "return InterruptExistingDD" in new DetailsTest {
-            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusTrue)) shouldBe InterruptExistingDD
-          }
-        }
-
-        "the DD creation date is after the migration date" should {
-
-          "return BypassInterrupt" in new DetailsTest {
-            val ddAfterMig: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-06-01"))))
-            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddAfterMig)) shouldBe BypassInterrupt
-          }
-        }
-
-        "the DD creation date is the same day as the migration date" should {
-
-          "return InterruptExistingDD" in new DetailsTest {
-            val ddSameDay: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-04-01"))))
-            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddSameDay)) shouldBe InterruptExistingDD
-          }
-        }
-      }
-
-      "there are multiple sets of DD Details" when {
-
-        "at least one of the DD creation dates is before the migration date" should {
-
-          "return InterruptExistingDD" in new DetailsTest {
-            val ddBeforeMig: DirectDebitStatus =
-              ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-01-01"), DDIDetails("2018-07-01"))))
-            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddBeforeMig)) shouldBe InterruptExistingDD
-          }
-        }
-
-        "all of the DD creation dates are after the migration date" should {
-
-          "return BypassInterrupt" in new DetailsTest {
-            val ddAfterMig: DirectDebitStatus =
-              ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-06-01"), DDIDetails("2018-07-01"))))
-            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddAfterMig)) shouldBe BypassInterrupt
-          }
-        }
-      }
-    }
-
-    "no migration date was returned" should {
-
-      "return BypassInterrupt, regardless of the DD response" in new DetailsTest {
-        target().ddInterrupt(Right(customerInformationMin), Right(ddStatusFalse)) shouldBe BypassInterrupt
-        target().ddInterrupt(Right(customerInformationMin), Right(ddStatusTrue)) shouldBe BypassInterrupt
-      }
-    }
-
-    "the customer info API response was an error" should {
-
-      "return BypassInterrupt, regardless of the DD response" in new DetailsTest {
-        target().ddInterrupt(Left(UnknownError), Right(ddStatusFalse)) shouldBe BypassInterrupt
-        target().ddInterrupt(Left(UnknownError), Right(ddStatusTrue)) shouldBe BypassInterrupt
-      }
-    }
-
-    "the DD API response was an error" should {
-
-      "return BypassInterrupt, regardless of the customer info response" in new DetailsTest {
-        target().ddInterrupt(Right(customerInformationMax), Left(DirectDebitStatusError)) shouldBe BypassInterrupt
-        target().ddInterrupt(Right(customerMigratedWithin4M), Left(DirectDebitStatusError)) shouldBe BypassInterrupt
-      }
-    }
-
-    "the DD interrupt feature switch is off" should {
-
-      "return BypassInterrupt, regardless of the two API responses" in new DetailsTest {
-        mockAppConfig.features.directDebitInterrupt(false)
-        target().ddInterrupt(Right(customerInformationMax), Right(ddStatusFalse)) shouldBe BypassInterrupt
-        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusFalse)) shouldBe BypassInterrupt
-        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusTrue)) shouldBe BypassInterrupt
-      }
-    }
-  }
+//  "Calling .ddInterrupt" when {
+//
+//    val ddStatusFalse = DirectDebitStatus(directDebitMandateFound = false, Some(Seq(DDIDetails("2018-01-01"))))
+//    val ddStatusTrue = DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-01"))))
+//    val customerMigratedWithin4M = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
+//
+//    "the migration date is over 4 months in the past" should {
+//
+//      "return BypassInterrupt" in new DetailsTest {
+//        target().ddInterrupt(Right(customerInformationMax), Right(ddStatusFalse)) shouldBe BypassInterrupt
+//      }
+//    }
+//
+//    "the migration date is within 4 months and DD mandate is set to false" should {
+//
+//      "return InterruptNoDD" in new DetailsTest {
+//        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusFalse)) shouldBe InterruptNoDD
+//      }
+//    }
+//
+//    "the migration date is within 4 months and DD mandate is set to true" when {
+//
+//      "there are no DD details" should {
+//
+//        "return BypassInterrupt" in new DetailsTest {
+//          val ddNoDates: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = None)
+//          target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddNoDates)) shouldBe BypassInterrupt
+//        }
+//      }
+//
+//      "there is one set of DD details" when {
+//
+//        "the DD creation date is before the migration date" should {
+//
+//          "return InterruptExistingDD" in new DetailsTest {
+//            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusTrue)) shouldBe InterruptExistingDD
+//          }
+//        }
+//
+//        "the DD creation date is after the migration date" should {
+//
+//          "return BypassInterrupt" in new DetailsTest {
+//            val ddAfterMig: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-06-01"))))
+//            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddAfterMig)) shouldBe BypassInterrupt
+//          }
+//        }
+//
+//        "the DD creation date is the same day as the migration date" should {
+//
+//          "return InterruptExistingDD" in new DetailsTest {
+//            val ddSameDay: DirectDebitStatus = ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-04-01"))))
+//            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddSameDay)) shouldBe InterruptExistingDD
+//          }
+//        }
+//      }
+//
+//      "there are multiple sets of DD Details" when {
+//
+//        "at least one of the DD creation dates is before the migration date" should {
+//
+//          "return InterruptExistingDD" in new DetailsTest {
+//            val ddBeforeMig: DirectDebitStatus =
+//              ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-01-01"), DDIDetails("2018-07-01"))))
+//            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddBeforeMig)) shouldBe InterruptExistingDD
+//          }
+//        }
+//
+//        "all of the DD creation dates are after the migration date" should {
+//
+//          "return BypassInterrupt" in new DetailsTest {
+//            val ddAfterMig: DirectDebitStatus =
+//              ddStatusTrue.copy(directDebitDetails = Some(Seq(DDIDetails("2018-06-01"), DDIDetails("2018-07-01"))))
+//            target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddAfterMig)) shouldBe BypassInterrupt
+//          }
+//        }
+//      }
+//    }
+//
+//    "no migration date was returned" should {
+//
+//      "return BypassInterrupt, regardless of the DD response" in new DetailsTest {
+//        target().ddInterrupt(Right(customerInformationMin), Right(ddStatusFalse)) shouldBe BypassInterrupt
+//        target().ddInterrupt(Right(customerInformationMin), Right(ddStatusTrue)) shouldBe BypassInterrupt
+//      }
+//    }
+//
+//    "the customer info API response was an error" should {
+//
+//      "return BypassInterrupt, regardless of the DD response" in new DetailsTest {
+//        target().ddInterrupt(Left(UnknownError), Right(ddStatusFalse)) shouldBe BypassInterrupt
+//        target().ddInterrupt(Left(UnknownError), Right(ddStatusTrue)) shouldBe BypassInterrupt
+//      }
+//    }
+//
+//    "the DD API response was an error" should {
+//
+//      "return BypassInterrupt, regardless of the customer info response" in new DetailsTest {
+//        target().ddInterrupt(Right(customerInformationMax), Left(DirectDebitStatusError)) shouldBe BypassInterrupt
+//        target().ddInterrupt(Right(customerMigratedWithin4M), Left(DirectDebitStatusError)) shouldBe BypassInterrupt
+//      }
+//    }
+//
+//    "the DD interrupt feature switch is off" should {
+//
+//      "return BypassInterrupt, regardless of the two API responses" in new DetailsTest {
+//        mockAppConfig.features.directDebitInterrupt(false)
+//        target().ddInterrupt(Right(customerInformationMax), Right(ddStatusFalse)) shouldBe BypassInterrupt
+//        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusFalse)) shouldBe BypassInterrupt
+//        target().ddInterrupt(Right(customerMigratedWithin4M), Right(ddStatusTrue)) shouldBe BypassInterrupt
+//      }
+//    }
+//  }
 }

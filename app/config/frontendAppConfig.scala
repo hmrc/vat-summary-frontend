@@ -97,6 +97,7 @@ trait AppConfig {
   val verifyEmailUrl: String
   val gtmContainer: String
   val govUkVatDeferralUrl: String
+  val environmentHost: String
 }
 
 @Singleton
@@ -113,7 +114,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val feedbackFormPartialUrl: String = s"$contactFrontendService/contact/beta-feedback/form"
 
   override lazy val authUrl: String = sc.baseUrl("auth")
-
+  override lazy val environmentHost: String = sc.getString(Keys.environmentHost)
   private lazy val signInBaseUrl: String = sc.getString(Keys.signInBaseUrl)
   override lazy val signInContinueBaseUrl: String = runModeConfiguration.getOptional[String](Keys.signInContinueBaseUrl).getOrElse("")
   private lazy val signInContinueUrl: String = SafeRedirectUrl(signInContinueBaseUrl + controllers.routes.VatDetailsController.details().url).encodedUrl

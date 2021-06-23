@@ -98,4 +98,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val missingTraderRedirectUrl: String = "/missing-trader"
   override val verifyEmailUrl: String = "/verify-email"
   override val gtmContainer: String = "x"
+  override val environmentHost: String = "localhost"
 }

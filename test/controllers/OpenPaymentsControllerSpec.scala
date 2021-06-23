@@ -108,7 +108,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         ec,
         NoPayments,
         mockPaymentsError,
-        openPayments
+        openPayments,
+        ddInterruptPredicate
       )
     }
   }
@@ -200,6 +201,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           val document: Document = Jsoup.parse(bodyOf(result))
 
           document.select("payment-2") shouldBe empty
+
 
         }
       }

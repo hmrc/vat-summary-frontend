@@ -19,6 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import config.AppConfig
+import controllers.predicates.DDInterruptPredicate
 import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments.{OpenPaymentsModel, Payment, PaymentOnAccount}
@@ -47,15 +48,18 @@ class OpenPaymentsController @Inject()(val enrolmentsAuthService: EnrolmentsAuth
                                        implicit val ec: ExecutionContext,
                                        noPayments: NoPayments,
                                        paymentsError: PaymentsError,
-                                       openPaymentsPage: OpenPayments)
+                                       openPaymentsPage: OpenPayments,
+                                       DDInterrupt: DDInterruptPredicate)
 extends FrontendController(mcc) with I18nSupport {
 
   def openPayments(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
-      for {
-        serviceInfoContent <- serviceInfoService.getPartial
-        paymentsView <- renderView(None, serviceInfoContent)
-      } yield paymentsView
+      DDInterrupt.interruptCheck { _ =>
+        for {
+          serviceInfoContent <- serviceInfoService.getPartial
+          paymentsView <- renderView(None, serviceInfoContent)
+        } yield paymentsView
+      }
   }
 
   private[controllers] def renderView(hasActiveDirectDebit: Option[Boolean], serviceInfoContent: Html)
