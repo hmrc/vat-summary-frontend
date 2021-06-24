@@ -33,7 +33,6 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "<empty>",
     ".*Reverse.*",
     ".*standardError*.*",
-    ".*govuk_wrapper*.*",
     ".*main_template*.*",
     "uk.gov.hmrc.BuildInfo",
     "app.*",
@@ -58,9 +57,8 @@ val compile: Seq[ModuleID] = Seq(
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-26" % "5.4.0",
   "uk.gov.hmrc"       %% "play-frontend-govuk"        % "0.77.0-play-26",
   "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "0.76.0-play-26",
-  "uk.gov.hmrc"       %% "govuk-template"             % "5.68.0-play-26",
   "uk.gov.hmrc"       %% "play-ui"                    % "9.6.0-play-26",
-  "uk.gov.hmrc"       %% "play-partials"              % "7.1.0-play-26",
+  "uk.gov.hmrc"       %% "play-partials"              % "8.1.0-play-26",
   "uk.gov.hmrc"       %% "play-language"              % "5.1.0-play-26",
   "com.typesafe.play" %% "play-json-joda"             % "2.9.2"
 )
@@ -70,7 +68,6 @@ def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "org.scalatest"           %% "scalatest"                    % "3.0.9"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
   "org.jsoup"               %  "jsoup"                        % "1.13.1"            % scope,
-  "com.typesafe.play"       %% "play-test"                    % PlayVersion.current % scope,
   "org.scalatestplus.play"  %% "scalatestplus-play"           % "3.1.3"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
   "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.28.1"            % scope

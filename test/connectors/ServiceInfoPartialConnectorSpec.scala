@@ -16,20 +16,19 @@
 
 package connectors
 
-import config.VatHeaderCarrierForPartialsConverter
 import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.twirl.api.Html
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.play.partials.HtmlPartial
+import uk.gov.hmrc.play.partials.{HeaderCarrierForPartialsConverter, HtmlPartial}
 import uk.gov.hmrc.play.partials.HtmlPartial._
 import views.html.templates.BtaNavigationLinks
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
-  val header: VatHeaderCarrierForPartialsConverter = injector.instanceOf[VatHeaderCarrierForPartialsConverter]
+  val header: HeaderCarrierForPartialsConverter = injector.instanceOf[HeaderCarrierForPartialsConverter]
   val btanl: BtaNavigationLinks = injector.instanceOf[BtaNavigationLinks]
   val validHtml: Html = Html("<nav>BTA lINK</nav>")
 
