@@ -172,4 +172,72 @@ object CustomerInfoStub extends WireMockMethods {
     "code" -> "500",
     "message" -> "INTERNAL_SERVER_ERROR"
   )
+
+  //noinspection ScalaStyle
+  def customerInfoJsonDD(isPartialMigration: Boolean, hasVerifiedEmail: Boolean): JsValue = Json.obj(
+    "customerDetails" -> Json.obj(
+      "organisationName" -> "Cheapo Clothing Ltd",
+      "firstName" -> "Betty",
+      "lastName" -> "Jones",
+      "tradingName" -> "Cheapo Clothing",
+      "isPartialMigration" ->  isPartialMigration,
+      "effectiveRegistrationDate" -> "2017-01-01",
+      "hybridToFullMigrationDate" -> "2017-05-06",
+      "customerMigratedToETMPDate" -> "2018-04-01",
+      "isInsolvent" -> false,
+      "continueToTrade" -> true,
+      "insolvencyType" -> "01",
+      "insolvencyDate" -> "2018-01-01"
+    ),
+    "ppob" -> Json.obj(
+      "address" -> Json.obj(
+        "line1" -> "Bedrock Quarry",
+        "line2" -> "Bedrock",
+        "line3" -> "Graveldon",
+        "postCode" -> "GV2 4BB"
+      ),
+      "contactDetails" -> Json.obj(
+        "primaryPhoneNumber" -> "01632 982028",
+        "mobileNumber" -> "07700 900018",
+        "emailAddress" -> "bettylucknexttime@gmail.com",
+        "emailVerified" -> hasVerifiedEmail
+      )
+    ),
+    "bankDetails" -> Json.obj(
+      "accountHolderName" -> "Mrs Betty Jones",
+      "bankAccountNumber" -> "****1234",
+      "sortCode" -> "69****"
+    ),
+    "returnPeriod" -> Json.obj(
+      "stdReturnPeriod" -> "MM"
+    ),
+    "nonStdTaxPeriods" -> Json.arr(
+      Json.obj(
+        "periodStart" -> "2018-01-01",
+        "periodEnd" -> "2018-01-15"
+      ),
+      Json.obj(
+        "periodStart" -> "2018-01-06",
+        "periodEnd" -> "2018-01-28"
+      )
+    ),
+    "firstNonNSTPPeriod" -> Json.obj(
+      "periodStart" -> "2018-01-29",
+      "periodEnd" -> "2018-01-31"
+    ),
+    "partyType" -> "7",
+    "primaryMainCode" -> "10410",
+    "pendingChanges" -> Json.obj(
+      "mandationStatus" -> "MTDfB Voluntary"
+    ),
+    "deregistration" -> Json.obj(
+      "effectDateOfCancellation" -> "2020-01-01"
+    ),
+    "changeIndicators" -> Json.obj(
+      "deregister" -> false
+    ),
+    "missingTrader" -> false,
+    "mandationStatus" -> "MTDfB"
+  )
+
 }

@@ -32,7 +32,7 @@ class PaymentsPageSpec extends IntegrationBaseSpec {
     def request(): WSRequest = {
       setupStubs()
       ServiceInfoStub.stubServiceInfoPartial
-      buildRequest("/what-you-owe")
+      buildRequest("/what-you-owe",viewedDDInterrupt(Some("true")))
     }
   }
 

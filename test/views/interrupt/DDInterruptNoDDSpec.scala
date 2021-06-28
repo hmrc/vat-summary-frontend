@@ -24,7 +24,7 @@ import common.MessageLookup.noDDInterruptMessages
 
 class DDInterruptNoDDSpec extends ViewBaseSpec {
 
-  val redirectUrl = "testUrl"
+  val redirectUrl = "/vat-through-software/vat-overview"
 
   object Selectors {
     val backLink = ".govuk-back-link"

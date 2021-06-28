@@ -25,19 +25,14 @@ import stubs._
 
 class LanguageSpec extends IntegrationBaseSpec {
 
-  val obligationsStub: VatObligationsStub = new VatObligationsStub(vatObligationsServiceEnabled = true)
-
   private trait Test {
     def request(): WSRequest = {
-      AuthStub.authorised()
-      obligationsStub.stubOutstandingObligations
       CustomerInfoStub.stubCustomerInfo(customerInfoJson(
         isPartialMigration = false,
         hasVerifiedEmail = true)
       )
-      FinancialDataStub.stubOutstandingTransactions
-      ServiceInfoStub.stubServiceInfoPartial
-      buildRequest("/vat-overview")
+      AuthStub.authorised()
+      buildRequest("/accessibility-statement")
     }
   }
 
@@ -53,7 +48,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Your VAT account - Business tax account - GOV.UK"
+          document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Business tax account - GOV.UK"
         }
       }
 
@@ -65,7 +60,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Eich cyfrif TAW - Cyfrif Treth Busnes - GOV.UK"
+          document.title() shouldBe "Datganiad hygyrchedd ar gyfer Troi Treth yn Ddigidol ar gyfer TAW - Cyfrif Treth Busnes - GOV.UK"
         }
       }
     }
@@ -78,7 +73,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         lazy val document: Document = Jsoup.parse(response.body)
 
-        document.title() shouldBe "Your VAT account - Business tax account - GOV.UK"
+        document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Business tax account - GOV.UK"
       }
     }
   }
