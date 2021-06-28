@@ -87,7 +87,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
               Future.successful(Right(Seq.empty))
             }
         } yield {
-          val showPreviousPaymentsTab: Boolean = migratedWithin15Months && user.hasNonMtdVat
+          val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
           generateViewModel(
             paymentsServiceYearOne,
             paymentsServiceYearTwo,
