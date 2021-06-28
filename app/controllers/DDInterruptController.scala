@@ -101,5 +101,4 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
         Future.successful(Redirect(cleanRedirectUrl).addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
       }
   }
-
 }

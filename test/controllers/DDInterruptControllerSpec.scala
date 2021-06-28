@@ -59,8 +59,6 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
         .expects(*, *, *, *)
         .returns(authResult)
 
-      mockDateServiceCall()
-
       (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *, *)
         .returns({})
@@ -141,17 +139,10 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
           override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
             Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
           override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
-            Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-02"))))))
+            Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-03"))))))
         }
-        "return 200" in {
-          status(Test.result) shouldBe Status.OK
-        }
-        "return HTML" in {
-          contentType(Test.result) shouldBe Some("text/html")
-        }
-        "return the existing DD interrupt view" in {
-          await(bodyOf(Test.result))
-            .contains("You need to validate your details for Direct Debit") shouldBe true
+        "return 303" in {
+          status(Test.result) shouldBe Status.SEE_OTHER
         }
       }
     }
@@ -239,31 +230,61 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
       }
     }
   }
-//  "The migratedWithin4M() function" when {
-//    "a valid customer details model is provided and the date is within 4 months" should {
-//        object Test extends DirectDebitInterruptTest {
-//          override def setup(): Any = mockDateServiceCall()
-//           val CustomerInformation : CustomerInformation =
-//            customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
-//          lazy val result: Boolean = target().migratedWithin4M(CustomerInformation)
-//        }
-//      "return true" in {
-//        val result = Test.result
-//        result shouldBe true
-//      }
-//    }
-//    "a valid customer details model is provided and the date is before 4 months" should {
-//      object Test extends DirectDebitInterruptTest {
-//        override def setup(): Any = mockDateServiceCall()
-//        val CustomerInformation : CustomerInformation =
-//          customerInformationMax.copy(customerMigratedToETMPDate = Some("2017-06-01"))
-//        lazy val result: Boolean = target().migratedWithin4M(CustomerInformation)
-//      }
-//      "return false" in {
-//        val result = Test.result
-//        result shouldBe false
-//      }
-//    }
-//  }
+  "The migratedWithin4M() function" when {
+    "a valid customer details model is provided and the date is within 4 months" should {
+        object Test extends DirectDebitInterruptTest {
+          override def setup(): Any = mockDateServiceCall()
+           val CustomerInformation : CustomerInformation =
+            customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
+          lazy val result: Boolean = target().migratedWithin4M(CustomerInformation)
+        }
+      "return true" in {
+        val result = Test.result
+        result shouldBe true
+      }
+    }
+    "a valid customer details model is provided and the date is before 4 months" should {
+      object Test extends DirectDebitInterruptTest {
+        override def setup(): Any = mockDateServiceCall()
+        val CustomerInformation : CustomerInformation =
+          customerInformationMax.copy(customerMigratedToETMPDate = Some("2017-06-01"))
+        lazy val result: Boolean = target().migratedWithin4M(CustomerInformation)
+      }
+      "return false" in {
+        val result = Test.result
+        result shouldBe false
+      }
+    }
+  }
+  "The dateCreatedBeforeMigDate() function" when {
+    "a valid customer details model and direct debit model is provided and the date is within 4 months" should {
+      object Test extends DirectDebitInterruptTest {
+        override def setup(): Any = mockDateServiceCall()
+        val CustomerInformation : CustomerInformation =
+          customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
+        val directDebitResult: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-01"))))
+        lazy val result: Boolean = target().dateCreatedBeforeMigDate(CustomerInformation,directDebitResult)
+      }
+      "return true" in {
+        val result = Test.result
+        result shouldBe true
+      }
+    }
+    "a valid customer details model is provided and the date is before 4 months" should {
+      object Test extends DirectDebitInterruptTest {
+        override def setup(): Any = mockDateServiceCall()
+        val CustomerInformation : CustomerInformation =
+          customerInformationMax.copy(customerMigratedToETMPDate = Some("2017-06-01"))
+        val directDebitResult: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-01"))))
+        lazy val result: Boolean = target().dateCreatedBeforeMigDate(CustomerInformation, directDebitResult)
+      }
+      "return false" in {
+        val result = Test.result
+        result shouldBe false
+      }
+    }
+  }
 }
 
