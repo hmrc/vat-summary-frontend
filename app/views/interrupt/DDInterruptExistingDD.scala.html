@@ -19,7 +19,7 @@
    govukInsetText: GovukInsetText,
    govukButton: GovukButton)
 
-@()(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
+@(redirectUrl: String)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
 
 @mainTemplate(title = messages("directDebitInterrupt.existingDD.title"), appConfig = appConfig) {
 
@@ -46,7 +46,7 @@
         content = Text(messages("directDebitInterrupt.existingDD.validateButton"))
     ))
     @govukButton(Button(
-        href = Some(controllers.routes.VatDetailsController.details().url),
+        href = Some(redirectUrl),
         content = Text(messages("directDebitInterrupt.continueButton")),
         classes = "govuk-button--secondary"
     ))

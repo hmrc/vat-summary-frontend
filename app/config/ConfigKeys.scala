@@ -130,4 +130,6 @@ object ConfigKeys {
   val verifyEmailEndPoint: String = "vat-correspondence-details-frontend.endpoints.verifyEmail"
 
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
+
+  val environmentHost: String = "environment-base.host"
 }

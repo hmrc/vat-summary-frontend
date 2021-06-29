@@ -17,10 +17,12 @@
 package controllers
 
 import java.time.{LocalDate, Period}
+
 import audit.AuditingService
 import audit.models.ViewVatPaymentHistoryAuditModel
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import controllers.predicates.DDInterruptPredicate
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
@@ -44,7 +46,8 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
                                          serviceErrorHandler: ServiceErrorHandler,
                                          mcc: MessagesControllerComponents,
                                          implicit  val ec: ExecutionContext,
-                                         paymentHistoryView: PaymentHistory)
+                                         paymentHistoryView: PaymentHistory,
+                                         DDInterrupt: DDInterruptPredicate)
                                         (implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
   extends FrontendController(mcc) with I18nSupport {
@@ -54,38 +57,52 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
 
   def paymentHistory(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
-      for {
-        customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
-        migrationDate = getMigratedToETMPDate(customerInfo)
-        showInsolvencyContent = showInsolventContent(customerInfo)
-        serviceInfoContent <- serviceInfoService.getPartial
-        validYears = getValidYears(migrationDate)
-        migratedWithin15Months = customerMigratedWithin15M(migrationDate)
-        paymentsServiceYearOne <-
-          if (validYears.contains(currentYear)) { paymentsService.getPaymentsHistory(user.vrn, validYears.head) }
-          else { Future.successful(Right(Seq.empty)) }
-        paymentsServiceYearTwo <-
-          if (validYears.contains(previousYear)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head) }
-          else { Future.successful(Right(Seq.empty)) }
-        paymentsServiceYearThree <-
-          if (validYears.contains(currentYear - 2)) { paymentsService.getPaymentsHistory(user.vrn, validYears.drop(2).head) }
-          else { Future.successful(Right(Seq.empty)) }
-      } yield {
-        val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
-        generateViewModel(
-          paymentsServiceYearOne,
-          paymentsServiceYearTwo,
-          paymentsServiceYearThree,
-          showPreviousPaymentsTab,
-          migrationDate,
-          showInsolvencyContent
-        ) match {
-          case Some(model) =>
-            auditEvent(user.vrn, model.transactions)
-            Ok(paymentHistoryView(model, serviceInfoContent))
-          case None =>
-            Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
-            serviceErrorHandler.showInternalServerError
+      DDInterrupt.interruptCheck { _ =>
+        for {
+          customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
+          migrationDate = getMigratedToETMPDate(customerInfo)
+          showInsolvencyContent = showInsolventContent(customerInfo)
+          serviceInfoContent <- serviceInfoService.getPartial
+          validYears = getValidYears(migrationDate)
+          migratedWithin15Months = customerMigratedWithin15M(migrationDate)
+          paymentsServiceYearOne <-
+            if (validYears.contains(currentYear)) {
+              paymentsService.getPaymentsHistory(user.vrn, validYears.head)
+            }
+            else {
+              Future.successful(Right(Seq.empty))
+            }
+          paymentsServiceYearTwo <-
+            if (validYears.contains(previousYear)) {
+              paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head)
+            }
+            else {
+              Future.successful(Right(Seq.empty))
+            }
+          paymentsServiceYearThree <-
+            if (validYears.contains(currentYear - 2)) {
+              paymentsService.getPaymentsHistory(user.vrn, validYears.drop(2).head)
+            }
+            else {
+              Future.successful(Right(Seq.empty))
+            }
+        } yield {
+          val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
+          generateViewModel(
+            paymentsServiceYearOne,
+            paymentsServiceYearTwo,
+            paymentsServiceYearThree,
+            showPreviousPaymentsTab,
+            migrationDate,
+            showInsolvencyContent
+          ) match {
+            case Some(model) =>
+              auditEvent(user.vrn, model.transactions)
+              Ok(paymentHistoryView(model, serviceInfoContent))
+            case None =>
+              Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
+              serviceErrorHandler.showInternalServerError
+          }
         }
       }
   }

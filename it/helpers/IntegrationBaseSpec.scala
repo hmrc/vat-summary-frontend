@@ -38,6 +38,8 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
 
   def formatSessionVrn: Option[String] => Map[String, String] =_.fold(Map.empty[String, String])(x => Map(SessionKeys.agentSessionVrn -> x))
 
+  def viewedDDInterrupt: Option[String] => Map[String, String] = _.fold(Map.empty[String, String])(x => Map(SessionKeys.viewedDDInterrupt -> x))
+
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 

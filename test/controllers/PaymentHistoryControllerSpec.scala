@@ -195,7 +195,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockServiceErrorHandler,
         mcc,
         ec,
-        paymentHistory
+        paymentHistory,
+        ddInterruptPredicate
       )
     }
   }
@@ -306,6 +307,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val authCall = true
         val result: Future[Result] = target.paymentHistory()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+    "the user has no viewDirectDebitInterrupt in session" should {
+
+      "return 303(SEE OTHER)" in new Test  {
+        override def setup(): Any = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+        }
+        val result: Future[Result] = target.paymentHistory()(DDInterruptRequest)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
       }
     }
 

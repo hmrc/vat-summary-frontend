@@ -108,7 +108,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         ec,
         NoPayments,
         mockPaymentsError,
-        openPayments
+        openPayments,
+        ddInterruptPredicate
       )
     }
   }
@@ -200,6 +201,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           val document: Document = Jsoup.parse(bodyOf(result))
 
           document.select("payment-2") shouldBe empty
+
 
         }
       }
@@ -519,6 +521,22 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         private val result = target.openPayments()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+    "the user has no viewDDInterrupt in session" should {
+
+      "return 303 (SEE  OTHER)" in new Test {
+
+        override def setupMocks(): Unit = {
+          mockDateServiceCall()
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+        }
+
+        private val result = target.openPayments()(DDInterruptRequest)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
       }
     }
   }

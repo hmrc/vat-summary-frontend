@@ -24,6 +24,8 @@ import common.MessageLookup.existingDDInterruptMessages
 
 class DDInterruptExistingDDSpec extends ViewBaseSpec {
 
+  val redirectUrl = "/vat-through-software/vat-overview"
+
   object Selectors {
     val backLink = ".govuk-back-link"
     val title = "title"
@@ -39,7 +41,7 @@ class DDInterruptExistingDDSpec extends ViewBaseSpec {
 
   "The DD interrupt screen for users" should {
 
-    lazy val view = DDInterruptView()
+    lazy val view = DDInterruptView(redirectUrl)
     implicit lazy val document: Document = Jsoup.parse(view.body)
 
     "have a back link" that {

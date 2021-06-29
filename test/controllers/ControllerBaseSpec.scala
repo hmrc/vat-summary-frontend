@@ -21,7 +21,7 @@ import akka.stream.{ActorMaterializer, Materializer}
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.{AgentPredicate, FinancialPredicate}
+import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
 import mocks.MockAppConfig
 import models.CustomerInformation
 import org.scalamock.scalatest.MockFactory
@@ -36,8 +36,8 @@ import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import uk.gov.hmrc.play.test.UnitSpec
 import views.html.errors.{AgentUnauthorised, Unauthorised}
-
 import java.time.LocalDate
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach {
@@ -52,7 +52,8 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: Materializer = ActorMaterializer()
-  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false")
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false",
+    SessionKeys.viewedDDInterrupt -> "true")
 
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
@@ -75,6 +76,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
     ec,
     unauthorised
   )
+  val ddInterruptPredicate: DDInterruptPredicate = new DDInterruptPredicate(
+    mcc
+  )
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
@@ -85,6 +89,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
 
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
+
+  lazy val DDInterruptRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("GET","/homepage").withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
 
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)
