@@ -30,7 +30,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Request, Result}
-import play.api.test.FakeRequest
 import play.api.test.Helpers.{redirectLocation, _}
 import play.twirl.api.Html
 import services._
@@ -50,8 +49,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
-    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-      Future.successful(Right(customerInformationMax))
 
     def setupMocks(): Unit = {
       mockDateServiceCall()
