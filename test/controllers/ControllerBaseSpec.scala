@@ -90,6 +90,9 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
 
+  lazy val DDInterruptRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("GET","/homepage").withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
+
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)
 

@@ -17,6 +17,7 @@
 package controllers
 
 import java.time.LocalDate
+
 import audit.AuditingService
 import audit.models.AuditModel
 import common.FinancialTransactionsConstants._
@@ -313,6 +314,16 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
         status(result) shouldBe INTERNAL_SERVER_ERROR
         }
+      "the user has no ddInterrupt value in session" in new DetailsTest {
+        override def setup(): Any = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .stubs(*, *, *, *)
+            .returns(authResult)
+        }
+        lazy val result = target.details()(DDInterruptRequest)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
       }
     }
   }

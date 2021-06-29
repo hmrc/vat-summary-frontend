@@ -30,6 +30,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Request, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers.{redirectLocation, _}
 import play.twirl.api.Html
 import services._
@@ -49,6 +50,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
     val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
     val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
+    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+      Future.successful(Right(customerInformationMax))
 
     def setupMocks(): Unit = {
       mockDateServiceCall()
@@ -521,6 +524,22 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         private val result = target.openPayments()(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+    "the user has no viewDDInterrupt in session" should {
+
+      "return 303 (SEE  OTHER)" in new Test {
+
+        override def setupMocks(): Unit = {
+          mockDateServiceCall()
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+        }
+
+        private val result = target.openPayments()(DDInterruptRequest)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
       }
     }
   }

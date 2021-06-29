@@ -309,6 +309,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+    "the user has no viewDirectDebitInterrupt in session" should {
+
+      "return 303(SEE OTHER)" in new Test  {
+        override def setup(): Any = {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(authResult)
+        }
+        val result: Future[Result] = target.paymentHistory()(DDInterruptRequest)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
+    }
 
     "the user has a VATDEC enrolment and no customerMigratedToETMPDate" should {
 

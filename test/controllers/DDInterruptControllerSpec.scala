@@ -109,31 +109,31 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
         }
 
       }
+    }
 
-      "they have an existing DD but need to validate there bank details and the feature switch is enabled" when {
+    "they have an existing DD but need to validate there bank details and the feature switch is enabled" when {
 
-        object Test extends DirectDebitInterruptTest {
-          lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
-          override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-            Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
-          override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
-            Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
-        }
-
-        "return 200" in {
-          status(Test.result) shouldBe Status.OK
-        }
-
-        "return HTML" in {
-          contentType(Test.result) shouldBe Some("text/html")
-        }
-
-        "return the existing DD interrupt view" in {
-          await(bodyOf(Test.result))
-            .contains("You need to validate your details for Direct Debit") shouldBe true
-        }
+      object Test extends DirectDebitInterruptTest {
+        lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
+        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+          Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+        override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+          Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
       }
-      "they have an existing DD that was set up after the migration date" when {
+
+      "return 200" in {
+        status(Test.result) shouldBe Status.OK
+      }
+
+      "return HTML" in {
+        contentType(Test.result) shouldBe Some("text/html")
+      }
+
+      "return the existing DD interrupt view" in {
+        await(bodyOf(Test.result))
+          .contains("You need to validate your details for Direct Debit") shouldBe true
+      }
+      "they have an existing DD that was set up after the migration date " when {
         object Test extends DirectDebitInterruptTest {
           lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
           override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
@@ -145,30 +145,28 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
           status(Test.result) shouldBe Status.SEE_OTHER
         }
       }
-    }
 
-    "Migration date is older than 4 months" when {
+      "Migration date is older than 4 months" when {
 
-      " redirected to the VAT Overview Page" should {
+        " redirected to the VAT Overview Page" should {
 
-        object Test extends DirectDebitInterruptTest {
-          lazy val result: Future[Result] =
-            target().directDebitInterruptCall(relativeUrl)(fakeRequest)
-        }
+          object Test extends DirectDebitInterruptTest {
+            lazy val result: Future[Result] =
+              target().directDebitInterruptCall(relativeUrl)(fakeRequest)
+          }
 
-        "return 303" in {
-          status(Test.result) shouldBe Status.SEE_OTHER
-        }
+          "return 303" in {
+            status(Test.result) shouldBe Status.SEE_OTHER
+          }
 
-        "return the correct redirect location" in {
-          redirectLocation(Test.result) shouldBe expectedRedirectLocation
+          "return the correct redirect location" in {
+            redirectLocation(Test.result) shouldBe expectedRedirectLocation
+          }
         }
       }
     }
   }
   "The DD Interrupt feature switch is disabled" should {
-    "redirect(303)" when {
-
       object Test extends DirectDebitInterruptTest {
         lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
@@ -186,7 +184,6 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
         mockAppConfig.features.directDebitInterrupt(false)
         redirectLocation(Test.result) shouldBe expectedRedirectLocation
       }
-    }
   }
   "The extractRedirectUrl() function" when {
     "a valid relative redirect URL is provided" should {
