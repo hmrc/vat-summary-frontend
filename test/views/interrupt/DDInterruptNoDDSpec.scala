@@ -33,7 +33,7 @@ class DDInterruptNoDDSpec extends ViewBaseSpec {
     val detailsSummary = ".govuk-details__summary-text"
     val detailsText = ".govuk-details__text"
     val para1 = "div > .govuk-body:nth-of-type(1)"
-    val para2 = "div > .govuk-body:nth-of-type(2)"
+    val para2 = "div > p:nth-of-type(2)"
     val para3 = "div > .govuk-body:nth-of-type(3)"
     val setupButton = ".govuk-button:nth-child(6)"
     val continueButton = ".govuk-button:nth-child(7)"
