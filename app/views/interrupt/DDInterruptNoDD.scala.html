@@ -21,15 +21,17 @@
 
 @(redirectUrl: String)(implicit messages: Messages, appConfig: config.AppConfig, request: Request[_])
 
-@mainTemplate(title = messages("directDebitInterrupt.noDD.title"), appConfig = appConfig) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = appConfig.btaHomeUrl
+    ))
+}
+
+@mainTemplate(title = messages("directDebitInterrupt.noDD.title"), appConfig = appConfig, backLinkContent = Some(backLink)) {
 
   <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-two-thirds">
-
-      @govukBackLink(BackLink(
-        href = appConfig.btaHomeUrl
-      ))
 
       <h1 class="govuk-heading-l">@messages("directDebitInterrupt.noDD.title")</h1>
 

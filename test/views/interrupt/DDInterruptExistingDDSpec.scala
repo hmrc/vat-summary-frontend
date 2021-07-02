@@ -31,10 +31,10 @@ class DDInterruptExistingDDSpec extends ViewBaseSpec {
     val title = "title"
     val text = "h1"
     val insetText = ".govuk-inset-text"
-    val para1 = "#content > div > div > p:nth-child(4)"
-    val para2 = "#content > div > div > p:nth-child(5)"
-    val validateButton = ".govuk-button:nth-child(6)"
-    val continueButton = ".govuk-button:nth-child(7)"
+    val para1 = "#content > div > div > .govuk-body:nth-of-type(1)"
+    val para2 = "#content > div > div > .govuk-body:nth-of-type(2)"
+    val validateButton = ".govuk-button:nth-child(5)"
+    val continueButton = ".govuk-button:nth-child(6)"
   }
 
   lazy val DDInterruptView: DDInterruptExistingDD = injector.instanceOf[DDInterruptExistingDD]
