@@ -90,9 +90,9 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
           case Right(details) if migratedWithin4M(details) =>
             paymentsService.getDirectDebitStatus(user.vrn).map {
               case Right(directDebit) if !directDebit.directDebitMandateFound =>
-                Ok(ddInterruptNoDDView(redirectUrl)).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+                Ok(ddInterruptNoDDView(cleanRedirectUrl)).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
               case Right(directDebit) if dateCreatedBeforeMigDate(details, directDebit) =>
-                Ok(ddInterruptExistingDDView(redirectUrl)).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
+                Ok(ddInterruptExistingDDView(cleanRedirectUrl)).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
               case _ => Redirect(cleanRedirectUrl).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
             }
           case _ => Future.successful(Redirect(cleanRedirectUrl).addingToSession(SessionKeys.viewedDDInterrupt -> "true"))
