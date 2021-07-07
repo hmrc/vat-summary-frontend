@@ -31,27 +31,30 @@
                                                         messages: Messages,
                                                         appConfig: config.AppConfig)
 
+@breadcrumbs = {
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title")),
+                href = Some(controllers.routes.VatDetailsController.details().url)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("openPayments.title"))
+            )
+        )
+    ))
+}
+
 @mainTemplate(
     title = messages("openPayments.title"),
     appConfig = appConfig,
     serviceInfoContent = serviceInfoContent,
-    user = Some(user)) {
-
-  @govukBreadcrumbs(Breadcrumbs(
-    items = Seq(
-      BreadcrumbsItem(
-        content = Text(messages("breadcrumbs.bta")),
-        href = Some(appConfig.btaHomeUrl)
-      ),
-      BreadcrumbsItem(
-        content = Text(messages("vatDetails.title")),
-        href = Some(controllers.routes.VatDetailsController.details().url)
-      ),
-      BreadcrumbsItem(
-        content = Text(messages("openPayments.title"))
-      )
-    )
-  ))
+    user = Some(user),
+    navLinkContent = Some(breadcrumbs)) {
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

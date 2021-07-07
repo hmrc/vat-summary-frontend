@@ -35,7 +35,7 @@
   showLogout: Boolean = true,
   appConfig: config.AppConfig,
   feedbackOnSignOut: Boolean = true,
-  backLinkContent: Option[Html] = None,
+  navLinkContent: Option[Html] = None,
   serviceInfoContent: Html = HtmlFormat.empty,
   user: Option[User] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
@@ -84,7 +84,7 @@
     @serviceInfoContent
   </div>
   @languageSelect
-  @backLinkContent
+  @navLinkContent
 }
 
 @content = {

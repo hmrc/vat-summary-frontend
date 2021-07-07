@@ -52,24 +52,27 @@
   }
 }
 
+@breadcrumbs = {
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title"))
+            )
+        )
+    ))
+}
+
 @mainTemplate(
   title = messages("vatDetails.title"),
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
-  user = Some(user)
+  user = Some(user),
+  navLinkContent = Some(breadcrumbs)
 ) {
-
-  @govukBreadcrumbs(Breadcrumbs(
-    items = Seq(
-      BreadcrumbsItem(
-        content = Text(messages("breadcrumbs.bta")),
-        href = Some(appConfig.btaHomeUrl)
-      ),
-      BreadcrumbsItem(
-        content = Text(messages("vatDetails.title"))
-      )
-    )
-  ))
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("vatDetails.title")</h1>
   <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)

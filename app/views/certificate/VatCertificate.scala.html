@@ -34,6 +34,39 @@
                                            request: Request[_],
                                            user: User)
 
+@navLink = {
+    @if(user.isAgent) {
+        @govukBackLink(BackLink(
+            href = appConfig.agentClientLookupHubUrl,
+            content = Text(messages("base.back"))
+        ))
+    } else {
+        @if(!user.isAgent) {
+            @govukBreadcrumbs(Breadcrumbs(
+                items = Seq(
+                    BreadcrumbsItem(
+                        content = Text(messages("breadcrumbs.bta")),
+                        href = Some(appConfig.btaHomeUrl)
+                    ),
+                    BreadcrumbsItem(
+                        content = Text(messages("vatDetails.title")),
+                        href = Some(controllers.routes.VatDetailsController.details().url)
+                    ),
+                    BreadcrumbsItem(
+                        content = Text(messages("vatCertificate.title"))
+                    )
+                )
+            ))
+        }
+    }
+}
+
+
+
+
+
+
+
 @fieldRow(title: String, content: Any) = {
   <dl class="govuk-summary-list">
     <div class="govuk-summary-list__row">
@@ -55,30 +88,10 @@
   if(user.isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
   appConfig = appConfig,
   user = Some(user),
-  serviceInfoContent = serviceInfoContent
+  serviceInfoContent = serviceInfoContent,
+  navLinkContent = Some(navLink),
 ) {
-  @if(!user.isAgent) {
-    @govukBreadcrumbs(Breadcrumbs(
-      items = Seq(
-        BreadcrumbsItem(
-          content = Text(messages("breadcrumbs.bta")),
-          href = Some(appConfig.btaHomeUrl)
-        ),
-        BreadcrumbsItem(
-          content = Text(messages("vatDetails.title")),
-          href = Some(controllers.routes.VatDetailsController.details().url)
-        ),
-        BreadcrumbsItem(
-          content = Text(messages("vatCertificate.title"))
-        )
-      )
-    ))
-  } else {
-    @govukBackLink(BackLink(
-      href = appConfig.agentClientLookupHubUrl,
-      content = Text(messages("base.back"))
-    ))
-  }
+
   <h1 class="govuk-heading-xl">@if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
 
   <div class="cert-header">

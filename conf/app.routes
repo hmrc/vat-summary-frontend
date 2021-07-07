@@ -22,7 +22,7 @@ GET        /time-out                                                            
 GET        /language/:lang                                                                         controllers.LanguageController.switchToLanguage(lang: String)
 
 #Vat-correspondence redirect
-GET        /send-verificatiion                                                                     controllers.VatDetailsController.detailsRedirectToEmailVerification
+GET        /send-verification                                                                     controllers.VatDetailsController.detailsRedirectToEmailVerification
 
 GET        /direct-debit-interrupt                                                                 controllers.DDInterruptController.directDebitInterruptCall(redirectUrl: String)
 
