@@ -30,6 +30,24 @@
                                                         appConfig: config.AppConfig,
                                                         user: User)
 
+@breadcrumbs = {
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title")),
+                href = Some(controllers.routes.VatDetailsController.details().url)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("paymentsHistory.title"))
+            )
+        )
+    ))
+}
+
 @additionalYears = @{
   (model.tabTwo.fold(Seq[Int]())(year=>Seq(year)) ++ model.tabThree.fold(Seq[Int]())(year=>Seq(year+1, year))).distinct
 }
@@ -38,23 +56,9 @@
   title = messages("paymentsHistory.title"),
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
-  user = Some(user)) {
+  user = Some(user),
+  navLinkContent = Some(breadcrumbs)) {
 
-  @govukBreadcrumbs(Breadcrumbs(
-    items = Seq(
-      BreadcrumbsItem(
-        content = Text(messages("breadcrumbs.bta")),
-        href = Some(appConfig.btaHomeUrl)
-      ),
-      BreadcrumbsItem(
-        content = Text(messages("vatDetails.title")),
-        href = Some(controllers.routes.VatDetailsController.details().url)
-      ),
-      BreadcrumbsItem(
-        content = Text(messages("paymentsHistory.title"))
-      )
-    )
-  ))
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
