@@ -165,6 +165,26 @@ vatCertificate.nstp.p2 = Bydd hyn yn cwmpasu’r amser rhwng eich cyfnod treth a
 vatCertificate.nstp.dateFromTo = {0} i {1}
 vatCertificate.logo = HMRC_WelshLogo
 
+#Direct debit interrupt
+directDebitInterrupt.noDD.title = Bydd yn rhaid i chi wirio’ch dull talu
+directDebitInterrupt.noDD.details1 = Pam ydw i’n gweld y neges hon?
+directDebitInterrupt.noDD.details2 = Rydych wedi cael eich trosglwyddo i system ar-lein newydd CThEM ar gyfer cyflwyno’ch Ffurflenni TAW.
+directDebitInterrupt.noDD.details3 = Os oeddech yn talu'ch bil TAW drwy Ddebyd Uniongyrchol yn flaenorol, mae’ch Debyd Uniongyrchol wedi’i ganslo.
+directDebitInterrupt.noDD.body1 = I barhau i dalu’ch TAW drwy Ddebyd Uniongyrchol,
+directDebitInterrupt.noDD.body2 = mae’n rhaid i chi drefnu Debyd Uniongyrchol newydd o leiaf 3 diwrnod gwaith cyn bod eich taliad TAW yn ddyledus.
+directDebitInterrupt.noDD.body3 = Os na fyddwch yn talu’ch Ffurflen TAW mewn pryd, mae’n bosibl y byddwch yn wynebu cosb.
+directDebitInterrupt.noDD.body4 = Os nad oes gennych amser i drefnu Debyd Uniongyrchol newydd cyn dyddiad dyledus eich taliad TAW nesaf,
+directDebitInterrupt.noDD.body5 = neu os yw’n well gennych dalu drwy ddefnyddio dull arall o dalu, byddwch yn gallu gwneud hyn yn adran
+directDebitInterrupt.noDD.body6 = ‘taliadau ac ad-daliadau’ eich cyfrif TAW.
+directDebitInterrupt.noDD.body7 = Os ydych eisoes wedi trefnu dull talu gallwch fynd yn eich blaen i’ch cyfrif TAW.
+directDebitInterrupt.noDD.setupButton = Trefnu debyd uniongyrchol newydd
+directDebitInterrupt.existingDD.title = Mae angen i chi ddilysu’ch manylion ar gyfer Debyd Uniongyrchol
+directDebitInterrupt.existingDD.info = Rydych wedi cael eich trosglwyddo i system ar-lein newydd CThEM ar gyfer cyflwyno’ch Ffurflenni TAW. Bydd eich enw a'ch rhif ar gyfer y gwasanaeth yn newid. Bydd y manylion wedi’u diweddaru yn cael eu hanfon atoch fel neges ddiogel.
+directDebitInterrupt.existingDD.para1 = Ar hyn o bryd rydych yn talu’ch bil TAW gan ddefnyddio Debyd Uniongyrchol ac mae eich Sgriniau Cydnabyddiaeth yn rhoi gwybod i chi faint sydd angen i chi ei dalu a phryd.
+directDebitInterrupt.existingDD.para2 = I barhau i gael negeseuon yn eich annog i fewngofnodi i’ch Sgriniau Cydnabyddiaeth ac adolygu’r wybodaeth, mae angen i chi ddilysu’ch cyfeiriad e-bost.
+directDebitInterrupt.existingDD.validateButton = Dilysu’ch e-bost
+directDebitInterrupt.continueButton = Yn eich blaen i’ch cyfrif TAW
+
 #Vat Overview Partials
 deregPartial.cancelRegistration.title = Canslo cofrestriad TAW
 deregPartial.cancelRegistration.content = Canslo’ch cofrestriad TAW os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i chi fod wedi cofrestru ar gyfer TAW.
