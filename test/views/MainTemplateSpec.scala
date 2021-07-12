@@ -47,7 +47,7 @@ class MainTemplateSpec extends ViewBaseSpec {
       "have a phase banner" which {
 
         "has a BETA tag" in {
-          elementText(Selectors.phaseTag) shouldBe "BETA"
+          elementText(Selectors.phaseTag) shouldBe "beta"
         }
 
         "has the correct text" in {
