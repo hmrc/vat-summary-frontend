@@ -108,9 +108,9 @@
     serviceName = Some(dynamicNavTitle),
     signOutUrl = if(showLogout) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
     phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl(request.uri))),
+    userResearchBanner = if(appConfig.features.userResearchBanner()) Some(UserResearchBanner(url = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34")) else None,
     displayHmrcBanner = false
   )
-  @userResearchBanner(appConfig)
 }
 
 @govukTemplate(
