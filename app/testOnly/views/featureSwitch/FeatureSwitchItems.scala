@@ -40,7 +40,6 @@ class FeatureSwitchItems @Inject() () {
   def items(form: Form[FeatureSwitchModel]): Seq[CheckboxItem] = {
     Seq(
       formCheckBoxItem(form, ConfigKeys.userResearchBannerFeature, "User research banner"),
-      formCheckBoxItem(form, ConfigKeys.vatCertNSTPsFeature, "Show NSTPs on VAT certificate"),
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
       formCheckBoxItem(form, ConfigKeys.paymentsAndRepaymentsFeature, "Show payments and repayments tile"),
       formCheckBoxItem(form, ConfigKeys.vatOptOutServiceFeature, "Show vat opt-out section"),

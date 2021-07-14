@@ -134,15 +134,10 @@
     </div>
   </div>
 
-  @{
-    if(!appConfig.features.vatCertNSTPs()) {
-      standardReturnFrequency(model.returnPeriodMsgKey)
-    } else {
-      model.nonStdTaxPeriods.fold {
-          standardReturnFrequency(model.returnPeriodMsgKey)
-      }{ nonStdReturnPeriods =>
-          nonStandardReturnFrequency(nonStdReturnPeriods, model.firstNonNSTPPeriod)
-      }
+  @{model.nonStdTaxPeriods.fold {
+        standardReturnFrequency(model.returnPeriodMsgKey)
+    }{ nonStdReturnPeriods =>
+        nonStandardReturnFrequency(nonStdReturnPeriods, model.firstNonNSTPPeriod)
     }
   }
 

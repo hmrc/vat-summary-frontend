@@ -34,7 +34,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
-        vatCertNSTPsEnabled = appConfig.features.vatCertNSTPs(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         paymentsAndRepaymentsEnabled = appConfig.features.paymentsAndRepaymentsEnabled(),
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
@@ -62,7 +61,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
-    appConfig.features.vatCertNSTPs(model.vatCertNSTPsEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.paymentsAndRepaymentsEnabled(model.paymentsAndRepaymentsEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
