@@ -35,7 +35,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        paymentsAndRepaymentsEnabled = appConfig.features.paymentsAndRepaymentsEnabled(),
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
         enableVatObligationsService = appConfig.features.enableVatObligationsService(),
         useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage(),
@@ -62,7 +61,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
-    appConfig.features.paymentsAndRepaymentsEnabled(model.paymentsAndRepaymentsEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
     appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
     appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)

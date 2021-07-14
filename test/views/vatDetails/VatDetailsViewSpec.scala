@@ -357,16 +357,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page" when {
 
-    "the paymentsAndRepayments feature switch is false" should {
-
-      "not display the payments and repayments section" in {
-        mockConfig.features.paymentsAndRepaymentsEnabled(false)
-        lazy val view = details(detailsModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-        elementExtinct(Selectors.paymentsAndRepaymentsSection)
-      }
-    }
-
     "the optOut feature switch is false" should {
 
       "not display the opt out section" in {

@@ -26,7 +26,6 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.paymentsAndRepaymentsFeature -> boolean,
       ConfigKeys.vatOptOutServiceFeature -> boolean,
       ConfigKeys.useVatObligationsService -> boolean,
       ConfigKeys.useDirectDebitDummyPageFeature -> boolean,

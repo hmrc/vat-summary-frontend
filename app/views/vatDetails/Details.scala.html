@@ -111,7 +111,7 @@
     <div class="govuk-grid-column-one-third">
       @updateVatDetailsSection()
     </div>
-    @if(appConfig.features.paymentsAndRepaymentsEnabled() && !detailsViewModel.customerInfoError && !detailsViewModel.isHybridUser) {
+    @if(!detailsViewModel.customerInfoError && !detailsViewModel.isHybridUser) {
       <div class="govuk-grid-column-one-third">
         @paymentsAndRepaymentsSection()
       </div>
