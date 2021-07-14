@@ -29,8 +29,6 @@ import views.html.certificate.VatCertificate
 
 class VatCertificateViewSpec extends ViewBaseSpec {
 
-  mockConfig.features.vatCertNSTPs(true)
-
   val vatCertificateView: VatCertificate = injector.instanceOf[VatCertificate]
 
   object Selectors {
@@ -242,41 +240,19 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
     "accessed by a user with non-standard tax periods" when {
 
-      "the vatCertNSTPs feature is on" should {
+      lazy val view = vatCertificateView(
+        HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        lazy val view = vatCertificateView(
-          HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the non-standard tax periods card" which {
-          lazy val card = document.select(Selectors.cardClass).get(2)
-          "contains the correct heading" in {
-            card.select("h2").text() shouldBe "Non-standard tax periods"
-          }
-        }
-
-        "not have the return details card" in {
-          document.select(Selectors.cardClass).contains("Return details") shouldBe false
+      "have the non-standard tax periods card" which {
+        lazy val card = document.select(Selectors.cardClass).get(2)
+        "contains the correct heading" in {
+          card.select("h2").text() shouldBe "Non-standard tax periods"
         }
       }
 
-      "the vatCertNSTPs feature is off" should {
-
-        "have the return details card" in {
-          mockConfig.features.vatCertNSTPs(false)
-          lazy val view = vatCertificateView(
-            HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-          elementText("div.govuk-grid-column-full:nth-child(1) > h2:nth-child(1)") shouldBe "Return details"
-        }
-
-        "not have the non-standard return details card" in {
-          mockConfig.features.vatCertNSTPs(false)
-          lazy val view = vatCertificateView(
-            HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-          document.select(Selectors.cardClass).contains("Non-standard tax periods") shouldBe false
-        }
+      "not have the return details card" in {
+        document.select(Selectors.cardClass).contains("Return details") shouldBe false
       }
     }
 

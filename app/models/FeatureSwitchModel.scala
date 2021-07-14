@@ -17,7 +17,6 @@
 package models
 
 case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
-                              vatCertNSTPsEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               paymentsAndRepaymentsEnabled: Boolean,
                               vatOptOutEnabled : Boolean,
