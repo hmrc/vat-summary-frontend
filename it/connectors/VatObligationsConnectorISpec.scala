@@ -30,9 +30,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 class VatObligationsConnectorISpec extends IntegrationBaseSpec {
 
-  val obligationsStub: VatObligationsStub = new VatObligationsStub(
-    app.configuration.underlying.getBoolean("features.useVatObligationsService.enabled")
-  )
+  val obligationsStub: VatObligationsStub = new VatObligationsStub
 
   private trait Test {
     def setupStubs(): StubMapping

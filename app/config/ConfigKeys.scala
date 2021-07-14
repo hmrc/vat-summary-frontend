@@ -30,7 +30,6 @@ object ConfigKeys {
   val staticDateValue: String = "date-service.staticDate.value"
   val paymentsAndRepaymentsFeature: String = "features.paymentsAndRepayments.enabled"
   val vatOptOutServiceFeature: String = "features.vatOptOutService.enabled"
-  val useVatObligationsService: String = "features.useVatObligationsService.enabled"
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
   val submitReturnFeatures: String = "features.submitReturnFeatures.enabled"
