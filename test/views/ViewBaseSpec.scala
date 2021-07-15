@@ -34,7 +34,6 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfter
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    mockConfig.features.paymentsAndRepaymentsEnabled(true)
     mockConfig.features.vatOptOutEnabled(true)
     mockConfig.features.mtdSignUp(true)
   }

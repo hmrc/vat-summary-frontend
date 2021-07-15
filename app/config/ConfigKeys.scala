@@ -27,7 +27,6 @@ object ConfigKeys {
   val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
-  val paymentsAndRepaymentsFeature: String = "features.paymentsAndRepayments.enabled"
   val vatOptOutServiceFeature: String = "features.vatOptOutService.enabled"
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
