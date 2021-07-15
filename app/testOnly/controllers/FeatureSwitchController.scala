@@ -39,7 +39,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         enableVatObligationsService = appConfig.features.enableVatObligationsService(),
         useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage(),
         useLanguageSelector = appConfig.features.useLanguageSelector(),
-        submitReturnFeatures = appConfig.features.submitReturnFeatures(),
         agentAccess = appConfig.features.agentAccess(),
         mtdSignUp = appConfig.features.mtdSignUp(),
         ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled(),
@@ -65,7 +64,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
     appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)
     appConfig.features.useLanguageSelector(model.useLanguageSelector)
-    appConfig.features.submitReturnFeatures(model.submitReturnFeatures)
     appConfig.features.agentAccess(model.agentAccess)
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)

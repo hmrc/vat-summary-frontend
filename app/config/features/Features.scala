@@ -29,7 +29,6 @@ class Features @Inject()(implicit config: Configuration) {
   val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService)
   val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
-  val submitReturnFeatures = new Feature(ConfigKeys.submitReturnFeatures)
   val agentAccess = new Feature(ConfigKeys.agentAccessFeature)
   val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature)
   val ddCollectionInProgressEnabled = new Feature(ConfigKeys.ddCollectionInProgressFeature)
