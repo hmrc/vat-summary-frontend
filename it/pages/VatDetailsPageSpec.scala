@@ -45,7 +45,6 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
     "the user is authenticated" should {
 
       "return 200 and 'View returns deadline'" in new Test {
-        appConfig.features.r17Content(true)
 
         override def setupStubs(): StubMapping = {
           AuthStub.authorised()
@@ -84,7 +83,6 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
       }
 
       "return 200 when user's email is not verified" in new Test {
-        appConfig.features.r17Content(true)
 
         val customerDataToUse: JsValue = CustomerInfoStub.customerInfoJson(
           isPartialMigration = false,

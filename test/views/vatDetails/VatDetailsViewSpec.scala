@@ -338,15 +338,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page for a user with an unverified email address" should {
 
-    "do not display the text asking user to verify email when the feature switch is disabled" in {
-      mockConfig.features.r17Content(false)
-      lazy val view = details(detailsModel.copy(userEmailVerified = false))
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-      elementExtinct(Selectors.unverifiedMessageSelector)
-    }
-
-    "display the text asking user to verify email when the feature switch is enabled" in {
-      mockConfig.features.r17Content(true)
+    "display the text asking user to verify email" in {
       lazy val view = details(detailsModel.copy(userEmailVerified = false))
       lazy implicit val document: Document = Jsoup.parse(view.body)
       allElementsOf(Selectors.unverifiedMessageSelector).right.nonEmpty shouldBe true

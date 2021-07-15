@@ -38,7 +38,7 @@
                                                         user: User)
 
 @unverifiedUserEmailContent = {
-  @if(!detailsViewModel.userEmailVerified && appConfig.features.r17Content()) {
+  @if(!detailsViewModel.userEmailVerified) {
     <div class="govuk-warning-text" id="unverified-email-notice">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
       <strong class="govuk-warning-text__text">
