@@ -32,7 +32,6 @@ object ConfigKeys {
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
   val agentAccessFeature: String = "features.agentAccess.enabled"
   val mtdSignUpFeature: String = "features.mtdSignUp.enabled"
-  val ddCollectionInProgressFeature: String = "features.ddCollectionInProgress.enabled"
   val displayCovidMessageFeature: String = "features.displayCovid.enabled"
   val missingTraderAddressIntercept: String = "features.missingTraderAddressIntercept.enabled"
   val r17Content: String = "features.r17Content.enabled"

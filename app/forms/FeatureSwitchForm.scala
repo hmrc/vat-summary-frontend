@@ -31,7 +31,6 @@ object FeatureSwitchForm {
       ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.agentAccessFeature -> boolean,
       ConfigKeys.mtdSignUpFeature -> boolean,
-      ConfigKeys.ddCollectionInProgressFeature -> boolean,
       ConfigKeys.displayCovidMessageFeature -> boolean,
       ConfigKeys.missingTraderAddressIntercept -> boolean,
       ConfigKeys.r17Content -> boolean,
