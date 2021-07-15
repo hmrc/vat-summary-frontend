@@ -44,7 +44,6 @@ class FeatureSwitchItems @Inject() () {
       formCheckBoxItem(form, ConfigKeys.vatOptOutServiceFeature, "Show vat opt-out section"),
       formCheckBoxItem(form, ConfigKeys.useDirectDebitDummyPageFeature, "Use direct debit hand-off dummy page"),
       formCheckBoxItem(form, ConfigKeys.useLanguageSelectorFeature, "Show welsh content"),
-      formCheckBoxItem(form, ConfigKeys.submitReturnFeatures, "User research banner"),
       formCheckBoxItem(form, ConfigKeys.agentAccessFeature, "Agent access enabled"),
       formCheckBoxItem(form, ConfigKeys.mtdSignUpFeature, "MTD sign up enabled"),
       formCheckBoxItem(form, ConfigKeys.ddCollectionInProgressFeature, "Direct debit collection in progress enabled"),
