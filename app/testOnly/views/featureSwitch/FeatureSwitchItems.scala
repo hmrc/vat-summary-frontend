@@ -42,7 +42,6 @@ class FeatureSwitchItems @Inject() () {
       formCheckBoxItem(form, ConfigKeys.userResearchBannerFeature, "User research banner"),
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
       formCheckBoxItem(form, ConfigKeys.vatOptOutServiceFeature, "Show vat opt-out section"),
-      formCheckBoxItem(form, ConfigKeys.useLanguageSelectorFeature, "Show welsh content"),
       formCheckBoxItem(form, ConfigKeys.agentAccessFeature, "Agent access enabled"),
       formCheckBoxItem(form, ConfigKeys.mtdSignUpFeature, "MTD sign up enabled"),
       formCheckBoxItem(form, ConfigKeys.ddCollectionInProgressFeature, "Direct debit collection in progress enabled"),
