@@ -62,7 +62,6 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
     "microservice.services.direct-debit.port" -> mockPort,
     "microservice.services.business-tax-account.host" -> mockHost,
     "microservice.services.business-tax-account.port" -> mockPort,
-    "features.useDirectDebitDummyPage.enabled" -> "false"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

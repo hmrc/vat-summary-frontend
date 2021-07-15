@@ -72,8 +72,6 @@ class DirectDebitControllerSpec extends ControllerBaseSpec {
 
       "redirect to the correct redirect url" in new DirectDebitDetailsTest {
 
-        mockAppConfig.features.useDirectDebitDummyPage(false)
-
         val redirectUrl = "http://google.com/"
         val expectedRedirectLocation: Option[String] = Some(redirectUrl)
         val serviceResponse = Right(redirectUrl)

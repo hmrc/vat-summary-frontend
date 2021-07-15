@@ -24,21 +24,14 @@ import uk.gov.hmrc.http.HttpClient
 class DirectDebitConnectorSpec extends ControllerBaseSpec{
 
   "DirectDebitConnector" should {
-    "generate the correct check direct debit end point url" when {
 
-      "directDebitDummyPage feature switch is off" in {
+    "generate the correct check direct debit end point url" in {
 
-        mockAppConfig.features.useDirectDebitDummyPage(false)
-        val connector = new DirectDebitConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
-        connector.setupUrl shouldEqual "direct-debits-url/direct-debit/start"
-      }
+      val connector = new DirectDebitConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+      connector.setupUrl shouldEqual "direct-debits-url/direct-debit/start"
 
-      "directDebitDummyPage feature switch is on" in {
-
-        mockAppConfig.features.useDirectDebitDummyPage(true)
-        val connector = new DirectDebitConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
-        connector.setupUrl shouldEqual "/vat-through-software/test-only/direct-debit-backend/start-journey"
-      }
     }
+
   }
+
 }

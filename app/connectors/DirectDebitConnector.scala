@@ -32,13 +32,7 @@ class DirectDebitConnector @Inject()(http: HttpClient,
                                      appConfig: AppConfig,
                                      metrics: MetricsService) {
 
-  private[connectors] def setupUrl: String = {
-      if (appConfig.features.useDirectDebitDummyPage()) {
-        appConfig.selfLookup + testOnly.controllers.routes.DirectDebitStubController.startJourney().url
-      } else {
-        appConfig.directDebitServiceUrl + appConfig.setupDirectDebitsJourneyPath
-      }
-  }
+  private[connectors] def setupUrl: String = appConfig.directDebitServiceUrl + appConfig.setupDirectDebitsJourneyPath
 
   def setupJourney(data: DirectDebitDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[String]] = {
 
