@@ -355,19 +355,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   }
 
-  "Rendering the VAT details page" when {
-
-    "the optOut feature switch is false" should {
-
-      "not display the opt out section" in {
-        mockConfig.features.vatOptOutEnabled(false)
-        lazy val view = details(detailsModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-        elementExtinct(Selectors.vatOptOutSection)
-      }
-    }
-  }
-
   "Rendering the VAT details page with a next return and a next payment" should {
 
     lazy val view = details(detailsModel, Html(""))
