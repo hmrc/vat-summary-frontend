@@ -19,7 +19,6 @@ package models
 case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               vatOptOutEnabled : Boolean,
-                              enableVatObligationsService: Boolean,
                               useDirectDebitDummyPage: Boolean,
                               useLanguageSelector: Boolean,
                               submitReturnFeatures: Boolean,
