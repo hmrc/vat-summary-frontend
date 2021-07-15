@@ -99,13 +99,11 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    mockAppConfig.features.agentAccess(true)
     mockAppConfig.features.directDebitInterrupt(true)
   }
 
   override def afterEach(): Unit = {
     super.afterEach()
-    mockAppConfig.features.agentAccess(true)
   }
 
   def mockCustomerInfo(accountDetailsResponse: Future[HttpGetResult[CustomerInformation]]):Any =

@@ -26,7 +26,6 @@ class Features @Inject()(implicit config: Configuration) {
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
   val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature)
-  val agentAccess = new Feature(ConfigKeys.agentAccessFeature)
   val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature)
   val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature)
   val r17Content = new Feature(ConfigKeys.r17Content)

@@ -124,7 +124,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
 
   def authorisedActionAllowAgents(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
     block,
-    allowAgentAccess = appConfig.features.agentAccess()
+    allowAgentAccess = true
   )
 
   def checkHybridAndInsolvency(block: Request[AnyContent] => User => Future[Result], financialRequest: Boolean)
