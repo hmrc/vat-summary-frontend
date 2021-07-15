@@ -36,7 +36,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
-        enableVatObligationsService = appConfig.features.enableVatObligationsService(),
         useDirectDebitDummyPage = appConfig.features.useDirectDebitDummyPage(),
         useLanguageSelector = appConfig.features.useLanguageSelector(),
         submitReturnFeatures = appConfig.features.submitReturnFeatures(),
@@ -62,7 +61,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
-    appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
     appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)
     appConfig.features.useLanguageSelector(model.useLanguageSelector)
     appConfig.features.submitReturnFeatures(model.submitReturnFeatures)

@@ -28,9 +28,8 @@ import stubs._
 class VatDetailsPageSpec extends IntegrationBaseSpec {
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
-  val obligationsStub: VatObligationsStub = new VatObligationsStub(
-    app.configuration.underlying.getBoolean("features.useVatObligationsService.enabled")
-  )
+  val obligationsStub: VatObligationsStub = new VatObligationsStub
+
 
   private trait Test {
     def setupStubs(): StubMapping
