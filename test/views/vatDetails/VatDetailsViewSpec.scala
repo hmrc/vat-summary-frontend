@@ -366,16 +366,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         elementExtinct(Selectors.vatOptOutSection)
       }
     }
-
-    "the mtdSignup feature switch is false" should {
-
-      "not display the mtd signup section" in {
-        mockConfig.features.mtdSignUp(false)
-        lazy val view = details(detailsModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-        elementExtinct(Selectors.mtdSignupSection)
-      }
-    }
   }
 
   "Rendering the VAT details page with a next return and a next payment" should {
