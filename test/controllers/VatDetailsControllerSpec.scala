@@ -97,8 +97,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         .returns(ddResult)
     }
 
-    mockAppConfig.features.submitReturnFeatures(true)
-
     def target(): VatDetailsController = {
       setup()
       new VatDetailsController(
@@ -193,7 +191,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "the user is hybrid" should {
 
       "not attempt to retrieve payment obligations" in new DetailsTest {
-        mockAppConfig.features.submitReturnFeatures(true)
 
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
           Future.successful(Right(customerInformationHybrid))
@@ -236,25 +233,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the submit return feature switch is turned off" should {
-      "display the View Returns link" in new DetailsTest {
-        mockAppConfig.features.submitReturnFeatures(false)
-        lazy val result: Future[Result] = target().details()(fakeRequest)
-        status(result) shouldBe OK
-        await(bodyOf(result)).contains(messages("returnObligation.viewReturns")) shouldBe true
-      }
-    }
+    "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
+      override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+        Future.successful(Right(customerInformationNonMTDfB))
 
-    "the submit return feature switch is turned on" should {
-      "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-          Future.successful(Right(customerInformationNonMTDfB))
-
-        mockAppConfig.features.submitReturnFeatures(true)
-        lazy val result: Future[Result] = target().details()(fakeRequest)
-        status(result) shouldBe OK
-        await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe true
-      }
+      lazy val result: Future[Result] = target().details()(fakeRequest)
+      status(result) shouldBe OK
+      await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe true
     }
 
     "the user is a missing trader" should {

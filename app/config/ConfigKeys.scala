@@ -31,7 +31,6 @@ object ConfigKeys {
   val useVatObligationsService: String = "features.useVatObligationsService.enabled"
   val useDirectDebitDummyPageFeature: String = "features.useDirectDebitDummyPage.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelector.enabled"
-  val submitReturnFeatures: String = "features.submitReturnFeatures.enabled"
   val agentAccessFeature: String = "features.agentAccess.enabled"
   val mtdSignUpFeature: String = "features.mtdSignUp.enabled"
   val ddCollectionInProgressFeature: String = "features.ddCollectionInProgress.enabled"

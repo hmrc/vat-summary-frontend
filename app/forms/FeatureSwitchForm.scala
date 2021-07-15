@@ -30,7 +30,6 @@ object FeatureSwitchForm {
       ConfigKeys.useVatObligationsService -> boolean,
       ConfigKeys.useDirectDebitDummyPageFeature -> boolean,
       ConfigKeys.useLanguageSelectorFeature -> boolean,
-      ConfigKeys.submitReturnFeatures -> boolean,
       ConfigKeys.agentAccessFeature -> boolean,
       ConfigKeys.mtdSignUpFeature -> boolean,
       ConfigKeys.ddCollectionInProgressFeature -> boolean,
