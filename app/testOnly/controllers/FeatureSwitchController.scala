@@ -42,7 +42,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         mtdSignUp = appConfig.features.mtdSignUp(),
         ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled(),
         displayCovid = appConfig.features.displayCovidMessage(),
-        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
         r17Content = appConfig.features.r17Content(),
         directDebitInterrupt = appConfig.features.directDebitInterrupt()
       )
@@ -66,7 +65,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
     appConfig.features.displayCovidMessage(model.displayCovid)
-    appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     appConfig.features.r17Content(model.r17Content)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     Redirect(routes.FeatureSwitchController.featureSwitch())

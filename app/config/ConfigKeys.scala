@@ -34,7 +34,6 @@ object ConfigKeys {
   val mtdSignUpFeature: String = "features.mtdSignUp.enabled"
   val ddCollectionInProgressFeature: String = "features.ddCollectionInProgress.enabled"
   val displayCovidMessageFeature: String = "features.displayCovid.enabled"
-  val missingTraderAddressIntercept: String = "features.missingTraderAddressIntercept.enabled"
   val r17Content: String = "features.r17Content.enabled"
   val directDebitInterrupt: String = "features.directDebitInterrupt.enabled"
 

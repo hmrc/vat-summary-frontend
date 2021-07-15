@@ -122,7 +122,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
   private[controllers] def redirectForMissingTrader(customerInfo: ResponseHttpParsers.HttpGetResult[CustomerInformation]) = {
     customerInfo.fold(
       _ => false,
-      details => appConfig.features.missingTraderAddressIntercept() && details.isMissingTrader && !details.hasPendingPpobChanges
+      details => details.isMissingTrader && !details.hasPendingPpobChanges
     )
   }
 
