@@ -26,11 +26,6 @@ class Features @Inject()(implicit config: Configuration) {
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
   val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature)
-<<<<<<< HEAD
-  val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature)
-=======
-  val enableVatObligationsService = new Feature(ConfigKeys.useVatObligationsService)
->>>>>>> 3401a05c... [BTAT-9455] Remove useDirectDebitDummyPage feature switch
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
   val submitReturnFeatures = new Feature(ConfigKeys.submitReturnFeatures)
   val agentAccess = new Feature(ConfigKeys.agentAccessFeature)

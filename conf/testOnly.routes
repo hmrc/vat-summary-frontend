@@ -28,7 +28,6 @@ DELETE      /vat-through-software/test-only/clear-schemas/:serviceName         t
 
 
 GET         /vat-through-software/test-only/payments-stub                      testOnly.controllers.PaymentsStubController.stub
-GET         /vat-through-software/test-only/direct-debit-stub                  testOnly.controllers.DirectDebitStubController.stub
 
 GET         /vat-through-software/test-only/:vrn/portal-stub                   testOnly.controllers.PortalStubController.show(vrn: String)
 
@@ -37,8 +36,4 @@ POST        /vat-through-software/test-only/vaclf-stub                         t
 GET         /vat-through-software/test-only/vaclf-stub-unauth                  testOnly.controllers.AgentClientLookupStubController.unauthorised
 GET         /vat-through-software/test-only/vaclf-stub-agent-hub               testOnly.controllers.AgentClientLookupStubController.agentHub
 
-# NOCSRF
-POST        /vat-through-software/test-only/direct-debit-backend/start-journey @testOnly.controllers.DirectDebitStubController.startJourney
-
 ->          /                                                                  prod.Routes
-
