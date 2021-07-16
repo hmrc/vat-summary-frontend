@@ -43,7 +43,6 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
-    val agentAccessSwitch: Boolean = true
     val customerInfoCallExpected: Boolean = true
 
     def setup(): Any = {
