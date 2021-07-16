@@ -22,6 +22,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               agentAccess: Boolean,
                               mtdSignUp: Boolean,
                               displayCovid: Boolean,
-                              missingTraderAddressIntercept: Boolean,
                               r17Content: Boolean,
                               directDebitInterrupt: Boolean)

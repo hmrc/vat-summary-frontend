@@ -29,7 +29,6 @@ class Features @Inject()(implicit config: Configuration) {
   val agentAccess = new Feature(ConfigKeys.agentAccessFeature)
   val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature)
   val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature)
-  val missingTraderAddressIntercept = new Feature(ConfigKeys.missingTraderAddressIntercept)
   val r17Content = new Feature(ConfigKeys.r17Content)
   val directDebitInterrupt = new Feature(ConfigKeys.directDebitInterrupt)
 }

@@ -30,7 +30,6 @@ object FeatureSwitchForm {
       ConfigKeys.agentAccessFeature -> boolean,
       ConfigKeys.mtdSignUpFeature -> boolean,
       ConfigKeys.displayCovidMessageFeature -> boolean,
-      ConfigKeys.missingTraderAddressIntercept -> boolean,
       ConfigKeys.r17Content -> boolean,
       ConfigKeys.directDebitInterrupt -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)

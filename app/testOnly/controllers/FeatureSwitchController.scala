@@ -39,7 +39,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         agentAccess = appConfig.features.agentAccess(),
         mtdSignUp = appConfig.features.mtdSignUp(),
         displayCovid = appConfig.features.displayCovidMessage(),
-        missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
         r17Content = appConfig.features.r17Content(),
         directDebitInterrupt = appConfig.features.directDebitInterrupt()
       )
@@ -60,7 +59,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.agentAccess(model.agentAccess)
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.displayCovidMessage(model.displayCovid)
-    appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     appConfig.features.r17Content(model.r17Content)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     Redirect(routes.FeatureSwitchController.featureSwitch())

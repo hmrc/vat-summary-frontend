@@ -45,7 +45,6 @@ class FeatureSwitchItems @Inject() () {
       formCheckBoxItem(form, ConfigKeys.agentAccessFeature, "Agent access enabled"),
       formCheckBoxItem(form, ConfigKeys.mtdSignUpFeature, "MTD sign up enabled"),
       formCheckBoxItem(form, ConfigKeys.displayCovidMessageFeature, "Display Covid-19 message"),
-      formCheckBoxItem(form, ConfigKeys.missingTraderAddressIntercept, "Intercept missing traders on entry to confirm address"),
       formCheckBoxItem(form, ConfigKeys.r17Content, "Display email unverified nudge"),
       formCheckBoxItem(form, ConfigKeys.directDebitInterrupt, "DD interrupt screen")
     )

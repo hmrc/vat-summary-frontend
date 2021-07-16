@@ -248,7 +248,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
           customerInformationMax.copy(isMissingTrader = true)
         ))
-        mockAppConfig.features.missingTraderAddressIntercept(true)
         lazy val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some("/missing-trader")
