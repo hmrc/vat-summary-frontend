@@ -58,13 +58,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
-<<<<<<< HEAD
-    appConfig.features.useLanguageSelector(model.useLanguageSelector)
-=======
-    appConfig.features.enableVatObligationsService(model.enableVatObligationsService)
-    appConfig.features.useDirectDebitDummyPage(model.useDirectDebitDummyPage)
-    appConfig.features.submitReturnFeatures(model.submitReturnFeatures)
->>>>>>> 29f77284... [BTAT-9456] Removed language selector feature switch
     appConfig.features.agentAccess(model.agentAccess)
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
