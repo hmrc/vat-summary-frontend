@@ -132,7 +132,7 @@
     } else {
       <div class="govuk-grid-column-one-third">
         @detailsViewModel.showSignUp match {
-          case Some(true) if appConfig.features.mtdSignUp() => {
+          case Some(true) => {
             @mtdSignupSection(user.vrn)
           }
           case Some(false) if appConfig.features.vatOptOutEnabled() => {
