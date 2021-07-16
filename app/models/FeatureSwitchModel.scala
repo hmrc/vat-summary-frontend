@@ -19,7 +19,6 @@ package models
 case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               vatOptOutEnabled : Boolean,
-                              agentAccess: Boolean,
                               mtdSignUp: Boolean,
                               displayCovid: Boolean,
                               r17Content: Boolean,

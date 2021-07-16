@@ -28,7 +28,6 @@ object ConfigKeys {
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
   val vatOptOutServiceFeature: String = "features.vatOptOutService.enabled"
-  val agentAccessFeature: String = "features.agentAccess.enabled"
   val mtdSignUpFeature: String = "features.mtdSignUp.enabled"
   val displayCovidMessageFeature: String = "features.displayCovid.enabled"
   val r17Content: String = "features.r17Content.enabled"

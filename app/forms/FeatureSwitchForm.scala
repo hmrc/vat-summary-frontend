@@ -27,7 +27,6 @@ object FeatureSwitchForm {
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.vatOptOutServiceFeature -> boolean,
-      ConfigKeys.agentAccessFeature -> boolean,
       ConfigKeys.mtdSignUpFeature -> boolean,
       ConfigKeys.displayCovidMessageFeature -> boolean,
       ConfigKeys.r17Content -> boolean,

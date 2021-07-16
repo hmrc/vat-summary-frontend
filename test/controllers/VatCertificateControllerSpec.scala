@@ -43,7 +43,6 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
     val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
 
-    val agentAccessSwitch: Boolean = true
     val customerInfoCallExpected: Boolean = true
 
     def setup(): Any = {
@@ -60,8 +59,6 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
         .stubs(*, *, *)
         .returns(serviceInfoServiceResult)
-
-      mockAppConfig.features.agentAccess(agentAccessSwitch)
 
     }
 
@@ -98,68 +95,13 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
     "the user is an agent" when {
 
-      "allow agent access feature switch is on" when {
+      "user is authorised" should {
 
-        "user is authorised" should {
-
-          "return OK (200)" in new Test {
-            override def setup(): Unit = {
-              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *, *)
-                .returns(agentAuthResult)
-                .noMoreThanOnce()
-
-              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *, *)
-                .returns(Future.successful(agentEnrolments))
-                .noMoreThanOnce()
-
-              (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *)
-                .returns(Right(customerInformationMax))
-              (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
-                .stubs(*, *, *)
-                .returns(serviceInfoServiceResult)
-            }
-
-            private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
-
-            status(result) shouldBe Status.OK
-            contentType(result) shouldBe Some("text/html")
-          }
-        }
-
-        "user is unauthorised" should {
-
-          "return FORBIDDEN and agent unauthorised page" in new Test {
-
-            override def setup(): Unit = {
-              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *, *)
-                .returns(Future.successful(new ~(otherEnrolment, Some(Agent))))
-                .noMoreThanOnce()
-
-              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-                .expects(*, *, *, *)
-                .returns(Future.successful(otherEnrolment))
-                .noMoreThanOnce()
-            }
-
-            private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
-
-            status(result) shouldBe Status.FORBIDDEN
-            Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet - VAT - GOV.UK"
-          }
-        }
-      }
-
-      "allow agent access feature switch is off" should {
-
-        "return Not Found (404)" in new Test {
+        "return OK (200)" in new Test {
           override def setup(): Unit = {
             (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *, *)
-              .returns(Future.successful(new ~(agentEnrolments, Some(Agent))))
+              .returns(agentAuthResult)
               .noMoreThanOnce()
 
             (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
@@ -167,13 +109,42 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
               .returns(Future.successful(agentEnrolments))
               .noMoreThanOnce()
 
-            mockAppConfig.features.agentAccess(false)
+            (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(Right(customerInformationMax))
+            (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
+              .stubs(*, *, *)
+              .returns(serviceInfoServiceResult)
           }
 
-          private val result = target.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "2223334443"))
-          status(result) shouldBe Status.SEE_OTHER
-        }
+          private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
+          status(result) shouldBe Status.OK
+          contentType(result) shouldBe Some("text/html")
+        }
+      }
+
+      "user is unauthorised" should {
+
+        "return FORBIDDEN and agent unauthorised page" in new Test {
+
+          override def setup(): Unit = {
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(new ~(otherEnrolment, Some(Agent))))
+              .noMoreThanOnce()
+
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(otherEnrolment))
+              .noMoreThanOnce()
+          }
+
+          private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+
+          status(result) shouldBe Status.FORBIDDEN
+          Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet - VAT - GOV.UK"
+        }
       }
     }
 
