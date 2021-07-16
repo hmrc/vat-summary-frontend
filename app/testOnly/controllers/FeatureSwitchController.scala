@@ -36,7 +36,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
-        useLanguageSelector = appConfig.features.useLanguageSelector(),
         agentAccess = appConfig.features.agentAccess(),
         mtdSignUp = appConfig.features.mtdSignUp(),
         ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled(),
@@ -59,7 +58,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
-    appConfig.features.useLanguageSelector(model.useLanguageSelector)
     appConfig.features.agentAccess(model.agentAccess)
     appConfig.features.mtdSignUp(model.mtdSignUp)
     appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
