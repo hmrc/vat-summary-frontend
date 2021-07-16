@@ -26,7 +26,6 @@ class Features @Inject()(implicit config: Configuration) {
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
   val vatOptOutEnabled = new Feature(ConfigKeys.vatOptOutServiceFeature)
-  val useDirectDebitDummyPage = new Feature(ConfigKeys.useDirectDebitDummyPageFeature)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
   val agentAccess = new Feature(ConfigKeys.agentAccessFeature)
   val mtdSignUp = new Feature(ConfigKeys.mtdSignUpFeature)

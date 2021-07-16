@@ -2,7 +2,6 @@
 
 GET        /vat-overview                                                                           controllers.VatDetailsController.details
 GET        /what-you-owe                                                                           controllers.OpenPaymentsController.openPayments
-GET        /direct-debit                                                                           controllers.DirectDebitController.directDebits(status: Option[Boolean])
 GET        /payment-history                                                                        controllers.PaymentHistoryController.paymentHistory
 GET        /vat-certificate                                                                        controllers.VatCertificateController.show
 GET        /accessibility-statement                                                                controllers.AccessibilityStatementController.show
