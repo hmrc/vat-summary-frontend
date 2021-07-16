@@ -604,15 +604,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is at least one obligation" when {
 
-      "ddCollectionInProgressEnabled feature switch is on" when {
-
         "due date of payment is in the past" when {
 
           "user has direct debit collection in progress" should {
 
             "return payment that is not overdue" in new DetailsTest {
-
-              mockAppConfig.features.ddCollectionInProgressEnabled(true)
 
               val testPayment: PaymentNoPeriod = Payment(
                 ReturnDebitCharge,
@@ -632,8 +628,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           "user has no direct debit collection in progress" should {
 
             "return payment that is overdue" in new DetailsTest {
-
-              mockAppConfig.features.ddCollectionInProgressEnabled(true)
 
               val testPayment: PaymentNoPeriod = Payment(
                 ReturnDebitCharge,
@@ -655,8 +649,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           "return payment that is not overdue" in new DetailsTest {
 
-            mockAppConfig.features.ddCollectionInProgressEnabled(true)
-
             val testPayment: PaymentNoPeriod = Payment(
               ReturnDebitCharge,
               due = LocalDate.parse("2020-01-01"),
@@ -671,31 +663,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             result.isOverdue shouldBe false
           }
         }
-      }
-
-      "ddCollectionInProgressEnabled feature switch is off" when {
-
-        "due date of payment is in the past and has no direct debit" should {
-
-          "return payment that isn't not overdue" in new DetailsTest {
-
-            mockAppConfig.features.ddCollectionInProgressEnabled(false)
-
-            val testPayment: PaymentNoPeriod = Payment(
-              ReturnDebitCharge,
-              due = LocalDate.parse("2017-01-01"),
-              BigDecimal("10000"),
-              Some("ABCD"),
-              chargeReference = Some("XD002750002155"),
-              ddCollectionInProgress = false
-            )
-
-            val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
-
-            result.isOverdue shouldBe false
-          }
-        }
-      }
     }
   }
 

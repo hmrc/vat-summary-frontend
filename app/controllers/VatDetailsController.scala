@@ -128,7 +128,6 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
   private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {
     val isOverdue = payments.headOption.fold(false) { payment =>
-      appConfig.features.ddCollectionInProgressEnabled() &&
         payment.due.isBefore(dateService.now()) &&
         !payment.ddCollectionInProgress
     }

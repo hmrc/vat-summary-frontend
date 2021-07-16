@@ -84,7 +84,7 @@ extends FrontendController(mcc) with I18nSupport {
       payments.map { payment =>
         OpenPaymentsModel(
           payment,
-          isOverdue = appConfig.features.ddCollectionInProgressEnabled() && payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress
+          isOverdue = payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         )
       },
       hasActiveDirectDebit

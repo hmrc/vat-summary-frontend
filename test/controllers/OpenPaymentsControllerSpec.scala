@@ -364,8 +364,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
     "Calling the .getModel function" when {
 
-      "ddCollectionInProgressEnabled feature switch is on" when {
-
         "due date of payments is in the past" when {
 
           "user has direct debit collections in progress" should {
@@ -473,47 +471,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
             result shouldBe expected
           }
         }
-      }
-
-      "ddCollectionInProgressEnabled feature switch is off" when {
-
-        "due date of payments are in the past and have no direct debit" should {
-
-          "return payments that are not overdue" in new Test {
-
-            mockAppConfig.features.ddCollectionInProgressEnabled(false)
-
-            override def setupMocks(): Unit = mockDateServiceCall()
-
-            val testPayment: PaymentWithPeriod = Payment(
-              ReturnDebitCharge,
-              LocalDate.parse("2017-01-01"),
-              LocalDate.parse("2017-01-01"),
-              due = LocalDate.parse("2017-01-01"),
-              BigDecimal("10000"),
-              Some("ABCD"),
-              chargeReference = None,
-              ddCollectionInProgress = false
-            )
-
-            val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
-              Seq(OpenPaymentsModel(
-                testPayment.chargeType,
-                testPayment.outstandingAmount,
-                testPayment.due,
-                testPayment.periodFrom,
-                testPayment.periodTo,
-                testPayment.periodKey,
-                isOverdue = false
-              )),
-              Some(true)
-            )
-            val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
-
-            result shouldBe expected
-          }
-        }
-      }
     }
     "the user is insolvent and not continuing to trade" should {
 

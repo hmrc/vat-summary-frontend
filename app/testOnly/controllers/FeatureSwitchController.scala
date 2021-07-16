@@ -38,7 +38,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
         agentAccess = appConfig.features.agentAccess(),
         mtdSignUp = appConfig.features.mtdSignUp(),
-        ddCollectionInProgress = appConfig.features.ddCollectionInProgressEnabled(),
         displayCovid = appConfig.features.displayCovidMessage(),
         missingTraderAddressIntercept = appConfig.features.missingTraderAddressIntercept(),
         r17Content = appConfig.features.r17Content(),
@@ -60,7 +59,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
     appConfig.features.agentAccess(model.agentAccess)
     appConfig.features.mtdSignUp(model.mtdSignUp)
-    appConfig.features.ddCollectionInProgressEnabled(model.ddCollectionInProgress)
     appConfig.features.displayCovidMessage(model.displayCovid)
     appConfig.features.missingTraderAddressIntercept(model.missingTraderAddressIntercept)
     appConfig.features.r17Content(model.r17Content)
