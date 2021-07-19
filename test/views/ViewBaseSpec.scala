@@ -32,11 +32,6 @@ import scala.collection.JavaConverters._
 
 trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    mockConfig.features.vatOptOutEnabled(true)
-  }
-
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   implicit val user: User = User("999999999")

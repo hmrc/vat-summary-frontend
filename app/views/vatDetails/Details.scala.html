@@ -135,7 +135,7 @@
           case Some(true) => {
             @mtdSignupSection(user.vrn)
           }
-          case Some(false) if appConfig.features.vatOptOutEnabled() => {
+          case Some(false) => {
             @vatOptOutSection(detailsViewModel.pendingOptOut)
           }
           case _ => {}

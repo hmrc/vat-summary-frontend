@@ -35,7 +35,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        vatOptOutEnabled = appConfig.features.vatOptOutEnabled(),
         displayCovid = appConfig.features.displayCovidMessage(),
         r17Content = appConfig.features.r17Content(),
         directDebitInterrupt = appConfig.features.directDebitInterrupt()
@@ -53,7 +52,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
-    appConfig.features.vatOptOutEnabled(model.vatOptOutEnabled)
     appConfig.features.displayCovidMessage(model.displayCovid)
     appConfig.features.r17Content(model.r17Content)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
