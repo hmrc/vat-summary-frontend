@@ -73,17 +73,19 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
     }
   }
 
-  private[controllers] def dateCreatedBeforeMigDate(customerInfo: CustomerInformation, directDebit: DirectDebitStatus) : Boolean = {
+  private[controllers] def dateBeforeOrWithin7Days(customerInfo: CustomerInformation,
+                                                   directDebit: DirectDebitStatus): Boolean = {
     val migrationDate: Option[LocalDate] = customerInfo.customerMigratedToETMPDate.map(LocalDate.parse)
     val ddDates: Option[Seq[DDIDetails]] = directDebit.directDebitDetails
     (migrationDate, ddDates) match {
-      case (Some(migDate), Some(dates)) => dates.exists(ddi => LocalDate.parse(ddi.dateCreated).compareTo(migDate) <= 0)
+      case (Some(migDate), Some(dates)) =>
+        dates.exists(ddi => LocalDate.parse(ddi.dateCreated).compareTo(migDate.plusWeeks(1)) <= 0)
       case _ => false
     }
   }
 
-  def directDebitInterruptCall(redirectUrl: String): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
-    implicit user =>
+  def directDebitInterruptCall(redirectUrl: String): Action[AnyContent] = authorisedController.authorisedAction {
+    implicit request => implicit user =>
      val cleanRedirectUrl = extractRedirectUrl(redirectUrl).getOrElse(controllers.routes.VatDetailsController.details().url)
        if (appConfig.features.directDebitInterrupt()) {
         accountDetailsService.getAccountDetails(user.vrn).flatMap {
@@ -91,7 +93,7 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
             paymentsService.getDirectDebitStatus(user.vrn).map {
               case Right(directDebit) if !directDebit.directDebitMandateFound =>
                 Ok(ddInterruptNoDDView(cleanRedirectUrl)).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
-              case Right(directDebit) if dateCreatedBeforeMigDate(details, directDebit) =>
+              case Right(directDebit) if dateBeforeOrWithin7Days(details, directDebit) =>
                 Ok(ddInterruptExistingDDView(cleanRedirectUrl)).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
               case _ => Redirect(cleanRedirectUrl).addingToSession(SessionKeys.viewedDDInterrupt -> "true")
             }

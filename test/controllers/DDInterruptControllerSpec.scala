@@ -21,7 +21,7 @@ package controllers
 import play.api.http.Status
 import audit.AuditingService
 import audit.models.AuditModel
-import common.TestModels.{customerInformationMax, successfulAuthResult}
+import common.TestModels.{customerInformationMax, customerInformationMin, successfulAuthResult}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.{CustomerInformation, DDIDetails, DirectDebitStatus, ServiceResponse}
 import services.PaymentsService
@@ -39,14 +39,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
   val relativeUrl = "/homepage"
   val expectedRedirectLocation: Option[String] = Some(relativeUrl)
+  val mockPaymentsService: PaymentsService = mock[PaymentsService]
+  val DDNoInterrupt: DDInterruptNoDD = injector.instanceOf[DDInterruptNoDD]
+  val DDInterruptExistingDD: DDInterruptExistingDD = injector.instanceOf[DDInterruptExistingDD]
+  val controller = new DDInterruptController(
+    mockPaymentsService,
+    authorisedController,
+    mockAccountDetailsService,
+    mockDateService,
+    mcc,
+    DDNoInterrupt,
+    DDInterruptExistingDD
+  )
 
   private trait DirectDebitInterruptTest {
     val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
-
-    val mockPaymentsService: PaymentsService = mock[PaymentsService]
     val mockAuditService: AuditingService = mock[AuditingService]
-    val DDNoInterrupt: DDInterruptNoDD = injector.instanceOf[DDInterruptNoDD]
-    val DDInterruptExistingDD: DDInterruptExistingDD = injector.instanceOf[DDInterruptExistingDD]
     val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
       Future.successful(Right(customerInformationMax))
     val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
@@ -74,15 +82,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
     def target(): DDInterruptController = {
       setup()
-      new DDInterruptController(
-        mockPaymentsService,
-        authorisedController,
-        mockAccountDetailsService,
-        mockDateService,
-        mcc,
-        DDNoInterrupt,
-        DDInterruptExistingDD
-      )
+      controller
     }
   }
 
@@ -133,13 +133,14 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
         await(bodyOf(Test.result))
           .contains("You need to validate your details for Direct Debit") shouldBe true
       }
-      "they have an existing DD that was set up after the migration date " when {
+
+      "they have an existing DD that was set up at least a week after the migration date" when {
         object Test extends DirectDebitInterruptTest {
           lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
           override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
             Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
           override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
-            Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-03"))))))
+            Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-05-01"))))))
         }
         "return 303" in {
           status(Test.result) shouldBe Status.SEE_OTHER
@@ -148,7 +149,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
       "Migration date is older than 4 months" when {
 
-        " redirected to the VAT Overview Page" should {
+        "redirected to the VAT Overview Page" should {
 
           object Test extends DirectDebitInterruptTest {
             lazy val result: Future[Result] =
@@ -166,122 +167,147 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
   "The DD Interrupt feature switch is disabled" should {
-      object Test extends DirectDebitInterruptTest {
-        lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-          Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
-        override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
-          Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
-      }
+    object Test extends DirectDebitInterruptTest {
+      lazy val result: Future[Result] = target().directDebitInterruptCall(relativeUrl)(fakeRequest)
+      override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
+        Future.successful(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+      override val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
+        Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
+    }
 
-      "return 303" in {
-        mockAppConfig.features.directDebitInterrupt(false)
-        status(Test.result) shouldBe Status.SEE_OTHER
-      }
+    "return 303" in {
+      mockAppConfig.features.directDebitInterrupt(false)
+      status(Test.result) shouldBe Status.SEE_OTHER
+    }
 
-      "return the correct redirect location" in {
-        mockAppConfig.features.directDebitInterrupt(false)
-        redirectLocation(Test.result) shouldBe expectedRedirectLocation
-      }
+    "return the correct redirect location" in {
+      mockAppConfig.features.directDebitInterrupt(false)
+      redirectLocation(Test.result) shouldBe expectedRedirectLocation
+    }
   }
+
   "The extractRedirectUrl() function" when {
+
     "a valid relative redirect URL is provided" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = None
-        lazy val result: Option[String] = target().extractRedirectUrl("/homepage")
-      }
+
       "return the URL" in {
-        val result = Test.result
-        result shouldBe Some("/homepage")
+        controller.extractRedirectUrl("/homepage") shouldBe Some("/homepage")
       }
     }
+
     "a valid absolute redirect url is provided" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = None
-        lazy val result: Option[String] = target().extractRedirectUrl("http://localhost:9149/homepage")
-      }
+
       "return the URL" in {
-        val result = Test.result
-        result shouldBe Some("http://localhost:9149/homepage")
+        controller.extractRedirectUrl("http://localhost:9149/homepage") shouldBe Some("http://localhost:9149/homepage")
       }
     }
+
     "an invalid redirect url is provided" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = None
-        lazy val result: Option[String] = target().extractRedirectUrl("http://wwww.google.com")
-      }
+
       "return the URL" in {
-        val result = Test.result
-        result shouldBe None
+        controller.extractRedirectUrl("http://wwww.google.com") shouldBe None
       }
     }
+
     "an exception is throne when trying to construct a continue url" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = None
-        lazy val result: Option[String] = target().extractRedirectUrl("99")
-      }
+
       "return the URL" in {
-        val result = Test.result
-        result shouldBe None
+        controller.extractRedirectUrl("99") shouldBe None
       }
     }
   }
-  "The migratedWithin4M() function" when {
-    "a valid customer details model is provided and the date is within 4 months" should {
-        object Test extends DirectDebitInterruptTest {
-          override def setup(): Any = mockDateServiceCall()
-           val CustomerInformation : CustomerInformation =
-            customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
-          lazy val result: Boolean = target().migratedWithin4M(CustomerInformation)
+
+  "The migratedWithin4M function" when {
+
+    "the migration date is less than 4 months ago" should {
+
+      "return true" in {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
+        val result = {
+          mockDateServiceCall()
+          controller.migratedWithin4M(customerInfo)
         }
-      "return true" in {
-        val result = Test.result
         result shouldBe true
       }
     }
-    "a valid customer details model is provided and the date is before 4 months" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = mockDateServiceCall()
-        val CustomerInformation : CustomerInformation =
-          customerInformationMax.copy(customerMigratedToETMPDate = Some("2017-06-01"))
-        lazy val result: Boolean = target().migratedWithin4M(CustomerInformation)
-      }
+
+    "the migration date is greater than 4 months ago" should {
+
       "return false" in {
-        val result = Test.result
+        val customerInfo: CustomerInformation = customerInformationMax.copy(customerMigratedToETMPDate = Some("2017-06-01"))
+        val result = {
+          mockDateServiceCall()
+          controller.migratedWithin4M(customerInfo)
+        }
         result shouldBe false
+      }
+    }
+
+    "the migration date is exactly 4 months ago" should {
+
+      "return false" in {
+        val customerInfo: CustomerInformation = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-01-01"))
+        val result = {
+          mockDateServiceCall()
+          controller.migratedWithin4M(customerInfo)
+        }
+        result shouldBe false
+      }
+    }
+
+    "there is no customerMigratedToETMPDate" should {
+
+      "return false" in {
+        controller.migratedWithin4M(customerInformationMin) shouldBe false
       }
     }
   }
-  "The dateCreatedBeforeMigDate() function" when {
-    "a valid customer details model and direct debit model is provided and the date is within 4 months" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = mockDateServiceCall()
-        val CustomerInformation : CustomerInformation =
-          customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
-        val directDebitResult: DirectDebitStatus =
-          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-01"))))
-        lazy val result: Boolean = target().dateCreatedBeforeMigDate(CustomerInformation,directDebitResult)
+
+  "The dateBeforeOrWithin7Days function" should {
+
+    val customerInfo = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-01-01"))
+
+    "return true" when {
+
+      "the DD date is before the migration date" in {
+        val ddStatus: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2017-04-01"))))
+
+        controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe true
       }
-      "return true" in {
-        val result = Test.result
-        result shouldBe true
+
+      "the DD date is the same day as the migration date" in {
+        val ddStatus: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-01"))))
+
+        controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe true
+      }
+
+      "the DD date is less than a week after the migration date" in {
+        val ddStatus: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-04"))))
+
+        controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe true
+      }
+
+      "the DD date is exactly 7 days after the migration date" in {
+        val ddStatus: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-08"))))
+
+        controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe true
       }
     }
-    "a valid customer details model is provided and the date is before 4 months" should {
-      object Test extends DirectDebitInterruptTest {
-        override def setup(): Any = mockDateServiceCall()
-        val CustomerInformation : CustomerInformation =
-          customerInformationMax.copy(customerMigratedToETMPDate = Some("2017-06-01"))
-        val directDebitResult: DirectDebitStatus =
-          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-04-01"))))
-        lazy val result: Boolean = target().dateCreatedBeforeMigDate(CustomerInformation, directDebitResult)
-      }
-      "return false" in {
-        val result = Test.result
-        result shouldBe false
+
+    "return false" when {
+
+      "the DD date is greater than a week after the migration date" in {
+        val ddStatus: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-09"))))
+
+        controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe false
       }
     }
   }
 }
-
