@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import utils.Money
+package utils
 
-@this()
+import play.twirl.api.Html
+import uk.gov.hmrc.play.views.helpers.{MoneyPounds, RenderableMoneyMessage}
 
-@(value: BigDecimal)
-
-@if(value.isWhole){
-  @Money.pounds(value)
-}else{
-  @Money.pounds(value, 2)
+object Money {
+  def pounds(value: BigDecimal, decimalPlaces: Int = 0): Html =
+    RenderableMoneyMessage(MoneyPounds(value, decimalPlaces)).render
 }

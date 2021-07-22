@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import utils.Money
+package utils
 
-@this()
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
-@(value: BigDecimal)
+object StopOnFirstFail {
 
-@if(value.isWhole){
-  @Money.pounds(value)
-}else{
-  @Money.pounds(value, 2)
+  def apply[T](constraints: Constraint[T]*) = Constraint { field: T =>
+    constraints.toList dropWhile (_ (field) == Valid) match {
+      case Nil => Valid
+      case constraint :: _ => constraint(field)
+    }
+  }
+
+  def constraint[T](message: String, validator: (T) => Boolean)=
+    Constraint((data: T) => if (validator(data)) Valid else Invalid(Seq(ValidationError(message))))
 }
