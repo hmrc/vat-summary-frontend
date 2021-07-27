@@ -46,7 +46,6 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     val certDate = s"$certDateRow > dd"
     val aboutTheBusinessHeading = "#content > div:nth-child(4) > div.govuk-grid-column-two-thirds > h2"
     val businessNameRow = "#content > div:nth-child(4) > .govuk-grid-column-full > dl:nth-child(1) > div"
-//      "#content > div:nth-child(5) > div.govuk-grid-column-full.card-full > dl:nth-child(1) > div"
     val businessNameTitle = s"$businessNameRow > dt"
     val businessName = s"$businessNameRow > dd"
     val tradingNameRow = "#content > div:nth-child(4) > div.govuk-grid-column-full.card-full > dl:nth-child(2) > div"
