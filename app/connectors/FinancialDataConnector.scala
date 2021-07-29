@@ -17,24 +17,24 @@
 package connectors
 
 import java.time.LocalDate
+
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.DirectDebitStatus
-
 import javax.inject.{Inject, Singleton}
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
-import play.api.Logger
 import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FinancialDataConnector @Inject()(http: HttpClient,
                                        appConfig: AppConfig,
-                                       metrics: MetricsService) {
+                                       metrics: MetricsService) extends LoggerUtil{
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
 
@@ -51,11 +51,11 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       .map {
         case payments@Right(_) =>
           timer.stop()
-          Logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
+          logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
           metrics.getOpenPaymentsCallFailureCounter.inc()
-          Logger.warn("FinancialDataConnector received error: " + error.message)
+          logger.warn("FinancialDataConnector received error: " + error.message)
           httpError
       }
   }
@@ -74,11 +74,11 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       .map {
         case payments@Right(_) =>
           timer.stop()
-          Logger.debug(s"[FinancialDataConnector][getVatLiabilities] Payments: \n\n $payments")
+          logger.debug(s"[FinancialDataConnector][getVatLiabilities] Payments: \n\n $payments")
           payments
         case httpError@Left(error) =>
           metrics.getPaymentHistoryFailureCounter.inc()
-          Logger.warn("[FinancialDataConnector][getVatLiabilities] received error: " + error.message)
+          logger.warn("[FinancialDataConnector][getVatLiabilities] received error: " + error.message)
           httpError
       }
   }
@@ -96,7 +96,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
         directDebitStatus
       case httpError@Left(error) =>
         metrics.getDirectDebitStatusFailureCounter.inc()
-        Logger.warn("FinancialDataConnector received error: " + error.message)
+        logger.warn("FinancialDataConnector received error: " + error.message)
         httpError
     }
   }

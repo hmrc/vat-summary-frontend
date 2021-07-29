@@ -31,12 +31,12 @@ import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
 import models.viewModels.VatDetailsViewModel
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil
 import views.html.vatDetails.Details
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -55,7 +55,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
                                      detailsView: Details,
                                      serviceErrorHandler: ServiceErrorHandler,
                                      DDInterrupt: DDInterruptPredicate)
-  extends FrontendController(mcc) with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
@@ -104,17 +104,17 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
 
                 Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*)
               case _ =>
-                Logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
+                logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
                   "Email address not returned from vat-subscription.")
                 serviceErrorHandler.showInternalServerError
             }
           case _ =>
-            Logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
+            logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
               "Email status not returned from vat-subscription.")
             serviceErrorHandler.showInternalServerError
         }
         case Left(_) =>
-          Logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Could not retrieve account details.")
+          logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] Could not retrieve account details.")
           serviceErrorHandler.showInternalServerError
       }
   }
@@ -222,7 +222,7 @@ class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthSe
     accountDetails match {
       case Right(model) =>
         if (model.details.entityName.isEmpty) {
-          Logger.warn("[VatDetailsController][retrieveDisplayedName] - No entity name was found on record")
+          logger.warn("[VatDetailsController][retrieveDisplayedName] - No entity name was found on record")
         }
         model.details.entityName
       case Left(_) => None

@@ -24,13 +24,13 @@ import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments.{OpenPaymentsModel, Payment, PaymentOnAccount}
 import models.viewModels.OpenPaymentsViewModel
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
 import services.{DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, OpenPayments}
 
@@ -50,7 +50,7 @@ class OpenPaymentsController @Inject()(val enrolmentsAuthService: EnrolmentsAuth
                                        paymentsError: PaymentsError,
                                        openPaymentsPage: OpenPayments,
                                        DDInterrupt: DDInterruptPredicate)
-extends FrontendController(mcc) with I18nSupport {
+extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def openPayments(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
@@ -73,7 +73,7 @@ extends FrontendController(mcc) with I18nSupport {
         auditEvent(user, Seq.empty)
         Ok(noPayments(user, hasActiveDirectDebit, serviceInfoContent))
       case Left(error) =>
-        Logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
+        logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
         InternalServerError(paymentsError())
     }
   }

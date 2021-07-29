@@ -20,17 +20,17 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
-import play.api.Logger
 import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentsConnector @Inject()(http: HttpClient,
                                   appConfig: AppConfig,
-                                  metrics: MetricsService) {
+                                  metrics: MetricsService) extends LoggerUtil{
 
   private[connectors] def vatUrl(chargeType: String): String =
     appConfig.paymentsServiceUrl + appConfig.payViewAndChange + chargeType + "/journey/start"
@@ -49,7 +49,7 @@ class PaymentsConnector @Inject()(http: HttpClient,
           url
         case httpError@Left(error) =>
           metrics.postSetupPaymentsJourneyCounter.inc()
-          Logger.warn("PaymentsConnector received error: " + error.message)
+          logger.warn("PaymentsConnector received error: " + error.message)
           httpError
       }
   }

@@ -22,7 +22,6 @@ import config.AppConfig
 import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import javax.inject.{Inject, Singleton}
 import models.User
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
@@ -32,6 +31,7 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.Unauthorised
 import config.ServiceErrorHandler
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +44,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
                                      val serviceErrorHandler: ServiceErrorHandler,
                                      implicit val appConfig: AppConfig,
                                      implicit val ec: ExecutionContext,
-                                     unauthorised: Unauthorised) extends FrontendController(mcc) with I18nSupport {
+                                     unauthorised: Unauthorised) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result],
                        financialRequest: Boolean = false,
@@ -58,20 +58,20 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
             if(allowAgentAccess) {
               agentPredicate.authoriseAsAgent(block)
             } else {
-              Logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
+              logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
               Future.successful(Redirect(appConfig.agentClientLookupHubUrl))
             }
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, financialRequest)
           case _ =>
-            Logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
+            logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
             Future.successful(serviceErrorHandler.showInternalServerError)
         } recoverWith {
           case _: NoActiveSession => Future.successful(Redirect(appConfig.signInUrl))
           case _: InsufficientEnrolments =>
-            Logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
+            logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
             Future.successful(Forbidden(unauthorised()))
           case _: AuthorisationException =>
-            Logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
+            logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
             Future.successful(Forbidden(unauthorised()))
         }
   }
@@ -96,23 +96,23 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
             case Some("false") => checkHybridAndInsolvency(block, financialRequest)
             case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
               case Right(response) if response.details.isInsolventWithoutAccess =>
-                Logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
+                logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
                 Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
               case Right(_) =>
-                Logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
+                logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
                 checkHybridAndInsolvency(block, financialRequest)
               case _ =>
-                Logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
+                logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
                 Future.successful(serviceErrorHandler.showInternalServerError)
             }
           }
 
       } getOrElse {
-        Logger.warn("[AuthPredicate][authoriseAsNonAgent] Non-agent with invalid VRN")
+        logger.warn("[AuthPredicate][authoriseAsNonAgent] Non-agent with invalid VRN")
         Future.successful(serviceErrorHandler.showInternalServerError)
       }
     } else {
-      Logger.debug("[AuthPredicate][authoriseAsNonAgent] Non-agent with no HMRC-MTD-VAT enrolment. Rendering unauthorised view.")
+      logger.debug("[AuthPredicate][authoriseAsNonAgent] Non-agent with no HMRC-MTD-VAT enrolment. Rendering unauthorised view.")
       Future.successful(Forbidden(unauthorised()))
     }
   }

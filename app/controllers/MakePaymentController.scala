@@ -22,12 +22,12 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments._
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.PaymentsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil
 import views.html.errors.PaymentsError
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +40,7 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
                                       paymentsError: PaymentsError)
                                      (implicit ec: ExecutionContext,
                                       appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def makePayment(amountInPence: Long,
                   taxPeriodMonth: Int,
@@ -100,11 +100,11 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
           makePaymentHandoff(paymentDetails)
 
         } else if(chargeReference == "noCR") {
-          Logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs a charge " +
+          logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs a charge " +
             "reference, but this payment does not have one")
           Future.successful(InternalServerError(paymentsError()))
         } else {
-          Logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs to have " +
+          logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs to have " +
             "period information")
           Future.successful(InternalServerError(paymentsError()))
         }
@@ -121,7 +121,7 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
         )
         Redirect(url)
       case Left(error) =>
-        Logger.warn("[MakePaymentController][makePayment] error: " + error.toString)
+        logger.warn("[MakePaymentController][makePayment] error: " + error.toString)
         InternalServerError(paymentsError())
     }
   }

@@ -29,7 +29,7 @@ import uk.gov.hmrc.play.bootstrap.binders.{AbsoluteWithHostnameFromAllowlist, On
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.interrupt.{DDInterruptExistingDD, DDInterruptNoDD}
-import play.api.Logger
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,7 +41,7 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
                                       ddInterruptNoDDView: DDInterruptNoDD,
                                       ddInterruptExistingDDView: DDInterruptExistingDD)
                                      (implicit appConfig: AppConfig , ec: ExecutionContext)
-  extends FrontendController(mcc) with I18nSupport{
+  extends FrontendController(mcc) with I18nSupport with LoggerUtil{
 
   def extractRedirectUrl(url: String)(implicit appConfig: AppConfig): Option[String] = {
     try {
@@ -50,16 +50,16 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
           case Right(value) =>
             Some(value.toString())
           case Left(_) =>
-            Logger.warn("[DDInterruptController][extractRedirectUrl] redirectUrl was an invalid absolute url")
+            logger.warn("[DDInterruptController][extractRedirectUrl] redirectUrl was an invalid absolute url")
             None
         }
       } else {
-        Logger.warn("[DDInterruptController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
+        logger.warn("[DDInterruptController][extractRedirectUrl] couldn't create ContinueUrl from empty string.")
         None
       }
     } catch {
       case e: Exception =>
-        Logger.warn("[DDInterruptController][extractRedirectUrl] couldn't create ContinueUrl from what was provided.", e)
+        logger.warn("[DDInterruptController][extractRedirectUrl] couldn't create ContinueUrl from what was provided.", e)
         None
     }
   }

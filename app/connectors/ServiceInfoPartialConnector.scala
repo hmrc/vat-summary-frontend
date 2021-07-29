@@ -18,13 +18,13 @@ package connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Request
 import play.twirl.api.Html
 import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.partials.HtmlPartial._
 import uk.gov.hmrc.play.partials.{HeaderCarrierForPartialsConverter, HtmlPartial}
+import utils.LoggerUtil
 import views.html.templates.BtaNavigationLinks
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -34,7 +34,7 @@ class ServiceInfoPartialConnector @Inject()(val http: HttpClient,
                                             hcForPartials: HeaderCarrierForPartialsConverter,
                                             btaNavigationLinks: BtaNavigationLinks)
                                            (implicit val messagesApi: MessagesApi,
-                                            val config: AppConfig) extends HtmlPartialHttpReads with I18nSupport {
+                                            val config: AppConfig) extends HtmlPartialHttpReads with I18nSupport with LoggerUtil{
   import hcForPartials._
 
   lazy val btaUrl: String = config.btaBaseUrl + "/business-account/partial/service-info"
@@ -45,7 +45,7 @@ class ServiceInfoPartialConnector @Inject()(val http: HttpClient,
         p.successfulContentOrElse(btaNavigationLinks())
     } recover {
       case _ =>
-        Logger.warn(s"[ServiceInfoPartialConnector][getServiceInfoPartial] - Unexpected future failed error")
+        logger.warn(s"[ServiceInfoPartialConnector][getServiceInfoPartial] - Unexpected future failed error")
         btaNavigationLinks()
     }
 }
