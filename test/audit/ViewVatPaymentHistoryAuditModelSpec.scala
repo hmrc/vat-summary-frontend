@@ -21,10 +21,11 @@ import java.time.LocalDate
 import _root_.models.payments._
 import _root_.models.viewModels.PaymentsHistoryModel
 import audit.models.ViewVatPaymentHistoryAuditModel
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class ViewVatPaymentHistoryAuditModelSpec extends UnitSpec {
+class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers {
 
   val onePayment: Seq[PaymentsHistoryModel] =
     Seq(

@@ -26,6 +26,7 @@ import models.errors.{BadRequestError, NextPaymentError, ObligationsError}
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments._
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.{ExecutionContext, Future}
 

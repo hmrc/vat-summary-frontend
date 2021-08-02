@@ -18,10 +18,11 @@ package models
 
 import java.time.LocalDate
 
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class DeregistrationSpec extends UnitSpec {
+class DeregistrationSpec extends AnyWordSpecLike with Matchers {
 
   "Deregistration Model" should {
 

@@ -21,12 +21,13 @@ import java.time.LocalDate
 import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
 import models.errors._
 import models.obligations.{VatReturnObligation, VatReturnObligations}
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class VatReturnObligationsHttpParserSpec extends UnitSpec {
+class VatReturnObligationsHttpParserSpec extends AnyWordSpecLike with Matchers {
 
   "VatReturnsReads" when {
 

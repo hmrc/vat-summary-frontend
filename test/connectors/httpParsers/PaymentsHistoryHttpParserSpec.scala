@@ -23,12 +23,13 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors._
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentsHistoryHttpParserSpec extends UnitSpec {
+class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
 
   val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.OK, Json.parse(
     s"""{

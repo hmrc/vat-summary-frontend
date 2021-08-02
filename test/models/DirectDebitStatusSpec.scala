@@ -17,9 +17,10 @@
 package models
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class DirectDebitStatusSpec extends UnitSpec {
+class DirectDebitStatusSpec extends AnyWordSpecLike with Matchers {
 
   "Direct debit JSON should parse to a DirectDebitStatus model correctly" when {
 

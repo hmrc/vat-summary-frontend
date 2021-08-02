@@ -31,7 +31,7 @@ import scala.concurrent.Future
 class FinancialPredicateSpec extends ControllerBaseSpec {
 
   def target(request: Request[AnyContent]): Future[Result] = financialPredicate.authoriseFinancialAction({
-    _ => _ => Ok("welcome")
+    _ => _ => Future.successful(Ok("welcome"))
   })(request, User("999999999"))
 
   ".authoriseFinancialAction" when {
@@ -49,7 +49,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
       "they are hybrid" should {
 
         lazy val result = {
-          mockCustomerInfo(Right(customerInformationHybrid))
+          Future.successful(Right(customerInformationHybrid))
           target(fakeRequest)
         }
 
@@ -67,7 +67,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
         "return 500" in {
           val result = {
             mockDateServiceCall()
-            mockCustomerInfo(Right(customerInformationInsolventFuture))
+            Future.successful(Right(customerInformationInsolventFuture))
             target(fakeRequest)
           }
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -78,7 +78,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
 
         lazy val result = {
           mockDateServiceCall()
-          mockCustomerInfo(Right(customerInformationMax))
+          Future.successful(Right(customerInformationMax))
           target(fakeRequest)
         }
 
@@ -96,7 +96,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
 
         "return 500" in {
           lazy val result = {
-            mockCustomerInfo(Left(UnknownError))
+            Future.successful(Left(UnknownError))
             target(fakeRequest)
           }
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR

@@ -18,10 +18,11 @@ package models.payments
 
 import java.time.LocalDate
 
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentSpec extends UnitSpec {
+class PaymentSpec extends AnyWordSpecLike with Matchers {
 
   "paymentReads" when {
 

@@ -18,9 +18,10 @@ package models
 
 import common.TestJson.{customerInfoJsonMax, customerInfoJsonMin}
 import common.TestModels.{customerInformationMax, customerInformationMin}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
 
-class CustomerInformationSpec extends UnitSpec {
+class CustomerInformationSpec extends AnyWordSpecLike with Matchers  {
 
   "A CustomerInformation object" when {
 

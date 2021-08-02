@@ -21,12 +21,13 @@ import java.time.LocalDate
 import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 import models.errors._
 import models.payments._
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentsHttpParserSpec extends UnitSpec {
+class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
 
   val paymentOnAccountReturnChargeMainType: String = "VAT POA Return Charge"
   val paymentOnAccountInstalmentsMainType: String = "VAT POA Instalments"

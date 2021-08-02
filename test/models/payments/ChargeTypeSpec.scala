@@ -16,9 +16,10 @@
 
 package models.payments
 
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
 
-class ChargeTypeSpec extends UnitSpec {
+class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
 
   "Charge type apply method" when {
 

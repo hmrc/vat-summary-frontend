@@ -16,10 +16,11 @@
 
 package models.payments
 
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json._
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentDetailsModelSpec extends UnitSpec {
+class PaymentDetailsModelSpec extends AnyWordSpecLike with Matchers  {
 
   "PaymentDetailsModel.apply" when {
     "not given a chargeReference" when {

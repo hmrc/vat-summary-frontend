@@ -28,7 +28,7 @@ import scala.concurrent.Future
 class DDInterruptPredicateSpec extends ControllerBaseSpec {
 
   def target(request: Request[AnyContent]): Future[Result] = ddInterruptPredicate.interruptCheck({
-    _ => Ok("Welcome")
+    _ => Future.successful(Ok("Welcome"))
   })(request)
 
   ".interruptCheck" when {

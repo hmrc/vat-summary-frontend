@@ -38,7 +38,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
   def target(request: Request[AnyContent]): Future[Result] = authorisedController.authorisedAction({
     _ =>
       _ =>
-        Ok("welcome")
+        Future.successful(Ok("welcome"))
   })(request)
 
   def mockAuth(authResponse: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
@@ -89,7 +89,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Right(customerInformationInsolvent))
+            mockCustomerInfo(Future.successful(Right(customerInformationInsolvent)))
             target(FakeRequest())
           }
 
@@ -106,7 +106,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Right(customerInformationMax))
+            mockCustomerInfo(Future.successful(Right(customerInformationMax)))
             target(FakeRequest())
           }
 
@@ -123,7 +123,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Left(UnknownError))
+            mockCustomerInfo(Future.successful(Left(UnknownError)))
             target(FakeRequest())
           }
 
@@ -141,7 +141,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
         await(target(fakeRequest))
       }
       "return Forbidden (403)" in {
-        status(result) shouldBe Status.FORBIDDEN
+        result shouldBe Status.FORBIDDEN
       }
 
       "render the Not Signed Up page" in {

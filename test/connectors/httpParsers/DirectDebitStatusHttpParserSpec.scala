@@ -19,12 +19,13 @@ package connectors.httpParsers
 import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 import models.DirectDebitStatus
 import models.errors._
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class DirectDebitStatusHttpParserSpec extends UnitSpec {
+class DirectDebitStatusHttpParserSpec extends AnyWordSpecLike with Matchers {
 
   "DirectDebitStatusReads" when {
 

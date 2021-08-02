@@ -53,7 +53,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
       if (customerInfoCallExpected) {
         (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(Right(customerInformationMax))
+          .returns(Future.successful(Right(customerInformationMax)))
       }
 
       (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
@@ -111,7 +111,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(Right(customerInformationMax))
+              .returns(Future.successful(Right(customerInformationMax)))
             (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
               .stubs(*, *, *)
               .returns(serviceInfoServiceResult)
@@ -143,7 +143,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
           private val result = target.show()(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
           status(result) shouldBe Status.FORBIDDEN
-          Jsoup.parse(bodyOf(result)).title() shouldBe "You can’t use this service yet - VAT - GOV.UK"
+          Jsoup.parse(contentAsString(result)).title() shouldBe "You can’t use this service yet - VAT - GOV.UK"
         }
       }
     }

@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.partials.{HeaderCarrierForPartialsConverter, HtmlPartial
 import uk.gov.hmrc.play.partials.HtmlPartial._
 import views.html.templates.BtaNavigationLinks
 
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {

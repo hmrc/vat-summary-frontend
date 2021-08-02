@@ -18,10 +18,11 @@ package models.obligations
 
 import java.time.LocalDate
 
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class VatReturnObligationsSpec extends UnitSpec {
+class VatReturnObligationsSpec extends AnyWordSpecLike with Matchers {
 
   "An obligation" should {
 

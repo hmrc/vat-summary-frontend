@@ -333,7 +333,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           }
 
           val result: Result = await(target.openPayments()(fakeRequest))
-          val document: Document = Jsoup.parse(bodyOf(result))
+          val document: Document = Jsoup.parse(contentAsString(result))
 
 
           document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"

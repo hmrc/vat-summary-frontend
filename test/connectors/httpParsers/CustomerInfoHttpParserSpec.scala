@@ -19,13 +19,13 @@ package connectors.httpParsers
 import common.TestJson.customerInfoJsonMax
 import common.TestModels.customerInformationMax
 import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
+import controllers.ControllerBaseSpec
 import models.errors._
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
 
-class CustomerInfoHttpParserSpec extends UnitSpec {
+class CustomerInfoHttpParserSpec extends ControllerBaseSpec {
 
   "CustomerInfoReads" when {
 

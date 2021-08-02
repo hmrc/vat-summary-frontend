@@ -16,9 +16,10 @@
 
 package views.templates.payments
 
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
 
-class PaymentMessageHelperSpec extends UnitSpec {
+class PaymentMessageHelperSpec extends AnyWordSpecLike with Matchers {
 
   "Calling getChargeType" when {
 

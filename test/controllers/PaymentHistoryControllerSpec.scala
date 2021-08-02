@@ -40,6 +40,7 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.StandardError
 import views.html.payments.PaymentHistory
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -386,14 +387,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     "the account details service response contains customer info" should {
 
       "return the date" in new Test {
-        await(target.getMigratedToETMPDate(Right(customerInformationMax))) shouldBe Some(LocalDate.parse("2017-05-06"))
+        Future(target.getMigratedToETMPDate(Right(customerInformationMax))) shouldBe Some(LocalDate.parse("2017-05-06"))
       }
     }
 
     "the account details service response contains an error" should {
 
       "return None" in new Test {
-        await(target.getMigratedToETMPDate(Left(UnknownError))) shouldBe None
+        Future(target.getMigratedToETMPDate(Left(UnknownError))) shouldBe None
       }
     }
   }

@@ -55,7 +55,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
     def target(request: Request[AnyContent]): Future[Result] = mockAgentPredicate.authoriseAsAgent({
       _ =>
         _ =>
-          Ok("welcome")
+          Future.successful(Ok("welcome"))
     })(request)
   }
 
@@ -76,7 +76,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
             lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
             status(result) shouldBe Status.OK
-            await(bodyOf(result)) shouldBe "welcome"
+            contentAsString(result) shouldBe "welcome"
           }
         }
 
@@ -115,7 +115,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
           lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 
-          await(status(result)) shouldBe Status.SEE_OTHER
+          status(result) shouldBe Status.SEE_OTHER
           redirectLocation(result) shouldBe Some(mockAppConfig.agentClientUnauthorisedUrl("/"))
         }
       }

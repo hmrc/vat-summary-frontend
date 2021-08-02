@@ -31,8 +31,8 @@ object User {
 
   def extractVatEnrolments(enrolments: Enrolments): Set[Enrolment] = {
     enrolments.enrolments.collect {
-      case mtd@Enrolment(EnrolmentKeys.mtdVatEnrolmentKey, EnrolmentIdentifier(EnrolmentKeys.mtdVatIdentifierKey, _) :: _, _, _) => mtd
-      case nonMtd@Enrolment(EnrolmentKeys.vatDecEnrolmentKey | EnrolmentKeys.vatVarEnrolmentKey, EnrolmentIdentifier(_, _) :: _, _, _) => nonMtd
+      case mtd@Enrolment(EnrolmentKeys.mtdVatEnrolmentKey, Seq(EnrolmentIdentifier(EnrolmentKeys.mtdVatIdentifierKey, _)), _, _) => mtd
+      case nonMtd@Enrolment(EnrolmentKeys.vatDecEnrolmentKey | EnrolmentKeys.vatVarEnrolmentKey, Seq(EnrolmentIdentifier(_, _)), _, _) => nonMtd
     }
   }
 }
