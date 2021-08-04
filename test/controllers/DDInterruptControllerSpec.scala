@@ -104,7 +104,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
         }
 
         "return no DD interrupt view" in {
-          await(bodyOf(Test.result))
+          contentAsString(Test.result)
             .contains("You need to check your payment method") shouldBe true
         }
 
@@ -130,7 +130,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
       }
 
       "return the existing DD interrupt view" in {
-        await(bodyOf(Test.result))
+        contentAsString(Test.result)
           .contains("You need to validate your details for Direct Debit") shouldBe true
       }
 

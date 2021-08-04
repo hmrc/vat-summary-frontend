@@ -87,7 +87,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
       val containsNonMtdVat: Boolean = User.containsNonMtdVat(vatEnrolments)
 
       vatEnrolments.collectFirst {
-        case Enrolment(Keys.mtdVatEnrolmentKey, EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn) :: _, status, _) =>
+        case Enrolment(Keys.mtdVatEnrolmentKey, Seq(EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn)), status, _) =>
 
           implicit val user: User = User(vrn, status == Keys.activated, containsNonMtdVat)
 

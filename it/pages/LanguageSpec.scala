@@ -22,6 +22,7 @@ import org.jsoup.nodes.Document
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.CustomerInfoStub.customerInfoJson
 import stubs._
+import play.api.test.Helpers._
 
 class LanguageSpec extends IntegrationBaseSpec {
 

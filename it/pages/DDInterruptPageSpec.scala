@@ -23,8 +23,9 @@ import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub}
 import stubs.CustomerInfoStub.customerInfoJsonDD
 import play.api.http.Status
 import config.AppConfig
+import play.api.test.Helpers._
 
-class DDInterruptPageSpec extends IntegrationBaseSpec{
+class DDInterruptPageSpec extends IntegrationBaseSpec {
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   val redirectUrl = "/vat-overview"
   private trait Test {

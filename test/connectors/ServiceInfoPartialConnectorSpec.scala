@@ -24,6 +24,7 @@ import uk.gov.hmrc.http.HttpClient
 import uk.gov.hmrc.play.partials.{HeaderCarrierForPartialsConverter, HtmlPartial}
 import uk.gov.hmrc.play.partials.HtmlPartial._
 import views.html.templates.BtaNavigationLinks
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 
 import scala.concurrent.{ExecutionContext, Future}

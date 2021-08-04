@@ -26,6 +26,7 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import play.api.libs.json.Json
 import stubs.VatObligationsStub
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers._
 
 
 class VatObligationsConnectorISpec extends IntegrationBaseSpec {

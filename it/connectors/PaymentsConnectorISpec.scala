@@ -22,6 +22,7 @@ import models.errors.UnexpectedStatusError
 import models.payments.{ChargeType, PaymentDetailsModel, ReturnDebitCharge}
 import stubs.PaymentsStub
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers._
 
 class PaymentsConnectorISpec extends IntegrationBaseSpec {
 

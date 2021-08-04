@@ -71,7 +71,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
             (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *, *)
-              .returns(authResponse)
+              .returns(Future.successful(authResponse))
 
             lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
 

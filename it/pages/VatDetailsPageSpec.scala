@@ -24,6 +24,7 @@ import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.CustomerInfoStub.{customerInfoJson, customerInfoJsonNonMtdfb}
 import stubs._
+import play.api.test.Helpers._
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]

@@ -25,6 +25,7 @@ import models.errors.ServerSideError
 import stubs.CustomerInfoStub
 import stubs.CustomerInfoStub.customerInfoJson
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers._
 
 
 class VatSubscriptionConnectorISpec extends IntegrationBaseSpec {

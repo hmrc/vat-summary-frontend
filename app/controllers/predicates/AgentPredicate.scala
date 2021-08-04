@@ -53,7 +53,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
           .retrieve(allEnrolments) {
             enrolments =>
               enrolments.enrolments.collectFirst {
-                case Enrolment(EnrolmentKeys.agentEnrolmentKey, EnrolmentIdentifier(_, arn) :: _, EnrolmentKeys.activated, _) => arn
+                case Enrolment(EnrolmentKeys.agentEnrolmentKey, Seq(EnrolmentIdentifier(_, arn)), EnrolmentKeys.activated, _) => arn
               } match {
                 case Some(arn) => block(request)(User(vrn, arn = Some(arn)))
                 case None =>

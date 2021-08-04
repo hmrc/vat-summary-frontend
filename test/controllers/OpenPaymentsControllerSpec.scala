@@ -39,6 +39,7 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, OpenPayments}
+import play.api.test.Helpers.contentAsString
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -129,7 +130,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
           (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(accountDetailsResponse)
+            .returns(Future.successful(accountDetailsResponse))
         }
 
         private val result = target.openPayments()(fakeRequest)
@@ -153,7 +154,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
           private val result = target.openPayments()(fakeRequest)
@@ -171,11 +172,11 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
-          val result: Result = await(target.openPayments()(fakeRequest))
-          val document: Document = Jsoup.parse(bodyOf(result))
+          val result: Future[Result] = target.openPayments()(fakeRequest)
+          val document: Document = Jsoup.parse(contentAsString(result))
 
           document.select("h1").first().text() shouldBe "What you owe"
         }
@@ -194,11 +195,11 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
-          val result: Result = await(target.openPayments()(fakeRequest))
-          val document: Document = Jsoup.parse(bodyOf(result))
+          val result: Future[Result] = target.openPayments()(fakeRequest)
+          val document: Document = Jsoup.parse(contentAsString(result))
 
           document.select("payment-2") shouldBe empty
 
@@ -218,7 +219,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
           private val result = target.openPayments()(fakeRequest)
@@ -236,11 +237,11 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
-          val result: Result = await(target.openPayments()(fakeRequest))
-          val document: Document = Jsoup.parse(bodyOf(result))
+          val result: Future[Result] = target.openPayments()(fakeRequest)
+          val document: Document = Jsoup.parse(contentAsString(result))
 
           document.select("h1").first().text() shouldBe "What you owe"
         }
@@ -288,11 +289,11 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
-          val result: Result = await(target.openPayments()(fakeRequest))
-          val document: Document = Jsoup.parse(bodyOf(result))
+          val result: Future[Result] = target.openPayments()(fakeRequest)
+          val document: Document = Jsoup.parse(contentAsString(result))
 
           document.select("h1").first().text() shouldBe "What you owe"
         }
@@ -310,7 +311,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
           private val result = target.openPayments()(fakeRequest)
@@ -329,10 +330,10 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
               .expects(*, *, *)
-              .returns(accountDetailsResponse)
+              .returns(Future.successful(accountDetailsResponse))
           }
 
-          val result: Result = await(target.openPayments()(fakeRequest))
+          val result: Future[Result] = target.openPayments()(fakeRequest)
           val document: Document = Jsoup.parse(contentAsString(result))
 
 
@@ -353,7 +354,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
           (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *)
-            .returns(Left(UnknownError))
+            .returns(Future.successful(Left(UnknownError)))
         }
 
         private val result = target.openPayments()(fakeRequest)

@@ -56,20 +56,20 @@ val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "5.7.0",
   "uk.gov.hmrc"       %% "play-frontend-govuk"        % "0.80.0-play-28",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "0.82.0-play-28",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "0.85.0-play-28",
   "uk.gov.hmrc"       %% "play-partials"              % "8.1.0-play-28",
   "uk.gov.hmrc"       %% "play-language"              % "5.1.0-play-28",
-  "com.typesafe.play" %% "play-json-joda"             % "2.9.2"
+  "com.typesafe.play" %% "play-json-joda"             % "2.7.4"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "org.scalatest"           %% "scalatest"                    % "3.1.4"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
-  "org.jsoup"               %  "jsoup"                        % "1.13.1"            % scope,
+  "org.jsoup"               %  "jsoup"                        % "1.14.1"            % scope,
   "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.1.0"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
-  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.28.1"            % scope,
-  "com.vladsch.flexmark"    % "flexmark-all"                  % "0.36.8" % scope
+  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
+  "com.vladsch.flexmark"    % "flexmark-all"                  % "0.36.8"            % scope
 )
 
 TwirlKeys.templateImports ++= Seq(

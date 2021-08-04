@@ -31,6 +31,7 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments, InsufficientEnrolments}
 
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthorisedControllerSpec extends ControllerBaseSpec {
@@ -136,16 +137,16 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
     "they do NOT have an active HMRC-MTD-VAT enrolment" should {
 
-      lazy val result = {
+      lazy val result :Future[Result] = {
         mockAuth(Future.failed(InsufficientEnrolments()))
-        await(target(fakeRequest))
+        target(fakeRequest)
       }
       "return Forbidden (403)" in {
-        result shouldBe Status.FORBIDDEN
+        status(result) shouldBe Status.FORBIDDEN
       }
 
       "render the Not Signed Up page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
       }
     }
   }

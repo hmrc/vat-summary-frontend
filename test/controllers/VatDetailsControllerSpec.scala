@@ -40,6 +40,7 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.vatDetails.Details
 
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsControllerSpec extends ControllerBaseSpec {
@@ -136,7 +137,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
 
       "return the VAT overview view" in {
-        await(bodyOf(Test.result)).contains("Your VAT account") shouldBe true
+        contentAsString(Test.result).contains("Your VAT account") shouldBe true
       }
 
       "put a customerMigratedToETMPDate key into the session" in {
@@ -239,7 +240,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       lazy val result: Future[Result] = target().details()(fakeRequest)
       status(result) shouldBe OK
-      await(bodyOf(result)).contains(messages("returnObligation.submit")) shouldBe true
+      contentAsString(result).contains(messages("returnObligation.submit")) shouldBe true
     }
 
     "the user is a missing trader" should {

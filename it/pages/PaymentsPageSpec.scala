@@ -24,6 +24,7 @@ import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.CustomerInfoStub.customerInfoJson
 import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, ServiceInfoStub}
+import play.api.test.Helpers._
 
 class PaymentsPageSpec extends IntegrationBaseSpec {
 

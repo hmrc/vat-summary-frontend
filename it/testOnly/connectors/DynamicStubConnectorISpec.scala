@@ -3,11 +3,11 @@ package testOnly.connectors
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 import testOnly.models.{DataModel, SchemaModel}
 import testOnly.stubs.DynamicStub
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
@@ -31,7 +31,7 @@ class DynamicStubConnectorISpec extends IntegrationBaseSpec {
         setupStubs()
         val result: Future[HttpResponse] = connector.clearStub(exampleService)
 
-        result.status shouldBe OK
+        await(result).status shouldBe OK
       }
     }
   }
@@ -46,7 +46,7 @@ class DynamicStubConnectorISpec extends IntegrationBaseSpec {
         setupStubs()
         val result: Future[HttpResponse] = connector.populateStub(DataModel("/test", None, "GET", OK, None), exampleService)
 
-        result.status shouldBe OK
+        await(result).status shouldBe OK
       }
     }
   }
@@ -90,7 +90,7 @@ class DynamicStubConnectorISpec extends IntegrationBaseSpec {
         setupStubs()
         val result: Future[HttpResponse] = connector.populateSchema(SchemaModel("getFinancialData", "/test", "GET", jsonSchema, None), exampleService)
 
-        result.status shouldBe OK
+        await(result).status shouldBe OK
       }
     }
   }
@@ -105,7 +105,7 @@ class DynamicStubConnectorISpec extends IntegrationBaseSpec {
         setupStubs()
         val result: Future[HttpResponse] = connector.clearSchemas(exampleService)
 
-        result.status shouldBe OK
+        await(result).status shouldBe OK
       }
     }
   }
