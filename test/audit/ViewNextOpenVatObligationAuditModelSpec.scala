@@ -21,9 +21,10 @@ import java.time.LocalDate
 import _root_.models.User
 import _root_.models.obligations.{VatReturnObligation, VatReturnObligations}
 import audit.models.ViewNextOpenVatObligationAuditModel
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class ViewNextOpenVatObligationAuditModelSpec extends UnitSpec {
+class ViewNextOpenVatObligationAuditModelSpec extends AnyWordSpecLike with Matchers {
 
   val obligationOne = VatReturnObligation(
     LocalDate.parse("2018-01-01"),

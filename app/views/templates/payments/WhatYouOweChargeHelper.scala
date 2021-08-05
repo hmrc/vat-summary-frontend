@@ -18,12 +18,12 @@ package views.templates.payments
 
 import javax.inject.Inject
 import models.payments._
-import play.api.Logger
 import play.api.i18n.Messages
+import utils.LoggerUtil
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
-                                       implicit val messages: Messages) {
+                                       implicit val messages: Messages) extends LoggerUtil{
 
   private def paymentMessageHelper(): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
 
@@ -34,7 +34,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
         val descriptionText = PaymentMessageHelper.getFullDescription(desc, None, None)
         if (descriptionText.contains("{0}")) {
-          Logger.warn("[WhatYouOweChargeHelper][description] - " +
+          logger.warn("[WhatYouOweChargeHelper][description] - " +
             s"No date period was found for ${payment.chargeType}. Omitting description.")
           None
         } else {

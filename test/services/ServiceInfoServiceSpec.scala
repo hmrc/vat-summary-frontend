@@ -21,6 +21,7 @@ import controllers.ControllerBaseSpec
 import models.User
 import play.api.mvc.Request
 import play.twirl.api.{Html, HtmlFormat}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.{ExecutionContext, Future}
 

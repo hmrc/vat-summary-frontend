@@ -21,15 +21,16 @@ import connectors.VatSubscriptionConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{BadRequestError, CustomerInformationError}
 import models.{CustomerInformation, ServiceResponse}
-import org.scalamock.matchers.Matchers
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 
-class AccountDetailsServiceSpec extends UnitSpec with MockFactory with Matchers {
+class AccountDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers {
 
   private trait Test {
     val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInformationMax)

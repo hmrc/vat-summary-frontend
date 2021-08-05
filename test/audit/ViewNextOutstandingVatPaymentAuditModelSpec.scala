@@ -21,9 +21,10 @@ import java.time.LocalDate
 import _root_.models.User
 import _root_.models.payments.{Payment, Payments, ReturnDebitCharge}
 import audit.models.ViewNextOutstandingVatPaymentAuditModel
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
 
-class ViewNextOutstandingVatPaymentAuditModelSpec extends UnitSpec {
+class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with Matchers {
 
   val onePayment = Payments(
     Seq(

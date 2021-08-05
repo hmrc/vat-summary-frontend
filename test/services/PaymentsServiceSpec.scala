@@ -17,22 +17,25 @@
 package services
 
 import java.time.LocalDate
+
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import models.errors._
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import models.{DirectDebitStatus, ServiceResponse}
-import org.scalamock.matchers.Matchers
+import org.scalatest.matchers.should.Matchers
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
+
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with GuiceOneAppPerSuite {
+class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers with GuiceOneAppPerSuite {
 
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
@@ -151,7 +154,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
       def setup(): Unit = {
         (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
-          .returns(connectorResponse)
+          .returns(Future.successful(connectorResponse))
       }
 
       def target: PaymentsService = {
@@ -216,7 +219,7 @@ class PaymentsServiceSpec extends UnitSpec with MockFactory with Matchers with G
       def setup(): Unit = {
         (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *)
-          .returns(connectorResponse)
+          .returns(Future.successful(connectorResponse))
       }
 
       def target: PaymentsService = {

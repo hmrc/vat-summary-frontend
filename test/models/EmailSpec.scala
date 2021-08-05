@@ -16,10 +16,11 @@
 
 package models
 
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.{JsObject, Json}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class EmailSpec extends UnitSpec {
+class EmailSpec extends AnyWordSpecLike with Matchers {
 
   val correctMaxJson: JsObject = Json.obj(
     "emailAddress" -> "asdf@asdf.com",

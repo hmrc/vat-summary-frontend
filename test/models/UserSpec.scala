@@ -16,10 +16,11 @@
 
 package models
 
+import org.scalatest.wordspec.AnyWordSpecLike
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class UserSpec extends UnitSpec {
+class UserSpec extends AnyWordSpecLike with Matchers {
 
   "Creating a User with only a VRN" should {
 

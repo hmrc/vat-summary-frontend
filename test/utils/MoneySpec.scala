@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import utils.{MoneyPounds, RenderableMoneyMessage}
-import uk.gov.hmrc.play.test.UnitSpec
 
-class MoneyPoundsSpec extends UnitSpec with Matchers {
+
+class MoneyPoundsSpec extends AnyWordSpecLike with Matchers  {
 
   "quantity" should {
 

@@ -26,12 +26,12 @@ import controllers.predicates.DDInterruptPredicate
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil
 import views.html.payments.PaymentHistory
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,7 +50,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
                                          DDInterrupt: DDInterruptPredicate)
                                         (implicit val appConfig: AppConfig,
                                          auditingService: AuditingService)
-  extends FrontendController(mcc) with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def currentYear: Int = dateService.now().getYear
   def previousYear: Int = currentYear - 1
@@ -100,7 +100,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
               auditEvent(user.vrn, model.transactions)
               Ok(paymentHistoryView(model, serviceInfoContent))
             case None =>
-              Logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
+              logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
               serviceErrorHandler.showInternalServerError
           }
         }

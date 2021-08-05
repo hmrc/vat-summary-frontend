@@ -31,6 +31,7 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments, InsufficientEnrolments}
 
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthorisedControllerSpec extends ControllerBaseSpec {
@@ -38,7 +39,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
   def target(request: Request[AnyContent]): Future[Result] = authorisedController.authorisedAction({
     _ =>
       _ =>
-        Ok("welcome")
+        Future.successful(Ok("welcome"))
   })(request)
 
   def mockAuth(authResponse: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
@@ -89,7 +90,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Right(customerInformationInsolvent))
+            mockCustomerInfo(Future.successful(Right(customerInformationInsolvent)))
             target(FakeRequest())
           }
 
@@ -106,7 +107,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Right(customerInformationMax))
+            mockCustomerInfo(Future.successful(Right(customerInformationMax)))
             target(FakeRequest())
           }
 
@@ -123,7 +124,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Left(UnknownError))
+            mockCustomerInfo(Future.successful(Left(UnknownError)))
             target(FakeRequest())
           }
 
@@ -136,16 +137,16 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
     "they do NOT have an active HMRC-MTD-VAT enrolment" should {
 
-      lazy val result = {
+      lazy val result :Future[Result] = {
         mockAuth(Future.failed(InsufficientEnrolments()))
-        await(target(fakeRequest))
+        target(fakeRequest)
       }
       "return Forbidden (403)" in {
         status(result) shouldBe Status.FORBIDDEN
       }
 
       "render the Not Signed Up page" in {
-        Jsoup.parse(bodyOf(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
       }
     }
   }

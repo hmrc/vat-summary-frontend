@@ -16,9 +16,7 @@
 
 package controllers
 
-import play.api.Play
 import play.api.http.Status
-import play.api.mvc.Cookie
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -37,9 +35,13 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "use the English language" in {
-        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "en"
       }
+
+      "have the correct redirect location" in {
+        redirectLocation(result) shouldBe Some("/vat-through-software/vat-overview")
+      }
+
     }
 
     "providing the parameter 'cymraeg" should {
@@ -51,8 +53,11 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "use the Welsh language" in {
-        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "cy", None, "/", None, secure = false, httpOnly = true))
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "cy"
+      }
+
+      "have the correct redirect location" in {
+        redirectLocation(result) shouldBe Some("/vat-through-software/vat-overview")
       }
 
     }
@@ -67,8 +72,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "keep the current language" in {
-        cookies(result).get(Play.langCookieName(messagesApi)) shouldBe
-          Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = true))
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "en"
       }
     }
   }

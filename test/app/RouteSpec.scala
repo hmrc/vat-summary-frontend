@@ -16,10 +16,11 @@
 
 package app
 
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import uk.gov.hmrc.play.test.UnitSpec
 
-class RouteSpec extends UnitSpec with GuiceOneAppPerSuite {
+class RouteSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with Matchers   {
 
   "The route for the VAT details controller" should {
     "be /vat-through-software/vat-overview" in {

@@ -22,6 +22,7 @@ import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.CustomerInfoStub.customerInfoJson
 import stubs.{AuthStub, CustomerInfoStub, ServiceInfoStub}
+import play.api.test.Helpers._
 
 class VatCertificatePageSpec extends IntegrationBaseSpec {
 

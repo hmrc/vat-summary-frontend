@@ -18,12 +18,13 @@ package connectors.httpParsers
 
 import connectors.httpParsers.PaymentsRedirectUrlHttpParser.PaymentsRedirectUrlReads
 import models.errors._
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentsRedirectUrlHttpParserSpec extends UnitSpec {
+class PaymentsRedirectUrlHttpParserSpec extends AnyWordSpecLike with Matchers {
 
   "PaymentsRedirectUrlReads" when {
 

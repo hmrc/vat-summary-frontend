@@ -20,18 +20,18 @@ import audit.models.{AuditModel, ExtendedAuditModel}
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
-import play.api.Logger
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.{Disabled, Failure, Success}
 import uk.gov.hmrc.play.audit.model.{DataEvent, ExtendedDataEvent}
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConnector) {
+class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConnector) extends LoggerUtil{
 
   implicit val dateTimeJsReader: Reads[DateTime] = JodaReads.jodaDateReads("yyyyMMddHHmmss")
   implicit val dateTimeWriter: Writes[DateTime] = JodaWrites.jodaDateWrites("dd/MM/yyyy HH:mm:ss")
@@ -41,7 +41,7 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
 
   def audit(auditModel: AuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val dataEvent = toDataEvent(appConfig.appName, auditModel, path)
-    Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(dataEvent)}")
+    logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(dataEvent)}")
     handleAuditResult(auditConnector.sendEvent(dataEvent))
   }
 
@@ -56,7 +56,7 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
 
   def extendedAudit(auditModel: ExtendedAuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val extendedDataEvent = toExtendedDataEvent(appConfig.appName, auditModel, path)
-    Logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(extendedDataEvent)}")
+    logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(extendedDataEvent)}")
     handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
   }
 
@@ -76,11 +76,11 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
   private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext): Unit = auditResult.map {
     //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
     case Success =>
-      Logger.debug("Splunk Audit Successful")
+      logger.debug("Splunk Audit Successful")
     case Failure(err, _) =>
-      Logger.debug(s"Splunk Audit Error, message: $err")
+      logger.debug(s"Splunk Audit Error, message: $err")
     case Disabled =>
-      Logger.debug(s"Auditing Disabled")
+      logger.debug(s"Auditing Disabled")
     //$COVERAGE-ON$
   }
 }

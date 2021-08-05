@@ -20,17 +20,18 @@ import mocks.MockAppConfig
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, MessagesApi, MessagesImpl}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.JavaConverters._
 
-trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
+trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers {
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

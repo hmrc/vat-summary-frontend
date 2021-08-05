@@ -40,6 +40,8 @@ import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.StandardError
 import views.html.payments.PaymentHistory
+import play.api.test.Helpers.defaultAwaitTimeout
+
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -165,7 +167,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
 
       if (accountDetailsCall) {
-        mockCustomerInfo(accountDetailsResponse)
+        mockCustomerInfo(Future.successful(accountDetailsResponse))
       }
 
       if (paymentsServiceCall) {
@@ -175,11 +177,11 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
         (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
-          .returns(serviceResultYearOne)
+          .returns(Future.successful(serviceResultYearOne))
 
         (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
-          .returns(serviceResultYearTwo)
+          .returns(Future.successful(serviceResultYearTwo))
       }
     }
 
@@ -289,14 +291,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "return a 500" in new AllCallsTest {
         override val serviceResultYearOne = Left(VatLiabilitiesError)
-        private val result: Result = await(target.paymentHistory()(fakeRequestWithSession))
+        private val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
       "return the standard error view" in new AllCallsTest {
         override val serviceResultYearOne = Left(VatLiabilitiesError)
-        private val result: Result = await(target.paymentHistory()(fakeRequestWithSession))
-        val document: Document = Jsoup.parse(bodyOf(result))
+        private val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
+        val document: Document = Jsoup.parse(contentAsString(result))
         document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
       }
     }
@@ -329,9 +331,9 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val accountDetailsCall: Boolean = false
         (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
-          .returns(emptyResult)
-        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
-        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+          .returns(Future.successful(emptyResult))
+        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
+        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
         val result: Future[Result] = target.paymentHistory()(fakeRequest)
         status(result) shouldBe OK
       }
@@ -340,11 +342,11 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         override val accountDetailsCall: Boolean = false
         (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
-          .returns(emptyResult)
-        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
-        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+          .returns(Future.successful(emptyResult))
+        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
+        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
         val result: Future[Result] = target.paymentHistory()(fakeRequest)
-        val document: Document = Jsoup.parse(bodyOf(result))
+        val document: Document = Jsoup.parse(contentAsString(result))
         document.select("li.govuk-tabs__list-item:nth-child(4)").text() shouldBe "Previous payments"
       }
     }
@@ -386,14 +388,14 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     "the account details service response contains customer info" should {
 
       "return the date" in new Test {
-        await(target.getMigratedToETMPDate(Right(customerInformationMax))) shouldBe Some(LocalDate.parse("2017-05-06"))
+        target.getMigratedToETMPDate(Right(customerInformationMax)) shouldBe Some(LocalDate.parse("2017-05-06"))
       }
     }
 
     "the account details service response contains an error" should {
 
       "return None" in new Test {
-        await(target.getMigratedToETMPDate(Left(UnknownError))) shouldBe None
+        target.getMigratedToETMPDate(Left(UnknownError)) shouldBe None
       }
     }
   }
@@ -405,21 +407,21 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       "the user is insolvent and not exempt from restrictions" should {
 
         "return true" in new Test {
-          await(target.showInsolventContent(Right(customerInformationInsolventTrading))) shouldBe true
+          target.showInsolventContent(Right(customerInformationInsolventTrading)) shouldBe true
         }
       }
 
       "the user is insolvent and exempt from restrictions" should {
 
         "return false" in new Test {
-          await(target.showInsolventContent(Right(customerInformationInsolventTradingExempt))) shouldBe false
+          target.showInsolventContent(Right(customerInformationInsolventTradingExempt)) shouldBe false
         }
       }
 
       "the user is not insolvent" should {
 
         "return false" in new Test {
-          await(target.showInsolventContent(Right(customerInformationMax))) shouldBe false
+          target.showInsolventContent(Right(customerInformationMax)) shouldBe false
         }
       }
     }
@@ -427,7 +429,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     "the account details service response contains an error" should {
 
       "return false" in new Test {
-        await(target.showInsolventContent(Left(UnknownError))) shouldBe false
+        target.showInsolventContent(Left(UnknownError)) shouldBe false
       }
     }
   }

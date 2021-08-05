@@ -25,6 +25,7 @@ import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnD
 import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers._
 
 
 class FinancialDataConnectorISpec extends IntegrationBaseSpec {

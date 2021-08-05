@@ -20,10 +20,11 @@ import java.time.LocalDate
 
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json._
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.matchers.should.Matchers
 
-class PaymentsHistoryModelSpec extends UnitSpec {
+class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
   val reads: Reads[Seq[PaymentsHistoryModel]] = PaymentsHistoryModel.reads
 

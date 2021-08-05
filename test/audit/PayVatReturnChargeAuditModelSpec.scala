@@ -19,9 +19,10 @@ package audit
 import _root_.audit.models.PayVatReturnChargeAuditModel
 import _root_.models.User
 import _root_.models.payments.{PaymentDetailsModel, ReturnDebitCharge}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
 
-class PayVatReturnChargeAuditModelSpec extends UnitSpec {
+class PayVatReturnChargeAuditModelSpec extends AnyWordSpecLike with Matchers {
 
   val paymentDetails = PaymentDetailsModel(
     "vat",
