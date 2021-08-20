@@ -32,16 +32,18 @@ import play.api.{Application, Environment, Mode}
 
 import scala.concurrent.ExecutionContext
 
-trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFutures with WireMockHelper with GuiceOneServerPerSuite
-  with BeforeAndAfterEach with BeforeAndAfterAll with Injecting {
+trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFutures with WireMockHelper with
+  GuiceOneServerPerSuite with BeforeAndAfterEach with BeforeAndAfterAll with Injecting {
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wireMockPort.toString
   val appRouteContext: String = "/vat-through-software"
 
-  def formatSessionVrn: Option[String] => Map[String, String] =_.fold(Map.empty[String, String])(x => Map(SessionKeys.agentSessionVrn -> x))
+  def formatSessionVrn: Option[String] => Map[String, String] =
+    _.fold(Map.empty[String, String])(x => Map(SessionKeys.agentSessionVrn -> x))
 
-  def viewedDDInterrupt: Option[String] => Map[String, String] = _.fold(Map.empty[String, String])(x => Map(SessionKeys.viewedDDInterrupt -> x))
+  def viewedDDInterrupt: Option[String] => Map[String, String] =
+    _.fold(Map.empty[String, String])(x => Map(SessionKeys.viewedDDInterrupt -> x))
 
  override lazy val client: WSClient = app.injector.instanceOf[WSClient]
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
@@ -51,8 +53,6 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.financial-transactions.host" -> mockHost,
     "microservice.services.financial-transactions.port" -> mockPort,
-    "microservice.services.vat-api.host" -> mockHost,
-    "microservice.services.vat-api.port" -> mockPort,
     "microservice.services.pay-api.host" -> mockHost,
     "microservice.services.pay-api.port" -> mockPort,
     "microservice.services.vat-sign-up-frontend.host" -> mockHost,
