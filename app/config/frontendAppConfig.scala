@@ -35,7 +35,6 @@ trait AppConfig {
   val signInUrl: String
   val signInContinueBaseUrl: String
   val features: Features
-  val vatApiBaseUrl: String
   val vatObligationsBaseUrl: String
   val vatSubscriptionBaseUrl: String
   val financialDataBaseUrl: String
@@ -124,7 +123,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override val features = new Features()(runModeConfiguration)
 
   override lazy val vatSubscriptionBaseUrl: String = sc.baseUrl("vat-subscription")
-  override lazy val vatApiBaseUrl: String = sc.baseUrl("vat-api")
   override lazy val financialDataBaseUrl: String = sc.baseUrl("financial-transactions")
 
   override lazy val selfLookup: String = sc.baseUrl("selfLookup")
