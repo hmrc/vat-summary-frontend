@@ -114,11 +114,11 @@ object MessageLookup {
     val pageTitle: String = "You need to check your payment method - VAT - GOV.UK"
     val title: String = "You need to check your payment method"
     val detailsSummary: String = "Why am I seeing this message?"
-    val detailsText: String = "You have been transferred to HMRC’s new online system for submitting your VAT returns. " +
+    val detailsText: String = "You have been transferred to HMRC’s new online system for submitting your VAT Returns. " +
       "If you previously paid your VAT bill by Direct Debit, your Direct Debit has been cancelled."
     val para1: String = "To continue to pay your VAT by Direct Debit, " +
       "you must set up a new Direct Debit at least 3 working days before your VAT Return payment is due. " +
-      "If you do not pay your VAT Return on time, you may incur a penalty."
+      "If you do not pay your VAT on time, you may incur a penalty."
     val para2: String = "If you do not have time to set up a new Direct Debit before your next VAT payment is due, " +
       "or you prefer to pay using an alternative payment method, you will be able to do this in the " +
       "’payments and repayments’ section of your VAT account."
@@ -131,11 +131,12 @@ object MessageLookup {
     val backLinkText: String = "Back"
     val pageTitle: String = "You need to validate your details for Direct Debit - VAT - GOV.UK"
     val title: String = "You need to validate your details for Direct Debit"
-    val insetText: String = "You have been transferred to HMRC’s new online system for submitting your VAT returns. " +
+    val insetText: String = "You have been transferred to HMRC’s new online system for submitting your VAT Returns. " +
       "Your Service user name and number will change. The updated details will be sent to you as a secure message."
-    val para1: String = "You currently pay via Direct Debit and your Acknowledgement Screens tell you how much you need to pay and when."
+    val para1: String = "You currently pay your VAT bill by Direct Debit and your Acknowledgement Screens tell you how much you need to pay and when."
     val para2: String = "To continue receiving prompts to log into your Acknowledgement Screens and review " +
-      "the information you need to validate your email address."
+      "the information, you need to validate your email address."
+    val para3: String = "If you have already confirmed your email address you do not need to do it again."
     val validateButtonText: String = "Validate your email"
     val continueButtonText: String = "Continue to your VAT account"
   }
