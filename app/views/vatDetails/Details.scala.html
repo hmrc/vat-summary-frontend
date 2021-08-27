@@ -75,13 +75,12 @@
 ) {
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("vatDetails.title")</h1>
-  <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)
-  </span>
+  <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)</span>
   @detailsViewModel.entityName.map { entityName =>
-    <span class="govuk-caption-m govuk-!-margin-bottom-6">@entityName</span>
+    <span class="govuk-caption-m">@entityName</span>
   }
 
-  <div class="flex-container govuk-grid-row">
+  <div class="flex-container govuk-grid-row govuk-!-margin-top-6">
     @nextPaymentSection(
       detailsViewModel.paymentsData,
       detailsViewModel.hasMultiplePayments,

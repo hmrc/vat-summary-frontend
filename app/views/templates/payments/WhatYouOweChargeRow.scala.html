@@ -21,7 +21,7 @@
 
 @this(displayMoney: DisplayMoney)
 
-@(payment: OpenPaymentsModel, count: Int)(implicit messages: Messages, appConfig: config.AppConfig)
+@(payment: OpenPaymentsModel, count: Int, userIsAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @chargeDetails = @{new WhatYouOweChargeHelper(payment, messages)}
 @defining(chargeDetails.description()) { chargeDescription =>
@@ -46,12 +46,14 @@
         <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
       </dd>
       <dd class="govuk-summary-list__actions what-you-owe-links nowrap">
-        <a class="govuk-link" href="@payment.makePaymentRedirect">
-          <span>@chargeDetails.payLinkText</span>
-          <span class="govuk-visually-hidden">
+        @if(!userIsAgent) {
+          <a class="govuk-link" href="@payment.makePaymentRedirect">
+            <span>@chargeDetails.payLinkText</span>
+            <span class="govuk-visually-hidden">
             @displayMoney(payment.amount)
-          </span>
-        </a>
+            </span>
+          </a>
+        }
 
         @if(chargeDetails.viewReturnEnabled) {
           <p class="govuk-body">

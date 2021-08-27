@@ -17,13 +17,13 @@
 package views.payments
 
 import java.time.LocalDate
-
-import common.MessageLookup.{PaymentMessages, CovidMessages}
+import common.MessageLookup.{CovidMessages, PaymentMessages}
 import models.User
 import models.payments._
 import models.viewModels.OpenPaymentsViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.OpenPayments
 import views.templates.payments.PaymentMessageHelper
@@ -33,6 +33,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   val openPaymentsView: OpenPayments = injector.instanceOf[OpenPayments]
   object Selectors {
     val pageHeading = "h1"
+    val caption = ".govuk-caption-xl"
+    val backLink = ".govuk-back-link"
     val paymentLink = "#payments a"
     val correctErrorLink = "div > p:nth-child(4) > a"
     val btaBreadcrumb = "li.govuk-breadcrumbs__list-item > a"
@@ -50,7 +52,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     private val columnThree: Int => String = row => s"#payment-$row > dl > div > dd:nth-child(3)"
     val payLink: Int => String = row => s"${columnThree(row)} > a"
     val payText: Int => String = row => s"${payLink(row)} > span"
-    val payByDirectDebit: Int => String = row => s"${columnThree(row)} span"
     val viewReturn: Int => String = row => s"${columnThree(row)} > p > a"
     val viewReturnText: Int => String = row => s"${columnThree(row)} > p > a > span:nth-of-type(2)"
     val processingTime = "#processing-time"
@@ -90,45 +91,243 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     )
   )
 
-  "Rendering the open payments page when a user has a direct debit" should {
+  "Rendering the open payments page for a principal user" when {
 
-    val hasDirectDebit = Some(true)
-    val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = openPaymentsView(user, viewModel)
+    "the display covid feature switch is on, user has two non-overdue charges" should {
+
+      val viewModel = OpenPaymentsViewModel(payments)
+      lazy val view = {
+        mockConfig.features.displayCovidMessage(true)
+        openPaymentsView(user, viewModel, Html(""), None)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe "What you owe - Business tax account - GOV.UK"
+      }
+
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe "What you owe"
+      }
+
+      "not have a client name caption" in {
+        elementExtinct(Selectors.caption)
+      }
+
+      "render breadcrumbs which" should {
+
+        "have the text 'Business tax account'" in {
+          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+        }
+
+        "link to bta" in {
+          element(Selectors.btaBreadcrumb).attr("href") shouldBe "bta-url"
+        }
+
+        "have the text 'VAT'" in {
+          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
+        }
+
+        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+          element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        }
+
+        s"link to https://www.gov.uk/vat-corrections" in {
+          element(Selectors.correctErrorLink).attr("href") shouldBe "https://www.gov.uk/vat-corrections"
+        }
+
+        "have the text 'What you owe'" in {
+          elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
+        }
+      }
+
+      "for the first payment" should {
+
+        "render the correct title" in {
+          elementText(Selectors.title(1)) shouldBe "Return for the period 1 Jan to 31 Mar 2001"
+        }
+
+        "render the correct amount" in {
+          elementText(Selectors.amount(1)) shouldBe "£2,000,000,000.01"
+        }
+
+        "render the correct due period" in {
+          elementText(Selectors.due(1)) shouldBe "due by 8 Apr 2001"
+        }
+
+        "render the Pay now text" in {
+          elementText(Selectors.payText(1)) shouldBe "Pay now"
+        }
+
+        "render the correct view return link text" in {
+          elementText(Selectors.viewReturnText(1)) shouldBe "View return"
+        }
+
+        "render the correct view return link" in {
+          element(Selectors.viewReturn(1)).attr("href") shouldBe "/submitted/%23001"
+        }
+      }
+
+      "for the second payment" should {
+
+        "render the correct title" in {
+          elementText(Selectors.title(2)) shouldBe "Additional assessment interest interest charged on additional " +
+            "tax assessed for the period 1 Jan to 31 Mar 2003"
+        }
+
+        "render the correct amount" in {
+          elementText(Selectors.amount(2)) shouldBe "£300"
+        }
+
+        "render the correct due period" in {
+          elementText(Selectors.due(2)) shouldBe "due by 5 Apr 2003"
+        }
+
+        "render the Pay now text" in {
+          elementText(Selectors.payText(2)) shouldBe "Pay now"
+        }
+
+        "render the correct Pay now link" in {
+          element(Selectors.payLink(2)).attr("href") should endWith(
+            "30000/3/2003/2003-03-31/VAT%20AA%20Default%20Interest/2003-04-05/XD002750002155"
+          )
+        }
+      }
+
+      "render the correct heading for what I owe is incorrect or missing" in {
+        elementText(Selectors.whatOweMissing) shouldBe "What I owe is incorrect or missing"
+      }
+
+      "render the correct help text" in {
+        elementText(Selectors.helpText) shouldBe
+          "If what you owe is incorrect, check if you can correct errors on your VAT Return (opens in a new tab)."
+      }
+
+      "render the correct make payment help text" in {
+        elementText(Selectors.helpMakePayment) shouldBe
+          "After you have submitted a return, it can take 24 hours for what you owe to show here. " +
+            "You can still make a payment (opens in a new tab) even if a payment is not shown."
+      }
+
+      "have the correct destination for the make a payment link" in {
+        element(Selectors.makePayment).attr("href") shouldBe "unauthenticated-payments-url"
+      }
+
+      "have a covid partial" which {
+
+        "has the correct warning heading" in {
+          elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
+        }
+
+        "has the correct first message" which {
+
+          "has the correct text" in {
+            elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
+          }
+
+          "has the correct link text" in {
+            elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
+          }
+
+          "has the correct link destination" in {
+            element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
+          }
+        }
+
+        "has the correct second message" in {
+          elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
+        }
+      }
+    }
+
+    "the display covid feature switch is off" should {
+
+      "not display the covid message" in {
+
+        val viewModel = OpenPaymentsViewModel(payments)
+        lazy val view = {
+          mockConfig.features.displayCovidMessage(false)
+          openPaymentsView(user, viewModel, Html(""), None)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementExtinct(Selectors.covidPartialLine1)
+        elementExtinct(Selectors.covidPartialLine2)
+      }
+    }
+
+    "the user has the following charge types" should {
+
+      PaymentMessageHelper.values.map { historyChargeHelper =>
+        (
+          OpenPaymentsViewModel(Seq(
+            OpenPaymentsModelWithPeriod(
+              chargeType = ChargeType.apply(historyChargeHelper.name),
+              amount = 2000000000.01,
+              due = LocalDate.parse("2008-04-08"),
+              periodFrom = LocalDate.parse("2018-01-01"),
+              periodTo = LocalDate.parse("2018-02-01"),
+              periodKey = "#001",
+              chargeReference = Some("XD002750002155"),
+              isOverdue = false
+            ))
+          ),
+          ChargeType.apply(historyChargeHelper.name).value,
+          PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,
+          PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._2
+        )
+      }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
+
+        lazy val view = openPaymentsView(user, openPaymentsViewModel, Html(""), None)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        s"contain a $chargeTypeTitle which" should {
+
+          if (expectedDescription.nonEmpty) {
+            "render the correct title" in {
+              elementText(Selectors.title(1)) shouldBe expectedTitle + " " + expectedDescription
+            }
+
+          } else {
+            "render the correct title" in {
+              elementText(Selectors.title(1)) shouldBe expectedTitle
+            }
+          }
+        }
+      }
+    }
+  }
+
+  "Rendering the open payments page for an agent" should {
+
+    val entityName = "Capgemini"
+    val viewModel = OpenPaymentsViewModel(payments)
+    lazy val view = {
+      mockConfig.features.displayCovidMessage(true)
+      openPaymentsView(agentUser, viewModel, Html(""), Some(entityName))
+    }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "What you owe - Business tax account - GOV.UK"
+      document.title shouldBe "What you owe - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe "What you owe"
     }
 
-    "render breadcrumbs which" should {
+    "have the client name caption" in {
+      elementText(Selectors.caption) shouldBe entityName
+    }
 
-      "have the text 'Business tax account'" in {
-        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+    "render a Back link" which {
+
+      "has the correct text" in {
+        elementText(Selectors.backLink) shouldBe "Back"
       }
 
-      "link to bta" in {
-        element(Selectors.btaBreadcrumb).attr("href") shouldBe "bta-url"
-      }
-
-      "have the text 'VAT'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
-      }
-
-      s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-        element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
-      }
-
-      s"link to https://www.gov.uk/vat-corrections" in {
-        element(Selectors.correctErrorLink).attr("href") shouldBe "https://www.gov.uk/vat-corrections"
-      }
-
-      "have the text 'What you owe'" in {
-        elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
+      "has the correct href" in {
+        element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
       }
     }
 
@@ -146,8 +345,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         elementText(Selectors.due(1)) shouldBe "due by 8 Apr 2001"
       }
 
-      "render the Pay now text" in {
-        elementText(Selectors.payByDirectDebit(1)) shouldBe "Pay now"
+      "not render the Pay now link" in {
+        elementExtinct(Selectors.payLink(1))
       }
 
       "render the correct view return link text" in {
@@ -158,7 +357,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         element(Selectors.viewReturn(1)).attr("href") shouldBe "/submitted/%23001"
       }
     }
-
 
     "for the second payment" should {
 
@@ -175,14 +373,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
         elementText(Selectors.due(2)) shouldBe "due by 5 Apr 2003"
       }
 
-      "render the Pay now text" in {
-        elementText(Selectors.payText(2)) shouldBe "Pay now"
-      }
-
-      "render the correct Pay now link" in {
-        element(Selectors.payLink(2)).attr("href") should endWith(
-          "30000/3/2003/2003-03-31/VAT%20AA%20Default%20Interest/2003-04-05/XD002750002155"
-        )
+      "not render the Pay now link" in {
+        elementExtinct(Selectors.payLink(2))
       }
     }
 
@@ -197,125 +389,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "render the correct make payment help text" in {
       elementText(Selectors.helpMakePayment) shouldBe
-        "After you have submitted a return, it can take 24 hours for what you owe to show here. " +
-          "You can still make a payment (opens in a new tab) even if a payment is not shown."
-    }
-
-    "have the correct destination for the make a payment link" in {
-      element(Selectors.makePayment).attr("href") shouldBe "unauthenticated-payments-url"
-    }
-  }
-
-  "Rendering the open payments page when a user does not have a direct debit" should {
-
-    val hasDirectDebit = Some(false)
-    val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-    lazy val view = openPaymentsView(user, viewModel)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    "render the Pay now text" in {
-      elementText(Selectors.payText(1)) shouldBe "Pay now"
-    }
-
-    "render the correct link to Pay now" in {
-      element(Selectors.payLink(1)).attr("href") should endWith(
-        "200000000001/3/2001/2001-03-31/VAT%20Return%20Debit%20Charge/2001-04-08/XD002750002155"
-      )
-    }
-  }
-
-  "Rendering the open payments page" when {
-
-    "the display covid feature switch is on" should {
-      mockConfig.features.displayCovidMessage(true)
-
-      val hasDirectDebit = None
-      val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-      lazy val view = openPaymentsView(user, viewModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct warning heading" in {
-        elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
-      }
-
-      "have the correct first message" which {
-
-        "has the correct text" in {
-          elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
-        }
-
-        "has the correct link text" in {
-          elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
-        }
-
-        "has the correct link destination" in {
-          element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
-        }
-      }
-
-      "have the correct second message" in {
-        elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
-      }
-    }
-
-      "the display covid feature switch is off" should {
-
-        "not display the covid message" in {
-
-        mockConfig.features.displayCovidMessage(false)
-
-        val hasDirectDebit = None
-        val viewModel = OpenPaymentsViewModel(payments, hasDirectDebit)
-        lazy val view = openPaymentsView(user, viewModel)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        elementExtinct(Selectors.covidPartialLine1)
-        elementExtinct(Selectors.covidPartialLine2)
-      }
-
-    }
-
-  }
-
-  "Supplying with the following charge types" should {
-
-    PaymentMessageHelper.values.map { historyChargeHelper =>
-      (
-        OpenPaymentsViewModel(Seq(
-          OpenPaymentsModelWithPeriod(
-            chargeType = ChargeType.apply(historyChargeHelper.name),
-            amount = 2000000000.01,
-            due = LocalDate.parse("2008-04-08"),
-            periodFrom = LocalDate.parse("2018-01-01"),
-            periodTo = LocalDate.parse("2018-02-01"),
-            periodKey = "#001",
-            chargeReference = Some("XD002750002155"),
-            isOverdue = false
-          )),
-          hasDirectDebit = Some(false)
-        ),
-        ChargeType.apply(historyChargeHelper.name).value,
-        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,
-        PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._2
-      )
-    }.foreach { case (openPaymentsViewModel, chargeTypeTitle, expectedTitle, expectedDescription) =>
-
-      lazy val view = openPaymentsView(user, openPaymentsViewModel)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      s"contain a $chargeTypeTitle which" should {
-
-        if (expectedDescription.nonEmpty) {
-          "render the correct title" in {
-            elementText(Selectors.title(1)) shouldBe expectedTitle + " " + expectedDescription
-          }
-
-        } else {
-          "render the correct title" in {
-            elementText(Selectors.title(1)) shouldBe expectedTitle
-          }
-        }
-      }
+        "After you have submitted a return, it can take 24 hours for what you owe to show here."
     }
   }
 }

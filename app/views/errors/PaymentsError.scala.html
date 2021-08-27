@@ -14,15 +14,47 @@
  * limitations under the License.
  *@
 
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate, govukBreadcrumbs: GovukBreadcrumbs, govukBackLink: GovukBackLink)
 
 @()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages, user: User)
 
-@mainTemplate(title = messages("paymentsError.title"), appConfig = appConfig, user = Some(user)) {
-  <h1 class="govuk-heading-l">@messages("paymentsError.heading")</h1>
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details().url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("openPayments.title"))
+      )
+    )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
+  ))
+}
+
+@mainTemplate(
+  title = messages("paymentsError.title"),
+  appConfig = appConfig,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+  <h1 class="govuk-heading-xl">@messages("paymentsError.heading")</h1>
   <p class="govuk-body-l">@messages("paymentsError.message")</p>
-  <p class="govuk-body" id="pay-now-content">
-    @messages("paymentsError.payNowOne")
-    <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl">@messages("paymentsError.payNowTwo")</a>.
-  </p>
+  @if(!user.isAgent) {
+    <p class="govuk-body" id="pay-now-content">
+      @messages("paymentsError.payNowOne")
+      <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl">@messages("paymentsError.payNowTwo")</a>.
+    </p>
+  }
 }

@@ -32,8 +32,6 @@
   <p class="govuk-body">@messages("covid.line2")</p>
 }
 
-<div class="govuk-grid-row govuk-form-group flex-container">
-  @govukInsetText(InsetText(
-    content = HtmlContent(insetTextContent)
-  ))
-</div>
+@govukInsetText(InsetText(
+  content = HtmlContent(insetTextContent)
+))

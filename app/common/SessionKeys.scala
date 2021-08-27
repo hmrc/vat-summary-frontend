@@ -20,6 +20,7 @@ object SessionKeys {
   val migrationToETMP = "customerMigratedToETMPDate"
   val mandationStatus = "mtdVatMandationStatus"
   val agentSessionVrn = "CLIENT_VRN"
+  val clientName: String = "mtdVatAgentClientName"
 
   val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
   val inFlightContactKey: String = "inFlightContactDetailsChange"
