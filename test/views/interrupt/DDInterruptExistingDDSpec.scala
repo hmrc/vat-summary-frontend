@@ -33,8 +33,9 @@ class DDInterruptExistingDDSpec extends ViewBaseSpec {
     val insetText = ".govuk-inset-text"
     val para1 = "#content > div > div > .govuk-body:nth-of-type(1)"
     val para2 = "#content > div > div > .govuk-body:nth-of-type(2)"
-    val validateButton = ".govuk-button:nth-child(5)"
-    val continueButton = ".govuk-button:nth-child(6)"
+    val para3 = "#content > div > div > .govuk-body:nth-of-type(3)"
+    val validateButton = ".govuk-button:nth-child(6)"
+    val continueButton = ".govuk-button:nth-child(7)"
   }
 
   lazy val DDInterruptView: DDInterruptExistingDD = injector.instanceOf[DDInterruptExistingDD]
@@ -74,6 +75,10 @@ class DDInterruptExistingDDSpec extends ViewBaseSpec {
 
       "have the correct paragraph 2 text" in {
         elementText(Selectors.para2) shouldBe existingDDInterruptMessages.para2
+      }
+
+      "have the correct paragraph 3 text" in {
+        elementText(Selectors.para3) shouldBe existingDDInterruptMessages.para3
       }
 
       "have a button to validate the direct debit" that {
