@@ -16,100 +16,52 @@
   footer
   { display: none; }
 
-  html {
-    background-color: white;
+  h1 {
+    font-size: 200% !important;
   }
 
-  #content {
-    padding-bottom: 0;
-  }
-
-  .govuk-heading-xl {
-    font-size: 30px;
-    margin-bottom: 12px;
-    margin-top: 12px;
-  }
-
-  .cert-header {
-    padding-bottom: 0;
+  h2 {
+    font-size: 120% !important;
   }
 
   .cert-header img {
-    width: 20%;
+    width: 120px !important;
   }
 
-  .govuk-heading-m {
-    font-size: 12px;
+  dt, dd, p {
+    font-size: 80% !important;
   }
 
   .card-full-container {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-top: 10px;
-    margin-bottom: 0;
-    background-color: #f3f2f1 !important;
-    -webkit-print-color-adjust: exact;
-  }
-
-  .card-full-container .card-heading {
-    margin-bottom: 6px;
-  }
-
-  dl {
-    font-size: 12px;
+    margin: 1em 0 2em 0 !important;
+    padding: 1em 1em !important;
+    width: 100% !important;
+    border: 1px solid black !important;
   }
 
   .govuk-summary-list {
-    padding-top: 5px;
-    padding-bottom: 5px;
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
   }
 
-  .govuk-summary-list:before,
-  .govuk-summary-list:after {
-    content: " "; /* 1 */
-    display: table; /* 2 */
+  .govuk-summary-list__row {
+    display: table-row !important;
   }
 
-  .govuk-summary-list:after {
-    clear: both;
+  .govuk-summary-list__key, .govuk-summary-list__value {
+    display: table-cell !important;
+    padding-top: 10px !important;
+    padding-right: 20px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #b1b4b6 !important;
   }
 
-  .govuk-summary-list:last-child div,
-  .card-full dl:last-child {
-    border-bottom: none;
+  .govuk-summary-list__key {
+    width: 50% !important;
   }
 
-  dt, dd {
-    font-size: 12px;
+  .govuk-summary-list__value {
+    width: 50% !important;
   }
-
-  .govuk-summary-list__key, #stp-dt {
-    float: left;
-    clear: left;
-    width: 50%;
-    text-align: left;
-    font-weight: bold;
-  }
-
-  .govuk-summary-list__value, #stp-dd {
-    text-align: left;
-    overflow: hidden;
-    width: 50%;
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  #nstp-card > dl > div > dt {
-    float: none;
-  }
-
-  #nstp-card {
-    page-break-before: always;
-  }
-
-  #nstp-card div p {
-    font-size: 12px;
-    display: block;
-  }
-
 }
