@@ -16,4 +16,52 @@
   footer
   { display: none; }
 
+  h1 {
+    font-size: 200% !important;
+  }
+
+  h2 {
+    font-size: 120% !important;
+  }
+
+  .cert-header img {
+    width: 120px !important;
+  }
+
+  dt, dd, p {
+    font-size: 80% !important;
+  }
+
+  .card-full-container {
+    margin: 1em 0 2em 0 !important;
+    padding: 1em 1em !important;
+    width: 100% !important;
+    border: 1px solid black !important;
+  }
+
+  .govuk-summary-list {
+    display: table !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+
+  .govuk-summary-list__row {
+    display: table-row !important;
+  }
+
+  .govuk-summary-list__key, .govuk-summary-list__value {
+    display: table-cell !important;
+    padding-top: 10px !important;
+    padding-right: 20px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #b1b4b6 !important;
+  }
+
+  .govuk-summary-list__key {
+    width: 50% !important;
+  }
+
+  .govuk-summary-list__value {
+    width: 50% !important;
+  }
 }
