@@ -13,19 +13,14 @@ $hmrc-assets-path: "/vat-through-software/assets/lib/hmrc-frontend/hmrc/assets/"
   padding-top: 0;
 }
 
-.govuk-back-link {
-  margin-bottom: 40px;
+.govuk-back-link, .govuk-breadcrumbs {
+  margin-bottom: 30px;
 }
 
 .govuk-header__link--service-name:hover {
   text-decoration: none;
   pointer-events: none;
   cursor: default;
-}
-
-.govuk-heading-xl {
-  margin-top: 30px;
-  margin-bottom: 30px
 }
 
 .govuk-summary-list {

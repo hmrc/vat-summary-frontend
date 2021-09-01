@@ -14,34 +14,39 @@
  * limitations under the License.
  *@
 
-@import play.twirl.api.HtmlFormat
 @import views.html.partials.covid.CovidMessage
 
 @this(mainTemplate: MainTemplate,
       covidMessage: CovidMessage,
-      govukBreadcrumbs: GovukBreadcrumbs)
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukBackLink: GovukBackLink)
 
-@(user: models.User,
-  hasDirectDebit: Option[Boolean],
-  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
-                                                        messages: Messages,
-                                                        appConfig: config.AppConfig)
+@(user: models.User, serviceInfoContent: Html, clientName: Option[String])(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+
 @breadcrumbs = {
-    @govukBreadcrumbs(Breadcrumbs(
-        items = Seq(
-            BreadcrumbsItem(
-                content = Text(messages("breadcrumbs.bta")),
-                href = Some(appConfig.btaHomeUrl)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("vatDetails.title")),
-                href = Some(controllers.routes.VatDetailsController.details().url)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("openPayments.title"))
-            )
-        )
-    ))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details().url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("openPayments.title"))
+      )
+    )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
+  ))
 }
 
 @mainTemplate(
@@ -49,10 +54,13 @@
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
-  navLinkContent = Some(breadcrumbs)) {
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)) {
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      @clientName.map { name =>
+        <span class="govuk-caption-xl">@name</span>
+      }
       <h1 class="govuk-heading-xl">@messages("noPayments.heading")</h1>
 
       @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
@@ -61,9 +69,11 @@
         <h2 class="govuk-body-l">@messages("noPayments.oweNothing")</h2>
         <p class="govuk-body">
           @messages("noPayments.twentyFourHours")
-          @messages("payment.stillMake")
-          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
+          @if(!user.isAgent) {
+            @messages("payment.stillMake")
+            <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
             @messages("payment.stillMakeLink")</a>.
+          }
         </p>
       </div>
     </div>

@@ -44,123 +44,131 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
     val viewReturnHiddenContent = s"$viewReturnLink > span:nth-of-type(1)"
   }
 
+  def generateModel: OpenPaymentsModelWithPeriod = {
+    OpenPaymentsModelWithPeriod(
+      ReturnDebitCharge,
+      BigDecimal(100.00),
+      LocalDate.parse("2018-03-03"),
+      LocalDate.parse("2018-01-01"),
+      LocalDate.parse("2018-02-02"),
+      "18AA",
+      Some("XD002750002155"),
+      isOverdue = false
+    )
+  }
+
   "Rendering the view" when {
 
-    def generateModel: OpenPaymentsModelWithPeriod = {
-      OpenPaymentsModelWithPeriod(
-        ReturnDebitCharge,
-        BigDecimal(100.00),
-        LocalDate.parse("2018-03-03"),
-        LocalDate.parse("2018-01-01"),
-        LocalDate.parse("2018-02-02"),
-        "18AA",
-        Some("XD002750002155"),
-        isOverdue = false
-      )
+    "the user is a principal entity" when {
+
+      "user has no direct debit" when {
+
+        "payment has a return associated" should {
+
+          val model = generateModel
+          lazy val view = whatYouOweChargeRow(model, 0, userIsAgent = false)
+          lazy implicit val document: Document = Jsoup.parse(s"<table>${view.body}</table>")
+
+          "display the correct title" in {
+            elementText(Selectors.title) shouldBe "Return for the period 1 Jan to 2 Feb 2018"
+          }
+
+          "display the correct due text" in {
+            elementText(Selectors.due) shouldBe "due by 3 Mar 2018"
+          }
+
+          "display the correct owed amount" in {
+            elementText(Selectors.amount) shouldBe "£100"
+          }
+
+          "display the correct amount data attribute" in {
+            elementText(Selectors.amountData) shouldBe "£100"
+          }
+
+          "display the correct pay text" in {
+            elementText(Selectors.payText) shouldBe "Pay now"
+          }
+
+          "not display overdue flag" in {
+            elementExtinct(".task-overdue")
+          }
+
+          "have the correct pay link destination" in {
+            element(Selectors.payLink).attr("href") shouldBe
+              "/vat-through-software/make-payment/10000/2/2018/2018-02-02/VAT%20Return%20Debit%20Charge/2018-03-03/XD002750002155"
+          }
+
+          "have the correct pay link context" in {
+            elementText(Selectors.payHiddenContent) shouldBe "£100"
+          }
+
+          "display the link to view the return" in {
+            elementText(Selectors.viewReturnText) shouldBe "View return"
+          }
+
+          "have the correct return location" in {
+            element(Selectors.viewReturnLink).attr("href") shouldBe "/submitted/18AA"
+          }
+
+          "have the correct return context" in {
+            elementText(Selectors.viewReturnHiddenContent) shouldBe "for the period 1 January to 2 February 2018"
+          }
+        }
+
+        "payment does not have a return associated" should {
+
+          val model = OpenPaymentsModelWithPeriod(
+            VatPADefaultInterestCharge,
+            BigDecimal(100.00),
+            LocalDate.parse("2018-03-03"),
+            LocalDate.parse("2018-01-01"),
+            LocalDate.parse("2018-02-02"),
+            "18AA",
+            Some("XD002750002155"),
+            isOverdue = false
+          )
+
+          lazy val view = whatYouOweChargeRow(model, 0, userIsAgent = false)
+          lazy implicit val document: Document = Jsoup.parse(s"<table>${view.body}</table>")
+
+          "not show a link to View Return" in {
+            document.select(Selectors.viewReturnLink) shouldBe empty
+          }
+        }
+      }
+
+      "payment is overdue" should {
+
+        val model: OpenPaymentsModelWithPeriod = {
+          OpenPaymentsModelWithPeriod(
+            ReturnDebitCharge,
+            BigDecimal(100.00),
+            LocalDate.parse("2018-03-03"),
+            LocalDate.parse("2018-01-01"),
+            LocalDate.parse("2018-02-02"),
+            "18AA",
+            Some("XD002750002155"),
+            isOverdue = true
+          )
+        }
+        lazy val view = whatYouOweChargeRow(model, 0, userIsAgent = false)
+        lazy implicit val document: Document = Jsoup.parse(s"<table>${view.body}</table>")
+
+        "display overdue flag" in {
+          elementText(".task-overdue") shouldBe "overdue"
+        }
+      }
     }
+  }
 
-    "user has no direct debit" when {
+  "the user is an agent" should {
 
-      "payment has a return associated" should {
+    val model = generateModel
+    lazy val view = whatYouOweChargeRow(model, 0, userIsAgent = true)
+    lazy implicit val document: Document = Jsoup.parse(s"<table>${view.body}</table>")
 
-        val model = generateModel
-        lazy val view = whatYouOweChargeRow(model, 0)
-        lazy implicit val document: Document = Jsoup.parse(
-          s"<table>${view.body}</table>"
-        )
-
-        "display the correct title" in {
-          elementText(Selectors.title) shouldBe "Return for the period 1 Jan to 2 Feb 2018"
-        }
-
-        "display the correct due text" in {
-          elementText(Selectors.due) shouldBe "due by 3 Mar 2018"
-        }
-
-        "display the correct owed amount" in {
-          elementText(Selectors.amount) shouldBe "£100"
-        }
-
-        "display the correct amount data attribute" in {
-          elementText(Selectors.amountData) shouldBe "£100"
-        }
-
-        "display the correct pay text" in {
-          elementText(Selectors.payText) shouldBe "Pay now"
-        }
-
-        "not display overdue flag" in {
-          elementExtinct(".task-overdue")
-        }
-
-        "have the correct pay link destination" in {
-          element(Selectors.payLink).attr("href") shouldBe
-            "/vat-through-software/make-payment/10000/2/2018/2018-02-02/VAT%20Return%20Debit%20Charge/2018-03-03/XD002750002155"
-        }
-
-        "have the correct pay link context" in {
-          elementText(Selectors.payHiddenContent) shouldBe "£100"
-        }
-
-        "display the link to view the return" in {
-          elementText(Selectors.viewReturnText) shouldBe "View return"
-        }
-
-        "have the correct return location" in {
-          element(Selectors.viewReturnLink).attr("href") shouldBe "/submitted/18AA"
-        }
-
-        "have the correct return context" in {
-          elementText(Selectors.viewReturnHiddenContent) shouldBe "for the period 1 January to 2 February 2018"
-        }
-      }
-
-      "payment does not have a return associated" should {
-
-        val model = OpenPaymentsModelWithPeriod(
-          VatPADefaultInterestCharge,
-          BigDecimal(100.00),
-          LocalDate.parse("2018-03-03"),
-          LocalDate.parse("2018-01-01"),
-          LocalDate.parse("2018-02-02"),
-          "18AA",
-          Some("XD002750002155"),
-          isOverdue = false
-        )
-
-        lazy val view = whatYouOweChargeRow(model, 0)
-        lazy implicit val document: Document = Jsoup.parse(
-          s"<table>${view.body}</table>"
-        )
-
-        "not show a link to View Return" in {
-          document.select(Selectors.viewReturnLink) shouldBe empty
-        }
-      }
-    }
-
-    "payment is overdue" should {
-
-      val model: OpenPaymentsModelWithPeriod = {
-        OpenPaymentsModelWithPeriod(
-          ReturnDebitCharge,
-          BigDecimal(100.00),
-          LocalDate.parse("2018-03-03"),
-          LocalDate.parse("2018-01-01"),
-          LocalDate.parse("2018-02-02"),
-          "18AA",
-          Some("XD002750002155"),
-          isOverdue = true
-        )
-      }
-      lazy val view = whatYouOweChargeRow(model, 0)
-      lazy implicit val document: Document = Jsoup.parse(
-        s"<table>${view.body}</table>"
-      )
-
-      "display overdue flag" in {
-        elementText(".task-overdue")shouldBe "overdue"
-      }
+    "not display the 'Pay now' link" in {
+      elementExtinct(Selectors.payLink)
     }
   }
 }

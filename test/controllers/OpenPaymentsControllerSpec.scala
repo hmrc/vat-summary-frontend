@@ -98,15 +98,12 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     def target: OpenPaymentsController = {
       setupMocks()
       new OpenPaymentsController(
-        enrolmentsAuthService,
         authorisedController,
         mockServiceInfoService,
         mockPaymentsService,
         mockDateService,
-        mockAppConfig,
         mockAuditService,
         mcc,
-        ec,
         NoPayments,
         mockPaymentsError,
         openPayments,
@@ -393,10 +390,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                   testPayment.periodTo,
                   testPayment.periodKey,
                   isOverdue = false
-                )),
-                Some(true)
+                ))
               )
-              val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+              val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment))
 
               result shouldBe expected
             }
@@ -428,10 +424,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                   testPayment.periodTo,
                   testPayment.periodKey,
                   isOverdue = true
-                )),
-                Some(true)
+                ))
               )
-              val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+              val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment))
 
               result shouldBe expected
             }
@@ -464,10 +459,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 testPayment.periodTo,
                 testPayment.periodKey,
                 isOverdue = false
-              )),
-              Some(true)
+              ))
             )
-            val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment), Some(true))
+            val result: OpenPaymentsViewModel = target.getModel(Seq(testPayment))
 
             result shouldBe expected
           }

@@ -21,6 +21,7 @@ import common.MessageLookup.CovidMessages
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.NoPayments
 
@@ -29,7 +30,9 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   val noPaymentsView: NoPayments = injector.instanceOf[NoPayments]
   object Selectors {
     val pageHeading = "h1"
+    val caption = ".govuk-caption-xl"
     val secondaryHeading = "h2"
+    val backLink = ".govuk-back-link"
     val noPaymentsDetail = "#noPaymentsDetail p:nth-of-type(1)"
     val paymentLink = "#noPaymentsDetail p:nth-of-type(1) a"
     val btaBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(1)"
@@ -45,9 +48,14 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
   override val user: User = User("123456789")
 
-  "Rendering the no payments page" when {
+  "Rendering the no payments page for a principal user" when {
 
-      lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
+    "the displayCovidMessage feature switch is on" should {
+
+      lazy val view = {
+        mockConfig.features.displayCovidMessage(true)
+        noPaymentsView(user, Html(""), None)
+      }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -58,6 +66,10 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
         elementText(Selectors.pageHeading) shouldBe "What you owe"
       }
 
+      "not have a client name caption" in {
+        elementExtinct(Selectors.caption)
+      }
+
       "have the correct secondary heading" in {
         elementText(Selectors.secondaryHeading) shouldBe "You do not owe anything right now."
       }
@@ -65,7 +77,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       "have the correct context information" in {
         elementText(Selectors.noPaymentsDetail) shouldBe
           "If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe." +
-          " You can still make a payment (opens in a new tab)."
+            " You can still make a payment (opens in a new tab)."
       }
 
       "have the correct make a payment link text" in {
@@ -98,23 +110,14 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
           elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
         }
       }
-    }
 
-  "Rendering the no payments page" should {
+      "have a covid partial" which {
 
-    "display the covid message" when {
-
-      "the display covid feature switch is on" should  {
-        mockConfig.features.displayCovidMessage(true)
-
-        lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct warning heading" in {
+        "has the correct warning heading" in {
           elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
         }
 
-        "have the correct first message" which {
+        "has the correct first message" which {
 
           "has the correct text" in {
             elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
@@ -129,25 +132,91 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
           }
         }
 
-        "have the correct second message" in {
+        "has the correct second message" in {
           elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
         }
       }
     }
 
-    "not display the covid message" when {
+    "the displayCovidMessage feature switch is off" in {
 
-      "the display covid feature switch is off" in {
+      lazy val view = {
         mockConfig.features.displayCovidMessage(false)
-
-        lazy val view = noPaymentsView(user, hasDirectDebit = Some(true))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        elementExtinct(Selectors.covidPartialLine1)
-        elementExtinct(Selectors.covidPartialLine2)
+        noPaymentsView(user, Html(""), None)
       }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
+      elementExtinct(Selectors.covidHeading)
+      elementExtinct(Selectors.covidPartialLine1)
+      elementExtinct(Selectors.covidPartialLine2)
+    }
+  }
+
+  "Rendering the no payments page for an agent" should {
+
+    val entityName = "Capgemini"
+    lazy val view = {
+      mockConfig.features.displayCovidMessage(true)
+      noPaymentsView(agentUser, Html(""), Some(entityName))
+    }
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have the correct document title" in {
+      document.title shouldBe "What you owe - Your client’s VAT details - GOV.UK"
     }
 
+    "have the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe "What you owe"
+    }
+
+    "have the client name caption" in {
+      elementText(Selectors.caption) shouldBe entityName
+    }
+
+    "have the correct secondary heading" in {
+      elementText(Selectors.secondaryHeading) shouldBe "You do not owe anything right now."
+    }
+
+    "have the correct context information" in {
+      elementText(Selectors.noPaymentsDetail) shouldBe
+        "If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe."
+    }
+
+    "render a Back link which" should {
+
+      "has the correct text" in {
+        elementText(Selectors.backLink) shouldBe "Back"
+      }
+
+      "has the correct href" in {
+        element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
+      }
+    }
+
+    "have a covid partial" which {
+
+      "has the correct warning heading" in {
+        elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
+      }
+
+      "has the correct first message" which {
+
+        "has the correct text" in {
+          elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
+        }
+
+        "has the correct link text" in {
+          elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
+        }
+
+        "has the correct link destination" in {
+          element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
+        }
+      }
+
+      "has the correct second message" in {
+        elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
+      }
+    }
   }
 }

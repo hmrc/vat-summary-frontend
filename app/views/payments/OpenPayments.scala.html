@@ -16,48 +16,56 @@
 
 @import models.User
 @import models.viewModels.OpenPaymentsViewModel
-@import play.twirl.api.HtmlFormat
 @import views.html.partials.covid.CovidMessage
 @import views.html.templates.payments.WhatYouOweChargeRow
 
 @this(mainTemplate: MainTemplate,
       covidMessage: CovidMessage,
       whatYouOweChargeRow: WhatYouOweChargeRow,
-      govukBreadcrumbs: GovukBreadcrumbs)
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukBackLink: GovukBackLink)
 
-@(user: User,
-  model: OpenPaymentsViewModel,
-  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
-                                                        messages: Messages,
-                                                        appConfig: config.AppConfig)
+@(user: User, model: OpenPaymentsViewModel, serviceInfoContent: Html, clientName: Option[String])(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @breadcrumbs = {
-    @govukBreadcrumbs(Breadcrumbs(
-        items = Seq(
-            BreadcrumbsItem(
-                content = Text(messages("breadcrumbs.bta")),
-                href = Some(appConfig.btaHomeUrl)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("vatDetails.title")),
-                href = Some(controllers.routes.VatDetailsController.details().url)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("openPayments.title"))
-            )
-        )
-    ))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details().url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("openPayments.title"))
+      )
+    )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
+  ))
 }
 
 @mainTemplate(
-    title = messages("openPayments.title"),
-    appConfig = appConfig,
-    serviceInfoContent = serviceInfoContent,
-    user = Some(user),
-    navLinkContent = Some(breadcrumbs)) {
+  title = messages("openPayments.title"),
+  appConfig = appConfig,
+  serviceInfoContent = serviceInfoContent,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      @clientName.map { name =>
+        <span class="govuk-caption-xl">@name</span>
+      }
       <h1 class="govuk-heading-xl">@messages("openPayments.heading")</h1>
 
       @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
@@ -65,7 +73,7 @@
       <div class="payments">
         <div class="section">
           @model.payments.zipWithIndex.map { case(payment, count) =>
-            @whatYouOweChargeRow(payment, count)
+            @whatYouOweChargeRow(payment, count, user.isAgent)
           }
         </div>
 
@@ -78,12 +86,16 @@
           <a class="govuk-link" href="https://www.gov.uk/vat-corrections" rel="noreferrer noopener" target="_blank">
             @messages("openPayments.correctErrors")</a>.
         </p>
-        <p class="govuk-body">@messages("payment.afterSubmitted") @Messages("payment.stillMake")
-          <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl" id="vatPaymentsLink" rel="noreferrer noopener" target="_blank">
-            @messages("payment.stillMakeLink")
-            <span class="govuk-visually-hidden"> @messages("payment.evenIfNotShown")</span></a>.
+        <p class="govuk-body">
+          @messages("payment.afterSubmitted")
+          @if(!user.isAgent) {
+            @messages("payment.stillMake")
+            <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl"
+               id="vatPaymentsLink" rel="noreferrer noopener" target="_blank">
+              @messages("payment.stillMakeLink")
+              <span class="govuk-visually-hidden">@messages("payment.evenIfNotShown")</span></a>.
+          }
         </p>
-
       </div>
     </div>
   </div>
