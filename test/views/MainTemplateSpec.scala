@@ -44,6 +44,10 @@ class MainTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.pageTitle) shouldBe "Business tax account"
       }
 
+      "have the correct service URL" in {
+        element(".govuk-header__link--service-name").attr("href") shouldBe mockConfig.btaHomeUrl
+      }
+
       "have a phase banner" which {
 
         "has a BETA tag" in {
@@ -65,6 +69,10 @@ class MainTemplateSpec extends ViewBaseSpec {
 
         elementText(Selectors.pageTitle) shouldBe "Your client’s VAT details"
       }
+
+      "have the correct service URL" in {
+        element(".govuk-header__link--service-name").attr("href") shouldBe mockConfig.agentClientLookupHubUrl
+      }
     }
 
     "the user is not known" should {
@@ -74,6 +82,10 @@ class MainTemplateSpec extends ViewBaseSpec {
 
       "have no nav title" in {
         elementText(Selectors.pageTitle) shouldBe "VAT"
+      }
+
+      "have the correct service URL" in {
+        element(".govuk-header__link--service-name").attr("href") shouldBe ""
       }
     }
 
