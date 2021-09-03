@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import play.core.PlayVersion
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
@@ -32,21 +31,14 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   val excludedPackages = Seq(
     "<empty>",
     ".*Reverse.*",
-    ".*standardError*.*",
-    ".*main_template*.*",
-    "uk.gov.hmrc.BuildInfo",
-    "app.*",
-    "prod.*",
+    ".*Routes.*",
     "config.*",
-    "testOnly.*",
-    "testOnlyDoNotUseInAppConf.*",
-    ".*feedback*.*",
-    "partials.*"
+    "testOnly.*"
   )
 
   Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
-    ScoverageKeys.coverageMinimum := 95,
+    ScoverageKeys.coverageMinimumStmtTotal := 95,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true
   )
