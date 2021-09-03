@@ -15,37 +15,41 @@
  *@
 
 @import models.viewModels.PaymentsHistoryViewModel
-@import play.twirl.api.HtmlFormat
 @import views.html.templates.payments._
 
 @this(mainTemplate: MainTemplate,
       paymentsHistoryTabs: PaymentsHistoryTabs,
       paymentsHistoryTabsContent: PaymentsHistoryTabsContent,
       govukBreadcrumbs: GovukBreadcrumbs,
-      govukTabs: GovukTabs)
+      govukTabs: GovukTabs,
+      govukBackLink: GovukBackLink)
 
-@(model: PaymentsHistoryViewModel,
-  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
-                                                        messages: Messages,
-                                                        appConfig: config.AppConfig,
-                                                        user: User)
+@(model: PaymentsHistoryViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
-    @govukBreadcrumbs(Breadcrumbs(
-        items = Seq(
-            BreadcrumbsItem(
-                content = Text(messages("breadcrumbs.bta")),
-                href = Some(appConfig.btaHomeUrl)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("vatDetails.title")),
-                href = Some(controllers.routes.VatDetailsController.details().url)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("paymentsHistory.title"))
-            )
-        )
-    ))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details().url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("paymentsHistory.title"))
+      )
+    )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
+  ))
 }
 
 @additionalYears = @{
@@ -57,11 +61,14 @@
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
-  navLinkContent = Some(breadcrumbs)) {
-
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+      @model.clientName.map { name =>
+        <span class="govuk-caption-xl">@name</span>
+      }
       <h1 id="top" class="govuk-heading-xl">@messages("paymentsHistory.title")</h1>
       <p class="govuk-body govuk-!-margin-bottom-8">
         <a class="govuk-link" href="@controllers.routes.OpenPaymentsController.openPayments().url">
@@ -74,11 +81,14 @@
       }
 
       <div class="govuk-tabs" data-module="govuk-tabs">
-        @paymentsHistoryTabs(Seq(model.tabOne) ++ additionalYears, model.previousPaymentsTab)
+        @paymentsHistoryTabs(
+          Seq(model.tabOne) ++ additionalYears,
+          model.previousPaymentsTab && !user.isAgent
+        )
         @paymentsHistoryTabsContent(
           Seq(model.tabOne) ++ additionalYears,
           model.transactions,
-          model.previousPaymentsTab
+          model.previousPaymentsTab && !user.isAgent
         )
       </div>
     </div>

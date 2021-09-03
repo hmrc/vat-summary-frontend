@@ -21,4 +21,5 @@ case class PaymentsHistoryViewModel(tabOne: Int,
                                     tabThree: Option[Int],
                                     previousPaymentsTab: Boolean,
                                     transactions: Seq[PaymentsHistoryModel],
-                                    showInsolvencyContent: Boolean)
+                                    showInsolvencyContent: Boolean,
+                                    clientName: Option[String])

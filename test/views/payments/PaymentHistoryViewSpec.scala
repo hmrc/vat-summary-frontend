@@ -16,8 +16,9 @@
 
 package views.payments
 
-import java.time.LocalDate
+import models.User
 
+import java.time.LocalDate
 import models.payments._
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import org.jsoup.Jsoup
@@ -32,6 +33,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageHeading = "h1"
+    val backLink = ".govuk-back-link"
+    val caption = ".govuk-caption-xl"
     val btaBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(1)"
     val btaBreadcrumbLink = "li.govuk-breadcrumbs__list-item:nth-child(1) a"
     val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2)"
@@ -51,7 +54,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val amountPaidTableContent = "tr td:nth-of-type(3)"
     val amountRepaidTableContent = "tr td:nth-of-type(4)"
     val insolvencyBanner = "div.govuk-form-group"
-    val whatYouOweLink = "p.govuk-body:nth-child(2) > a:nth-child(1)"
+    val whatYouOweLink = ".govuk-body > a"
     def columnHeaading(col: Int): String = s".govuk-table__header:nth-of-type($col)"
   }
 
@@ -70,14 +73,15 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       amount = exampleAmount,
       clearedDate = Some(LocalDate.parse(s"2018-03-01"))
     )),
-    showInsolvencyContent = false
+    showInsolvencyContent = false,
+    None
   )
 
-  "The payments history page" when {
+  "The payments history page for a principal user" when {
 
     "the user is not insolvent" should {
 
-      lazy val view: Html = paymentHistoryView(model)
+      lazy val view: Html = paymentHistoryView(model, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -86,6 +90,10 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe "Payment history"
+      }
+
+      "not have a client name caption" in {
+        elementExtinct(Selectors.caption)
       }
 
       "have the link to check what you owe" which {
@@ -207,12 +215,119 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the user is insolvent" should {
 
       val insolventViewModel = model.copy(showInsolvencyContent = true)
-      lazy val view: Html = paymentHistoryView(insolventViewModel)
+      lazy val view: Html = paymentHistoryView(insolventViewModel, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the insolvency banner" in {
         elementText(Selectors.insolvencyBanner) shouldBe "You cannot view payments made before the insolvency date."
       }
+    }
+  }
+
+  "The payments history page for an agent user" should {
+
+    implicit val user: User = agentUser
+    val entityName = "Capgemini"
+    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have the correct document title" in {
+      document.title shouldBe "Payment history - Your client’s VAT details - GOV.UK"
+    }
+
+    "have the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe "Payment history"
+    }
+
+    "have the client name caption" in {
+      elementText(Selectors.caption) shouldBe entityName
+    }
+
+    "have the link to check what you owe" which {
+
+      "has the correct text" in {
+        elementText(Selectors.whatYouOweLink) shouldBe "Find out if you owe anything to HMRC"
+      }
+
+      "has the correct href" in {
+        element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments().url
+      }
+    }
+
+    "render a Back link" which {
+
+      "has the correct text" in {
+        elementText(Selectors.backLink) shouldBe "Back"
+      }
+
+      "has the correct href" in {
+        element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
+      }
+    }
+
+    "display a current year tab" in {
+      elementText(Selectors.tabOne) shouldBe currentYear.toString
+    }
+
+    "display a previous year tab" in {
+      elementText(Selectors.tabTwo) shouldBe (currentYear - 1).toString
+    }
+
+    "display a tab for 2 years ago" in {
+      elementText(Selectors.tabThree) shouldBe (currentYear - 2).toString
+    }
+
+    "not display a 'Previous payments' tab, despite the previousPaymentsTab boolean being set to true" in {
+      elementExtinct(Selectors.tabFour)
+    }
+
+    "have the correct current year tab content" which {
+
+      "has the correct heading in the first column" in {
+        elementText(Selectors.columnHeaading(1)) shouldBe "Date"
+      }
+
+      "has the correct heading in the second column" in {
+        elementText(Selectors.columnHeaading(2)) shouldBe "Payment description"
+      }
+
+      "has the correct heading in the third column" in {
+        elementText(Selectors.columnHeaading(3)) shouldBe "You paid HMRC"
+      }
+
+      "has the correct heading in the fourth column" in {
+        elementText(Selectors.columnHeaading(4)) shouldBe "HMRC paid you"
+      }
+
+      "has the correct date in the first column" in {
+        elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar"
+      }
+
+      "has the correct charge description in the second column" in {
+        elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
+        elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
+      }
+
+      "has the correct payment amount in the third column" in {
+        elementText(Selectors.amountPaidTableContent) shouldBe "£100"
+      }
+
+      "has the correct repayment amount in the fourth column" in {
+        elementText(Selectors.amountRepaidTableContent) shouldBe "£0"
+      }
+    }
+
+    "have the correct previous year tab content" in {
+      elementText(Selectors.previousYearNoPayments) shouldBe
+        "You have not made or received any payments using the new VAT service this year."
+    }
+
+    "not have the 'Previous payments' tab content, despite the previousPaymentsTab boolean being set to true" in {
+      elementExtinct(Selectors.prevPaymentsParagraph)
+    }
+
+    "not display the insolvency banner" in {
+      elementExtinct(Selectors.insolvencyBanner)
     }
   }
 }
