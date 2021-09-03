@@ -17,12 +17,13 @@
 package controllers
 
 import java.time.{LocalDate, Period}
-
 import audit.AuditingService
 import audit.models.ViewVatPaymentHistoryAuditModel
+import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.DDInterruptPredicate
+
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
@@ -37,19 +38,18 @@ import views.html.payments.PaymentHistory
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
+class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
                                          authorisedController: AuthorisedController,
                                          dateService: DateService,
                                          serviceInfoService: ServiceInfoService,
-                                         val enrolmentsAuthService: EnrolmentsAuthService,
                                          accountDetailsService: AccountDetailsService,
                                          serviceErrorHandler: ServiceErrorHandler,
                                          mcc: MessagesControllerComponents,
-                                         implicit  val ec: ExecutionContext,
                                          paymentHistoryView: PaymentHistory,
                                          DDInterrupt: DDInterruptPredicate)
-                                        (implicit val appConfig: AppConfig,
-                                         auditingService: AuditingService)
+                                        (implicit appConfig: AppConfig,
+                                         auditingService: AuditingService,
+                                         ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def currentYear: Int = dateService.now().getYear
@@ -87,6 +87,7 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
               Future.successful(Right(Seq.empty))
             }
         } yield {
+          val clientName = request.session.get(SessionKeys.clientName)
           val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
           generateViewModel(
             paymentsServiceYearOne,
@@ -94,7 +95,8 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
             paymentsServiceYearThree,
             showPreviousPaymentsTab,
             migrationDate,
-            showInsolvencyContent
+            showInsolvencyContent,
+            clientName
           ) match {
             case Some(model) =>
               auditEvent(user.vrn, model.transactions)
@@ -141,7 +143,8 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
                                              paymentsServiceYearThree: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              showPreviousPaymentsTab: Boolean,
                                              customerMigratedToETMPDate: Option[LocalDate],
-                                             showInsolvencyContent: Boolean): Option[PaymentsHistoryViewModel] =
+                                             showInsolvencyContent: Boolean,
+                                             clientName: Option[String]): Option[PaymentsHistoryViewModel] =
     (paymentsServiceYearOne, paymentsServiceYearTwo, paymentsServiceYearThree) match {
       case (Right(yearOneTrans), Right(yearTwoTrans), Right(yearThreeTrans)) =>
         val migratedThisYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
@@ -157,7 +160,8 @@ class PaymentHistoryController @Inject()(val paymentsService: PaymentsService,
           tabThree,
           showPreviousPaymentsTab,
           transactions,
-          showInsolvencyContent
+          showInsolvencyContent,
+          clientName
         ))
       case _ => None
   }

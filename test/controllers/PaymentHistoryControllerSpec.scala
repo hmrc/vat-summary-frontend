@@ -42,7 +42,6 @@ import views.html.errors.StandardError
 import views.html.payments.PaymentHistory
 import play.api.test.Helpers.defaultAwaitTimeout
 
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentHistoryControllerSpec extends ControllerBaseSpec {
@@ -192,11 +191,9 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         authorisedController,
         mockDateService,
         mockServiceInfoService,
-        enrolmentsAuthService,
         mockAccountDetailsService,
         mockServiceErrorHandler,
         mcc,
-        ec,
         paymentHistory,
         ddInterruptPredicate
       )
@@ -500,14 +497,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             emptyResult,
             showPreviousPaymentsTab = false,
             Some(LocalDate.parse("2018-01-01")),
-            showInsolvencyContent = false
+            showInsolvencyContent = false,
+            None
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             None,
             None,
             previousPaymentsTab = false,
             (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
-            showInsolvencyContent = false
+            showInsolvencyContent = false,
+            None
           ))
         }
       }
@@ -521,14 +520,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             emptyResult,
             showPreviousPaymentsTab = false,
             Some(LocalDate.parse("2017-01-01")),
-            showInsolvencyContent = false
+            showInsolvencyContent = false,
+            None
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             Some(currentYear - 1),
             None,
             previousPaymentsTab = false,
             (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
-            showInsolvencyContent = false
+            showInsolvencyContent = false,
+            None
           ))
         }
       }
@@ -542,14 +543,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             serviceResultYearThree,
             showPreviousPaymentsTab = false,
             Some(LocalDate.parse("2016-12-12")),
-            showInsolvencyContent = false
+            showInsolvencyContent = false,
+            None
           ) shouldBe Some(PaymentsHistoryViewModel(
             currentYear,
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
             (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct,
-            showInsolvencyContent = false
+            showInsolvencyContent = false,
+            None
           ))
         }
       }
@@ -565,7 +568,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           serviceResultYearThree,
           showPreviousPaymentsTab = false,
           None,
-          showInsolvencyContent = false
+          showInsolvencyContent = false,
+          None
         ) shouldBe None
       }
     }
