@@ -41,7 +41,6 @@ class FeatureSwitchItems @Inject() () {
     Seq(
       formCheckBoxItem(form, ConfigKeys.userResearchBannerFeature, "User research banner"),
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
-      formCheckBoxItem(form, ConfigKeys.displayCovidMessageFeature, "Display Covid-19 message"),
       formCheckBoxItem(form, ConfigKeys.directDebitInterrupt, "DD interrupt screen")
     )
   }

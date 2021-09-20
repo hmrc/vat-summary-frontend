@@ -26,7 +26,6 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.displayCovidMessageFeature -> boolean,
       ConfigKeys.directDebitInterrupt -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )

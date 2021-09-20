@@ -430,11 +430,6 @@ a11yStatement.testCarriedOut.2 = Digital Accessibility Centre
 a11yStatement.testCarriedOut.3 = The full service was tested by HMRC and included disabled users.
 a11yStatement.pagePrepared = This page was prepared on 20 September 2019. It was last updated on 22 October 2020.
 
-covid.heading = Paying deferred VAT: the new payment scheme
-covid.line1 = If you deferred paying VAT that was due between 20 March 2020 and 30 June 2020, you may be able to join the
-covid.line1.link = VAT deferral new payment scheme (opens in new tab)
-covid.line2 = Instead of paying the full amount of your deferred VAT immediately, you can pay in smaller, interest free instalments. The number of instalments depends on when you join the scheme.
-
 emailVerification.message.1 = You need to confirm your email address.
 emailVerification.message.2 = Resend the email
 emailVerification.message.3 = to confirm it.

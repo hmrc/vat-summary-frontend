@@ -25,6 +25,5 @@ class Features @Inject()(implicit config: Configuration) {
 
   val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
-  val displayCovidMessage = new Feature(ConfigKeys.displayCovidMessageFeature)
   val directDebitInterrupt = new Feature(ConfigKeys.directDebitInterrupt)
 }

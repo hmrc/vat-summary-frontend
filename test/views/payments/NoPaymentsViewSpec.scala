@@ -17,7 +17,6 @@
 package views.payments
 
 
-import common.MessageLookup.CovidMessages
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -50,105 +49,62 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
   "Rendering the no payments page for a principal user" when {
 
-    "the displayCovidMessage feature switch is on" should {
+    lazy val view = {
+      noPaymentsView(user, Html(""), None)
+    }
+    lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val view = {
-        mockConfig.features.displayCovidMessage(true)
-        noPaymentsView(user, Html(""), None)
-      }
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct document title" in {
-        document.title shouldBe "What you owe - Business tax account - GOV.UK"
-      }
-
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe "What you owe"
-      }
-
-      "not have a client name caption" in {
-        elementExtinct(Selectors.caption)
-      }
-
-      "have the correct secondary heading" in {
-        elementText(Selectors.secondaryHeading) shouldBe "You do not owe anything right now."
-      }
-
-      "have the correct context information" in {
-        elementText(Selectors.noPaymentsDetail) shouldBe
-          "If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe." +
-            " You can still make a payment (opens in a new tab)."
-      }
-
-      "have the correct make a payment link text" in {
-        elementText(Selectors.paymentLink) shouldBe "make a payment (opens in a new tab)"
-      }
-
-      "have the correct href" in {
-        element(Selectors.paymentLink).attr("href") shouldBe "unauthenticated-payments-url"
-      }
-
-      "render breadcrumbs which" should {
-
-        "have the text 'Business tax account'" in {
-          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
-        }
-
-        "link to bta" in {
-          element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
-        }
-
-        "have the text 'VAT'" in {
-          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
-        }
-
-        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
-        }
-
-        "have the text 'What you owe'" in {
-          elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
-        }
-      }
-
-      "have a covid partial" which {
-
-        "has the correct warning heading" in {
-          elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
-        }
-
-        "has the correct first message" which {
-
-          "has the correct text" in {
-            elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
-          }
-
-          "has the correct link text" in {
-            elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
-          }
-
-          "has the correct link destination" in {
-            element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
-          }
-        }
-
-        "has the correct second message" in {
-          elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
-        }
-      }
+    "have the correct document title" in {
+      document.title shouldBe "What you owe - Business tax account - GOV.UK"
     }
 
-    "the displayCovidMessage feature switch is off" in {
+    "have the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe "What you owe"
+    }
 
-      lazy val view = {
-        mockConfig.features.displayCovidMessage(false)
-        noPaymentsView(user, Html(""), None)
+    "not have a client name caption" in {
+      elementExtinct(Selectors.caption)
+    }
+
+    "have the correct secondary heading" in {
+      elementText(Selectors.secondaryHeading) shouldBe "You do not owe anything right now."
+    }
+
+    "have the correct context information" in {
+      elementText(Selectors.noPaymentsDetail) shouldBe
+        "If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe." +
+          " You can still make a payment (opens in a new tab)."
+    }
+
+    "have the correct make a payment link text" in {
+      elementText(Selectors.paymentLink) shouldBe "make a payment (opens in a new tab)"
+    }
+
+    "have the correct href" in {
+      element(Selectors.paymentLink).attr("href") shouldBe "unauthenticated-payments-url"
+    }
+
+    "render breadcrumbs which" should {
+
+      "have the text 'Business tax account'" in {
+        elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
       }
-      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      elementExtinct(Selectors.covidHeading)
-      elementExtinct(Selectors.covidPartialLine1)
-      elementExtinct(Selectors.covidPartialLine2)
+      "link to bta" in {
+        element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
+      }
+
+      "have the text 'VAT'" in {
+        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
+      }
+
+      s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+        element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+      }
+
+      "have the text 'What you owe'" in {
+        elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
+      }
     }
   }
 
@@ -156,7 +112,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     val entityName = "Capgemini"
     lazy val view = {
-      mockConfig.features.displayCovidMessage(true)
       noPaymentsView(agentUser, Html(""), Some(entityName))
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -190,32 +145,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
       "has the correct href" in {
         element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
-      }
-    }
-
-    "have a covid partial" which {
-
-      "has the correct warning heading" in {
-        elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
-      }
-
-      "has the correct first message" which {
-
-        "has the correct text" in {
-          elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
-        }
-
-        "has the correct link text" in {
-          elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
-        }
-
-        "has the correct link destination" in {
-          element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
-        }
-      }
-
-      "has the correct second message" in {
-        elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
       }
     }
   }
