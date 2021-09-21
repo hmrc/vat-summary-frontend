@@ -60,10 +60,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
-    val covidHeading = ".govuk-warning-text__text"
-    val covidPartialLine1 = "div.govuk-inset-text > p:nth-of-type(1)"
-    val covidPartialLine1Link = "div.govuk-inset-text > p > a"
-    val covidPartialLine2 = "div.govuk-inset-text > p:nth-of-type(2)"
   }
 
   override val user: User = User("1111")
