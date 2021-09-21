@@ -14,10 +14,7 @@
  * limitations under the License.
  *@
 
-@import views.html.partials.covid.CovidMessage
-
 @this(mainTemplate: MainTemplate,
-      covidMessage: CovidMessage,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukBackLink: GovukBackLink)
 
@@ -62,8 +59,6 @@
         <span class="govuk-caption-xl">@name</span>
       }
       <h1 class="govuk-heading-xl">@messages("noPayments.heading")</h1>
-
-      @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
 
       <div class="govuk-form-group" id="noPaymentsDetail">
         <h2 class="govuk-body-l">@messages("noPayments.oweNothing")</h2>

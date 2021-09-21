@@ -100,15 +100,6 @@ object MessageLookup {
     //scalastyle:on
   }
 
-  object CovidMessages {
-    val heading: String = "Paying deferred VAT: the new payment scheme"
-    val line1LinkText: String = "VAT deferral new payment scheme (opens in new tab)"
-    val line1: String = "If you deferred paying VAT that was due between 20 March 2020 and 30 June 2020, you may be " +
-      s"able to join the $line1LinkText."
-    val line2: String = "Instead of paying the full amount of your deferred VAT immediately, you can pay in " +
-      "smaller, interest free instalments. The number of instalments depends on when you join the scheme."
-  }
-
   object noDDInterruptMessages {
     val backLinkText: String = "Back"
     val pageTitle: String = "You need to check your payment method - VAT - GOV.UK"

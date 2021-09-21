@@ -17,7 +17,7 @@
 package views.payments
 
 import java.time.LocalDate
-import common.MessageLookup.{CovidMessages, PaymentMessages}
+import common.MessageLookup.PaymentMessages
 import models.User
 import models.payments._
 import models.viewModels.OpenPaymentsViewModel
@@ -60,10 +60,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val helpMakePayment = "div > p:nth-child(5)"
     val helpSummaryRevealLink = "summary span:nth-of-type(1)"
     val makePayment = "#vatPaymentsLink"
-    val covidHeading = ".govuk-warning-text__text"
-    val covidPartialLine1 = "div.govuk-inset-text > p:nth-of-type(1)"
-    val covidPartialLine1Link = "div.govuk-inset-text > p > a"
-    val covidPartialLine2 = "div.govuk-inset-text > p:nth-of-type(2)"
   }
 
   override val user: User = User("1111")
@@ -93,11 +89,10 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
   "Rendering the open payments page for a principal user" when {
 
-    "the display covid feature switch is on, user has two non-overdue charges" should {
+    "the  user has two non-overdue charges" should {
 
       val viewModel = OpenPaymentsViewModel(payments)
       lazy val view = {
-        mockConfig.features.displayCovidMessage(true)
         openPaymentsView(user, viewModel, Html(""), None)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -212,48 +207,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "have the correct destination for the make a payment link" in {
         element(Selectors.makePayment).attr("href") shouldBe "unauthenticated-payments-url"
       }
-
-      "have a covid partial" which {
-
-        "has the correct warning heading" in {
-          elementText(Selectors.covidHeading) shouldBe CovidMessages.heading
-        }
-
-        "has the correct first message" which {
-
-          "has the correct text" in {
-            elementText(Selectors.covidPartialLine1) shouldBe CovidMessages.line1
-          }
-
-          "has the correct link text" in {
-            elementText(Selectors.covidPartialLine1Link) shouldBe CovidMessages.line1LinkText
-          }
-
-          "has the correct link destination" in {
-            element(Selectors.covidPartialLine1Link).attr("href") shouldBe mockConfig.govUkVatDeferralUrl
-          }
-        }
-
-        "has the correct second message" in {
-          elementText(Selectors.covidPartialLine2) shouldBe CovidMessages.line2
-        }
-      }
-    }
-
-    "the display covid feature switch is off" should {
-
-      "not display the covid message" in {
-
-        val viewModel = OpenPaymentsViewModel(payments)
-        lazy val view = {
-          mockConfig.features.displayCovidMessage(false)
-          openPaymentsView(user, viewModel, Html(""), None)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        elementExtinct(Selectors.covidPartialLine1)
-        elementExtinct(Selectors.covidPartialLine2)
-      }
     }
 
     "the user has the following charge types" should {
@@ -303,7 +256,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val entityName = "Capgemini"
     val viewModel = OpenPaymentsViewModel(payments)
     lazy val view = {
-      mockConfig.features.displayCovidMessage(true)
       openPaymentsView(agentUser, viewModel, Html(""), Some(entityName))
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)

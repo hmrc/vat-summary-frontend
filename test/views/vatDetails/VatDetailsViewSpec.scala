@@ -56,7 +56,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val apiError = "h3:nth-child(2).govuk-heading-m"
     val vatOptOutSection = "#vat-optout"
     val cancelVatSection = "#cancel-vat"
-    val covidPartial = ".warning-banner"
     val unverifiedMessageSelector = "#unverified-email-notice"
   }
 

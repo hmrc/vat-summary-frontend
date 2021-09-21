@@ -81,7 +81,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val govUkHearingImpairedUrl: String = "/hearing-impaired"
   override val govUkVatRegistrationUrl: String = "/register-for-vat"
   override val govUkVat7Form: String = "/vat-application-to-cancel-your-vat-registration-vat7"
-  override val govUkVatDeferralUrl: String = "/deferral"
   override val abilityNetUrl: String = "/ability-net"
   override val wcagGuidelinesUrl: String = "/wcag"
   override val eassUrl: String = "/eass"

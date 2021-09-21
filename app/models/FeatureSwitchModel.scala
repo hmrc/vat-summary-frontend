@@ -18,5 +18,4 @@ package models
 
 case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               staticDateEnabled: Boolean,
-                              displayCovid: Boolean,
                               directDebitInterrupt: Boolean)

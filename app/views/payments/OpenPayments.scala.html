@@ -16,11 +16,9 @@
 
 @import models.User
 @import models.viewModels.OpenPaymentsViewModel
-@import views.html.partials.covid.CovidMessage
 @import views.html.templates.payments.WhatYouOweChargeRow
 
 @this(mainTemplate: MainTemplate,
-      covidMessage: CovidMessage,
       whatYouOweChargeRow: WhatYouOweChargeRow,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukBackLink: GovukBackLink)
@@ -67,8 +65,6 @@
         <span class="govuk-caption-xl">@name</span>
       }
       <h1 class="govuk-heading-xl">@messages("openPayments.heading")</h1>
-
-      @if(appConfig.features.displayCovidMessage()) { @covidMessage() }
 
       <div class="payments">
         <div class="section">
