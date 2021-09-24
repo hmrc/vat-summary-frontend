@@ -16,12 +16,14 @@
 
 package controllers.predicates
 
+import common.SessionKeys
+import common.TestModels.customerInformationMax
 import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.mvc.Results.Ok
-import play.api.mvc.{AnyContent, Request, Result}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -31,33 +33,22 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AgentPredicateSpec extends ControllerBaseSpec {
 
-  private trait Test {
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    lazy val authResponse: Enrolments = Enrolments(
-      Set(
-        Enrolment(
-          "HMRC-AS-AGENT",
-          Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
-          "Activated"
-        )
+  lazy val authResponse: Enrolments = Enrolments(
+    Set(
+      Enrolment(
+        "HMRC-AS-AGENT",
+        Seq(EnrolmentIdentifier("AgentReferenceNumber", "XARN1234567")),
+        "Activated"
       )
     )
+  )
 
-    lazy val mockAgentPredicate: AgentPredicate = new AgentPredicate(
-      mockEnrolmentsAuthService,
-      mcc,
-      mockAppConfig,
-      ec,
-      agentUnauthorised
-    )
+  def target(request: Request[AnyContent], financialRequest: Boolean = false): Future[Result] =
+    agentPredicate.authoriseAsAgent(
+      _ => _ => Future.successful(Ok("welcome")), financialRequest
+    )(request)
 
-    def target(request: Request[AnyContent]): Future[Result] = mockAgentPredicate.authoriseAsAgent({
-      _ =>
-        _ =>
-          Future.successful(Ok("welcome"))
-    })(request)
-  }
+  lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession("CLIENT_VRN" -> "123456789")
 
   "AgentPredicate .authoriseAsAgent" when {
 
@@ -65,24 +56,55 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
       "agent has delegated enrolment for VRN" when {
 
-        "agent has HMRC-AS-AGENT enrolment" should {
+        "agent has HMRC-AS-AGENT enrolment" when {
 
-          "return the result of the original code block" in new Test {
+          "the request is for a financial page" should {
 
-            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-              .expects(*, *, *, *)
-              .returns(Future.successful(authResponse))
+            lazy val result: Future[Result] = {
+              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+                .expects(*, *, *, *)
+                .returns(Future.successful(authResponse))
 
-            lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+              mockCustomerInfo(Future.successful(Right(customerInformationMax)))
+              mockDateServiceCall()
+              target(requestWithVRN, financialRequest = true)
+            }
 
-            status(result) shouldBe Status.OK
-            contentAsString(result) shouldBe "welcome"
+            "successfully pass the request through the predicate" in {
+              status(result) shouldBe Status.OK
+              contentAsString(result) shouldBe "welcome"
+            }
+
+            "add values to the session to prove financial access" in {
+              session(result).get(SessionKeys.financialAccess) shouldBe Some("true")
+              session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("false")
+            }
+          }
+
+          "the request is not for a financial page" should {
+
+            lazy val result: Future[Result] = {
+              (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+                .expects(*, *, *, *)
+                .returns(Future.successful(authResponse))
+              target(requestWithVRN)
+            }
+
+            "successfully pass the request through the predicate" in {
+              status(result) shouldBe Status.OK
+              contentAsString(result) shouldBe "welcome"
+            }
+
+            "not add values to the session as the request was not forwarded to the financial predicate" in {
+              session(result).get(SessionKeys.financialAccess) shouldBe None
+              session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe None
+            }
           }
         }
 
         "agent does not have HMRC-AS-AGENT enrolment" should {
 
-          "return 403" in new Test {
+          "return 403" in {
 
             val otherEnrolment: Enrolments = Enrolments(
               Set(
@@ -98,7 +120,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
               .expects(*, *, *, *)
               .returns(Future.successful(otherEnrolment))
 
-            lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+            lazy val result: Future[Result] = target(requestWithVRN)
 
             status(result) shouldBe Status.FORBIDDEN
           }
@@ -107,13 +129,13 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
       "agent does not have delegated enrolment for VRN" should {
 
-        "redirect to agent-client-lookup unauthorised page" in new Test {
+        "redirect to agent-client-lookup unauthorised page" in {
 
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *, *)
             .returns(Future.failed(InsufficientEnrolments()))
 
-          lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+          lazy val result: Future[Result] = target(requestWithVRN)
 
           status(result) shouldBe Status.SEE_OTHER
           redirectLocation(result) shouldBe Some(mockAppConfig.agentClientUnauthorisedUrl("/"))
@@ -122,13 +144,13 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
       "user has no session" should {
 
-        "redirect to sign in" in new Test {
+        "redirect to sign in" in {
 
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *, *)
             .returns(Future.failed(MissingBearerToken()))
 
-          lazy val result: Future[Result] = target(fakeRequest.withSession("CLIENT_VRN" -> "123456789"))
+          lazy val result: Future[Result] = target(requestWithVRN)
 
           status(result) shouldBe Status.SEE_OTHER
           redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
@@ -138,7 +160,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
 
     "CLIENT_VRN is not in session" should {
 
-      "redirect to agent-client lookup VRN lookup page" in new Test {
+      "redirect to agent-client lookup VRN lookup page" in {
 
         lazy val result: Future[Result] = target(fakeRequest)
 

@@ -33,12 +33,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
-                               val mcc: MessagesControllerComponents,
-                               implicit val appConfig: AppConfig,
-                               implicit val ec: ExecutionContext,
-                               agentUnauthorised: AgentUnauthorised) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                               mcc: MessagesControllerComponents,
+                               agentUnauthorised: AgentUnauthorised,
+                               financialPredicate: FinancialPredicate)
+                              (implicit appConfig: AppConfig,
+                               ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  def authoriseAsAgent(block: Request[AnyContent] => User => Future[Result])
+  def authoriseAsAgent(block: Request[AnyContent] => User => Future[Result], financialRequest: Boolean = false)
                       (implicit request: Request[AnyContent]): Future[Result] = {
 
     val agentDelegatedAuthorityRule: String => Enrolment = vrn =>
@@ -55,9 +56,16 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
               enrolments.enrolments.collectFirst {
                 case Enrolment(EnrolmentKeys.agentEnrolmentKey, Seq(EnrolmentIdentifier(_, arn)), EnrolmentKeys.activated, _) => arn
               } match {
-                case Some(arn) => block(request)(User(vrn, arn = Some(arn)))
+                case Some(arn) =>
+                  val user = User(vrn, arn = Some(arn))
+                  if(financialRequest) {
+                    financialPredicate.authoriseFinancialAction(block)(request, user)
+                  } else {
+                    block(request)(user)
+                  }
                 case None =>
-                  logger.debug("[AgentPredicate][authoriseAsAgent] - Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
+                  logger.debug("[AgentPredicate][authoriseAsAgent] - " +
+                    "Agent with no HMRC-AS-AGENT enrolment. Rendering unauthorised view.")
                   Future.successful(Forbidden(agentUnauthorised()))
               }
           } recover {
@@ -70,7 +78,8 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
             Redirect(appConfig.agentClientUnauthorisedUrl(request.uri))
           }
       case None =>
-        logger.debug(s"[AuthPredicate][authoriseAsAgent] - No Client VRN in session. Redirecting to ${appConfig.agentClientLookupStartUrl(request.uri)}")
+        logger.debug("[AuthPredicate][authoriseAsAgent] - No Client VRN in session. " +
+          s"Redirecting to ${appConfig.agentClientLookupStartUrl(request.uri)}")
         Future.successful(Redirect(appConfig.agentClientLookupStartUrl(request.uri)))
     }
   }
