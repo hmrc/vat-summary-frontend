@@ -255,13 +255,17 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "user is an Agent" should {
 
-      "redirect to Agent Hub page" in new Test {
-        override val authCall = true
+      "return 200" in new AllCallsTest {
         override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = agentAuthResult
-        val result: Future[Result] = target.paymentHistory()(fakeRequest)
-
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
+        override def setup(): Any = {
+          super.setup()
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(agentEnrolments))
+            .noMoreThanOnce()
+        }
+        private val result = target.paymentHistory()(agentFinancialRequest)
+        status(result) shouldBe Status.OK
       }
     }
 

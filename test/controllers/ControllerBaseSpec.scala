@@ -16,7 +16,6 @@
 
 package controllers
 
-import akka.actor.ActorSystem
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -51,9 +50,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
 
   implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
-  implicit val system: ActorSystem = ActorSystem()
-    implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false",
-    SessionKeys.viewedDDInterrupt -> "true")
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.viewedDDInterrupt -> "true")
 
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
@@ -63,8 +61,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val enrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-  val agentPredicate: AgentPredicate = new AgentPredicate(
-    enrolmentsAuthService, mcc, mockAppConfig, ec, agentUnauthorised)
+  val agentPredicate: AgentPredicate = new AgentPredicate(enrolmentsAuthService, mcc, agentUnauthorised, financialPredicate)
   val authorisedController: AuthorisedController = new AuthorisedController(
     mcc,
     enrolmentsAuthService,
@@ -72,13 +69,9 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     agentPredicate,
     mockAccountDetailsService,
     mockServiceErrorHandler,
-    mockAppConfig,
-    ec,
     unauthorised
   )
-  val ddInterruptPredicate: DDInterruptPredicate = new DDInterruptPredicate(
-    mcc
-  )
+  val ddInterruptPredicate: DDInterruptPredicate = new DDInterruptPredicate(mcc)
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
@@ -93,17 +86,19 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   lazy val DDInterruptRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest("GET","/homepage").withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
 
+  lazy val agentFinancialRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(
+      SessionKeys.financialAccess -> "true",
+      SessionKeys.agentSessionVrn -> "123456789",
+      SessionKeys.viewedDDInterrupt -> "false"
+    )
+
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)
-
 
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockAppConfig.features.directDebitInterrupt(true)
-  }
-
-  override def afterEach(): Unit = {
-    super.afterEach()
   }
 
   def mockCustomerInfo(accountDetailsResponse: Future[HttpGetResult[CustomerInformation]]):Any =

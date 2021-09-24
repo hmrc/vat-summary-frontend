@@ -255,12 +255,22 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
       "user is an Agent" should {
 
-        "redirect to Agent Hub page" in new Test {
+        "return 200 (OK)" in new Test {
           override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
-          val result: Future[Result] = target.openPayments()(fakeRequest)
+          override def setupMocks(): Unit = {
+            super.setupMocks()
 
-          status(result) shouldBe Status.SEE_OTHER
-          redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
+            (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *, *)
+              .returns(Future.successful(agentEnrolments))
+              .noMoreThanOnce()
+
+            (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+              .expects(*, *, *)
+              .returns(Future.successful(Right(Some(Payments(Seq(payment, payment))))))
+          }
+          val result: Future[Result] = target.openPayments()(agentFinancialRequest)
+          status(result) shouldBe Status.OK
         }
       }
 

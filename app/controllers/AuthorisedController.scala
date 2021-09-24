@@ -36,15 +36,15 @@ import utils.LoggerUtil
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
-                                     val enrolmentsAuthService: EnrolmentsAuthService,
-                                     val financialPredicate: FinancialPredicate,
-                                     val agentPredicate: AgentPredicate,
-                                     val accountDetailsService: AccountDetailsService,
-                                     val serviceErrorHandler: ServiceErrorHandler,
-                                     implicit val appConfig: AppConfig,
-                                     implicit val ec: ExecutionContext,
-                                     unauthorised: Unauthorised) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
+                                     enrolmentsAuthService: EnrolmentsAuthService,
+                                     financialPredicate: FinancialPredicate,
+                                     agentPredicate: AgentPredicate,
+                                     accountDetailsService: AccountDetailsService,
+                                     serviceErrorHandler: ServiceErrorHandler,
+                                     unauthorised: Unauthorised)
+                                    (implicit appConfig: AppConfig,
+                                     ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def authorisedAction(block: Request[AnyContent] => User => Future[Result],
                        financialRequest: Boolean = false,
@@ -56,7 +56,7 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
         .retrieve(Retrievals.allEnrolments and Retrievals.affinityGroup) {
           case _ ~ Some(AffinityGroup.Agent) =>
             if(allowAgentAccess) {
-              agentPredicate.authoriseAsAgent(block)
+              agentPredicate.authoriseAsAgent(block, financialRequest)
             } else {
               logger.debug("[AuthorisedController][authorisedAction] User is agent and agent access is forbidden. Redirecting to VACLUF")
               Future.successful(Redirect(appConfig.agentClientLookupHubUrl))
@@ -119,7 +119,8 @@ class AuthorisedController @Inject()(val mcc: MessagesControllerComponents,
 
   def financialAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
     block,
-    financialRequest = true
+    financialRequest = true,
+    allowAgentAccess = true
   )
 
   def authorisedActionAllowAgents(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = authorisedAction(
