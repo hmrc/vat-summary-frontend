@@ -30,8 +30,7 @@ class DDInterruptNoDDSpec extends ViewBaseSpec {
     val backLink = ".govuk-back-link"
     val title = "title"
     val text = "h1"
-    val detailsSummary = ".govuk-details__summary-text"
-    val detailsText = ".govuk-details__text"
+    val insetText = ".govuk-inset-text"
     val para1 = "div > div > div > p:nth-of-type(1)"
     val para2 = "div > .govuk-body:nth-of-type(2)"
     val para3 = "div > .govuk-body:nth-of-type(3)"
@@ -66,14 +65,10 @@ class DDInterruptNoDDSpec extends ViewBaseSpec {
       elementText(Selectors.text) shouldBe noDDInterruptMessages.title
     }
 
-    "have a progressive disclosure section" that {
-
-      "has the correct summary" in {
-        elementText(Selectors.detailsSummary) shouldBe noDDInterruptMessages.detailsSummary
-      }
+    "have inset text" that {
 
       "has the correct content" in {
-        elementText(Selectors.detailsText) shouldBe noDDInterruptMessages.detailsText
+        elementText(Selectors.insetText) shouldBe noDDInterruptMessages.insetText
       }
 
     }

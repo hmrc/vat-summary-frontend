@@ -15,7 +15,7 @@
  *@
 
 @this(mainTemplate: MainTemplate,
-        govukDetails: GovukDetails,
+        govukInsetText : GovukInsetText,
         govukButton: GovukButton,
         govukBackLink: GovukBackLink)
 
@@ -23,7 +23,8 @@
 
 @backLink = {
     @govukBackLink(BackLink(
-        href = appConfig.btaHomeUrl
+        href = appConfig.btaHomeUrl,
+        content = Text(messages("base.back"))
     ))
 }
 
@@ -35,28 +36,20 @@
 
       <h1 class="govuk-heading-l">@messages("directDebitInterrupt.noDD.title")</h1>
 
-      @govukDetails(Details(
-        summary = Text(messages("directDebitInterrupt.noDD.details1")),
-        content = Text(
-          messages("directDebitInterrupt.noDD.details2") + " " +
-          messages("directDebitInterrupt.noDD.details3")
-        )
-      ))
+        @govukInsetText(InsetText(
+        content = Text(messages("directDebitInterrupt.noDD.inset"))
+        ))
 
       <p class="govuk-body">
-        @messages("directDebitInterrupt.noDD.body1")
-        @messages("directDebitInterrupt.noDD.body2")
-        @messages("directDebitInterrupt.noDD.body3")
+        @messages("directDebitInterrupt.noDD.para1")
       </p>
 
       <p class="govuk-body">
-        @messages("directDebitInterrupt.noDD.body4")
-        @messages("directDebitInterrupt.noDD.body5")
-        @messages("directDebitInterrupt.noDD.body6")
+        @messages("directDebitInterrupt.noDD.para2")
       </p>
 
       <p class="govuk-body">
-        @messages("directDebitInterrupt.noDD.body7")
+        @messages("directDebitInterrupt.noDD.para3")
       </p>
 
       @govukButton(Button(

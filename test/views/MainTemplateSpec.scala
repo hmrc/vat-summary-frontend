@@ -26,7 +26,7 @@ class MainTemplateSpec extends ViewBaseSpec {
   val injectedView: MainTemplate = injector.instanceOf[MainTemplate]
 
   object Selectors {
-    val pageTitle = ".govuk-header__link--service-name"
+    val pageTitle = ".hmrc-header__service-name"
     val accessibilityStatementUrl = ".govuk-footer__inline-list-item:nth-child(2) > a"
     val phaseTag = ".govuk-phase-banner__content__tag"
     val phaseText = ".govuk-phase-banner__text"
@@ -37,7 +37,7 @@ class MainTemplateSpec extends ViewBaseSpec {
 
     "the user is an individual or organisation" should {
 
-      lazy val view = injectedView(title = "", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
+      lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the client nav title" in {
@@ -45,7 +45,7 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".govuk-header__link--service-name").attr("href") shouldBe mockConfig.btaHomeUrl
+        element(".hmrc-header__service-name").attr("href") shouldBe mockConfig.btaHomeUrl
       }
 
       "have a phase banner" which {
@@ -62,7 +62,7 @@ class MainTemplateSpec extends ViewBaseSpec {
 
     "the user is an agent" should {
 
-      lazy val view = injectedView(title = "", appConfig = mockConfig, user = Some(agentUser))(Html("Test"))(request, messages)
+      lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(agentUser))(Html("Test"))(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct agent title" in {
@@ -71,13 +71,13 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".govuk-header__link--service-name").attr("href") shouldBe mockConfig.agentClientLookupHubUrl
+        element(".hmrc-header__service-name").attr("href") shouldBe mockConfig.agentClientLookupHubUrl
       }
     }
 
     "the user is not known" should {
 
-      lazy val view = injectedView(title = "", appConfig = mockConfig, user = None)(Html("Test"))(request, messages)
+      lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = None)(Html("Test"))(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have no nav title" in {
@@ -85,13 +85,13 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".govuk-header__link--service-name").attr("href") shouldBe ""
+        element(".hmrc-header__service-name").attr("href") shouldBe ""
       }
     }
 
     "the accessibility statement link has been provided in the footer links" should {
 
-      lazy val view = injectedView(title = "title", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
+      lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct accessibility statement link" in {
