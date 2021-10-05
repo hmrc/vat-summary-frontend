@@ -167,7 +167,7 @@ vatCertificate.logo = HMRC_WelshLogo
 
 #Direct debit interrupt
 directDebitInterrupt.noDD.title = Mae angen i chi drefnu Debyd Uniongyrchol newydd
-directDebitInterrupt.noDD.inset = I barhau i dalu’ch TAW drwy Ddebyd Uniongyrchol, cyn dyddiad dyledus eich taliad nesaf, mae’n rhaid i chi drefnu Debyd Uniongyrchol newydd o leiaf 3 diwrnod gwaith cyn i’r taliad ar gyfer eich Ffurflen TAW ddod yn ddyledus. Os na fyddwch yn talu’r swm sy’n ddyledus mewn pryd, mae’n bosibl y byddwch yn cael cosb.
+directDebitInterrupt.noDD.inset = I barhau i dalu’ch TAW drwy Ddebyd Uniongyrchol, mae’n rhaid i chi drefnu Debyd Uniongyrchol newydd o leiaf 3 diwrnod gwaith cyn bod eich taliad Ffurflen TAW TAW yn ddyledus. Os na fyddwch yn talu’r swm sy’n ddyledus mewn pryd, mae’n bosibl y byddwch yn cael cosb.
 directDebitInterrupt.noDD.para1 = Os nad oes gennych amser i drefnu Debyd Uniongyrchol newydd cyn dyddiad dyledus eich taliad nesaf, neu os yw’n well gennych dalu drwy ddefnyddio dull gwahanol o dalu, gallwch wneud hyn yn adran ‘taliadau ac ad-daliadau’ eich cyfrif TAW.
 directDebitInterrupt.noDD.para2 = Os defnyddiwch y cysylltiad ‘Trefnu Debyd Uniongyrchol newydd’ isod, gallwch hefyd wirio a yw’ch Debyd Uniongyrchol newydd wedi’i actifadu yn adran ‘taliadau ac ad-daliadau’ eich cyfrif TAW.
 directDebitInterrupt.noDD.para3 = Os ydych eisoes wedi trefnu dull talu, gallwch fynd yn eich blaen i’ch cyfrif TAW.

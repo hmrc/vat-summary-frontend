@@ -141,7 +141,7 @@ vatCertificate.logo = HMRC_Logo
 
 #Direct debit interrupt
 directDebitInterrupt.noDD.title = You need to set up a new Direct Debit
-directDebitInterrupt.noDD.inset = To continue to pay your VAT by Direct Debit before your next payment is due you must set up a new Direct Debit at least 3 working days before your VAT Return payment is due. If you do not pay the amount due on time you may get a penalty.
+directDebitInterrupt.noDD.inset = To continue to pay your VAT by Direct Debit you must set up a new Direct Debit, at least 3 working days before your VAT Return payment is due. If you do not pay the amount due on time, you may get a penalty.
 directDebitInterrupt.noDD.para1 =  If you do not have time to set up a new Direct Debit before your next payment is due or you prefer to pay using a different payment method, you can do this in the ’Payments and repayments’ section of your VAT account.
 directDebitInterrupt.noDD.para2 = If you use the link below to ’Set up a new Direct Debit’ you can also check if your new Direct Debit has been activated within the ’Payments and repayments’ section of your VAT account.
 directDebitInterrupt.noDD.para3 = If you have already set up a payment method you can continue to your VAT account.
