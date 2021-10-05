@@ -105,7 +105,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
         "return no DD interrupt view" in {
           contentAsString(Test.result)
-            .contains("You need to check your payment method") shouldBe true
+            .contains("You need to set up a new Direct Debit") shouldBe true
         }
 
       }

@@ -140,17 +140,11 @@ vatCertificate.nstp.dateFromTo = {0} to {1}
 vatCertificate.logo = HMRC_Logo
 
 #Direct debit interrupt
-directDebitInterrupt.noDD.title = You need to check your payment method
-directDebitInterrupt.noDD.details1 = Why am I seeing this message?
-directDebitInterrupt.noDD.details2 = You have been transferred to HMRC’s new online system for submitting your VAT Returns.
-directDebitInterrupt.noDD.details3 = If you previously paid your VAT bill by Direct Debit, your Direct Debit has been cancelled.
-directDebitInterrupt.noDD.body1 = To continue to pay your VAT by Direct Debit,
-directDebitInterrupt.noDD.body2 = you must set up a new Direct Debit at least 3 working days before your VAT Return payment is due.
-directDebitInterrupt.noDD.body3 = If you do not pay your VAT on time, you may incur a penalty.
-directDebitInterrupt.noDD.body4 = If you do not have time to set up a new Direct Debit before your next VAT payment is due,
-directDebitInterrupt.noDD.body5 = or you prefer to pay using an alternative payment method, you will be able to do this in the
-directDebitInterrupt.noDD.body6 = ’payments and repayments’ section of your VAT account.
-directDebitInterrupt.noDD.body7 = If you have already set up a payment method you can continue to your VAT account.
+directDebitInterrupt.noDD.title = You need to set up a new Direct Debit
+directDebitInterrupt.noDD.inset = To continue to pay your VAT by Direct Debit you must set up a new Direct Debit, at least 3 working days before your VAT Return payment is due. If you do not pay the amount due on time, you may get a penalty.
+directDebitInterrupt.noDD.para1 =  If you do not have time to set up a new Direct Debit before your next payment is due or you prefer to pay using a different payment method, you can do this in the ’Payments and repayments’ section of your VAT account.
+directDebitInterrupt.noDD.para2 = If you use the link below to ’Set up a new Direct Debit’ you can also check if your new Direct Debit has been activated within the ’Payments and repayments’ section of your VAT account.
+directDebitInterrupt.noDD.para3 = If you have already set up a payment method you can continue to your VAT account.
 directDebitInterrupt.noDD.setupButton = Set up a new Direct Debit
 directDebitInterrupt.existingDD.title = You need to validate your details for Direct Debit
 directDebitInterrupt.existingDD.info = You have been transferred to HMRC’s new online system for submitting your VAT Returns. Your Service user name and number will change. The updated details will be sent to you as a secure message.
