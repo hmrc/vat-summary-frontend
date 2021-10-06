@@ -42,6 +42,11 @@ case class CustomerInformation(details: CustomerDetails,
     case _ => customerMigratedToETMPDate
   }
 
+  def extractHybridToFullDate: Option[String] = hybridToFullMigrationDate match {
+    case Some(_) => hybridToFullMigrationDate
+    case _ => None
+  }
+
   val partyTypeMessageKey: String = partyType.fold("common.notProvided")(x => s"partyType.$x")
   val returnPeriodMessageKey: String = returnPeriod.fold("common.notProvided"){
     case x @ ("MM" | "MA" | "MB" | "MC") => s"returnPeriod.$x"

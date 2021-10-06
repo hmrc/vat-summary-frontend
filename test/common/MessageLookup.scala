@@ -130,4 +130,9 @@ object MessageLookup {
     val validateButtonText: String = "Validate your email"
     val continueButtonText: String = "Continue to your VAT account"
   }
+
+  object paymentHistoryMessages {
+    val insetText = "If you cannot see your all of your client’s history, " +
+      "you may be able to access more through your HMRC online services for agents account. You’ll need to sign in separately."
+  }
 }

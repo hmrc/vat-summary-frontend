@@ -22,9 +22,10 @@
       paymentsHistoryTabsContent: PaymentsHistoryTabsContent,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukTabs: GovukTabs,
-      govukBackLink: GovukBackLink)
+      govukBackLink: GovukBackLink,
+      govukInsetText : GovukInsetText)
 
-@(model: PaymentsHistoryViewModel, serviceInfoContent: Html)(
+@(model: PaymentsHistoryViewModel, serviceInfoContent: Html, migratedWithinThreeYears: Boolean)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
@@ -70,6 +71,11 @@
         <span class="govuk-caption-xl">@name</span>
       }
       <h1 id="top" class="govuk-heading-xl">@messages("paymentsHistory.title")</h1>
+      @if(user.isAgent && migratedWithinThreeYears) {
+        @govukInsetText(InsetText(
+            content = Text(messages("paymentsHistory.agentsHandoffMessage"))
+        ))
+      }
       <p class="govuk-body govuk-!-margin-bottom-8">
         <a class="govuk-link" href="@controllers.routes.OpenPaymentsController.openPayments().url">
           @messages("paymentsHistory.whatYouOwe")
