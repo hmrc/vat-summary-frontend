@@ -138,6 +138,7 @@ paymentsHistory.date = Dyddiad
 paymentsHistory.description = Disgrifiad o’r taliad
 paymentsHistory.youPaid = Rydych chi wedi talu CThEM
 paymentsHistory.paidYou = Gwnaeth CThEM eich talu
+paymentsHistory.agentsHandoffMessage = Os na allwch weld holl hanes eich cleient, mae’n bosibl y gallwch weld rhagor o’r hanes drwy’ch cyfrif gwasanaethau ar-lein CThEM ar gyfer asiantau.  Bydd angen i chi fewngofnodi ar wahân.
 
 #VAT certificate
 vatCertificate.title = Eich tystysgrif TAW
