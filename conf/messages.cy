@@ -35,7 +35,7 @@ month.short.10 = Hyd
 month.short.11 = Tach
 month.short.12 = Rhag
 
-navTitle.nonAgent = Cyfrif Treth Busnes
+navTitle.nonAgent = Rheoli eich cyfrif TAW
 navTitle.agent = Manylion TAW eich cleient
 navTitle.vat = TAW
 

@@ -5,7 +5,7 @@ common.fullStop = .
 common.notProvided = Not provided
 common.warning = Warning
 
-navTitle.nonAgent = Business tax account
+navTitle.nonAgent = Manage your VAT account
 navTitle.agent = Your client’s VAT details
 navTitle.vat = VAT
 

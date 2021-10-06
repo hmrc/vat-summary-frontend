@@ -98,7 +98,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe "What you owe - Business tax account - GOV.UK"
+        document.title shouldBe "What you owe - Manage your VAT account - GOV.UK"
       }
 
       "have the correct page heading" in {
