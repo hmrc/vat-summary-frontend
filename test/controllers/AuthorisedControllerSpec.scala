@@ -90,7 +90,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Future.successful(Right(customerInformationInsolvent)))
+            mockCustomerInfo(Right(customerInformationInsolvent))
             target(FakeRequest())
           }
 
@@ -107,7 +107,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Future.successful(Right(customerInformationMax)))
+            mockCustomerInfo(Right(customerInformationMax))
             target(FakeRequest())
           }
 
@@ -124,7 +124,7 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
           lazy val result = {
             mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Future.successful(Left(UnknownError)))
+            mockCustomerInfo(Left(UnknownError))
             target(FakeRequest())
           }
 

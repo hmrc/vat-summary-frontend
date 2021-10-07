@@ -52,7 +52,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   val paymentHistory: PaymentHistory = injector.instanceOf[PaymentHistory]
 
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
-  val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   implicit val mockAuditService: AuditingService = mock[AuditingService]
 
   lazy val fakeRequestWithEmptyDate: FakeRequest[AnyContentAsEmpty.type] =
@@ -166,7 +165,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
 
       if (accountDetailsCall) {
-        mockCustomerInfo(Future.successful(accountDetailsResponse))
+        mockCustomerInfo(accountDetailsResponse)
       }
 
       if (paymentsServiceCall) {
@@ -333,8 +332,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
           .returns(Future.successful(emptyResult))
-        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
-        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
         val result: Future[Result] = target.paymentHistory()(fakeRequest)
         status(result) shouldBe OK
       }
@@ -344,8 +343,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *).noMoreThanOnce()
           .returns(Future.successful(emptyResult))
-        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
-        mockCustomerInfo(Future.successful(accountDetailsResponseNoMigratedDate))
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
+        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
         val result: Future[Result] = target.paymentHistory()(fakeRequest)
         val document: Document = Jsoup.parse(contentAsString(result))
         document.select("li.govuk-tabs__list-item:nth-child(4)").text() shouldBe "Previous payments"

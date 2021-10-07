@@ -65,7 +65,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
                 .expects(*, *, *, *)
                 .returns(Future.successful(authResponse))
 
-              mockCustomerInfo(Future.successful(Right(customerInformationMax)))
+              mockCustomerInfo(Right(customerInformationMax))
               mockDateServiceCall()
               target(requestWithVRN, financialRequest = true)
             }

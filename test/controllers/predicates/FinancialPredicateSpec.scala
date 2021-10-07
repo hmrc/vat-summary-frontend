@@ -49,7 +49,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
       "they are hybrid" should {
 
         lazy val result = {
-          mockCustomerInfo(Future.successful(Right(customerInformationHybrid)))
+          mockCustomerInfo(Right(customerInformationHybrid))
           target(fakeRequest)
         }
 
@@ -68,7 +68,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
 
         val result = {
           mockDateServiceCall()
-          mockCustomerInfo(Future.successful(Right(customerInformationInsolventFuture)))
+          mockCustomerInfo(Right(customerInformationInsolventFuture))
           target(fakeRequest)
         }
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -79,7 +79,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
 
         lazy val result = {
           mockDateServiceCall()
-          mockCustomerInfo(Future.successful(Right(customerInformationMax)))
+          mockCustomerInfo(Right(customerInformationMax))
           target(fakeRequest)
         }
 
@@ -97,7 +97,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
 
         "return 500" in {
           lazy val result = {
-            mockCustomerInfo(Future.successful(Left(UnknownError)))
+            mockCustomerInfo(Left(UnknownError))
             target(fakeRequest)
           }
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
