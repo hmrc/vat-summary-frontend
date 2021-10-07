@@ -69,25 +69,6 @@ class CustomerInformationSpec extends AnyWordSpecLike with Matchers  {
     }
   }
 
-  ".extractHybridToFullDate" when {
-
-    "hybridToFullMigrationDate is available" should {
-
-      "return the date from hybridToFullMigrationDate" in {
-        val customerInfo = customerInformationMax
-        customerInfo.extractHybridToFullDate shouldBe customerInfo.hybridToFullMigrationDate
-      }
-    }
-
-    "hybridToFullMigrationDate is missing" should {
-
-      "return customerMigratedToETMPDate" in {
-        val customerInfo = customerInformationMax.copy(hybridToFullMigrationDate = None)
-        customerInfo.extractHybridToFullDate shouldBe None
-      }
-    }
-  }
-
   "Calling .partyTypeMessageKey" when {
 
     "the model contains a partyType" should {

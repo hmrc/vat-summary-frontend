@@ -340,7 +340,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     }
   }
 
-  "the client's hybridToFullMigrationDate is not within the last three years" should {
+  "the client's hybridToFullMigrationDate is within the last three years" should {
 
     implicit val user: User = agentUser
     val entityName = "Capgemini"

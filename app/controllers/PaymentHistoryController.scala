@@ -118,7 +118,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
 
   private[controllers] def getHybridToFullMigrationDate(customerInfo: HttpGetResult[CustomerInformation]): Option[LocalDate] =
     customerInfo match {
-      case Right(information) => information.extractHybridToFullDate.map(LocalDate.parse)
+      case Right(information) => information.hybridToFullMigrationDate.map(LocalDate.parse)
       case Left(_) => None
     }
 
