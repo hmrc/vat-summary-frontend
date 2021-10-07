@@ -112,6 +112,7 @@ paymentsHistory.date = Date
 paymentsHistory.description = Payment description
 paymentsHistory.youPaid = You paid HMRC
 paymentsHistory.paidYou = HMRC paid you
+paymentsHistory.agentsHandoffMessage = If you cannot see your all of your client’s history, you may be able to access more through your HMRC online services for agents account. You’ll need to sign in separately.
 
 #VAT certificate
 vatCertificate.title = Your VAT Certificate

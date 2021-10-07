@@ -401,6 +401,33 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     }
   }
 
+  "Calling .getHybridToFullMigrationDate" when {
+
+    "the account details service response contains customer info" when {
+
+      "the user has a hybridToFullMigrationDate" should {
+
+        "return the date" in new Test {
+          target.getHybridToFullMigrationDate(Right(customerInformationMax)) shouldBe Some(LocalDate.parse("2017-05-06"))
+        }
+      }
+
+      "the user has no hybridToFullMigrationDate" should {
+
+        "return None" in new Test {
+          target.getHybridToFullMigrationDate(Right(customerInformationMax.copy(hybridToFullMigrationDate = None))) shouldBe None
+        }
+      }
+    }
+
+    "the account details service response contains an error" should {
+
+      "return None" in new Test {
+        target.getHybridToFullMigrationDate(Left(UnknownError)) shouldBe None
+      }
+    }
+  }
+
   "Calling .showInsolventContent" when {
 
     "the account details service response contains customer info" when {
@@ -575,6 +602,34 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           showInsolvencyContent = false,
           None
         ) shouldBe None
+      }
+    }
+  }
+
+  "Calling .checkIfMigrationWithinLastThreeYears" when {
+
+    "return true" when {
+
+      "the provided date is less than 3 years ago" in new Test {
+        val (year, month, day): (Int, Int, Int) = (2016, 6, 1)
+        target.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe true
+      }
+    }
+
+    "return false" when {
+
+      "the provided date is more than 3 years ago" in new Test {
+        val (year, month, day): (Int, Int, Int) = (2014, 4, 1)
+        target.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe false
+      }
+
+      "the provided date is exactly 3 years ago" in new Test {
+        val (year, month, day): (Int, Int, Int) = (2015, 5, 1)
+        target.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe false
+      }
+
+      "no date is provided" in new Test {
+        target.checkIfMigrationWithinLastThreeYears(None) shouldBe false
       }
     }
   }

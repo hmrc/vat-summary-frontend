@@ -61,6 +61,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
         for {
           customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
           migrationDate = getMigratedToETMPDate(customerInfo)
+          hybridToFullMigrationDate = getHybridToFullMigrationDate(customerInfo)
           showInsolvencyContent = showInsolventContent(customerInfo)
           serviceInfoContent <- serviceInfoService.getPartial
           validYears = getValidYears(migrationDate)
@@ -100,7 +101,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
           ) match {
             case Some(model) =>
               auditEvent(user.vrn, model.transactions)
-              Ok(paymentHistoryView(model, serviceInfoContent))
+              Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate)))
             case None =>
               logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
               serviceErrorHandler.showInternalServerError
@@ -112,6 +113,12 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
   private[controllers] def getMigratedToETMPDate(customerInfo: HttpGetResult[CustomerInformation]): Option[LocalDate] =
     customerInfo match {
       case Right(information) => information.extractDate.map(LocalDate.parse)
+      case Left(_) => None
+    }
+
+  private[controllers] def getHybridToFullMigrationDate(customerInfo: HttpGetResult[CustomerInformation]): Option[LocalDate] =
+    customerInfo match {
+      case Right(information) => information.hybridToFullMigrationDate.map(LocalDate.parse)
       case Left(_) => None
     }
 
@@ -178,4 +185,11 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
                                      (implicit hc: HeaderCarrier): Unit =
     auditingService.extendedAudit(ViewVatPaymentHistoryAuditModel(vrn, payments),
       routes.PaymentHistoryController.paymentHistory().url)
+
+  private[controllers] def checkIfMigrationWithinLastThreeYears(migrationDate: Option[LocalDate]): Boolean = {
+    migrationDate match {
+      case Some(date) => date.isAfter(dateService.now().minusMonths(36))
+      case _ => false
+    }
+  }
 }
