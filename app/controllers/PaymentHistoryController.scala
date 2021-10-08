@@ -46,9 +46,9 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
                                          serviceErrorHandler: ServiceErrorHandler,
                                          mcc: MessagesControllerComponents,
                                          paymentHistoryView: PaymentHistory,
-                                         DDInterrupt: DDInterruptPredicate)
+                                         DDInterrupt: DDInterruptPredicate,
+                                         auditingService: AuditingService)
                                         (implicit appConfig: AppConfig,
-                                         auditingService: AuditingService,
                                          ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 

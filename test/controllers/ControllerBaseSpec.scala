@@ -16,6 +16,8 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.ExtendedAuditModel
 import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
@@ -30,7 +32,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Request}
 import play.api.test.FakeRequest
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, ServiceInfoService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -62,6 +64,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
   val mockDateService: DateService = mock[DateService]
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
+  val mockPaymentsService: PaymentsService = mock[PaymentsService]
+  val mockAuditService: AuditingService = mock[AuditingService]
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -140,4 +144,9 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   def mockAgentAuth(): Any = mockAuth(isAgent = true, agentAuthResult)
   def mockInsufficientEnrolments(): Any = mockAuth(isAgent = false, Future.failed(InsufficientEnrolments()))
   def mockMissingBearerToken(): Any = mockAuth(isAgent = false, Future.failed(MissingBearerToken()))
+
+  def mockAudit(): Any =
+    (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *, *)
+      .returns({})
 }
