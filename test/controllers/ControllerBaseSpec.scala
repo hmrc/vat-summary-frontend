@@ -17,26 +17,30 @@
 package controllers
 
 import common.SessionKeys
+import common.TestModels.{agentAuthResult, agentEnrolments, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
 import mocks.MockAppConfig
-import models.CustomerInformation
+import models.{CustomerInformation, User}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Request}
 import play.api.test.FakeRequest
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService}
-import uk.gov.hmrc.auth.core.AuthConnector
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, ServiceInfoService}
+import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised}
-import java.time.LocalDate
 
+import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
+import play.twirl.api.Html
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -57,6 +61,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
   val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
   val mockDateService: DateService = mock[DateService]
+  val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -84,7 +89,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
 
   lazy val DDInterruptRequest: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest("GET","/homepage").withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
+    FakeRequest("GET","/homepage")
+      .withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
 
   lazy val agentFinancialRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
@@ -101,13 +107,37 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     mockAppConfig.features.directDebitInterrupt(true)
   }
 
-  def mockCustomerInfo(accountDetailsResponse: Future[HttpGetResult[CustomerInformation]]):Any =
+  def mockCustomerInfo(accountDetailsResponse: HttpGetResult[CustomerInformation]): Any =
     (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
-      .returns(accountDetailsResponse)
+      .returns(Future.successful(accountDetailsResponse))
 
   def mockDateServiceCall(): Any =
     (mockDateService.now: () => LocalDate)
     .stubs()
     .returns(LocalDate.parse("2018-05-01"))
+
+  def mockServiceInfoCall(): Any =
+    (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(Html("")))
+
+  def mockAuth(isAgent: Boolean, authResult: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
+    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])
+                                (_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *)
+      .returns(authResult)
+
+    if(isAgent) {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(Future.successful(agentEnrolments))
+        .noMoreThanOnce()
+    }
+  }
+
+  def mockPrincipalAuth(): Any = mockAuth(isAgent = false, successfulAuthResult)
+  def mockAgentAuth(): Any = mockAuth(isAgent = true, agentAuthResult)
+  def mockInsufficientEnrolments(): Any = mockAuth(isAgent = false, Future.failed(InsufficientEnrolments()))
+  def mockMissingBearerToken(): Any = mockAuth(isAgent = false, Future.failed(MissingBearerToken()))
 }
