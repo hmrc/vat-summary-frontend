@@ -161,7 +161,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct document title" in {
-      document.title shouldBe "Your VAT account - Business tax account - GOV.UK"
+      document.title shouldBe "Your VAT account - Manage your VAT account - GOV.UK"
     }
 
     "have the correct entity name" in {

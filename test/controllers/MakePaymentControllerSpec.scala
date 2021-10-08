@@ -119,7 +119,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           testChargeReference)(fakeRequestWithSession)
 
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Business tax account - GOV.UK"
+        Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Manage your VAT account - GOV.UK"
       }
     }
 

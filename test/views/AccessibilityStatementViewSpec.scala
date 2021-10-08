@@ -33,7 +33,7 @@ class AccessibilityStatementViewSpec extends ViewBaseSpec {
       implicit lazy val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
-        document.title shouldBe "Accessibility statement for Making Tax Digital for VAT - Business tax account - GOV.UK"
+        document.title shouldBe "Accessibility statement for Making Tax Digital for VAT - Manage your VAT account - GOV.UK"
       }
 
       "have the correct page heading" in {

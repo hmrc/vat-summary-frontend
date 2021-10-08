@@ -49,7 +49,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Business tax account - GOV.UK"
+          document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -61,7 +61,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Datganiad hygyrchedd ar gyfer Troi Treth yn Ddigidol ar gyfer TAW - Cyfrif Treth Busnes - GOV.UK"
+          document.title() shouldBe "Datganiad hygyrchedd ar gyfer Troi Treth yn Ddigidol ar gyfer TAW - Rheoli eich cyfrif TAW - GOV.UK"
         }
       }
     }
@@ -74,7 +74,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         lazy val document: Document = Jsoup.parse(response.body)
 
-        document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Business tax account - GOV.UK"
+        document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Manage your VAT account - GOV.UK"
       }
     }
   }
