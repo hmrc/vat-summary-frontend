@@ -16,15 +16,12 @@
 
 package controllers
 
-
-
 import play.api.http.Status
 import audit.AuditingService
 import audit.models.AuditModel
 import common.TestModels.{customerInformationMax, customerInformationMin, successfulAuthResult}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.{CustomerInformation, DDIDetails, DirectDebitStatus, ServiceResponse}
-import services.PaymentsService
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -39,7 +36,6 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
   val relativeUrl = "/homepage"
   val expectedRedirectLocation: Option[String] = Some(relativeUrl)
-  val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val DDNoInterrupt: DDInterruptNoDD = injector.instanceOf[DDInterruptNoDD]
   val DDInterruptExistingDD: DDInterruptExistingDD = injector.instanceOf[DDInterruptExistingDD]
   val controller = new DDInterruptController(

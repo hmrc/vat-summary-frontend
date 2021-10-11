@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -32,7 +31,6 @@ import play.api.mvc.{AnyContentAsEmpty, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.twirl.api.Html
-import services._
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -50,9 +48,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   val standardError: StandardError = injector.instanceOf[StandardError]
   val paymentHistory: PaymentHistory = injector.instanceOf[PaymentHistory]
-
-  val mockPaymentsService: PaymentsService = mock[PaymentsService]
-  implicit val mockAuditService: AuditingService = mock[AuditingService]
 
   lazy val fakeRequestWithEmptyDate: FakeRequest[AnyContentAsEmpty.type] =
     fakeRequest.withSession("customerMigratedToETMPDate" -> "")
@@ -194,7 +189,8 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockServiceErrorHandler,
         mcc,
         paymentHistory,
-        ddInterruptPredicate
+        ddInterruptPredicate,
+        mockAuditService
       )
     }
   }
