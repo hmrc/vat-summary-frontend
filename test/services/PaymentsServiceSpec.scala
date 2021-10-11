@@ -38,30 +38,16 @@ import scala.concurrent.{ExecutionContext, Future}
 class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers with GuiceOneAppPerSuite {
 
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
+  val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+  val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
+  lazy val paymentsService: PaymentsService = new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
   "Calling the .getOpenPayments function" when {
 
-    trait Test {
-      implicit val hc: HeaderCarrier = HeaderCarrier()
-      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
-      val responseFromFinancialDataConnector: HttpGetResult[Payments]
-
-      def setup(): Any = {
-        (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(responseFromFinancialDataConnector))
-      }
-
-      def target: PaymentsService = {
-        setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
-      }
-    }
-
     "the user has payments outstanding" should {
 
-      "return a list of payments sorted by due date in descending order" in new Test {
+      "return a list of payments sorted by due date in descending order" in {
         val payment1 = PaymentWithPeriod(
           ReturnDebitCharge,
           LocalDate.parse("2008-01-01"),
@@ -104,9 +90,15 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
         )
 
         val payments = Payments(Seq(payment1, payment2, payment3, payment4))
+        lazy val responseFromFinancialDataConnector = Right(payments)
+
         val sortedPayments = Payments(Seq(payment3, payment2, payment4, payment1))
-        override val responseFromFinancialDataConnector = Right(payments)
-        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
+        val paymentsResponse: ServiceResponse[Option[Payments]] = {
+          (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getOpenPayments("123456789"))
+        }
 
         paymentsResponse shouldBe Right(Some(sortedPayments))
       }
@@ -114,7 +106,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
     "the user has no payments outstanding" should {
 
-      "return an empty list of payments" in new Test {
+      "return an empty list of payments" in {
         val payments = Payments(Seq(PaymentWithPeriod(
           ReturnCreditCharge,
           LocalDate.parse("2008-12-06"),
@@ -125,8 +117,14 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )))
-        override val responseFromFinancialDataConnector = Right(payments)
-        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
+        lazy val responseFromFinancialDataConnector = Right(payments)
+
+        val paymentsResponse: ServiceResponse[Option[Payments]] = {
+          (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getOpenPayments("123456789"))
+        }
 
         paymentsResponse shouldBe Right(None)
       }
@@ -134,9 +132,15 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
     "the connector call fails" should {
 
-      "return None" in new Test {
-        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
-        val paymentsResponse: ServiceResponse[Option[Payments]] = await(target.getOpenPayments("123456789"))
+      "return None" in {
+        lazy val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
+
+        val paymentsResponse: ServiceResponse[Option[Payments]] = {
+          (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getOpenPayments("123456789"))
+        }
 
         paymentsResponse shouldBe Left(PaymentsError)
       }
@@ -144,24 +148,6 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
   }
 
   "Calling the .setupPaymentJourney method" when {
-
-    trait Test {
-      implicit val hc: HeaderCarrier = HeaderCarrier()
-      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
-      val connectorResponse: HttpPostResult[String]
-
-      def setup(): Unit = {
-        (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(connectorResponse))
-      }
-
-      def target: PaymentsService = {
-        setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
-      }
-    }
 
     val amountInPence: Int = 123456
     val taxPeriodMonth: Int = 2
@@ -185,11 +171,14 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
     "setting up the payments journey is successful" should {
 
-      "return a redirect url" in new Test {
+      "return a redirect url" in {
         val redirectUrl: String = "http://www.google.com"
-        override val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
+        lazy val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
+        (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(connectorResponse))
         val expectedResult: ServiceResponse[String] = Right(redirectUrl)
-        private val result: ServiceResponse[String] = await(target.setupPaymentsJourney(paymentDetails))
+        val result: ServiceResponse[String] = await(paymentsService.setupPaymentsJourney(paymentDetails))
 
         result shouldBe expectedResult
       }
@@ -197,10 +186,13 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
     "setting up the payments journey is unsuccessful" should {
 
-      "return an error" in new Test {
-        override val connectorResponse: HttpPostResult[String] = Left(UnknownError)
+      "return an error" in {
+        lazy val connectorResponse: HttpPostResult[String] = Left(UnknownError)
+        (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *)
+          .returns(Future.successful(connectorResponse))
         val expectedResult: ServiceResponse[String] = Left(PaymentSetupError)
-        private val result: ServiceResponse[String] = await(target.setupPaymentsJourney(paymentDetails))
+        val result: ServiceResponse[String] = await(paymentsService.setupPaymentsJourney(paymentDetails))
 
         result shouldBe expectedResult
       }
@@ -209,28 +201,12 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
   "Calling the .getPaymentsHistory method" when {
 
-    trait Test {
-      val exampleAmount = 1000L
-      implicit val hc: HeaderCarrier = HeaderCarrier()
-      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
-      val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]]
-
-      def setup(): Unit = {
-        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *)
-          .returns(Future.successful(connectorResponse))
-      }
-
-      def target: PaymentsService = {
-        setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
-      }
-    }
+    val exampleAmount = 1000L
+    implicit val hc: HeaderCarrier = HeaderCarrier()
 
     val taxPeriodYear: Int = 2018
 
-    "return a seq of payment history models sorted by clearing date in descending order" in new Test {
+    "return a seq of payment history models sorted by clearing date in descending order" in {
 
       val paymentModel1 = PaymentsHistoryModel(
         chargeType = ReturnCreditCharge,
@@ -265,17 +241,26 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
         Right(Seq(paymentModel1, paymentModel2, paymentModel3, paymentModel4))
       val sortedPayments: ServiceResponse[Seq[PaymentsHistoryModel]] =
         Right(Seq(paymentModel3, paymentModel2, paymentModel4, paymentModel1))
-      override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
-      private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
-        await(target.getPaymentsHistory("999999999", taxPeriodYear))
+      lazy val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
+
+      val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
+        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *, *)
+          .returns(Future.successful(connectorResponse))
+        await(paymentsService.getPaymentsHistory("999999999", taxPeriodYear))
+      }
 
       result shouldBe sortedPayments
     }
 
-    "return a http error" in new Test {
-      override val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
-      private val result: ServiceResponse[Seq[PaymentsHistoryModel]] =
-        await(target.getPaymentsHistory("999999999", taxPeriodYear))
+    "return a http error" in {
+      lazy val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
+      val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
+        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *, *)
+          .returns(Future.successful(connectorResponse))
+        await(paymentsService.getPaymentsHistory("999999999", taxPeriodYear))
+      }
 
       result shouldBe Left(VatLiabilitiesError)
     }
@@ -283,29 +268,16 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
   "Calling the .getDirectDebitStatus function" when {
 
-    trait Test {
-      implicit val hc: HeaderCarrier = HeaderCarrier()
-      val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-      val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
-      val responseFromFinancialDataConnector: HttpGetResult[DirectDebitStatus]
-
-      def setup(): Any = {
-        (mockFinancialDataConnector.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(responseFromFinancialDataConnector))
-      }
-
-      def target: PaymentsService = {
-        setup()
-        new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
-      }
-    }
-
     "the connector call returns a successful model" should {
 
-      "return a DirectDebitStatus" in new Test {
-        override val responseFromFinancialDataConnector = Right(DirectDebitStatus(directDebitMandateFound = false, None))
-        val paymentsResponse: ServiceResponse[DirectDebitStatus] = await(target.getDirectDebitStatus("123456789"))
+      "return a DirectDebitStatus" in {
+        lazy val responseFromFinancialDataConnector = Right(DirectDebitStatus(directDebitMandateFound = false, None))
+        val paymentsResponse: ServiceResponse[DirectDebitStatus] = {
+          (mockFinancialDataConnector.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getDirectDebitStatus("123456789"))
+        }
 
         paymentsResponse shouldBe Right(DirectDebitStatus(directDebitMandateFound = false, None))
       }
@@ -313,9 +285,14 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
     "the connector call fails" should {
 
-      "return a DirectDebitStatusError" in new Test {
-        override val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
-        val paymentsResponse: ServiceResponse[DirectDebitStatus] = await(target.getDirectDebitStatus("123456789"))
+      "return a DirectDebitStatusError" in {
+        lazy val responseFromFinancialDataConnector = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, ""))
+        val paymentsResponse: ServiceResponse[DirectDebitStatus] = {
+          (mockFinancialDataConnector.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getDirectDebitStatus("123456789"))
+        }
 
         paymentsResponse shouldBe Left(DirectDebitStatusError)
       }
