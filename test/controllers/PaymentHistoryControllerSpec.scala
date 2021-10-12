@@ -207,7 +207,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockCustomerInfo(Right(customerInformationHybrid))
-        controller.paymentHistory()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "123456789"))
+        controller.paymentHistory()(fakeRequest)
       }
 
       "redirect to VAT overview page" in {
