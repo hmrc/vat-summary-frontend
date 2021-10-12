@@ -127,6 +127,9 @@ object TestModels {
     customerInformationMax.copy(details = customerDetailsInsolventTradingExempt)
   val customerInformationInsolventFuture: CustomerInformation =
     customerInformationMax.copy(details = customerDetailsInsolventFuture)
+  val customerInformationLaterMigratedToETMPDate: CustomerInformation =
+    customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
+
 
   val customerInformationHybrid: CustomerInformation = customerInformationMax.copy(isHybridUser = true)
 
