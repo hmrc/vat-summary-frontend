@@ -17,12 +17,8 @@
 package controllers
 
 import play.api.http.Status
-import audit.AuditingService
-import common.TestModels.{customerInformationMax, customerInformationMin, successfulAuthResult}
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import common.TestModels.{customerInformationLaterMigratedToETMPDate, customerInformationMax, customerInformationMin}
 import models.{CustomerInformation, DDIDetails, DirectDebitStatus, ServiceResponse}
-import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
-import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.interrupt.{DDInterruptExistingDD, DDInterruptNoDD}
 import play.api.mvc.Result
@@ -46,7 +42,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
     DDInterruptExistingDD
   )
 
-  val noDirectDebitSetup: Future[ServiceResponse[DirectDebitStatus]] =
+  lazy val noDirectDebitSetup: Future[ServiceResponse[DirectDebitStatus]] =
     Future.successful(Right(DirectDebitStatus(directDebitMandateFound = false, None)))
   lazy val directDebitSetup: Future[ServiceResponse[DirectDebitStatus]] =
     Future.successful(Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-03-01"))))))
@@ -61,7 +57,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
         lazy val result: Future[Result] = {
           mockPrincipalAuth()
-          mockCustomerInfo(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+          mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
           mockDateServiceCall()
           (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *)
@@ -85,7 +81,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
       lazy val result: Future[Result] = {
         mockPrincipalAuth()
-        mockCustomerInfo(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+        mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
         mockDateServiceCall()
         (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
           .stubs(*, *, *)
@@ -110,7 +106,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
         lazy val result: Future[Result] = {
           mockPrincipalAuth()
-          mockCustomerInfo(Right(customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))))
+          mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
           mockDateServiceCall()
           (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
             .stubs(*, *, *)
@@ -200,10 +196,9 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
     "the migration date is less than 4 months ago" should {
 
       "return true" in {
-        val customerInfo: CustomerInformation = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-04-01"))
         val result = {
           mockDateServiceCall()
-          controller.migratedWithin4M(customerInfo)
+          controller.migratedWithin4M(customerInformationLaterMigratedToETMPDate)
         }
         result shouldBe true
       }
