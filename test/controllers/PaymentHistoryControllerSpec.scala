@@ -17,222 +17,157 @@
 package controllers
 
 import java.time.LocalDate
-import audit.models.ExtendedAuditModel
+import common.SessionKeys
 import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
-import models.{CustomerInformation, ServiceResponse, User}
+import models.{CustomerInformation, ServiceResponse}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsEmpty, Request, Result}
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.twirl.api.Html
-import uk.gov.hmrc.auth.core.AffinityGroup.Individual
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.errors.StandardError
 import views.html.payments.PaymentHistory
 import play.api.test.Helpers.defaultAwaitTimeout
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  val standardError: StandardError = injector.instanceOf[StandardError]
   val paymentHistory: PaymentHistory = injector.instanceOf[PaymentHistory]
+  val exampleAmount: Int = 100
+  val emptyResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(Seq())
+  val currentYear: Int = 2018
+  val accountDetailsResponseNoMigratedDate: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
 
-  lazy val fakeRequestWithEmptyDate: FakeRequest[AnyContentAsEmpty.type] =
-    fakeRequest.withSession("customerMigratedToETMPDate" -> "")
-  val exampleAmount = 100
-  implicit val user: User = User("123456789")
+  val controller = new PaymentHistoryController(
+    mockPaymentsService,
+    authorisedController,
+    mockDateService,
+    mockServiceInfoService,
+    mockAccountDetailsService,
+    mockServiceErrorHandler,
+    mcc,
+    paymentHistory,
+    ddInterruptPredicate,
+    mockAuditService
+  )
 
-  private trait Test {
-    val serviceResultYearOne: ServiceResponse[Seq[PaymentsHistoryModel]] =
-      Right(Seq(
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2018-02-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2018-03-01"))
-        ),
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2018-05-01"))
-        ),
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2018-05-01"))
-        )
-      ))
-    val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] =
-      Right(Seq(
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2017-01-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2017-02-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2017-03-01"))
-        ),
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2017-04-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2017-05-01"))
-        ),
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2018-04-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2018-05-01"))
-        )
-      ))
-    val serviceResultYearThree: ServiceResponse[Seq[PaymentsHistoryModel]] =
-      Right(Seq(
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2016-01-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2016-02-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2016-03-01"))
-        ),
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2016-08-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2016-09-01"))
-        ),
-        PaymentsHistoryModel(
-          chargeType    = ReturnDebitCharge,
-          taxPeriodFrom = Some(LocalDate.parse("2016-09-01")),
-          taxPeriodTo   = Some(LocalDate.parse("2016-10-01")),
-          amount        = exampleAmount,
-          clearedDate   = Some(LocalDate.parse("2016-11-01"))
-        )
-      ))
-    val emptyResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(Seq())
-
-    val currentYear: Int = 2018
-    val paymentsServiceCall: Boolean = false
-    val authCall: Boolean = false
-    val accountDetailsCall: Boolean = false
-    val enrolments: Set[Enrolment] = Set(
-      Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), ""),
-      Enrolment("HMCE-VATDEC-ORG", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
-    )
-
-    lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.successful(new ~(
-      Enrolments(enrolments),
-      Some(Individual)
-    ))
-    val accountDetailsResponse: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
-    val accountDetailsResponseNoMigratedDate: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
-    val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
-
-    def setup(): Any = {
-      mockDateServiceCall()
-
-      (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
-        .stubs(*, *, *)
-        .returns(serviceInfoServiceResult)
-
-      if (authCall) {
-        (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *)
-          .returns(authResult)
-      }
-
-      if (accountDetailsCall) {
-        mockCustomerInfo(accountDetailsResponse)
-      }
-
-      if (paymentsServiceCall) {
-        (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-          .stubs(*, *, *, *)
-          .returns({})
-
-        (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(Future.successful(serviceResultYearOne))
-
-        (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(Future.successful(serviceResultYearTwo))
-      }
-    }
-
-    def target: PaymentHistoryController = {
-      setup()
-      new PaymentHistoryController(
-        mockPaymentsService,
-        authorisedController,
-        mockDateService,
-        mockServiceInfoService,
-        mockAccountDetailsService,
-        mockServiceErrorHandler,
-        mcc,
-        paymentHistory,
-        ddInterruptPredicate,
-        mockAuditService
+  val serviceResultYearOne: ServiceResponse[Seq[PaymentsHistoryModel]] =
+    Right(Seq(
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-03-01"))
+      ),
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-05-01"))
+      ),
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-05-01"))
       )
-    }
-  }
+    ))
+  val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] =
+    Right(Seq(
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2017-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2017-02-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2017-03-01"))
+      ),
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
+        taxPeriodTo = Some(LocalDate.parse("2017-04-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2017-05-01"))
+      ),
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
+        taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2018-05-01"))
+      )
+    ))
+  val serviceResultYearThree: ServiceResponse[Seq[PaymentsHistoryModel]] =
+    Right(Seq(
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2016-01-01")),
+        taxPeriodTo = Some(LocalDate.parse("2016-02-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2016-03-01"))
+      ),
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
+        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2016-09-01"))
+      ),
+      PaymentsHistoryModel(
+        chargeType = ReturnDebitCharge,
+        taxPeriodFrom = Some(LocalDate.parse("2016-09-01")),
+        taxPeriodTo = Some(LocalDate.parse("2016-10-01")),
+        amount = exampleAmount,
+        clearedDate = Some(LocalDate.parse("2016-11-01"))
+      )
+    ))
 
-  private trait AllCallsTest extends Test {
-    override val authCall: Boolean = true
-    override val accountDetailsCall: Boolean = true
-    override val paymentsServiceCall: Boolean = true
-  }
-
-  private trait NoPaymentsCallsTest extends Test {
-    override val authCall: Boolean = true
-    override val accountDetailsCall: Boolean = true
-  }
+  def mockPaymentHistory(paymentHistoryResponse: ServiceResponse[Seq[PaymentsHistoryModel]]): Any =
+    (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *).noMoreThanOnce()
+      .returns(Future.successful(paymentHistoryResponse))
 
   "Calling the paymentHistory action" when {
 
     "the user is logged in" when {
 
-      "return 200" in new AllCallsTest {
-        private val result = target.paymentHistory()(fakeRequestWithSession)
+      lazy val result = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockServiceInfoCall()
+        mockAudit()
+        mockPaymentHistory(serviceResultYearOne)
+        mockPaymentHistory(serviceResultYearTwo)
+        mockCustomerInfo(Right(customerInformationMax))
+        controller.paymentHistory()(fakeRequestWithSession)
+      }
+
+      "return 200" in {
         status(result) shouldBe Status.OK
       }
 
-      "return HTML" in new AllCallsTest {
-        private val result = target.paymentHistory()(fakeRequestWithSession)
+      "return HTML" in {
         contentType(result) shouldBe Some("text/html")
       }
 
-      "return charset utf-8" in new AllCallsTest {
-        private val result = target.paymentHistory()(fakeRequestWithSession)
+      "return charset utf-8" in {
         charset(result) shouldBe Some("utf-8")
       }
     }
 
     "the user is not logged in" should {
 
-      "return SEE_OTHER" in new Test {
-        override val authCall = true
-        override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.failed(MissingBearerToken())
-        val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
+      lazy val result = {
+        mockMissingBearerToken()
+        controller.paymentHistory()(fakeRequestWithSession)
+    }
 
+      "return SEE_OTHER" in {
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
@@ -240,35 +175,42 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 403 (Forbidden)" in new Test {
-        override val authCall = true
-        override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.failed(InsufficientEnrolments())
-        val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
+      lazy val result = {
+        mockInsufficientEnrolments()
+        controller.paymentHistory()(fakeRequestWithSession)
+    }
+
+      "return 403 (Forbidden)" in {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
 
     "user is an Agent" should {
 
-      "return 200" in new AllCallsTest {
-        override lazy val authResult: Future[Enrolments ~ Option[AffinityGroup]] = agentAuthResult
-        override def setup(): Any = {
-          super.setup()
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(Future.successful(agentEnrolments))
-            .noMoreThanOnce()
-        }
-        private val result = target.paymentHistory()(agentFinancialRequest)
+      lazy val result = {
+        mockAgentAuth()
+        mockDateServiceCall()
+        mockServiceInfoCall()
+        mockAudit()
+        mockPaymentHistory(serviceResultYearOne)
+        mockPaymentHistory(serviceResultYearTwo)
+        mockCustomerInfo(Right(customerInformationMax))
+        controller.paymentHistory()(agentFinancialRequest)
+      }
+      "return 200" in {
         status(result) shouldBe Status.OK
       }
     }
 
     "the user is hybrid" should {
 
-      "redirect to VAT overview page" in new NoPaymentsCallsTest {
-        override val accountDetailsResponse: Right[Nothing, CustomerInformation] = Right(customerInformationHybrid)
-        private val result = target.paymentHistory()(fakeRequest)
+      lazy val result = {
+        mockPrincipalAuth()
+        mockCustomerInfo(Right(customerInformationHybrid))
+        controller.paymentHistory()(fakeRequest)
+      }
+
+      "redirect to VAT overview page" in {
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
@@ -276,46 +218,58 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the call to retrieve hybrid status fails" should {
 
-      "return Internal Server Error" in new NoPaymentsCallsTest {
-        override val accountDetailsResponse: HttpGetResult[CustomerInformation] = Left(UnknownError)
-        private val result = target.paymentHistory()(fakeRequest)
+      lazy val result = {
+        mockPrincipalAuth()
+        mockCustomerInfo(Left(UnknownError))
+        controller.paymentHistory()(fakeRequest)
+      }
+
+      "return Internal Server Error" in {
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
 
     "an error occurs upstream" should {
 
-      "return a 500" in new AllCallsTest {
-        override val serviceResultYearOne = Left(VatLiabilitiesError)
-        private val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
+      lazy val result = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockServiceInfoCall()
+        mockAudit()
+        mockCustomerInfo(Right(customerInformationMax))
+        mockPaymentHistory(Left(VatLiabilitiesError))
+        mockPaymentHistory(Left(VatLiabilitiesError))
+        controller.paymentHistory()(fakeRequestWithSession)
+      }
+      "return Internal Server Error" in {
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
-      "return the standard error view" in new AllCallsTest {
-        override val serviceResultYearOne = Left(VatLiabilitiesError)
-        private val result: Future[Result] = target.paymentHistory()(fakeRequestWithSession)
+    "return the standard error view" in {
         val document: Document = Jsoup.parse(contentAsString(result))
         document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
       }
     }
+  }
 
     "the user is insolvent and not continuing to trade" should {
 
-      "return 403 (Forbidden)" in new Test {
-        override val authCall = true
-        val result: Future[Result] = target.paymentHistory()(insolventRequest)
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.paymentHistory()(insolventRequest)
+      }
+      "return 403 (Forbidden)" in {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
     "the user has no viewDirectDebitInterrupt in session" should {
 
-      "return 303(SEE OTHER)" in new Test  {
-        override def setup(): Any = {
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(authResult)
-        }
-        val result: Future[Result] = target.paymentHistory()(DDInterruptRequest)
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.paymentHistory()(DDInterruptRequest)
+      }
+      "return 303(SEE OTHER)" in {
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
       }
@@ -323,58 +277,58 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the user has a VATDEC enrolment and no customerMigratedToETMPDate" should {
 
-      "return 200" in new AllCallsTest {
-        override val accountDetailsCall: Boolean = false
-        (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(Future.successful(emptyResult))
+      lazy val result = {
+        mockVatDec()
+        mockDateServiceCall()
+        mockServiceInfoCall()
+        mockAudit()
+        mockPaymentHistory(serviceResultYearOne)
+        mockPaymentHistory(serviceResultYearTwo)
+        mockPaymentHistory(serviceResultYearThree)
         mockCustomerInfo(accountDetailsResponseNoMigratedDate)
         mockCustomerInfo(accountDetailsResponseNoMigratedDate)
-        val result: Future[Result] = target.paymentHistory()(fakeRequest)
+        controller.paymentHistory()(fakeRequest)
+      }
+      "return 200" in {
         status(result) shouldBe OK
       }
 
-      "render the Previous Payments tab" in new AllCallsTest {
-        override val accountDetailsCall: Boolean = false
-        (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *).noMoreThanOnce()
-          .returns(Future.successful(emptyResult))
-        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
-        mockCustomerInfo(accountDetailsResponseNoMigratedDate)
-        val result: Future[Result] = target.paymentHistory()(fakeRequest)
+      "render the Previous Payments tab" in {
         val document: Document = Jsoup.parse(contentAsString(result))
         document.select("li.govuk-tabs__list-item:nth-child(4)").text() shouldBe "Previous payments"
       }
     }
-  }
 
   "Calling .customerMigratedWithin15M" when {
 
     "the interval between dates is less than 15 months" should {
 
-      "return true" in new Test {
-        target.customerMigratedWithin15M(Some(LocalDate.parse("2017-02-02"))) shouldBe true
+      "return true" in {
+        mockDateServiceCall()
+        controller.customerMigratedWithin15M(Some(LocalDate.parse("2017-02-02"))) shouldBe true
       }
     }
 
     "the interval between dates is 15 months or greater" should {
 
-      "return false" in new Test {
-        target.customerMigratedWithin15M(Some(LocalDate.parse("2017-02-01"))) shouldBe false
+      "return false" in {
+        mockDateServiceCall()
+        controller.customerMigratedWithin15M(Some(LocalDate.parse("2017-02-01"))) shouldBe false
       }
     }
 
     "the interval is 0 days" should {
 
-      "return true" in new Test {
-        target.customerMigratedWithin15M(Some(LocalDate.parse("2018-05-01"))) shouldBe true
+      "return true" in {
+        mockDateServiceCall()
+        controller.customerMigratedWithin15M(Some(LocalDate.parse("2018-05-01"))) shouldBe true
       }
     }
 
     "the date provided is None" should {
 
-      "return false as a default" in new Test {
-        target.customerMigratedWithin15M(None) shouldBe false
+      "return false as a default" in {
+        controller.customerMigratedWithin15M(None) shouldBe false
       }
     }
   }
@@ -383,15 +337,15 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the account details service response contains customer info" should {
 
-      "return the date" in new Test {
-        target.getMigratedToETMPDate(Right(customerInformationMax)) shouldBe Some(LocalDate.parse("2017-05-06"))
+      "return the date" in {
+        controller.getMigratedToETMPDate(Right(customerInformationMax)) shouldBe Some(LocalDate.parse("2017-05-06"))
       }
     }
 
     "the account details service response contains an error" should {
 
-      "return None" in new Test {
-        target.getMigratedToETMPDate(Left(UnknownError)) shouldBe None
+      "return None" in {
+        controller.getMigratedToETMPDate(Left(UnknownError)) shouldBe None
       }
     }
   }
@@ -402,23 +356,23 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "the user has a hybridToFullMigrationDate" should {
 
-        "return the date" in new Test {
-          target.getHybridToFullMigrationDate(Right(customerInformationMax)) shouldBe Some(LocalDate.parse("2017-05-06"))
+        "return the date" in {
+          controller.getHybridToFullMigrationDate(Right(customerInformationMax)) shouldBe Some(LocalDate.parse("2017-05-06"))
         }
       }
 
       "the user has no hybridToFullMigrationDate" should {
 
-        "return None" in new Test {
-          target.getHybridToFullMigrationDate(Right(customerInformationMax.copy(hybridToFullMigrationDate = None))) shouldBe None
+        "return None" in {
+          controller.getHybridToFullMigrationDate(Right(customerInformationMax.copy(hybridToFullMigrationDate = None))) shouldBe None
         }
       }
     }
 
     "the account details service response contains an error" should {
 
-      "return None" in new Test {
-        target.getHybridToFullMigrationDate(Left(UnknownError)) shouldBe None
+      "return None" in {
+        controller.getHybridToFullMigrationDate(Left(UnknownError)) shouldBe None
       }
     }
   }
@@ -429,30 +383,30 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "the user is insolvent and not exempt from restrictions" should {
 
-        "return true" in new Test {
-          target.showInsolventContent(Right(customerInformationInsolventTrading)) shouldBe true
+        "return true" in {
+          controller.showInsolventContent(Right(customerInformationInsolventTrading)) shouldBe true
         }
       }
 
       "the user is insolvent and exempt from restrictions" should {
 
-        "return false" in new Test {
-          target.showInsolventContent(Right(customerInformationInsolventTradingExempt)) shouldBe false
+        "return false" in {
+          controller.showInsolventContent(Right(customerInformationInsolventTradingExempt)) shouldBe false
         }
       }
 
       "the user is not insolvent" should {
 
-        "return false" in new Test {
-          target.showInsolventContent(Right(customerInformationMax)) shouldBe false
+        "return false" in {
+          controller.showInsolventContent(Right(customerInformationMax)) shouldBe false
         }
       }
     }
 
     "the account details service response contains an error" should {
 
-      "return false" in new Test {
-        target.showInsolventContent(Left(UnknownError)) shouldBe false
+      "return false" in {
+        controller.showInsolventContent(Left(UnknownError)) shouldBe false
       }
     }
   }
@@ -461,51 +415,63 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "the migration year is equal to the current year" should {
 
-      "return a sequence of just the current year" in new Test {
-        target.getValidYears(Some(LocalDate.parse("2018-01-01"))) shouldBe Seq(currentYear)
+      "return a sequence of just the current year" in {
+        mockDateServiceCall()
+        controller.getValidYears(Some(LocalDate.parse("2018-01-01"))) shouldBe Seq(currentYear)
       }
     }
 
     "the migration year is the previous year" should {
 
-      "return a sequence of the current year and previous year" in new Test {
-        target.getValidYears(Some(LocalDate.parse("2017-12-12"))) shouldBe Seq(currentYear, currentYear - 1)
+      "return a sequence of the current year and previous year" in {
+        mockDateServiceCall()
+        controller.getValidYears(Some(LocalDate.parse("2017-12-12"))) shouldBe Seq(currentYear, currentYear - 1)
       }
     }
 
     "the migration year is two years ago" should {
 
-      "return a sequence of the current year and the two years prior" in new Test {
-        target.getValidYears(Some(LocalDate.parse("2016-12-12"))) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
+      "return a sequence of the current year and the two years prior" in {
+        mockDateServiceCall()
+        controller.getValidYears(Some(LocalDate.parse("2016-12-12"))) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
       }
     }
 
     "the migration year could not be retrieved" should {
 
-      "return a sequence of the current year and previous year" in new Test {
-        target.getValidYears(None) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
+      "return a sequence of the current year and previous year" in {
+        mockDateServiceCall()
+        controller.getValidYears(None) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
       }
     }
   }
 
   "Calling .isLast24Months" should {
+
     "return true" when {
-      "the provided date is younger than 24 months" in new Test {
+
+      "the provided date is younger than 24 months" in {
+        mockDateServiceCall()
         val (year, month, day): (Int, Int, Int) = (2016, 6, 1)
-        target.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe true
+        controller.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe true
       }
-      "the provided date is exactly 24 months ago" in new Test {
+      "the provided date is exactly 24 months ago" in {
+        mockDateServiceCall()
         val (year, month, day): (Int, Int, Int) = (2016, 5, 1)
-        target.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe true
+        controller.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe true
       }
-      "no date is provided" in new Test {
-        target.isLast24Months(None) shouldBe true
+      "no date is provided" in {
+        mockDateServiceCall()
+        controller.isLast24Months(None) shouldBe true
       }
     }
+
     "return false" when {
-      "the provided date is older than 24 months" in new Test {
+
+      "the provided date is older than 24 months" in {
+        mockDateServiceCall()
         val (year, month, day): (Int, Int, Int) = (2016, 4, 1)
-        target.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe false
+        controller.isLast24Months(Some(LocalDate.of(year, month, day))) shouldBe false
       }
     }
   }
@@ -516,69 +482,72 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "the customer was migrated in the current year" should {
 
-        "return a PaymentsHistoryViewModel with the correct information" in new Test {
-          target.generateViewModel(
-            serviceResultYearOne,
-            serviceResultYearTwo,
-            emptyResult,
-            showPreviousPaymentsTab = false,
-            Some(LocalDate.parse("2018-01-01")),
-            showInsolvencyContent = false,
-            None
+        "return a PaymentsHistoryViewModel with the correct information" in {
+          mockDateServiceCall()
+          controller.generateViewModel(
+          serviceResultYearOne,
+          serviceResultYearTwo,
+          emptyResult,
+          showPreviousPaymentsTab = false,
+          Some(LocalDate.parse("2018-01-01")),
+          showInsolvencyContent = false,
+          None
           ) shouldBe Some(PaymentsHistoryViewModel(
-            currentYear,
-            None,
-            None,
-            previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
-            showInsolvencyContent = false,
-            None
+          currentYear,
+          None,
+          None,
+          previousPaymentsTab = false,
+          (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
+          showInsolvencyContent = false,
+          None
           ))
         }
       }
 
       "the customer was migrated in the previous year" should {
 
-        "return a PaymentsHistoryViewModel with the correct information" in new Test {
-          target.generateViewModel(
-            serviceResultYearOne,
-            serviceResultYearTwo,
-            emptyResult,
-            showPreviousPaymentsTab = false,
-            Some(LocalDate.parse("2017-01-01")),
-            showInsolvencyContent = false,
-            None
+        "return a PaymentsHistoryViewModel with the correct information" in {
+          mockDateServiceCall()
+          controller.generateViewModel(
+          serviceResultYearOne,
+          serviceResultYearTwo,
+          emptyResult,
+          showPreviousPaymentsTab = false,
+          Some(LocalDate.parse("2017-01-01")),
+          showInsolvencyContent = false,
+          None
           ) shouldBe Some(PaymentsHistoryViewModel(
-            currentYear,
-            Some(currentYear - 1),
-            None,
-            previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
-            showInsolvencyContent = false,
-            None
+          currentYear,
+          Some(currentYear - 1),
+          None,
+          previousPaymentsTab = false,
+          (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
+          showInsolvencyContent = false,
+          None
           ))
         }
       }
 
       "the customer was migrated two years ago" should {
 
-        "return a PaymentsHistoryViewModel with the correct information" in new Test {
-          target.generateViewModel(
-            serviceResultYearOne,
-            serviceResultYearTwo,
-            serviceResultYearThree,
-            showPreviousPaymentsTab = false,
-            Some(LocalDate.parse("2016-12-12")),
-            showInsolvencyContent = false,
-            None
+        "return a PaymentsHistoryViewModel with the correct information" in {
+          mockDateServiceCall()
+          controller.generateViewModel(
+          serviceResultYearOne,
+          serviceResultYearTwo,
+          serviceResultYearThree,
+          showPreviousPaymentsTab = false,
+          Some(LocalDate.parse("2016-12-12")),
+          showInsolvencyContent = false,
+          None
           ) shouldBe Some(PaymentsHistoryViewModel(
-            currentYear,
-            Some(currentYear - 1),
-            Some(currentYear - 2),
-            previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct,
-            showInsolvencyContent = false,
-            None
+          currentYear,
+          Some(currentYear - 1),
+          Some(currentYear - 2),
+          previousPaymentsTab = false,
+          (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct,
+          showInsolvencyContent = false,
+          None
           ))
         }
       }
@@ -586,16 +555,16 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "either of the service call parameters fail" should {
 
-      "return None" in new Test {
-        override val serviceResultYearOne = Left(VatLiabilitiesError)
-        target.generateViewModel(
-          serviceResultYearOne,
-          serviceResultYearTwo,
-          serviceResultYearThree,
-          showPreviousPaymentsTab = false,
-          None,
-          showInsolvencyContent = false,
-          None
+      "return None" in {
+        val serviceResultYearOne = Left(VatLiabilitiesError)
+        controller.generateViewModel(
+        serviceResultYearOne,
+        serviceResultYearTwo,
+        serviceResultYearThree,
+        showPreviousPaymentsTab = false,
+        None,
+        showInsolvencyContent = false,
+        None
         ) shouldBe None
       }
     }
@@ -605,26 +574,29 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
     "return true" when {
 
-      "the provided date is less than 3 years ago" in new Test {
+      "the provided date is less than 3 years ago" in {
+        mockDateServiceCall()
         val (year, month, day): (Int, Int, Int) = (2016, 6, 1)
-        target.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe true
+        controller.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe true
       }
     }
 
     "return false" when {
 
-      "the provided date is more than 3 years ago" in new Test {
+      "the provided date is more than 3 years ago" in {
+        mockDateServiceCall()
         val (year, month, day): (Int, Int, Int) = (2014, 4, 1)
-        target.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe false
+        controller.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe false
       }
 
-      "the provided date is exactly 3 years ago" in new Test {
+      "the provided date is exactly 3 years ago" in {
+        mockDateServiceCall()
         val (year, month, day): (Int, Int, Int) = (2015, 5, 1)
-        target.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe false
+        controller.checkIfMigrationWithinLastThreeYears(Some(LocalDate.of(year, month, day))) shouldBe false
       }
 
-      "no date is provided" in new Test {
-        target.checkIfMigrationWithinLastThreeYears(None) shouldBe false
+      "no date is provided" in {
+        controller.checkIfMigrationWithinLastThreeYears(None) shouldBe false
       }
     }
   }

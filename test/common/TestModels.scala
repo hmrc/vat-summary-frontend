@@ -178,15 +178,15 @@ object TestModels {
     Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate, partyType = Some("1")
   )
 
+  val mtdEnrolment = Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
+  val vatDecEnrolment = Enrolment("HMCE-VATDEC-ORG", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
   val successfulAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
-    Enrolments(
-      Set(
-        Enrolment(
-          "HMRC-MTD-VAT",
-          Seq(EnrolmentIdentifier("VRN", "123456789")),
-          "Active")
-      )
-    ),
+    Enrolments(Set(mtdEnrolment)),
+    Some(Individual)
+  ))
+
+  val authResultWithVatDec: Future[Enrolments ~ Option[AffinityGroup]] = Future.successful(new ~(
+    Enrolments(Set(mtdEnrolment,vatDecEnrolment)),
     Some(Individual)
   ))
 
