@@ -51,47 +51,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = "#003",
         chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false
-      ),
-      PaymentWithPeriod(
-        ReturnDebitCharge,
-        periodFrom = LocalDate.parse("2016-11-22"),
-        periodTo = LocalDate.parse("2016-12-22"),
-        due = LocalDate.parse("2016-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003",
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
-      ),
-      PaymentWithPeriod(
-        ReturnDebitCharge,
-        periodFrom = LocalDate.parse("2015-11-22"),
-        periodTo = LocalDate.parse("2015-12-22"),
-        due = LocalDate.parse("2015-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003",
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
-      ),
-      PaymentWithPeriod(
-        ReturnDebitCharge,
-        periodFrom = LocalDate.parse("2011-11-22"),
-        periodTo = LocalDate.parse("2011-12-22"),
-        due = LocalDate.parse("2011-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003",
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
-      ),
-      PaymentWithPeriod(
-        ReturnDebitCharge,
-        periodFrom = LocalDate.parse("2013-11-22"),
-        periodTo = LocalDate.parse("2013-12-22"),
-        due = LocalDate.parse("2013-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        periodKey = "#003",
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
-      )))
+      )
+      ))
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
