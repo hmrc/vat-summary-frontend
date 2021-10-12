@@ -16,8 +16,7 @@
 
 package controllers
 
-
-import common.TestModels.successfulAuthResult
+import models.ServiceResponse
 import models.errors.PaymentSetupError
 import models.payments.PaymentDetailsModel
 import org.jsoup.Jsoup
@@ -25,8 +24,6 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.PaymentsError
 
@@ -42,13 +39,20 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   val testDueDate: String = "2018-08-08"
   val testChargeReference: String = "XD002750002155"
   val testVatPeriodEnding: String = "2018-08-08"
+  val redirectUrl = "google.com"
+  val expectedRedirectLocation: Option[String] = Some(redirectUrl)
+  val serviceResponse = Right(redirectUrl)
+
+  def mockPaymentInfo(serviceResponse: ServiceResponse[String]) : Any = {
+    (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
+    .expects(*, *, *)
+    .returns(Future.successful(serviceResponse))
+  }
 
   lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
     ("amountInPence", "10000"),
     ("taxPeriodMonth", "02"),
     ("taxPeriodYear", "2018"))
-
-  val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
   val paymentsError: PaymentsError = injector.instanceOf[PaymentsError]
 
@@ -62,16 +66,11 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
 
   "Calling the makePayment action" when {
     "the user is logged in" should {
-      val redirectUrl = "google.com"
-      val expectedRedirectLocation: Option[String] = Some(redirectUrl)
-      val serviceResponse = Right(redirectUrl)
 
       lazy val result = {
         mockPrincipalAuth()
-        (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(serviceResponse))
         mockAudit()
+        mockPaymentInfo(serviceResponse)
         controller.makePayment(
           testAmountInPence,
           testMonth,
@@ -151,9 +150,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockAudit()
-        (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(PaymentSetupError)))
+        mockPaymentInfo(Left(PaymentSetupError))
         controller.makePayment(
           testAmountInPence,
           testMonth,
@@ -192,16 +189,10 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   "Calling in the makePaymentNoPeriod action" when {
     "the user is logged in" should {
 
-      val redirectUrl = "google.com"
-      val expectedRedirectLocation: Option[String] = Some(redirectUrl)
-      val serviceResponse = Right(redirectUrl)
-
       lazy val result = {
         mockPrincipalAuth()
         mockAudit()
-        (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(serviceResponse))
+        mockPaymentInfo(serviceResponse)
         controller.makePaymentNoPeriod(
           testAmountInPence,
           testNonReturnChargeType,
@@ -251,9 +242,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockAudit()
-        (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(Left(PaymentSetupError)))
+        mockPaymentInfo(Left(PaymentSetupError))
         controller.makePaymentNoPeriod(
           testAmountInPence,
           testNonReturnChargeType,
