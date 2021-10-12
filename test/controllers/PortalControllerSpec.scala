@@ -16,33 +16,22 @@
 
 package controllers
 
-import audit.AuditingService
-import audit.models.ExtendedAuditModel
 import common.TestModels.successfulAuthResult
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.auth.core.retrieve.~
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class PortalControllerSpec extends ControllerBaseSpec {
 
   val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
-  override val mockAuditService: AuditingService = mock[AuditingService]
-
   def setup(): Any = {
-    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *, *)
-      .returns(authResult)
-
-    (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-      .stubs(*, *, *, *)
-      .returns({})
+    mockPrincipalAuth()
+    mockAudit()
   }
 
   def portalController: PortalController = {

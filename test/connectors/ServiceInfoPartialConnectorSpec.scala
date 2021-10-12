@@ -35,21 +35,19 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
   lazy val validHtml: Html = Html("<nav>BTA lINK</nav>")
   lazy val result :Future[HtmlPartial] = Future.successful(Success(None,validHtml))
   val httpClient: HttpClient = mock[HttpClient]
+  def connector(result: Future[HtmlPartial]): ServiceInfoPartialConnector = {
+    (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
+      (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
+      .stubs(*,*,*,*,*,*)
+      .returns(result)
+    new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
+  }
 
   "ServiceInfoPartialConnector" should {
 
     "generate the correct url" in {
 
-      lazy val connector: ServiceInfoPartialConnector = {
-
-        (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-          (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
-          .stubs(*,*,*,*,*,*)
-          .returns(result)
-        new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
-
-      }
-      connector.btaUrl shouldBe "/business-account/partial/service-info"
+      connector(result).btaUrl shouldBe "/business-account/partial/service-info"
     }
   }
 
@@ -60,16 +58,7 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
       "return the fall back partial" in {
 
         lazy val result: Future[Failure] = Future.successful(Failure(Some(Status.GATEWAY_TIMEOUT)))
-        lazy val connector: ServiceInfoPartialConnector = {
-
-          (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-            (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
-            .stubs(*,*,*,*,*,*)
-            .returns(result)
-          new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
-
-        }
-        await(connector.getServiceInfoPartial()) shouldBe btanl()
+        await(connector(result).getServiceInfoPartial()) shouldBe btanl()
       }
     }
 
@@ -78,16 +67,7 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
       "return the fall back partial" in {
 
         lazy val result: Future[Failure] = Future.successful(Failure(Some(Status.INTERNAL_SERVER_ERROR)))
-        lazy val connector: ServiceInfoPartialConnector = {
-
-          (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-            (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
-            .stubs(*,*,*,*,*,*)
-            .returns(result)
-          new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
-
-        }
-        await(connector.getServiceInfoPartial()) shouldBe btanl()
+        await(connector(result).getServiceInfoPartial()) shouldBe btanl()
       }
     }
 
@@ -95,16 +75,7 @@ class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
 
       "return the Bta partial" in {
 
-        lazy val connector: ServiceInfoPartialConnector = {
-
-          (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-            (_: HttpReads[HtmlPartial], _: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *, *, *, *)
-            .returns(result)
-          new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
-
-        }
-        await(connector.getServiceInfoPartial()) shouldBe validHtml
+        await(connector(result).getServiceInfoPartial()) shouldBe validHtml
       }
     }
   }
