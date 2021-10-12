@@ -17,7 +17,7 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.{AuditModel, ExtendedAuditModel}
+import audit.models.{ExtendedAuditModel, AuditModel}
 import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
@@ -148,7 +148,6 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *, *)
       .returns({})
-
     (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *, *)
       .returns({})
