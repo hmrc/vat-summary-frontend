@@ -19,7 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.ExtendedAuditModel
 import common.SessionKeys
-import common.TestModels.{agentAuthResult, agentEnrolments, successfulAuthResult}
+import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
@@ -37,13 +37,11 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, Insuffic
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised}
-
 import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers {
@@ -59,12 +57,12 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.viewedDDInterrupt -> "true")
 
+  val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
   val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
   val mockDateService: DateService = mock[DateService]
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
-  val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val mockAuditService: AuditingService = mock[AuditingService]
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
@@ -144,6 +142,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   def mockAgentAuth(): Any = mockAuth(isAgent = true, agentAuthResult)
   def mockInsufficientEnrolments(): Any = mockAuth(isAgent = false, Future.failed(InsufficientEnrolments()))
   def mockMissingBearerToken(): Any = mockAuth(isAgent = false, Future.failed(MissingBearerToken()))
+  def mockVatDec(): Any = mockAuth(isAgent = false, authResultWithVatDec)
 
   def mockAudit(): Any =
     (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))

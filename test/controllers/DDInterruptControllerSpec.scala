@@ -29,7 +29,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import views.html.interrupt.{DDInterruptExistingDD, DDInterruptNoDD}
 import play.api.mvc.Result
 import play.api.test.Helpers._
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class DDInterruptControllerSpec extends ControllerBaseSpec {
