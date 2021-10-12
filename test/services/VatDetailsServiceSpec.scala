@@ -31,8 +31,7 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsServiceSpec extends ControllerBaseSpec {
-
-  private trait Test {
+  
     val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
       periodFrom = LocalDate.parse("2017-01-01"),
       periodTo = LocalDate.parse("2017-03-30"),
@@ -41,8 +40,6 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       received = None,
       periodKey = "#001"
     )))
-    lazy val obligationResult: HttpGetResult[VatReturnObligations] = Right(obligations)
-    val obligationsCall: Boolean = false
 
     val payments: Payments = Payments(Seq(
       PaymentWithPeriod(
@@ -95,68 +92,61 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false
       )))
-    lazy val paymentsResult: HttpGetResult[Payments] = Right(payments)
-    val paymentsCall: Boolean = false
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
     val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
     val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
-    def setup(obligationsCall: Boolean = false, paymentsCall: Boolean = false): Any = {
-      if(obligationsCall) {
-        (mockObligationsConnector.getVatReturnObligations(_: String, _: Obligation.Status.Value, _: Option[LocalDate], _: Option[LocalDate])
-        (_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *, *, *, *)
-          .returns(Future.successful(obligationResult))
-      }
-      if(paymentsCall) {
-        (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
-          .expects(*, *, *)
-          .returns(Future.successful(paymentsResult))
-      }
+  def callObligationsConnector(obligationResult: HttpGetResult[VatReturnObligations] = Right(obligations)): Any = {
+    (mockObligationsConnector.getVatReturnObligations(_: String, _: Obligation.Status.Value, _: Option[LocalDate], _: Option[LocalDate])
+    (_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *, *, *)
+      .returns(Future.successful(obligationResult))
+  }
+    def callFinancialDataConnector(paymentsResult: HttpGetResult[Payments] = Right(payments)): Any = {
+      (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *)
+        .returns(Future.successful(paymentsResult))
     }
 
-    def target: VatDetailsService = {
-      setup(obligationsCall, paymentsCall)
+    def vatDetailsService: VatDetailsService = {
       new VatDetailsService(
         mockObligationsConnector,
         mockFinancialDataConnector,
         mockAppConfig
       )
     }
-  }
+
 
   "Calling .getNextReturn" when {
 
     "the connector returns some obligations" should {
 
-      "return the most recent outstanding obligation" in new Test {
-        override val obligationsCall = true
+      "return the most recent outstanding obligation" in {
+        callObligationsConnector(obligationResult = Right(obligations))
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(target.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
+          await(vatDetailsService.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
         result shouldBe Right(Some(obligations))
       }
     }
 
     "the connector returns no obligations" should {
 
-      "return nothing" in new Test {
-        override val obligationsCall = true
-        override val obligations = VatReturnObligations(Seq.empty)
+      "return nothing" in {
+        callObligationsConnector(obligationResult = Right(VatReturnObligations(Seq.empty)))
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(target.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
+          await(vatDetailsService.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
         result shouldBe Right(None)
       }
     }
 
     "the connector returns an HttpError" should {
 
-      "return the error" in new Test {
-        override val obligationsCall = true
-        override lazy val obligationResult = Left(BadRequestError("TEST_FAIL", "this is a test"))
+      "return the error" in {
+        callObligationsConnector(obligationResult = Left(BadRequestError("TEST_FAIL", "this is a test")))
         val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(target.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
+          await(vatDetailsService.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
         result shouldBe Left(ObligationsError)
       }
     }
@@ -166,29 +156,28 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
     "the connector returns some outstanding payment obligations" should {
 
-      "return the most recent outstanding payment obligation" in new Test {
-        override val paymentsCall = true
-        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations("1111"))
+      "return the most recent outstanding payment obligation" in {
+        callFinancialDataConnector(paymentsResult = Right(payments))
+        val result: ServiceResponse[Option[Payments]] =
+          await(vatDetailsService.getPaymentObligations("1111"))
         result shouldBe Right(Some(payments))
       }
     }
 
     "the connector returns no outstanding payment obligations" should {
 
-      "return nothing" in new Test {
-        override val paymentsCall = true
-        override val payments = Payments(Seq.empty)
-        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations("1111"))
+      "return nothing" in {
+        callFinancialDataConnector(paymentsResult = Right(Payments(Seq.empty)))
+        val result: ServiceResponse[Option[Payments]] = await(vatDetailsService.getPaymentObligations("1111"))
         result shouldBe Right(None)
       }
     }
 
     "the connector returns an HttpError" should {
 
-      "return the error" in new Test {
-        override val paymentsCall = true
-        override lazy val paymentsResult = Left(BadRequestError("TEST_FAIL", "this is a test"))
-        val result: ServiceResponse[Option[Payments]] = await(target.getPaymentObligations("1111"))
+      "return the error" in {
+        callFinancialDataConnector(paymentsResult = Left(BadRequestError("TEST_FAIL", "this is a test")))
+        val result: ServiceResponse[Option[Payments]] = await(vatDetailsService.getPaymentObligations("1111"))
         result shouldBe Left(NextPaymentError)
       }
     }
