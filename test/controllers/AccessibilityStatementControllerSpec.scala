@@ -16,17 +16,9 @@
 
 package controllers
 
-import common.TestModels._
 import play.api.http.Status
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
-import uk.gov.hmrc.auth.core.AffinityGroup.Individual
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
-import uk.gov.hmrc.http.HeaderCarrier
 import views.html.AccessibilityStatement
-
-import scala.concurrent.{ExecutionContext, Future}
 
 class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
