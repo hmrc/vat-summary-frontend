@@ -18,8 +18,6 @@ package controllers
 
 import java.time.LocalDate
 
-import audit.AuditingService
-import audit.models.AuditModel
 import common.FinancialTransactionsConstants._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
@@ -30,306 +28,277 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
-import play.api.mvc.{Request, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
-import play.twirl.api.Html
 import services._
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.vatDetails.Details
-
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsControllerSpec extends ControllerBaseSpec {
 
-  private trait DetailsTest {
+  val obligations: VatReturnObligations = TestModels.obligations
+  val payments: Payments = TestModels.payments
+  val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
 
-    val obligations: VatReturnObligations = TestModels.obligations
-    val payments: Payments = TestModels.payments
+  def mockReturnObligations(result: ServiceResponse[Option[VatReturnObligations]]): Any =
+    (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *, *)
+      .returns(Future.successful(result))
 
-    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
-    val vatServiceReturnsResult: Future[ServiceResponse[Option[VatReturnObligations]]] =
-      Future.successful(Right(Some(obligations)))
-    val vatServicePaymentsResult: Future[ServiceResponse[Option[Payments]]] =
-      Future.successful(Right(Some(payments)))
-    val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-      Future.successful(Right(customerInformationMax))
-    val serviceInfoServiceResult: Future[Html] = Future.successful(Html(""))
-    val ddResult: Future[ServiceResponse[DirectDebitStatus]] =
-      Future.successful(Right(DirectDebitStatus(directDebitMandateFound = false, None)))
-
-    val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
-    val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
-    val mockAuditService: AuditingService = mock[AuditingService]
-    val mockPaymentsService: PaymentsService = mock[PaymentsService]
-
-    def setup(): Any = {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *, *)
-        .returns(authResult)
-
-      mockDateServiceCall()
-
-      (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *, *)
-        .returns(vatServiceReturnsResult)
-
-      (mockVatDetailsService.getPaymentObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *)
-        .returns(vatServicePaymentsResult)
-
-      (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *)
-        .returns(accountDetailsServiceResult)
-
-      (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *, *)
-        .returns({})
-
-      (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
-        .stubs(*,*,*)
-        .returns(serviceInfoServiceResult)
-
-      (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *)
-        .returns(ddResult)
-    }
-
-    def target(): VatDetailsController = {
-      setup()
-      new VatDetailsController(
-        enrolmentsAuthService,
-        mockAppConfig,
-        mockVatDetailsService,
-        mockServiceInfoService,
-        authorisedController,
-        mockAccountDetailsService,
-        mockDateService,
-        mockAuditService,
-        mcc,
-        ec,
-        injector.instanceOf[Details],
-        mockServiceErrorHandler,
-        ddInterruptPredicate
-      )
-    }
-  }
-
+  def mockPaymentLiabilities(result: ServiceResponse[Option[Payments]]): Any =
+    (mockVatDetailsService.getPaymentObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(result))
+  
+  val controller = new VatDetailsController(
+    mockVatDetailsService,
+    mockServiceInfoService,
+    authorisedController,
+    mockAccountDetailsService,
+    mockDateService,
+    mockAuditService,
+    mcc,
+    injector.instanceOf[Details],
+    mockServiceErrorHandler,
+    ddInterruptPredicate
+  )
+  
   "Calling the details action" when {
 
     "the user is logged in and does not meet the criteria to see an interrupt screen" should {
 
-      object Test extends DetailsTest { lazy val result: Future[Result] = target().details()(fakeRequest) }
+      lazy val result: Future[Result] = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockReturnObligations(Right(Some(obligations)))
+        mockPaymentLiabilities(Right(Some(payments)))
+        mockCustomerInfo(Right(customerInformationMax))
+        mockServiceInfoCall()
+        mockAudit()
+        controller.details()(fakeRequest)
+      }
 
       "return 200" in {
-        status(Test.result) shouldBe Status.OK
+        status(result) shouldBe Status.OK
       }
 
       "return HTML" in {
-        contentType(Test.result) shouldBe Some("text/html")
+        contentType(result) shouldBe Some("text/html")
       }
 
       "return charset utf-8" in {
-        charset(Test.result) shouldBe Some("utf-8")
+        charset(result) shouldBe Some("utf-8")
       }
 
       "return the VAT overview view" in {
-        contentAsString(Test.result).contains("Your VAT account") shouldBe true
+        contentAsString(result).contains("Your VAT account") shouldBe true
       }
 
       "put a customerMigratedToETMPDate key into the session" in {
-        session(Test.result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-05")
+        session(result).get(SessionKeys.migrationToETMP) shouldBe Some("2017-05-05")
       }
 
       "put a mandation status in the session" in {
-        session(Test.result).get(SessionKeys.mandationStatus) shouldBe Some("MTDfB")
+        session(result).get(SessionKeys.mandationStatus) shouldBe Some("MTDfB")
       }
     }
 
     "the user is not logged in" should {
 
-      "return SEE_OTHER" in new DetailsTest {
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(MissingBearerToken())
-        val result: Future[Result] = target().details()(fakeRequest)
+      lazy val result: Future[Result] = {
+        mockMissingBearerToken()
+        controller.details()(fakeRequest)
+      }
 
+      "return 303 (SEE_OTHER)" in {
         status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the sign-in URL" in {
         redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
 
     "the user does not have sufficient enrolments" should {
 
-      "return 403 (Forbidden)" in new DetailsTest {
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientEnrolments())
-        val result: Future[Result] = target().details()(fakeRequest)
-        status(result) shouldBe Status.FORBIDDEN
-      }
-    }
-
-    "the user is not authenticated" should {
-
-      "return 403 (Forbidden)" in new DetailsTest {
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.failed(InsufficientConfidenceLevel())
-        val result: Future[Result] = target().details()(fakeRequest)
+      "return 403 (FORBIDDEN)" in {
+        val result: Future[Result] = {
+          mockInsufficientEnrolments()
+          controller.details()(fakeRequest)
+        }
         status(result) shouldBe Status.FORBIDDEN
       }
     }
 
     "user is an Agent" should {
 
-      "redirect to Agent Hub page" in new DetailsTest {
-        override val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = agentAuthResult
-        val result: Future[Result] = target().details()(fakeRequest)
+      lazy val result: Future[Result] = {
+        mockAgentAuth()
+        controller.details()(fakeRequest)
+      }
 
+      "return 303 (SEE_OTHER)" in {
         status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect to the Agent Hub page" in {
         redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
       }
     }
 
     "the user is hybrid" should {
 
-      "not attempt to retrieve payment obligations" in new DetailsTest {
+      "return 200 (OK) without calling the API for payment information" in {
 
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-          Future.successful(Right(customerInformationHybrid))
-
-        override def setup(): Unit = {
-
-          (mockServiceInfoService.getPartial(_: Request[_], _: User,  _: ExecutionContext))
-            .stubs(*,*,*)
-            .returns(serviceInfoServiceResult)
-
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *, *)
-            .returns(authResult)
-
+        val result = {
+          mockPrincipalAuth()
           mockDateServiceCall()
-
-          (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(accountDetailsServiceResult)
-
-          (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *, *)
-            .returns(vatServiceReturnsResult)
-
-          (mockVatDetailsService.getPaymentObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .never()
-
-          (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *, *)
-            .returns({})
-
-          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(ddResult)
+          mockReturnObligations(Right(Some(obligations)))
+          mockCustomerInfo(Right(customerInformationHybrid))
+          mockAudit()
+          mockServiceInfoCall()
+          controller.details()(fakeRequest)
         }
 
-        val result: Future[Result] = target().details()(fakeRequest)
         status(result) shouldBe Status.OK
       }
     }
 
-    "return a VatDetailsViewModel as a non MTDfB user" in new DetailsTest {
-      override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] =
-        Future.successful(Right(customerInformationNonMTDfB))
+    "the user is non-MTD" should {
 
-      lazy val result: Future[Result] = target().details()(fakeRequest)
-      status(result) shouldBe OK
-      contentAsString(result).contains(messages("returnObligation.submit")) shouldBe true
+      lazy val result = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockReturnObligations(Right(Some(obligations)))
+        mockPaymentLiabilities(Right(Some(payments)))
+        mockCustomerInfo(Right(customerInformationNonMTDfB))
+        mockServiceInfoCall()
+        mockAudit()
+        controller.details()(fakeRequest)
+      }
+
+      "return 200 (OK)" in {
+        status(result) shouldBe OK
+      }
+
+      "render the page with a 'Submit' link" in {
+        contentAsString(result).contains(messages("returnObligation.submit")) shouldBe true
+      }
     }
 
     "the user is a missing trader" should {
 
-      "redirect to the manage-vat-subscription-frontend missing trader URL" in new DetailsTest {
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
-          customerInformationMax.copy(isMissingTrader = true)
-        ))
-        lazy val result: Future[Result] = target().details()(fakeRequest)
+      lazy val result = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockReturnObligations(Right(Some(obligations)))
+        mockPaymentLiabilities(Right(Some(payments)))
+        mockCustomerInfo(Right(customerInformationMax.copy(isMissingTrader = true)))
+        mockServiceInfoCall()
+        mockAudit()
+        controller.details()(fakeRequest)
+      }
+
+      "return 303 (SEE_OTHER)" in {
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("/missing-trader")
+      }
+
+      "redirect to the manage-vat-subscription-frontend missing trader URL" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.missingTraderRedirectUrl)
       }
     }
+
+    "the user has no ddInterrupt value in session" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.details()(DDInterruptRequest)
+      }
+
+      "return 303 (SEE_OTHER)" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+      "redirect to the DD interrupt controller" in {
+        redirectLocation(result) shouldBe
+          Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
+    }
+  }
 
   "Calling .detailsRedirectToEmailVerification" should {
 
     "redirect to email verification" when {
 
-      "All relevant information is returned from vat-subscription" in new DetailsTest {
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
-          customerInformationMax
-        ))
+      "all relevant information is returned from vat-subscription" in {
 
-        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
+        val result = {
+          mockPrincipalAuth()
+          mockCustomerInfo(Right(customerInformationMax))
+          controller.detailsRedirectToEmailVerification()(fakeRequest)
+        }
+
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
       }
-
     }
 
     "return an internal server error" when {
 
-      "account details is an error" in new DetailsTest {
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Left(
-          UnknownError
-        ))
-
-        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-      }
-
-      "no email information is returned in customer information" in new DetailsTest {
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
-          customerInformationMax.copy(emailAddress = None)
-        ))
-
-        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-      }
-
-      "the email address is empty" in new DetailsTest {
-        override val accountDetailsServiceResult: Future[HttpGetResult[CustomerInformation]] = Future.successful(Right(
-          customerInformationMax.copy(emailAddress = Some(Email(None, None)))
-        ))
-
-        lazy val result: Future[Result] = target().detailsRedirectToEmailVerification()(fakeRequest)
-        status(result) shouldBe INTERNAL_SERVER_ERROR
+      "account details cannot be retrieved" in {
+        val result = {
+          mockPrincipalAuth()
+          mockCustomerInfo(Left(UnknownError))
+          controller.detailsRedirectToEmailVerification()(fakeRequest)
         }
-      "the user has no ddInterrupt value in session" in new DetailsTest {
-        override def setup(): Any = {
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *, *)
-            .returns(authResult)
-        }
-        lazy val result = target.details()(DDInterruptRequest)
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
+
+      "no email information is returned in customer information" in {
+        val result = {
+          mockPrincipalAuth()
+          mockCustomerInfo(Right(customerInformationMax.copy(emailAddress = None)))
+          controller.detailsRedirectToEmailVerification()(fakeRequest)
+        }
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "the email address is empty" in {
+        val result = {
+          mockPrincipalAuth()
+          mockCustomerInfo(Right(customerInformationMax.copy(emailAddress = Some(Email(None, None)))))
+          controller.detailsRedirectToEmailVerification()(fakeRequest)
+        }
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }
   }
 
-  "Calling .constructViewModel with a VatDetailsModel" when {
+  "Calling .constructViewModel" when {
 
     lazy val paymentDueDate: Option[String] = Some("2019-03-03")
     lazy val obligationData: Option[String] = Some("2019-06-06")
 
     "there is both a payment and an obligation" should {
 
-      "return a VatDetailsViewModel with both due dates" in new DetailsTest {
+      "return a VatDetailsViewModel with both due dates" in {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
+            paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(Some(obligations)),
-          Right(Some(payments)),
-          Right(customerInformationMax)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(Some(obligations)),
+            Right(Some(payments)),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
@@ -337,16 +306,20 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is a payment but no obligation" should {
 
-      "return a VatDetailsViewModel with a payment due date and no obligation due date" in new DetailsTest {
+      "return a VatDetailsViewModel with a payment due date and no obligation due date" in {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
+            paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Right(Some(payments)),
-          Right(customerInformationMax)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(None),
+            Right(Some(payments)),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
@@ -354,16 +327,20 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is an obligation but no payment" should {
 
-      "return a VatDetailsViewModel with an obligation due date and no payment due date" in new DetailsTest {
+      "return a VatDetailsViewModel with an obligation due date and no payment due date" in {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
+            None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(Some(obligations)),
-          Right(None),
-          Right(customerInformationMax)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(Some(obligations)),
+            Right(None),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
@@ -371,16 +348,20 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is no obligation or payment" should {
 
-      "return a VatDetailsViewModel with no obligation due date and no payment due date" in new DetailsTest {
+      "return a VatDetailsViewModel with no obligation due date and no payment due date" in {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
-            None, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true
+            None, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true
           )
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Right(None),
-          Right(customerInformationMax)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(None),
+            Right(None),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
@@ -388,66 +369,81 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is no obligation, payment, or entity name" should {
 
-      "return a VatDetailsViewModel with no obligation due date, payment due date, entity name or partyType" in new DetailsTest {
-        lazy val expected: VatDetailsViewModel = VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Right(None),
-          Right(customerInformationMin)
-        )
+      "return a VatDetailsViewModel with no obligation due date, payment due date, entity name or partyType" in {
+        lazy val expected: VatDetailsViewModel =
+          VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true)
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(None),
+            Right(None),
+            Right(customerInformationMin)
+          )
+        }
 
         result shouldBe expected
       }
     }
 
-    "there is no obligation, payment, entity name or partyType when the showSignUp flag is true" should {
+    "there is no obligation, payment, entity name, partyType and there is a non-MTD mandation status" should {
 
-      "return a VatDetailsViewModel with no obligation due date, payment due date, or entity name with the isNonMTDfBOrNonDigital flag set to true" in
-        new DetailsTest {
+      "return a VatDetailsViewModel with no obligation due date, payment due date or entity name with the showSignUp flag set to true" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Right(None),
-          Right(customerInformationMTDfBExempt)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(None),
+            Right(None),
+            Right(customerInformationMTDfBExempt)
+          )
+        }
+
         result shouldBe expected
       }
     }
 
-    "there is an error from VAT API" should {
-      "return a VatDetailsViewModel with the returnError flag set" in new DetailsTest {
+    "there is an error returned by the obligations API" should {
+
+      "return a VatDetailsViewModel with the returnError flag set" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, Some(entityName), returnObligationError = true,
-          deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Left(ObligationsError),
-          Right(None),
-          Right(customerInformationMax)
-        )
+          None, None, Some(entityName), returnObligationError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true)
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Left(ObligationsError),
+            Right(None),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
     }
 
-    "there is an error from Financial Data API" should {
+    "there is an error returned by the financial data API" should {
 
-      "return a VatDetailsViewModel with the paymentError flag set" in new DetailsTest {
+      "return a VatDetailsViewModel with the paymentError flag set" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")), currentDate = testDate, partyType = Some("7"), userEmailVerified = true)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(None),
-          Left(NextPaymentError),
-          Right(customerInformationMax)
-        )
+          None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true)
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(None),
+            Left(NextPaymentError),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
     }
 
-    "there is an error from both APIs" should {
+    "there is an error from both obligation and financial APIs" should {
 
-      "return a VatDetailsViewModel with the returnError and paymentError flags set" in new DetailsTest {
+      "return a VatDetailsViewModel with the returnError and paymentError flags set" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None,
           None,
@@ -458,11 +454,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           currentDate = testDate,
           partyType = Some("7"),
           userEmailVerified = true)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Left(ObligationsError),
-          Left(NextPaymentError),
-          Right(customerInformationMax)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Left(ObligationsError),
+            Left(NextPaymentError),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
@@ -470,9 +469,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the obligation is overdue" should {
 
-      "return a VatDetailsViewModel with the return overdue flag set" in new DetailsTest {
+      "return a VatDetailsViewModel with the return overdue flag set" in {
         val overdueObligationDueDate: Option[String] = Some("2017-06-06")
-        override val obligations: VatReturnObligations = overdueObligations
 
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate,
@@ -483,11 +481,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           currentDate = testDate,
           partyType = Some("7"),
           userEmailVerified = true)
-        lazy val result: VatDetailsViewModel = target().constructViewModel(
-          Right(Some(obligations)),
-          Right(Some(payments)),
-          Right(customerInformationMax)
-        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(Some(overdueObligations)),
+            Right(Some(payments)),
+            Right(customerInformationMax)
+          )
+        }
 
         result shouldBe expected
       }
@@ -498,50 +499,50 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "return true" when {
 
-      "account details returns an error" in new DetailsTest {
-        target().retrieveEmailVerifiedIfExist(Left(UnknownError)) shouldBe true
+      "account details returns an error" in {
+        controller.retrieveEmailVerifiedIfExist(Left(UnknownError)) shouldBe true
       }
 
-      "customer information does not contain any email information" in new DetailsTest {
+      "customer information does not contain any email information" in {
         val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = None)
 
-        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+        controller.retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
       }
 
-      "no email is returned, regardless of validation status" in new DetailsTest {
+      "no email is returned, regardless of validation status" in {
         val customerInfo: CustomerInformation = customerInformationMax.copy(emailAddress = Some(Email(None, Some(true))))
 
-        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+        controller.retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
       }
 
-      "the email is verified" in new DetailsTest {
+      "the email is verified" in {
         val customerInfo: CustomerInformation =
           customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@adf.com"), Some(true))))
 
-        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+        controller.retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
       }
 
-      "there is a pending PPOB section" in new DetailsTest {
+      "there is a pending PPOB section" in {
         val customerInfo: CustomerInformation = customerInformationMax.copy(hasPendingPpobChanges = true)
 
-        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
+        controller.retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe true
       }
     }
 
     "return false" when {
 
-      "the email is not verified" in new DetailsTest {
+      "the email is not verified" in {
         val customerInfo: CustomerInformation =
           customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), Some(false))))
 
-        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
+        controller.retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
       }
 
-      "no verification is returned" in new DetailsTest {
+      "no verification is returned" in {
         val customerInfo: CustomerInformation =
           customerInformationMax.copy(emailAddress = Some(Email(Some("asdf@asdf.com"), None)))
 
-        target().retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
+        controller.retrieveEmailVerifiedIfExist(Right(customerInfo)) shouldBe false
       }
     }
   }
@@ -550,7 +551,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "there is a single obligation" should {
 
-      "return a VatDetailsDataModel with the correct data" in new DetailsTest {
+      "return a VatDetailsDataModel with the correct data" in {
 
         val expected: VatDetailsDataModel = VatDetailsDataModel(
           Some("2019-06-06"),
@@ -559,14 +560,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           hasError = false
         )
 
-        val result: VatDetailsDataModel = target().getObligationDetails(obligations.obligations, isOverdue = false)
+        val result: VatDetailsDataModel = controller.getObligationDetails(obligations.obligations, isOverdue = false)
         result shouldBe expected
       }
     }
 
     "there are multiple obligations" should {
 
-      "return a VatDetailsDataModel with the hasMultiple flag set" in new DetailsTest {
+      "return a VatDetailsDataModel with the hasMultiple flag set" in {
 
         val multipleObligations: Seq[VatReturnObligation] = Seq(
           VatReturnObligation(
@@ -594,7 +595,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           hasError = false
         )
 
-        val result: VatDetailsDataModel = target().getObligationDetails(multipleObligations, isOverdue = false)
+        val result: VatDetailsDataModel = controller.getObligationDetails(multipleObligations, isOverdue = false)
         result shouldBe expected
       }
     }
@@ -608,7 +609,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           "user has direct debit collection in progress" should {
 
-            "return payment that is not overdue" in new DetailsTest {
+            "return payment that is not overdue" in {
 
               val testPayment: PaymentNoPeriod = Payment(
                 ReturnDebitCharge,
@@ -619,7 +620,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 ddCollectionInProgress = true
               )
 
-              val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+              val result: VatDetailsDataModel = {
+                mockDateServiceCall()
+                controller.getPaymentObligationDetails(Seq(testPayment))
+              }
 
               result.isOverdue shouldBe false
             }
@@ -627,7 +631,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           "user has no direct debit collection in progress" should {
 
-            "return payment that is overdue" in new DetailsTest {
+            "return payment that is overdue" in {
 
               val testPayment: PaymentNoPeriod = Payment(
                 ReturnDebitCharge,
@@ -638,7 +642,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 ddCollectionInProgress = false
               )
 
-              val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+              val result: VatDetailsDataModel = {
+                mockDateServiceCall()
+                controller.getPaymentObligationDetails(Seq(testPayment))
+              }
 
               result.isOverdue shouldBe true
             }
@@ -647,7 +654,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         "due date of payment is in the future" should {
 
-          "return payment that is not overdue" in new DetailsTest {
+          "return payment that is not overdue" in {
 
             val testPayment: PaymentNoPeriod = Payment(
               ReturnDebitCharge,
@@ -658,7 +665,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
               ddCollectionInProgress = false
             )
 
-            val result: VatDetailsDataModel = target().getPaymentObligationDetails(Seq(testPayment))
+            val result: VatDetailsDataModel = {
+              mockDateServiceCall()
+              controller.getPaymentObligationDetails(Seq(testPayment))
+            }
 
             result.isOverdue shouldBe false
           }
@@ -672,7 +682,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "obligation is overdue" should {
 
-        "return VatDetailsDataModel with overdue flag set to true" in new DetailsTest {
+        "return VatDetailsDataModel with overdue flag set to true" in {
 
           val expected: VatDetailsDataModel = VatDetailsDataModel(
             displayData = Some("2017-06-06"),
@@ -681,14 +691,17 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             hasError = false
           )
 
-          val result: VatDetailsDataModel = target().getReturnObligationDetails(overdueObligations.obligations)
+          val result: VatDetailsDataModel = {
+            mockDateServiceCall()
+            controller.getReturnObligationDetails(overdueObligations.obligations)
+          }
           result shouldBe expected
         }
       }
 
       "obligation is not overdue" should {
 
-        "return VatDetailsDataModel with overdue flag set to false" in new DetailsTest {
+        "return VatDetailsDataModel with overdue flag set to false" in {
 
           val expected: VatDetailsDataModel = VatDetailsDataModel(
             displayData = Some("2019-06-06"),
@@ -697,7 +710,10 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             hasError = false
           )
 
-          val result: VatDetailsDataModel = target().getReturnObligationDetails(obligations.obligations)
+          val result: VatDetailsDataModel = {
+            mockDateServiceCall()
+            controller.getReturnObligationDetails(obligations.obligations)
+          }
           result shouldBe expected
         }
       }
@@ -708,16 +724,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "return true" when {
 
-      "the mandation status in the CustomerInformation matches the expected status" in new DetailsTest {
+      "the mandation status in the CustomerInformation matches the expected status" in {
         val customerInfoToCompare: Either[Nothing, CustomerInformation] = Right(customerInformationMin)
-        target().retrieveIsOfStatus(customerInfoToCompare, Seq(mtdfb)) shouldBe Some(true)
+        controller.retrieveIsOfStatus(customerInfoToCompare, Seq(mtdfb)) shouldBe Some(true)
       }
 
-      "the mandation status in the CustomerInformation matches one of the expected statuses" in new DetailsTest {
+      "the mandation status in the CustomerInformation matches one of the expected statuses" in {
         val mandationStatusToCompareMtdfb: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
         val mandationStatusToCompareExempt: HttpGetResult[CustomerInformation] = Right(customerInformationMTDfBExempt)
-
-        val controller: VatDetailsController = target()
 
         controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
         controller.retrieveIsOfStatus(mandationStatusToCompareExempt, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
@@ -727,28 +741,28 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "return false" when {
 
-      "the mandation status does not match the expected status" in new DetailsTest {
+      "the mandation status does not match the expected status" in {
         val mandationStatusToCompare: Either[Nothing, CustomerInformation] = Right(customerInformationJunkStatus)
-        target().retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(false)
+        controller.retrieveIsOfStatus(mandationStatusToCompare, Seq(mtdfb)) shouldBe Some(false)
       }
 
-      "the mandation status does not match any of the expected statuses" in new DetailsTest {
+      "the mandation status does not match any of the expected statuses" in {
         val mandationStatusToCompareMtdfb: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
-        target().retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
+        controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
       }
 
-      "the expected mandation statuses list is empty" in new DetailsTest {
+      "the expected mandation statuses list is empty" in {
         val mandationStatusToCompare: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
-        target().retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
+        controller.retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
       }
 
     }
 
     "return None" when {
 
-      "an error is present" in new DetailsTest {
+      "an error is present" in {
         val errorForTest: HttpGetResult[CustomerInformation] = Left(UnknownError)
-        target().retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
+        controller.retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
       }
     }
   }
@@ -757,15 +771,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the user is a missing trader and has no inflight changes" should {
 
-      "return true" in new DetailsTest {
-        target().redirectForMissingTrader(Right(customerInformationMax.copy(isMissingTrader = true))) shouldBe true
+      "return true" in {
+        controller.redirectForMissingTrader(Right(customerInformationMax.copy(isMissingTrader = true))) shouldBe true
       }
     }
 
     "the user is a missing trader and has an inflight PPOB change" should {
 
-      "return false" in new DetailsTest {
-        target().redirectForMissingTrader(Right(
+      "return false" in {
+        controller.redirectForMissingTrader(Right(
           customerInformationMax.copy(isMissingTrader = true, hasPendingPpobChanges = true)
         )) shouldBe false
       }
@@ -773,8 +787,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the user is not a missing trader" should {
 
-      "return false" in new DetailsTest {
-        target().redirectForMissingTrader(Right(customerInformationMax)) shouldBe false
+      "return false" in {
+        controller.redirectForMissingTrader(Right(customerInformationMax)) shouldBe false
       }
     }
   }

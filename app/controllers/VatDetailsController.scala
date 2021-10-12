@@ -42,19 +42,18 @@ import views.html.vatDetails.Details
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class VatDetailsController @Inject()(val enrolmentsAuthService: EnrolmentsAuthService,
-                                     implicit val appConfig: AppConfig,
-                                     vatDetailsService: VatDetailsService,
+class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      serviceInfoService: ServiceInfoService,
                                      authorisedController: AuthorisedController,
-                                     val accountDetailsService: AccountDetailsService,
+                                     accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
                                      auditingService: AuditingService,
                                      mcc: MessagesControllerComponents,
-                                     implicit val ec: ExecutionContext,
                                      detailsView: Details,
                                      serviceErrorHandler: ServiceErrorHandler,
                                      DDInterrupt: DDInterruptPredicate)
+                                    (implicit appConfig: AppConfig,
+                                     ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>

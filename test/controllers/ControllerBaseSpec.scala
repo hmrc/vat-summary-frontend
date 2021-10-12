@@ -17,7 +17,7 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.ExtendedAuditModel
+import audit.models.{AuditModel, ExtendedAuditModel}
 import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
@@ -144,8 +144,13 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   def mockMissingBearerToken(): Any = mockAuth(isAgent = false, Future.failed(MissingBearerToken()))
   def mockVatDec(): Any = mockAuth(isAgent = false, authResultWithVatDec)
 
-  def mockAudit(): Any =
+  def mockAudit(): Any = {
     (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *, *)
       .returns({})
+
+    (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *, *)
+      .returns({})
+  }
 }
