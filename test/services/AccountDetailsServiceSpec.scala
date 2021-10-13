@@ -32,28 +32,26 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AccountDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers {
 
-  private trait Test {
-    val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
+  val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
-    def setup(): Any = {
-      (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *)
-        .returns(Future.successful(customerInfoResult))
-    }
+  def setup(customerInfoResult: HttpGetResult[CustomerInformation]): Any = {
+    (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returns(Future.successful(customerInfoResult))
+  }
 
-    def target: AccountDetailsService = {
-      setup()
-      new AccountDetailsService(mockVatSubscriptionConnector)
-    }
+  def accountDetailsService(customerInfoResult: HttpGetResult[CustomerInformation] = customerInfoResult): AccountDetailsService = {
+    setup(customerInfoResult: HttpGetResult[CustomerInformation])
+    new AccountDetailsService(mockVatSubscriptionConnector)
   }
 
   "Calling .getAccountDetails" should {
 
-    "retrieve the customer details" in new Test {
-      val details: HttpGetResult[CustomerInformation] = await(target.getAccountDetails("123456789"))
+    "retrieve the customer details" in {
+      val details: HttpGetResult[CustomerInformation] = await(accountDetailsService().getAccountDetails("123456789"))
       details shouldBe customerInfoResult
     }
   }
@@ -62,17 +60,17 @@ class AccountDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Ma
 
     "the connector retrieves a CustomerInformation model" should {
 
-      "return the appropriate name" in new Test {
-        lazy val result: ServiceResponse[Option[String]] = await(target.getEntityName("999999999"))
+      "return the appropriate name" in {
+        lazy val result: ServiceResponse[Option[String]] = await(accountDetailsService().getEntityName("999999999"))
         result shouldBe Right(Some("Cheapo Clothing"))
       }
     }
 
     "the connector returns an error" should {
 
-      "return None" in new Test {
-        override val customerInfoResult: HttpGetResult[CustomerInformation] = Left(BadRequestError("", ""))
-        val result: ServiceResponse[Option[String]] = await(target.getEntityName("999999999"))
+      "return None" in {
+        lazy val customerInfoResult: HttpGetResult[CustomerInformation] = Left(BadRequestError("", ""))
+        val result: ServiceResponse[Option[String]] = await(accountDetailsService(customerInfoResult).getEntityName("999999999"))
         result shouldBe Left(CustomerInformationError)
       }
     }

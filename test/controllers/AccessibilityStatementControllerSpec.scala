@@ -16,42 +16,27 @@
 
 package controllers
 
-import common.TestModels._
 import play.api.http.Status
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
-import uk.gov.hmrc.auth.core.AffinityGroup.Individual
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
-import uk.gov.hmrc.http.HeaderCarrier
 import views.html.AccessibilityStatement
-
-import scala.concurrent.{ExecutionContext, Future}
 
 class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
-  trait Test {
-    val mockAccessibilityStatement: AccessibilityStatement = injector.instanceOf[AccessibilityStatement]
-    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+  val mockAccessibilityStatement: AccessibilityStatement = injector.instanceOf[AccessibilityStatement]
 
-    def setup: Any =
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(authResult)
-        .noMoreThanOnce()
-
-    def controller: AccessibilityStatementController = {
-      setup
-      new AccessibilityStatementController(authorisedController, mcc, mockAccessibilityStatement)
-    }
+  def controller: AccessibilityStatementController = {
+    new AccessibilityStatementController(authorisedController, mcc, mockAccessibilityStatement)
   }
 
   "The show() action" when {
 
     "the user is an authenticated principal entity" should {
 
-      "return 200" in new Test {
-        private val result = controller.show(fakeRequest)
+      "return 200" in {
+        lazy val result = {
+          mockPrincipalAuth()
+          controller.show(fakeRequest)
+        }
         status(result) shouldBe Status.OK
 
       }
@@ -59,18 +44,12 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
     "the user is an authenticated agent entity" should {
 
-      "return 200" in new Test {
-        override val authResult: Future[Enrolments ~ Option[AffinityGroup]] = agentAuthResult
+      "return 200" in {
 
-        override def setup: Any = {
-          super.setup
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(Future.successful(agentEnrolments))
-            .noMoreThanOnce()
+        lazy val result = {
+          mockAgentAuth()
+          controller.show(fakeRequest.withSession("CLIENT_VRN" -> "999999999"))
         }
-
-        private val result = controller.show(fakeRequest.withSession("CLIENT_VRN" -> "999999999"))
 
         status(result) shouldBe Status.OK
       }
@@ -78,21 +57,12 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
     "the user is unauthorised" should {
 
-      "return 403" in new Test {
-        override val authResult: Future[Enrolments ~ Option[AffinityGroup]] = Future.successful(new ~(
-          otherEnrolment,
-          Some(Individual)
-        ))
+      "return 403" in {
 
-        override def setup: Any = {
-          super.setup
-          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-            .expects(*, *, *, *)
-            .returns(Future.successful(otherEnrolment))
-            .noMoreThanOnce()
+        lazy val result = {
+          mockInsufficientEnrolments()
+          controller.show(fakeRequest)
         }
-
-        private val result = controller.show(fakeRequest)
 
         status(result) shouldBe Status.FORBIDDEN
       }
@@ -100,8 +70,11 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
   }
   "the user is insolvent and not continuing to trade" should {
 
-    "return 403 (Forbidden)" in new Test {
-      private val result = controller.show(insolventRequest)
+    "return 403 (Forbidden)" in {
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.show(insolventRequest)
+      }
 
       status(result) shouldBe Status.FORBIDDEN
     }

@@ -16,55 +16,44 @@
 
 package controllers
 
-import audit.AuditingService
-import audit.models.ExtendedAuditModel
 import common.TestModels.successfulAuthResult
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.auth.core.retrieve.~
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class PortalControllerSpec extends ControllerBaseSpec {
 
-  private trait PortalControllerTest {
-    val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
+  val authResult: Future[~[Enrolments, Option[AffinityGroup]]] = successfulAuthResult
 
-    val mockAuditService: AuditingService = mock[AuditingService]
+  def setup(): Any = {
+    mockPrincipalAuth()
+    mockAudit()
+  }
 
-    def setup(): Any = {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(authResult)
-
-      (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-        .stubs(*, *, *, *)
-        .returns({})
-    }
-
-    def target: PortalController = {
-      setup()
-      new PortalController(
-        authorisedController,
-        mockAuditService,
-        mockAppConfig,
-        mcc,
-        ec
-      )
-    }
+  def portalController: PortalController = {
+    setup()
+    new PortalController(
+      authorisedController,
+      mockAuditService,
+      mockAppConfig,
+      mcc,
+      ec
+    )
   }
 
   "Calling the HybridWYO method" when {
 
     "the user is authorised" should {
 
-      "redirect to the portal" in new PortalControllerTest {
+      "redirect to the portal" in {
 
-        lazy val result: Future[Result] = target.hybridWYO()(fakeRequestWithSession)
+        lazy val result: Future[Result] = {
+          portalController.hybridWYO()(fakeRequestWithSession)
+        }
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("/whatYouOwePortal")
@@ -79,9 +68,11 @@ class PortalControllerSpec extends ControllerBaseSpec {
 
     "the user is authorised" should {
 
-      "redirect to the portal" in new PortalControllerTest {
+      "redirect to the portal" in {
 
-        lazy val result: Future[Result] = target.hybridPH()(fakeRequestWithSession)
+        lazy val result: Future[Result] = {
+          portalController.hybridPH()(fakeRequestWithSession)
+        }
 
         status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some("/paymentHistoryPortal")
