@@ -64,7 +64,7 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
     "microservice.services.direct-debit.host" -> mockHost,
     "microservice.services.direct-debit.port" -> mockPort,
     "microservice.services.business-tax-account.host" -> mockHost,
-    "microservice.services.business-tax-account.port" -> mockPort,
+    "microservice.services.business-tax-account.port" -> mockPort
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

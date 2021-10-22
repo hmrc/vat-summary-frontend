@@ -178,8 +178,8 @@ object TestModels {
     Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate, partyType = Some("1")
   )
 
-  val mtdEnrolment = Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
-  val vatDecEnrolment = Enrolment("HMCE-VATDEC-ORG", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
+  val mtdEnrolment: Enrolment = Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
+  val vatDecEnrolment: Enrolment = Enrolment("HMCE-VATDEC-ORG", Seq(EnrolmentIdentifier("VATRegNo", "123456789")), "")
   val successfulAuthResult: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
     Enrolments(Set(mtdEnrolment)),
     Some(Individual)
@@ -221,4 +221,11 @@ object TestModels {
   )
 
   val exampleNonNSTP: Option[TaxPeriod] = Some(TaxPeriod("2019-01-06", "2019-01-31"))
+
+  val navContent: NavContent = NavContent(
+    NavLinks("Home", "Hafan", "http://localhost:9999/home"),
+    NavLinks("Account", "Crfrif", "http://localhost:9999/account"),
+    NavLinks("Messages", "Negeseuon", "http://localhost:9999/messages", Some(1)),
+    NavLinks("Help", "Cymorth", "http://localhost:9999/help")
+  )
 }

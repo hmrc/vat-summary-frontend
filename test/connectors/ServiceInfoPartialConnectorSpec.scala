@@ -16,66 +16,48 @@
 
 package connectors
 
+import common.TestModels.navContent
 import controllers.ControllerBaseSpec
-import play.api.http.Status
-import play.twirl.api.Html
+import models.NavContent
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.play.partials.{HeaderCarrierForPartialsConverter, HtmlPartial}
-import uk.gov.hmrc.play.partials.HtmlPartial._
-import views.html.templates.BtaNavigationLinks
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
-
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, TimeoutException}
 
 class ServiceInfoPartialConnectorSpec extends ControllerBaseSpec {
-  val header: HeaderCarrierForPartialsConverter = injector.instanceOf[HeaderCarrierForPartialsConverter]
-  val btanl: BtaNavigationLinks = injector.instanceOf[BtaNavigationLinks]
-  lazy val validHtml: Html = Html("<nav>BTA lINK</nav>")
-  lazy val result :Future[HtmlPartial] = Future.successful(Success(None,validHtml))
+
   val httpClient: HttpClient = mock[HttpClient]
-  def connector(result: Future[HtmlPartial]): ServiceInfoPartialConnector = {
-    (httpClient.GET[HtmlPartial](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-      (_: HttpReads[HtmlPartial],_: HeaderCarrier,_: ExecutionContext))
+  val connector = new ServiceInfoPartialConnector(httpClient)(mockAppConfig)
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  def mockNavLinksCall(result: Future[Option[NavContent]]): Any =
+    (httpClient.GET[Option[NavContent]](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
+                                       (_: HttpReads[Option[NavContent]],_: HeaderCarrier,_: ExecutionContext))
       .stubs(*,*,*,*,*,*)
       .returns(result)
-    new ServiceInfoPartialConnector(httpClient, header, btanl)(messagesApi, mockAppConfig)
-  }
 
   "ServiceInfoPartialConnector" should {
 
     "generate the correct url" in {
-
-      connector(result).btaUrl shouldBe "/business-account/partial/service-info"
+      connector.btaUrl shouldBe "/business-account/partial/nav-links"
     }
   }
 
-  "getServiceInfoPartial" when{
-
-    "a connectionExceptionsAsHtmlPartialFailure error is returned" should {
-
-      "return the fall back partial" in {
-
-        lazy val result: Future[Failure] = Future.successful(Failure(Some(Status.GATEWAY_TIMEOUT)))
-        await(connector(result).getServiceInfoPartial()) shouldBe btanl()
-      }
-    }
-
-    "an unexpected Exception is returned" should {
-
-      "return the fall back partial" in {
-
-        lazy val result: Future[Failure] = Future.successful(Failure(Some(Status.INTERNAL_SERVER_ERROR)))
-        await(connector(result).getServiceInfoPartial()) shouldBe btanl()
-      }
-    }
+  ".getNavLinks" when {
 
     "a successful response is returned" should {
 
-      "return the Bta partial" in {
+      "return the NavLinks model" in {
+        mockNavLinksCall(Future.successful(Some(navContent)))
+        await(connector.getNavLinks()) shouldBe Some(navContent)
+      }
+    }
 
-        await(connector(result).getServiceInfoPartial()) shouldBe validHtml
+    "an exception is thrown when attempting to retrieve the BTA nav links" should {
+
+      "return None" in {
+        mockNavLinksCall(Future.failed(new TimeoutException("FAILURE")))
+        await(connector.getNavLinks()) shouldBe None
       }
     }
   }

@@ -19,11 +19,39 @@ package stubs
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import play.api.http.Status
+import play.api.libs.json.{JsObject, Json}
 
 object ServiceInfoStub extends WireMockMethods {
 
-  private val serviceInfoUri = "/business-account/partial/service-info"
+  private val serviceInfoUri = "/business-account/partial/nav-links"
+
+  val navContentJson: JsObject = Json.obj(
+    "home" -> Json.obj(
+      "en" -> "Home",
+      "cy" -> "Hafan",
+      "url" -> "http://localhost:9999/home"
+    ),
+    "account" -> Json.obj(
+      "en" -> "Account",
+      "cy" -> "Crfrif",
+      "url" -> "http://localhost:9999/account"
+    ),
+    "messages" -> Json.obj(
+      "en" -> "Messages",
+      "cy" -> "Negeseuon",
+      "url" -> "http://localhost:9999/messages",
+      "alerts" -> 1
+    ),
+    "help" -> Json.obj(
+      "en" -> "Help",
+      "cy" -> "Cymorth",
+      "url" -> "http://localhost:9999/help"
+    )
+  )
 
   def stubServiceInfoPartial: StubMapping =
-    when(method = GET, uri = serviceInfoUri).thenReturn(Status.OK)
+    when(method = GET, uri = serviceInfoUri).thenReturn(status = Status.OK, body = navContentJson)
+
+  def stubInvalidJson: StubMapping =
+    when(method = GET, uri = serviceInfoUri).thenReturn(status = Status.OK, body = Json.obj("fail" -> "nope"))
 }

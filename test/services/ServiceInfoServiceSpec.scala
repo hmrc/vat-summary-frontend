@@ -16,45 +16,103 @@
 
 package services
 
+import common.TestModels.navContent
 import connectors.ServiceInfoPartialConnector
 import controllers.ControllerBaseSpec
-import models.User
-import play.api.mvc.Request
+import models.{ListLinks, User}
+import play.api.i18n.{Lang, Messages, MessagesImpl}
 import play.twirl.api.{Html, HtmlFormat}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import uk.gov.hmrc.http.HeaderCarrier
+import views.html.templates.NavLinksView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceInfoServiceSpec extends ControllerBaseSpec {
 
   val mockConnector: ServiceInfoPartialConnector = mock[ServiceInfoPartialConnector]
-  val service: ServiceInfoService = new ServiceInfoService(mockConnector)
-  val user: User = User("1231231231")
-  val agentUser: User = User("1231231231", arn = Some("XAIT123123123"))
-  val validHtml: Html = Html("<nav>btalink<nav>")
-  val htmlError: Html = Html("error")
+  val btaLinks: NavLinksView = injector.instanceOf[NavLinksView]
+  val service: ServiceInfoService = new ServiceInfoService(mockConnector, btaLinks)
+  val hc: HeaderCarrier = HeaderCarrier()
+  val user: User = User("123123123")
+  val agentUser: User = User("123123123", arn = Some("XARN1234567"))
 
-  "getServiceInfo Partial" should {
-    "return bta Partial" in {
-      (mockConnector.getServiceInfoPartial()(_:Request[_], _:ExecutionContext))
+  ".getPartial" should {
+
+    "return the BTA nav HTML for principal users" in {
+      (mockConnector.getNavLinks()(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *)
-        .returning(Future.successful(validHtml))
+        .returning(Future.successful(Some(navContent)))
+      val listLinks = Seq(
+        ListLinks(navContent.home.en, navContent.home.url),
+        ListLinks(navContent.account.en, navContent.account.url),
+        ListLinks(navContent.messages.en, navContent.messages.url, navContent.messages.alerts.map(_.toString)),
+        ListLinks(navContent.help.en, navContent.help.url)
+      )
+      val result: Html = await(service.getPartial(user, hc, ec, messages))
+      val expectedResult: Html = btaLinks(listLinks)
 
-      val result: Html = await(service.getPartial(fakeRequest, user, ec))
-      val expectedResult: Html = validHtml
-
-      result shouldBe expectedResult
+      result.body shouldBe expectedResult.body
     }
-    "return empty HTML for an agent" in {
-      (mockConnector.getServiceInfoPartial()(_:Request[_], _:ExecutionContext))
-        .expects(*, *)
-        .never()
 
-      val result: Html = await(service.getPartial(fakeRequest, agentUser, ec))
+    "return empty HTML for agents" in {
+      val result: Html = await(service.getPartial(agentUser, hc, ec, messages))
       val expectedResult: Html = HtmlFormat.empty
 
       result shouldBe expectedResult
     }
   }
 
+  ".notificationBadgeCount" should {
+
+    "return the specified number as a string" in {
+      service.notificationBadgeCount(0) shouldBe "0"
+      service.notificationBadgeCount(1) shouldBe "1"
+      service.notificationBadgeCount(99) shouldBe "99"
+    }
+
+    "return '+99' when the number is greater than 99" in {
+      service.notificationBadgeCount(100) shouldBe "+99"
+    }
+  }
+
+  ".partialList" when {
+
+    "provided with some nav content and a language of 'en'" should {
+
+      "return a sequence of English list links" in {
+        implicit val messages: Messages = MessagesImpl(Lang("en"), messagesApi)
+        val expectedListLinks = Seq(
+          ListLinks("Home", "http://localhost:9999/home"),
+          ListLinks("Account", "http://localhost:9999/account"),
+          ListLinks("Messages", "http://localhost:9999/messages", Some("1")),
+          ListLinks("Help", "http://localhost:9999/help")
+        )
+
+        service.partialList(Some(navContent)) shouldBe expectedListLinks
+      }
+    }
+
+    "provided with some nav content and a language of 'cy'" should {
+
+      "return a sequence of Welsh list links" in {
+        implicit val messages: Messages = MessagesImpl(Lang("cy"), messagesApi)
+        val expectedListLinks = Seq(
+          ListLinks("Hafan", "http://localhost:9999/home"),
+          ListLinks("Crfrif", "http://localhost:9999/account"),
+          ListLinks("Negeseuon", "http://localhost:9999/messages", Some("1")),
+          ListLinks("Cymorth", "http://localhost:9999/help")
+        )
+
+        service.partialList(Some(navContent)) shouldBe expectedListLinks
+      }
+    }
+
+    "provided with no nav content" should {
+
+      "return an empty sequence" in {
+        service.partialList(None) shouldBe Seq()
+      }
+    }
+  }
 }
