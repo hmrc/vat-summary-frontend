@@ -37,7 +37,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
   val navLinksMessage: ListLinks = ListLinks("Messages", "/messages", Some("3"), Some(true))
   val navLinksHelpAndContact: ListLinks = ListLinks("Help and contact", "/help", Some("0"), Some(true))
   val navLinksHideMenu: ListLinks = ListLinks("Home", "/business-account", Some("0"), Some(false))
-
+  val noAltertlink: ListLinks = ListLinks("Messages", "/messages", Some("0"), Some(true))
 
   "navLinks" should {
 
@@ -128,6 +128,23 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
       "should have the correct link URL's" in {
         element(".hmrc-account-menu__main > li:nth-child(1) > a").attr("href") shouldBe "/business-account"
         element(".hmrc-account-menu__main > li:nth-child(2) > a").attr("href") shouldBe "/messages"
+      }
+    }
+
+    "render a Messages link without a notification alert" which {
+
+      val view: Html = navLinksView(Seq(noAltertlink))(messages)
+
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      lazy val messagesLink = document.getElementById("nav-bar-link-Messages")
+
+      "should have the text Messages" in {
+        messagesLink.text() shouldBe "Messages"
+      }
+
+      "should not display a notification badge" in {
+        elementExtinct(".hmrc-notification-badge")
       }
     }
 
