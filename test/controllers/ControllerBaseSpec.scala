@@ -30,7 +30,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
-import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Request}
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
@@ -120,8 +120,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     .returns(LocalDate.parse("2018-05-01"))
 
   def mockServiceInfoCall(): Any =
-    (mockServiceInfoService.getPartial(_: Request[_], _: User, _: ExecutionContext))
-      .stubs(*, *, *)
+    (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))
+      .stubs(*, *, *, *)
       .returns(Future.successful(Html("")))
 
   def mockAuth(isAgent: Boolean, authResult: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {

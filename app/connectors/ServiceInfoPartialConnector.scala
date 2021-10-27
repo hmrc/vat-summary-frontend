@@ -17,35 +17,24 @@
 package connectors
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Request
-import play.twirl.api.Html
-import uk.gov.hmrc.http.HttpClient
-import uk.gov.hmrc.play.partials.HtmlPartial._
-import uk.gov.hmrc.play.partials.{HeaderCarrierForPartialsConverter, HtmlPartial}
+import models.NavContent
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import utils.LoggerUtil
-import views.html.templates.BtaNavigationLinks
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ServiceInfoPartialConnector @Inject()(val http: HttpClient,
-                                            hcForPartials: HeaderCarrierForPartialsConverter,
-                                            btaNavigationLinks: BtaNavigationLinks)
-                                           (implicit val messagesApi: MessagesApi,
-                                            val config: AppConfig) extends HtmlPartialHttpReads with I18nSupport with LoggerUtil{
-  import hcForPartials._
+class ServiceInfoPartialConnector @Inject()(http: HttpClient)
+                                           (implicit config: AppConfig) extends LoggerUtil {
 
-  lazy val btaUrl: String = config.btaBaseUrl + "/business-account/partial/service-info"
+  lazy val btaUrl: String = config.btaBaseUrl + "/business-account/partial/nav-links"
 
-  def getServiceInfoPartial()(implicit request: Request[_], executionContext: ExecutionContext): Future[Html] =
-    http.GET[HtmlPartial](btaUrl) recover connectionExceptionsAsHtmlPartialFailure map {
-      p =>
-        p.successfulContentOrElse(btaNavigationLinks())
-    } recover {
-      case _ =>
-        logger.warn(s"[ServiceInfoPartialConnector][getServiceInfoPartial] - Unexpected future failed error")
-        btaNavigationLinks()
-    }
+  def getNavLinks()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[NavContent]] =
+    http.GET[Option[NavContent]](btaUrl)
+      .recover {
+        case e =>
+          logger.warn(s"[ServiceInfoPartialConnector][getNavLinks] - Unexpected error ${e.getMessage}")
+          None
+      }
 }
