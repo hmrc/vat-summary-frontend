@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-import common.SessionKeys
 import common.TestModels._
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{UnknownError, VatLiabilitiesError}
