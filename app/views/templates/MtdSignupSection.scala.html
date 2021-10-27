@@ -19,7 +19,7 @@
 @(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
 
 <div id="mtd-signup">
-  <h3 class="govuk-heading-s govuk-!-padding-bottom-1">
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
     <a class="govuk-link" href="@{appConfig.mtdVatReSignUpUrl + vrn}">@messages("vatDetails.mtdSignup.link")</a>
   </h3>
   <p class="govuk-body">@messages("vatDetails.mtdSignup.info")</p>
