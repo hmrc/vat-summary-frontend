@@ -113,4 +113,6 @@ object ConfigKeys {
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 
   val environmentHost: String = "environment-base.host"
+
+  val penaltiesServiceFeature: String = "features.penaltiesService.enabled"
 }
