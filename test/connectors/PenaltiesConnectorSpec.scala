@@ -50,7 +50,7 @@ class PenaltiesConnectorSpec extends ControllerBaseSpec {
     "when the feature switch is disabled" should {
       "return None" in {
         mockAppConfig.features.penaltiesServiceEnabled(false)
-        connector.getPenaltiesDataForVRN("123") shouldBe None
+        await(connector.getPenaltiesDataForVRN("123")) shouldBe None
       }
     }
   }
