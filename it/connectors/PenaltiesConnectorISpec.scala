@@ -14,8 +14,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 class PenaltiesConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test{
-
-    def setupStubs(): StubMapping
     val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
     val connector: PenaltiesConnector = app.injector.instanceOf[PenaltiesConnector]
     implicit val hc: HeaderCarrier = HeaderCarrier()
@@ -24,7 +22,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
   "calling getPenaltiesDataForVRN" when {
     "when the feature switch is enabled" should {
       "return a successful response and PenaltySummary model from the penalties API" in new Test {
-        appConfig.features.directDebitInterrupt(true)
+        appConfig.features.penaltiesServiceEnabled(true)
 
         val responseBody = Json.parse(
           """
@@ -37,7 +35,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
             |  "hasAnyPenaltyData": true
             |}
             |""".stripMargin)
-        override def setupStubs(): StubMapping = PenaltiesStub.stubPenaltiesSummary(OK, responseBody)
+        PenaltiesStub.stubPenaltiesSummary(OK, responseBody, "123")
         val expectedContent: PenaltiesSummary = PenaltiesSummary(
           noOfPoints = 3,
           noOfEstimatedPenalties = 2,
@@ -46,14 +44,13 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
           crystalisedPenaltyAmountDue = 54.32,
           hasAnyPenaltyData = true
         )
-        setupStubs()
 
         val result = await(connector.getPenaltiesDataForVRN("123"))
-        result shouldBe Right(expectedContent)
+        result.get shouldBe Right(expectedContent)
       }
 
       "return an Empty PenaltiesSummary model when given an invalid vrn" in new Test {
-        appConfig.features.directDebitInterrupt(true)
+        appConfig.features.penaltiesServiceEnabled(true)
         val responseBody = Json.parse(
           """
             |{
@@ -61,7 +58,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
             | "message": "bar"
             |}
             |""".stripMargin)
-        override def setupStubs(): StubMapping = PenaltiesStub.stubPenaltiesSummary(NOT_FOUND, responseBody)
+        PenaltiesStub.stubPenaltiesSummary(NOT_FOUND, responseBody, "123")
         val expectedContent: PenaltiesSummary = PenaltiesSummary(
           noOfPoints = 0,
           noOfEstimatedPenalties = 0,
@@ -72,24 +69,21 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
         )
 
         val result = await(connector.getPenaltiesDataForVRN("1FOO2"))
-        result shouldBe Right(expectedContent)
+        result.get shouldBe Right(expectedContent)
       }
-
-
     }
 
     "when the feature switch is disabled" should {
       "return None" in new Test {
-        appConfig.features.directDebitInterrupt(false)
+        appConfig.features.penaltiesServiceEnabled(false)
         val responseBody = Json.parse(
           """
             |{
             |}
             |""".stripMargin)
-        override def setupStubs(): StubMapping = PenaltiesStub.stubPenaltiesSummary(OK, responseBody)
+        PenaltiesStub.stubPenaltiesSummary(OK, responseBody, "123")
         val result = await(connector.getPenaltiesDataForVRN("123"))
         result shouldBe None
-
       }
     }
   }

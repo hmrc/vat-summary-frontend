@@ -7,10 +7,10 @@ import play.api.libs.json.JsValue
 
 object PenaltiesStub extends WireMockMethods {
 
-  private val penaltiesServiceUrl = "/vat/penalties/summary/([0-9]+)"
+  private val penaltiesServiceUrl: String => String = vrn => s"/vat/penalties/summary/$vrn"
 
-  def stubPenaltiesSummary(status: Int, response: JsValue): StubMapping = {
-    when(method = GET, uri = penaltiesServiceUrl)
+  def stubPenaltiesSummary(status: Int, response: JsValue, vrn: String): StubMapping = {
+    when(method = GET, uri = penaltiesServiceUrl(vrn))
       .thenReturn(status = status, body = response)
   }
 
