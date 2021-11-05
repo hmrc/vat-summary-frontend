@@ -114,5 +114,8 @@ object ConfigKeys {
 
   val environmentHost: String = "environment-base.host"
 
-  val penaltiesServiceFeature: String = "features.penaltiesService.enabled"
+  val penaltiesServiceEnabledFeature: String = "features.penaltiesService.enabled"
+  val penaltiesHost: String = "penalties.host"
+  val penaltiesUrl: String = "penalties.url"
+
 }

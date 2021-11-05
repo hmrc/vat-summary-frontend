@@ -28,7 +28,7 @@ class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterE
   override def beforeEach(): Unit = {
     super.beforeEach()
     features.userResearchBanner(true)
-    features.penaltiesService(true)
+    features.penaltiesServiceEnabled(true)
   }
 
   "The User Research Banner Feature" should {
@@ -46,12 +46,12 @@ class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterE
   "The Penalties Service feature" should {
 
     "return its current state" in {
-      features.penaltiesService() mustBe true
+      features.penaltiesServiceEnabled() mustBe true
     }
 
     "switch to a new state" in {
-      features.penaltiesService(false)
-      features.penaltiesService() mustBe false
+      features.penaltiesServiceEnabled(false)
+      features.penaltiesServiceEnabled() mustBe false
     }
   }
 }
