@@ -18,4 +18,5 @@ package models
 
 case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               staticDateEnabled: Boolean,
-                              directDebitInterrupt: Boolean)
+                              directDebitInterrupt: Boolean,
+                              penaltiesServiceEnabled: Boolean)

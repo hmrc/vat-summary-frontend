@@ -94,4 +94,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val verifyEmailUrl: String = "/verify-email"
   override val gtmContainer: String = "x"
   override val environmentHost: String = "localhost"
+  override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
 }

@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package config.features
+package services
 
-import config.ConfigKeys
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import connectors.PenaltiesConnector
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import models.penalties.PenaltiesSummary
+import uk.gov.hmrc.http.HeaderCarrier
 
-@Singleton
-class Features @Inject()(implicit config: Configuration) {
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
-  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
-  val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
-  val directDebitInterrupt = new Feature(ConfigKeys.directDebitInterrupt)
-  val penaltiesServiceEnabled = new Feature(ConfigKeys.penaltiesServiceEnabledFeature)
+class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
+
+  def getPenaltiesInformation(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[HttpGetResult[PenaltiesSummary]]] = {
+    penaltiesConnector.getPenaltiesDataForVRN(vrn)
+  }
+
 }

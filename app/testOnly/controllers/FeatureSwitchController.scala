@@ -35,7 +35,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        directDebitInterrupt = appConfig.features.directDebitInterrupt()
+        directDebitInterrupt = appConfig.features.directDebitInterrupt(),
+        penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled()
       )
     )))
   }
@@ -51,6 +52,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
+    appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
