@@ -1,7 +1,6 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import config.AppConfig
 import helpers.IntegrationBaseSpec
 import models.penalties.PenaltiesSummary

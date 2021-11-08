@@ -16,7 +16,6 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 import connectors.httpParsers.PenaltiesHttpParser.PenaltiesReads
 import models.errors.{BadRequestError, ServerSideError, UnexpectedStatusError}
 import models.penalties.PenaltiesSummary
