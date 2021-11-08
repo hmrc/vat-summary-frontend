@@ -109,7 +109,7 @@ class PenaltiesHttpParserSpec extends AnyWordSpecLike with Matchers {
 
       val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
       val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
-      val result = DirectDebitStatusReads.read("", "", httpResponse)
+      val result = PenaltiesReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
         result shouldBe expected
@@ -124,7 +124,7 @@ class PenaltiesHttpParserSpec extends AnyWordSpecLike with Matchers {
 
       val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
       val expected = Left(UnexpectedStatusError("409", httpResponse.body))
-      val result = DirectDebitStatusReads.read("", "", httpResponse)
+      val result = PenaltiesReads.read("", "", httpResponse)
 
       "return an UnexpectedStatusError" in {
         result shouldBe expected
