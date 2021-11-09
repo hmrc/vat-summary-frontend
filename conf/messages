@@ -99,6 +99,10 @@ standardError.title = There is a problem with the service
 standardError.heading = Sorry, there is a problem with the service
 standardError.message = Try again later.
 
+insolventError.title = Sorry, you cannot access this service
+insolventError.message = Your business has been declared insolvent.
+insolventError.buttonText = Go to your business tax account
+
 paymentsHistory.title = Payment history
 paymentsHistory.noCurrentYearHistory = You have not made or received any payments using the new VAT service this year.
 paymentsHistory.previousPayments.heading = Previous payments
