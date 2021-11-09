@@ -16,6 +16,7 @@
 
 @import models.viewModels.VatDetailsViewModel
 @import views.html.templates._
+@import views.html.templates.penalties.PenaltiesTileSection
 @import play.twirl.api.HtmlFormat
 
 @this(mainTemplate: MainTemplate,
@@ -29,7 +30,8 @@
       vatOptOutSection: VatOptOutSection,
       deregSection: DeregSection,
       govukBreadcrumbs: GovukBreadcrumbs,
-      govukWarningText: GovukWarningText)
+      govukWarningText: GovukWarningText,
+      penaltiesTileSection: PenaltiesTileSection)
 
 @(detailsViewModel: VatDetailsViewModel,
   serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
@@ -144,5 +146,10 @@
         @deregSection(detailsViewModel)
       </div>
     }
+      @if(detailsViewModel.displayPenaltiesTile){
+      <div class="govuk-grid-column-one-third">
+          @penaltiesTileSection()
+      </div>
+      }
   </div>
 }

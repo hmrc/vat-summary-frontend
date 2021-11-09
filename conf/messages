@@ -55,6 +55,8 @@ vatDetails.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.returnsDue = You have {0} returns due
 vatDetails.paymentsDue = You have {0} payments due
 vatDetails.checkWhatYouOwe = Check what you owe and make a payment
+vatDetails.viewPenalties.link = Penalties and appeals
+vatDetails.viewPenalties.info = View your penalties, make an appeal against a penalty and see the status of any current appeals.
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
@@ -428,3 +430,4 @@ a11yStatement.pagePrepared = This page was prepared on 20 September 2019. It was
 emailVerification.message.1 = You need to confirm your email address.
 emailVerification.message.2 = Resend the email
 emailVerification.message.3 = to confirm it.
+

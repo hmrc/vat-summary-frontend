@@ -17,7 +17,7 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.{ExtendedAuditModel, AuditModel}
+import audit.models.{AuditModel, ExtendedAuditModel}
 import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
@@ -32,16 +32,18 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
+import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, PenaltiesService, ServiceInfoService}
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised}
+
 import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers {

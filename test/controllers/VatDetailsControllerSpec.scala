@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-
 import common.FinancialTransactionsConstants._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
@@ -26,6 +25,7 @@ import models._
 import models.errors.{NextPaymentError, ObligationsError, _}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
+import models.penalties.PenaltiesSummary
 import models.viewModels.VatDetailsViewModel
 import play.api.http.Status
 import play.api.mvc.Result
@@ -33,6 +33,8 @@ import play.api.test.Helpers._
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.vatDetails.Details
+import common.TestModels._
+import org.jsoup.Jsoup
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,6 +43,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
   val obligations: VatReturnObligations = TestModels.obligations
   val payments: Payments = TestModels.payments
   val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
+  val mockPenaltiesService: PenaltiesService = mock[PenaltiesService]
 
   def mockReturnObligations(result: ServiceResponse[Option[VatReturnObligations]]): Any =
     (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
@@ -51,6 +54,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     (mockVatDetailsService.getPaymentObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *)
       .returns(Future.successful(result))
+
+  def mockPenaltiesService(result: Option[HttpGetResult[PenaltiesSummary]]): Any =
+    (mockPenaltiesService.getPenaltiesInformation(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(result))
   
   val controller = new VatDetailsController(
     mockVatDetailsService,
@@ -59,6 +67,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     mockAccountDetailsService,
     mockDateService,
     mockAuditService,
+    mockPenaltiesService,
     mcc,
     injector.instanceOf[Details],
     mockServiceErrorHandler,
@@ -77,6 +86,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationMax))
         mockServiceInfoCall()
         mockAudit()
+        mockPenaltiesService(penaltySummaryNoResponse)
         controller.details()(fakeRequest)
       }
 
@@ -159,6 +169,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationHybrid))
           mockAudit()
           mockServiceInfoCall()
+          mockPenaltiesService(penaltySummaryNoResponse)
           controller.details()(fakeRequest)
         }
 
@@ -176,6 +187,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationNonMTDfB))
         mockServiceInfoCall()
         mockAudit()
+        mockPenaltiesService(penaltySummaryNoResponse)
         controller.details()(fakeRequest)
       }
 
@@ -198,6 +210,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationMax.copy(isMissingTrader = true)))
         mockServiceInfoCall()
         mockAudit()
+        mockPenaltiesService(penaltySummaryNoResponse)
         controller.details()(fakeRequest)
       }
 
@@ -223,6 +236,29 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "redirect to the DD interrupt controller" in {
         redirectLocation(result) shouldBe
           Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
+    }
+
+    "the user has penalties" should {
+
+      lazy val result: Future[Result] = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockReturnObligations(Right(Some(obligations)))
+        mockPaymentLiabilities(Right(Some(payments)))
+        mockCustomerInfo(Right(customerInformationMax))
+        mockServiceInfoCall()
+        mockAudit()
+        mockPenaltiesService(penaltySummaryResponse)
+        controller.details()(fakeRequest)
+      }
+
+      "return 200" in {
+        status(result) shouldBe OK
+      }
+
+      "render the page with a penalties tile" in {
+        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe "Penalties and appeals"
       }
     }
   }
@@ -296,7 +332,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -317,7 +354,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(None),
             Right(Some(payments)),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -338,7 +376,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(None),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -359,7 +398,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(None),
             Right(None),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -377,7 +417,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(None),
             Right(None),
-            Right(customerInformationMin)
+            Right(customerInformationMin),
+            None
           )
         }
 
@@ -395,7 +436,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(None),
             Right(None),
-            Right(customerInformationMTDfBExempt)
+            Right(customerInformationMTDfBExempt),
+            None
           )
         }
 
@@ -414,7 +456,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Left(ObligationsError),
             Right(None),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -433,7 +476,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(None),
             Left(NextPaymentError),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -459,7 +503,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Left(ObligationsError),
             Left(NextPaymentError),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
@@ -486,11 +531,31 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Right(Some(overdueObligations)),
             Right(Some(payments)),
-            Right(customerInformationMax)
+            Right(customerInformationMax),
+            None
           )
         }
 
         result shouldBe expected
+      }
+    }
+
+    "the user has penalties" should {
+      "return a VatDetailsModel with displayPenaltiesTile set to true" in {
+        lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
+          paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, displayPenaltiesTile = true
+        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(Some(obligations)),
+            Right(Some(payments)),
+            Right(customerInformationMax),
+            Some(penaltiesSummaryModel)
+          )
+        }
+        result shouldBe expectedContent
       }
     }
   }

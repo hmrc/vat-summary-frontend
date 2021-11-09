@@ -16,6 +16,8 @@
 
 package common
 
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+
 import java.time.LocalDate
 import models._
 import models.obligations.{VatReturnObligation, VatReturnObligations}
@@ -237,4 +239,7 @@ object TestModels {
     crystalisedPenaltyAmountDue = 54.32,
     hasAnyPenaltyData = true
   )
+
+  val penaltySummaryResponse: Option[HttpGetResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryModel))
+  val penaltySummaryNoResponse: Option[HttpGetResult[PenaltiesSummary]] = None
 }
