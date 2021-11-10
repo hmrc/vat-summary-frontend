@@ -94,6 +94,7 @@ trait AppConfig {
   val gtmContainer: String
   val environmentHost: String
   val penaltiesUrl: String => String
+  val penaltiesFrontendUrl: String
 }
 
 @Singleton
@@ -236,4 +237,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val gtmContainer: String = sc.getString(Keys.gtmContainer)
 
   override lazy val penaltiesUrl: String => String = vrn => sc.getString(Keys.penaltiesHost) + sc.getString(Keys.penaltiesUrl) + vrn
+
+  override lazy val penaltiesFrontendUrl: String = sc.getString(Keys.penaltiesFrontendHost) + sc.getString(Keys.penaltiesFrontendUrl)
 }

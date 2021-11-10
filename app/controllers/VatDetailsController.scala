@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import common.FinancialTransactionsConstants._
@@ -26,10 +25,12 @@ import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.DDInterruptPredicate
+
 import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
+import models.penalties.PenaltiesSummary
 import models.viewModels.VatDetailsViewModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,6 +49,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      accountDetailsService: AccountDetailsService,
                                      dateService: DateService,
                                      auditingService: AuditingService,
+                                     penaltiesService: PenaltiesService,
                                      mcc: MessagesControllerComponents,
                                      detailsView: Details,
                                      serviceErrorHandler: ServiceErrorHandler,
@@ -67,6 +69,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           nextReturn <- returnObligationsCall
           nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
           serviceInfoContent <- serviceInfoService.getPartial
+          penaltiesCallResult <- penaltiesService.getPenaltiesInformation(user.vrn)
         } yield {
 
           auditEvents(user, nextReturn, nextPayment)
@@ -79,11 +82,12 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             case Left(_) => Seq()
           }
 
+          val penaltiesInfo = penaltiesCallResult.flatMap(_.fold( _ => None, Some(_)))
           if (redirectForMissingTrader(customerInfo)) {
             Redirect(appConfig.missingTraderRedirectUrl)
           } else {
             Ok(detailsView(
-              constructViewModel(nextReturn, nextPayment, customerInfo),
+              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo),
               serviceInfoContent
             )).addingToSession(newSessionVariables: _*)
           }
@@ -156,7 +160,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               payments: ServiceResponse[Option[Payments]],
-                                              accountDetails: HttpGetResult[CustomerInformation]): VatDetailsViewModel = {
+                                              accountDetails: HttpGetResult[CustomerInformation],
+                                              penaltyInformation: Option[PenaltiesSummary]): VatDetailsViewModel = {
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments)
@@ -168,6 +173,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val customerInfoError: Boolean = accountDetails.isLeft
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
+    val displayPenaltiesTile: Boolean = penaltyInformation.fold(false)(_.hasAnyPenaltyData)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -187,7 +193,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       pendingDereg,
       dateService.now(),
       partyType,
-      retrieveEmailVerifiedIfExist(accountDetails)
+      retrieveEmailVerifiedIfExist(accountDetails),
+      displayPenaltiesTile
     )
   }
 

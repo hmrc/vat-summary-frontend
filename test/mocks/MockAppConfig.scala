@@ -95,4 +95,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val gtmContainer: String = "x"
   override val environmentHost: String = "localhost"
   override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
+  override val penaltiesFrontendUrl: String = "/vat-through-software/test-only/penalties-stub"
 }

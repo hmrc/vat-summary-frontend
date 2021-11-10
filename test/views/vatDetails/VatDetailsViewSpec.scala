@@ -56,6 +56,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val apiError = "h3:nth-child(2).govuk-heading-m"
     val vatOptOutSection = "#vat-optout"
     val cancelVatSection = "#cancel-vat"
+    val penaltiesSection = "#view-penalties-details"
     val unverifiedMessageSelector = "#unverified-email-notice"
   }
 
@@ -507,4 +508,36 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementExtinct(Selectors.cancelVatSection)
     }
   }
+
+  "Rendering the VAT details page " when {
+
+    "the user has penalties" should {
+      lazy val view = details(detailsModel.copy(displayPenaltiesTile = true), Html("<nav>BTA Links</nav>"))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the Penalties and appeals section" which {
+
+        lazy val penaltiesSection = element(Selectors.penaltiesSection)
+
+        "has the correct heading" in {
+          penaltiesSection.select("h3").text shouldBe "Penalties and appeals"
+        }
+
+        "has the correct paragraph" in {
+          penaltiesSection.select("p").text shouldBe "View your penalties, make an appeal against a " +
+            "penalty and see the status of any current appeals."
+        }
+      }
+    }
+
+    "the user has no penalties" should {
+      "not display the penalties and appeal section" in {
+        lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementExtinct(Selectors.penaltiesSection)
+      }
+    }
+  }
+
 }

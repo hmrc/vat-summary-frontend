@@ -21,14 +21,17 @@ import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.penalties.PenaltiesSummary
 import play.api.http.Status._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import utils.LoggerUtil
 
-object PenaltiesHttpParser extends ResponseHttpParsers {
+object PenaltiesHttpParser extends ResponseHttpParsers with LoggerUtil {
 
   implicit object PenaltiesReads extends HttpReads[HttpGetResult[PenaltiesSummary]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[PenaltiesSummary] = {
       response.status match {
         case OK => Right(response.json.as[PenaltiesSummary])
-        case NOT_FOUND => Right(PenaltiesSummary.empty)
+        case NOT_FOUND | NO_CONTENT =>
+          logger.debug(s"[PenaltiesHttpParser][read] - Received status: ${response.status}")
+          Right(PenaltiesSummary.empty)
         case BAD_REQUEST => handleBadRequest(response.json)
         case status  if status >= 500 & status < 600 => Left(ServerSideError(response.status.toString, response.body))
         case _ => Left(UnexpectedStatusError(response.status.toString, response.body))

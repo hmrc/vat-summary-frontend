@@ -17,6 +17,7 @@
 package views
 
 import mocks.MockAppConfig
+import mocks.MockAppConfig
 import models.User
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}

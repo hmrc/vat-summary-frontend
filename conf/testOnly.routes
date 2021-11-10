@@ -23,4 +23,6 @@ POST        /vat-through-software/test-only/vaclf-stub                         t
 GET         /vat-through-software/test-only/vaclf-stub-unauth                  testOnly.controllers.AgentClientLookupStubController.unauthorised
 GET         /vat-through-software/test-only/vaclf-stub-agent-hub               testOnly.controllers.AgentClientLookupStubController.agentHub
 
+GET         /vat-through-software/test-only/penalties-stub                     testOnly.controllers.PenaltiesController.show()
+
 ->          /                                                                  prod.Routes
