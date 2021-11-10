@@ -20,6 +20,7 @@ import common.{EnrolmentKeys => Keys}
 import common.SessionKeys
 import config.AppConfig
 import controllers.predicates.{AgentPredicate, FinancialPredicate}
+
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.i18n.I18nSupport
@@ -29,7 +30,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.errors.Unauthorised
+import views.html.errors.{Unauthorised, UserInsolventError}
 import config.ServiceErrorHandler
 import utils.LoggerUtil
 
@@ -42,7 +43,8 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
                                      agentPredicate: AgentPredicate,
                                      accountDetailsService: AccountDetailsService,
                                      serviceErrorHandler: ServiceErrorHandler,
-                                     unauthorised: Unauthorised)
+                                     unauthorised: Unauthorised,
+                                     userInsolvent: UserInsolventError)
                                     (implicit appConfig: AppConfig,
                                      ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
@@ -92,12 +94,12 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
           implicit val user: User = User(vrn, status == Keys.activated, containsNonMtdVat)
 
           request.session.get(SessionKeys.insolventWithoutAccessKey) match {
-            case Some("true") => Future.successful(Forbidden(unauthorised()))
+            case Some("true") => Future.successful(Forbidden(userInsolvent()))
             case Some("false") => checkHybridAndInsolvency(block, financialRequest)
             case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
               case Right(response) if response.details.isInsolventWithoutAccess =>
                 logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
-                Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
+                Future.successful(Forbidden(userInsolvent()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
               case Right(_) =>
                 logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
                 checkHybridAndInsolvency(block, financialRequest)

@@ -125,6 +125,10 @@ standardError.title = Mae problem gyda’r gwasanaeth
 standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth.
 standardError.message = Rhowch gynnig arall arni yn nes ymlaen.
 
+insolventError.title = Mae’n ddrwg gennym - ni allwch gael mynediad at y gwasanaeth hwn
+insolventError.message = Mae’ch busnes wedi’i ddatgan yn ansolfent.
+insolventError.buttonText = Ewch i’ch cyfrif treth busnes
+
 paymentsHistory.title = Hanes taliadau
 paymentsHistory.noCurrentYearHistory = Nid ydych wedi cael na gwneud unrhyw daliadau gan ddefnyddio’r gwasanaeth TAW newydd y flwyddyn hon.
 paymentsHistory.previousPayments.heading = Taliadau blaenorol

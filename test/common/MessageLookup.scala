@@ -30,6 +30,13 @@ object MessageLookup {
     val instructions: String = "Here are some instructions about what you should do next."
   }
 
+  object InsolventError {
+    val title: String = "Sorry, you cannot access this service - VAT - GOV.UK"
+    val heading: String = "Sorry, you cannot access this service"
+    val message: String = "Your business has been declared insolvent."
+    val buttonText: String = "Go to your business tax account"
+  }
+
   object PaymentMessages {
 
     private val datePeriodShort: String = "1 Jan to 1 Feb 2018"

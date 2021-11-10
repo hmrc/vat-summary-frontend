@@ -36,8 +36,7 @@ import services.{AccountDetailsService, DateService, EnrolmentsAuthService, Paym
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
-import views.html.errors.{AgentUnauthorised, Unauthorised}
-
+import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
 import java.time.LocalDate
 import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
@@ -62,6 +61,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
   val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
+  val userInsolvent: UserInsolventError = injector.instanceOf[UserInsolventError]
   val mockAccountDetailsService: AccountDetailsService = mock[AccountDetailsService]
   val mockDateService: DateService = mock[DateService]
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
@@ -78,7 +78,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     agentPredicate,
     mockAccountDetailsService,
     mockServiceErrorHandler,
-    unauthorised
+    unauthorised,
+    userInsolvent
   )
   val ddInterruptPredicate: DDInterruptPredicate = new DDInterruptPredicate(mcc)
 
