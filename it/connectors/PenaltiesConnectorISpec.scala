@@ -57,7 +57,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
             | "message": "bar"
             |}
             |""".stripMargin)
-        PenaltiesStub.stubPenaltiesSummary(NOT_FOUND, responseBody, "123")
+        PenaltiesStub.stubPenaltiesSummary(NOT_FOUND, responseBody, "1FOO2")
         val expectedContent: PenaltiesSummary = PenaltiesSummary(
           noOfPoints = 0,
           noOfEstimatedPenalties = 0,
