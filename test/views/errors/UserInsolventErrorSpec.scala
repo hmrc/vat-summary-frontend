@@ -32,6 +32,7 @@ class UserInsolventErrorSpec extends ViewBaseSpec {
       val pageHeading = "#insolvent-without-access-heading"
       val message = "#insolvent-without-access-body"
       val button = ".govuk-button"
+      val signOutLink = "#sign-out-link"
     }
 
     lazy val view = userInsolvent()
@@ -55,6 +56,14 @@ class UserInsolventErrorSpec extends ViewBaseSpec {
 
     "have the correct button link" in {
       element(Selectors.button).attr("href") shouldBe "bta-url"
+    }
+
+    "have a sign out link" in {
+      element(Selectors.signOutLink).attr("href") shouldBe "/vat-through-software/sign-out?authorised=false"
+    }
+
+    "the sign out link should have the correct text" in {
+      elementText(Selectors.signOutLink) shouldBe InsolventError.signOutLink
     }
 
   }
