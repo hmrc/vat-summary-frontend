@@ -81,6 +81,8 @@ vatDetails.error = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth. Rho
 vatDetails.returnsDue = Mae gennych {0} o Ffurflenni TAW sy’n ddyledus
 vatDetails.paymentsDue = Mae gennych {0} o daliadau’n ddyledus
 vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
+vatDetails.viewPenalties.link = Cosbau ac apeliadau
+vatDetails.viewPenalties.info = Bwrw golwg dros eich cosbau, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
 
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i’w chyflwyno

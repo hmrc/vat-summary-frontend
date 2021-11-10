@@ -563,7 +563,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsModel with displayPenaltiesTile set to false" in {
         lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, displayPenaltiesTile = false
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true
         )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
