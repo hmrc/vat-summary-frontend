@@ -29,7 +29,6 @@ class PenaltiesController @Inject()(penaltiesHomeView: PenaltiesHomeView,
                                     implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport{
 
   def show(): Action[AnyContent] = Action { implicit request =>
-    println("[Pen Connector][Show] - in the show action!!!!")
       Ok(penaltiesHomeView())
   }
 }

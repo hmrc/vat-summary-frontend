@@ -558,6 +558,26 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         result shouldBe expectedContent
       }
     }
+
+    "the user has no penalties" should {
+      "return a VatDetailsModel with displayPenaltiesTile set to false" in {
+        lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
+          paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, displayPenaltiesTile = false
+        )
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(Some(obligations)),
+            Right(Some(payments)),
+            Right(customerInformationMax),
+            None
+          )
+        }
+        result shouldBe expectedContent
+      }
+    }
+
   }
 
   "Calling .retrieveEmailVerifiedIfExist" should {
