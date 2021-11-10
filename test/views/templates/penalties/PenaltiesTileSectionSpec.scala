@@ -34,7 +34,7 @@ class PenaltiesTileSectionSpec extends ViewBaseSpec {
     }
 
     "have the correct link to the penalties-frontend service" in {
-      element("#penalties-link").attr("href") shouldBe "/penalties"
+      element("#penalties-link").attr("href") shouldBe "/vat-through-software/test-only/penalties-stub"
     }
 
     "have the correct card paragraph" in {
