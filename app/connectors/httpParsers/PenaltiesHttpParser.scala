@@ -30,7 +30,7 @@ object PenaltiesHttpParser extends ResponseHttpParsers with LoggerUtil {
       response.status match {
         case OK => Right(response.json.as[PenaltiesSummary])
         case NOT_FOUND | NO_CONTENT =>
-          logger.debug(s"[PenaltiesHttpParser][read]: Received status: ${response.status}")
+          logger.debug(s"[PenaltiesHttpParser][read] - Received status: ${response.status}")
           Right(PenaltiesSummary.empty)
         case BAD_REQUEST => handleBadRequest(response.json)
         case status  if status >= 500 & status < 600 => Left(ServerSideError(response.status.toString, response.body))
