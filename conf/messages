@@ -435,3 +435,7 @@ emailVerification.message.1 = You need to confirm your email address.
 emailVerification.message.2 = Resend the email
 emailVerification.message.3 = to confirm it.
 
+penaltiesBanner.heading = Late submission and late payment penalties
+penaltiesBanner.totalPoints = Total penalty points
+penaltiesBanner.linkSingular = Find out why you have a penalty
+penaltiesBanner.linkPlural = Find out why you have penalties

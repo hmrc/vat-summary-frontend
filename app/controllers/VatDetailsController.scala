@@ -82,7 +82,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             case Left(_) => Seq()
           }
 
-          val penaltiesInfo = penaltiesCallResult.flatMap(_.fold( _ => None, Some(_)))
+          val penaltiesInfo = penaltiesCallResult.fold(_ => None, Some(_))
           if (redirectForMissingTrader(customerInfo)) {
             Redirect(appConfig.missingTraderRedirectUrl)
           } else {

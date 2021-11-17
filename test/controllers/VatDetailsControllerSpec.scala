@@ -55,7 +55,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       .stubs(*, *, *)
       .returns(Future.successful(result))
 
-  def mockPenaltiesService(result: Option[HttpGetResult[PenaltiesSummary]]): Any =
+  def mockPenaltiesService(result: HttpGetResult[PenaltiesSummary]): Any =
     (mockPenaltiesService.getPenaltiesInformation(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *)
       .returns(Future.successful(result))

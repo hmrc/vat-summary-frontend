@@ -20,6 +20,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 
 import java.time.LocalDate
 import models._
+import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
 import models.penalties.PenaltiesSummary
@@ -240,6 +241,6 @@ object TestModels {
     hasAnyPenaltyData = true
   )
 
-  val penaltySummaryResponse: Option[HttpGetResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryModel))
-  val penaltySummaryNoResponse: Option[HttpGetResult[PenaltiesSummary]] = None
+  val penaltySummaryResponse: HttpGetResult[PenaltiesSummary] = Right(penaltiesSummaryModel)
+  val penaltySummaryNoResponse: HttpGetResult[PenaltiesSummary] = Left(PenaltiesFeatureSwitchError)
 }
