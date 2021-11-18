@@ -29,8 +29,7 @@ import models.errors.UnknownError
 import uk.gov.hmrc.auth.core.AffinityGroup.Individual
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
-import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments, InsufficientEnrolments}
-
+import uk.gov.hmrc.auth.core._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -54,102 +53,158 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
     Some(Individual)
   ))
 
-  "The AuthPredicate when the user is an Individual (Principle Entity)" when {
+  val noEnrolmentsAuthResponse: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
+    Enrolments(Set()),
+    Some(Individual)
+  ))
 
-    "they have an active HMRC-MTD-VAT enrolment" when {
+  val noAffinityAuthResponse: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
+    Enrolments(enrolments),
+    None
+  ))
 
-      "they have a value in session for their insolvency status" when {
+  "The AuthPredicate" when {
 
-        "the value is 'true' (insolvent user not continuing to trade)" should {
+    "the user is an Individual (Principle Entity)" when {
 
-          lazy val result = {
-            mockAuth(successfulAuthResponse)
-            target(insolventRequest)
+      "they have an active HMRC-MTD-VAT enrolment" when {
+
+        "they have a value in session for their insolvency status" when {
+
+          "the value is 'true' (insolvent user not continuing to trade)" should {
+
+            lazy val result = {
+              mockAuth(successfulAuthResponse)
+              target(insolventRequest)
+            }
+            "return Forbidden (403)" in {
+              status(result) shouldBe Status.FORBIDDEN
+            }
           }
-          "return Forbidden (403)" in {
-            status(result) shouldBe Status.FORBIDDEN
+
+          "the value is 'false' (user permitted to trade)" should {
+
+            lazy val result = {
+              mockAuth(successfulAuthResponse)
+              target(fakeRequest)
+            }
+
+            "return OK (200)" in {
+              status(result) shouldBe Status.OK
+            }
           }
         }
 
-        "the value is 'false' (user permitted to trade)" should {
+        "they do not have a value in session for their insolvency status" when {
 
-          lazy val result = {
-            mockAuth(successfulAuthResponse)
-            target(fakeRequest)
+          "they are insolvent and not continuing to trade" should {
+
+            lazy val result = {
+              mockAuth(successfulAuthResponse)
+              mockCustomerInfo(Right(customerInformationInsolvent))
+              target(FakeRequest())
+            }
+
+            "return Forbidden (403)" in {
+              status(result) shouldBe Status.FORBIDDEN
+            }
+
+            "add the insolvent flag to the session" in {
+              session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("true")
+            }
           }
 
-          "return OK (200)" in {
-            status(result) shouldBe Status.OK
+          "they are permitted to trade" should {
+
+            lazy val result = {
+              mockAuth(successfulAuthResponse)
+              mockCustomerInfo(Right(customerInformationMax))
+              target(FakeRequest())
+            }
+
+            "return OK (200)" in {
+              status(result) shouldBe Status.OK
+            }
+
+            "add the insolvent flag to the session" in {
+              session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("false")
+            }
+          }
+
+          "there is an error returned from the customer information API" should {
+
+            lazy val result = {
+              mockAuth(successfulAuthResponse)
+              mockCustomerInfo(Left(UnknownError))
+              target(FakeRequest())
+            }
+
+            "return Internal Server Error (500)" in {
+              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+            }
           }
         }
       }
 
-      "they do not have a value in session for their insolvency status" when {
+      "they do NOT have an active HMRC-MTD-VAT enrolment" should {
 
-        "they are insolvent and not continuing to trade" should {
-
-          lazy val result = {
-            mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Right(customerInformationInsolvent))
-            target(FakeRequest())
-          }
-
-          "return Forbidden (403)" in {
-            status(result) shouldBe Status.FORBIDDEN
-          }
-
-          "add the insolvent flag to the session" in {
-            session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("true")
-          }
+        lazy val result: Future[Result] = {
+          mockAuth(Future.failed(InsufficientEnrolments()))
+          target(fakeRequest)
         }
 
-        "they are permitted to trade" should {
-
-          lazy val result = {
-            mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Right(customerInformationMax))
-            target(FakeRequest())
-          }
-
-          "return OK (200)" in {
-            status(result) shouldBe Status.OK
-          }
-
-          "add the insolvent flag to the session" in {
-            session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("false")
-          }
+        "return Forbidden (403)" in {
+          status(result) shouldBe Status.FORBIDDEN
         }
 
-        "there is an error returned from the customer information API" should {
-
-          lazy val result = {
-            mockAuth(successfulAuthResponse)
-            mockCustomerInfo(Left(UnknownError))
-            target(FakeRequest())
-          }
-
-          "return Internal Server Error (500)" in {
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
+        "render the Not Signed Up page" in {
+          Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
         }
       }
-    }
 
-    "they do NOT have an active HMRC-MTD-VAT enrolment" should {
+      "there is a different authorisation exception" should {
 
-      lazy val result :Future[Result] = {
-        mockAuth(Future.failed(InsufficientEnrolments()))
-        target(fakeRequest)
+        lazy val result: Future[Result] = {
+          mockAuth(Future.failed(InternalError()))
+          target(fakeRequest)
+        }
+
+        "return Forbidden (403)" in {
+          status(result) shouldBe Status.FORBIDDEN
+        }
+
+        "render the Not Signed Up page" in {
+          Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
+        }
       }
-      "return Forbidden (403)" in {
-        status(result) shouldBe Status.FORBIDDEN
-      }
 
-      "render the Not Signed Up page" in {
-        Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
+      "they have no HMRC-MTD-VAT enrolment" should {
+
+        lazy val result = {
+          mockAuth(noEnrolmentsAuthResponse)
+          target(FakeRequest())
+        }
+
+        "return Forbidden (403)" in {
+          status(result) shouldBe Status.FORBIDDEN
+        }
+
+        "render the Not Signed Up page" in {
+          Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
+        }
       }
     }
   }
+
+  "the user has no affinity" should {
+
+    lazy val result = {
+      mockAuth(noAffinityAuthResponse)
+      target(FakeRequest())
+    }
+
+    "return ISE (500)" in {
+      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+    }
+  }
 }
-
-

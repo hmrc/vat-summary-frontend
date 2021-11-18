@@ -30,6 +30,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
   val excludedPackages = Seq(
     "<empty>",
+    "views.*",
     ".*Reverse.*",
     ".*Routes.*",
     "config.*",

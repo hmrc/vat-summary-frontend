@@ -34,34 +34,34 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   object Selectors {
     val heading = "h1"
     val cardClass = ".card-full-container"
-    val aboutYourRegHeading = ".govuk-grid-column-two-thirds > h2"
-    val vrnRow = "#content > div:nth-child(3) > .govuk-grid-column-full > dl:nth-child(1) > div"
+    val aboutYourRegHeading = "#about-your-registration-heading"
+    val vrnRow = "#vrn"
     val vrnTitle = s"$vrnRow > dt"
     val vrn = s"$vrnRow > dd"
-    val regDateRow = "#content > div:nth-child(3) > .govuk-grid-column-full dl:nth-of-type(2) > div"
+    val regDateRow = "#registration-date"
     val regDateTitle = s"$regDateRow > dt"
     val regDate = s"$regDateRow > dd"
-    val certDateRow = "#content > div:nth-child(3) > .govuk-grid-column-full dl:nth-of-type(3) > div"
+    val certDateRow = "#certificate-date"
     val certDateTitle = s"$certDateRow > dt"
     val certDate = s"$certDateRow > dd"
-    val aboutTheBusinessHeading = "#content > div:nth-child(4) > div.govuk-grid-column-two-thirds > h2"
-    val businessNameRow = "#content > div:nth-child(4) > .govuk-grid-column-full > dl:nth-child(1) > div"
+    val aboutTheBusinessHeading = "#about-the-business-heading"
+    val businessNameRow = "#business-name"
     val businessNameTitle = s"$businessNameRow > dt"
     val businessName = s"$businessNameRow > dd"
-    val tradingNameRow = "#content > div:nth-child(4) > div.govuk-grid-column-full.card-full > dl:nth-child(2) > div"
+    val tradingNameRow = "#trading-name"
     val tradingNameTitle = s"$tradingNameRow > dt"
     val tradingName = s"$tradingNameRow > dd"
-    val businessTypeRow = "#content > div:nth-child(4) > div.govuk-grid-column-full.card-full > dl:nth-child(3) > div"
+    val businessTypeRow = "#business-type"
     val businessTypeTitle = s"$businessTypeRow > dt"
     val businessType = s"$businessTypeRow > dd"
-    val tradeClassificationRow = "#content > div:nth-child(4) > div.govuk-grid-column-full.card-full > dl:nth-child(4) > div"
+    val tradeClassificationRow = "#trade-classification"
     val tradeClassificationTitle = s"$tradeClassificationRow > dt"
     val tradeClassification = s"$tradeClassificationRow > dd"
-    val ppobRow = "#content > div:nth-child(4) > div.govuk-grid-column-full.card-full > dl:nth-child(5) > div"
+    val ppobRow = "#ppob"
     val ppobRowTitle = s"$ppobRow > dt"
     val ppob = s"$ppobRow > dd"
     val printButton = ".govuk-button"
-    val fullNameSelector = "#content > div:nth-child(4) > .govuk-grid-column-full > dl:nth-child(1) > div > dd"
+    val fullNameSelector = "#full-name > dd"
     val backLink = ".govuk-back-link"
   }
 
@@ -98,6 +98,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   )
 
   lazy val soleTraderWithoutTradingName: VatCertificateViewModel = soleTrader.copy(tradingName = None)
+  lazy val soleTraderWithoutName: VatCertificateViewModel = soleTrader.copy(fullName = None)
 
   "The VAT Certificate page" when {
 
@@ -276,7 +277,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "not display the business name" in {
-        elementText(Selectors.businessName) shouldNot include("Business name")
+        elementExtinct(Selectors.businessName)
       }
 
     }
@@ -302,7 +303,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "not display the business name" in {
-        elementText(Selectors.businessName) shouldNot include("Business name")
+        elementExtinct(Selectors.businessName)
       }
     }
 
@@ -323,11 +324,20 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "not display the traders trading name" in {
-        elementText(Selectors.tradingName) shouldNot be("Trading name")
+        elementExtinct(Selectors.tradingName)
       }
 
       "not display the business name" in {
-        elementText(Selectors.businessName) shouldNot be("Business name")
+        elementExtinct(Selectors.businessName)
+      }
+    }
+
+    "accessed by a sole trader without a full first and last name" should {
+      lazy val view = vatCertificateView(HtmlFormat.empty, soleTraderWithoutName)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not have a Full Name row" in {
+        elementExtinct(Selectors.fullNameSelector)
       }
     }
   }

@@ -17,7 +17,9 @@
 package controllers
 
 import java.time.LocalDate
+
 import common.FinancialTransactionsConstants._
+import common.TestModels._
 import common.{SessionKeys, TestModels}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models._
@@ -26,14 +28,13 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.penalties.PenaltiesSummary
 import models.viewModels.VatDetailsViewModel
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.vatDetails.Details
-import common.TestModels._
-import org.jsoup.Jsoup
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -262,11 +263,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .detailsRedirectToEmailVerification" should {
+  "Calling .detailsRedirectToEmailVerification" when {
 
-    "redirect to email verification" when {
+    "all relevant information is returned from vat-subscription" when {
 
-      "all relevant information is returned from vat-subscription" in {
+      "there is no pending PPOB change" should {
 
         val result = {
           mockPrincipalAuth()
@@ -274,8 +275,32 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           controller.detailsRedirectToEmailVerification()(fakeRequest)
         }
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
+        "redirect to email verification" in {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
+        }
+
+        "add the inFlightContactKey to session" in {
+          session(result).get(SessionKeys.inFlightContactKey) shouldBe Some("false")
+        }
+      }
+
+      "there is a pending PPOB change" should {
+
+        val result = {
+          mockPrincipalAuth()
+          mockCustomerInfo(Right(customerInformationMax.copy(hasPendingPpobChanges = true)))
+          controller.detailsRedirectToEmailVerification()(fakeRequest)
+        }
+
+        "redirect to email verification" in {
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
+        }
+
+        "not add the inFlightContactKey to session" in {
+          session(result).get(SessionKeys.inFlightContactKey) shouldBe None
+        }
       }
     }
 
@@ -570,6 +595,34 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None
+          )
+        }
+        result shouldBe expectedContent
+      }
+    }
+
+    "the customer info call fails" should {
+
+      "return a VatDetailsModel with pendingOptOut and pendingDereg set to false" in {
+
+        lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
+          paymentDueDate,
+          obligationData,
+          None,
+          showSignUp = None,
+          customerInfoError = true,
+          currentDate = testDate,
+          partyType = None,
+          userEmailVerified = true
+        )
+
+        lazy val result: VatDetailsViewModel = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Right(Some(obligations)),
+            Right(Some(payments)),
+            Left(BadRequestError("", "")),
             None
           )
         }
@@ -873,6 +926,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return false" in {
         controller.redirectForMissingTrader(Right(customerInformationMax)) shouldBe false
+      }
+    }
+
+    "there is no customer information" should {
+
+      "return false" in {
+        controller.redirectForMissingTrader(Left(BadRequestError("", ""))) shouldBe false
       }
     }
   }
