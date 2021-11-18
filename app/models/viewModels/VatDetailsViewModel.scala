@@ -16,6 +16,8 @@
 
 package models.viewModels
 
+import models.penalties.PenaltiesSummary
+
 import java.time.LocalDate
 
 case class VatDetailsViewModel(paymentsData: Option[String],
@@ -36,4 +38,4 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                currentDate: LocalDate,
                                partyType: Option[String],
                                userEmailVerified: Boolean = false,
-                               displayPenaltiesTile: Boolean = false)
+                               penaltiesSummary: Option[PenaltiesSummary] = None)

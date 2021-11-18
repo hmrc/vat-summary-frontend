@@ -20,7 +20,8 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsValue, Json}
 
-class PenaltiesSummarySpec extends AnyWordSpec with Matchers{
+class PenaltiesSummarySpec extends AnyWordSpec with Matchers {
+
   val penaltiesSummaryJson: JsValue = Json.parse(
     """
       |{
@@ -45,10 +46,45 @@ class PenaltiesSummarySpec extends AnyWordSpec with Matchers{
         crystalisedPenaltyAmountDue = 54.32,
         hasAnyPenaltyData = true
       )
-
       penaltiesSummaryJson.as[PenaltiesSummary] shouldBe penaltiesDetailsModel
     }
-
   }
 
+  val model: PenaltiesSummary = PenaltiesSummary.empty
+
+  ".hasActivePenalties" should {
+
+    "return true" when {
+
+      "the number of penalty points is greater than 0" in {
+        model.copy(noOfPoints = 1).hasActivePenalties shouldBe true
+        model.copy(noOfPoints = 2).hasActivePenalties shouldBe true
+      }
+    }
+
+    "return false" when {
+
+      "the number of penalty points is 0" in {
+        model.hasActivePenalties shouldBe false
+      }
+    }
+  }
+
+  ".hasMultiplePenalties" should {
+
+    "return true" when {
+
+      "the number of penalty points is greater than 1" in {
+        model.copy(noOfPoints = 2).hasMultiplePenalties shouldBe true
+      }
+    }
+
+    "return false" when {
+
+      "the number of penalty points is 1 or fewer" in {
+        model.hasMultiplePenalties shouldBe false
+        model.copy(noOfPoints = 1).hasMultiplePenalties shouldBe false
+      }
+    }
+  }
 }
