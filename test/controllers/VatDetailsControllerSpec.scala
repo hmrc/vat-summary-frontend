@@ -18,7 +18,6 @@ package controllers
 
 import java.time.LocalDate
 import common.FinancialTransactionsConstants._
-import common.TestModels._
 import common.{SessionKeys, TestModels}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models._
@@ -55,7 +54,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       .stubs(*, *, *)
       .returns(Future.successful(result))
 
-  def mockPenaltiesService(result: Option[HttpGetResult[PenaltiesSummary]]): Any =
+  def mockPenaltiesService(result: HttpGetResult[PenaltiesSummary]): Any =
     (mockPenaltiesService.getPenaltiesInformation(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *)
       .returns(Future.successful(result))
@@ -544,7 +543,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsModel with displayPenaltiesTile set to true" in {
         lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, displayPenaltiesTile = true
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, penaltiesSummary = Some(penaltiesSummaryModel)
         )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()

@@ -21,7 +21,7 @@ import controllers.ControllerBaseSpec
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 import uk.gov.hmrc.http.HttpClient
-import common.TestModels.penaltiesSummaryModel
+import common.TestModels.{penaltySummaryNoResponse, penaltySummaryResponse}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,15 +42,15 @@ class PenaltiesConnectorSpec extends ControllerBaseSpec {
     "the feature switch is enabled" should {
       "return 200 and a PenaltiesSummary model" in {
         mockAppConfig.features.penaltiesServiceEnabled(true)
-        mockPenaltiesCall(Future.successful(Right(penaltiesSummaryModel)))
-        await(connector.getPenaltiesDataForVRN("123")) shouldBe Some(Right(penaltiesSummaryModel))
+        mockPenaltiesCall(Future.successful(penaltySummaryResponse))
+        await(connector.getPenaltiesDataForVRN("123")) shouldBe penaltySummaryResponse
       }
     }
 
     "when the feature switch is disabled" should {
-      "return None" in {
+      "return the custom penalties feature switch error" in {
         mockAppConfig.features.penaltiesServiceEnabled(false)
-        await(connector.getPenaltiesDataForVRN("123")) shouldBe None
+        await(connector.getPenaltiesDataForVRN("123")) shouldBe penaltySummaryNoResponse
       }
     }
   }

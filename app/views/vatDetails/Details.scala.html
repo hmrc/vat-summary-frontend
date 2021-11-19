@@ -16,6 +16,7 @@
 
 @import models.viewModels.VatDetailsViewModel
 @import views.html.templates._
+@import views.html.templates.penalties.PenaltiesBanner
 @import views.html.templates.penalties.PenaltiesTileSection
 @import play.twirl.api.HtmlFormat
 
@@ -31,7 +32,8 @@
       deregSection: DeregSection,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukWarningText: GovukWarningText,
-      penaltiesTileSection: PenaltiesTileSection)
+      penaltiesTileSection: PenaltiesTileSection,
+      penaltiesBanner: PenaltiesBanner)
 
 @(detailsViewModel: VatDetailsViewModel,
   serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
@@ -80,6 +82,10 @@
   <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)</span>
   @detailsViewModel.entityName.map { entityName =>
     <span class="govuk-caption-m">@entityName</span>
+  }
+
+  @detailsViewModel.penaltiesSummary.map { summary =>
+    @penaltiesBanner(summary)
   }
 
   <div class="flex-container govuk-grid-row govuk-!-margin-top-6">
@@ -146,10 +152,11 @@
         @deregSection(detailsViewModel)
       </div>
     }
-      @if(detailsViewModel.displayPenaltiesTile){
+
+    @if(detailsViewModel.penaltiesSummary.fold(false)(_.hasAnyPenaltyData)){
       <div class="govuk-grid-column-one-third">
-          @penaltiesTileSection()
+        @penaltiesTileSection()
       </div>
-      }
+    }
   </div>
 }

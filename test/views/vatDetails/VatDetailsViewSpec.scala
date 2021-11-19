@@ -16,7 +16,7 @@
 
 package views.vatDetails
 
-import common.TestModels.testDate
+import common.TestModels.{penaltiesSummaryModel, testDate}
 import models.User
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
@@ -57,6 +57,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatOptOutSection = "#vat-optout"
     val cancelVatSection = "#cancel-vat"
     val penaltiesSection = "#view-penalties-details"
+    val penaltiesBanner = ".govuk-notification-banner"
     val unverifiedMessageSelector = "#unverified-email-notice"
   }
 
@@ -512,10 +513,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   "Rendering the VAT details page " when {
 
     "the user has penalties" should {
-      lazy val view = details(detailsModel.copy(displayPenaltiesTile = true), Html("<nav>BTA Links</nav>"))
+      lazy val view = details(detailsModel.copy(penaltiesSummary = Some(penaltiesSummaryModel)), Html("<nav>BTA Links</nav>"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "display the Penalties and appeals section" which {
+      "display the Penalties and appeals tile" which {
 
         lazy val penaltiesSection = element(Selectors.penaltiesSection)
 
@@ -528,16 +529,44 @@ class VatDetailsViewSpec extends ViewBaseSpec {
             "penalty and see the status of any current appeals."
         }
       }
+
+      "display the Penalties notification banner" which {
+
+        lazy val penaltiesBanner = element(Selectors.penaltiesBanner)
+
+        "has the correct heading" in {
+          penaltiesBanner.select("h2").text shouldBe "Late submission and late payment penalties"
+        }
+
+        "has content relating to the number of penalties the user has" in {
+          penaltiesBanner.select(".govuk-notification-banner__content > div").text shouldBe "Total penalty points: 3"
+        }
+
+        "has a link to the penalties service" which {
+
+          "has the correct text" in {
+            penaltiesBanner.select("a").text shouldBe "Find out why you have penalties"
+          }
+
+          "has the correct link destination" in {
+            penaltiesBanner.select("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+          }
+        }
+      }
     }
 
     "the user has no penalties" should {
-      "not display the penalties and appeal section" in {
-        lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
 
+      lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not display the penalties and appeal section" in {
         elementExtinct(Selectors.penaltiesSection)
+      }
+
+      "not display the penalties notification banner" in {
+        elementExtinct(Selectors.penaltiesBanner)
       }
     }
   }
-
 }

@@ -82,7 +82,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             case Left(_) => Seq()
           }
 
-          val penaltiesInfo = penaltiesCallResult.flatMap(_.fold( _ => None, Some(_)))
+          val penaltiesInfo = penaltiesCallResult.fold(_ => None, Some(_))
           if (redirectForMissingTrader(customerInfo)) {
             Redirect(appConfig.missingTraderRedirectUrl)
           } else {
@@ -173,7 +173,6 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val customerInfoError: Boolean = accountDetails.isLeft
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
-    val displayPenaltiesTile: Boolean = penaltyInformation.fold(false)(_.hasAnyPenaltyData)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -194,7 +193,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       dateService.now(),
       partyType,
       retrieveEmailVerifiedIfExist(accountDetails),
-      displayPenaltiesTile
+      penaltyInformation
     )
   }
 

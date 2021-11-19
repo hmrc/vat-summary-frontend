@@ -43,3 +43,7 @@ case class MultipleErrors(code: String, errorResponse: String) extends HttpError
 case object UnknownError extends HttpError {
   override val message: String = "Received an unknown error."
 }
+
+case object PenaltiesFeatureSwitchError extends HttpError {
+  override val message: String = "A feature switch is preventing the API call"
+}

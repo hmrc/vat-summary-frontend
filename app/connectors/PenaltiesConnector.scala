@@ -21,6 +21,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import connectors.httpParsers.PenaltiesHttpParser.PenaltiesReads
+import models.errors.PenaltiesFeatureSwitchError
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,13 +29,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class PenaltiesConnector @Inject()(http: HttpClient)
                                   (implicit appConfig: AppConfig){
 
-  def getPenaltiesDataForVRN(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[HttpGetResult[PenaltiesSummary]]] = {
+  def getPenaltiesDataForVRN(vrn: String)
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[PenaltiesSummary]] =
     if (appConfig.features.penaltiesServiceEnabled()){
-      http.GET(appConfig.penaltiesUrl(vrn)).map{
-        Some(_)
-      }
+      http.GET(appConfig.penaltiesUrl(vrn))
     } else {
-      Future.successful(None)
+      Future.successful(Left(PenaltiesFeatureSwitchError))
     }
-  }
 }

@@ -21,7 +21,7 @@ import models.penalties.PenaltiesSummary
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import common.TestModels.penaltiesSummaryModel
+import common.TestModels.penaltySummaryResponse
 import connectors.PenaltiesConnector
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,25 +31,23 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matchers {
 
-  val penaltiesSummary: Option[HttpGetResult[PenaltiesSummary]] = Some(Right(penaltiesSummaryModel))
-
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val mockPenaltiesConnector: PenaltiesConnector = mock[PenaltiesConnector]
 
-  def setup(penaltiesSummary: Option[HttpGetResult[PenaltiesSummary]]): Any =
+  def setup(penaltiesSummary: HttpGetResult[PenaltiesSummary]): Any =
     (mockPenaltiesConnector.getPenaltiesDataForVRN(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*,*,*)
       .returns(Future.successful(penaltiesSummary))
 
-  def penaltiesService(penaltiesSummary: Option[HttpGetResult[PenaltiesSummary]] = penaltiesSummary): PenaltiesService = {
-    setup(penaltiesSummary: Option[HttpGetResult[PenaltiesSummary]])
+  def penaltiesService(): PenaltiesService = {
+    setup(penaltySummaryResponse)
     new PenaltiesService(mockPenaltiesConnector)
   }
 
   "Calling getPenaltiesDataForVRN" should {
     "retrieve the penalties summary for the vrn" in {
-      val summary: Option[HttpGetResult[PenaltiesSummary]] = await(penaltiesService().getPenaltiesInformation("123"))
-      summary shouldBe penaltiesSummary
+      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesService().getPenaltiesInformation("123"))
+      summary shouldBe penaltySummaryResponse
     }
   }
 
