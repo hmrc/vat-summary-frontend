@@ -39,112 +39,113 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
   val navLinksHideMenu: ListLinks = ListLinks("Home", "/business-account", Some("0"), Some(false))
   val noAltertlink: ListLinks = ListLinks("Messages", "/messages", Some("0"), Some(true))
 
+  object Selectors {
+    val homeLink = ".hmrc-account-menu__main > li:nth-child(1) > a"
+    val manageAccLink = ".hmrc-account-menu__main > li:nth-child(2) > a"
+    val messagesLink = ".hmrc-account-menu__main > li:nth-child(3) > a"
+    val helpLink = ".hmrc-account-menu__main > li:nth-child(4) > a"
+    val notificationBadge = ".hmrc-notification-badge"
+  }
+
   "navLinks" should {
 
     "have a link to BTA home" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val homeLink = document.getElementById("nav-bar-link-Home")
-
       "should have the text home" in {
-        homeLink.text() shouldBe btaHome
+        elementText(Selectors.homeLink) shouldBe btaHome
       }
 
       "should have a link to home" in {
-        homeLink.attr("href") shouldBe "/business-account"
+        element(Selectors.homeLink).attr("href") shouldBe "/business-account"
       }
     }
 
     "have a link to BTA Manage Account" which {
 
-      val view: Html = navLinksView(Seq(navLinksAccount))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val manageAccountLink = document.getElementById("nav-bar-link-Manage account")
 
       "should have the text Manage account" in {
-        manageAccountLink.text() shouldBe btaManageAccount
+        elementText(Selectors.manageAccLink) shouldBe btaManageAccount
       }
 
       "should have a link to Manage account" in {
-        manageAccountLink.attr("href") shouldBe "/manage-account"
+        element(Selectors.manageAccLink).attr("href") shouldBe "/manage-account"
       }
     }
 
     "have a link to BTA Messages" which {
 
-      val view: Html = navLinksView(Seq(navLinksMessage))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val messagesLink = document.getElementById("nav-bar-link-Messages")
-
       "should have the text Messagees and show the number of alerts" in {
-        messagesLink.text() shouldBe btaMessages
+        elementText(Selectors.messagesLink) shouldBe btaMessages
       }
 
       "should have a link to Messages" in {
-        messagesLink.attr("href") shouldBe "/messages"
+        element(Selectors.messagesLink).attr("href") shouldBe "/messages"
       }
 
       "should have 3 alerts" in {
-        elementText(".hmrc-notification-badge") shouldBe "3"
+        elementText(Selectors.notificationBadge) shouldBe "3"
 
       }
     }
 
     "have a link to BTA Help and contact" which {
 
-      val view: Html = navLinksView(Seq(navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val helpAndContactLink = document.getElementById("nav-bar-link-Help and contact")
-
       "should have the text Help and contact" in {
-        helpAndContactLink.text() shouldBe btaHelpAndContact
+        elementText(Selectors.helpLink) shouldBe btaHelpAndContact
       }
 
       "should have a link to Help and contact" in {
-        helpAndContactLink.attr("href") shouldBe "/help"
+        element(Selectors.helpLink).attr("href") shouldBe "/help"
       }
     }
 
     "display multiple links" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome, navLinksMessage))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "should have the correct link names" in {
-        elementText(".hmrc-account-menu__main > li:nth-child(1) > a") shouldBe btaHome
-        elementText(".hmrc-account-menu__main > li:nth-child(2) > a") shouldBe btaMessages
+        elementText(Selectors.homeLink) shouldBe btaHome
+        elementText(Selectors.manageAccLink) shouldBe btaManageAccount
       }
 
       "should have the correct link URL's" in {
-        element(".hmrc-account-menu__main > li:nth-child(1) > a").attr("href") shouldBe "/business-account"
-        element(".hmrc-account-menu__main > li:nth-child(2) > a").attr("href") shouldBe "/messages"
+        element(Selectors.homeLink).attr("href") shouldBe "/business-account"
+        element(Selectors.manageAccLink).attr("href") shouldBe "/manage-account"
+        element(Selectors.messagesLink).attr("href") shouldBe "/messages"
+        element(Selectors.helpLink).attr("href") shouldBe "/help"
       }
     }
 
     "render a Messages link without a notification alert" which {
 
-      val view: Html = navLinksView(Seq(noAltertlink))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,noAltertlink,navLinksHelpAndContact))(messages)
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      lazy val messagesLink = document.getElementById("nav-bar-link-Messages")
-
       "should have the text Messages" in {
-        messagesLink.text() shouldBe "Messages"
+        elementText(Selectors.messagesLink) shouldBe "Messages"
       }
 
       "should not display a notification badge" in {
-        elementExtinct(".hmrc-notification-badge")
+        elementExtinct(Selectors.notificationBadge)
       }
     }
 
@@ -155,7 +156,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "should not display the link" in {
-        elementExtinct(".hmrc-account-menu__main > li:nth-child(1) > a")
+        elementExtinct(Selectors.homeLink)
       }
     }
 
