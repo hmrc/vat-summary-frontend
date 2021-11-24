@@ -30,6 +30,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
   val excludedPackages = Seq(
     "<empty>",
+    "views.*",
     ".*Reverse.*",
     ".*Routes.*",
     "config.*",
@@ -47,15 +48,15 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "5.14.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "1.17.0-play-28",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "1.26.0-play-28",
   "uk.gov.hmrc"       %% "play-language"              % "5.1.0-play-28",
-  "com.typesafe.play" %% "play-json-joda"             % "2.7.4"
+  "com.typesafe.play" %% "play-json-joda"             % "2.9.2"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "org.scalatest"           %% "scalatest"                    % "3.1.4"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
-  "org.jsoup"               %  "jsoup"                        % "1.14.1"            % scope,
+  "org.jsoup"               %  "jsoup"                        % "1.14.3"            % scope,
   "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.1.0"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
   "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
