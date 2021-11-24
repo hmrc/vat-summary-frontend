@@ -22,9 +22,12 @@
 
 @bannerContent = {
   <div class="govuk-!-margin-bottom-3">
-    @if(penaltiesSummary.noOfPoints > 0) {
-      <div>@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>
-    }
+      @if(penaltiesSummary.noOfCrystalisedPenalties > 0) {
+        <div>@messages("penaltiesBanner.crystalisedPenalty", penaltiesSummary.crystalisedPenaltyAmountDue)</div>
+      }
+        @if(penaltiesSummary.noOfPoints > 0) {
+            <div>@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>
+        }
   </div>
   <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
     @if(penaltiesSummary.hasMultiplePenalties) {
