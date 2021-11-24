@@ -60,12 +60,18 @@ class PenaltiesSummarySpec extends AnyWordSpec with Matchers {
         model.copy(noOfPoints = 1).hasActivePenalties shouldBe true
         model.copy(noOfPoints = 2).hasActivePenalties shouldBe true
       }
+
+      "the number of Crystalised penalties is greater than 0" in {
+        model.copy(noOfCrystalisedPenalties = 1).hasActivePenalties shouldBe true
+        model.copy(noOfCrystalisedPenalties = 2).hasActivePenalties shouldBe true
+      }
     }
 
     "return false" when {
 
-      "the number of penalty points is 0" in {
+      "the total number of penalties is 0" in {
         model.hasActivePenalties shouldBe false
+        model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 0).hasActivePenalties shouldBe false
       }
     }
   }
@@ -77,13 +83,22 @@ class PenaltiesSummarySpec extends AnyWordSpec with Matchers {
       "the number of penalty points is greater than 1" in {
         model.copy(noOfPoints = 2).hasMultiplePenalties shouldBe true
       }
+
+      "the number of Crystalised penalties is greater than 1" in {
+        model.copy(noOfCrystalisedPenalties = 2).hasMultiplePenalties shouldBe true
+      }
+
+      "the number of penalty points and Crystalised penalties is greater than 1" in {
+        model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1).hasMultiplePenalties shouldBe true
+      }
     }
 
     "return false" when {
 
       "the number of penalty points is 1 or fewer" in {
         model.hasMultiplePenalties shouldBe false
-        model.copy(noOfPoints = 1).hasMultiplePenalties shouldBe false
+        model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 0).hasMultiplePenalties shouldBe false
+        model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1).hasMultiplePenalties shouldBe false
       }
     }
   }

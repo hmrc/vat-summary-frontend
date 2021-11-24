@@ -267,10 +267,10 @@ object TestModels {
 
   val penaltiesSummaryModel: PenaltiesSummary = PenaltiesSummary(
     noOfPoints = 3,
-    noOfEstimatedPenalties = 2,
-    noOfCrystalisedPenalties = 1,
-    estimatedPenaltyAmount = 123.45,
-    crystalisedPenaltyAmountDue = 54.32,
+    noOfEstimatedPenalties = 0,
+    noOfCrystalisedPenalties = 0,
+    estimatedPenaltyAmount = 0,
+    crystalisedPenaltyAmountDue = 0,
     hasAnyPenaltyData = true
   )
 
