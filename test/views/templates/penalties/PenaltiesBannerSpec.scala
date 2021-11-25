@@ -41,23 +41,142 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
     "there are active penalties" when {
 
-      "there is one penalty point" should {
+      "there are only penalty points" when {
 
-        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 0))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
+        "there is one penalty point" should {
 
-        "have the correct heading" in {
-          elementText("h2") shouldBe "Late submission and late payment penalties"
+          lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 0, noOfEstimatedPenalties = 0))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct heading" in {
+            elementText("h2") shouldBe "Late submission and late payment penalties"
+          }
+
+          "have the correct penalty information" in {
+            elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 1"
+          }
+
+          "have a link to the penalties service" which {
+
+            "has the correct text" in {
+              elementText("a") shouldBe "Find out why you have a penalty"
+            }
+
+            "has the correct link destination" in {
+              element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+            }
+          }
         }
 
-        "have the correct penalty information" in {
-          elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 1"
+        "there is more than one penalty point" should {
+
+          lazy val view = injectedView(model.copy(noOfPoints = 2, noOfCrystalisedPenalties = 0, noOfEstimatedPenalties = 0))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct penalty information" in {
+            elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 2"
+          }
+
+          "have the correct link text" in {
+            elementText("a") shouldBe "Find out why you have penalties"
+          }
+
+          "has the correct link destination" in {
+            element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+          }
         }
 
-        "have a link to the penalties service" which {
+      }
 
-          "has the correct text" in {
-            elementText("a") shouldBe "Find out why you have a penalty"
+      "there are only crystalised penalties" when {
+
+        "there is one crystalised penalty point" should {
+
+          lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1,
+            crystalisedPenaltyAmountDue = 100.00, noOfEstimatedPenalties = 0))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct heading" in {
+            elementText("h2") shouldBe "Late submission and late payment penalties"
+          }
+
+          "have the correct penalty information" in {
+            elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100"
+          }
+
+          "have a link to the penalties service" which {
+
+            "has the correct text" in {
+              elementText("a") shouldBe "Find out why you have a penalty"
+            }
+
+            "has the correct link destination" in {
+              element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+            }
+          }
+        }
+
+        "there is more than one crystalised penalty point" should {
+
+          lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.99,
+            noOfEstimatedPenalties = 0))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct penalty information" in {
+            elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £200.99"
+          }
+
+          "have the correct link text" in {
+            elementText("a") shouldBe "Find out why you have penalties"
+          }
+
+          "has the correct link destination" in {
+            element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+          }
+        }
+
+      }
+
+      "there are only estimated penalties" when {
+
+        "there is one estimated penalty" should {
+
+          lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 0,
+            noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 100.00))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct heading" in {
+            elementText("h2") shouldBe "Late submission and late payment penalties"
+          }
+
+          "have the correct penalty information" in {
+            elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £100"
+          }
+
+          "have a link to the penalties service" which {
+
+            "has the correct text" in {
+              elementText("a") shouldBe "Find out why you have a penalty"
+            }
+
+            "has the correct link destination" in {
+              element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+            }
+          }
+        }
+
+        "there is more thn one estimated penalty" should {
+
+          lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 0,
+            noOfEstimatedPenalties = 2, estimatedPenaltyAmount = 200.99))
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          "have the correct penalty information" in {
+            elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £200.99"
+          }
+
+          "have the correct link text" in {
+            elementText("a") shouldBe "Find out why you have penalties"
           }
 
           "has the correct link destination" in {
@@ -66,74 +185,72 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         }
       }
 
-      "there is more than one penalty point" should {
+      "there are both crystalised penalties and penalty points, but no estimated penalties" should {
 
-        lazy val view = injectedView(model.copy(noOfPoints = 2, noOfCrystalisedPenalties = 0))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct penalty information" in {
-          elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 2"
-        }
-
-        "have the correct link text" in {
-          elementText("a") shouldBe "Find out why you have penalties"
-        }
-
-        "has the correct link destination" in {
-          element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
-        }
-      }
-
-      "there is one crystalised penalty point" should {
-
-        lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct heading" in {
-          elementText("h2") shouldBe "Late submission and late payment penalties"
-        }
-
-        "have the correct penalty information" in {
-          elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100"
-        }
-
-        "have a link to the penalties service" which {
-
-          "has the correct text" in {
-            elementText("a") shouldBe "Find out why you have a penalty"
-          }
-
-          "has the correct link destination" in {
-            element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
-          }
-        }
-      }
-
-      "there is more than one crystalised penalty point" should {
-
-        lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.99))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct penalty information" in {
-          elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £200.99"
-        }
-
-        "have the correct link text" in {
-          elementText("a") shouldBe "Find out why you have penalties"
-        }
-
-        "has the correct link destination" in {
-          element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
-        }
-      }
-
-      "there are both crystalised penalties and penalty points" should {
-
-        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00))
+        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
+          noOfEstimatedPenalties = 0))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
           elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100 Total penalty points: 1"
+        }
+
+        "have the correct link text" in {
+          elementText("a") shouldBe "Find out why you have penalties"
+        }
+
+        "has the correct link destination" in {
+          element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+        }
+      }
+
+      "there are both crystalised penalties and estimated penalties, but no penalty points" should {
+
+        lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
+          noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct penalty information" in {
+          elementText(".govuk-notification-banner__content > div") shouldBe
+            "Penalty amount to pay: £100 Estimated further penalty amount: £150"
+        }
+
+        "have the correct link text" in {
+          elementText("a") shouldBe "Find out why you have penalties"
+        }
+
+        "has the correct link destination" in {
+          element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+        }
+      }
+
+      "there are both estimated penalties and penalty points, but no crystalised penalties" should {
+
+        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 0, noOfEstimatedPenalties = 1,
+          estimatedPenaltyAmount = 150.00))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct penalty information" in {
+          elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £150 Total penalty points: 1"
+        }
+
+        "have the correct link text" in {
+          elementText("a") shouldBe "Find out why you have penalties"
+        }
+
+        "has the correct link destination" in {
+          element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+        }
+      }
+
+      "there are crystalised penalties, estimated penalties and active points" should {
+
+        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
+          noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct penalty information" in {
+          elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100 Estimated further penalty amount: £150 Total penalty points: 1"
         }
 
         "have the correct link text" in {

@@ -25,11 +25,13 @@ case class PenaltiesSummary(noOfPoints: Int,
                             crystalisedPenaltyAmountDue: BigDecimal,
                             hasAnyPenaltyData: Boolean) {
 
-  val hasActivePenalties: Boolean = noOfPoints > 0 || noOfCrystalisedPenalties > 0
+  val hasActivePenalties: Boolean = noOfPoints > 0 || noOfCrystalisedPenalties > 0  || noOfEstimatedPenalties > 0
 
-  val hasMultiplePenalties: Boolean = (noOfPoints, noOfCrystalisedPenalties) match {
-    case (1, 1) => true
-    case _ if noOfPoints > 1 || noOfCrystalisedPenalties > 1 => true
+  val hasMultiplePenalties: Boolean = (noOfPoints, noOfCrystalisedPenalties, noOfEstimatedPenalties) match {
+    case (1, 1, _) => true
+    case (1, _, 1) => true
+    case (_, 1, 1) => true
+    case _ if noOfPoints > 1 || noOfCrystalisedPenalties > 1 || noOfEstimatedPenalties > 1 => true
     case _ => false
   }
 }
