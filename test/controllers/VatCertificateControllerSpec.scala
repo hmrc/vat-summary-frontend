@@ -62,7 +62,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         mockAgentAuth()
         mockServiceInfoCall()
         mockCustomerInfo(Right(customerInformationMax))
-        controller.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "123456789"))
+        controller.show()(fakeRequest.withSession(SessionKeys.mtdVatvcClientVrn -> "123456789"))
       }
 
       "return OK (200)" in {

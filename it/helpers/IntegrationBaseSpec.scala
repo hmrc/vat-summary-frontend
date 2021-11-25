@@ -40,7 +40,7 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
   val appRouteContext: String = "/vat-through-software"
 
   def formatSessionVrn: Option[String] => Map[String, String] =
-    _.fold(Map.empty[String, String])(x => Map(SessionKeys.agentSessionVrn -> x))
+    _.fold(Map.empty[String, String])(x => Map(SessionKeys.mtdVatvcClientVrn -> x))
 
   def viewedDDInterrupt: Option[String] => Map[String, String] =
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.viewedDDInterrupt -> x))

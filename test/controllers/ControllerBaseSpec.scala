@@ -100,7 +100,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   lazy val agentFinancialRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(
       SessionKeys.financialAccess -> "true",
-      SessionKeys.agentSessionVrn -> "123456789",
+      SessionKeys.mtdVatvcClientVrn -> "123456789",
       SessionKeys.viewedDDInterrupt -> "false"
     )
 

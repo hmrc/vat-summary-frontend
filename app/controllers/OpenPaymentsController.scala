@@ -65,7 +65,7 @@ class OpenPaymentsController @Inject()(authorisedController: AuthorisedControlle
 
   private[controllers] def renderView(serviceInfoContent: Html)
                                      (implicit request: Request[_], user: User, hc: HeaderCarrier): Future[Result] = {
-    val clientName = request.session.get(SessionKeys.clientName)
+    val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
     paymentsService.getOpenPayments(user.vrn).map {
       case Right(Some(payments)) =>
         val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount))
