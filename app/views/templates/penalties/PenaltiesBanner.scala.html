@@ -25,9 +25,15 @@
       @if(penaltiesSummary.noOfCrystalisedPenalties > 0) {
         <div>@messages("penaltiesBanner.crystalisedPenalty", penaltiesSummary.crystalisedPenaltyAmountDue)</div>
       }
-        @if(penaltiesSummary.noOfPoints > 0) {
-            <div>@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>
-        }
+      @if(penaltiesSummary.noOfEstimatedPenalties > 0 && penaltiesSummary.noOfCrystalisedPenalties == 0) {
+        <div>@messages("penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty", penaltiesSummary.estimatedPenaltyAmount)</div>
+      }
+      @if(penaltiesSummary.noOfEstimatedPenalties > 0 && penaltiesSummary.noOfCrystalisedPenalties > 0) {
+        <div>@messages("penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty", penaltiesSummary.estimatedPenaltyAmount)</div>
+      }
+      @if(penaltiesSummary.noOfPoints > 0) {
+        <div>@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>
+      }
   </div>
   <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
     @if(penaltiesSummary.hasMultiplePenalties) {
