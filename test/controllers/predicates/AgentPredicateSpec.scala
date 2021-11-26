@@ -48,11 +48,11 @@ class AgentPredicateSpec extends ControllerBaseSpec {
       _ => _ => Future.successful(Ok("welcome")), financialRequest
     )(request)
 
-  lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession("CLIENT_VRN" -> "123456789")
+  lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession("mtdVatvcClientVrn" -> "123456789")
 
   "AgentPredicate .authoriseAsAgent" when {
 
-    "CLIENT_VRN is in session" when {
+    "mtdVatvcClientVrn is in session" when {
 
       "agent has delegated enrolment for VRN" when {
 
@@ -158,7 +158,7 @@ class AgentPredicateSpec extends ControllerBaseSpec {
       }
     }
 
-    "CLIENT_VRN is not in session" should {
+    "mtdVatvcClientVrn is not in session" should {
 
       "redirect to agent-client lookup VRN lookup page" in {
 

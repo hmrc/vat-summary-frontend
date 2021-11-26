@@ -19,8 +19,8 @@ package common
 object SessionKeys {
   val migrationToETMP = "customerMigratedToETMPDate"
   val mandationStatus = "mtdVatMandationStatus"
-  val agentSessionVrn = "CLIENT_VRN"
-  val clientName: String = "mtdVatAgentClientName"
+  val mtdVatvcClientVrn = "mtdVatvcClientVrn"
+  val mtdVatvcAgentClientName: String = "mtdVatvcAgentClientName"
 
   val prepopulationEmailKey: String = "vatCorrespondencePrepopulationEmail"
   val inFlightContactKey: String = "inFlightContactDetailsChange"
