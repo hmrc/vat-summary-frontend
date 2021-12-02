@@ -49,6 +49,7 @@ object MessageLookup {
       val datePeriod = if(useLongDateFormat) datePeriodLong else datePeriodShort
 
       chargeType match {
+        case UnrepayableOverpayment.name => ("Overpayment", "cannot be repaid after 4 years")
         case RepaymentSupplementRecovery.name => ("Repayment supplement recovery", "to recover the amount you were overpaid")
         case IndirectTaxRevenueRecovery.name => ("Payment recovery", "to recover a payment made to you in error")
         case DefaultInterest.name => ("Default interest", s"based on our assessment of your tax for the period $datePeriod")

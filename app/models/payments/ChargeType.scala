@@ -30,6 +30,10 @@ sealed trait ChargeType {
   }
 }
 
+case object VatUnrepayableOverpayment extends ChargeType {
+  override val value: String = "VAT Unrepayable Overpayment"
+}
+
 case object VatRepaymentSupplementRecovery extends ChargeType {
   override val value: String = "VAT Repayment Supplement Rec"
 }
@@ -204,6 +208,7 @@ object ChargeType extends LoggerUtil {
   )
 
   val allChargeTypes: Set[ChargeType] = Set(
+    VatUnrepayableOverpayment,
     VatRepaymentSupplementRecovery,
     VatIndirectTaxRevenueRecovery,
     ReturnDebitCharge,

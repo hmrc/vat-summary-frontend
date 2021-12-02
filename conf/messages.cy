@@ -204,6 +204,8 @@ deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ga
 
 
 # Charge types
+chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
+chargeType.UnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 chargeType.repaymentSupplementRecTitle = Adennill atodiad ad-dalu
 chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd i chi
 chargeType.indirectRevRecoveryTitle = Adennill taliadau
