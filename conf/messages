@@ -176,6 +176,8 @@ deregPartial.vatGroup.title = Cancel VAT registration (opens in a new window or 
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
+chargeType.vatUnrepayableOverpaymentTitle = Overpayment
+chargeType.UnrepayableOverpaymentDescription = cannot be repaid after 4 years
 chargeType.repaymentSupplementRecTitle = Repayment supplement recovery
 chargeType.repaymentSupplementRecDescription = to recover the amount you were overpaid
 chargeType.indirectRevRecoveryTitle = Payment recovery
