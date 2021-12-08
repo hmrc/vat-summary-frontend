@@ -465,3 +465,11 @@ a11yStatement.pagePrepared = Paratowyd y dudalen hon ar 20 Medi 2019. Cafodd ei 
 global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW – GOV.UK
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
+
+penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
+penaltiesBanner.totalPoints = Cyfanswm y pwyntiau cosb: {0}
+penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu: £{0}
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb: £{0}
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach: £{0}
+penaltiesBanner.linkSingular = Cael gwybod pam mae gennych gosb
+penaltiesBanner.linkPlural = Cael gwybod pam mae gennych gosbau
