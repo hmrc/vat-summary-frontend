@@ -27,13 +27,8 @@ case class PenaltiesSummary(noOfPoints: Int,
 
   val hasActivePenalties: Boolean = noOfPoints > 0 || noOfCrystalisedPenalties > 0  || noOfEstimatedPenalties > 0
 
-  val hasMultiplePenalties: Boolean = (noOfPoints, noOfCrystalisedPenalties, noOfEstimatedPenalties) match {
-    case (1, 1, _) => true
-    case (1, _, 1) => true
-    case (_, 1, 1) => true
-    case _ if noOfPoints > 1 || noOfCrystalisedPenalties > 1 || noOfEstimatedPenalties > 1 => true
-    case _ => false
-  }
+  val hasMultiplePenalties: Boolean =
+    noOfPoints + noOfCrystalisedPenalties + noOfEstimatedPenalties > 1
 }
 
 object PenaltiesSummary {
