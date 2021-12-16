@@ -78,7 +78,11 @@
       }
       <p class="govuk-body govuk-!-margin-bottom-8">
         <a class="govuk-link" href="@controllers.routes.OpenPaymentsController.openPayments().url">
-          @messages("paymentsHistory.whatYouOwe")
+          @if(user.isAgent) {
+            @messages("paymentsHistory.whatYouOweAgent")
+            } else {
+            @messages("paymentsHistory.whatYouOwe")
+            }
         </a>
       </p>
 

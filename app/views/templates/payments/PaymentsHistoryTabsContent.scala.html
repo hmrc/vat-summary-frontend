@@ -36,8 +36,8 @@
         head = Some(Seq(
           HeadCell(content = Text(messages("paymentsHistory.date"))),
           HeadCell(content = Text(messages("paymentsHistory.description"))),
-          HeadCell(content = Text(messages("paymentsHistory.youPaid")), format = Some("numeric")),
-          HeadCell(content = Text(messages("paymentsHistory.paidYou")), format = Some("numeric"))
+          HeadCell(content = if(user.isAgent) Text(messages("paymentsHistory.youPaidAgent")) else Text(messages("paymentsHistory.youPaid")), format = Some("numeric")),
+          HeadCell(content = if(user.isAgent) Text(messages("paymentsHistory.paidYouAgent")) else Text(messages("paymentsHistory.paidYou")), format = Some("numeric"))
         )),
         rows = transactions
                 .filter(_.clearedDate.getOrElse("").toString.contains(year.toString))
