@@ -25,9 +25,10 @@ case class PenaltiesSummary(noOfPoints: Int,
                             crystalisedPenaltyAmountDue: BigDecimal,
                             hasAnyPenaltyData: Boolean) {
 
-  val hasActivePenalties: Boolean = noOfPoints > 0
+  val hasActivePenalties: Boolean = noOfPoints > 0 || noOfCrystalisedPenalties > 0  || noOfEstimatedPenalties > 0
 
-  val hasMultiplePenalties: Boolean = noOfPoints > 1
+  val hasMultiplePenalties: Boolean =
+    noOfPoints + noOfCrystalisedPenalties + noOfEstimatedPenalties > 1
 }
 
 object PenaltiesSummary {

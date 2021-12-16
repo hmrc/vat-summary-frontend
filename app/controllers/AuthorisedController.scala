@@ -73,7 +73,7 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
             logger.warn(s"[AuthorisedController][authorisedAction] insufficient enrolment exception encountered")
             Future.successful(Forbidden(unauthorised()))
           case _: AuthorisationException =>
-            logger.warn(s"[AuthorisedController][authorisedAction] encountered unauthorisation exception")
+            logger.warn(s"[AuthorisedController][authorisedAction] encountered authorisation exception")
             Future.successful(Forbidden(unauthorised()))
         }
   }

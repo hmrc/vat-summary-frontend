@@ -17,14 +17,14 @@
 package common
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-
 import java.time.LocalDate
+
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments, ReturnDebitCharge}
 import models.penalties.PenaltiesSummary
-import models.viewModels.VatDetailsViewModel
+import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -160,6 +160,39 @@ object TestModels {
   val customerInformationNonMTDfB: CustomerInformation = customerInformationMin.copy(mandationStatus = "Non MTDfB")
   val customerInformationJunkStatus: CustomerInformation = customerInformationMin.copy(mandationStatus = "Some Status")
 
+  val vatCertificateViewModelMin: VatCertificateViewModel = VatCertificateViewModel(
+    "999999999",
+    None,
+    LocalDate.now(),
+    None,
+    None,
+    "common.notProvided",
+    None,
+    Address("Bedrock Quarry", None, None, None, None),
+    "common.notProvided",
+    None,
+    None,
+    None
+  )
+
+  val vatCertificateViewModelMax: VatCertificateViewModel = VatCertificateViewModel(
+    "999999999",
+    Some(LocalDate.parse("2017-01-01")),
+    LocalDate.now(),
+    Some("Cheapo Clothing Ltd"),
+    Some("Cheapo Clothing"),
+    "partyType.7",
+    Some("10410"),
+    Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB")),
+    "returnPeriod.MM",
+    Some(List(
+      TaxPeriod("2018-01-01", "2018-01-15"),
+      TaxPeriod("2018-01-06", "2018-01-28"),
+    )),
+    Some(TaxPeriod("2018-01-29", "2018-01-31")),
+    Some("Betty Jones")
+  )
+
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1")
   )
@@ -234,10 +267,10 @@ object TestModels {
 
   val penaltiesSummaryModel: PenaltiesSummary = PenaltiesSummary(
     noOfPoints = 3,
-    noOfEstimatedPenalties = 2,
-    noOfCrystalisedPenalties = 1,
-    estimatedPenaltyAmount = 123.45,
-    crystalisedPenaltyAmountDue = 54.32,
+    noOfEstimatedPenalties = 0,
+    noOfCrystalisedPenalties = 0,
+    estimatedPenaltyAmount = 0,
+    crystalisedPenaltyAmountDue = 0,
     hasAnyPenaltyData = true
   )
 

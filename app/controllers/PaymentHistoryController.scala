@@ -88,7 +88,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
               Future.successful(Right(Seq.empty))
             }
         } yield {
-          val clientName = request.session.get(SessionKeys.clientName)
+          val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
           val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
           generateViewModel(
             paymentsServiceYearOne,

@@ -48,7 +48,7 @@ class AccessibilityStatementControllerSpec extends ControllerBaseSpec {
 
         lazy val result = {
           mockAgentAuth()
-          controller.show(fakeRequest.withSession("CLIENT_VRN" -> "999999999"))
+          controller.show(fakeRequest.withSession("mtdVatvcClientVrn" -> "999999999"))
         }
 
         status(result) shouldBe Status.OK

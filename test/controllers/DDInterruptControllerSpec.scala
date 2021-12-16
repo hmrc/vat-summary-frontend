@@ -50,33 +50,29 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
   "The user meets the requirements for the DD interrupt Screen and the feature switch is enabled" when {
 
-    "they have no DD" which {
+    "they have no DD" should {
 
-      "should present them with the No Direct Debit View" when {
+      lazy val result: Future[Result] = {
+        mockPrincipalAuth()
+        mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
+        mockDateServiceCall()
+        (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .stubs(*, *, *)
+          .returns(noDirectDebitSetup)
+        controller.directDebitInterruptCall(relativeUrl)(fakeRequest)
+      }
 
-        lazy val result: Future[Result] = {
-          mockPrincipalAuth()
-          mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
-          mockDateServiceCall()
-          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(noDirectDebitSetup)
-          controller.directDebitInterruptCall(relativeUrl)(fakeRequest)
-        }
+      "return 200" in {
+        status(result) shouldBe Status.OK
+      }
 
-        "return 200" in {
-          status(result) shouldBe Status.OK
-        }
-
-        "return no DD interrupt view" in {
-          contentAsString(result)
-            .contains("You need to set up a new Direct Debit") shouldBe true
-        }
-
+      "return no DD interrupt view" in {
+        contentAsString(result)
+          .contains("You need to set up a new Direct Debit") shouldBe true
       }
     }
 
-    "they have an existing DD but need to validate there bank details and the feature switch is enabled" when {
+    "they have an existing DD but need to validate their bank details and the feature switch is enabled" should {
 
       lazy val result: Future[Result] = {
         mockPrincipalAuth()
@@ -100,45 +96,57 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
         contentAsString(result)
           .contains("You need to validate your details for Direct Debit") shouldBe true
       }
+    }
 
-      "they have an existing DD that was set up at least a week after the migration date" when {
+    "they have an existing DD that was set up at least a week after the migration date" should {
 
-        lazy val result: Future[Result] = {
-          mockPrincipalAuth()
-          mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
-          mockDateServiceCall()
-          (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
-            .stubs(*, *, *)
-            .returns(directDebitSetupAfterMigrationDate)
-          controller.directDebitInterruptCall(relativeUrl)(fakeRequest)
-        }
-
-        "return 303" in {
-          status(result) shouldBe Status.SEE_OTHER
-        }
+      lazy val result: Future[Result] = {
+        mockPrincipalAuth()
+        mockCustomerInfo(Right(customerInformationLaterMigratedToETMPDate))
+        mockDateServiceCall()
+        (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+          .stubs(*, *, *)
+          .returns(directDebitSetupAfterMigrationDate)
+        controller.directDebitInterruptCall(relativeUrl)(fakeRequest)
       }
 
-      "Migration date is older than 4 months" when {
-
-        "redirected to the VAT Overview Page" should {
-
-          lazy val result: Future[Result] = {
-            mockPrincipalAuth()
-            mockCustomerInfo(Right(customerInformationMax))
-            mockDateServiceCall()
-            controller.directDebitInterruptCall(relativeUrl)(fakeRequest)
-          }
-
-          "return 303" in {
-            status(result) shouldBe Status.SEE_OTHER
-          }
-
-          "return the correct redirect location" in {
-            redirectLocation(result) shouldBe expectedRedirectLocation
-          }
-        }
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
+
+    "migration date is before 4 months ago" should {
+
+      lazy val result: Future[Result] = {
+        mockPrincipalAuth()
+        mockCustomerInfo(Right(customerInformationMax))
+        mockDateServiceCall()
+        controller.directDebitInterruptCall(relativeUrl)(fakeRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "return the correct redirect location" in {
+        redirectLocation(result) shouldBe expectedRedirectLocation
+      }
+    }
+
+    "an empty string is passed as a redirect URL" should {
+
+      lazy val result: Future[Result] = {
+        mockPrincipalAuth()
+        mockCustomerInfo(Right(customerInformationMax))
+        mockDateServiceCall()
+        controller.directDebitInterruptCall("")(fakeRequest)
+      }
+
+      "redirect to the VAT overview page" in {
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
+      }
+    }
+
   }
 
   "The DD Interrupt feature switch is disabled" should {
@@ -177,15 +185,22 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
 
     "an invalid redirect url is provided" should {
 
-      "return the URL" in {
+      "return None" in {
         controller.extractRedirectUrl("http://wwww.google.com") shouldBe None
       }
     }
 
-    "an exception is throne when trying to construct a continue url" should {
+    "an exception is thrown when trying to construct a continue url" should {
 
-      "return the URL" in {
+      "return None" in {
         controller.extractRedirectUrl("99") shouldBe None
+      }
+    }
+
+    "the redirect URL is an empty string" should {
+
+      "return None" in {
+        controller.extractRedirectUrl("") shouldBe None
       }
     }
   }
@@ -275,6 +290,13 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
       "the DD date is greater than a week after the migration date" in {
         val ddStatus: DirectDebitStatus =
           DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-09"))))
+
+        controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe false
+      }
+
+      "either the migration date or the DD dates are not retrieved" in {
+        val ddStatus: DirectDebitStatus =
+          DirectDebitStatus(directDebitMandateFound = true, None)
 
         controller.dateBeforeOrWithin7Days(customerInfo, ddStatus) shouldBe false
       }

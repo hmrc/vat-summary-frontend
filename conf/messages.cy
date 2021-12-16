@@ -139,7 +139,7 @@ paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich tal
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
 paymentsHistory.backToTop = Nôl i’r brig
 paymentsHistory.insolvencyNotice = Ni allwch fwrw golwg dros daliadau a wnaed cyn dyddiad yr ansolfedd.
-paymentsHistory.whatYouOwe = Cael gwybod a oes unrhyw beth arnoch i CThEM
+paymentsHistory.whatYouOwe = Cael gwybod a oes arnoch unrhyw beth i CThEM
 paymentsHistory.whatYouOweAgent = Cael gwybod a oes ar eich cleient unrhyw beth i CThEM
 paymentsHistory.date = Dyddiad
 paymentsHistory.description = Disgrifiad o’r taliad
@@ -207,6 +207,8 @@ deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ga
 
 
 # Charge types
+chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
+chargeType.UnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 chargeType.repaymentSupplementRecTitle = Adennill atodiad ad-dalu
 chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd i chi
 chargeType.indirectRevRecoveryTitle = Adennill taliadau
@@ -466,3 +468,11 @@ a11yStatement.pagePrepared = Paratowyd y dudalen hon ar 20 Medi 2019. Cafodd ei 
 global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW – GOV.UK
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
+
+penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
+penaltiesBanner.totalPoints = Cyfanswm y pwyntiau cosb: {0}
+penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu: £{0}
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb: £{0}
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach: £{0}
+penaltiesBanner.linkSingular = Cael gwybod pam mae gennych gosb
+penaltiesBanner.linkPlural = Cael gwybod pam mae gennych gosbau

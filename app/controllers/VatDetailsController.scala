@@ -130,10 +130,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
   }
 
   private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {
-    val isOverdue = payments.headOption.fold(false) { payment =>
-        payment.due.isBefore(dateService.now()) &&
-        !payment.ddCollectionInProgress
-    }
+    val isOverdue = payments.head.due.isBefore(dateService.now()) && !payments.head.ddCollectionInProgress
     getObligationDetails(
       payments,
       isOverdue
@@ -143,7 +140,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
   private[controllers] def getReturnObligationDetails(obligations: Seq[VatReturnObligation]): VatDetailsDataModel =
     getObligationDetails(
       obligations,
-      obligations.headOption.fold(false)(obligation => obligation.due.isBefore(dateService.now()))
+      obligations.head.due.isBefore(dateService.now())
     )
 
   private[controllers] def getObligationDetails(obligations: Seq[Obligation], isOverdue: Boolean): VatDetailsDataModel = {

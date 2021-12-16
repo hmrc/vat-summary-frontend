@@ -38,7 +38,7 @@ class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfi
   }
 
   def unauthorised: Action[AnyContent] = Action { implicit request =>
-    Ok(unauthorisedView()).removingFromSession(SessionKeys.agentSessionVrn)
+    Ok(unauthorisedView()).removingFromSession(SessionKeys.mtdVatvcClientVrn)
   }
 
   def agentHub: Action[AnyContent] = Action { implicit request =>
@@ -49,7 +49,7 @@ class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfi
     StubAgentClientLookupForm.form.bindFromRequest().fold(
       error => InternalServerError(s"Failed to bind model. Error: $error"),
       success => Redirect(success.redirectUrl)
-        .addingToSession(SessionKeys.agentSessionVrn -> success.vrn)
+        .addingToSession(SessionKeys.mtdVatvcClientVrn -> success.vrn)
         .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
     )
   }

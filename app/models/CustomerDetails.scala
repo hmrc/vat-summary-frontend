@@ -58,10 +58,10 @@ case class CustomerDetails(firstName: Option[String],
 
 object CustomerDetails {
   implicit val customerDetailsReads: Reads[CustomerDetails] = (
-    (__ \ "firstName").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "lastName").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "tradingName").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "organisationName").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \ "firstName").readNullable[String] and
+    (__ \ "lastName").readNullable[String] and
+    (__ \ "tradingName").readNullable[String] and
+    (__ \ "organisationName").readNullable[String] and
     (__ \ "isInsolvent").read[Boolean] and
     (__ \ "continueToTrade").readNullable[Boolean] and
     (__ \ "insolvencyType").readNullable[String] and

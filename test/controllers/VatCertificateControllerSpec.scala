@@ -18,6 +18,7 @@ package controllers
 
 import common.SessionKeys
 import common.TestModels._
+import models.errors.BadRequestError
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.Helpers._
@@ -61,7 +62,7 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
         mockAgentAuth()
         mockServiceInfoCall()
         mockCustomerInfo(Right(customerInformationMax))
-        controller.show()(fakeRequest.withSession(SessionKeys.agentSessionVrn -> "123456789"))
+        controller.show()(fakeRequest.withSession(SessionKeys.mtdVatvcClientVrn -> "123456789"))
       }
 
       "return OK (200)" in {
@@ -102,6 +103,20 @@ class VatCertificateControllerSpec extends ControllerBaseSpec {
 
       "redirect to sign in" in {
         redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the account details service returns a Left" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        mockCustomerInfo(Left(BadRequestError("", "")))
+        controller.show()(fakeRequest)
+      }
+
+      "return ISE (500)" in {
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }

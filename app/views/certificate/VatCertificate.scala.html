@@ -61,15 +61,9 @@
     }
 }
 
-
-
-
-
-
-
-@fieldRow(title: String, content: Any) = {
+@fieldRow(title: String, content: Any, id: String) = {
   <dl class="govuk-summary-list">
-    <div class="govuk-summary-list__row">
+    <div id="@id" class="govuk-summary-list__row">
       <dt class="govuk-summary-list__key govuk-!-font-weight-bold">
         @title
       </dt>
@@ -92,7 +86,9 @@
   navLinkContent = Some(navLink),
 ) {
 
-  <h1 class="govuk-heading-xl">@if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}</h1>
+  <h1 class="govuk-heading-xl">
+    @if(user.isAgent){@messages("vatCertificate.agentTitle")} else {@messages("vatCertificate.title")}
+  </h1>
 
   <div class="cert-header">
     <img src='@routes.Assets.at("images/"+messages("vatCertificate.logo")+".png")' alt="HMRC Logo">
@@ -100,37 +96,65 @@
 
   <div class="card-full-container govuk-grid-column-full">
     <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-m card-heading">@messages("vatCertificate.aboutYourRegistration.title")</h2>
+      <h2 id="about-your-registration-heading" class="govuk-heading-m card-heading">
+        @messages("vatCertificate.aboutYourRegistration.title")
+      </h2>
     </div>
     <div class="govuk-grid-column-full card-full">
-      @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn)
-      @fieldRow(messages("vatCertificate.aboutYourRegistration.registrationDate"),
-        model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")))
-      @fieldRow(messages("vatCertificate.aboutYourRegistration.certificateDate"), displayDate(model.certificateDate))
+      @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn, "vrn")
+      @fieldRow(
+        messages("vatCertificate.aboutYourRegistration.registrationDate"),
+        model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")),
+        "registration-date"
+      )
+      @fieldRow(
+        messages("vatCertificate.aboutYourRegistration.certificateDate"),
+        displayDate(model.certificateDate),
+        "certificate-date"
+      )
     </div>
   </div>
 
   <div class="card-full-container govuk-grid-column-full">
     <div class="govuk-grid-column-two-thirds">
-      <h2 class="govuk-heading-m card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
+      <h2 id="about-the-business-heading" class="govuk-heading-m card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
     </div>
     <div class="govuk-grid-column-full card-full">
       @if(isSoleTrader && model.fullName.nonEmpty) {
-        @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get)
+        @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get, "full-name")
       }
       @if(!isSoleTrader) {
-        @fieldRow(messages("vatCertificate.aboutTheBusiness.businessName"), model.businessName.getOrElse(messages("common.notProvided")))
+        @fieldRow(
+          messages("vatCertificate.aboutTheBusiness.businessName"),
+          model.businessName.getOrElse(messages("common.notProvided")),
+          "business-name"
+        )
       }
       @if(isSoleTrader) {
         @if(model.tradingName.nonEmpty) {
-          @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.get)
+          @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.get, "trading-name")
         }
       } else {
-        @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.getOrElse(messages("common.notProvided")))
+        @fieldRow(
+          messages("vatCertificate.aboutTheBusiness.tradingName"),
+          model.tradingName.getOrElse(messages("common.notProvided")),
+          "trading-name"
+        )
       }
-      @fieldRow(messages("vatCertificate.aboutTheBusiness.businessType"), messages(model.businessTypeMsgKey))
-      @fieldRow(messages("vatCertificate.aboutTheBusiness.tradeClassification"), model.tradeClassification)
-      @fieldRow(messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"), fullAddress(model.ppob))
+      @fieldRow(
+        messages("vatCertificate.aboutTheBusiness.businessType"),
+        messages(model.businessTypeMsgKey),
+        "business-type")
+      @fieldRow(
+        messages("vatCertificate.aboutTheBusiness.tradeClassification"),
+        model.tradeClassification,
+        "trade-classification"
+      )
+      @fieldRow(
+        messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"),
+        fullAddress(model.ppob),
+        "ppob"
+      )
     </div>
   </div>
 

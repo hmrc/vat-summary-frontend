@@ -16,9 +16,9 @@
 
 package models.payments
 
-import play.api.Logger
 import play.api.libs.json.Reads._
 import play.api.libs.json._
+import utils.LoggerUtil
 
 sealed trait ChargeType {
   val value: String
@@ -28,6 +28,10 @@ sealed trait ChargeType {
   def toPathElement: String = {
     value.map(_.toLower).replace(' ', '-')
   }
+}
+
+case object VatUnrepayableOverpayment extends ChargeType {
+  override val value: String = "VAT Unrepayable Overpayment"
 }
 
 case object VatRepaymentSupplementRecovery extends ChargeType {
@@ -195,9 +199,8 @@ case object UnallocatedPayment extends ChargeType {
 case object Refund extends ChargeType {
   override val value: String = "Refund"
 }
-object ChargeType {
 
-  val logger = Logger(getClass.getSimpleName)
+object ChargeType extends LoggerUtil {
 
   val positiveOrNegativeChargeTypes: Set[ChargeType] = Set(
     VatDefaultInterest,
@@ -205,6 +208,7 @@ object ChargeType {
   )
 
   val allChargeTypes: Set[ChargeType] = Set(
+    VatUnrepayableOverpayment,
     VatRepaymentSupplementRecovery,
     VatIndirectTaxRevenueRecovery,
     ReturnDebitCharge,

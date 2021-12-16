@@ -53,20 +53,20 @@ object CustomerInformation {
   implicit val customerInformationReads: Reads[CustomerInformation] = (
     (__ \ "customerDetails").read[CustomerDetails] and
     (__ \ "ppob").read[Address] and
-    (__ \ "ppob" \ "contactDetails").readNullable[Email].orElse(Reads.pure(None)) and
+    (__ \ "ppob" \ "contactDetails").readNullable[Email] and
     (__ \\ "isPartialMigration").readNullable[Boolean].map(_.contains(true)) and
-    (__ \\ "customerMigratedToETMPDate").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \\ "hybridToFullMigrationDate").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "partyType").readNullable[String].orElse(Reads.pure(None)) and
+    (__ \\ "customerMigratedToETMPDate").readNullable[String] and
+    (__ \\ "hybridToFullMigrationDate").readNullable[String] and
+    (__ \ "partyType").readNullable[String] and
     (__ \ "primaryMainCode").readNullable[String] and
-    (__ \\ "stdReturnPeriod").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]].orElse(Reads.pure(None)) and
-    (__ \\ "firstNonNSTPPeriod").readNullable[TaxPeriod].orElse(Reads.pure(None)) and
-    (__ \ "pendingChanges" \ "mandationStatus").readNullable[String].orElse(Reads.pure(None)) and
-    (__ \ "deregistration").readNullable[Deregistration].orElse(Reads.pure(None)) and
-    (__ \ "changeIndicators").readNullable[ChangeIndicators].orElse(Reads.pure(None)) and
+    (__ \\ "stdReturnPeriod").readNullable[String] and
+    (__ \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]] and
+    (__ \\ "firstNonNSTPPeriod").readNullable[TaxPeriod] and
+    (__ \ "pendingChanges" \ "mandationStatus").readNullable[String] and
+    (__ \ "deregistration").readNullable[Deregistration] and
+    (__ \ "changeIndicators").readNullable[ChangeIndicators] and
     (__ \ "missingTrader").read[Boolean] and
-    (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].orElse(Reads.pure(None)).map(_.contains(true)) and
+    (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].map(_.contains(true)) and
     (__ \ "mandationStatus").read[String]
   )(CustomerInformation.apply _)
 }

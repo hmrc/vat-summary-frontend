@@ -38,6 +38,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   val testNonReturnChargeType: String = "VAT Default Interest"
   val testDueDate: String = "2018-08-08"
   val testChargeReference: String = "XD002750002155"
+  val testNoChargeReference: String = "noCR"
   val testVatPeriodEnding: String = "2018-08-08"
   val redirectUrl = "google.com"
   val expectedRedirectLocation: Option[String] = Some(redirectUrl)
@@ -65,6 +66,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   )
 
   "Calling the makePayment action" when {
+
     "the user is logged in" should {
 
       lazy val result = {
@@ -76,7 +78,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
           testMonth,
           testYear,
           testVatPeriodEnding,
-          testChargeType,
+          testNonReturnChargeType,
           testDueDate,
           testChargeReference)(fakeRequestWithSession)
       }
@@ -88,6 +90,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         redirectLocation(result) shouldBe expectedRedirectLocation
       }
     }
+
     "the user is not logged in" should {
 
       lazy val result = {
@@ -109,6 +112,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
+
     "the user is not authenticated" should {
 
       lazy val result = {
@@ -127,6 +131,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
     "the user is insolvent and not continuing to trade" should {
 
       lazy val result = {
@@ -145,6 +150,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
     "the user makes an error during set up of payment" should {
 
       lazy val result = {
@@ -187,26 +193,72 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     }
   }
   "Calling in the makePaymentNoPeriod action" when {
-    "the user is logged in" should {
 
-      lazy val result = {
-        mockPrincipalAuth()
-        mockAudit()
-        mockPaymentInfo(serviceResponse)
-        controller.makePaymentNoPeriod(
-          testAmountInPence,
-          testNonReturnChargeType,
-          testDueDate,
-          testChargeReference)(fakeRequestWithSession)
+    "the user is logged in" when {
+
+      "the charge is not a return and the charge reference is not noCR" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockAudit()
+          mockPaymentInfo(serviceResponse)
+          controller.makePaymentNoPeriod(
+            testAmountInPence,
+            testNonReturnChargeType,
+            testDueDate,
+            testChargeReference)(fakeRequestWithSession)
+        }
+
+        "return a 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+        "return the expected redirect location" in {
+          redirectLocation(result) shouldBe expectedRedirectLocation
+        }
+
+      }
+      "the charge reference is noCR" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          controller.makePaymentNoPeriod(
+            testAmountInPence,
+            testNonReturnChargeType,
+            testDueDate,
+            testNoChargeReference)(fakeRequestWithSession)
+        }
+
+        "return ISE (500)" in {
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "render the payments error page" in {
+          Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Manage your VAT account - GOV.UK"
+        }
+
       }
 
-      "return a 303" in {
-        status(result) shouldBe Status.SEE_OTHER
-      }
-      "return the expected redirect location" in {
-        redirectLocation(result) shouldBe expectedRedirectLocation
+      "the charge is a return with no period information" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          controller.makePaymentNoPeriod(
+            testAmountInPence,
+            testChargeType,
+            testDueDate,
+            testChargeReference)(fakeRequestWithSession)
+        }
+
+        "return ISE (500)" in {
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "render the payments error page" in {
+          Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Manage your VAT account - GOV.UK"
+        }
       }
     }
+
     "The user is not logged in" should {
       lazy val result = {
         mockMissingBearerToken()

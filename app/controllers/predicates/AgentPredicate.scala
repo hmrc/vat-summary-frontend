@@ -47,7 +47,7 @@ class AgentPredicate @Inject()(authService: EnrolmentsAuthService,
         .withIdentifier(EnrolmentKeys.mtdVatIdentifierKey, vrn)
         .withDelegatedAuthRule(EnrolmentKeys.agentDelegatedAuthRuleKey)
 
-    request.session.get(SessionKeys.agentSessionVrn) match {
+    request.session.get(SessionKeys.mtdVatvcClientVrn) match {
       case Some(vrn) =>
         authService
           .authorised(agentDelegatedAuthorityRule(vrn))

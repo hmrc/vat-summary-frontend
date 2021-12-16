@@ -702,5 +702,27 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
       }
     }
+
+    "there is a VAT Unrepayable Overpayment Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        VatUnrepayableOverpayment,
+        Some(LocalDate.parse("2018-03-02")),
+        Some(LocalDate.parse("2018-04-02")),
+        300,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryChargeDescription(model)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Overpayment"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "cannot be repaid after 4 years"
+      }
+    }
   }
 }

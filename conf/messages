@@ -179,6 +179,8 @@ deregPartial.vatGroup.title = Cancel VAT registration (opens in a new window or 
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
+chargeType.vatUnrepayableOverpaymentTitle = Overpayment
+chargeType.UnrepayableOverpaymentDescription = cannot be repaid after 4 years
 chargeType.repaymentSupplementRecTitle = Repayment supplement recovery
 chargeType.repaymentSupplementRecDescription = to recover the amount you were overpaid
 chargeType.indirectRevRecoveryTitle = Payment recovery
@@ -440,5 +442,8 @@ emailVerification.message.3 = to confirm it.
 
 penaltiesBanner.heading = Late submission and late payment penalties
 penaltiesBanner.totalPoints = Total penalty points: {0}
+penaltiesBanner.crystalisedPenalty = Penalty amount to pay: £{0}
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Estimated penalty amount: £{0}
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Estimated further penalty amount: £{0}
 penaltiesBanner.linkSingular = Find out why you have a penalty
 penaltiesBanner.linkPlural = Find out why you have penalties
