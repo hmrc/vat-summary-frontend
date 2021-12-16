@@ -140,10 +140,13 @@ paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â
 paymentsHistory.backToTop = Nôl i’r brig
 paymentsHistory.insolvencyNotice = Ni allwch fwrw golwg dros daliadau a wnaed cyn dyddiad yr ansolfedd.
 paymentsHistory.whatYouOwe = Cael gwybod a oes unrhyw beth arnoch i CThEM
+paymentsHistory.whatYouOweAgent = Cael gwybod a oes ar eich cleient unrhyw beth i CThEM
 paymentsHistory.date = Dyddiad
 paymentsHistory.description = Disgrifiad o’r taliad
 paymentsHistory.youPaid = Rydych chi wedi talu CThEM
 paymentsHistory.paidYou = Gwnaeth CThEM eich talu
+paymentsHistory.youPaidAgent = Talodd eich cleient CThEM
+paymentsHistory.paidYouAgent = Talodd CThEM eich cleient
 paymentsHistory.agentsHandoffMessage = Os na allwch weld holl hanes eich cleient, mae’n bosibl y gallwch weld rhagor o’r hanes drwy’ch cyfrif gwasanaethau ar-lein CThEM ar gyfer asiantau.  Bydd angen i chi fewngofnodi ar wahân.
 
 #VAT certificate
