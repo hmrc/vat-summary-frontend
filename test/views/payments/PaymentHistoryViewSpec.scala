@@ -254,7 +254,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       "have the link to check what you owe" which {
 
         "has the correct text" in {
-          elementText(Selectors.whatYouOweLink) shouldBe "Find out if you owe anything to HMRC"
+          elementText(Selectors.whatYouOweLink) shouldBe "Find out if your client owes anything to HMRC"
         }
 
         "has the correct href" in {
@@ -300,11 +300,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct heading in the third column" in {
-          elementText(Selectors.columnHeaading(3)) shouldBe "You paid HMRC"
+          elementText(Selectors.columnHeaading(3)) shouldBe "Your client paid HMRC"
         }
 
         "has the correct heading in the fourth column" in {
-          elementText(Selectors.columnHeaading(4)) shouldBe "HMRC paid you"
+          elementText(Selectors.columnHeaading(4)) shouldBe "HMRC paid your client"
         }
 
         "has the correct date in the first column" in {
