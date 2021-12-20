@@ -28,7 +28,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
   private def paymentMessageHelper(): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
 
   def description(): Option[String] = {
-    (payment, paymentMessageHelper().description) match {
+    (payment, paymentMessageHelper().principalUserDescription) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
         Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.periodFrom), Some(payment.periodTo)))
       case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
