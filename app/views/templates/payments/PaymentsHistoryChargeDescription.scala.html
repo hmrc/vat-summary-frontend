@@ -19,15 +19,14 @@
 
 @this()
 
-@(transaction: PaymentsHistoryModel)(implicit messages: Messages)
+@(transaction: PaymentsHistoryModel)(implicit messages: Messages, user: User)
 
 @chargeType = @{
   PaymentMessageHelper.getChargeType(transaction.chargeType.value)
 }
 
 <span class="govuk-!-font-weight-bold">@messages(s"${chargeType.title}")</span>
-@chargeType.description.map { description =>
-  <span class="govuk-hint">
-    @PaymentMessageHelper.getFullDescription(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
-  </span>
-}
+        <span class="govuk-hint">
+            @PaymentMessageHelper.getCorrectDescription(chargeType.principalUserDescription.getOrElse(""),
+            chargeType.agentDescription.getOrElse(""), transaction.taxPeriodFrom, transaction.taxPeriodTo)
+        </span>
