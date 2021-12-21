@@ -26,16 +26,7 @@
 }
 
 <span class="govuk-!-font-weight-bold">@messages(s"${chargeType.title}")</span>
-@if(user.isAgent) {
-    @chargeType.agentDescription.map { description =>
         <span class="govuk-hint">
-            @PaymentMessageHelper.getFullDescription(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
+            @PaymentMessageHelper.getCorrectDescription(chargeType.principalUserDescription.getOrElse(""),
+            chargeType.agentDescription.getOrElse(""), transaction.taxPeriodFrom, transaction.taxPeriodTo)
         </span>
-    }
-} else {
-    @chargeType.principalUserDescription.map { description =>
-        <span class="govuk-hint">
-            @PaymentMessageHelper.getFullDescription(description, transaction.taxPeriodFrom, transaction.taxPeriodTo)
-        </span>
-    }
-}

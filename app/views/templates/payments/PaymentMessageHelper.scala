@@ -16,8 +16,9 @@
 
 package views.templates.payments
 
-import java.time.LocalDate
+import models.User
 
+import java.time.LocalDate
 import models.payments._
 import play.api.i18n.Messages
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
@@ -476,6 +477,15 @@ object PaymentMessageHelper {
     (from, to) match {
       case (Some(fromDate), Some(toDate)) => messages(descriptionMessageKey, displayDateRange(fromDate, toDate, useShortDayFormat = true))
       case _ => messages(descriptionMessageKey)
+    }
+  }
+
+  def getCorrectDescription(principalMessageKey: String, agentMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
+                           (implicit messages: Messages, user: User): String = {
+    if(user.isAgent) {
+      getFullDescription(agentMessageKey, from, to)
+    } else {
+      getFullDescription(principalMessageKey, from, to)
     }
   }
 
