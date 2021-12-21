@@ -77,7 +77,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for the 12 Jan to 23 Mar 2018 return"
       }
     }
 
@@ -143,7 +143,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for the 12 Jan to 23 Mar 2018 return"
       }
     }
 
@@ -165,7 +165,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for late payment of your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for late payment of the 12 Jan to 23 Mar 2018 return"
       }
     }
 
@@ -187,7 +187,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for late payment of your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for late payment of the 12 Jan to 23 Mar 2018 return"
       }
     }
 
@@ -209,7 +209,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for correcting your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for correcting the 12 Jan to 23 Mar 2018 return"
       }
     }
 
@@ -231,7 +231,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for correcting your 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for correcting the 12 Jan to 23 Mar 2018 return"
       }
     }
 
