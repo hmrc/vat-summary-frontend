@@ -201,7 +201,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "render the correct make payment help text" in {
         elementText(Selectors.helpMakePayment) shouldBe
           "After you have submitted a return, it can take 24 hours for what you owe to show here. " +
-            "You can still make a payment (opens in a new tab) even if a payment is not shown."
+            "You can still make a payment (opens in a new tab)even if a payment is not shown."
       }
 
       "have the correct destination for the make a payment link" in {
