@@ -87,8 +87,7 @@
             @if(user.isAgent) {@messages("openPayments.incorrectAgent")} else {@messages("openPayments.incorrect")}
 
           <a class="govuk-link" href="https://www.gov.uk/vat-corrections" rel="noreferrer noopener" target="_blank">
-              @if(user.isAgent) {@messages("openPayments.correctErrorsAgent")} else {@messages("openPayments.correctErrors")}
-          </a>@messages("common.fullStop")
+              @if(user.isAgent) {@messages("openPayments.correctErrorsAgent")} else {@messages("openPayments.correctErrors")}</a>@messages("common.fullStop")
 
         </p>
         <p class="govuk-body">
@@ -99,8 +98,7 @@
                 <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl"
                    id="vatPaymentsLink" rel="noreferrer noopener" target="_blank">
                   @messages("payment.stillMakeLink")
-                  <span class="govuk-visually-hidden">@messages("payment.evenIfNotShown")</span>
-                </a>@messages("common.fullStop")
+                  <span class="govuk-visually-hidden">@messages("payment.evenIfNotShown")</span></a>@messages("common.fullStop")
           }
         </p>
       </div>

@@ -95,7 +95,6 @@ payment.nextPayment = Taliad nesaf yn ddyledus
 payment.nextPayments = Taliadau sy’n ddyledus
 payment.check = Gwirio’r hyn sydd arnoch
 payment.afterSubmitted = Ar ôl i chi gyflwyno Ffurflen TAW, gall gymryd 24 awr i’r hyn sydd arnoch gael ei ddangos yma.
-payment.afterSubmittedAgent = Os yw Ffurflen TAW wedi’i chyflwyno a bod angen i’ch cleient dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arno.
 payment.stillMake = Mae’n dal yn bosibl i chi
 payment.stillMakeLink = dalu (yn agor mewn tab newydd)
 payment.evenIfNotShown = hyd yn oed os na ddangosir taliad
