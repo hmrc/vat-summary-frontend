@@ -95,6 +95,7 @@ payment.nextPayment = Taliad nesaf yn ddyledus
 payment.nextPayments = Taliadau sy’n ddyledus
 payment.check = Gwirio’r hyn sydd arnoch
 payment.afterSubmitted = Ar ôl i chi gyflwyno Ffurflen TAW, gall gymryd 24 awr i’r hyn sydd arnoch gael ei ddangos yma.
+payment.afterSubmittedAgent = Os yw Ffurflen TAW wedi’i chyflwyno a bod angen i’ch cleient dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arno.
 payment.stillMake = Mae’n dal yn bosibl i chi
 payment.stillMakeLink = dalu (yn agor mewn tab newydd)
 payment.evenIfNotShown = hyd yn oed os na ddangosir taliad
@@ -102,20 +103,24 @@ payment.evenIfNotShown = hyd yn oed os na ddangosir taliad
 pastHistory.history = Hanes
 
 openPayments.title = Yr hyn sydd arnoch
-openPayments.heading = Yr hyn sydd arnoch
+openPayments.agentTitle = Yr hyn sydd ar eich cleient
 openPayments.makePayment = Talu nawr
 openPayments.dueBy = erbyn
 openPayments.viewReturnLink = Bwrw golwg dros y Ffurflen TAW
 openPayments.processingTime = Gall taliadau gymryd hyd at 5 diwrnod i’w prosesu.
 openPayments.incorrect = Os yw’r hyn sydd arnoch yn anghywir, dylech wirio a allwch
+openPayments.incorrectAgent = Os yw’r swm sy’n ddyledus yn anghywir, gwiriwch a oes modd i chi
 openPayments.correctErrors = gywiro gwallau ar eich Ffurflen TAW (yn agor mewn tab newydd)
+openPayments.correctErrorsAgent = gywiro gwallau ar Ffurflen TAW eich cleient (yn agor tab newydd)
 openPayments.whatOweHelp.heading = Mae’r hyn sydd arnaf yn anghywir neu ar goll
+openPayments.whatOweHelp.headingAgent = Mae’r swm sy’n ddyledus yn anghywir neu ar goll
 openPayments.vatReturn = ar gyfer y cyfnod {0}
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
-noPayments.heading = Yr hyn sydd arnoch
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
+noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
+noPayments.twentyFourHoursAgent = Os yw Ffurflen TAW wedi’i chyflwyno a bod angen i’ch cleient dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arno.
 
 paymentsError.title = Mae problem gyda’r gwasanaeth
 paymentsError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth.

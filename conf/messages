@@ -76,20 +76,24 @@ payment.evenIfNotShown = even if a payment is not shown
 pastHistory.history = History
 
 openPayments.title = What you owe
-openPayments.heading = What you owe
+openPayments.agentTitle = What your client owes
 openPayments.makePayment = Pay now
 openPayments.dueBy = due by
 openPayments.viewReturnLink = View return
 openPayments.processingTime = Payments can take up to 5 days to process.
 openPayments.incorrect = If what you owe is incorrect, check if you can
+openPayments.incorrectAgent = If the amount owed is incorrect, check if you can
 openPayments.correctErrors = correct errors on your VAT Return (opens in a new tab)
+openPayments.correctErrorsAgent = correct errors on your client’s VAT return (opens in a new tab)
 openPayments.whatOweHelp.heading = What I owe is incorrect or missing
+openPayments.whatOweHelp.headingAgent = The amount owed is incorrect or missing
 openPayments.vatReturn = for the period {0}
 openPayments.errorCorrectionReturnContext = that you corrected for the period {0}
 
-noPayments.heading = What you owe
 noPayments.oweNothing = You do not owe anything right now.
+noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
+noPayments.twentyFourHoursAgent = If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe.
 
 paymentsError.title = There is a problem with the service
 paymentsError.heading = Sorry, there is a problem with the service
