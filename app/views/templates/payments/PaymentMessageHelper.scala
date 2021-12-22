@@ -39,7 +39,7 @@ object PaymentMessageHelper {
     VatRepaymentSupplementRecovery.value,
     "chargeType.repaymentSupplementRecTitle",
     Some("chargeType.repaymentSupplementRecDescription"),
-    Some("chargeType.repaymentSupplementRecDescription"),
+    Some("chargeType.repaymentSupplementRecDescription")
   )
 
   object IndirectTaxRevenueRecovery extends PaymentMessageHelper(
@@ -53,7 +53,7 @@ object PaymentMessageHelper {
     VatDefaultInterest.value,
     "chargeType.defaultInterestTitle",
     Some("chargeType.defaultAndFurtherInterestDescription"),
-    Some("chargeType.defaultAndFurtherInterestDescription"),
+    Some("chargeType.defaultAndFurtherInterestDescription")
   )
 
   object FurtherInterest extends PaymentMessageHelper(
