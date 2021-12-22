@@ -52,7 +52,7 @@
 }
 
 @mainTemplate(
-  title = messages("openPayments.title"),
+  title = if(user.isAgent) messages("openPayments.agentTitle") else messages("openPayments.title"),
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
@@ -64,7 +64,9 @@
       @clientName.map { name =>
         <span class="govuk-caption-xl">@name</span>
       }
-      <h1 class="govuk-heading-xl">@messages("openPayments.heading")</h1>
+      <h1 class="govuk-heading-xl">
+        @if(user.isAgent) {@messages("openPayments.agentTitle")} else {@messages("openPayments.title")}
+      </h1>
 
       <div class="payments">
         <div class="section">
@@ -77,20 +79,26 @@
           <p class="govuk-body">@messages("openPayments.processingTime")</p>
         </div>
 
-        <h2 class="govuk-heading-s" id="what-you-owe-missing">@messages("openPayments.whatOweHelp.heading")</h2>
-        <p class="govuk-body">@messages("openPayments.incorrect")
+        <h2 class="govuk-heading-s" id="what-you-owe-missing">
+            @if(user.isAgent) {@messages("openPayments.whatOweHelp.headingAgent")} else {@messages("openPayments.whatOweHelp.heading")}
+        </h2>
+
+        <p class="govuk-body">
+            @if(user.isAgent) {@messages("openPayments.incorrectAgent")} else {@messages("openPayments.incorrect")}
+
           <a class="govuk-link" href="https://www.gov.uk/vat-corrections" rel="noreferrer noopener" target="_blank">
-            @messages("openPayments.correctErrors")</a>.
+              @if(user.isAgent) {@messages("openPayments.correctErrorsAgent")} else {@messages("openPayments.correctErrors")}</a>@messages("common.fullStop")
+
         </p>
         <p class="govuk-body">
-          @messages("payment.afterSubmitted")
-          @if(!user.isAgent) {
-            @messages("payment.stillMake")
-            <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl"
-               id="vatPaymentsLink" rel="noreferrer noopener" target="_blank">
-              @messages("payment.stillMakeLink")
-              <span class="govuk-visually-hidden">@messages("payment.evenIfNotShown")</span></a>.
-          }
+            @if(user.isAgent) {@messages("noPayments.twentyFourHoursAgent")} else {@messages("payment.afterSubmitted")}
+
+              @if(!user.isAgent) {
+                @messages("payment.stillMake")
+                <a class="govuk-link" href="@appConfig.unauthenticatedPaymentsUrl"
+                   id="vatPaymentsLink" rel="noreferrer noopener" target="_blank">
+                  @messages("payment.stillMakeLink")<span class="govuk-visually-hidden">@messages("payment.evenIfNotShown")</span></a>@messages("common.fullStop")
+              }
         </p>
       </div>
     </div>

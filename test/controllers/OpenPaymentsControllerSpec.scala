@@ -188,7 +188,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         "return the payments view" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.select("h1").first().text() shouldBe "What you owe"
+          document.select("h1").first().text() shouldBe "What your client owes"
         }
       }
 

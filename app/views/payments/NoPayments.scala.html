@@ -47,7 +47,7 @@
 }
 
 @mainTemplate(
-  title = messages("openPayments.title"),
+  title = if(user.isAgent) messages("openPayments.agentTitle") else messages("openPayments.title"),
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
@@ -58,17 +58,21 @@
       @clientName.map { name =>
         <span class="govuk-caption-xl">@name</span>
       }
-      <h1 class="govuk-heading-xl">@messages("noPayments.heading")</h1>
+      <h1 class="govuk-heading-xl">
+          @if(user.isAgent) {@messages("openPayments.agentTitle")} else {@messages("openPayments.title")}
+      </h1>
 
       <div class="govuk-form-group" id="noPaymentsDetail">
-        <h2 class="govuk-body-l">@messages("noPayments.oweNothing")</h2>
+        <h2 class="govuk-body-l">
+            @if(user.isAgent) {@messages("noPayments.oweNothingAgent")} else {@messages("noPayments.oweNothing")}
+        </h2>
         <p class="govuk-body">
-          @messages("noPayments.twentyFourHours")
-          @if(!user.isAgent) {
-            @messages("payment.stillMake")
-            <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
-            @messages("payment.stillMakeLink")</a>.
-          }
+            @if(user.isAgent) {@messages("noPayments.twentyFourHoursAgent")} else {@messages("noPayments.twentyFourHours")}
+              @if(!user.isAgent) {
+                @messages("payment.stillMake")
+                <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
+                @messages("payment.stillMakeLink")</a>@messages("common.fullStop")
+              }
         </p>
       </div>
     </div>

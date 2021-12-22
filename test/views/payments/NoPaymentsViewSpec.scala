@@ -113,11 +113,11 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "What you owe - Your client’s VAT details - GOV.UK"
+      document.title shouldBe "What your client owes - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "What you owe"
+      elementText(Selectors.pageHeading) shouldBe "What your client owes"
     }
 
     "have the client name caption" in {
@@ -125,12 +125,12 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct secondary heading" in {
-      elementText(Selectors.secondaryHeading) shouldBe "You do not owe anything right now."
+      elementText(Selectors.secondaryHeading) shouldBe "Your client does not owe anything right now."
     }
 
     "have the correct context information" in {
       elementText(Selectors.noPaymentsDetail) shouldBe
-        "If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe."
+        "If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe."
     }
 
     "render a Back link which" should {

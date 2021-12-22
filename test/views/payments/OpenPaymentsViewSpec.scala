@@ -201,7 +201,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "render the correct make payment help text" in {
         elementText(Selectors.helpMakePayment) shouldBe
           "After you have submitted a return, it can take 24 hours for what you owe to show here. " +
-            "You can still make a payment (opens in a new tab) even if a payment is not shown."
+            "You can still make a payment (opens in a new tab)even if a payment is not shown."
       }
 
       "have the correct destination for the make a payment link" in {
@@ -261,11 +261,11 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "What you owe - Your client’s VAT details - GOV.UK"
+      document.title shouldBe "What your client owes - Your client’s VAT details - GOV.UK"
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "What you owe"
+      elementText(Selectors.pageHeading) shouldBe "What your client owes"
     }
 
     "have the client name caption" in {
@@ -331,17 +331,17 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct heading for what I owe is incorrect or missing" in {
-      elementText(Selectors.whatOweMissing) shouldBe "What I owe is incorrect or missing"
+      elementText(Selectors.whatOweMissing) shouldBe "The amount owed is incorrect or missing"
     }
 
     "render the correct help text" in {
       elementText(Selectors.helpText) shouldBe
-        "If what you owe is incorrect, check if you can correct errors on your VAT Return (opens in a new tab)."
+        "If the amount owed is incorrect, check if you can correct errors on your client’s VAT return (opens in a new tab)."
     }
 
     "render the correct make payment help text" in {
       elementText(Selectors.helpMakePayment) shouldBe
-        "After you have submitted a return, it can take 24 hours for what you owe to show here."
+        "If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe."
     }
   }
 }
