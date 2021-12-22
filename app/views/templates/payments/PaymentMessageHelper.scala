@@ -39,7 +39,7 @@ object PaymentMessageHelper {
     VatRepaymentSupplementRecovery.value,
     "chargeType.repaymentSupplementRecTitle",
     Some("chargeType.repaymentSupplementRecDescription"),
-    Some("chargeType.repaymentSupplementRecDescription"),
+    Some("chargeType.repaymentSupplementRecDescription")
   )
 
   object IndirectTaxRevenueRecovery extends PaymentMessageHelper(
