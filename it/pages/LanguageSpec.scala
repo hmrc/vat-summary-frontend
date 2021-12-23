@@ -28,12 +28,13 @@ class LanguageSpec extends IntegrationBaseSpec {
 
   private trait Test {
     def request(): WSRequest = {
+      AuthStub.authorised()
       CustomerInfoStub.stubCustomerInfo(customerInfoJson(
         isPartialMigration = false,
         hasVerifiedEmail = true)
       )
-      AuthStub.authorised()
-      buildRequest("/accessibility-statement")
+      ServiceInfoStub.stubServiceInfoPartial
+      buildRequest("/vat-certificate")
     }
   }
 
@@ -49,7 +50,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Manage your VAT account - GOV.UK"
+          document.title() shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -61,7 +62,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
           lazy val document: Document = Jsoup.parse(response.body)
 
-          document.title() shouldBe "Datganiad hygyrchedd ar gyfer Troi Treth yn Ddigidol ar gyfer TAW - Rheoli eich cyfrif TAW - GOV.UK"
+          document.title() shouldBe "Eich tystysgrif TAW - Rheoli eich cyfrif TAW - GOV.UK"
         }
       }
     }
@@ -74,7 +75,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         lazy val document: Document = Jsoup.parse(response.body)
 
-        document.title() shouldBe "Accessibility statement for Making Tax Digital for VAT - Manage your VAT account - GOV.UK"
+        document.title() shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
       }
     }
   }
