@@ -27,7 +27,6 @@ class MainTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageTitle = ".hmrc-header__service-name"
-    val accessibilityStatementUrl = ".govuk-footer__inline-list-item:nth-child(2) > a"
     val phaseTag = ".govuk-phase-banner__content__tag"
     val phaseText = ".govuk-phase-banner__text"
     val phaseLink = ".beta-banner-feedback"
