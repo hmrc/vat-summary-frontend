@@ -123,8 +123,6 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
   headBlock = Some(head),
   headerBlock = header,
   beforeContentBlock = Some(beforeContentHtml),
-  footerBlock = hmrcStandardFooter(
-    accessibilityStatementUrl = Some(controllers.routes.AccessibilityStatementController.show().url)
-  ),
+  footerBlock = hmrcStandardFooter(),
   bodyEndBlock = Some(scripts)
 )(content)
