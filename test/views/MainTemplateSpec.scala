@@ -88,15 +88,5 @@ class MainTemplateSpec extends ViewBaseSpec {
         element(".hmrc-header__service-name").attr("href") shouldBe ""
       }
     }
-
-    "the accessibility statement link has been provided in the footer links" should {
-
-      lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct accessibility statement link" in {
-        element(Selectors.accessibilityStatementUrl).attr("href") shouldBe "/vat-through-software/accessibility-statement"
-      }
-    }
   }
 }
