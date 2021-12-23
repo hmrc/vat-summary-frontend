@@ -73,7 +73,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val agentClientLookupStartUrl: String => String = uri => s"agent-client-lookup-start-url/$uri"
   override val agentClientUnauthorisedUrl: String => String = uri => s"agent-client-unauthorised-url/$uri"
   override val agentServicesGovUkGuidance: String = "guidance/get-an-hmrc-agent-services-account"
-  override val govUkAccessibilityUrl: String = "/a11y"
   override val govUkHMRCUrl: String = "/hmrc"
   override val govUkHearingImpairedUrl: String = "/hearing-impaired"
   override val govUkVatRegistrationUrl: String = "/register-for-vat"

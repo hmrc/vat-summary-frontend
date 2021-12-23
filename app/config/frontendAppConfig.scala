@@ -73,7 +73,6 @@ trait AppConfig {
   val agentClientUnauthorisedUrl: String => String
   val agentClientLookupHubUrl: String
   val agentServicesGovUkGuidance: String
-  val govUkAccessibilityUrl: String
   val govUkHMRCUrl: String
   val govUkHearingImpairedUrl: String
   val govUkVatRegistrationUrl: String
@@ -210,7 +209,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val agentClientLookupHubUrl: String = agentClientLookupHost + sc.getString(Keys.vatAgentClientLookupFrontendHubUrl)
 
   override lazy val agentServicesGovUkGuidance: String = sc.getString(Keys.govUkSetupAgentServices)
-  override lazy val govUkAccessibilityUrl: String = sc.getString(Keys.govUkAccessibilityUrl)
   override lazy val govUkHMRCUrl: String = sc.getString(Keys.govUkHMRCUrl)
   override lazy val govUkHearingImpairedUrl: String = sc.getString(Keys.govUkHearingImpairedUrl)
   override lazy val govUkVatRegistrationUrl: String = sc.getString(Keys.govUkVatRegistrationUrl)

@@ -90,7 +90,6 @@ object ConfigKeys {
   val deregisterVatUrl: String = "deregister-vat-frontend.url"
 
   val govUkSetupAgentServices: String = "gov-uk.setupAgentServicesUrl"
-  val govUkAccessibilityUrl: String = "gov-uk.accessibilityUrl"
   val govUkHMRCUrl: String = "gov-uk.hmrcUrl"
   val govUkHearingImpairedUrl: String = "gov-uk.hearingImpairedUrl"
   val govUkVatRegistrationUrl: String = "gov-uk.vatRegistrationUrl"
