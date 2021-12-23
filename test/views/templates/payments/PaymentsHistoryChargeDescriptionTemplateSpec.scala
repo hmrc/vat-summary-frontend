@@ -456,7 +456,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "this is because you have submitted inaccurate information for" +
+          elementText(Selectors.description) shouldBe "because you have submitted inaccurate information for" +
             " the period 12 Sep to 13 Oct 2018"
         }
       }
@@ -523,7 +523,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "you made an overpayment, you can have this refunded or leave it on account"
+          elementText(Selectors.description) shouldBe "you made an overpayment which can be refunded to you or left on account"
         }
       }
 
@@ -1080,7 +1080,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "because you submitted an inaccurate document for the period 10 Sep to 11 Oct 2018"
+        elementText(Selectors.description) shouldBe "because your client submitted an inaccurate document for the period 10 Sep to 11 Oct 2018"
       }
     }
 
@@ -1102,7 +1102,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "because you have made an incorrect declaration"
+        elementText(Selectors.description) shouldBe "because your client has made an incorrect declaration"
       }
     }
 
@@ -1124,7 +1124,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "because you have repeatedly made incorrect declarations"
+        elementText(Selectors.description) shouldBe "because your client has repeatedly made incorrect declarations"
       }
     }
 
@@ -1146,7 +1146,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "this is because you have submitted inaccurate information for" +
+        elementText(Selectors.description) shouldBe "because your client submitted inaccurate information for" +
           " the period 12 Sep to 13 Oct 2018"
       }
     }
@@ -1169,7 +1169,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "because you charged VAT when you should not have done"
+        elementText(Selectors.description) shouldBe "because your client charged VAT when they should not have done"
       }
     }
 
@@ -1213,7 +1213,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "you made an overpayment, you can have this refunded or leave it on account"
+        elementText(Selectors.description) shouldBe "your client made an overpayment which can be refunded to them or left on account"
       }
     }
 
@@ -1235,7 +1235,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "as you requested a refund on an overpayment you made"
+        elementText(Selectors.description) shouldBe "as your client requested a refund on an overpayment they made"
       }
     }
 
