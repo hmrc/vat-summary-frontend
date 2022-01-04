@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ class MainTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageTitle = ".hmrc-header__service-name"
-    val accessibilityStatementUrl = ".govuk-footer__inline-list-item:nth-child(2) > a"
     val phaseTag = ".govuk-phase-banner__content__tag"
     val phaseText = ".govuk-phase-banner__text"
     val phaseLink = ".beta-banner-feedback"
@@ -86,16 +85,6 @@ class MainTemplateSpec extends ViewBaseSpec {
 
       "have the correct service URL" in {
         element(".hmrc-header__service-name").attr("href") shouldBe ""
-      }
-    }
-
-    "the accessibility statement link has been provided in the footer links" should {
-
-      lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct accessibility statement link" in {
-        element(Selectors.accessibilityStatementUrl).attr("href") shouldBe "/vat-through-software/accessibility-statement"
       }
     }
   }
