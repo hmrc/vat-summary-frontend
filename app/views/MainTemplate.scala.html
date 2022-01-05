@@ -1,5 +1,5 @@
 @*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,8 +123,6 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
   headBlock = Some(head),
   headerBlock = header,
   beforeContentBlock = Some(beforeContentHtml),
-  footerBlock = hmrcStandardFooter(
-    accessibilityStatementUrl = Some(controllers.routes.AccessibilityStatementController.show().url)
-  ),
+  footerBlock = hmrcStandardFooter(),
   bodyEndBlock = Some(scripts)
 )(content)

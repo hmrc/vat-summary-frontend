@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,6 @@ object ConfigKeys {
   val deregisterVatUrl: String = "deregister-vat-frontend.url"
 
   val govUkSetupAgentServices: String = "gov-uk.setupAgentServicesUrl"
-  val govUkAccessibilityUrl: String = "gov-uk.accessibilityUrl"
   val govUkHMRCUrl: String = "gov-uk.hmrcUrl"
   val govUkHearingImpairedUrl: String = "gov-uk.hearingImpairedUrl"
   val govUkVatRegistrationUrl: String = "gov-uk.vatRegistrationUrl"
