@@ -145,28 +145,28 @@ object PaymentMessageHelper {
     BnpRegPre2010Charge.value,
     "chargeType.bnpRegPre2010ChargeTitle",
     Some("chargeType.bnpRegPre2010ChargeDescription"),
-    Some("chargeType.bnpRegPre2010ChargeDescription")
+    Some("chargeType.bnpRegPre2010ChargeDescription.agent")
   )
 
   object VatBnpRegPost2010Charge extends PaymentMessageHelper(
     BnpRegPost2010Charge.value,
     "chargeType.bnpRegPost2010ChargeTitle",
     Some("chargeType.bnpRegPost2010ChargeDescription"),
-    Some("chargeType.bnpRegPost2010ChargeDescription")
+    Some("chargeType.bnpRegPost2010ChargeDescription.agent")
   )
 
   object VatFtnMatPre2010Charge extends PaymentMessageHelper(
     FtnMatPre2010Charge.value,
     "chargeType.ftnMatPre2010ChargeTitle",
     Some("chargeType.ftnMatPre2010ChargeDescription"),
-    Some("chargeType.ftnMatPre2010ChargeDescription")
+    Some("chargeType.ftnMatPre2010ChargeDescription.agent")
   )
 
   object VatFtnMatPost2010Charge extends PaymentMessageHelper(
     FtnMatPost2010Charge.value,
     "chargeType.ftnMatPost2010ChargeTitle",
     Some("chargeType.ftnMatPost2010ChargeDescription"),
-    Some("chargeType.ftnMatPost2010ChargeDescription")
+    Some("chargeType.ftnMatPost2010ChargeDescription.agent")
   )
 
   object VatMiscPenaltyCharge extends PaymentMessageHelper(
@@ -243,7 +243,7 @@ object PaymentMessageHelper {
     VatSecurityDepositRequestCharge.value,
     "chargeType.vatSecurityDepositRequestTitle",
     Some("chargeType.vatSecurityDepositRequestDescription"),
-    Some("chargeType.vatSecurityDepositRequestDescription")
+    Some("chargeType.vatSecurityDepositRequestDescription.agent")
   )
 
   object VatEcNoticeFurtherInterest extends PaymentMessageHelper(
@@ -271,63 +271,63 @@ object PaymentMessageHelper {
     VatInaccuraciesInECSalesCharge.value,
     "chargeType.vatInaccuraciesInECSalesTitle",
     Some("chargeType.vatInaccuraciesInECSalesDescription"),
-    Some("chargeType.vatInaccuraciesInECSalesDescription")
+    Some("chargeType.vatInaccuraciesInECSalesDescription.agent")
   )
 
   object VatFailureToSubmitECSales extends PaymentMessageHelper(
     VatFailureToSubmitECSalesCharge.value,
     "chargeType.vatFailureToSubmitECSalesTitle",
     Some("chargeType.vatFailureToSubmitECSalesDescription"),
-    Some("chargeType.vatFailureToSubmitECSalesDescription")
+    Some("chargeType.vatFailureToSubmitECSalesDescription.agent")
   )
 
   object FtnEachPartner extends PaymentMessageHelper(
     FtnEachPartnerCharge.value,
     "chargeType.ftnEachPartnerTitle",
     Some("chargeType.ftnEachPartnerDescription"),
-    Some("chargeType.ftnEachPartnerDescription")
+    Some("chargeType.ftnEachPartnerDescription.agent")
   )
 
   object VatOAInaccuracies2009 extends PaymentMessageHelper(
     VatOAInaccuraciesFrom2009.value,
     "chargeType.vatOAInaccuraciesFrom2009Title",
     Some("chargeType.vatOAInaccuraciesFrom2009Description"),
-    Some("chargeType.vatOAInaccuraciesFrom2009Description")
+    Some("chargeType.vatOAInaccuraciesFrom2009Description.agent")
   )
 
   object VatInaccuracyAssessmentsPenCharge extends PaymentMessageHelper(
     InaccuraciesAssessmentsPenCharge.value,
     "chargeType.vatInaccuracyAssessmentsPenChargeTitle",
     Some("chargeType.vatInaccuracyAssessmentsPenChargeDescription"),
-    Some("chargeType.vatInaccuracyAssessmentsPenChargeDescription")
+    Some("chargeType.vatInaccuracyAssessmentsPenChargeDescription.agent")
   )
 
   object VatMpPre2009Charge extends PaymentMessageHelper(
     MpPre2009Charge.value,
     "chargeType.vatMpPre2009ChargeTitle",
     Some("chargeType.vatMpPre2009ChargeDescription"),
-    Some("chargeType.vatMpPre2009ChargeDescription")
+    Some("chargeType.vatMpPre2009ChargeDescription.agent")
   )
 
   object VatMpRepeatedPre2009Charge extends PaymentMessageHelper(
     MpRepeatedPre2009Charge.value,
     "chargeType.vatMpRepeatedPre2009ChargeTitle",
     Some("chargeType.vatMpRepeatedPre2009ChargeDescription"),
-    Some("chargeType.vatMpRepeatedPre2009ChargeDescription")
+    Some("chargeType.vatMpRepeatedPre2009ChargeDescription.agent")
   )
 
   object VatInaccuraciesReturnReplacedCharge extends PaymentMessageHelper(
     InaccuraciesReturnReplacedCharge.value,
     "chargeType.vatInaccuraciesReturnReplacedChargeTitle",
     Some("chargeType.vatInaccuraciesReturnReplacedChargeDescription"),
-    Some("chargeType.vatInaccuraciesReturnReplacedChargeDescription")
+    Some("chargeType.vatInaccuraciesReturnReplacedChargeDescription.agent")
   )
 
   object VatWrongDoingPenaltyCharge extends PaymentMessageHelper(
     WrongDoingPenaltyCharge.value,
     "chargeType.vatWrongDoingPenaltyChargeTitle",
     Some("chargeType.vatWrongDoingPenaltyChargeDescription"),
-    Some("chargeType.vatWrongDoingPenaltyChargeDescription")
+    Some("chargeType.vatWrongDoingPenaltyChargeDescription.agent")
   )
 
   object VatECDefaultInterest extends PaymentMessageHelper(
@@ -348,21 +348,21 @@ object PaymentMessageHelper {
     CarterPenaltyCharge.value,
     "chargeType.vatCarterPenaltyChargeTitle",
     Some("chargeType.vatCarterPenaltyChargeDescription"),
-    Some("chargeType.vatCarterPenaltyChargeDescription")
+    Some("chargeType.vatCarterPenaltyChargeDescription.agent")
   )
 
   object VatFailureToNotifyRCSL extends PaymentMessageHelper(
     FailureToNotifyRCSLCharge.value,
     "chargeType.vatFailureToNotifyRCSLTitle",
     Some("chargeType.vatFailureToNotifyRCSLDescription"),
-    Some("chargeType.vatFailureToNotifyRCSLDescription")
+    Some("chargeType.vatFailureToNotifyRCSLDescription.agent")
   )
 
   object VatFailureToSubmitRCSL extends PaymentMessageHelper(
     FailureToSubmitRCSLCharge.value,
     "chargeType.vatFailureToSubmitRCSLTitle",
     Some("chargeType.vatFailureToSubmitRCSLDescription"),
-    Some("chargeType.vatFailureToSubmitRCSLDescription")
+    Some("chargeType.vatFailureToSubmitRCSLDescription.agent")
   )
 
   object VatCreditReturnOffsetCharge extends PaymentMessageHelper(
@@ -383,14 +383,14 @@ object PaymentMessageHelper {
     UnallocatedPayment.value,
     "chargeType.unallocatedPaymentTitle",
     Some("chargeType.unallocatedPaymentDescription"),
-    Some("chargeType.unallocatedPaymentDescription")
+    Some("chargeType.unallocatedPaymentDescription.agent")
   )
 
   object RefundsCharge extends PaymentMessageHelper(
     Refund.value,
     "chargeType.refundTitle",
     Some("chargeType.refundDescription"),
-    Some("chargeType.refundDescription")
+    Some("chargeType.refundDescription.agent")
   )
 
   object VATPOAInstalmentCharge extends PaymentMessageHelper(
