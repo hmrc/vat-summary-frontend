@@ -44,7 +44,7 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".hmrc-header__service-name").attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        element(".hmrc-header__service-name").attr("href") shouldBe controllers.routes.VatDetailsController.details.url
       }
 
       "have a phase banner" which {

@@ -86,7 +86,7 @@ class DDInterruptController @Inject()(paymentsService: PaymentsService,
 
   def directDebitInterruptCall(redirectUrl: String): Action[AnyContent] = authorisedController.authorisedAction {
     implicit request => implicit user =>
-     val cleanRedirectUrl = extractRedirectUrl(redirectUrl).getOrElse(controllers.routes.VatDetailsController.details().url)
+     val cleanRedirectUrl = extractRedirectUrl(redirectUrl).getOrElse(controllers.routes.VatDetailsController.details.url)
        if (appConfig.features.directDebitInterrupt()) {
         accountDetailsService.getAccountDetails(user.vrn).flatMap {
           case Right(details) if migratedWithin4M(details) =>

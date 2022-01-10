@@ -99,7 +99,7 @@ class DDInterruptExistingDDSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element(Selectors.continueButton).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+          element(Selectors.continueButton).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
         }
       }
 

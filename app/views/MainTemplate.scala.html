@@ -42,7 +42,7 @@
 }
 
 @titleServiceUrl = @{
-user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLookupHubUrl) else Some(controllers.routes.VatDetailsController.details().url))
+user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLookupHubUrl) else Some(controllers.routes.VatDetailsController.details.url))
 }
 
 @scripts = {
@@ -97,7 +97,7 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
     @hmrcTimeoutDialog(TimeoutDialog(
       timeout = Some(appConfig.timeoutPeriod),
       countdown = Some(appConfig.timeoutCountdown),
-      signOutUrl = Some(routes.SignOutController.timeout().url),
+      signOutUrl = Some(routes.SignOutController.timeout.url),
       keepAliveUrl = Some("#"),
       signOutButtonText = Some(messages("base.signOut"))
     ))

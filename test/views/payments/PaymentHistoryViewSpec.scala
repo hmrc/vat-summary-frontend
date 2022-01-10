@@ -105,7 +105,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments().url
+          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments.url
         }
       }
 
@@ -123,8 +123,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
         }
 
-        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        s"link to ${controllers.routes.VatDetailsController.details.url}" in {
+          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
         }
 
         "have the text 'Payment history'" in {
@@ -258,7 +258,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments().url
+          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments.url
         }
       }
 

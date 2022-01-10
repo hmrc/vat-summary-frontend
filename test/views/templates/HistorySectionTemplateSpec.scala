@@ -47,7 +47,7 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
       }
 
       "have a link to the payment history" in {
-        element(Selectors.viewPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory().url
+        element(Selectors.viewPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory.url
       }
 
       "have the past returns text" in {

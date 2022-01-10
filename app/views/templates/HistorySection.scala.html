@@ -30,13 +30,13 @@
         @if(isHybridUser) {
           <p class="govuk-body">
             @openInNewTab(
-              controllers.routes.PortalController.hybridPH().url,
+              controllers.routes.PortalController.hybridPH.url,
               messages("vatDetails.viewPastPayments.link")
             )
           </p>
         } else {
           <p class="govuk-body">
-            <a class="govuk-link" href="@controllers.routes.PaymentHistoryController.paymentHistory()">
+            <a class="govuk-link" href="@controllers.routes.PaymentHistoryController.paymentHistory">
                @messages("vatDetails.viewPastPayments.link")
             </a>
           </p>

@@ -24,19 +24,19 @@ class RouteSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with Matchers  
 
   "The route for the VAT details controller" should {
     "be /vat-through-software/vat-overview" in {
-      controllers.routes.VatDetailsController.details().url shouldBe "/vat-through-software/vat-overview"
+      controllers.routes.VatDetailsController.details.url shouldBe "/vat-through-software/vat-overview"
     }
   }
 
   "The route for the Open payments controller" should {
     "be /vat-through-software/what-you-owe" in {
-      controllers.routes.OpenPaymentsController.openPayments().url shouldBe "/vat-through-software/what-you-owe"
+      controllers.routes.OpenPaymentsController.openPayments.url shouldBe "/vat-through-software/what-you-owe"
     }
   }
 
   "The route for the Payment History controller" should {
     "be /vat-through-software/payment-history/{year}" in {
-      controllers.routes.PaymentHistoryController.paymentHistory().url shouldBe "/vat-through-software/payment-history"
+      controllers.routes.PaymentHistoryController.paymentHistory.url shouldBe "/vat-through-software/payment-history"
     }
   }
 }

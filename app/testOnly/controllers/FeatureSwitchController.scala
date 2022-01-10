@@ -43,7 +43,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
 
   def submitFeatureSwitch: Action[AnyContent] = Action { implicit request =>
     FeatureSwitchForm.form.bindFromRequest().fold(
-      _ => Redirect(routes.FeatureSwitchController.featureSwitch()),
+      _ => Redirect(routes.FeatureSwitchController.featureSwitch),
       success = handleSuccess
     )
   }
@@ -53,6 +53,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
-    Redirect(routes.FeatureSwitchController.featureSwitch())
+    Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

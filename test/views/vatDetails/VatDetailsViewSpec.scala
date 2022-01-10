@@ -190,7 +190,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         }
 
         "have a link to the payment history" in {
-          element(Selectors.historyPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory().url
+          element(Selectors.historyPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory.url
         }
 
         "have the past returns text" in {

@@ -36,7 +36,7 @@
 
     @if(isHybridUser) {
       <p class="govuk-body">
-        @openInNewTab(controllers.routes.PortalController.hybridWYO().url, messages("vatDetails.checkWhatYouOwe"))
+        @openInNewTab(controllers.routes.PortalController.hybridWYO.url, messages("vatDetails.checkWhatYouOwe"))
       </p>
     } else {
       <p class="govuk-body">
@@ -55,7 +55,7 @@
       </p>
 
       <p class="govuk-body">
-        <a class="govuk-link" href="@{controllers.routes.OpenPaymentsController.openPayments().url}">
+        <a class="govuk-link" href="@{controllers.routes.OpenPaymentsController.openPayments.url}">
           @messages("payment.check")
         </a>
       </p>
