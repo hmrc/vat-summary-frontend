@@ -184,7 +184,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
   private[controllers] def auditEvent(vrn: String, payments: Seq[PaymentsHistoryModel])
                                      (implicit hc: HeaderCarrier): Unit =
     auditingService.extendedAudit(ViewVatPaymentHistoryAuditModel(vrn, payments),
-      routes.PaymentHistoryController.paymentHistory().url)
+      routes.PaymentHistoryController.paymentHistory.url)
 
   private[controllers] def checkIfMigrationWithinLastThreeYears(migrationDate: Option[LocalDate]): Boolean = {
     migrationDate match {

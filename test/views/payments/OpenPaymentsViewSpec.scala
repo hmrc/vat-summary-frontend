@@ -123,8 +123,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
           elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
         }
 
-        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
-          element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
+        s"link to ${controllers.routes.VatDetailsController.details.url}" in {
+          element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
         }
 
         s"link to https://www.gov.uk/vat-corrections" in {

@@ -58,7 +58,7 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
     }
 
     "redirect the user to the feature switch page" in {
-      redirectLocation(result) shouldBe Some(routes.FeatureSwitchController.featureSwitch().url)
+      redirectLocation(result) shouldBe Some(routes.FeatureSwitchController.featureSwitch.url)
     }
   }
 }

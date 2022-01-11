@@ -272,8 +272,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     }
 
     auditingService.audit(
-      ViewNextOutstandingVatPaymentAuditModel(user, paymentObs), routes.VatDetailsController.details().url)
+      ViewNextOutstandingVatPaymentAuditModel(user, paymentObs), routes.VatDetailsController.details.url)
     auditingService.audit(
-      ViewNextOpenVatObligationAuditModel(user, returnObs), routes.VatDetailsController.details().url)
+      ViewNextOpenVatObligationAuditModel(user, returnObs), routes.VatDetailsController.details.url)
   }
 }

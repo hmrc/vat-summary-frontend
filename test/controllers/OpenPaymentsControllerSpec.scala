@@ -99,7 +99,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
 
       "redirect to VAT overview page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
       }
     }
 

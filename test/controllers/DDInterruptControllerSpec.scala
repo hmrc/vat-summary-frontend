@@ -143,7 +143,7 @@ class DDInterruptControllerSpec extends ControllerBaseSpec {
       }
 
       "redirect to the VAT overview page" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
       }
     }
 
