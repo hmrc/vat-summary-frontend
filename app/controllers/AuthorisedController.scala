@@ -85,35 +85,28 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
 
     val vatEnrolments: Set[Enrolment] = User.extractVatEnrolments(enrolments)
 
-    if(vatEnrolments.exists(_.key == Keys.mtdVatEnrolmentKey)) {
-      val containsNonMtdVat: Boolean = User.containsNonMtdVat(vatEnrolments)
+    vatEnrolments.collectFirst {
+      case Enrolment(Keys.mtdVatEnrolmentKey, Seq(EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn)), status, _) =>
 
-      vatEnrolments.collectFirst {
-        case Enrolment(Keys.mtdVatEnrolmentKey, Seq(EnrolmentIdentifier(Keys.mtdVatIdentifierKey, vrn)), status, _) =>
+        val containsNonMtdVat: Boolean = User.containsNonMtdVat(vatEnrolments)
+        implicit val user: User = User(vrn, status == Keys.activated, containsNonMtdVat)
 
-          implicit val user: User = User(vrn, status == Keys.activated, containsNonMtdVat)
-
-          request.session.get(SessionKeys.insolventWithoutAccessKey) match {
-            case Some("true") => Future.successful(Forbidden(userInsolvent()))
-            case Some("false") => checkHybridAndInsolvency(block, financialRequest)
-            case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
-              case Right(response) if response.details.isInsolventWithoutAccess =>
-                logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
-                Future.successful(Forbidden(userInsolvent()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
-              case Right(_) =>
-                logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
-                checkHybridAndInsolvency(block, financialRequest)
-              case _ =>
-                logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
-                Future.successful(serviceErrorHandler.showInternalServerError)
-            }
+        request.session.get(SessionKeys.insolventWithoutAccessKey) match {
+          case Some("true") => Future.successful(Forbidden(userInsolvent()))
+          case Some("false") => checkHybridAndInsolvency(block, financialRequest)
+          case _ => accountDetailsService.getAccountDetails(user.vrn).flatMap {
+            case Right(response) if response.details.isInsolventWithoutAccess =>
+              logger.debug("[AuthorisedController][authoriseAsNonAgent] - User is insolvent and not continuing to trade")
+              Future.successful(Forbidden(userInsolvent()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
+            case Right(_) =>
+              logger.debug("[AuthorisedController][authoriseAsNonAgent] - Authenticated as principle")
+              checkHybridAndInsolvency(block, financialRequest)
+            case _ =>
+              logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
+              Future.successful(serviceErrorHandler.showInternalServerError)
           }
-
-      } getOrElse {
-        logger.warn("[AuthPredicate][authoriseAsNonAgent] Non-agent with invalid VRN")
-        Future.successful(serviceErrorHandler.showInternalServerError)
-      }
-    } else {
+        }
+    } getOrElse {
       logger.debug("[AuthPredicate][authoriseAsNonAgent] Non-agent with no HMRC-MTD-VAT enrolment. Rendering unauthorised view.")
       Future.successful(Forbidden(unauthorised()))
     }

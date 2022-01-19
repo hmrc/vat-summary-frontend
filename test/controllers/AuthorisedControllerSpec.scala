@@ -16,6 +16,7 @@
 
 package controllers
 
+import common.EnrolmentKeys.mtdVatEnrolmentKey
 import common.SessionKeys
 import common.TestModels.{customerInformationInsolvent, customerInformationMax}
 import org.jsoup.Jsoup
@@ -48,6 +49,12 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
   }
   val enrolments: Set[Enrolment] = Set(Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), ""))
 
+  val invalidIdentifierNameEnrolment: Set[Enrolment] =
+    Set(Enrolment(mtdVatEnrolmentKey, Seq(EnrolmentIdentifier("F", "123456789")), "Activated"))
+
+  val emptyIdentifiersEnrolment: Set[Enrolment] =
+    Set(Enrolment(mtdVatEnrolmentKey, Seq(), "Activated"))
+
   val successfulAuthResponse: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
     Enrolments(enrolments),
     Some(Individual)
@@ -56,6 +63,14 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
   val noEnrolmentsAuthResponse: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
     Enrolments(Set()),
     Some(Individual)
+  ))
+
+  val invalidIdentifierNameAuthResult: Future[Enrolments ~ Some[AffinityGroup.Individual.type]] = Future.successful(new ~(
+    Enrolments(invalidIdentifierNameEnrolment), Some(Individual)
+  ))
+
+  val emptyIdentifiersAuthResult: Future[Enrolments ~ Some[AffinityGroup.Individual.type]] = Future.successful(new ~(
+    Enrolments(emptyIdentifiersEnrolment), Some(Individual)
   ))
 
   val noAffinityAuthResponse: Future[~[Enrolments, Option[AffinityGroup]]] = Future.successful(new ~(
@@ -159,6 +174,30 @@ class AuthorisedControllerSpec extends ControllerBaseSpec {
 
         "render the Not Signed Up page" in {
           Jsoup.parse(contentAsString(result)).title shouldBe "You are not authorised to use this service - VAT - GOV.UK"
+        }
+      }
+
+      "they have an unrecognised identifier name" should {
+
+        lazy val result = {
+          mockAuth(invalidIdentifierNameAuthResult)
+          target(FakeRequest())
+        }
+
+        "return Forbidden (403)" in {
+          status(result) shouldBe Status.FORBIDDEN
+        }
+      }
+
+      "they have no identifiers" should {
+
+        lazy val result = {
+          mockAuth(emptyIdentifiersAuthResult)
+          target(FakeRequest())
+        }
+
+        "return Forbidden (403)" in {
+          status(result) shouldBe Status.FORBIDDEN
         }
       }
 
