@@ -101,7 +101,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override val appName: String = sc.getString("appName")
   private lazy val contactHost: String = sc.getString(Keys.contactFrontendHost)
-  override lazy val contactFormServiceIdentifier: String = "VATVC"
+  override lazy val contactFormServiceIdentifier: String = sc.getString(Keys.contactFrontendIdentifier)
   private lazy val contactFrontendService = sc.baseUrl(Keys.contactFrontendService)
   override lazy val a11yServiceIdentifier: String = "VATVCACCESSIBILITY"
   override lazy val reportA11yProblemUrl = s"$contactHost/contact/accessibility?service=$a11yServiceIdentifier"
