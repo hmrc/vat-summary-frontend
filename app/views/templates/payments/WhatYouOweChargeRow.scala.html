@@ -21,9 +21,9 @@
 
 @this(displayMoney: DisplayMoney)
 
-@(payment: OpenPaymentsModel, count: Int, userIsAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
+@(payment: OpenPaymentsModel, count: Int, userIsAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig, user: User)
 
-@chargeDetails = @{new WhatYouOweChargeHelper(payment, messages)}
+@chargeDetails = @{new WhatYouOweChargeHelper(payment, messages, user)}
 @defining(chargeDetails.description()) { chargeDescription =>
 
 <div id="payment-@{count + 1}">

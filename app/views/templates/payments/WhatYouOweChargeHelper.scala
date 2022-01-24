@@ -16,6 +16,8 @@
 
 package views.templates.payments
 
+import models.User
+
 import javax.inject.Inject
 import models.payments._
 import play.api.i18n.Messages
@@ -23,16 +25,16 @@ import utils.LoggerUtil
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
 class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
-                                       implicit val messages: Messages) extends LoggerUtil{
+                                       implicit val messages: Messages, user: User) extends LoggerUtil{
 
   private def paymentMessageHelper(): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
 
   def description(): Option[String] = {
-    (payment, paymentMessageHelper().principalUserDescription) match {
-      case (payment: OpenPaymentsModelWithPeriod, Some(desc)) =>
-        Some(PaymentMessageHelper.getFullDescription(desc, Some(payment.periodFrom), Some(payment.periodTo)))
-      case (_: OpenPaymentsModelNoPeriod, Some(desc)) =>
-        val descriptionText = PaymentMessageHelper.getFullDescription(desc, None, None)
+    (payment, paymentMessageHelper().principalUserDescription, paymentMessageHelper().agentDescription) match {
+      case (payment: OpenPaymentsModelWithPeriod, Some(principalDesc), Some(agentDesc)) =>
+        Some(PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, Some(payment.periodFrom), Some(payment.periodTo))(messages, user))
+      case (_: OpenPaymentsModelNoPeriod, Some(principalDesc), Some(agentDesc)) =>
+        val descriptionText = PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, None, None)(messages, user)
         if (descriptionText.contains("{0}")) {
           logger.warn("[WhatYouOweChargeHelper][description] - " +
             s"No date period was found for ${payment.chargeType}. Omitting description.")
@@ -40,7 +42,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
         } else {
           Some(descriptionText)
         }
-      case (_, _) => None
+      case (_, _, _) => None
     }
   }
 
