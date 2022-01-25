@@ -28,5 +28,5 @@
 <span class="govuk-!-font-weight-bold">@messages(s"${chargeType.title}")</span>
         <span class="govuk-hint">
             @PaymentMessageHelper.getCorrectDescription(chargeType.principalUserDescription.getOrElse(""),
-            chargeType.agentDescription.getOrElse(""), transaction.taxPeriodFrom, transaction.taxPeriodTo)
+            chargeType.agentDescription.getOrElse(""), transaction.taxPeriodFrom, transaction.taxPeriodTo, user.isAgent)
         </span>
