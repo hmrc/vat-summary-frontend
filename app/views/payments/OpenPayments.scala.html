@@ -71,7 +71,7 @@
       <div class="payments">
         <div class="section">
           @model.payments.zipWithIndex.map { case(payment, count) =>
-            @whatYouOweChargeRow(payment, count, user.isAgent)(messages, appConfig)
+            @whatYouOweChargeRow(payment, count, user.isAgent)
           }
         </div>
 

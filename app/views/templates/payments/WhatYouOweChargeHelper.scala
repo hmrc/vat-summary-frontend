@@ -30,9 +30,9 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, userIsAgent: 
   def description(): Option[String] = {
     (payment, paymentMessageHelper().principalUserDescription, paymentMessageHelper().agentDescription) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(principalDesc), Some(agentDesc)) =>
-        Some(PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, Some(payment.periodFrom), Some(payment.periodTo), userIsAgent)(messages))
+        Some(PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, Some(payment.periodFrom), Some(payment.periodTo), userIsAgent))
       case (_: OpenPaymentsModelNoPeriod, Some(principalDesc), Some(agentDesc)) =>
-        val descriptionText = PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, None, None, userIsAgent)(messages)
+        val descriptionText = PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, None, None, userIsAgent)
         if (descriptionText.contains("{0}")) {
           logger.warn("[WhatYouOweChargeHelper][description] - " +
             s"No date period was found for ${payment.chargeType}. Omitting description.")
