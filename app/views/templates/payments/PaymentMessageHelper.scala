@@ -16,8 +16,6 @@
 
 package views.templates.payments
 
-import models.User
-
 import java.time.LocalDate
 import models.payments._
 import play.api.i18n.Messages
@@ -480,9 +478,9 @@ object PaymentMessageHelper {
     }
   }
 
-  def getCorrectDescription(principalMessageKey: String, agentMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
-                           (implicit messages: Messages, user: User): String = {
-    if(user.isAgent) {
+  def getCorrectDescription(principalMessageKey: String, agentMessageKey: String, from: Option[LocalDate], to: Option[LocalDate], userIsAgent: Boolean)
+                           (implicit messages: Messages): String = {
+    if(userIsAgent) {
       getFullDescription(agentMessageKey, from, to)
     } else {
       getFullDescription(principalMessageKey, from, to)

@@ -16,25 +16,23 @@
 
 package views.templates.payments
 
-import models.User
-
 import javax.inject.Inject
 import models.payments._
 import play.api.i18n.Messages
 import utils.LoggerUtil
 import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 
-class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel,
-                                       implicit val messages: Messages, user: User) extends LoggerUtil{
+class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, userIsAgent: Boolean,
+                                       implicit val messages: Messages) extends LoggerUtil{
 
   private def paymentMessageHelper(): PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
 
   def description(): Option[String] = {
     (payment, paymentMessageHelper().principalUserDescription, paymentMessageHelper().agentDescription) match {
       case (payment: OpenPaymentsModelWithPeriod, Some(principalDesc), Some(agentDesc)) =>
-        Some(PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, Some(payment.periodFrom), Some(payment.periodTo))(messages, user))
+        Some(PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, Some(payment.periodFrom), Some(payment.periodTo), userIsAgent)(messages))
       case (_: OpenPaymentsModelNoPeriod, Some(principalDesc), Some(agentDesc)) =>
-        val descriptionText = PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, None, None)(messages, user)
+        val descriptionText = PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, None, None, userIsAgent)(messages)
         if (descriptionText.contains("{0}")) {
           logger.warn("[WhatYouOweChargeHelper][description] - " +
             s"No date period was found for ${payment.chargeType}. Omitting description.")
