@@ -45,7 +45,7 @@
       <dd class="govuk-summary-list__value what-you-owe-amount">
         <span data-amount="@(payment.amount)">@displayMoney(payment.amount)</span>
       </dd>
-      <dd class="govuk-summary-list__actions what-you-owe-links nowrap">
+      <dd class="govuk-summary-list__actions what-you-owe-links">
         @if(!userIsAgent) {
           <a class="govuk-link" href="@payment.makePaymentRedirect">
             <span>@chargeDetails.payLinkText</span>
