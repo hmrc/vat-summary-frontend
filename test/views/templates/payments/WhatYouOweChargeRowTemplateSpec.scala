@@ -35,11 +35,11 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
     val amount = "#payment-1 > dl > div > .govuk-summary-list__value > span"
     val amountData = "#payment-1 > dl > div > .govuk-summary-list__value > span[data-amount]"
 
-    val payLink = "#payment-1 > dl > div > dd.govuk-summary-list__actions.what-you-owe-links.nowrap > a"
+    val payLink = "#payment-1 > dl > div > dd.govuk-summary-list__actions.what-you-owe-links > a"
     val payText = s"$payLink > span:nth-child(1)"
     val directDebitText = s"tr > td:nth-child(3) > p > a > span:nth-of-type(2)"
     val payHiddenContent = s"$payLink > span:nth-of-type(2)"
-    val viewReturnLink = "#payment-1 > dl > div > dd.govuk-summary-list__actions.what-you-owe-links.nowrap > p > a"
+    val viewReturnLink = "#payment-1 > dl > div > dd.govuk-summary-list__actions.what-you-owe-links > p > a"
     val viewReturnText = s"$viewReturnLink > span:nth-of-type(2)"
     val viewReturnHiddenContent = s"$viewReturnLink > span:nth-of-type(1)"
   }
