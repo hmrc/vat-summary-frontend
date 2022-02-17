@@ -39,7 +39,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     val correctErrorLink = "div > p:nth-child(4) > a"
     val btaBreadcrumb = "li.govuk-breadcrumbs__list-item > a"
     val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2) > a"
-    val paymentBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3)"
 
     private val columnOne: Int => String = row => s"#payment-$row > dl > div > dt"
     val title: Int => String = row => s"${columnOne(row)} > p"
@@ -129,10 +128,6 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
         s"link to https://www.gov.uk/vat-corrections" in {
           element(Selectors.correctErrorLink).attr("href") shouldBe "https://www.gov.uk/vat-corrections"
-        }
-
-        "have the text 'What you owe'" in {
-          elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
         }
       }
 
