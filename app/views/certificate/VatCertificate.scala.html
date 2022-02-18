@@ -35,30 +35,27 @@
                                            user: User)
 
 @navLink = {
-    @if(user.isAgent) {
-        @govukBackLink(BackLink(
-            href = appConfig.agentClientLookupHubUrl,
-            content = Text(messages("base.back"))
-        ))
-    } else {
-        @if(!user.isAgent) {
-            @govukBreadcrumbs(Breadcrumbs(
-                items = Seq(
-                    BreadcrumbsItem(
-                        content = Text(messages("breadcrumbs.bta")),
-                        href = Some(appConfig.btaHomeUrl)
-                    ),
-                    BreadcrumbsItem(
-                        content = Text(messages("vatDetails.title")),
-                        href = Some(controllers.routes.VatDetailsController.details.url)
-                    ),
-                    BreadcrumbsItem(
-                        content = Text(messages("vatCertificate.title"))
-                    )
-                )
-            ))
-        }
+  @if(user.isAgent) {
+    @govukBackLink(BackLink(
+      href = appConfig.agentClientLookupHubUrl,
+      content = Text(messages("base.back"))
+    ))
+  } else {
+    @if(!user.isAgent) {
+      @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+          BreadcrumbsItem(
+            content = Text(messages("breadcrumbs.bta")),
+            href = Some(appConfig.btaHomeUrl)
+          ),
+          BreadcrumbsItem(
+            content = Text(messages("vatDetails.title")),
+            href = Some(controllers.routes.VatDetailsController.details.url)
+          )
+        )
+      ))
     }
+  }
 }
 
 @fieldRow(title: String, content: Any, id: String) = {

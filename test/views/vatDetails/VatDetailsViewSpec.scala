@@ -46,7 +46,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatRegNo = ".govuk-caption-m"
     val btaBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(1)"
     val btaBreadcrumbLink = ".govuk-breadcrumbs__link"
-    val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2)"
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
     val historyHeading = "#history > h2"
@@ -155,10 +154,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "links to bta" in {
         element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
-      }
-
-      "have the text 'Your VAT account'" in {
-        elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
       }
     }
 

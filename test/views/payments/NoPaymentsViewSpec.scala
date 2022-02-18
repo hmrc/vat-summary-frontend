@@ -38,7 +38,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val btaBreadcrumbLink = "div.govuk-breadcrumbs li:nth-of-type(1) a"
     val vatBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(2)"
     val vatBreadcrumbLink = "div.govuk-breadcrumbs li:nth-of-type(2) a"
-    val paymentBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(3)"
   }
 
   override val user: User = User("123456789")
@@ -96,10 +95,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
       s"link to ${controllers.routes.VatDetailsController.details.url}" in {
         element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
-      }
-
-      "have the text 'What you owe'" in {
-        elementText(Selectors.paymentBreadcrumb) shouldBe "What you owe"
       }
     }
   }

@@ -41,7 +41,6 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val btaBreadcrumbLink = "li.govuk-breadcrumbs__list-item:nth-child(1) a"
     val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2)"
     val vatBreadcrumbLink = "li.govuk-breadcrumbs__list-item:nth-child(2) a"
-    val paymentHistoryBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3)"
     val tabOne = "li.govuk-tabs__list-item:nth-child(1) a"
     val tabTwo = "li.govuk-tabs__list-item:nth-child(2) a"
     val tabThree = "li.govuk-tabs__list-item:nth-child(3) a"
@@ -125,10 +124,6 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
         s"link to ${controllers.routes.VatDetailsController.details.url}" in {
           element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
-        }
-
-        "have the text 'Payment history'" in {
-          elementText(Selectors.paymentHistoryBreadcrumb) shouldBe "Payment history"
         }
       }
 

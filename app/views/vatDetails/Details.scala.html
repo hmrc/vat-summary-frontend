@@ -57,17 +57,14 @@
 }
 
 @breadcrumbs = {
-    @govukBreadcrumbs(Breadcrumbs(
-        items = Seq(
-            BreadcrumbsItem(
-                content = Text(messages("breadcrumbs.bta")),
-                href = Some(appConfig.btaHomeUrl)
-            ),
-            BreadcrumbsItem(
-                content = Text(messages("vatDetails.title"))
-            )
-        )
-    ))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      )
+    )
+  ))
 }
 
 @mainTemplate(

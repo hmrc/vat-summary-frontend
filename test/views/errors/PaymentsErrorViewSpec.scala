@@ -25,6 +25,8 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
 
   val paymentsErrorView: PaymentsError = injector.instanceOf[PaymentsError]
   object Selectors {
+    val breadcrumb = ".govuk-breadcrumbs__list-item > a"
+    val breadcrumb2 = ".govuk-breadcrumbs__list-item:nth-child(2) > a"
     val heading = "h1"
     val payNow = "#pay-now-content"
     val payNowLink = s"$payNow > a"
@@ -34,6 +36,32 @@ class PaymentsErrorViewSpec extends ViewBaseSpec {
 
     lazy val view = paymentsErrorView()
     lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have breadcrumbs" which {
+
+      "has a link to BTA" which {
+
+        "has the correct text" in {
+          elementText(Selectors.breadcrumb) shouldBe "Business tax account"
+        }
+
+        "has the correct href" in {
+          element(Selectors.breadcrumb).attr("href") shouldBe mockConfig.btaHomeUrl
+        }
+      }
+
+      "has a link to the VAT overview" which {
+
+        "has the correct text" in {
+          elementText(Selectors.breadcrumb2) shouldBe "Your VAT account"
+        }
+
+        "has the correct href" in {
+          element(Selectors.breadcrumb2).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+        }
+      }
+
+    }
 
     "have the correct document title" in {
       document.title shouldBe "There is a problem with the service - Manage your VAT account - GOV.UK"
