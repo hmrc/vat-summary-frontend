@@ -33,6 +33,8 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
   object Selectors {
     val heading = "h1"
+    val breadcrumb = ".govuk-breadcrumbs__list-item > a"
+    val breadcrumb2 = ".govuk-breadcrumbs__list-item:nth-child(2) > a"
     val cardClass = ".card-full-container"
     val aboutYourRegHeading = "#about-your-registration-heading"
     val vrnRow = "#vrn"
@@ -105,6 +107,32 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "accessed by a principal user" should {
       lazy val view = vatCertificateView(HtmlFormat.empty, model)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have breadcrumbs" which {
+
+        "has a link to BTA" which {
+
+          "has the correct text" in {
+            elementText(Selectors.breadcrumb) shouldBe "Business tax account"
+          }
+
+          "has the correct href" in {
+            element(Selectors.breadcrumb).attr("href") shouldBe mockConfig.btaHomeUrl
+          }
+        }
+
+        "has a link to the VAT overview" which {
+
+          "has the correct text" in {
+            elementText(Selectors.breadcrumb2) shouldBe "Your VAT account"
+          }
+
+          "has the correct href" in {
+            element(Selectors.breadcrumb2).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+          }
+        }
+
+      }
 
       "have the correct title" in {
         document.title shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
