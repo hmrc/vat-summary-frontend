@@ -59,7 +59,7 @@ object CustomerInformation {
     (__ \\ "hybridToFullMigrationDate").readNullable[String] and
     (__ \ "partyType").readNullable[String] and
     (__ \ "primaryMainCode").readNullable[String] and
-    (__ \\ "stdReturnPeriod").readNullable[String] and
+    (__ \ "returnPeriod" \ "stdReturnPeriod").readNullable[String] and
     (__ \\ "nonStdTaxPeriods").readNullable[Seq[TaxPeriod]] and
     (__ \\ "firstNonNSTPPeriod").readNullable[TaxPeriod] and
     (__ \ "pendingChanges" \ "mandationStatus").readNullable[String] and
