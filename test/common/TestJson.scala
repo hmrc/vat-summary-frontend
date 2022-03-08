@@ -82,7 +82,10 @@ object TestJson {
         ),
         "websiteAddress" -> "asdf.com"
       ),
-      "mandationStatus" -> "MTDfB Voluntary"
+      "mandationStatus" -> "MTDfB Voluntary",
+      "returnPeriod" -> Json.obj(
+        "stdReturnPeriod" -> "MA"
+      )
     ),
     "deregistration" -> Json.obj(
       "effectDateOfCancellation" -> "2020-01-01"
