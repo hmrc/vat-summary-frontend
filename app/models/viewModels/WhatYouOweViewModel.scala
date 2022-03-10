@@ -16,5 +16,5 @@
 
 package models.viewModels
 
-case class WhatYouOweViewModel(totalAmount : BigDecimal,
+case class WhatYouOweViewModel(totalAmount: BigDecimal,
                                charges: Seq[WhatYouOweChargeModel])
