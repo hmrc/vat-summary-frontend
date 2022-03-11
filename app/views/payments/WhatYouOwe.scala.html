@@ -15,132 +15,171 @@
  *@
 
 @import models.User
+@import models.viewModels.WhatYouOweChargeModel
 @import models.viewModels.WhatYouOweViewModel
-@import views.html.templates.payments.WhatYouOweChargeRow
+@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.html.templates.formatters.money.DisplayMoney
 
 @this(mainTemplate: MainTemplate,
-whatYouOweChargeRow: WhatYouOweChargeRow,
-govukBreadcrumbs: GovukBreadcrumbs,
-govukBackLink: GovukBackLink,
-govukButton : GovukButton,
-govukTable : GovukTable,
-govukDetails: GovukDetails)
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukBackLink: GovukBackLink,
+      govukButton : GovukButton,
+      govukTable : GovukTable,
+      govukDetails: GovukDetails,
+      govukTag: GovukTag,
+      displayMoney: DisplayMoney)
 
-@(user: User, model: WhatYouOweViewModel, serviceInfoContent: Html, clientName: Option[String])(
-implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(model: WhatYouOweViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
-@govukBreadcrumbs(Breadcrumbs(
-items = Seq(
-BreadcrumbsItem(
-content = Text(messages("breadcrumbs.bta")),
-href = Some(appConfig.btaHomeUrl)
-),
-BreadcrumbsItem(
-content = Text(messages("vatDetails.title")),
-href = Some(controllers.routes.VatDetailsController.details.url)
-)
-)
-))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details.url)
+      )
+    )
+  ))
 }
 
 @backLink = {
-@govukBackLink(BackLink(
-href = appConfig.agentClientLookupHubUrl,
-content = Text(messages("base.back"))
-))
-}
-
-@PaymentHelp = {
-<p class="govuk-body">@messages("whatYouOwe.details.agent.paymentHelpTwo")<a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">@messages("whatYouOwe.details.agent.paymentHelpThree")</a> @messages("whatYouOwe.details.agent.paymentHelpFour")</p>
-}
-
-@mainTemplate(
-title = if(user.isAgent) messages("openPayments.agentTitle") else messages("openPayments.title"),
-appConfig = appConfig,
-serviceInfoContent = serviceInfoContent,
-user = Some(user),
-navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
-) {
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        @clientName.map { name =>
-        <span class="govuk-caption-xl">@name</span>
-        }
-        <h1 class="govuk-heading-xl">
-            @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
-        </h1>
-
-        <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
-
-        @govukTable(Table(
-            rows = Seq(
-        Seq(
-        TableRow(
-        content = Text("Total")
-        ),
-        TableRow(
-        content = Text("£125"),
-        format = Some("numeric")
-        ))
-            ),
-            head = Some(Seq(
-              HeadCell(
-                content = Text(messages("whatYouOwe.headCell.paymentType"))
-              ),
-              HeadCell(
-                content = Text(messages("whatYouOwe.headCell.amountDue"))
-              )
-            )),
-        captionClasses = "govuk-table__caption--m"
+  @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
   ))
+}
 
-        @if(user.isAgent){
-            <p class="govuk-body">@messages("whatYouOwe.agent.anyPaymentsYouMake")</p>
-        }else{
-            <p class="govuk-body">@messages("whatYouOwe.anyPaymentsYouMake")</p>
-        }
+@paymentHelp = {
+  <p class="govuk-body">
+    @messages("whatYouOwe.details.agent.paymentHelpTwo")
+    <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
+      @messages("whatYouOwe.details.agent.paymentHelpThree")</a>.
+    @messages("whatYouOwe.details.agent.paymentHelpFour")
+  </p>
+}
 
-        <ul class="govuk-list govuk-list--bullet">
-            <li>
-                @messages("whatYouOwe.anyPaymentsYouMake.firstBullet")  <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
-                @if(user.isAgent){@messages("whatYouOwe.anyPaymentsYouMake.agent.firstBulletLink")</a>}else{@messages("whatYouOwe.anyPaymentsYouMake.firstBulletLink")}
-            </li>
-            <li>
-                @if(user.isAgent){
-                @messages("whatYouOwe.anyPaymentsYouMake.agent.secondBullet")
-                ))
-                }else{
-                @messages("whatYouOwe.anyPaymentsYouMake.secondBullet")
-                }
-            </li>
-        </ul>
+@paymentHtml(charge: WhatYouOweChargeModel) = {
+  @if(charge.isOverdue){@govukTag(Tag(
+    content = Text(messages("common.overdue")),
+    classes = "govuk-tag--red"
+  ))}<a class="govuk-link" href="/todo-new-page">@messages(charge.chargeDescription)</a>
+  <span class="govuk-hint govuk-!-margin-0">
+    @messages("whatYouOwe.due") @displayDate(charge.dueDate)
+  </span>
+}
 
-                @if(user.isAgent){
-                @govukDetails(Details(
-                summary = Text(messages("whatYouOwe.details.agent.paymentHelpOne")),
-                content = HtmlContent(PaymentHelp)
-                ))
-                }
+@chargeRows = @{
+  val individualRows = model.charges.map { charge =>
+    Seq(
+      TableRow(content = HtmlContent(paymentHtml(charge))),
+      TableRow(content = HtmlContent(displayMoney(charge.outstandingAmount)), format = Some("numeric"))
+    )
+  }
+  val totalRow = Seq(Seq(
+    TableRow(content = Text(messages("whatYouOwe.total")), classes = "govuk-!-font-weight-bold"),
+    TableRow(content = HtmlContent(displayMoney(model.totalAmount)), format = Some("numeric"), classes = "govuk-!-font-weight-bold")
+  ))
+  individualRows ++ totalRow
+}
 
+@mainTemplate(title = if(user.isAgent) messages("openPayments.agentTitle") else messages("openPayments.title"),
+              appConfig = appConfig,
+              serviceInfoContent = serviceInfoContent,
+              user = Some(user),
+              navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
+      </h1>
 
-        @govukButton(Button(
-        content = Text(messages("whatYouOwe.makePayment"))
+      <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
+      <p class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold govuk-!-margin-bottom-8">
+        @displayMoney(model.totalAmount)
+      </p>
+
+      @govukTable(Table(
+        rows = chargeRows,
+        head = Some(Seq(
+          HeadCell(content = Text(messages("whatYouOwe.headCell.paymentType"))),
+          HeadCell(
+            content = Text(messages("whatYouOwe.headCell.amountDue")),
+            format = Some("numeric")
+          )
+        )),
+        captionClasses = "govuk-table__caption--m"
+      ))
+
+      @if(user.isAgent){
+        <p class="govuk-body">@messages("whatYouOwe.agent.anyPaymentsYouMake")</p>
+      } else {
+        <p class="govuk-body">@messages("whatYouOwe.anyPaymentsYouMake")</p>
+      }
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+          @messages("whatYouOwe.anyPaymentsYouMake.firstBullet")
+          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
+            @if(user.isAgent){
+              @messages("whatYouOwe.anyPaymentsYouMake.agent.firstBulletLink")
+            } else {
+              @messages("whatYouOwe.anyPaymentsYouMake.firstBulletLink")
+            }
+          </a>
+        </li>
+        <li>
+          @if(user.isAgent){
+            @messages("whatYouOwe.anyPaymentsYouMake.agent.secondBullet")
+          } else {
+            @messages("whatYouOwe.anyPaymentsYouMake.secondBullet")
+          }
+        </li>
+      </ul>
+
+      @if(user.isAgent){
+        @govukDetails(Details(
+          summary = Text(messages("whatYouOwe.details.agent.paymentHelpOne")),
+          content = HtmlContent(paymentHelp)
         ))
+      }
 
-        @if(user.isAgent){
+      @if(!user.isAgent) {
+        @govukButton(Button(
+          content = Text(messages("whatYouOwe.makePayment")),
+          href = Some(appConfig.unauthenticatedPaymentsUrl)
+        ))
+      }
+
+      @if(user.isAgent){
         <h3 class="govuk-heading-s">@messages("whatYouOwe.agent.isIncorrectOne")</h3>
-        <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectTwo") <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">@messages("whatYouOwe.agent.isIncorrectThree")</a></p>
+        <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectTwo")
+          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKCorrections">
+            @messages("whatYouOwe.agent.isIncorrectThree")</a>.
+        </p>
         <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectFour")</p>
-        } else {
+      } else {
         <h3 class="govuk-heading-s">@messages("whatYouOwe.ifYouCannotPayOne")</h3>
-        <p class="govuk-body">@messages("whatYouOwe.ifYouCannotPayTwo") <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">@messages("whatYouOwe.ifYouCannotPayThree")</a> @messages("whatYouOwe.ifYouCannotPayFour")</p>
+        <p class="govuk-body">@messages("whatYouOwe.ifYouCannotPayTwo")
+          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
+            @messages("whatYouOwe.ifYouCannotPayThree")</a>.
+          @messages("whatYouOwe.ifYouCannotPayFour")
+        </p>
         <h3 class="govuk-heading-s">@messages("whatYouOwe.isIncorrectOne")</h3>
-        <p class ="govuk-body">@messages("whatYouOwe.isIncorrectTwo") <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKCorrections">@messages("whatYouOwe.isIncorrectThree")</a></p>
-        <p class ="govuk-body">@messages("whatYouOwe.isIncorrectFour") <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="">@messages("whatYouOwe.isIncorrectFive")</a></p>
-        }
-
+        <p class ="govuk-body">@messages("whatYouOwe.isIncorrectTwo")
+          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKCorrections">
+            @messages("whatYouOwe.isIncorrectThree")</a>.
+        </p>
+        <p class ="govuk-body">@messages("whatYouOwe.isIncorrectFour")
+          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
+            @messages("whatYouOwe.isIncorrectFive")</a>.
+        </p>
+      }
     </div>
-</div>
-
+  </div>
 }

@@ -77,6 +77,9 @@ trait AppConfig {
   val govUkHearingImpairedUrl: String
   val govUkVatRegistrationUrl: String
   val govUkVat7Form: String
+  val govUkPayVATUrl : String
+  val govUKDifficultiesPayingUrl : String
+  val govUKCorrections : String
   val abilityNetUrl: String
   val wcagGuidelinesUrl: String
   val eassUrl: String
@@ -94,9 +97,6 @@ trait AppConfig {
   val environmentHost: String
   val penaltiesUrl: String => String
   val penaltiesFrontendUrl: String
-  val govUkPayVATUrl : String
-  val govUKDifficultiesPayingUrl : String
-  val govUKCorrections : String
 }
 
 @Singleton
@@ -216,13 +216,15 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val govUkHearingImpairedUrl: String = sc.getString(Keys.govUkHearingImpairedUrl)
   override lazy val govUkVatRegistrationUrl: String = sc.getString(Keys.govUkVatRegistrationUrl)
   override lazy val govUkVat7Form: String = sc.getString(Keys.govUkVat7Form)
+  override lazy val govUkPayVATUrl: String = sc.getString(Keys.govUkPayVATUrl)
+  override lazy val govUKDifficultiesPayingUrl : String = sc.getString(Keys.govUKDifficultiesPayingUrl)
+  override lazy val govUKCorrections : String = sc.getString(Keys.govUKCorrections)
 
   override lazy val abilityNetUrl: String = sc.getString(Keys.abilityNetUrl)
   override lazy val wcagGuidelinesUrl: String = sc.getString(Keys.wcagGuidelinesUrl)
   override lazy val eassUrl: String = sc.getString(Keys.eassUrl)
   override lazy val ecniUrl: String = sc.getString(Keys.ecniUrl)
   override lazy val dacUrl: String = sc.getString(Keys.dacUrl)
-  override lazy val govUkPayVATUrl: String = sc.getString(Keys.govUkPayVATUrl)
 
   override lazy val optOutFrontendUrl: String = sc.getString(Keys.vatOptOutFrontendHost) + sc.getString(Keys.vatOptOutFrontendStartUrl)
 
@@ -241,7 +243,4 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val penaltiesUrl: String => String = vrn => sc.getString(Keys.penaltiesHost) + sc.getString(Keys.penaltiesUrl) + vrn
 
   override lazy val penaltiesFrontendUrl: String = sc.getString(Keys.penaltiesFrontendHost) + sc.getString(Keys.penaltiesFrontendUrl)
-
-  override lazy val govUKDifficultiesPayingUrl : String = sc.getString(Keys.govUKDifficultiesPayingUrl)
-  override lazy val govUKCorrections : String = sc.getString(Keys.govUKCorrections)
 }

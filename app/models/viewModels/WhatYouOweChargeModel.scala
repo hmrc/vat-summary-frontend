@@ -14,28 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package models.viewModels
 
 import java.time.LocalDate
-
-import play.api.libs.json.{Format, Json}
 
 case class WhatYouOweChargeModel(chargeDescription: String,
                                  chargeTitle: String,
                                  outstandingAmount: BigDecimal,
                                  originalAmount: BigDecimal,
-                                 clearedAmount: BigDecimal,
+                                 clearedAmount: Option[BigDecimal],
                                  dueDate: LocalDate,
                                  periodKey: Option[String],
                                  isOverdue: Boolean,
                                  chargeReference: Option[String],
                                  makePaymentRedirect: String,
                                  periodFrom: Option[LocalDate],
-                                 periodTo: Option[LocalDate]
-                                 )
-
-object WhatYouOweChargeModel{
-  implicit val format: Format[WhatYouOweChargeModel] = Json.format[WhatYouOweChargeModel]
-}
-
-
+                                 periodTo: Option[LocalDate])
