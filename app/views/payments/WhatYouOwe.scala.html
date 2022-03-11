@@ -15,7 +15,7 @@
  *@
 
 @import models.User
-@import models.viewModels.OpenPaymentsViewModel
+@import models.viewModels.WhatYouOweViewModel
 @import views.html.templates.payments.WhatYouOweChargeRow
 
 @this(mainTemplate: MainTemplate,
@@ -26,7 +26,7 @@ govukButton : GovukButton,
 govukTable : GovukTable,
 govukDetails: GovukDetails)
 
-@(user: User, model: Option[OpenPaymentsViewModel], serviceInfoContent: Html, clientName: Option[String])(
+@(user: User, model: WhatYouOweViewModel, serviceInfoContent: Html, clientName: Option[String])(
 implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @breadcrumbs = {
