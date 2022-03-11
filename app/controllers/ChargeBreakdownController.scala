@@ -37,7 +37,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
         "Example Charge",
         111.11,
         333.33,
-        222.22,
+        Some(222.22),
         LocalDate.parse("2018-03-01"),
         Some("18AA"),
         isOverdue = true,
