@@ -1,0 +1,126 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.viewModels.WhatYouOweChargeModel
+
+@this(mainTemplate: MainTemplate,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukSummaryList: GovukSummaryList,
+      govukButton: GovukButton,
+      govukTag: GovukTag)
+
+@(model: WhatYouOweChargeModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title")),
+                href = Some(controllers.routes.VatDetailsController.details.url)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("openPayments.title")),
+            )
+        )
+    ))
+}
+
+@dueDateHtml = {
+    @model.dueDate
+}
+
+@chargeDueHtml = {
+    @model.originalAmount
+}
+
+@clearedAmountHtml = {
+    @model.clearedAmount
+}
+
+@outstandingAmountHtml = {
+    @model.outstandingAmount
+}
+
+@mainTemplate(
+    title = model.chargeTitle,
+    appConfig = appConfig,
+    serviceInfoContent = serviceInfoContent,
+    user = Some(user),
+    navLinkContent = Some(breadcrumbs)
+) {
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-xl">
+                @model.periodFrom @messages("chargeTypeDetails.to") @model.periodTo
+            </span>
+            <h1 class="govuk-heading-xl">
+                @model.chargeTitle
+            </h1>
+
+            @govukSummaryList(SummaryList(
+                rows = Seq(
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("chargeTypeDetails.dueDate"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(dueDateHtml)
+                        )
+                    ),
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("chargeTypeDetails.chargeDue"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(chargeDueHtml)
+                        )
+                    ),
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("chargeTypeDetails.amountReceived"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(clearedAmountHtml)
+                        )
+                    ),
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("chargeTypeDetails.amountLeft"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(outstandingAmountHtml)
+                        )
+                    )
+                )
+            ))
+        </div>
+    </div>
+
+    @govukButton(Button(
+        content = Text(messages("chargeTypeDetails.button"))
+    ))
+
+<a class="govuk-link" href="#"
+   id="whatYouOweLink" rel="noreferrer noopener" target="_blank">
+    @messages("chargeTypeDetails.link")
+</a>
+}
