@@ -19,17 +19,19 @@ package controllers
 import java.time.LocalDate
 
 import com.google.inject.Inject
-import models.payments.WhatYouOweChargeModel
+import controllers.predicates.DDInterruptPredicate
 import models.viewModels.WhatYouOweViewModel
+import models.viewModels.WhatYouOweChargeModel
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
 
 import scala.concurrent.Future
 
-class WhatYouOweController @Inject()(authorisedController: AuthorisedController) {
+class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
+                                     ddInterrupt: DDInterruptPredicate) {
 
   def show: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user =>
+    implicit user => ddInterrupt.interruptCheck { _ =>
 
       val viewModel = WhatYouOweViewModel(
         totalAmount = 1000.00,
@@ -38,7 +40,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController)
           chargeTitle = "VAT OA Debit Charge",
           outstandingAmount = 1000.00,
           originalAmount = 1000.00,
-          clearedAmount = 00.00,
+          clearedAmount = Some(00.00),
           dueDate = LocalDate.parse("2017-03-08"),
           periodKey = Some("#001"),
           isOverdue = false,
@@ -50,5 +52,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController)
       )
 
       Future.successful(Ok("view"))
+
+    }
   }
 }

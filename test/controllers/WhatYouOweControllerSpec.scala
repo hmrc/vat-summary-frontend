@@ -18,13 +18,13 @@ package controllers
 
 import common.TestModels.customerInformationMax
 import org.jsoup.Jsoup
-import play.api.http.Status.OK
 import play.api.test.Helpers._
 
 class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   val controller = new WhatYouOweController(
-    authorisedController
+    authorisedController,
+    ddInterruptPredicate
   )
 
   "The WhatYouOweController .show method" when {
@@ -48,6 +48,24 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     }
 
+    "the user has no viewDDInterrupt in session" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        controller.show(DDInterruptRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the DD interrupt controller" in {
+        redirectLocation(result) shouldBe
+          Some(controllers.routes.DDInterruptController.directDebitInterruptCall(DDInterruptRequest.uri).url)
+      }
+    }
+
     "an agent user is authenticated" should {
 
       lazy val result = {
@@ -69,5 +87,33 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe FORBIDDEN
       }
     }
+
+    "the user is not signed in" should {
+
+      lazy val result = {
+        mockMissingBearerToken()
+        controller.show(fakeRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to sign in" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403" in {
+        val result = {
+          mockPrincipalAuth()
+          controller.show(insolventRequest)
+        }
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
   }
 }
