@@ -125,7 +125,7 @@ whatYouOwe.details.agent.paymentHelpFour = This allows them to pay their bill in
 
 chargeTypeDetails.dueDate = Due date
 chargeTypeDetails.chargeDue = Charge due
-chargeTypeDetails.amountReceived = Amount Received
+chargeTypeDetails.amountReceived = Amount received
 chargeTypeDetails.amountLeft = Amount left to pay
 chargeTypeDetails.button = Pay now
 chargeTypeDetails.link = Return to what you owe

@@ -68,7 +68,7 @@ class DisplayDateRangeHelperSpec extends ViewBaseSpec {
 
     val startDate: LocalDate = LocalDate.parse("2017-01-01")
 
-    "start and end dates are in the same year" should {
+    "start and end dates are in the same year and alwaysUseYear is false" should {
 
       val endDate: LocalDate = LocalDate.parse("2017-04-01")
       val formattedDate = displayDateRange(startDate, endDate)
@@ -78,13 +78,33 @@ class DisplayDateRangeHelperSpec extends ViewBaseSpec {
       }
     }
 
-    "start and end dates are in the same year with short month format" should {
+    "start and end dates are in the same year with short month format and alwaysUseYear is false" should {
 
       val endDate: LocalDate = LocalDate.parse("2017-04-01")
       val formattedDate = displayDateRange(startDate, endDate, useShortDayFormat = true)
 
       "render the correct text" in {
         formattedDate shouldBe "1 Jan to 1 Apr 2017"
+      }
+    }
+
+    "start and end dates are in the same year and alwaysUseYear is true" should {
+
+      val endDate: LocalDate = LocalDate.parse("2017-04-01")
+      val formattedDate = displayDateRange(startDate, endDate, alwaysUseYear = true)
+
+      "render the correct text" in {
+        formattedDate shouldBe "1 January 2017 to 1 April 2017"
+      }
+    }
+
+    "start and end dates are in the same year with short month format and alwaysUseYear is true" should {
+
+      val endDate: LocalDate = LocalDate.parse("2017-04-01")
+      val formattedDate = displayDateRange(startDate, endDate, useShortDayFormat = true, alwaysUseYear = true)
+
+      "render the correct text" in {
+        formattedDate shouldBe "1 Jan 2017 to 1 Apr 2017"
       }
     }
 

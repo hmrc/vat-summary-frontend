@@ -15,6 +15,7 @@
  *@
 
 @import models.viewModels.WhatYouOweChargeModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper._
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -70,7 +71,9 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-xl">
-                @model.periodFrom @messages("chargeTypeDetails.to") @model.periodTo
+                @if(model.periodFrom && model.periodTo) {
+                    @displayDateRange(model.periodFrom.get, model.periodTo.get, false, true)
+                }
             </span>
             <h1 class="govuk-heading-xl">
                 @model.chargeTitle
@@ -116,11 +119,12 @@
     </div>
 
     @govukButton(Button(
-        content = Text(messages("chargeTypeDetails.button"))
+        content = Text(messages("chargeTypeDetails.button")),
+        href    = Some(appConfig.unauthenticatedPaymentsUrl)
     ))
 
-<a class="govuk-link" href="#"
-   id="whatYouOweLink" rel="noreferrer noopener" target="_blank">
-    @messages("chargeTypeDetails.link")
-</a>
+    <a class="govuk-link" href="#"
+        id="whatYouOweLink" rel="noreferrer noopener" target="_blank">
+        @messages("chargeTypeDetails.link")
+    </a>
 }
