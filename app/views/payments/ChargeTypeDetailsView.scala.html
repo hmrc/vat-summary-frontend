@@ -53,7 +53,7 @@
 }
 
 @clearedAmountHtml = {
-    @model.clearedAmount
+    @model.clearedAmount.getOrElse(0)
 }
 
 @outstandingAmountHtml = {
@@ -70,11 +70,11 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-xl">
-                @if(model.periodFrom && model.periodTo) {
+            @if(model.periodFrom && model.periodTo) {
+                <span class="govuk-caption-xl">
                     @displayDateRange(model.periodFrom.get, model.periodTo.get, false, true)
-                }
-            </span>
+                </span>
+            }
             <h1 class="govuk-heading-xl">
                 @model.chargeTitle
             </h1>

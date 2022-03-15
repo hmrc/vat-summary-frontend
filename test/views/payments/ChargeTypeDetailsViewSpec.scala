@@ -61,6 +61,10 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     periodTo = Some(LocalDate.parse("2021-03-31"))
   )
 
+  val whatYouOweChargeNoPeriod = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
+
+  val whatYouOweChargeNoClearedAmount = whatYouOweCharge.copy(clearedAmount = None)
+
   "Rendering the Charge Type Details page" when {
 
     "the user has a cleared amount and a period for the charge" should {
@@ -154,6 +158,34 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           element(Selectors.whatYouOweLink).attr("href") shouldBe "#"
           //TODO: add correct link location once this page and the What you owe page have been wired up
         }
+      }
+    }
+
+    "the user has a cleared amount and no period for the charge" should {
+
+      lazy val view = {
+        chargeTypeDetailsView(whatYouOweChargeNoPeriod, Html(""))(request, messages, mockConfig, user)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not have a period caption" in {
+        elementExtinct(Selectors.caption)
+      }
+    }
+
+    "the user has no cleared amount" should {
+
+      lazy val view = {
+        chargeTypeDetailsView(whatYouOweChargeNoClearedAmount, Html(""))(request, messages, mockConfig, user)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first column in the third line" in {
+        elementText(Selectors.clearedAmountKey) shouldBe "Amount received"
+      }
+
+      "display the correct cleared amount" in {
+        elementText(Selectors.clearedAmountValue) shouldBe "0"
       }
     }
   }
