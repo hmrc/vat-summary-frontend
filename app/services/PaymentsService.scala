@@ -69,4 +69,5 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
       case Right(directDebitStatus) => Right(directDebitStatus)
       case Left(_) => Left(DirectDebitStatusError)
     }
+
 }

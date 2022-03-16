@@ -17,43 +17,19 @@
 package controllers
 
 import java.time.LocalDate
+
 import common.TestModels._
 import models.errors.{PaymentsError, UnknownError}
 import models.payments._
 import models.viewModels.OpenPaymentsViewModel
-import models.ServiceResponse
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.test.Helpers.{redirectLocation, _}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.test.Helpers.{contentAsString, redirectLocation, _}
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, OpenPayments}
-import play.api.test.Helpers.contentAsString
-
-import scala.concurrent.{ExecutionContext, Future}
 
 class OpenPaymentsControllerSpec extends ControllerBaseSpec {
-
-  val payment: PaymentWithPeriod = Payment(
-    ReturnDebitCharge,
-    LocalDate.parse("2017-01-01"),
-    LocalDate.parse("2017-01-01"),
-    LocalDate.parse("2017-01-01"),
-    BigDecimal("10000"),
-    Some("ABCD"),
-    chargeReference = Some("XD002750002155"),
-    ddCollectionInProgress = false
-  )
-
-  val paymentOnAccount: PaymentNoPeriod = Payment(
-    PaymentOnAccount,
-    LocalDate.parse("2017-01-01"),
-    BigDecimal("0"),
-    None,
-    chargeReference = Some("XD002750002155"),
-    ddCollectionInProgress = false
-  )
 
   val noPayments: NoPayments = injector.instanceOf[NoPayments]
   val mockPaymentsError: PaymentsError = injector.instanceOf[PaymentsError]
@@ -78,11 +54,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     mockAudit()
     mockServiceInfoCall()
   }
-
-  def mockOpenPayments(result: ServiceResponse[Option[Payments]]): Any =
-    (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
-    .expects(*, *, *)
-    .returns(Future.successful(result))
 
   "Calling the openPayments action" when {
 

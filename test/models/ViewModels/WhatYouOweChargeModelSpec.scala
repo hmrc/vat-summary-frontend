@@ -21,8 +21,10 @@ import models.viewModels.WhatYouOweChargeModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
-
 import java.time.LocalDate
+
+import common.TestModels._
+import models.User
 
 class WhatYouOweChargeModelSpec extends AnyWordSpecLike with Matchers {
 
@@ -271,5 +273,80 @@ class WhatYouOweChargeModelSpec extends AnyWordSpecLike with Matchers {
         }
       }
     }
+  }
+
+  "makePaymentRedirect" when {
+
+    "passed a PaymentWithPeriod" should {
+
+      "return the correct redirect link" in {
+        WhatYouOweChargeModel.makePaymentRedirect(payment) shouldBe redirectLinkWithPeriod
+      }
+    }
+
+    "passed a PaymentNoPeriod" should {
+
+      "return the correct redirect link" in {
+        WhatYouOweChargeModel.makePaymentRedirect(paymentOnAccount) shouldBe redirectLinkNoPeriod
+      }
+    }
+  }
+
+  "periodFrom" when {
+
+    "passed a PaymentWithPeriod" should {
+
+      "return its periodFrom field" in {
+        WhatYouOweChargeModel.periodFrom(payment) shouldBe Some(LocalDate.parse("2019-01-01"))
+      }
+    }
+
+    "passed a PaymentNoPeriod" should {
+
+      "return None" in {
+        WhatYouOweChargeModel.periodFrom(paymentOnAccount) shouldBe None
+      }
+    }
+  }
+
+  "periodTo" when {
+
+    "passed a PaymentWithPeriod" should {
+
+      "return the periodFrom field" in {
+        WhatYouOweChargeModel.periodTo(payment) shouldBe Some(LocalDate.parse("2019-02-02"))
+      }
+    }
+
+    "passed a PaymentNoPeriod" should {
+
+      "return None" in {
+        WhatYouOweChargeModel.periodTo(paymentOnAccount) shouldBe None
+      }
+    }
+  }
+
+  "description()" when {
+
+    "the user is an agent" should {
+
+      implicit val agentUser: User = User(vrn = "111111111", arn = Some("111111111"))
+
+      "return the correct description message key" in {
+        WhatYouOweChargeModel.description(paymentWithDifferentAgentMessage) shouldBe
+          Some("chargeType.bnpRegPost2010ChargeDescription.agent")
+      }
+    }
+
+    "the user is not an agent" should {
+
+      implicit val user: User = User(vrn = "111111111")
+
+      "return the correct message key" in {
+        WhatYouOweChargeModel.description(paymentWithDifferentAgentMessage) shouldBe
+          Some("chargeType.bnpRegPost2010ChargeDescription")
+      }
+    }
+
   }
 }

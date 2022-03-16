@@ -16,69 +16,122 @@
 
 package testOnly.controllers
 
+import java.time.LocalDate
+
 import com.google.inject.Inject
+import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.viewModels
+import models.User
+import models.payments.Payments
+import models.viewModels.WhatYouOweChargeModel._
 import models.viewModels.{WhatYouOweChargeModel, WhatYouOweViewModel}
-import play.api.i18n.I18nSupport
+import play.api.i18n.{I18nSupport, Messages}
+import play.api.mvc.Results.{InternalServerError, Ok}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.ServiceInfoService
+import services.{DateService, PaymentsService, ServiceInfoService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.payments.WhatYouOwe
+import utils.LoggerUtil
+import views.html.errors.PaymentsError
+import views.html.payments.{NoPayments, WhatYouOwe}
 
-import java.time.LocalDate
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
-class WhatYouOweController @Inject()(serviceInfoService: ServiceInfoService,
-                                     authorisedController: AuthorisedController,
+class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      ddInterrupt: DDInterruptPredicate,
+                                     dateService: DateService,
+                                     paymentsService: PaymentsService,
+                                     serviceInfoService: ServiceInfoService,
                                      mcc: MessagesControllerComponents,
-                                     whatYouOwe: WhatYouOwe)
-                                    (implicit appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
-
-  implicit val ec: ExecutionContext = mcc.executionContext
+                                     paymentsError: PaymentsError,
+                                     view: WhatYouOwe,
+                                     noPayments: NoPayments)
+                                    (implicit ec: ExecutionContext,
+                                     appConfig: AppConfig)
+  extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def show: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => ddInterrupt.interruptCheck { _ =>
 
-      serviceInfoService.getPartial.map { serviceInfoContent =>
-
-        val viewModel = WhatYouOweViewModel(
-          totalAmount = 2000.00,
-          charges = Seq(WhatYouOweChargeModel(
-            chargeDescription = "VAT OA Debit Charge",
-            chargeTitle = "VAT OA Debit Charge",
-            outstandingAmount = 1000.00,
-            originalAmount = 1000.00,
-            clearedAmount = Some(00.00),
-            dueDate = LocalDate.parse("2017-03-08"),
-            periodKey = Some("#001"),
-            isOverdue = false,
-            chargeReference = Some("XD002750002155"),
-            makePaymentRedirect = "/vat-through-software/make-payment",
-            periodFrom = Some(LocalDate.parse("2017-01-01")),
-            periodTo = Some(LocalDate.parse("2017-03-01"))
-          ),
-          WhatYouOweChargeModel(
-            chargeDescription = "VAT OA Debit Charge",
-            chargeTitle = "VAT OA Debit Charge",
-            outstandingAmount = 1000.00,
-            originalAmount = 1000.00,
-            clearedAmount = Some(00.00),
-            dueDate = LocalDate.parse("2017-03-08"),
-            periodKey = Some("#001"),
-            isOverdue = true,
-            chargeReference = Some("XD002750002156"),
-            makePaymentRedirect = "/vat-through-software/make-payment",
-            periodFrom = Some(LocalDate.parse("2017-01-01")),
-            periodTo = Some(LocalDate.parse("2017-03-01"))
-          ))
-        )
-
-        Ok(whatYouOwe(viewModel, serviceInfoContent))
+      for {
+        serviceInfoContent <- serviceInfoService.getPartial
+        payments <- paymentsService.getOpenPayments(user.vrn)
+      } yield {
+        payments match {
+          case Right(Some(payments)) =>
+            constructViewModel(payments) match {
+              case Some(model) =>
+                Ok(view(model, serviceInfoContent))
+              case None =>
+                InternalServerError(paymentsError())
+            }
+          case Right(_) =>
+            val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+            Ok(noPayments(user, serviceInfoContent, clientName))
+          case Left(_) =>
+            InternalServerError(paymentsError())
+        }
       }
+    }
+  }
+
+  val viewModel = WhatYouOweViewModel(
+    totalAmount = 2000.00,
+    charges = Seq(WhatYouOweChargeModel(
+      chargeDescription = "VAT OA Debit Charge",
+      chargeTitle = "VAT OA Debit Charge",
+      outstandingAmount = 1000.00,
+      originalAmount = 1000.00,
+      clearedAmount = Some(00.00),
+      dueDate = LocalDate.parse("2017-03-08"),
+      periodKey = Some("#001"),
+      isOverdue = false,
+      chargeReference = Some("XD002750002155"),
+      makePaymentRedirect = "/vat-through-software/make-payment",
+      periodFrom = Some(LocalDate.parse("2017-01-01")),
+      periodTo = Some(LocalDate.parse("2017-03-01"))
+    ),
+      WhatYouOweChargeModel(
+        chargeDescription = "VAT OA Debit Charge",
+        chargeTitle = "VAT OA Debit Charge",
+        outstandingAmount = 1000.00,
+        originalAmount = 1000.00,
+        clearedAmount = Some(00.00),
+        dueDate = LocalDate.parse("2017-03-08"),
+        periodKey = Some("#001"),
+        isOverdue = true,
+        chargeReference = Some("XD002750002156"),
+        makePaymentRedirect = "/vat-through-software/make-payment",
+        periodFrom = Some(LocalDate.parse("2017-01-01")),
+        periodTo = Some(LocalDate.parse("2017-03-01"))
+      ))
+  )
+
+  def constructViewModel(payments: Payments)(implicit user: User): Option[WhatYouOweViewModel] = {
+    val totalAmount = payments.financialTransactions.map(_.outstandingAmount).sum
+    val chargeModels: Seq[WhatYouOweChargeModel] = payments.financialTransactions.collect {
+      case payment if payment.originalAmount.isDefined && description(payment).isDefined =>
+        WhatYouOweChargeModel(
+          chargeDescription = description(payment).get,
+          chargeTitle = payment.chargeType.value,
+          outstandingAmount = payment.outstandingAmount,
+          originalAmount = payment.originalAmount.get,
+          clearedAmount = payment.clearedAmount,
+          dueDate = payment.due,
+          periodKey = if (payment.periodKey == "0000") None else Some(payment.periodKey),
+          isOverdue = payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress,
+          chargeReference = payment.chargeReference,
+          makePaymentRedirect = makePaymentRedirect(payment),
+          periodFrom = periodFrom(payment),
+          periodTo = periodTo(payment)
+        )
+    }
+    if(payments.financialTransactions.length == chargeModels.length) {
+      Some(WhatYouOweViewModel(totalAmount, chargeModels))
+    } else {
+      None
     }
   }
 }

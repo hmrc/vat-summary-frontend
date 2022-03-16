@@ -21,6 +21,10 @@ import play.api.data.Forms._
 
 import java.time.LocalDate
 
+import models.User
+import models.payments.{Payment, PaymentNoPeriod, PaymentWithPeriod}
+import views.templates.payments.PaymentMessageHelper
+
 case class WhatYouOweChargeModel(chargeDescription: String,
                                  chargeTitle: String,
                                  outstandingAmount: BigDecimal,
@@ -50,4 +54,39 @@ object WhatYouOweChargeModel {
     "periodFrom" -> optional(localDate),
     "periodTo" -> optional(localDate)
   )(WhatYouOweChargeModel.apply)(WhatYouOweChargeModel.unapply))
+
+  def makePaymentRedirect(payment: Payment): String = payment match {
+    case p: PaymentWithPeriod =>
+      controllers.routes.MakePaymentController.makePayment(
+        amountInPence = (p.outstandingAmount * 100).toLong,
+        taxPeriodMonth = p.periodTo.getMonthValue,
+        taxPeriodYear = p.periodTo.getYear,
+        vatPeriodEnding = p.periodTo.toString,
+        chargeType = p.chargeType.value,
+        dueDate = p.due.toString,
+        chargeReference = p.chargeReference.getOrElse("noCR")
+      ).url
+    case p: PaymentNoPeriod =>
+      controllers.routes.MakePaymentController.makePaymentNoPeriod(
+        amountInPence = (p.outstandingAmount * 100).toLong,
+        chargeType = p.chargeType.value,
+        dueDate = p.due.toString,
+        chargeReference = p.chargeReference.getOrElse("noCR")
+      ).url
+  }
+
+  def periodFrom(payment: Payment): Option[LocalDate] = payment match {
+    case p: PaymentWithPeriod => Some(p.periodFrom)
+    case _ => None
+  }
+
+  def periodTo(payment: Payment): Option[LocalDate] = payment match {
+    case p: PaymentWithPeriod => Some(p.periodTo)
+    case _ => None
+  }
+
+  def description(payment: Payment)(implicit user: User): Option[String] = {
+    if (user.isAgent) { PaymentMessageHelper.getChargeType(payment.chargeType.value).agentDescription }
+    else { PaymentMessageHelper.getChargeType(payment.chargeType.value).principalUserDescription }
+  }
 }

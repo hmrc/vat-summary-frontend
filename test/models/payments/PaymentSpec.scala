@@ -143,5 +143,111 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         paymentJson.as[Payment] shouldBe model
       }
     }
+
+    "given JSON with no original amount or cleared amount fields" should {
+
+      val paymentJson = Json.obj(
+        "chargeType" -> ReturnDebitCharge.value,
+        "taxPeriodFrom" -> startDate,
+        "taxPeriodTo" -> endDate,
+        "items" -> Json.arr(
+          Json.obj(
+            "dueDate" -> dueDate,
+            "DDcollectionInProgress" -> true
+          )
+        ),
+        "outstandingAmount" -> 0,
+        "periodKey" -> "#001",
+        "chargeReference" -> "XD002750002155"
+      )
+
+      val result = paymentJson.as[Payment]
+
+      "return a model" that {
+
+        "has None in the originalAmount field" in {
+          result.originalAmount shouldBe None
+        }
+
+        "has None in the clearedAmount field" in {
+          result.clearedAmount shouldBe None
+        }
+
+      }
+
+    }
+
+    "given JSON with period data and original amount and cleared amount fields" should {
+
+      "return a model with those fields populated" in {
+
+        val paymentJson = Json.obj(
+          "chargeType" -> ReturnDebitCharge.value,
+          "taxPeriodFrom" -> startDate,
+          "taxPeriodTo" -> endDate,
+          "items" -> Json.arr(
+            Json.obj(
+              "dueDate" -> dueDate,
+              "DDcollectionInProgress" -> true
+            )
+          ),
+          "outstandingAmount" -> 0,
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155",
+          "originalAmount" -> "10000",
+          "clearedAmount" -> "100"
+        )
+
+        val model = PaymentWithPeriod(
+          chargeType = ReturnDebitCharge,
+          periodFrom = LocalDate.parse(startDate),
+          periodTo = LocalDate.parse(endDate),
+          due = LocalDate.parse(dueDate),
+          outstandingAmount = 0,
+          periodKey = "#001",
+          Some("XD002750002155"),
+          ddCollectionInProgress = true,
+          originalAmount = Some(10000),
+          clearedAmount = Some(100)
+        )
+
+        paymentJson.as[Payment] shouldBe model
+      }
+
+    }
+
+    "given JSON without period data and with original amount and cleared amount fields" should {
+
+      "return a paymentNoPeriod model with the correct original amount and cleared amount fields" in {
+
+        val paymentJson = Json.obj(
+          "chargeType" -> ReturnDebitCharge.value,
+          "items" -> Json.arr(
+            Json.obj(
+              "dueDate" -> dueDate,
+              "DDcollectionInProgress" -> true
+            )
+          ),
+          "outstandingAmount" -> 0,
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155",
+          "originalAmount" -> "10000",
+          "clearedAmount" -> "100"
+        )
+
+        val model = PaymentNoPeriod(
+          chargeType = ReturnDebitCharge,
+          due = LocalDate.parse(dueDate),
+          outstandingAmount = 0,
+          periodKey = "#001",
+          Some("XD002750002155"),
+          ddCollectionInProgress = true,
+          originalAmount = Some(10000),
+          clearedAmount = Some(100)
+        )
+
+        paymentJson.as[Payment] shouldBe model
+      }
+    }
   }
 }
