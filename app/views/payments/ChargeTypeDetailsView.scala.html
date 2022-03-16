@@ -16,12 +16,15 @@
 
 @import models.viewModels.WhatYouOweChargeModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import views.html.templates.formatters.money.DisplayMoney
 
 @this(mainTemplate: MainTemplate,
+      displayMoney: DisplayMoney,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukButton: GovukButton,
-      govukTag: GovukTag)
+      govukTag: GovukTag,
+      govukBackLink: GovukBackLink)
 
 @(model: WhatYouOweChargeModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
@@ -44,20 +47,30 @@
     ))
 }
 
+@backLink = {
+    @govukBackLink(BackLink(
+        content = Text(messages("base.back"))
+    ))
+}
+
 @dueDateHtml = {
-    @model.dueDate
+    @displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
+                                                        content = Text(messages("common.overdue")),
+                                                        classes = "govuk-tag--red"
+                                                      ))
+    }
 }
 
 @chargeDueHtml = {
-    @model.originalAmount
+    @displayMoney(model.originalAmount)
 }
 
 @clearedAmountHtml = {
-    @model.clearedAmount.getOrElse(0)
+    @displayMoney(model.clearedAmount.getOrElse(0))
 }
 
 @outstandingAmountHtml = {
-    @model.outstandingAmount
+    @displayMoney(model.outstandingAmount)
 }
 
 @mainTemplate(
@@ -65,7 +78,7 @@
     appConfig = appConfig,
     serviceInfoContent = serviceInfoContent,
     user = Some(user),
-    navLinkContent = Some(breadcrumbs)
+    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
 ) {
 
     <div class="govuk-grid-row">
@@ -118,13 +131,16 @@
         </div>
     </div>
 
-    @govukButton(Button(
-        content = Text(messages("chargeTypeDetails.button")),
-        href    = Some(appConfig.unauthenticatedPaymentsUrl)
-    ))
+    @if(!user.isAgent) {
+        @govukButton(Button(
+            content = Text(messages("chargeTypeDetails.button")),
+            href    = Some(model.makePaymentRedirect)
+        ))
+    }
 
-    <a class="govuk-link" href="#"
-        id="whatYouOweLink" rel="noreferrer noopener" target="_blank">
-        @messages("chargeTypeDetails.link")
-    </a>
+    <p class="govuk-body">
+        <a class="govuk-link" href="#" id="whatYouOweLink">
+            @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+        </a>
+    </p>
 }

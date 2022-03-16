@@ -31,9 +31,11 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val caption = ".govuk-caption-xl"
+    val breadcrumbs = "govuk-breadcrumbs"
     val btaBreadcrumb = "li.govuk-breadcrumbs__list-item > a"
     val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2) > a"
-    val openPaymentsBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3) > a"
+    val openPaymentsBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3)"
+    val backLink = ".govuk-back-link"
     val dueDateKey = ".govuk-summary-list__key"
     val dueDateValue = ".govuk-summary-list__value"
     val chargeDueKey = ".govuk-summary-list__row:nth-of-type(2) > .govuk-summary-list__key"
@@ -61,102 +63,132 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     periodTo = Some(LocalDate.parse("2021-03-31"))
   )
 
+  val whatYouOweChargeOverdue = whatYouOweCharge.copy(isOverdue = true)
+
   val whatYouOweChargeNoPeriod = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
+
+  val whatYouOweChargeNoPeriodFrom = whatYouOweCharge.copy(periodFrom = None)
+
+  val whatYouOweChargeNoPeriodTo = whatYouOweCharge.copy(periodTo = None)
 
   val whatYouOweChargeNoClearedAmount = whatYouOweCharge.copy(clearedAmount = None)
 
-  "Rendering the Charge Type Details page" when {
+  "Rendering the Charge Type Details page for a principal user" when {
 
-    "the user has a cleared amount and a period for the charge" should {
+    "the user has a cleared amount and a period for the charge" when {
 
-      lazy val view = {
-        chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, user)
-      }
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "the charge isn't overdue" should {
 
-      "have the correct document title" in {
-        document.title shouldBe "Charge Title - Manage your VAT account - GOV.UK"
-      }
+        lazy val view = {
+          chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, user)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe "Charge Title"
-      }
-
-      "have a period caption" in {
-        elementText(Selectors.caption) shouldBe "1 January 2021 to 31 March 2021"
-      }
-
-      "render breadcrumbs which" should {
-
-        "have the text 'Business tax account'" in {
-          elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+        "have the correct document title" in {
+          document.title shouldBe "Charge Title - Manage your VAT account - GOV.UK"
         }
 
-        "link to bta" in {
-          element(Selectors.btaBreadcrumb).attr("href") shouldBe "bta-url"
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe "Charge Title"
         }
 
-        "have the text 'VAT'" in {
-          elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
+        "have a period caption" in {
+          elementText(Selectors.caption) shouldBe "1 January 2021 to 31 March 2021"
         }
 
-        s"link to ${controllers.routes.VatDetailsController.details.url}" in {
-          element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+        "render breadcrumbs which" should {
+
+          "have the text 'Business tax account'" in {
+            elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
+          }
+
+          "link to bta" in {
+            element(Selectors.btaBreadcrumb).attr("href") shouldBe "bta-url"
+          }
+
+          "have the text 'VAT'" in {
+            elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
+          }
+
+          s"link to ${controllers.routes.VatDetailsController.details.url}" in {
+            element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+          }
+
+          "have the text 'What you owe'" in {
+            elementText(Selectors.openPaymentsBreadcrumb) shouldBe "What you owe"
+          }
+
+          "link to the what you owe page" in {
+            element(Selectors.openPaymentsBreadcrumb).attr("href") shouldBe ""
+            //TODO: add correct link location once this page and the What you owe page have been wired up
+          }
+        }
+
+        "have the correct first column in the first line" in {
+          elementText(Selectors.dueDateKey) shouldBe "Due date"
+        }
+
+        "display the correct due date for the charge" in {
+          elementText(Selectors.dueDateValue) shouldBe "8 April 2021"
+        }
+
+        "have the correct first column in the second line" in {
+          elementText(Selectors.chargeDueKey) shouldBe "Charge due"
+        }
+
+        "display the correct total amount due" in {
+          elementText(Selectors.chargeDueValue) shouldBe "£3,333.33"
+        }
+
+        "have the correct first column in the third line" in {
+          elementText(Selectors.clearedAmountKey) shouldBe "Amount received"
+        }
+
+        "display the correct cleared amount" in {
+          elementText(Selectors.clearedAmountValue) shouldBe "£2,222.22"
+        }
+
+        "have the correct first column in the fourth line" in {
+          elementText(Selectors.outstandingAmountKey) shouldBe "Amount left to pay"
+        }
+
+        "display the correct outstanding amount" in {
+          elementText(Selectors.outstandingAmountValue) shouldBe "£1,111.11"
+        }
+
+        "have a button" which {
+
+          "has the correct button text" in {
+            elementText(Selectors.button) shouldBe "Pay now"
+          }
+
+          "has the correct href location" in {
+            element(Selectors.button).attr("href") shouldBe "/paymentPageRedirect"
+          }
+        }
+
+        "have a link to the What you owe page" which {
+
+          "has the correct link text" in {
+            elementText(Selectors.whatYouOweLink) shouldBe "Return to what you owe"
+          }
+
+          "has the correct href" in {
+            element(Selectors.whatYouOweLink).attr("href") shouldBe "#"
+            //TODO: add correct link location once this page and the What you owe page have been wired up
+          }
         }
       }
 
-      "have the correct first column in the first line" in {
-        elementText(Selectors.dueDateKey) shouldBe "Due date"
-      }
+      "the charge is overdue" should {
 
-      "display the correct due date for the charge" in {
-        elementText(Selectors.dueDateValue) shouldBe "2021-04-08"
-      }
-
-      "have the correct first column in the second line" in {
-        elementText(Selectors.chargeDueKey) shouldBe "Charge due"
-      }
-
-      "display the correct total amount due" in {
-        elementText(Selectors.chargeDueValue) shouldBe "3333.33"
-      }
-
-      "have the correct first column in the third line" in {
-        elementText(Selectors.clearedAmountKey) shouldBe "Amount received"
-      }
-
-      "display the correct cleared amount" in {
-        elementText(Selectors.clearedAmountValue) shouldBe "2222.22"
-      }
-
-      "have the correct first column in the fourth line" in {
-        elementText(Selectors.outstandingAmountKey) shouldBe "Amount left to pay"
-      }
-
-      "display the correct outstanding amount" in {
-        elementText(Selectors.outstandingAmountValue) shouldBe "1111.11"
-      }
-
-      "have a button" which {
-
-        "has the correct button text" in {
-          elementText(Selectors.button) shouldBe "Pay now"
+        lazy val view = {
+          chargeTypeDetailsView(whatYouOweChargeOverdue, Html(""))(request, messages, mockConfig, user)
         }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "has the correct href location" in {
-          element(Selectors.button).attr("href") shouldBe "unauthenticated-payments-url"
-        }
-      }
-
-      "have a link to the What you owe page" which {
-
-        "has the correct link text" in {
-          elementText(Selectors.whatYouOweLink) shouldBe "Return to what you owe"
-        }
-
-        "has the correct href" in {
-          element(Selectors.whatYouOweLink).attr("href") shouldBe "#"
-          //TODO: add correct link location once this page and the What you owe page have been wired up
+        "display the overdue label" in {
+          elementText(Selectors.dueDateValue) shouldBe "8 April 2021 overdue"
         }
       }
     }
@@ -165,6 +197,30 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
       lazy val view = {
         chargeTypeDetailsView(whatYouOweChargeNoPeriod, Html(""))(request, messages, mockConfig, user)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not have a period caption" in {
+        elementExtinct(Selectors.caption)
+      }
+    }
+
+    "the user only has the periodFrom field but not the periodTo field" should {
+
+      lazy val view = {
+        chargeTypeDetailsView(whatYouOweChargeNoPeriodTo, Html(""))(request, messages, mockConfig, user)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not have a period caption" in {
+        elementExtinct(Selectors.caption)
+      }
+    }
+
+    "the user only has the periodTo field but not the periodFrom field" should {
+
+      lazy val view = {
+        chargeTypeDetailsView(whatYouOweChargeNoPeriodFrom, Html(""))(request, messages, mockConfig, user)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -184,8 +240,48 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         elementText(Selectors.clearedAmountKey) shouldBe "Amount received"
       }
 
-      "display the correct cleared amount" in {
-        elementText(Selectors.clearedAmountValue) shouldBe "0"
+      "display 0 as the cleared amount" in {
+        elementText(Selectors.clearedAmountValue) shouldBe "£0"
+      }
+    }
+  }
+
+  "Rendering the Charge Type Details page for an agent" should {
+
+    lazy val view = {
+      chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, agentUser)
+    }
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render breadcrumbs" in {
+      elementExtinct(Selectors.breadcrumbs)
+    }
+
+    "have a backLink" which {
+
+      "has the text Back" in {
+        elementText(Selectors.backLink) shouldBe "Back"
+      }
+
+      "has the correct href" in {
+        element(Selectors.backLink).attr("href") shouldBe "#"
+        //TODO: add correct link location once this page and the What you owe page have been wired up
+      }
+    }
+
+    "not have the make payment button" in {
+      elementExtinct(Selectors.button)
+    }
+
+    "have a link to the What your client owes page" which {
+
+      "has the correct link text" in {
+        elementText(Selectors.whatYouOweLink) shouldBe "Return to what your client owes"
+      }
+
+      "has the correct href" in {
+        element(Selectors.whatYouOweLink).attr("href") shouldBe "#"
+        //TODO: add correct link location once this page and the What you owe page have been wired up
       }
     }
   }
