@@ -23,9 +23,9 @@ import play.api.i18n.Messages
 
 object DisplayDateRangeHelper {
 
-  def displayDateRange(from: LocalDate, to: LocalDate, useShortDayFormat: Boolean = false)
+  def displayDateRange(from: LocalDate, to: LocalDate, useShortDayFormat: Boolean = false, alwaysUseYear: Boolean = false)
                       (implicit messages: Messages): String = {
-    s"${displayDate(from, from.getYear != to.getYear, useShortDayFormat)} " +
+    s"${displayDate(from, (from.getYear != to.getYear) || alwaysUseYear , useShortDayFormat)} " +
       s"${messages("common.dateRangeSeparator")} " +
       s"${displayDate(to, true, useShortDayFormat)}"
   }

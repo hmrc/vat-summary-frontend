@@ -123,6 +123,14 @@ whatYouOwe.details.agent.paymentHelpTwo = If your client cannot pay a tax bill, 
 whatYouOwe.details.agent.paymentHelpThree = setting up a Time to Pay Arrangement (opens in a new tab)
 whatYouOwe.details.agent.paymentHelpFour = This allows them to pay their bill in instalments.
 
+chargeTypeDetails.dueDate = Due date
+chargeTypeDetails.chargeDue = Charge due
+chargeTypeDetails.amountReceived = Amount received
+chargeTypeDetails.amountLeft = Amount left to pay
+chargeTypeDetails.button = Pay now
+chargeTypeDetails.link = Return to what you owe
+chargeTypeDetails.agentLink = Return to what your client owes
+
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
