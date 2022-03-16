@@ -27,6 +27,9 @@ sealed trait Payment extends Obligation {
   val chargeType: ChargeType
   val due: LocalDate
   val outstandingAmount: BigDecimal
+  val originalAmount: Option[BigDecimal]
+  val chargeReference: Option[String]
+  val clearedAmount: Option[BigDecimal]
   val periodKey: String
   val ddCollectionInProgress: Boolean
   val auditDetails: Map[String, String]
@@ -39,7 +42,9 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              outstandingAmount: BigDecimal,
                              periodKey: String,
                              chargeReference: Option[String],
-                             ddCollectionInProgress: Boolean) extends Payment {
+                             ddCollectionInProgress: Boolean,
+                             originalAmount: Option[BigDecimal] = None,
+                             clearedAmount: Option[BigDecimal] = None) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
     "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
@@ -55,7 +60,9 @@ case class PaymentNoPeriod(chargeType: ChargeType,
                            outstandingAmount: BigDecimal,
                            periodKey: String,
                            chargeReference: Option[String],
-                           ddCollectionInProgress: Boolean) extends Payment {
+                           ddCollectionInProgress: Boolean,
+                           originalAmount: Option[BigDecimal] = None,
+                           clearedAmount: Option[BigDecimal] = None) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
     "paymentOutstanding" -> (if(outstandingAmount > 0) "yes" else "no"),
@@ -73,12 +80,40 @@ object Payment {
                             outstandingAmount: BigDecimal,
                             periodKey: Option[String],
                             chargeReference: Option[String],
-                            ddCollectionInProgress: Boolean): Payment =
+                            ddCollectionInProgress: Boolean,
+                            originalAmount: Option[BigDecimal],
+                            clearedAmount: Option[BigDecimal]): Payment =
     (periodFrom, periodTo) match {
-      case (Some(s), Some(e)) => apply(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress)
-      case (None, None) => apply(chargeType, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress)
-      case (s, e) => throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
+      case (Some(s), Some(e)) =>
+        apply(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress, originalAmount, clearedAmount)
+      case (None, None) =>
+        apply(chargeType, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress, originalAmount, clearedAmount)
+      case (s, e) =>
+        throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
   }
+
+  def apply(chargeType: ChargeType,
+            periodFrom: LocalDate,
+            periodTo: LocalDate,
+            due: LocalDate,
+            outstandingAmount: BigDecimal,
+            periodKey: Option[String],
+            chargeReference: Option[String],
+            ddCollectionInProgress: Boolean,
+            originalAmount: Option[BigDecimal],
+            clearedAmount: Option[BigDecimal]): PaymentWithPeriod =
+    PaymentWithPeriod(
+      chargeType,
+      periodFrom,
+      periodTo,
+      due,
+      outstandingAmount,
+      periodKey.getOrElse("0000"),
+      chargeReference,
+      ddCollectionInProgress,
+      originalAmount,
+      clearedAmount
+    )
 
   def apply(chargeType: ChargeType,
             periodFrom: LocalDate,
@@ -104,6 +139,25 @@ object Payment {
             outstandingAmount: BigDecimal,
             periodKey: Option[String],
             chargeReference: Option[String],
+            ddCollectionInProgress: Boolean,
+            originalAmount: Option[BigDecimal],
+            clearedAmount: Option[BigDecimal]): PaymentNoPeriod =
+    PaymentNoPeriod(
+      chargeType,
+      due,
+      outstandingAmount,
+      periodKey.getOrElse("0000"),
+      chargeReference,
+      ddCollectionInProgress,
+      originalAmount,
+      clearedAmount
+    )
+
+  def apply(chargeType: ChargeType,
+            due: LocalDate,
+            outstandingAmount: BigDecimal,
+            periodKey: Option[String],
+            chargeReference: Option[String],
             ddCollectionInProgress: Boolean): PaymentNoPeriod =
     PaymentNoPeriod(
       chargeType,
@@ -122,7 +176,10 @@ object Payment {
     (JsPath \ "outstandingAmount").read[BigDecimal] and
     (JsPath \ "periodKey").readNullable[String] and
     (JsPath \ "chargeReference").readNullable[String] and
-    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false))
+    (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false)) and
+    (JsPath \ "originalAmount").readNullable[BigDecimal] and
+    (JsPath \ "clearedAmount").readNullable[BigDecimal]
+
   )(Payment.createPayment _)
 
 }

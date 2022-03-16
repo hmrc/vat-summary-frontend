@@ -22,9 +22,9 @@ import java.time.LocalDate
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.payments.{Payment, Payments, ReturnDebitCharge}
+import models.payments._
 import models.penalties.PenaltiesSummary
-import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel}
+import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel, WhatYouOweChargeModel, WhatYouOweViewModel}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -45,6 +45,43 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false
   )))
+
+  val payment: PaymentWithPeriod = Payment(
+    ReturnDebitCharge,
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
+    LocalDate.parse("2019-03-03"),
+    BigDecimal("10000"),
+    Some("ABCD"),
+    chargeReference = Some("XD002750002155"),
+    ddCollectionInProgress = false,
+    originalAmount = Some(1000.00),
+    clearedAmount = Some(00.00)
+  )
+
+  val paymentNoPeriodNoDate: PaymentNoPeriod = Payment(
+    OADefaultInterestCharge,
+    LocalDate.parse("2019-03-03"),
+    BigDecimal("10000"),
+    Some("ABCD"),
+    chargeReference = Some("XD002750002155"),
+    ddCollectionInProgress = false,
+    originalAmount = Some(1000.00),
+    clearedAmount = Some(00.00)
+  )
+
+  val defaultInterestPaymentNoPeriod: PaymentNoPeriod = paymentNoPeriodNoDate.copy(chargeType = VatDefaultInterest)
+
+  val paymentWithDifferentAgentMessage = payment.copy(chargeType = BnpRegPost2010Charge)
+
+  val paymentOnAccount: PaymentNoPeriod = Payment(
+    PaymentOnAccount,
+    LocalDate.parse("2017-01-01"),
+    BigDecimal("0"),
+    None,
+    chargeReference = Some("XD002750002155"),
+    ddCollectionInProgress = false
+  )
 
   val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
     LocalDate.parse("2019-04-04"),
@@ -276,4 +313,26 @@ object TestModels {
 
   val penaltySummaryResponse: HttpGetResult[PenaltiesSummary] = Right(penaltiesSummaryModel)
   val penaltySummaryNoResponse: HttpGetResult[PenaltiesSummary] = Left(PenaltiesFeatureSwitchError)
+
+  val redirectLinkWithPeriod = "/vat-through-software/make-payment/1000000/2/2019/2019-02-02/VAT%20Return%20Debit%20Charge/2019-03-03/XD002750002155"
+  val redirectLinkNoPeriod = "/vat-through-software/make-payment/0/Payment%20on%20account/2017-01-01/XD002750002155"
+
+  val whatYouOweViewModel = WhatYouOweViewModel(
+    10000,
+    Seq(WhatYouOweChargeModel(
+      chargeDescription = "for the period 1 Jan to 2 Feb 2019",
+      chargeTitle = "VAT Return Debit Charge",
+      outstandingAmount = 10000,
+      originalAmount = 1000.00,
+      clearedAmount = Some(00.00),
+      dueDate = LocalDate.parse("2019-03-03"),
+      periodKey = Some("ABCD"),
+      isOverdue = false,
+      chargeReference = Some("XD002750002155"),
+      makePaymentRedirect = redirectLinkWithPeriod,
+      periodFrom = Some(LocalDate.parse("2019-01-01")),
+      periodTo = Some(LocalDate.parse("2019-02-02"))
+    ))
+  )
+
 }
