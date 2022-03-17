@@ -128,19 +128,20 @@
                     )
                 )
             ))
+
+            @if(!user.isAgent) {
+                @govukButton(Button(
+                    content = Text(messages("chargeTypeDetails.button")),
+                    href    = Some(model.makePaymentRedirect)
+                ))
+            }
+
+            <p class="govuk-body">
+                <a class="govuk-link" href="#" id="whatYouOweLink">
+                    @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+                </a>
+            </p>
+
         </div>
     </div>
-
-    @if(!user.isAgent) {
-        @govukButton(Button(
-            content = Text(messages("chargeTypeDetails.button")),
-            href    = Some(model.makePaymentRedirect)
-        ))
-    }
-
-    <p class="govuk-body">
-        <a class="govuk-link" href="#" id="whatYouOweLink">
-            @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
-        </a>
-    </p>
 }

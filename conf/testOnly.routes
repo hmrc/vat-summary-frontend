@@ -25,4 +25,6 @@ GET         /vat-through-software/test-only/vaclf-stub-agent-hub               t
 
 GET         /vat-through-software/test-only/penalties-stub                     testOnly.controllers.PenaltiesController.show()
 
+GET         /vat-through-software/test-only/amount-to-pay                      testOnly.controllers.ChargeBreakdownController.showBreakdown
+
 ->          /                                                                  prod.Routes
