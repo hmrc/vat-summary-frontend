@@ -19,12 +19,19 @@ package controllers
 import common.TestModels.customerInformationMax
 import org.jsoup.Jsoup
 import play.api.test.Helpers._
+import testOnly.controllers.WhatYouOweController
+import views.html.payments.WhatYouOwe
 
 class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
+  val whatYouOwe: WhatYouOwe = injector.instanceOf[WhatYouOwe]
+
   val controller = new WhatYouOweController(
+    mockServiceInfoService,
     authorisedController,
-    ddInterruptPredicate
+    ddInterruptPredicate,
+    mcc,
+    whatYouOwe
   )
 
   "The WhatYouOweController .show method" when {
@@ -33,6 +40,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockPrincipalAuth
+        mockServiceInfoCall()
         mockCustomerInfo(Right(customerInformationMax))
         mockDateServiceCall
         controller.show(fakeRequest)
@@ -43,7 +51,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
 
       "return the correct content" in {
-        Jsoup.parse(contentAsString(result)).text() shouldBe "view"
+        Jsoup.parse(contentAsString(result)).title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
       }
 
     }
@@ -52,6 +60,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockPrincipalAuth()
+        mockServiceInfoCall()
         mockDateServiceCall()
         controller.show(DDInterruptRequest)
       }
@@ -70,6 +79,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockAgentAuth
+        mockServiceInfoCall()
         controller.show(agentFinancialRequest)
       }
 
