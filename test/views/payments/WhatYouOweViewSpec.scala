@@ -205,7 +205,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "have a section for guidance if the user cannot pay today" which {
 
       "has the correct heading" in {
-        elementText("h3:nth-of-type(1)") shouldBe "If you cannot pay today"
+        elementText("h2:nth-of-type(1)") shouldBe "If you cannot pay today"
       }
 
       "has the correct paragraph text" in {
@@ -225,7 +225,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "have a section for guidance if what the user owes is missing" which {
 
       "has the correct heading" in {
-        elementText("h3:nth-of-type(2)") shouldBe "What you owe is incorrect or missing"
+        elementText("h2:nth-of-type(2)") shouldBe "What you owe is incorrect or missing"
       }
 
       "has the correct first paragraph" which {
