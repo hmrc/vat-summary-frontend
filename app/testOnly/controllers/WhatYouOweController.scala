@@ -20,12 +20,14 @@ import com.google.inject.Inject
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
+import models.viewModels
 import models.viewModels.{WhatYouOweChargeModel, WhatYouOweViewModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.payments.WhatYouOwe
+
 import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -41,10 +43,10 @@ class WhatYouOweController @Inject()(serviceInfoService: ServiceInfoService,
   def show: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => ddInterrupt.interruptCheck { _ =>
 
-      serviceInfoService.getPartial.flatMap { serviceInfoContent =>
+      serviceInfoService.getPartial.map { serviceInfoContent =>
 
         val viewModel = WhatYouOweViewModel(
-          totalAmount = 1000.00,
+          totalAmount = 2000.00,
           charges = Seq(WhatYouOweChargeModel(
             chargeDescription = "VAT OA Debit Charge",
             chargeTitle = "VAT OA Debit Charge",
@@ -58,10 +60,24 @@ class WhatYouOweController @Inject()(serviceInfoService: ServiceInfoService,
             makePaymentRedirect = "/vat-through-software/make-payment",
             periodFrom = Some(LocalDate.parse("2017-01-01")),
             periodTo = Some(LocalDate.parse("2017-03-01"))
+          ),
+          WhatYouOweChargeModel(
+            chargeDescription = "VAT OA Debit Charge",
+            chargeTitle = "VAT OA Debit Charge",
+            outstandingAmount = 1000.00,
+            originalAmount = 1000.00,
+            clearedAmount = Some(00.00),
+            dueDate = LocalDate.parse("2017-03-08"),
+            periodKey = Some("#001"),
+            isOverdue = true,
+            chargeReference = Some("XD002750002156"),
+            makePaymentRedirect = "/vat-through-software/make-payment",
+            periodFrom = Some(LocalDate.parse("2017-01-01")),
+            periodTo = Some(LocalDate.parse("2017-03-01"))
           ))
         )
 
-        Future.successful(Ok(whatYouOwe(viewModel, serviceInfoContent)))
+        Ok(whatYouOwe(viewModel, serviceInfoContent))
       }
     }
   }
