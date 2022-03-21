@@ -20,17 +20,96 @@ import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
+import views.html.errors.PaymentsError
 import views.html.payments.ChargeTypeDetailsView
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
-    authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService, injector.instanceOf[ChargeTypeDetailsView]
+    authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
+    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[PaymentsError]
   )
 
   "The showBreakdown action" when {
 
-    "the user is logged in as a principal entity" should {
+    "valid form information is submitted in the request" when {
+
+      "the user is logged in as a principal entity" should {
+
+        val request = fakeRequestWithSession.withFormUrlEncodedBody(
+          "chargeDescription" -> "Example Description",
+          "chargeTitle" -> "Example Charge",
+          "outstandingAmount" -> "1234.56",
+          "originalAmount" -> "1234.56",
+          "dueDate" -> "2018-01-01",
+          "isOverdue" -> "true",
+          "makePaymentRedirect" -> "/payment-redirect"
+        )
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          controller.showBreakdown(request)
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "Example Charge - Manage your VAT account - GOV.UK"
+        }
+      }
+
+      "the user is logged in as an agent" should {
+
+        lazy val request = agentFinancialRequest.withFormUrlEncodedBody(
+          "chargeDescription" -> "Example Description",
+          "chargeTitle" -> "Example Charge",
+          "outstandingAmount" -> "1234.56",
+          "originalAmount" -> "1234.56",
+          "dueDate" -> "2018-01-01",
+          "isOverdue" -> "true",
+          "makePaymentRedirect" -> "/payment-redirect"
+        )
+
+        lazy val result = {
+          mockAgentAuth()
+          mockServiceInfoCall()
+          controller.showBreakdown(request)
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "Example Charge - Your client’s VAT details - GOV.UK"
+        }
+      }
+    }
+
+    "invalid form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.showBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "no form information is submitted in the request" should {
 
       lazy val result = {
         mockPrincipalAuth()
@@ -38,31 +117,13 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         controller.showBreakdown(fakeRequestWithSession)
       }
 
-      "return 200" in {
-        status(result) shouldBe OK
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
 
-      "load the page" in {
+      "load the payments error view" in {
         val document: Document = Jsoup.parse(contentAsString(result))
-        document.select("h1").text() shouldBe "Example Charge"
-      }
-    }
-
-    "the user is logged in as an agent" should {
-
-      lazy val result = {
-        mockAgentAuth()
-        mockServiceInfoCall()
-        controller.showBreakdown(agentFinancialRequest)
-      }
-
-      "return 200" in {
-        status(result) shouldBe OK
-      }
-
-      "load the page" in {
-        val document: Document = Jsoup.parse(contentAsString(result))
-        document.select("h1").text() shouldBe "Example Charge"
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
       }
     }
 
