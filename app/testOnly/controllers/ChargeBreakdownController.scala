@@ -24,9 +24,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil
+import views.html.errors.PaymentsError
 import views.html.payments.ChargeTypeDetailsView
 
-import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
@@ -34,28 +35,22 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           DDInterrupt: DDInterruptPredicate,
                                           mcc: MessagesControllerComponents,
                                           serviceInfoService: ServiceInfoService,
-                                          view: ChargeTypeDetailsView)
+                                          view: ChargeTypeDetailsView,
+                                          errorView: PaymentsError)
                                          (implicit ec: ExecutionContext,
-                                          appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                          appConfig: AppConfig) extends
+  FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def showBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
       serviceInfoService.getPartial.map { navLinks =>
-        val model = WhatYouOweChargeModel(
-          "Example description",
-          "Example Charge",
-          111.11,
-          333.33,
-          Some(222.22),
-          LocalDate.parse("2018-03-01"),
-          Some("18AA"),
-          isOverdue = true,
-          Some("ABCD"),
-          "http://localhost:9152/vat-through-software/make-payment/11111/02/2018/2018-02-01/VAT%20FTN%20RCSL/2018-03-01/ABCD",
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-01"))
+        WhatYouOweChargeModel.form.bindFromRequest.fold(
+          errorForm => {
+            logger.warn(s"[ChargeBreakdownController][showBreakdown] - Unexpected error when binding form: $errorForm")
+            InternalServerError(errorView())
+          },
+          model => Ok(view(model, navLinks))
         )
-        Ok(view(model, navLinks))
       }
     }
   }
