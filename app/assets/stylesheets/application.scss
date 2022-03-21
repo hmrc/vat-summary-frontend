@@ -17,11 +17,7 @@ $hmrc-assets-path: "/vat-through-software/assets/lib/hmrc-frontend/hmrc/assets/"
   margin-bottom: 30px;
 }
 
-.govuk-summary-list {
-  margin-bottom: 0;
-}
-
-.govuk-summary-list__key {
+dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__key {
   width: 70%;
 }
 

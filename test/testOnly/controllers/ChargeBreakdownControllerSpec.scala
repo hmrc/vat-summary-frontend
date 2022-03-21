@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package testOnly.controllers
 
+import controllers.ControllerBaseSpec
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.api.test.Helpers._
+import views.html.payments.ChargeTypeDetailsView
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
-  val controller = new ChargeBreakdownController(authorisedController, ddInterruptPredicate, mcc)
+  val controller = new ChargeBreakdownController(
+    authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService, injector.instanceOf[ChargeTypeDetailsView]
+  )
 
   "The showBreakdown action" when {
 
@@ -28,6 +34,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockPrincipalAuth()
+        mockServiceInfoCall()
         controller.showBreakdown(fakeRequestWithSession)
       }
 
@@ -36,7 +43,8 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       }
 
       "load the page" in {
-        contentAsString(result) shouldBe "Example Charge"
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select("h1").text() shouldBe "Example Charge"
       }
     }
 
@@ -44,6 +52,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockAgentAuth()
+        mockServiceInfoCall()
         controller.showBreakdown(agentFinancialRequest)
       }
 
@@ -52,7 +61,8 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       }
 
       "load the page" in {
-        contentAsString(result) shouldBe "Example Charge"
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select("h1").text() shouldBe "Example Charge"
       }
     }
 
