@@ -16,6 +16,9 @@
 
 package models.viewModels
 
+import play.api.data.Form
+import play.api.data.Forms._
+
 import java.time.LocalDate
 
 case class WhatYouOweChargeModel(chargeDescription: String,
@@ -30,3 +33,21 @@ case class WhatYouOweChargeModel(chargeDescription: String,
                                  makePaymentRedirect: String,
                                  periodFrom: Option[LocalDate],
                                  periodTo: Option[LocalDate])
+
+object WhatYouOweChargeModel {
+
+  val form: Form[WhatYouOweChargeModel] = Form(mapping(
+    "chargeDescription" -> text,
+    "chargeTitle" -> text,
+    "outstandingAmount" -> bigDecimal,
+    "originalAmount" -> bigDecimal,
+    "clearedAmount" -> optional(bigDecimal),
+    "dueDate" -> localDate,
+    "periodKey" -> optional(text),
+    "isOverdue" -> boolean,
+    "chargeReference" -> optional(text),
+    "makePaymentRedirect" -> text,
+    "periodFrom" -> optional(localDate),
+    "periodTo" -> optional(localDate)
+  )(WhatYouOweChargeModel.apply)(WhatYouOweChargeModel.unapply))
+}
