@@ -51,7 +51,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           outstandingAmount = 10000,
           periodKey = "15AC",
           ddCollectionInProgress = false,
-          chargeReference = Some("XD002750002155")
+          chargeReference = Some("XD002750002155"),
+          originalAmount = Some(10000)
         ),
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
@@ -61,7 +62,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           outstandingAmount = 10000,
           periodKey = "15AC",
           ddCollectionInProgress = false,
-          chargeReference = Some("XD002750002155")
+          chargeReference = Some("XD002750002155"),
+          originalAmount = Some(10000)
         )
       )))
 

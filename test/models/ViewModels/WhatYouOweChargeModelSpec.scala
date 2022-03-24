@@ -16,15 +16,18 @@
 
 package models.ViewModels
 
+import java.time.LocalDate
+
+import common.TestModels._
+import models.User
 import models.viewModels.WhatYouOweChargeModel
 import models.viewModels.WhatYouOweChargeModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
+import views.ViewBaseSpec
 
-import java.time.LocalDate
-
-class WhatYouOweChargeModelSpec extends AnyWordSpecLike with Matchers {
+class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "Binding the form" when {
 
@@ -269,6 +272,103 @@ class WhatYouOweChargeModelSpec extends AnyWordSpecLike with Matchers {
             formWithValues shouldBe Left(List(FormError("periodTo", List("error.date"), List())))
           }
         }
+      }
+    }
+  }
+
+  "makePaymentRedirect" when {
+
+    "passed a PaymentWithPeriod" should {
+
+      "return the correct redirect link" in {
+        WhatYouOweChargeModel.makePaymentRedirect(payment) shouldBe redirectLinkWithPeriod
+      }
+    }
+
+    "passed a PaymentNoPeriod" should {
+
+      "return the correct redirect link" in {
+        WhatYouOweChargeModel.makePaymentRedirect(paymentOnAccount) shouldBe redirectLinkNoPeriod
+      }
+    }
+  }
+
+  "periodFrom" when {
+
+    "passed a PaymentWithPeriod" should {
+
+      "return its periodFrom field" in {
+        WhatYouOweChargeModel.periodFrom(payment) shouldBe Some(LocalDate.parse("2019-01-01"))
+      }
+    }
+
+    "passed a PaymentNoPeriod" should {
+
+      "return None" in {
+        WhatYouOweChargeModel.periodFrom(paymentOnAccount) shouldBe None
+      }
+    }
+  }
+
+  "periodTo" when {
+
+    "passed a PaymentWithPeriod" should {
+
+      "return the periodFrom field" in {
+        WhatYouOweChargeModel.periodTo(payment) shouldBe Some(LocalDate.parse("2019-02-02"))
+      }
+    }
+
+    "passed a PaymentNoPeriod" should {
+
+      "return None" in {
+        WhatYouOweChargeModel.periodTo(paymentOnAccount) shouldBe None
+      }
+    }
+  }
+
+  "description()" when {
+
+    "passed a PaymentWithPeriod" when {
+
+      "the user is an agent" should {
+
+        val agentUser: User = User(vrn = "111111111", arn = Some("111111111"))
+
+        "return the correct description message" in {
+          WhatYouOweChargeModel.description(paymentWithDifferentAgentMessage, agentUser.isAgent) shouldBe
+            Some("because your client should have been registered for VAT earlier")
+        }
+      }
+
+      "the user is not an agent" should {
+
+        val user: User = User(vrn = "111111111")
+
+        "return the correct message" in {
+          WhatYouOweChargeModel.description(paymentWithDifferentAgentMessage, user.isAgent) shouldBe
+            Some("because you should have been registered for VAT earlier")
+        }
+      }
+
+    }
+
+    "passed a PaymentNoPeriod" when {
+
+      "the payment description contains date information" should {
+
+        "return None" in {
+          WhatYouOweChargeModel.description(defaultInterestPaymentNoPeriod, userIsAgent = false) shouldBe None
+        }
+      }
+
+      "the payment description does not contain date information" should {
+
+        "return the correct description message" in {
+          WhatYouOweChargeModel.description(paymentNoPeriodNoDate, userIsAgent = false) shouldBe
+            Some("interest charged on the officer’s assessment")
+        }
+
       }
     }
   }

@@ -18,8 +18,12 @@ package models.viewModels
 
 import play.api.data.Form
 import play.api.data.Forms._
-
 import java.time.LocalDate
+
+import models.payments.{Payment, PaymentNoPeriod, PaymentWithPeriod}
+import play.api.i18n.Messages
+import utils.LoggerUtil
+import views.templates.payments.PaymentMessageHelper
 
 case class WhatYouOweChargeModel(chargeDescription: String,
                                  chargeTitle: String,
@@ -34,7 +38,7 @@ case class WhatYouOweChargeModel(chargeDescription: String,
                                  periodFrom: Option[LocalDate],
                                  periodTo: Option[LocalDate])
 
-object WhatYouOweChargeModel {
+object WhatYouOweChargeModel extends LoggerUtil {
 
   val form: Form[WhatYouOweChargeModel] = Form(mapping(
     "chargeDescription" -> text,
@@ -50,4 +54,55 @@ object WhatYouOweChargeModel {
     "periodFrom" -> optional(localDate),
     "periodTo" -> optional(localDate)
   )(WhatYouOweChargeModel.apply)(WhatYouOweChargeModel.unapply))
+
+  def makePaymentRedirect(payment: Payment): String = payment match {
+    case p: PaymentWithPeriod =>
+      controllers.routes.MakePaymentController.makePayment(
+        amountInPence = (p.outstandingAmount * 100).toLong,
+        taxPeriodMonth = p.periodTo.getMonthValue,
+        taxPeriodYear = p.periodTo.getYear,
+        vatPeriodEnding = p.periodTo.toString,
+        chargeType = p.chargeType.value,
+        dueDate = p.due.toString,
+        chargeReference = p.chargeReference.getOrElse("noCR")
+      ).url
+    case p: PaymentNoPeriod =>
+      controllers.routes.MakePaymentController.makePaymentNoPeriod(
+        amountInPence = (p.outstandingAmount * 100).toLong,
+        chargeType = p.chargeType.value,
+        dueDate = p.due.toString,
+        chargeReference = p.chargeReference.getOrElse("noCR")
+      ).url
+  }
+
+  def periodFrom(payment: Payment): Option[LocalDate] = payment match {
+    case p: PaymentWithPeriod => Some(p.periodFrom)
+    case _ => None
+  }
+
+  def periodTo(payment: Payment): Option[LocalDate] = payment match {
+    case p: PaymentWithPeriod => Some(p.periodTo)
+    case _ => None
+  }
+
+  def description(payment: Payment, userIsAgent: Boolean)(implicit messages: Messages): Option[String] = {
+
+    val helper: PaymentMessageHelper = PaymentMessageHelper.getChargeType(payment.chargeType.value)
+
+    (payment, helper.principalUserDescription, helper.agentDescription) match {
+      case (payment: PaymentWithPeriod, Some(principalDesc), Some(agentDesc)) =>
+        Some(PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, Some(payment.periodFrom), Some(payment.periodTo), userIsAgent))
+      case (_: PaymentNoPeriod, Some(principalDesc), Some(agentDesc)) =>
+        val descriptionText = PaymentMessageHelper.getCorrectDescription(principalDesc, agentDesc, None, None, userIsAgent)
+        if (descriptionText.contains("{0}")) {
+          logger.warn("[WhatYouOweChargeHelper][description] - " +
+            s"No date period was found for ${payment.chargeType}. Omitting description.")
+          None
+        } else {
+          Some(descriptionText)
+        }
+      case (_, _, _) => None
+    }
+  }
+
 }

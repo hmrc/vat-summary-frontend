@@ -24,7 +24,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
 import mocks.MockAppConfig
-import models.{CustomerInformation, User}
+import models.{CustomerInformation, ServiceResponse, User}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -38,6 +38,8 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
 import java.time.LocalDate
+
+import models.payments.Payments
 import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -111,6 +113,11 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     super.beforeEach()
     mockAppConfig.features.directDebitInterrupt(true)
   }
+
+  def mockOpenPayments(result: ServiceResponse[Option[Payments]]): Any =
+    (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returns(Future.successful(result))
 
   def mockCustomerInfo(accountDetailsResponse: HttpGetResult[CustomerInformation]): Any =
     (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
