@@ -321,7 +321,7 @@ object TestModels {
     10000,
     Seq(WhatYouOweChargeModel(
       chargeDescription = "for the period 1 Jan to 2 Feb 2019",
-      chargeTitle = "VAT Return Debit Charge",
+      chargeTitle = "Return",
       outstandingAmount = 10000,
       originalAmount = 1000.00,
       clearedAmount = Some(00.00),

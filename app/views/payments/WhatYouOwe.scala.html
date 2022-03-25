@@ -67,7 +67,7 @@
   @if(charge.isOverdue){@govukTag(Tag(
     content = Text(messages("common.overdue")),
     classes = "govuk-tag--red"
-  ))}<a class="govuk-link" href="/todo-new-page">@charge.chargeDescription</a>
+  ))}<a class="govuk-link" href="/todo-new-page">@charge.chargeTitle @charge.chargeDescription</a>
   <span class="govuk-hint govuk-!-margin-0">
     @messages("whatYouOwe.due") @displayDate(charge.dueDate)
   </span>

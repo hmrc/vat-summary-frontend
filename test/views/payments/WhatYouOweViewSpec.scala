@@ -108,7 +108,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "has the correct row for an example first charge" which {
 
         "has the correct charge description text" in {
-          elementText(tableBodyCell(1, 1)) shouldBe "overdue " + chargeModel1.chargeDescription + " due 1 March 2018"
+          elementText(tableBodyCell(1, 1)) shouldBe "overdue " + chargeModel1.chargeTitle + " " + chargeModel1.chargeDescription + " due 1 March 2018"
         }
 
         "has an overdue label" in {
@@ -131,7 +131,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "has the correct row for an example second charge" which {
 
         "has the correct charge description text" in {
-          elementText(tableBodyCell(2, 1)) shouldBe chargeModel2.chargeDescription + " due 1 December 2018"
+          elementText(tableBodyCell(2, 1)) shouldBe chargeModel2.chargeTitle + " " + chargeModel2.chargeDescription + " due 1 December 2018"
         }
 
         "does not have an overdue label" in {
