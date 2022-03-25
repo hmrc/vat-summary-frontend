@@ -49,6 +49,7 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 
   def servicesConfig: Map[String, String] = Map(
+    "play.http.router" -> "testOnly.Routes",
     "microservice.services.auth.host" -> mockHost,
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.financial-transactions.host" -> mockHost,
