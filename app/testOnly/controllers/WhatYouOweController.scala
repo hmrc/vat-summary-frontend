@@ -16,8 +16,6 @@
 
 package testOnly.controllers
 
-import java.time.LocalDate
-
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
