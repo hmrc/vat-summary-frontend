@@ -105,4 +105,8 @@ object WhatYouOweChargeModel extends LoggerUtil {
     }
   }
 
+  def title(chargeValue: String)(implicit messages: Messages): String = {
+    messages(PaymentMessageHelper.getChargeType(chargeValue).title)
+  }
+
 }

@@ -16,6 +16,8 @@
 
 package testOnly.controllers
 
+import java.time.LocalDate
+
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
@@ -61,6 +63,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
               case Some(model) =>
                 Ok(view(model, serviceInfoContent))
               case None =>
+                logger.warn("[WhatYouOweController][show] originalAmount field missing from payment or payment " +
+                  "description could not be found; failed to render view")
                 InternalServerError(paymentsError())
             }
           case Right(_) =>
@@ -81,7 +85,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case payment if payment.originalAmount.isDefined && description(payment, user.isAgent).isDefined =>
         WhatYouOweChargeModel(
           chargeDescription = description(payment, user.isAgent).get,
-          chargeTitle = payment.chargeType.value,
+          chargeTitle = title(payment.chargeType.value),
           outstandingAmount = payment.outstandingAmount,
           originalAmount = payment.originalAmount.get,
           clearedAmount = payment.clearedAmount,
