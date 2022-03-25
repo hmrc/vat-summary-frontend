@@ -57,7 +57,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val cancelVatSection = "#cancel-vat"
     val penaltiesSection = "#view-penalties-details"
     val penaltiesBanner = ".govuk-notification-banner"
-    val unverifiedMessageSelector = "#unverified-email-notice"
+    val unverifiedMessage = "#unverified-email-notice > strong"
+    val unverifiedMessageLink = unverifiedMessage + "> a"
   }
 
   override implicit val user: User = User("123456789")
@@ -67,7 +68,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     currentDate = testDate,
     partyType = Some("1"),
-    userEmailVerified = true
+    userEmailVerified = true,
+    emailAddress = Some("testsi1222@gmail.com")
   )
   val nonMtdDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     None,
@@ -291,7 +293,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "not have the unverified email content" in {
-      elementExtinct(Selectors.unverifiedMessageSelector)
+      elementExtinct(Selectors.unverifiedMessage)
     }
   }
 
@@ -334,11 +336,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page for a user with an unverified email address" should {
 
+    lazy val view = details(detailsModel.copy(userEmailVerified = false))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
     "display the text asking user to verify email" in {
-      lazy val view = details(detailsModel.copy(userEmailVerified = false))
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-      allElementsOf(Selectors.unverifiedMessageSelector).right.nonEmpty shouldBe true
-      element(Selectors.unverifiedMessageSelector).wholeText().contains("You need to confirm your email address.") shouldBe true
+      allElementsOf(Selectors.unverifiedMessage).right.nonEmpty shouldBe true
+      elementText(Selectors.unverifiedMessage) shouldBe
+        "Warning Your email address testsi1222@gmail.com is not working. Fix this now"
+    }
+
+    "have the correct link href" in {
+      element(Selectors.unverifiedMessageLink).attr("href") shouldBe mockConfig.fixEmailUrl
     }
 
   }

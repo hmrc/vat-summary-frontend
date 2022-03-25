@@ -395,9 +395,9 @@ returnPeriod.MB = May, August, November and February
 returnPeriod.MC = March, June, September and December
 returnPeriod.nonStandard = Non-standard
 
-emailVerification.message.1 = You need to confirm your email address.
-emailVerification.message.2 = Resend the email
-emailVerification.message.3 = to confirm it.
+emailVerification.message.1 = Your email address
+emailVerification.message.2 = is not working.
+emailVerification.message.3 = Fix this now
 
 penaltiesBanner.heading = Late submission and late payment penalties
 penaltiesBanner.totalPoints = Total penalty points: {0}

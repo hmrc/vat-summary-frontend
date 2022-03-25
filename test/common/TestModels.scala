@@ -137,10 +137,11 @@ object TestModels {
     isInsolvent = true, insolvencyDate = Some("2019-01-01")
   )
 
+  val email = "bettylucknexttime@gmail.com"
   val customerInformationMax: CustomerInformation = CustomerInformation(
     customerDetailsMax,
     address,
-    emailAddress = Some(Email(Some("bettylucknexttime@gmail.com"), Some(true))),
+    emailAddress = Some(Email(Some(email), Some(true))),
     isHybridUser = false,
     Some("2017-05-05"),
     Some("2017-05-06"),

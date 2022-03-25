@@ -19,12 +19,13 @@ package pages
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import config.AppConfig
 import helpers.IntegrationBaseSpec
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.libs.json.JsValue
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers._
 import stubs.CustomerInfoStub.{customerInfoJson, customerInfoJsonNonMtdfb}
 import stubs._
-import play.api.test.Helpers._
 
 class VatDetailsPageSpec extends IntegrationBaseSpec {
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
@@ -100,7 +101,8 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
         val response: WSResponse = await(request().get())
 
         response.status shouldBe Status.OK
-        response.body.contains("You need to confirm your email address") shouldBe true
+        Jsoup.parse(response.body).select("#email-address").text() shouldBe
+          "Your email address bettylucknexttime@gmail.com is not working."
       }
     }
 
