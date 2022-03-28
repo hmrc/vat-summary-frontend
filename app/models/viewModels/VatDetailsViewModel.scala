@@ -38,4 +38,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                currentDate: LocalDate,
                                partyType: Option[String],
                                userEmailVerified: Boolean = false,
+                               emailAddress: Option[String] = None,
                                penaltiesSummary: Option[PenaltiesSummary] = None)

@@ -97,6 +97,7 @@ trait AppConfig {
   val environmentHost: String
   val penaltiesUrl: String => String
   val penaltiesFrontendUrl: String
+  val fixEmailUrl: String
 }
 
 @Singleton
@@ -237,6 +238,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   private val vatCorrespondenceUrl = sc.getString(Keys.vatCorrespondenceHost) + sc.getString(Keys.vatCorrespondenceContext)
   override val verifyEmailUrl: String = vatCorrespondenceUrl + sc.getString(Keys.verifyEmailEndPoint)
+  override val fixEmailUrl: String = vatCorrespondenceUrl + sc.getString(Keys.fixEmail)
 
   override lazy val gtmContainer: String = sc.getString(Keys.gtmContainer)
 

@@ -387,6 +387,10 @@ global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – 
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 
+emailVerification.message.1 = Nid yw’ch cyfeiriad e-bost
+emailVerification.message.2 = yn gweithio.
+emailVerification.message.3 = Ewch ati i gywiro hyn nawr
+
 penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
 penaltiesBanner.totalPoints = Cyfanswm y pwyntiau cosb: {0}
 penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu: £{0}

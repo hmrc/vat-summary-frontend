@@ -170,6 +170,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val customerInfoError: Boolean = accountDetails.isLeft
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
+    val emailAddress: Option[String] = accountDetails.fold(_ => None, _.emailAddress.flatMap(_.email))
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -190,6 +191,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       dateService.now(),
       partyType,
       retrieveEmailVerifiedIfExist(accountDetails),
+      emailAddress,
       penaltyInformation
     )
   }
