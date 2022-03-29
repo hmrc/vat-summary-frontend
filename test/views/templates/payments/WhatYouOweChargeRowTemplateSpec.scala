@@ -90,7 +90,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           }
 
           "not display overdue flag" in {
-            elementExtinct(".task-overdue")
+            elementExtinct(".govuk-tag--red")
           }
 
           "have the correct pay link destination" in {
@@ -155,7 +155,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(s"<table>${view.body}</table>")
 
         "display overdue flag" in {
-          elementText(".task-overdue") shouldBe "overdue"
+          elementText(".govuk-tag--red") shouldBe "overdue"
         }
       }
     }

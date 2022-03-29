@@ -18,7 +18,7 @@
 @import java.time.LocalDate
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
-@this(openInNewTab: OpenInNewTab)
+@this(openInNewTab: OpenInNewTab, govukTag: GovukTag)
 
 @(paymentsData: Option[String],
   hasMultiple: Boolean,
@@ -47,7 +47,10 @@
           @paymentsData.map(date => displayDate(LocalDate.parse(date))).getOrElse(messages("payment.noPayment"))
           @if(isOverdue){
             <span>
-              <strong class="task-overdue">@messages("common.overdue")</strong>
+              @govukTag(Tag(
+                content = Text(messages("common.overdue")),
+                classes = "govuk-tag--red"
+              ))
             </span>
           }
         }
