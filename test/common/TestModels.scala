@@ -316,24 +316,34 @@ object TestModels {
   val penaltySummaryNoResponse: HttpGetResult[PenaltiesSummary] = Left(PenaltiesFeatureSwitchError)
 
   val redirectLinkWithPeriod = "/vat-through-software/make-payment/1000000/2/2019/2019-02-02/VAT%20Return%20Debit%20Charge/2019-03-03/XD002750002155"
+  val redirectLinkWithPeriodMiscPenalty = "/vat-through-software/make-payment/1000000/2/2019/2019-02-02/VAT%20Miscellaneous%20Penalty/2019-03-03/XD002750002155"
   val redirectLinkNoPeriod = "/vat-through-software/make-payment/0/Payment%20on%20account/2017-01-01/XD002750002155"
+
+  val whatYouOweChargeModel = WhatYouOweChargeModel(
+    chargeDescription = "for the period 1 Jan to 2 Feb 2019",
+    chargeTitle = "Return",
+    outstandingAmount = 10000,
+    originalAmount = 1000.00,
+    clearedAmount = Some(00.00),
+    dueDate = LocalDate.parse("2019-03-03"),
+    periodKey = Some("ABCD"),
+    isOverdue = false,
+    chargeReference = Some("XD002750002155"),
+    makePaymentRedirect = redirectLinkWithPeriod,
+    periodFrom = Some(LocalDate.parse("2019-01-01")),
+    periodTo = Some(LocalDate.parse("2019-02-02"))
+  )
 
   val whatYouOweViewModel = WhatYouOweViewModel(
     10000,
-    Seq(WhatYouOweChargeModel(
-      chargeDescription = "for the period 1 Jan to 2 Feb 2019",
-      chargeTitle = "Return",
-      outstandingAmount = 10000,
-      originalAmount = 1000.00,
-      clearedAmount = Some(00.00),
-      dueDate = LocalDate.parse("2019-03-03"),
-      periodKey = Some("ABCD"),
-      isOverdue = false,
-      chargeReference = Some("XD002750002155"),
-      makePaymentRedirect = redirectLinkWithPeriod,
-      periodFrom = Some(LocalDate.parse("2019-01-01")),
-      periodTo = Some(LocalDate.parse("2019-02-02"))
-    ))
+    Seq(whatYouOweChargeModel)
   )
+
+  val viewModelNoChargeDescription = whatYouOweViewModel.copy(
+    charges = Seq(whatYouOweChargeModel.copy(
+      chargeDescription = "",
+      chargeTitle = "VAT general penalty",
+      makePaymentRedirect = redirectLinkWithPeriodMiscPenalty)
+  ))
 
 }
