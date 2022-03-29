@@ -20,7 +20,7 @@ import common.TestModels._
 import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.Payments
+import models.payments.{MiscPenaltyCharge, Payments}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -216,10 +216,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val result = {
           mockDateServiceCall()
           controller.constructViewModel(Seq(payment, payment, payment))
-        }
+        } map (_.totalAmount)
         val expectedTotal = 30000
 
-        result.map(_.totalAmount) shouldBe Some(expectedTotal)
+        result shouldBe Some(expectedTotal)
       }
     }
 
@@ -248,5 +248,17 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "description() cannot retrieve a charge description" should {
+
+      "return a charge model with an empty string as a description" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(
+            payment.copy(chargeType = MiscPenaltyCharge)
+          ))
+        }
+        result shouldBe Some(viewModelNoChargeDescription)
+      }
+    }
   }
 }

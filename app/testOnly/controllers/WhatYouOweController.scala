@@ -61,8 +61,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
               case Some(model) =>
                 Ok(view(model, serviceInfoContent))
               case None =>
-                logger.warn("[WhatYouOweController][show] originalAmount field missing from payment or payment " +
-                  "description could not be found; failed to render view")
+                logger.warn("[WhatYouOweController][show] originalAmount field missing from payment; failed to render view")
                 InternalServerError(paymentsError())
             }
           case Right(_) =>
@@ -80,9 +79,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   def constructViewModel(payments: Seq[Payment])(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels: Seq[WhatYouOweChargeModel] = payments.collect {
-      case payment if payment.originalAmount.isDefined && description(payment, user.isAgent).isDefined =>
+      case payment if payment.originalAmount.isDefined =>
         WhatYouOweChargeModel(
-          chargeDescription = description(payment, user.isAgent).get,
+          chargeDescription = description(payment, user.isAgent).getOrElse(""),
           chargeTitle = title(payment.chargeType.value),
           outstandingAmount = payment.outstandingAmount,
           originalAmount = payment.originalAmount.get,
