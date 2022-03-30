@@ -62,7 +62,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         }
 
         "not display overdue flag" in {
-          elementExtinct(".task-overdue")
+          elementExtinct(".govuk-tag--red")
         }
       }
 
@@ -78,7 +78,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display overdue flag" in {
-          elementText(".task-overdue")shouldBe "overdue"
+          elementText(".govuk-tag--red")shouldBe "overdue"
         }
       }
     }

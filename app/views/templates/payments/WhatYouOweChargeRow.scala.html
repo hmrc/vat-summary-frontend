@@ -19,7 +19,7 @@
 @import views.html.templates.formatters.money.DisplayMoney
 @import views.templates.payments.WhatYouOweChargeHelper
 
-@this(displayMoney: DisplayMoney)
+@this(displayMoney: DisplayMoney, govukTag: GovukTag)
 
 @(payment: OpenPaymentsModel, count: Int, userIsAgent: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
@@ -38,7 +38,10 @@
         <div data-due="@(payment.due.toString)" class="govuk-hint">
           @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
           @if(payment.isOverdue) {
-            <strong class="task-overdue">@messages("common.overdue")</strong>
+            @govukTag(Tag(
+              content = Text(messages("common.overdue")),
+              classes = "govuk-tag--red"
+            ))
           }
         </div>
       </dt>
