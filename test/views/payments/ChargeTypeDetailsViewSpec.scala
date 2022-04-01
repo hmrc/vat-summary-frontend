@@ -34,7 +34,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     val breadcrumbs = "govuk-breadcrumbs"
     val btaBreadcrumb = "li.govuk-breadcrumbs__list-item > a"
     val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2) > a"
-    val openPaymentsBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3)"
+    val openPaymentsBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(3) > a"
     val backLink = ".govuk-back-link"
     val dueDateKey = ".govuk-summary-list__key"
     val dueDateValue = ".govuk-summary-list__value"
@@ -73,6 +73,10 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
   val whatYouOweChargeNoClearedAmount = whatYouOweCharge.copy(clearedAmount = None)
 
+  val whatYouOweUrl = testOnly.controllers.routes.WhatYouOweController.show.url
+
+  val vatDetailsUrl = controllers.routes.VatDetailsController.details.url
+
   "Rendering the Charge Type Details page for a principal user" when {
 
     "the user has a cleared amount and a period for the charge" when {
@@ -110,8 +114,8 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
             elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
           }
 
-          s"link to ${controllers.routes.VatDetailsController.details.url}" in {
-            element(Selectors.vatBreadcrumb).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+          s"link to $vatDetailsUrl" in {
+            element(Selectors.vatBreadcrumb).attr("href") shouldBe vatDetailsUrl
           }
 
           "have the text 'What you owe'" in {
@@ -119,8 +123,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "link to the what you owe page" in {
-            element(Selectors.openPaymentsBreadcrumb).attr("href") shouldBe ""
-            //TODO: add correct link location once this page and the What you owe page have been wired up
+            element(Selectors.openPaymentsBreadcrumb).attr("href") shouldBe whatYouOweUrl
           }
         }
 
@@ -174,8 +177,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "has the correct href" in {
-            element(Selectors.whatYouOweLink).attr("href") shouldBe "#"
-            //TODO: add correct link location once this page and the What you owe page have been wired up
+            element(Selectors.whatYouOweLink).attr("href") shouldBe whatYouOweUrl
           }
         }
       }
@@ -264,8 +266,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has the correct href" in {
-        element(Selectors.backLink).attr("href") shouldBe "#"
-        //TODO: add correct link location once this page and the What you owe page have been wired up
+        element(Selectors.backLink).attr("href") shouldBe whatYouOweUrl
       }
     }
 
@@ -280,8 +281,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has the correct href" in {
-        element(Selectors.whatYouOweLink).attr("href") shouldBe "#"
-        //TODO: add correct link location once this page and the What you owe page have been wired up
+        element(Selectors.whatYouOweLink).attr("href") shouldBe whatYouOweUrl
       }
     }
   }
