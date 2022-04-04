@@ -108,7 +108,8 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "has the correct row for an example first charge" which {
 
         "has the correct charge description text" in {
-          elementText(tableBodyCell(1, 1)) shouldBe "overdue " + chargeModel1.chargeTitle + " " + chargeModel1.chargeDescription + " due 1 March 2018"
+          elementText(tableBodyCell(1, 1)) shouldBe
+            "overdue " + chargeModel1.chargeTitle + " " + chargeModel1.chargeDescription + " due 1 March 2018"
         }
 
         "has an overdue label" in {
@@ -119,8 +120,9 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           elementText(tableBodyCell(1, 1) + "> span") shouldBe "due 1 March 2018"
         }
 
-        "has the correct link destination" in {
-          element(tableBodyCell(1, 1) + "> a").attr("href") shouldBe "/todo-new-page" //TODO update to link to the new controller
+        "has a form with the correct action" in {
+          element(tableBodyCell(1, 1) + " > form").attr("action") shouldBe
+            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown.url
         }
 
         "has the correct amount" in {
@@ -142,8 +144,9 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           elementText(tableBodyCell(2, 1) + "> span") shouldBe "due 1 December 2018"
         }
 
-        "has the correct link destination" in {
-          element(tableBodyCell(2, 1) + "> a").attr("href") shouldBe "/todo-new-page" //TODO update to link to the new controller
+        "has a form with the correct action" in {
+          element(tableBodyCell(2, 1) + " > form").attr("action") shouldBe
+            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown.url
         }
 
         "has the correct amount" in {
