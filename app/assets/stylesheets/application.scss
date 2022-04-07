@@ -35,13 +35,16 @@ dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__ke
   }
 }
 
-button.what-you-owe-link {
-  background: none;
-  border: none;
-  padding: 0;
+.what-you-owe-link {
+  display: contents;
+}
+
+.what-you-owe-link > .govuk-tag {
+  pointer-events: none;
+}
+
+.what-you-owe-link > a {
   color: #069;
-  text-decoration: underline;
   cursor: pointer;
-  text-align: left!important;
-  font-size: 1em;
+  font-size: 1.1875rem;
 }

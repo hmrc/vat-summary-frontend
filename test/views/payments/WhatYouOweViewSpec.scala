@@ -113,7 +113,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has an overdue label" in {
-          elementText(tableBodyCell(1, 1) + " > strong") shouldBe "overdue"
+          elementText(tableBodyCell(1, 1) + " .govuk-tag") shouldBe "overdue"
         }
 
         "has the correct due hint text" in {
@@ -137,7 +137,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "does not have an overdue label" in {
-          elementExtinct(tableBodyCell(2, 1) + "> strong")
+          elementExtinct(tableBodyCell(2, 1) + " .govuk-tag")
         }
 
         "has the correct due hint text" in {
