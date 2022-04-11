@@ -65,10 +65,6 @@
 }
 
 @paymentHtml(charge: WhatYouOweChargeModel) = {
-  @if(charge.isOverdue){@govukTag(Tag(
-    content = Text(messages("common.overdue")),
-    classes = "govuk-tag--red"
-  ))}
   @form(action = testOnly.controllers.routes.ChargeBreakdownController.showBreakdown) {
     <input type="hidden" name="chargeDescription" value="@charge.chargeDescription">
     <input type="hidden" name="chargeTitle" value="@charge.chargeTitle">
@@ -82,7 +78,13 @@
     <input type="hidden" name="makePaymentRedirect" value="@charge.makePaymentRedirect">
     <input type="hidden" name="periodFrom" value="@charge.periodFrom">
     <input type="hidden" name="periodTo" value="@charge.periodTo">
-    <button class="what-you-owe-link" type="submit">@charge.chargeTitle @charge.chargeDescription</button>
+    <button class="what-you-owe-link" type="submit">
+      @if(charge.isOverdue){@govukTag(Tag(
+        content = Text(messages("common.overdue")),
+        classes = "govuk-tag--red"
+        ))}
+      <a class="govuk-link" tabindex="0">@charge.chargeTitle @charge.chargeDescription</a>
+    </button>
   }
   <span class="govuk-hint govuk-!-margin-0">
     @messages("whatYouOwe.due") @displayDate(charge.dueDate)
