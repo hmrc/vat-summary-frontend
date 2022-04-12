@@ -1,0 +1,128 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.viewModels.InterestChargeViewModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import views.html.templates.formatters.money.DisplayMoney
+
+@this(mainTemplate: MainTemplate,
+      displayMoney: DisplayMoney,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukSummaryList: GovukSummaryList,
+      govukBackLink: GovukBackLink)
+
+@(model: InterestChargeViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details.url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("openPayments.title")),
+        href = Some(testOnly.controllers.routes.WhatYouOweController.show.url)
+      )
+    )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    content = Text(messages("base.back")),
+    href = testOnly.controllers.routes.WhatYouOweController.show.url
+  ))
+}
+
+@interestTypeMessageKey = @{
+  if(model.isPenalty) "penalty" else "vat"
+}
+
+@lateByHtml = {
+  @if(model.numberOfDaysLate == 1) {
+    @messages("interestChargeDetails.day")
+  } else {
+    @messages("interestChargeDetails.days", model.numberOfDaysLate)
+  }
+}
+
+@mainTemplate(
+  title = model.chargeTitle,
+  appConfig = appConfig,
+  serviceInfoContent = serviceInfoContent,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-xl">
+        @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+      </span>
+      <h1 class="govuk-heading-xl">@model.chargeTitle</h1>
+      <p class="govuk-body">@messages(s"interestChargeDetails.${interestTypeMessageKey}ChargeInterest")</p>
+      <p class="govuk-body">@messages(s"interestChargeDetails.${interestTypeMessageKey}IncreaseDaily")</p>
+      <p class="govuk-body">
+        @messages(s"interestChargeDetails.calculation")
+        <br>
+        @messages(s"interestChargeDetails.${interestTypeMessageKey}Calculation", model.interestRate)
+      </p>
+
+      @govukSummaryList(SummaryList(
+        rows = Seq(
+          SummaryListRow(
+            key = Key(content = Text(messages(s"interestChargeDetails.${interestTypeMessageKey}LateBy"))),
+            value = Value(content = HtmlContent(lateByHtml))
+          ),
+          SummaryListRow(
+            key = Key(content = Text(messages(s"interestChargeDetails.currentAmount"))),
+            value = Value(content = HtmlContent(displayMoney(model.currentAmount)))
+          ),
+          SummaryListRow(
+            key = Key(content = Text(messages("interestChargeDetails.amountReceived"))),
+            value = Value(content = HtmlContent(displayMoney(model.amountReceived)))
+          ),
+          SummaryListRow(
+            key = Key(content = Text(messages("interestChargeDetails.leftToPay"))),
+            value = Value(content = HtmlContent(displayMoney(model.leftToPay)))
+          )
+        )
+      ))
+
+      <h2 class="govuk-heading-s">@messages("interestChargeDetails.estimates")</h2>
+      <p class="govuk-body">@messages(s"interestChargeDetails.estimatesExplanation")</p>
+      <p class="govuk-body">
+        <a class="govuk-link" href="#" target="_blank" rel="noreferrer noopener">
+          @messages(s"interestChargeDetails.calculationLink")
+        </a>
+      </p>
+
+      <p class="govuk-body">
+        <a class="govuk-link" href="@testOnly.controllers.routes.WhatYouOweController.show.url">
+          @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+        </a>
+      </p>
+
+    </div>
+  </div>
+}

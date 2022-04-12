@@ -71,7 +71,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         element("li.govuk-breadcrumbs__list-item > a").attr("href") shouldBe "bta-url"
       }
 
-      "have the text 'VAT'" in {
+      "have the text 'Your VAT account'" in {
         elementText("li.govuk-breadcrumbs__list-item:nth-child(2) > a") shouldBe "Your VAT account"
       }
 
