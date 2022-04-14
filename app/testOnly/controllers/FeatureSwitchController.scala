@@ -18,12 +18,13 @@ package testOnly.controllers
 
 import config.AppConfig
 import forms.FeatureSwitchForm
-import javax.inject.Inject
 import models.FeatureSwitchModel
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import testOnly.views.html.featureSwitch.FeatureSwitch
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
+import javax.inject.Inject
 
 class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
                                         mcc: MessagesControllerComponents,
@@ -36,7 +37,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         directDebitInterrupt = appConfig.features.directDebitInterrupt(),
-        penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled()
+        penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled(),
+        interestBreakdownEnabled = appConfig.features.interestBreakdownEnabled()
       )
     )))
   }
@@ -53,6 +55,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
+    appConfig.features.interestBreakdownEnabled(model.interestBreakdownEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }
