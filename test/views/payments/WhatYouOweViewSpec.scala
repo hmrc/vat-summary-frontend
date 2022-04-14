@@ -122,7 +122,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has a form with the correct action" in {
           element(tableBodyCell(1, 1) + " > form").attr("action") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown.url
+            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown.url
         }
 
         "has the correct amount" in {
@@ -146,7 +146,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has a form with the correct action" in {
           element(tableBodyCell(2, 1) + " > form").attr("action") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown.url
+            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown.url
         }
 
         "has the correct amount" in {

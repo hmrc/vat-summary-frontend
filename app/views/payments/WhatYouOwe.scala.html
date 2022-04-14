@@ -65,7 +65,7 @@
 }
 
 @paymentHtml(charge: WhatYouOweChargeModel) = {
-  @form(action = testOnly.controllers.routes.ChargeBreakdownController.showBreakdown) {
+  @form(action = testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown) {
     <input type="hidden" name="chargeDescription" value="@charge.chargeDescription">
     <input type="hidden" name="chargeTitle" value="@charge.chargeTitle">
     <input type="hidden" name="outstandingAmount" value="@charge.outstandingAmount">

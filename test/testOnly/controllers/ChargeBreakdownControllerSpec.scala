@@ -19,18 +19,26 @@ package testOnly.controllers
 import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.errors.PaymentsError
-import views.html.payments.ChargeTypeDetailsView
+import views.html.payments.{ChargeTypeDetailsView, InterestChargeDetailsView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    mockAppConfig.features.interestBreakdownEnabled(true)
+  }
+
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
-    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[PaymentsError]
+    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[InterestChargeDetailsView],
+    injector.instanceOf[PaymentsError], mockServiceErrorHandler
   )
 
-  "The showBreakdown action" when {
+  "The chargeBreakdown action" when {
 
     "valid form information is submitted in the request" when {
 
@@ -49,7 +57,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockPrincipalAuth()
           mockServiceInfoCall()
-          controller.showBreakdown(request)
+          controller.chargeBreakdown(request)
         }
 
         "return 200" in {
@@ -77,7 +85,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockAgentAuth()
           mockServiceInfoCall()
-          controller.showBreakdown(request)
+          controller.chargeBreakdown(request)
         }
 
         "return 200" in {
@@ -96,7 +104,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
-        controller.showBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+        controller.chargeBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
       }
 
       "return 500" in {
@@ -114,7 +122,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
-        controller.showBreakdown(fakeRequestWithSession)
+        controller.chargeBreakdown(fakeRequestWithSession)
       }
 
       "return 500" in {
@@ -131,7 +139,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockMissingBearerToken()
-        controller.showBreakdown(fakeRequest)
+        controller.chargeBreakdown(fakeRequest)
       }
 
       "return status 303" in {
@@ -146,7 +154,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "return 403" in {
         mockInsufficientEnrolments()
-        val result = controller.showBreakdown()(fakeRequest)
+        val result = controller.chargeBreakdown()(fakeRequest)
         status(result) shouldBe FORBIDDEN
       }
     }
@@ -155,7 +163,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "return 403" in {
         mockPrincipalAuth()
-        val result = controller.showBreakdown()(insolventRequest)
+        val result = controller.chargeBreakdown()(insolventRequest)
         status(result) shouldBe FORBIDDEN
       }
     }
@@ -164,7 +172,158 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockPrincipalAuth()
-        controller.showBreakdown()(DDInterruptRequest)
+        controller.chargeBreakdown()(DDInterruptRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the DD interrupt controller" in {
+        redirectLocation(result) shouldBe
+          Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
+    }
+  }
+
+  "The interestBreakdown action" when {
+
+    "valid form information is submitted in the request" when {
+
+      def requestWithForm(request: FakeRequest[_]): FakeRequest[AnyContentAsFormUrlEncoded] = request.withFormUrlEncodedBody(
+        "periodFrom" -> "2018-01-01",
+        "periodTo" -> "2018-02-02",
+        "chargeTitle" -> "Example interest charge title",
+        "interestRate" -> "2.6",
+        "numberOfDaysLate" -> "3",
+        "currentAmount" -> "300.33",
+        "amountReceived" -> "200.22",
+        "leftToPay" -> "100.11",
+        "isPenalty" -> "false"
+      )
+
+      "the user is logged in as a principal entity" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          controller.interestBreakdown(requestWithForm(fakeRequestWithSession))
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "Example interest charge title - Manage your VAT account - GOV.UK"
+        }
+      }
+
+      "the user is logged in as an agent" should {
+
+        lazy val result = {
+          mockAgentAuth()
+          mockServiceInfoCall()
+          controller.interestBreakdown(requestWithForm(agentFinancialRequest))
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "Example interest charge title - Your client’s VAT details - GOV.UK"
+        }
+      }
+
+      "the interest breakdown feature switch is disabled" should {
+
+        "return 404" in {
+          mockAppConfig.features.interestBreakdownEnabled(false)
+          mockPrincipalAuth()
+          val result = controller.interestBreakdown(requestWithForm(fakeRequestWithSession))
+
+          status(result) shouldBe NOT_FOUND
+        }
+      }
+    }
+
+    "invalid form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.interestBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "no form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.interestBreakdown(fakeRequestWithSession)
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "the user is not logged in" should {
+
+      lazy val result = {
+        mockMissingBearerToken()
+        controller.interestBreakdown(fakeRequest)
+      }
+
+      "return status 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+      "return the correct redirect location which should be sign in" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the user has invalid credentials" should {
+
+      "return 403" in {
+        mockInsufficientEnrolments()
+        val result = controller.interestBreakdown()(fakeRequest)
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
+    "the user is insolvent without access" should {
+
+      "return 403" in {
+        mockPrincipalAuth()
+        val result = controller.interestBreakdown()(insolventRequest)
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
+    "the user has no viewDirectDebitInterrupt in session" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.interestBreakdown()(DDInterruptRequest)
       }
 
       "return 303" in {
