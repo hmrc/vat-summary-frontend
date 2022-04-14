@@ -29,6 +29,7 @@ object ConfigKeys {
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
   val directDebitInterrupt: String = "features.directDebitInterrupt.enabled"
+  val interestBreakdownFeature: String = "features.interestBreakdown.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"

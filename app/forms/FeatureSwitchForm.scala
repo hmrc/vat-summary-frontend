@@ -27,7 +27,8 @@ object FeatureSwitchForm {
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.directDebitInterrupt -> boolean,
-      ConfigKeys.penaltiesServiceEnabledFeature -> boolean
+      ConfigKeys.penaltiesServiceEnabledFeature -> boolean,
+      ConfigKeys.interestBreakdownFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

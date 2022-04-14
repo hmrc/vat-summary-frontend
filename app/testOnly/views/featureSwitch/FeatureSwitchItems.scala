@@ -42,7 +42,8 @@ class FeatureSwitchItems @Inject() () {
       formCheckBoxItem(form, ConfigKeys.userResearchBannerFeature, "User research banner"),
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
       formCheckBoxItem(form, ConfigKeys.directDebitInterrupt, "DD interrupt screen"),
-      formCheckBoxItem(form, ConfigKeys.penaltiesServiceEnabledFeature, "Enable penalties service features")
+      formCheckBoxItem(form, ConfigKeys.penaltiesServiceEnabledFeature, "Enable penalties service features"),
+      formCheckBoxItem(form, ConfigKeys.interestBreakdownFeature, "Enable interest breakdown")
     )
   }
 }
