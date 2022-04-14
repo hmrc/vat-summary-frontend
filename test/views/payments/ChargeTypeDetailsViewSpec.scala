@@ -63,19 +63,19 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     periodTo = Some(LocalDate.parse("2021-03-31"))
   )
 
-  val whatYouOweChargeOverdue = whatYouOweCharge.copy(isOverdue = true)
+  val whatYouOweChargeOverdue: WhatYouOweChargeModel = whatYouOweCharge.copy(isOverdue = true)
 
-  val whatYouOweChargeNoPeriod = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
+  val whatYouOweChargeNoPeriod: WhatYouOweChargeModel = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
 
-  val whatYouOweChargeNoPeriodFrom = whatYouOweCharge.copy(periodFrom = None)
+  val whatYouOweChargeNoPeriodFrom: WhatYouOweChargeModel = whatYouOweCharge.copy(periodFrom = None)
 
-  val whatYouOweChargeNoPeriodTo = whatYouOweCharge.copy(periodTo = None)
+  val whatYouOweChargeNoPeriodTo: WhatYouOweChargeModel = whatYouOweCharge.copy(periodTo = None)
 
-  val whatYouOweChargeNoClearedAmount = whatYouOweCharge.copy(clearedAmount = None)
+  val whatYouOweChargeNoClearedAmount: WhatYouOweChargeModel = whatYouOweCharge.copy(clearedAmount = None)
 
-  val whatYouOweUrl = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweUrl: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
-  val vatDetailsUrl = controllers.routes.VatDetailsController.details.url
+  val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
 
   "Rendering the Charge Type Details page for a principal user" when {
 
@@ -110,11 +110,11 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
             element(Selectors.btaBreadcrumb).attr("href") shouldBe "bta-url"
           }
 
-          "have the text 'VAT'" in {
+          "have the text 'Your VAT account'" in {
             elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
           }
 
-          s"link to $vatDetailsUrl" in {
+          "link to the VAT overview page" in {
             element(Selectors.vatBreadcrumb).attr("href") shouldBe vatDetailsUrl
           }
 
@@ -255,7 +255,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render breadcrumbs" in {
+    "not render breadcrumbs" in {
       elementExtinct(Selectors.breadcrumbs)
     }
 
