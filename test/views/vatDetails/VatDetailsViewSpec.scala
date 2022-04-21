@@ -53,7 +53,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val historyPastReturns = ".govuk-list > li:nth-child(2) > p > a"
     val serviceInfoNav = ".govuk-width-container > .govuk-body"
     val apiError = "h3:nth-child(2).govuk-heading-m"
-    val vatOptOutSection = "#vat-optout"
     val cancelVatSection = "#cancel-vat"
     val penaltiesSection = "#view-penalties-details"
     val penaltiesBanner = ".govuk-notification-banner"
@@ -247,20 +246,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
     }
 
-    "have the opt out section" which {
-
-      lazy val optOutSection = element(Selectors.vatOptOutSection)
-
-      "has the correct heading" in {
-        optOutSection.select("h3").text() shouldBe "Opt out of Making Tax Digital for VAT"
-      }
-
-      "has the correct paragraph" in {
-        optOutSection.select("p").text() shouldBe
-          "You cannot opt out if your taxable turnover has been above £85,000 since 1 April 2019."
-      }
-    }
-
     "have the update your VAT details section" which {
 
       lazy val updateVatDetails = element(Selectors.updateVatDetails)
@@ -318,10 +303,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         mtdSignupSection.select("p").text() shouldBe "You must sign up to Making Tax Digital for VAT if you’re not exempt from " +
           "VAT, and your taxable turnover exceeds the £85,000 threshold."
       }
-    }
-
-    "not have the Opt out section" in {
-      elementExtinct(Selectors.vatOptOutSection)
     }
   }
 
@@ -502,10 +483,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "not display the payments and repayments section" in {
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
-    }
-
-    "not display the opt out section" in {
-      elementExtinct(Selectors.vatOptOutSection)
     }
 
     "not display the cancel VAT section" in {
