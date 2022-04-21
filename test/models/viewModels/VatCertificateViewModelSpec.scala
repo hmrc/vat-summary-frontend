@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package models.ViewModels
+package models.viewModels
 
 import common.TestModels.{customerInformationMax, customerInformationMin, vatCertificateViewModelMax, vatCertificateViewModelMin}
-import models.viewModels.VatCertificateViewModel
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 

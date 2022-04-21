@@ -16,41 +16,61 @@
 
 package testOnly.controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.viewModels.WhatYouOweChargeModel
+import models.viewModels.{InterestChargeViewModel, WhatYouOweChargeModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.ChargeTypeDetailsView
+import views.html.payments.{ChargeTypeDetailsView, InterestChargeDetailsView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
                                           DDInterrupt: DDInterruptPredicate,
                                           mcc: MessagesControllerComponents,
                                           serviceInfoService: ServiceInfoService,
-                                          view: ChargeTypeDetailsView,
-                                          errorView: PaymentsError)
+                                          chargeBreakdownView: ChargeTypeDetailsView,
+                                          interestBreakdownView: InterestChargeDetailsView,
+                                          errorView: PaymentsError,
+                                          serviceErrorHandler: ServiceErrorHandler)
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  def showBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+  def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
       serviceInfoService.getPartial.map { navLinks =>
         WhatYouOweChargeModel.form.bindFromRequest.fold(
           errorForm => {
-            logger.warn(s"[ChargeBreakdownController][showBreakdown] - Unexpected error when binding form: $errorForm")
+            logger.warn(s"[ChargeBreakdownController][chargeBreakdown] - Unexpected error when binding form: $errorForm")
             InternalServerError(errorView())
           },
-          model => Ok(view(model, navLinks))
+          model => Ok(chargeBreakdownView(model, navLinks))
         )
+      }
+    }
+  }
+
+  def interestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+    implicit user => DDInterrupt.interruptCheck { _ =>
+      if(appConfig.features.interestBreakdownEnabled()) {
+        serviceInfoService.getPartial.map { navLinks =>
+          InterestChargeViewModel.form.bindFromRequest.fold(
+            errorForm => {
+              logger.warn(s"[ChargeBreakdownController][interestBreakdown] - Unexpected error when binding form: $errorForm")
+              InternalServerError(errorView())
+            },
+            model => Ok(interestBreakdownView(model, navLinks))
+          )
+        }
+      } else {
+        Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
       }
     }
   }

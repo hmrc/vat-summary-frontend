@@ -16,6 +16,9 @@
 
 package models.viewModels
 
+import play.api.data.Form
+import play.api.data.Forms._
+
 import java.time.LocalDate
 
 case class InterestChargeViewModel(periodFrom: LocalDate,
@@ -27,3 +30,18 @@ case class InterestChargeViewModel(periodFrom: LocalDate,
                                    amountReceived: BigDecimal,
                                    leftToPay: BigDecimal,
                                    isPenalty: Boolean)
+
+object InterestChargeViewModel {
+
+  val form: Form[InterestChargeViewModel] = Form(mapping(
+    "periodFrom" -> localDate,
+    "periodTo" -> localDate,
+    "chargeTitle" -> text,
+    "interestRate" -> bigDecimal,
+    "numberOfDaysLate" -> number,
+    "currentAmount" -> bigDecimal,
+    "amountReceived" -> bigDecimal,
+    "leftToPay" -> bigDecimal,
+    "isPenalty" -> boolean
+  )(InterestChargeViewModel.apply)(InterestChargeViewModel.unapply))
+}

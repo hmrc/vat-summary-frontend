@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package models.ViewModels
+package models.viewModels
 
 import java.time.LocalDate
 
 import common.TestModels._
 import models.User
-import models.viewModels.WhatYouOweChargeModel
 import models.viewModels.WhatYouOweChargeModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
