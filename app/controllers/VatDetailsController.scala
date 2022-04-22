@@ -164,8 +164,6 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val paymentModel: VatDetailsDataModel = retrievePayments(payments)
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
-    val pendingOptOut: Boolean =
-      accountDetails.fold(_ => false, details => details.pendingMandationStatus.fold(false)(_ == nonMTDfB))
     val partyType: Option[String] = retrievePartyType(accountDetails)
     val customerInfoError: Boolean = accountDetails.isLeft
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
@@ -185,7 +183,6 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       isHybridUser,
       retrieveIsOfStatus(accountDetails, Seq(nonMTDfB, nonDigital, mtdfbExempt)),
       customerInfoError,
-      pendingOptOut,
       deregDate,
       pendingDereg,
       dateService.now(),

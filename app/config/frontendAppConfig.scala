@@ -85,7 +85,6 @@ trait AppConfig {
   val eassUrl: String
   val ecniUrl: String
   val dacUrl: String
-  val optOutFrontendUrl: String
   val deregisterVatUrl: String
   val paymentsAndRepaymentsUrl: String
   val manageVatUrl: String
@@ -226,8 +225,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val eassUrl: String = sc.getString(Keys.eassUrl)
   override lazy val ecniUrl: String = sc.getString(Keys.ecniUrl)
   override lazy val dacUrl: String = sc.getString(Keys.dacUrl)
-
-  override lazy val optOutFrontendUrl: String = sc.getString(Keys.vatOptOutFrontendHost) + sc.getString(Keys.vatOptOutFrontendStartUrl)
 
   override lazy val deregisterVatUrl: String = sc.getString(Keys.deregisterVatHost) + sc.getString(Keys.deregisterVatUrl)
 
