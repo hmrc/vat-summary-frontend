@@ -28,7 +28,6 @@
       paymentsAndRepaymentsSection: PaymentsAndRepaymentsSection,
       vatCertificateSection: VatCertificateSection,
       mtdSignupSection: MtdSignupSection,
-      vatOptOutSection: VatOptOutSection,
       deregSection: DeregSection,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukWarningText: GovukWarningText,
@@ -139,9 +138,6 @@
         @detailsViewModel.showSignUp match {
           case Some(true) => {
             @mtdSignupSection(user.vrn)
-          }
-          case Some(false) => {
-            @vatOptOutSection(detailsViewModel.pendingOptOut)
           }
           case _ => {}
         }

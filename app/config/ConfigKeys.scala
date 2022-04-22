@@ -85,9 +85,6 @@ object ConfigKeys {
   val vatRepaymentTrackerFrontendHost: String = "vat-repayment-tracker-frontend.host"
   val vatRepaymentTrackerFrontendUrl: String = "vat-repayment-tracker-frontend.url"
 
-  val vatOptOutFrontendHost: String = "vat-opt-out-frontend.host"
-  val vatOptOutFrontendStartUrl: String = "vat-opt-out-frontend.startUrl"
-
   val deregisterVatHost: String = "deregister-vat-frontend.host"
   val deregisterVatUrl: String = "deregister-vat-frontend.url"
 

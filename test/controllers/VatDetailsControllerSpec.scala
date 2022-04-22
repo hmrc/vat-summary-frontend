@@ -607,7 +607,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
     "the customer info call fails" should {
 
-      "return a VatDetailsModel with pendingOptOut and pendingDereg set to false" in {
+      "return a VatDetailsModel and pendingDereg set to false" in {
 
         lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate,
