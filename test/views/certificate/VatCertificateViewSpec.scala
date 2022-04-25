@@ -17,7 +17,6 @@
 package views.certificate
 
 import java.time.LocalDate
-
 import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
 import models.Address
 import models.viewModels.VatCertificateViewModel
@@ -37,33 +36,25 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     val breadcrumb2 = ".govuk-breadcrumbs__list-item:nth-child(2) > a"
     val cardClass = ".card-full-container"
     val aboutYourRegHeading = "#about-your-registration-heading"
-    val vrnRow = "#vrn"
-    val vrnTitle = s"$vrnRow > dt"
-    val vrn = s"$vrnRow > dd"
-    val regDateRow = "#registration-date"
-    val regDateTitle = s"$regDateRow > dt"
-    val regDate = s"$regDateRow > dd"
-    val certDateRow = "#certificate-date"
-    val certDateTitle = s"$certDateRow > dt"
-    val certDate = s"$certDateRow > dd"
+    val vrnTitle = "dt.vrn"
+    val vrn = "dd.vrn"
+    val regDateTitle = "dt.registration-date"
+    val regDate = "dd.registration-date"
+    val certDateTitle = "dt.certificate-date"
+    val certDate = "dd.certificate-date"
     val aboutTheBusinessHeading = "#about-the-business-heading"
-    val businessNameRow = "#business-name"
-    val businessNameTitle = s"$businessNameRow > dt"
-    val businessName = s"$businessNameRow > dd"
-    val tradingNameRow = "#trading-name"
-    val tradingNameTitle = s"$tradingNameRow > dt"
-    val tradingName = s"$tradingNameRow > dd"
-    val businessTypeRow = "#business-type"
-    val businessTypeTitle = s"$businessTypeRow > dt"
-    val businessType = s"$businessTypeRow > dd"
-    val tradeClassificationRow = "#trade-classification"
-    val tradeClassificationTitle = s"$tradeClassificationRow > dt"
-    val tradeClassification = s"$tradeClassificationRow > dd"
-    val ppobRow = "#ppob"
-    val ppobRowTitle = s"$ppobRow > dt"
-    val ppob = s"$ppobRow > dd"
+    val businessNameTitle = "dt.business-name"
+    val businessName = "dd.business-name"
+    val tradingNameTitle = "dt.trading-name"
+    val tradingName = "dd.trading-name"
+    val businessTypeTitle = "dt.business-type"
+    val businessType = "dd.business-type"
+    val tradeClassificationTitle = "dt.trade-classification"
+    val tradeClassification = "dd.trade-classification"
+    val ppobRowTitle = "dt.ppob"
+    val ppob = "dd.ppob"
     val printButton = ".govuk-button"
-    val fullNameSelector = "#full-name > dd"
+    val fullNameSelector = "dd.full-name"
     val backLink = ".govuk-back-link"
   }
 
@@ -255,8 +246,8 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         }
 
         "contains the return frequency" in {
-          document.select("#stp-dt").text() shouldBe "VAT Return dates"
-          document.select("#stp-dd").text() shouldBe "Every month"
+          document.select("dt.stp").text() shouldBe "VAT Return dates"
+          document.select("dd.stp").text() shouldBe "Every month"
         }
 
       }
