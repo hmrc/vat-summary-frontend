@@ -209,6 +209,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
     "return a seq of payment history models sorted by clearing date in descending order" in {
 
       val paymentModel1 = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         chargeType = ReturnCreditCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
@@ -216,6 +217,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
         clearedDate = Some(LocalDate.parse("2018-01-30"))
       )
       val paymentModel2 = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853335"),
         chargeType = ReturnCreditCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
@@ -223,6 +225,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
         clearedDate = Some(LocalDate.parse("2018-02-28"))
       )
       val paymentModel3 = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853336"),
         chargeType = ReturnCreditCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
@@ -230,6 +233,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
         clearedDate = Some(LocalDate.parse("2018-03-01"))
       )
       val paymentModel4 = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853337"),
         chargeType = ReturnCreditCharge,
         taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
         taxPeriodTo = Some(LocalDate.parse("2018-01-01")),

@@ -18,6 +18,7 @@ package common
 
 object FinancialTransactionsConstants {
 
+  val clearingSAPDocument = "clearingSAPDocument"
   val financialTransactions = "financialTransactions"
   val chargeType = "chargeType"
   val taxPeriodFrom = "taxPeriodFrom"

@@ -22,7 +22,8 @@ import common.FinancialTransactionsConstants
 import models.payments.{PaymentOnAccount, _}
 import play.api.libs.json._
 
-case class PaymentsHistoryModel(chargeType: ChargeType,
+case class PaymentsHistoryModel(clearingSAPDocument: Option[String],
+                                chargeType: ChargeType,
                                 taxPeriodFrom: Option[LocalDate],
                                 taxPeriodTo: Option[LocalDate],
                                 amount: BigDecimal,
@@ -65,6 +66,7 @@ object PaymentsHistoryModel {
     (chargeType.value, subItem.paymentAmount) match {
       case (PaymentOnAccount.value, _) if subItem.clearingReason.isEmpty =>
         Some(PaymentsHistoryModel(
+          clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = UnallocatedPayment,
           taxPeriodFrom = None,
           taxPeriodTo = None,
@@ -73,6 +75,7 @@ object PaymentsHistoryModel {
         ))
       case (PaymentOnAccount.value, Some(subItemAmount)) =>
         Some(PaymentsHistoryModel(
+          clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = Refund,
           taxPeriodFrom = None,
           taxPeriodTo = None,
@@ -81,6 +84,7 @@ object PaymentsHistoryModel {
         ))
       case (_, Some(subItemAmount)) =>
         Some(PaymentsHistoryModel(
+          clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = chargeType,
           taxPeriodFrom = (transaction \ FinancialTransactionsConstants.taxPeriodFrom).asOpt[LocalDate],
           taxPeriodTo = (transaction \ FinancialTransactionsConstants.taxPeriodTo).asOpt[LocalDate],

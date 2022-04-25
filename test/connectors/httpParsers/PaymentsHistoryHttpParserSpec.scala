@@ -58,6 +58,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853334",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-01-10",
        |            "dueDate" : "2018-12-07",
@@ -85,6 +86,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : -600,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853335",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-03-10",
        |            "dueDate" : "2018-09-07",
@@ -112,6 +114,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 200,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853336",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-04-14",
        |            "dueDate" : "2018-09-07",
@@ -139,6 +142,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : -550,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853337",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-06-28",
        |            "dueDate" : "2018-09-07",
@@ -166,6 +170,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853338",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-09-07",
@@ -193,6 +198,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : -150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853339",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-09-07",
@@ -220,6 +226,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853340",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-11-10",
@@ -247,6 +254,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : -150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853341",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-06-10",
        |            "dueDate" : "2018-06-10",
@@ -274,6 +282,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 1000,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853342",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
@@ -301,6 +310,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 1000,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853343",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
@@ -328,6 +338,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853344",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
@@ -355,6 +366,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 400,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853345",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
@@ -382,6 +394,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : 555,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853346",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-10-07",
        |            "dueDate" : "2018-10-08",
@@ -409,6 +422,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |        "originalAmount" : -555,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853347",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-10-07",
        |            "dueDate" : "2018-10-08",
@@ -422,6 +436,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
 
   val expected: Either[Nothing, Seq[PaymentsHistoryModel]] = Right(Seq(
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853334"),
       chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -429,6 +444,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 1, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853335"),
       chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -436,6 +452,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 3, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853336"),
       chargeType = OADebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -443,6 +460,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 4, 14))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853337"),
       chargeType = OACreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -450,6 +468,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 6, 28))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853338"),
       chargeType = DebitDefaultSurcharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 6, 10)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -457,6 +476,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 11, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853339"),
       chargeType = CreditDefaultSurcharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 6, 10)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -464,6 +484,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 11, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853340"),
       chargeType = CentralAssessmentCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -471,6 +492,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 11, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853341"),
       chargeType = ErrorCorrectionCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 2, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 5, 20)),
@@ -478,6 +500,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 6, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853342"),
       chargeType= ErrorCorrectionDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
@@ -485,6 +508,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 12, 15))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853343"),
       chargeType= OADefaultInterestCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
@@ -492,6 +516,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 12, 15))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853344"),
       chargeType = OAFurtherInterestCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
@@ -499,6 +524,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 12, 15))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853345"),
       chargeType = AACharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 10, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 12, 12)),
@@ -506,6 +532,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 12, 15))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853346"),
       chargeType = AAInterestCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 6, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 9, 12)),
@@ -513,6 +540,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       clearedDate = Some(LocalDate.of(2018, 10, 7))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853347"),
       chargeType = StatutoryInterestCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 6, 12)),
       taxPeriodTo = Some(LocalDate.of(2018, 9, 12)),
@@ -555,6 +583,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
          |        "originalAmount" : 150,
          |        "items" : [
          |          {
+         |            "clearingSAPDocument" : "002828853334",
          |            "subItem" : "000",
          |            "clearingDate" : "2018-03-10",
          |            "dueDate" : "2018-12-07",
@@ -581,6 +610,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
          |        "originalAmount" : 150,
          |        "items" : [
          |          {
+         |            "clearingSAPDocument" : "002828853335",
          |            "subItem" : "000",
          |            "clearingDate" : "2018-03-10",
          |            "dueDate" : "2018-12-07",
