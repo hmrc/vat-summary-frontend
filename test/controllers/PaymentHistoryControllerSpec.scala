@@ -635,7 +635,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThreeGenuineIdenticalPayments.right.get.drop(1)).distinct,
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThreeGenuineIdenticalPayments.right.get).distinct,
             showInsolvencyContent = false,
             None
           ))
@@ -660,7 +660,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThreeWithDuplicate.right.get.drop(1)).distinct,
+            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThreeWithDuplicate.right.get).distinct,
             showInsolvencyContent = false,
             None
           ))
