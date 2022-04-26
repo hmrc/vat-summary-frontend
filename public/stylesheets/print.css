@@ -13,11 +13,13 @@
   .govuk-back-link,
   #get-help-action,
   #content > .float--right,
-  footer
+  footer,
+  .hmrc-account-menu__main
   { display: none; }
 
   h1 {
     font-size: 200% !important;
+    padding-top: 20px !important;
   }
 
   h2 {
