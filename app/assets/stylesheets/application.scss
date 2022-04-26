@@ -25,10 +25,6 @@ dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__ke
   width: 30%;
 }
 
-.card-full > dl:last-child > div > *, #stp-dt, #stp-dd, #nstp-card > dl > div > dd {
-  border-bottom: none;
-}
-
 @media screen {
   #nstp-card > dl > div {
     border-bottom: 1px solid $govuk-border-colour;

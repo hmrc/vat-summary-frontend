@@ -26,7 +26,8 @@
       nonStandardReturnFrequency: NonStandardReturnFrequency,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukBackLink: GovukBackLink,
-      govukButton: GovukButton)
+      govukButton: GovukButton,
+      govukSummaryList: GovukSummaryList)
 
 @(serviceInfoContent: Html = HtmlFormat.empty,
   model: VatCertificateViewModel)(implicit messages: Messages,
@@ -58,17 +59,22 @@
   }
 }
 
-@fieldRow(title: String, content: Any, id: String) = {
-  <dl class="govuk-summary-list govuk-!-margin-bottom-0">
-    <div id="@id" class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key govuk-!-font-weight-bold">
-        @title
-      </dt>
-      <dd class="govuk-summary-list__value">
-        @content
-      </dd>
-    </div>
-  </dl>
+
+@fieldRow(title: String, content: String, id: String, displayRow: Boolean = true) = @{
+
+ if (displayRow) { Seq(
+      SummaryListRow(
+        key = Key(
+          content = Text(messages(title)),
+          classes = id
+        ),
+        value = Value(
+          content = HtmlContent(content),
+            classes = id
+        )
+      )
+  )} else Seq()
+
 }
 
 @isSoleTrader = @{
@@ -98,17 +104,30 @@
       </h2>
     </div>
     <div class="govuk-grid-column-full card-full">
-      @fieldRow(messages("vatCertificate.aboutYourRegistration.vrn"), model.vrn, "vrn")
-      @fieldRow(
-        messages("vatCertificate.aboutYourRegistration.registrationDate"),
-        model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")),
-        "registration-date"
-      )
-      @fieldRow(
-        messages("vatCertificate.aboutYourRegistration.certificateDate"),
-        displayDate(model.certificateDate),
-        "certificate-date"
-      )
+
+      @govukSummaryList(SummaryList(
+        rows =
+
+            fieldRow(
+                messages("vatCertificate.aboutYourRegistration.vrn"),
+                model.vrn,
+                "vrn"
+            ) ++
+
+            fieldRow(
+                messages("vatCertificate.aboutYourRegistration.registrationDate"),
+                model.registrationDate.map(displayDate(_)).getOrElse(messages("common.notProvided")),
+                "registration-date"
+            ) ++
+
+            fieldRow(
+                messages("vatCertificate.aboutYourRegistration.certificateDate"),
+                displayDate(model.certificateDate),
+                "certificate-date"
+            ),
+        classes = "govuk-!-margin-bottom-0"
+      ))
+
     </div>
   </div>
 
@@ -117,41 +136,58 @@
       <h2 id="about-the-business-heading" class="govuk-heading-m card-heading">@messages("vatCertificate.aboutTheBusiness.title")</h2>
     </div>
     <div class="govuk-grid-column-full card-full">
-      @if(isSoleTrader && model.fullName.nonEmpty) {
-        @fieldRow(messages("vatCertificate.aboutYourRegistration.fullName"), model.fullName.get, "full-name")
-      }
-      @if(!isSoleTrader) {
-        @fieldRow(
-          messages("vatCertificate.aboutTheBusiness.businessName"),
-          model.businessName.getOrElse(messages("common.notProvided")),
-          "business-name"
-        )
-      }
-      @if(isSoleTrader) {
-        @if(model.tradingName.nonEmpty) {
-          @fieldRow(messages("vatCertificate.aboutTheBusiness.tradingName"), model.tradingName.get, "trading-name")
-        }
-      } else {
-        @fieldRow(
-          messages("vatCertificate.aboutTheBusiness.tradingName"),
-          model.tradingName.getOrElse(messages("common.notProvided")),
-          "trading-name"
-        )
-      }
-      @fieldRow(
-        messages("vatCertificate.aboutTheBusiness.businessType"),
-        messages(model.businessTypeMsgKey),
-        "business-type")
-      @fieldRow(
-        messages("vatCertificate.aboutTheBusiness.tradeClassification"),
-        model.tradeClassification,
-        "trade-classification"
-      )
-      @fieldRow(
-        messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"),
-        fullAddress(model.ppob),
-        "ppob"
-      )
+
+      @govukSummaryList(SummaryList(
+        rows =
+
+            fieldRow(
+              messages("vatCertificate.aboutYourRegistration.fullName"),
+              model.fullName.getOrElse(messages("common.notProvided")),
+              "full-name",
+              isSoleTrader && model.fullName.nonEmpty
+            ) ++
+
+            fieldRow(
+              messages("vatCertificate.aboutTheBusiness.businessName"),
+              model.businessName.getOrElse(messages("common.notProvided")),
+              "business-name",
+              !isSoleTrader
+            ) ++
+
+            fieldRow(
+              messages("vatCertificate.aboutTheBusiness.tradingName"),
+              model.tradingName.getOrElse(messages("common.notProvided")),
+              "trading-name",
+              isSoleTrader && model.tradingName.nonEmpty
+            ) ++
+
+            fieldRow(
+              messages("vatCertificate.aboutTheBusiness.tradingName"),
+              model.tradingName.getOrElse(messages("common.notProvided")),
+              "trading-name",
+              !isSoleTrader
+            ) ++
+
+            fieldRow(
+              messages("vatCertificate.aboutTheBusiness.businessType"),
+              messages(model.businessTypeMsgKey),
+              "business-type"
+            ) ++
+
+            fieldRow(
+              messages("vatCertificate.aboutTheBusiness.tradeClassification"),
+              model.tradeClassification.getOrElse(messages("common.notProvided")),
+              "trade-classification"
+            ) ++
+
+            fieldRow(
+              messages("vatCertificate.aboutTheBusiness.principalPlaceOfBusiness"),
+              fullAddress(model.ppob).toString,
+              "ppob"
+            ),
+        classes = "govuk-!-margin-bottom-0"
+      ))
+
     </div>
   </div>
 

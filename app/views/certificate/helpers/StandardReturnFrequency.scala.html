@@ -14,22 +14,30 @@
  * limitations under the License.
  *@
 
-@this()
+@this(govukSummaryList: GovukSummaryList)
 
 @(returnPeriod: String)(implicit messages: Messages)
 
 <div class="card-full-container govuk-grid-column-full">
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m card-heading">@messages("vatCertificate.returnDetails.title")</h2>
-    <dl class="govuk-summary-list govuk-check-your-answers govuk-!-margin-bottom-0">
-      <div class="govuk-summary-list__row">
-        <dt id="stp-dt" class="govuk-summary-list__key govuk-!-font-weight-bold">
-          @messages("vatCertificate.returnDetails.returnDates")
-        </dt>
-        <dd id="stp-dd" class="govuk-summary-list__value">
-          @messages(returnPeriod)
-        </dd>
-      </div>
-    </dl>
+
+
+    @govukSummaryList(SummaryList(
+      classes = "govuk-summary-list--no-border govuk-!-margin-bottom-0 govuk-!-padding-bottom-3",
+        rows = Seq(
+            SummaryListRow(
+                key = Key(
+                    content = Text(messages("vatCertificate.returnDetails.returnDates")),
+                    classes = "stp"
+                ),
+                value = Value(
+                    content = Text(messages(returnPeriod)),
+                    classes = "stp"
+                )
+            )
+        )
+    ))
+
   </div>
 </div>
