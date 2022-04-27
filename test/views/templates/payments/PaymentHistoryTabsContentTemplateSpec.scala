@@ -40,6 +40,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
   implicit val user: User = User("999999999")
 
   val paymentTransaction: PaymentsHistoryModel = PaymentsHistoryModel(
+    clearingSAPDocument = Some("002828853334"),
     chargeType = ReturnDebitCharge,
     taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
     taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),

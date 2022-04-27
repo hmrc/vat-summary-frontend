@@ -30,6 +30,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
   val onePayment: Seq[PaymentsHistoryModel] =
     Seq(
       PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         chargeType = ReturnDebitCharge,
         taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
         taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -40,6 +41,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
 
   val onePaymentPerPeriod: Seq[PaymentsHistoryModel] = Seq(
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853334"),
       chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -47,6 +49,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
       clearedDate = Some(LocalDate.of(2018, 1, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853335"),
       chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -56,6 +59,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
 
   val multiplesPaymentsPerPeriod: Seq[PaymentsHistoryModel] = Seq(
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853334"),
       chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -63,6 +67,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
       clearedDate = Some(LocalDate.of(2018, 1, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853335"),
       chargeType = ReturnDebitCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -70,6 +75,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
       clearedDate = Some(LocalDate.of(2018, 3, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853336"),
       chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -77,6 +83,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
       clearedDate = Some(LocalDate.of(2018, 4, 10))
     ),
     PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853337"),
       chargeType = ReturnCreditCharge,
       taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
       taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -100,6 +107,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
               "vrn": "999999999",
               "payments": [{
                 "vrn": "999999999",
+                "clearingSAPDocument" : "002828853334",
                 "chargeType": "VAT Return Debit Charge",
                 "periodFrom": "2018-08-01",
                 "periodTo": "2018-10-31",
@@ -124,6 +132,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                   "vrn": "999999999",
                   "payments": [{
                     "vrn": "999999999",
+                    "clearingSAPDocument" : "002828853334",
                     "chargeType": "VAT Return Debit Charge",
                     "periodFrom": "2018-08-01",
                     "periodTo": "2018-10-31",
@@ -131,6 +140,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                     "paymentAmount": 150
                   }, {
                     "vrn": "999999999",
+                    "clearingSAPDocument" : "002828853335",
                     "chargeType": "VAT Return Credit Charge",
                     "periodFrom": "2018-05-01",
                     "periodTo": "2018-07-31",
@@ -156,6 +166,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
               "vrn": "999999999",
               "payments": [{
                 "vrn": "999999999",
+                "clearingSAPDocument" : "002828853334",
                 "chargeType": "VAT Return Debit Charge",
                 "periodFrom": "2018-08-01",
                 "periodTo": "2018-10-31",
@@ -163,6 +174,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "paymentAmount": 150
               }, {
                 "vrn": "999999999",
+                "clearingSAPDocument" : "002828853335",
                 "chargeType": "VAT Return Debit Charge",
                 "periodFrom": "2018-08-01",
                 "periodTo": "2018-10-31",
@@ -170,6 +182,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "paymentAmount": 100
               }, {
                 "vrn": "999999999",
+                "clearingSAPDocument" : "002828853336",
                 "chargeType": "VAT Return Credit Charge",
                 "periodFrom": "2018-05-01",
                 "periodTo": "2018-07-31",
@@ -177,6 +190,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "paymentAmount": 600
               }, {
                 "vrn": "999999999",
+                "clearingSAPDocument" : "002828853337",
                 "chargeType": "VAT Return Credit Charge",
                 "periodFrom": "2018-05-01",
                 "periodTo": "2018-07-31",

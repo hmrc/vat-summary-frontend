@@ -61,6 +61,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -88,6 +89,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : -600,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
            |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
@@ -101,6 +103,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -108,6 +111,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853335"),
           chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -150,6 +154,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -177,6 +182,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -204,6 +210,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853336",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -231,6 +238,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : -600,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853337",
            |            "subItem" : "000",
            |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
@@ -258,6 +266,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : -600,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853338",
            |            "subItem" : "000",
            |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
@@ -285,6 +294,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 600,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853339",
            |            "subItem" : "000",
            |            "paymentAmount" : 600,
            |            "dueDate" : "2018-09-07",
@@ -298,6 +308,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -305,6 +316,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853335"),
           chargeType = DebitDefaultSurcharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -312,6 +324,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853336"),
           chargeType = CentralAssessmentCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -319,6 +332,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853337"),
           chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -326,6 +340,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853338"),
           chargeType = ErrorCorrectionCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -333,6 +348,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853339"),
           chargeType = ErrorCorrectionDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -374,6 +390,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -401,6 +418,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : -600,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
            |            "paymentAmount" : -600,
            |            "dueDate" : "2018-09-07",
@@ -414,6 +432,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val expectedSeq = Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -421,6 +440,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853335"),
           chargeType = ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 5, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 7, 31)),
@@ -463,12 +483,14 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 250,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "001",
            |            "paymentAmount" : 100,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-03-10"
            |          },
            |          {
+           |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -483,6 +505,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -490,6 +513,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           clearedDate = Some(LocalDate.of(2018, 3, 10))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853335"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -596,6 +620,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
@@ -639,6 +664,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -652,6 +678,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = None,
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
@@ -692,6 +719,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "originalAmount" : 150,
            |        "items" : [
            |          {
+           |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
            |            "paymentAmount" : 150,
            |            "dueDate" : "2018-12-07",
@@ -705,6 +733,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = None,
@@ -744,6 +773,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
              |        "outstandingAmount" : 5050,
              |        "items" : [
              |          {
+             |            "clearingSAPDocument" : "002828853334",
              |            "subItem" : "000",
              |            "dueDate" : "2018-12-04",
              |            "amount" : 5050
@@ -756,6 +786,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
         val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
           PaymentsHistoryModel(
+            clearingSAPDocument = Some("002828853334"),
             UnallocatedPayment,
             None,
             None,
@@ -792,6 +823,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
              |        "originalAmount" : -5050,
              |        "items" : [
              |          {
+             |            "clearingSAPDocument" : "002828853334",
              |            "subItem": "000",
              |            "amount": -5050,
              |            "paymentReference": "654378944",
@@ -811,6 +843,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
         val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
           PaymentsHistoryModel(
+            clearingSAPDocument = Some("002828853334"),
             Refund,
             None,
             None,
@@ -845,6 +878,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
              |        "originalAmount" : -5050,
              |        "items" : [
              |          {
+             |            "clearingSAPDocument" : "002828853334",
              |            "subItem": "000",
              |            "amount": -5050,
              |            "paymentReference": "654378944",
@@ -873,7 +907,8 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
     "Charge type is not Payment on account" should {
 
       val chargeType = ReturnDebitCharge
-      val subItem = TransactionSubItem(Some(9), Some(LocalDate.of(2018, 1, 1)), None)
+      val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(9),
+        Some(LocalDate.of(2018, 1, 1)), None)
       val transaction: JsValue = Json.parse(
         """ {
           |   "taxPeriodFrom" : "2018-08-01",
@@ -896,6 +931,10 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
         result.taxPeriodTo shouldBe Some(LocalDate.of(2018, 11, 1))
       }
 
+      "return clearingSAPDocument" in {
+        result.clearingSAPDocument shouldBe subItem.clearingSAPDocument
+      }
+
       "return the amount of the sub item" in {
         result.amount shouldBe subItem.paymentAmount.get
       }
@@ -911,7 +950,8 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       "clearing reason is defined" should {
 
-        val subItem = TransactionSubItem(Some(9000), Some(LocalDate.of(2018, 1, 1)), Some("some clearing reason"))
+        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(9000),
+          Some(LocalDate.of(2018, 1, 1)), Some("some clearing reason"))
         val transaction: JsValue = Json.parse(
           """ {
             |   "taxPeriodFrom" : "2018-08-01",
@@ -934,6 +974,10 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           result.taxPeriodTo shouldBe None
         }
 
+        "return clearingSAPDocument" in {
+          result.clearingSAPDocument shouldBe subItem.clearingSAPDocument
+        }
+
         "return the correct amount" in {
           result.amount shouldBe subItem.paymentAmount.get
         }
@@ -945,7 +989,8 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       "clearing reason is not defined" should {
 
-        val subItem = TransactionSubItem(Some(9), None, None, Some(LocalDate.of(2018, 1, 1)))
+        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(9), None, None,
+          Some(LocalDate.of(2018, 1, 1)))
         val transaction: JsValue = Json.parse(
           """ {
             |   "outstandingAmount" : "1000"
@@ -965,6 +1010,10 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
         "not return a to date" in {
           result.taxPeriodTo shouldBe None
+        }
+
+        "return clearingSAPDocument" in {
+          result.clearingSAPDocument shouldBe subItem.clearingSAPDocument
         }
 
         "use the outstanding amount as the amount" in {

@@ -98,6 +98,7 @@ object FinancialDataStub extends WireMockMethods {
        |        "originalAmount" : 150,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853334",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-01-10",
        |            "dueDate" : "2018-12-07",
@@ -125,6 +126,7 @@ object FinancialDataStub extends WireMockMethods {
        |        "originalAmount" : -600,
        |        "items" : [
        |          {
+       |            "clearingSAPDocument" : "002828853335",
        |            "subItem" : "000",
        |            "clearingDate" : "2018-03-10",
        |            "dueDate" : "2018-09-07",
@@ -164,6 +166,7 @@ object FinancialDataStub extends WireMockMethods {
       |        "outstandingAmount" : 10000,
       |        "items" : [
       |          {
+      |            "clearingSAPDocument" : "002828853334",
       |            "subItem" : "000",
       |            "dueDate" : "2019-01-15",
       |            "amount" : 10000
@@ -191,6 +194,7 @@ object FinancialDataStub extends WireMockMethods {
       |        "outstandingAmount" : 10000,
       |        "items" : [
       |          {
+      |            "clearingSAPDocument" : "002828853335",
       |            "subItem" : "000",
       |            "dueDate" : "2019-01-16",
       |            "amount" : 10000

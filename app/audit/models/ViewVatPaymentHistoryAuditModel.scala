@@ -29,6 +29,7 @@ case class ViewVatPaymentHistoryAuditModel(vrn: String,
   override val transactionName: String = "view-payment-history"
 
   case class PaymentHistoryDetails(vrn: String,
+                                   clearingSAPDocument: Option[String],
                                            chargeType: String,
                                            periodFrom: Option[LocalDate],
                                            periodTo: Option[LocalDate],
@@ -44,6 +45,7 @@ case class ViewVatPaymentHistoryAuditModel(vrn: String,
 
     PaymentHistoryDetails(
       vrn,
+      payment.clearingSAPDocument,
       payment.chargeType.value,
       payment.taxPeriodFrom,
       payment.taxPeriodTo,

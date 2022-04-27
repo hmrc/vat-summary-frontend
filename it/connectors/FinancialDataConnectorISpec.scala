@@ -109,6 +109,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
       val expected = Right(Seq(
         PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           chargeType    =  ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-08-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-10-31")),
@@ -116,6 +117,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           clearedDate   = Some(LocalDate.parse("2018-01-10"))
         ),
         PaymentsHistoryModel(
+          clearingSAPDocument= Some("002828853335"),
           chargeType    =  ReturnCreditCharge,
           taxPeriodFrom = Some(LocalDate.parse("2018-05-01")),
           taxPeriodTo   = Some(LocalDate.parse("2018-07-31")),

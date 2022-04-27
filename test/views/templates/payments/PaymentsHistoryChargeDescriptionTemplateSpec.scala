@@ -42,6 +42,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a vat return debit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           ReturnDebitCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -64,6 +65,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a vat return credit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           ReturnCreditCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -86,6 +88,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a vat officer assessment debit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           OADebitCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -108,6 +111,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a vat officer assessment credit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           OACreditCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -130,6 +134,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a vat central assessment charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           CentralAssessmentCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -152,6 +157,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT Debit Default Surcharge charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           DebitDefaultSurcharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -174,6 +180,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT Credit Default Surcharge charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           CreditDefaultSurcharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -196,6 +203,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is an error correction credit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           ErrorCorrectionCreditCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -218,6 +226,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is an error correction debit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           ErrorCorrectionDebitCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -240,6 +249,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a vat officer assessment default interest charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           OADefaultInterestCharge,
           Some(LocalDate.parse("2018-01-12")),
           Some(LocalDate.parse("2018-03-23")),
@@ -262,6 +272,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT Officer Assessment Further Interest charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           OAFurtherInterestCharge,
           Some(LocalDate.parse("2018-02-12")),
           Some(LocalDate.parse("2018-03-24")),
@@ -284,6 +295,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT Additional Assessment charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AACharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-04-01")),
@@ -307,6 +319,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT AA Default Interest charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AAInterestCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-04-01")),
@@ -330,6 +343,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT AA Further Interest charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AAFurtherInterestCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-04-01")),
@@ -353,6 +367,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT Statutory Interest charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           StatutoryInterestCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-04-01")),
@@ -375,6 +390,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a Vat Inaccuracy Assessments Pen charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           InaccuraciesAssessmentsPenCharge,
           Some(LocalDate.parse("2018-09-10")),
           Some(LocalDate.parse("2018-10-11")),
@@ -397,6 +413,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a Vat Mp Pre 2009 Charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           MpPre2009Charge,
           Some(LocalDate.parse("2018-09-10")),
           Some(LocalDate.parse("2018-10-11")),
@@ -419,6 +436,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a Vat Mp Repeated Pre 2009 Charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           MpRepeatedPre2009Charge,
           Some(LocalDate.parse("2018-09-10")),
           Some(LocalDate.parse("2018-10-11")),
@@ -441,6 +459,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a Vat Inaccuracies Return Replaced Charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           InaccuraciesReturnReplacedCharge,
           Some(LocalDate.parse("2018-09-12")),
           Some(LocalDate.parse("2018-10-13")),
@@ -464,6 +483,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a Vat Wrong Doing Penalty Charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           WrongDoingPenaltyCharge,
           Some(LocalDate.parse("2018-09-12")),
           Some(LocalDate.parse("2018-10-13")),
@@ -486,6 +506,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a Vat Credit Return Offset Charge Charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           CreditReturnOffsetCharge,
           Some(LocalDate.parse("2018-09-12")),
           Some(LocalDate.parse("2018-10-13")),
@@ -508,6 +529,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is an Unallocated Payment Charge Type" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           UnallocatedPayment,
           None,
           None,
@@ -530,6 +552,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is an Refund Charge Type" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           Refund,
           None,
           None,
@@ -552,6 +575,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT POA Instalment charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           PaymentOnAccountInstalments,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -574,6 +598,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT POA Return Debit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           PaymentOnAccountReturnDebitCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -596,6 +621,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT POA Return Credit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           PaymentOnAccountReturnCreditCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -618,6 +644,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT AA Monthly Instalment charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AAMonthlyInstalment,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -640,6 +667,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT AA Quarterly Instalment charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AAQuarterlyInstalments,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -662,6 +690,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT AA Return Debit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AAReturnDebitCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -684,6 +713,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT AA Return Credit charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           AAReturnCreditCharge,
           Some(LocalDate.parse("2018-01-01")),
           Some(LocalDate.parse("2018-02-02")),
@@ -706,6 +736,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       "there is a VAT Unrepayable Overpayment Charge" should {
 
         val model: PaymentsHistoryModel = PaymentsHistoryModel(
+          clearingSAPDocument = Some("002828853334"),
           VatUnrepayableOverpayment,
           Some(LocalDate.parse("2018-03-02")),
           Some(LocalDate.parse("2018-04-02")),
@@ -732,6 +763,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a vat return debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         ReturnDebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -754,6 +786,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a vat return credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         ReturnCreditCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -776,6 +809,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a vat officer assessment debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         OADebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -798,6 +832,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a vat officer assessment credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         OACreditCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -820,6 +855,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a vat central assessment charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         CentralAssessmentCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -842,6 +878,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT Debit Default Surcharge charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         DebitDefaultSurcharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -864,6 +901,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT Credit Default Surcharge charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         CreditDefaultSurcharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -886,6 +924,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is an error correction credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         ErrorCorrectionCreditCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -908,6 +947,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is an error correction debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         ErrorCorrectionDebitCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -930,6 +970,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a vat officer assessment default interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         OADefaultInterestCharge,
         Some(LocalDate.parse("2018-01-12")),
         Some(LocalDate.parse("2018-03-23")),
@@ -952,6 +993,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT Officer Assessment Further Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         OAFurtherInterestCharge,
         Some(LocalDate.parse("2018-02-12")),
         Some(LocalDate.parse("2018-03-24")),
@@ -974,6 +1016,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT Additional Assessment charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AACharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-04-01")),
@@ -997,6 +1040,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT AA Default Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AAInterestCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-04-01")),
@@ -1020,6 +1064,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT AA Further Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AAFurtherInterestCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-04-01")),
@@ -1043,6 +1088,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT Statutory Interest charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         StatutoryInterestCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-04-01")),
@@ -1065,6 +1111,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a Vat Inaccuracy Assessments Pen charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         InaccuraciesAssessmentsPenCharge,
         Some(LocalDate.parse("2018-09-10")),
         Some(LocalDate.parse("2018-10-11")),
@@ -1087,6 +1134,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a Vat Mp Pre 2009 Charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         MpPre2009Charge,
         Some(LocalDate.parse("2018-09-10")),
         Some(LocalDate.parse("2018-10-11")),
@@ -1109,6 +1157,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a Vat Mp Repeated Pre 2009 Charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         MpRepeatedPre2009Charge,
         Some(LocalDate.parse("2018-09-10")),
         Some(LocalDate.parse("2018-10-11")),
@@ -1131,6 +1180,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a Vat Inaccuracies Return Replaced Charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         InaccuraciesReturnReplacedCharge,
         Some(LocalDate.parse("2018-09-12")),
         Some(LocalDate.parse("2018-10-13")),
@@ -1154,6 +1204,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a Vat Wrong Doing Penalty Charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         WrongDoingPenaltyCharge,
         Some(LocalDate.parse("2018-09-12")),
         Some(LocalDate.parse("2018-10-13")),
@@ -1176,6 +1227,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a Vat Credit Return Offset Charge Charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         CreditReturnOffsetCharge,
         Some(LocalDate.parse("2018-09-12")),
         Some(LocalDate.parse("2018-10-13")),
@@ -1198,6 +1250,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is an Unallocated Payment Charge Type" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         UnallocatedPayment,
         None,
         None,
@@ -1220,6 +1273,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is an Refund Charge Type" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         Refund,
         None,
         None,
@@ -1242,6 +1296,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT POA Instalment charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         PaymentOnAccountInstalments,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1264,6 +1319,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT POA Return Debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         PaymentOnAccountReturnDebitCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1286,6 +1342,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT POA Return Credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         PaymentOnAccountReturnCreditCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1308,6 +1365,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT AA Monthly Instalment charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AAMonthlyInstalment,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1330,6 +1388,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT AA Quarterly Instalment charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AAQuarterlyInstalments,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1352,6 +1411,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT AA Return Debit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AAReturnDebitCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1374,6 +1434,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT AA Return Credit charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         AAReturnCreditCharge,
         Some(LocalDate.parse("2018-01-01")),
         Some(LocalDate.parse("2018-02-02")),
@@ -1396,6 +1457,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     "there is a VAT Unrepayable Overpayment Charge" should {
 
       val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
         VatUnrepayableOverpayment,
         Some(LocalDate.parse("2018-03-02")),
         Some(LocalDate.parse("2018-04-02")),
