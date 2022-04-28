@@ -17,11 +17,13 @@
 @import models.User
 @import models.viewModels.OpenPaymentsViewModel
 @import views.html.templates.payments.WhatYouOweChargeRow
+@import views.html.templates.MtdNotificationBanner
 
 @this(mainTemplate: MainTemplate,
       whatYouOweChargeRow: WhatYouOweChargeRow,
       govukBreadcrumbs: GovukBreadcrumbs,
-      govukBackLink: GovukBackLink)
+      govukBackLink: GovukBackLink,
+      mtdNotificationBanner: MtdNotificationBanner)
 
 @(user: User, model: OpenPaymentsViewModel, serviceInfoContent: Html, clientName: Option[String])(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
@@ -64,6 +66,8 @@
       <h1 class="govuk-heading-xl">
         @if(user.isAgent) {@messages("openPayments.agentTitle")} else {@messages("openPayments.title")}
       </h1>
+
+        @mtdNotificationBanner(model.mandationStatus)
 
       <div class="payments">
         <div class="section">

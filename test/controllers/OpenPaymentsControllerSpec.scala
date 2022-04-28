@@ -45,7 +45,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     noPayments,
     mockPaymentsError,
     openPayments,
-    ddInterruptPredicate
+    ddInterruptPredicate,
+    mockAccountDetailsService
   )
 
   def commonPaymentHistoryMocks(isAgent: Boolean = false): Unit = {
@@ -81,6 +82,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           commonPaymentHistoryMocks()
           mockCustomerInfo(Right(customerInformationMax))
+          mockCustomerInfo(Right(customerInformationMax))
           mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
           controller.openPayments()(fakeRequest)
         }
@@ -101,6 +103,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           commonPaymentHistoryMocks()
           mockCustomerInfo(Right(customerInformationMax))
           mockOpenPayments(Right(Some(Payments(Seq(payment, paymentOnAccount)))))
+          mockCustomerInfo(Right(customerInformationMax))
           controller.openPayments()(fakeRequest)
         }
 
@@ -118,6 +121,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         lazy val result = {
           commonPaymentHistoryMocks()
+          mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockOpenPayments(Right(None))
           controller.openPayments()(fakeRequest)
@@ -149,6 +153,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         lazy val result = {
           commonPaymentHistoryMocks(isAgent = true)
+          mockCustomerInfo(Right(customerInformationMax))
           mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
           controller.openPayments()(agentFinancialRequest)
         }
@@ -183,6 +188,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
         lazy val result = {
           commonPaymentHistoryMocks()
+          mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockOpenPayments(Left(PaymentsError))
           controller.openPayments()(fakeRequest)
@@ -247,12 +253,13 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                   testPayment.periodTo,
                   testPayment.periodKey,
                   isOverdue = false
-                ))
+                )),
+                mandationStatus = "MTDfB"
               )
 
               val result: OpenPaymentsViewModel = {
                 mockDateServiceCall()
-                controller.getModel(Seq(testPayment))
+                controller.getModel(Seq(testPayment), mandationStatus = "MTDfB")
               }
 
               result shouldBe expected
@@ -283,12 +290,13 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                   testPayment.periodTo,
                   testPayment.periodKey,
                   isOverdue = true
-                ))
+                )),
+                mandationStatus = "MTDfB"
               )
 
               val result: OpenPaymentsViewModel = {
                 mockDateServiceCall()
-                controller.getModel(Seq(testPayment))
+                controller.getModel(Seq(testPayment), mandationStatus = "MTDfB")
               }
 
               result shouldBe expected
@@ -319,13 +327,14 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 testPayment.periodFrom,
                 testPayment.periodTo,
                 testPayment.periodKey,
-                isOverdue = false
-              ))
+                isOverdue = false,
+              )),
+              mandationStatus = "MTDfB"
             )
 
             val result: OpenPaymentsViewModel = {
               mockDateServiceCall()
-              controller.getModel(Seq(testPayment))
+              controller.getModel(Seq(testPayment), mandationStatus = "MTDfB")
             }
 
             result shouldBe expected

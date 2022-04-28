@@ -18,4 +18,5 @@ package models.viewModels
 
 import models.payments.OpenPaymentsModel
 
-case class OpenPaymentsViewModel(payments: Seq[OpenPaymentsModel])
+case class OpenPaymentsViewModel(payments: Seq[OpenPaymentsModel],
+                                 mandationStatus: String)

@@ -79,7 +79,8 @@ trait AppConfig {
   val govUkVat7Form: String
   val govUkPayVATUrl : String
   val govUKDifficultiesPayingUrl : String
-  val govUKCorrections : String
+  val govUKCorrections: String
+  val mtdGuidance: String
   val abilityNetUrl: String
   val wcagGuidelinesUrl: String
   val eassUrl: String
@@ -219,6 +220,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val govUkPayVATUrl: String = sc.getString(Keys.govUkPayVATUrl)
   override lazy val govUKDifficultiesPayingUrl : String = sc.getString(Keys.govUKDifficultiesPayingUrl)
   override lazy val govUKCorrections : String = sc.getString(Keys.govUKCorrections)
+  override lazy val mtdGuidance: String = sc.getString(Keys.mtdGuidance)
 
   override lazy val abilityNetUrl: String = sc.getString(Keys.abilityNetUrl)
   override lazy val wcagGuidelinesUrl: String = sc.getString(Keys.wcagGuidelinesUrl)

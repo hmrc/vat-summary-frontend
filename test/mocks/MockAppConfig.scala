@@ -98,4 +98,5 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val environmentHost: String = "localhost"
   override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
   override val penaltiesFrontendUrl: String = "/vat-through-software/test-only/penalties-stub"
+  override val mtdGuidance: String = "/when-to-start-using-making-tax-digital-for-vat-if-youve-not-before"
 }

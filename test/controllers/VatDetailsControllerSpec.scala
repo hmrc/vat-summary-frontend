@@ -349,7 +349,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email)
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
@@ -371,7 +371,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email)
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
@@ -393,7 +393,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email)
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
@@ -415,7 +415,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             None, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email)
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
@@ -435,7 +435,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date, entity name or partyType" in {
         lazy val expected: VatDetailsViewModel =
-          VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true)
+          VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -454,7 +454,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date or entity name with the showSignUp flag set to true" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true)
+          None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB Exempt")
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -474,7 +474,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with the returnError flag set" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, Some(entityName), returnObligationError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
-          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email))
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -494,7 +494,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsViewModel with the paymentError flag set" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
-          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email))
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -522,7 +522,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           currentDate = testDate,
           partyType = Some("7"),
           userEmailVerified = true,
-          emailAddress = Some(email))
+          emailAddress = Some(email),
+          mandationStatus = "MTDfB"
+        )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -551,7 +553,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           currentDate = testDate,
           partyType = Some("7"),
           userEmailVerified = true,
-          emailAddress = Some(email))
+          emailAddress = Some(email),
+          mandationStatus = "MTDfB"
+        )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -571,7 +575,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
           currentDate = testDate, partyType = Some("7"), userEmailVerified = true,
-          emailAddress = Some(email), penaltiesSummary = Some(penaltiesSummaryModel)
+          emailAddress = Some(email), penaltiesSummary = Some(penaltiesSummaryModel), mandationStatus = "MTDfB"
         )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
@@ -590,7 +594,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       "return a VatDetailsModel with displayPenaltiesTile set to false" in {
         lazy val expectedContent: VatDetailsViewModel = VatDetailsViewModel(
           paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email)
+          currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
         )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
@@ -617,7 +621,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           customerInfoError = true,
           currentDate = testDate,
           partyType = None,
-          userEmailVerified = true
+          userEmailVerified = true,
+          mandationStatus = "ERROR"
         )
 
         lazy val result: VatDetailsViewModel = {

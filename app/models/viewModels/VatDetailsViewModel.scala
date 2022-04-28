@@ -38,4 +38,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                partyType: Option[String],
                                userEmailVerified: Boolean = false,
                                emailAddress: Option[String] = None,
-                               penaltiesSummary: Option[PenaltiesSummary] = None)
+                               penaltiesSummary: Option[PenaltiesSummary] = None,
+                               mandationStatus: String)

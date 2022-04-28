@@ -90,7 +90,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
 
     "the  user has two non-overdue charges" should {
 
-      val viewModel = OpenPaymentsViewModel(payments)
+      val viewModel = OpenPaymentsViewModel(payments, mandationStatus = "2")
       lazy val view = {
         openPaymentsView(user, viewModel, Html(""), None)
       }
@@ -218,7 +218,8 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
               periodKey = "#001",
               chargeReference = Some("XD002750002155"),
               isOverdue = false
-            ))
+            )),
+            mandationStatus = "MTDfB"
           ),
           ChargeType.apply(historyChargeHelper.name).value,
           PaymentMessages.getMessagesForChargeType(historyChargeHelper.name)._1,
@@ -249,7 +250,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
   "Rendering the open payments page for an agent" should {
 
     val entityName = "Capgemini"
-    val viewModel = OpenPaymentsViewModel(payments)
+    val viewModel = OpenPaymentsViewModel(payments, mandationStatus = "2")
     lazy val view = {
       openPaymentsView(agentUser, viewModel, Html(""), Some(entityName))
     }
