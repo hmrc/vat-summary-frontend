@@ -20,22 +20,21 @@ import audit.AuditingService
 import audit.models.ViewOutstandingVatPaymentsAuditModel
 import common.SessionKeys
 import config.AppConfig
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.DDInterruptPredicate
-
 import javax.inject.{Inject, Singleton}
-import models.User
+import models.{CustomerInformation, User}
 import models.payments.{OpenPaymentsModel, Payment, PaymentOnAccount}
 import models.viewModels.OpenPaymentsViewModel
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import play.twirl.api.Html
-import services.{DateService, PaymentsService, ServiceInfoService}
+import services.{AccountDetailsService, DateService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, OpenPayments}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -48,7 +47,8 @@ class OpenPaymentsController @Inject()(authorisedController: AuthorisedControlle
                                        noPayments: NoPayments,
                                        paymentsError: PaymentsError,
                                        openPaymentsPage: OpenPayments,
-                                       DDInterrupt: DDInterruptPredicate)
+                                       DDInterrupt: DDInterruptPredicate,
+                                       accountDetailsService: AccountDetailsService)
                                       (implicit appConfig: AppConfig,
                                        ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -58,36 +58,40 @@ class OpenPaymentsController @Inject()(authorisedController: AuthorisedControlle
       DDInterrupt.interruptCheck { _ =>
         for {
           serviceInfoContent <- serviceInfoService.getPartial
-          paymentsView <- renderView(serviceInfoContent)
+          accountDetailsCall <- accountDetailsService.getAccountDetails(user.vrn)
+          paymentsView <- renderView(serviceInfoContent, accountDetailsCall)
         } yield paymentsView
       }
   }
 
-  private[controllers] def renderView(serviceInfoContent: Html)
+  private[controllers] def renderView(serviceInfoContent: Html,
+                                      accountDetails: HttpGetResult[CustomerInformation])
                                      (implicit request: Request[_], user: User, hc: HeaderCarrier): Future[Result] = {
     val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+    val mandationStatus = accountDetails.fold(_ => "", _.mandationStatus)
     paymentsService.getOpenPayments(user.vrn).map {
       case Right(Some(payments)) =>
-        val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount))
+        val model = getModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus)
         auditEvent(user, model.payments)
         Ok(openPaymentsPage(user, model, serviceInfoContent, clientName))
       case Right(_) =>
         auditEvent(user, Seq.empty)
-        Ok(noPayments(user, serviceInfoContent, clientName))
+        Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus))
       case Left(error) =>
         logger.warn("[OpenPaymentsController][openPayments] error: " + error.toString)
         InternalServerError(paymentsError())
     }
   }
 
-  private[controllers] def getModel(payments: Seq[Payment]): OpenPaymentsViewModel =
+  private[controllers] def getModel(payments: Seq[Payment], mandationStatus: String): OpenPaymentsViewModel =
     OpenPaymentsViewModel(
       payments.map { payment =>
         OpenPaymentsModel(
           payment,
           isOverdue = payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress
         )
-      }
+      },
+      mandationStatus
     )
 
   private[controllers] def auditEvent(user: User, payments: Seq[OpenPaymentsModel])(implicit hc: HeaderCarrier): Unit = {

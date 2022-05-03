@@ -27,12 +27,11 @@ import models.viewModels.WhatYouOweChargeModel._
 import models.viewModels.{WhatYouOweChargeModel, WhatYouOweViewModel}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{DateService, PaymentsService, ServiceInfoService}
+import services.{AccountDetailsService, DateService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
-
 import scala.concurrent.ExecutionContext
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
@@ -43,21 +42,28 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      mcc: MessagesControllerComponents,
                                      paymentsError: PaymentsError,
                                      view: WhatYouOwe,
-                                     noPayments: NoPayments)
+                                     noPayments: NoPayments,
+                                     accountDetailsService: AccountDetailsService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def show: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+
     implicit user => ddInterrupt.interruptCheck { _ =>
 
       for {
         serviceInfoContent <- serviceInfoService.getPartial
         payments <- paymentsService.getOpenPayments(user.vrn)
+        mandationStatusCall <- accountDetailsService.getAccountDetails(user.vrn).map(_.map(_.mandationStatus))
+
       } yield {
         payments match {
           case Right(Some(payments)) =>
-            constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount)) match {
+
+            val mandationStatus = mandationStatusCall.getOrElse("")
+
+            constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
               case Some(model) =>
                 Ok(view(model, serviceInfoContent))
               case None =>
@@ -66,7 +72,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             }
           case Right(_) =>
             val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-            Ok(noPayments(user, serviceInfoContent, clientName))
+            Ok(noPayments(user, serviceInfoContent, clientName, mandationStatusCall.getOrElse("")))
           case Left(error) =>
             logger.warn(s"[WhatYouOweController][show] Payments error: $error")
             InternalServerError(paymentsError())
@@ -76,7 +82,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
   }
 
-  def constructViewModel(payments: Seq[Payment])(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
+
+
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels: Seq[WhatYouOweChargeModel] = payments.collect {
       case payment if payment.originalAmount.isDefined =>
@@ -96,7 +104,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         )
     }
     if(payments.length == chargeModels.length) {
-      Some(WhatYouOweViewModel(totalAmount, chargeModels))
+      Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus))
     } else {
       None
     }

@@ -232,24 +232,24 @@ object TestModels {
   )
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1")
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1"), mandationStatus = "2"
   )
 
   val vatDetailsGroupModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some(PartyTypes.vatGroup)
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some(PartyTypes.vatGroup), mandationStatus = "2"
   )
 
   val vatDetailsDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02")), currentDate = testDate, partyType = Some("1")
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2020-02-02")), currentDate = testDate, partyType = Some("1"), mandationStatus = "2"
   )
 
   val vatDetailsHistoricDeregModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2019-03-03"), Some("2019-03-03"), Some(entityName), deregDate = Some(LocalDate.parse("2017-02-02")), currentDate = testDate,
-    partyType = Some(PartyTypes.vatGroup)
+    partyType = Some(PartyTypes.vatGroup), mandationStatus = "2"
   )
 
   val vatDetailsPendingDeregModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate, partyType = Some("1")
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), pendingDereg = true, currentDate = testDate, partyType = Some("1"), mandationStatus = "2"
   )
 
   val mtdEnrolment: Enrolment = Enrolment("HMRC-MTD-VAT", Seq(EnrolmentIdentifier("VRN", "123456789")), "")
@@ -336,7 +336,8 @@ object TestModels {
 
   val whatYouOweViewModel = WhatYouOweViewModel(
     10000,
-    Seq(whatYouOweChargeModel)
+    Seq(whatYouOweChargeModel),
+    mandationStatus = "MTDfB"
   )
 
   val viewModelNoChargeDescription = whatYouOweViewModel.copy(

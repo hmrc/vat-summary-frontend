@@ -14,11 +14,14 @@
  * limitations under the License.
  *@
 
+@import views.html.templates.MtdNotificationBanner
+
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
-      govukBackLink: GovukBackLink)
+      govukBackLink: GovukBackLink,
+      mtdNotificationBanner: MtdNotificationBanner)
 
-@(user: models.User, serviceInfoContent: Html, clientName: Option[String])(
+@(user: models.User, serviceInfoContent: Html, clientName: Option[String], mandationStatus: String)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @breadcrumbs = {
@@ -58,6 +61,8 @@
       <h1 class="govuk-heading-xl">
           @if(user.isAgent) {@messages("openPayments.agentTitle")} else {@messages("openPayments.title")}
       </h1>
+
+      @mtdNotificationBanner(mandationStatus)
 
       <div class="govuk-form-group" id="noPaymentsDetail">
         <h2 class="govuk-body-l">

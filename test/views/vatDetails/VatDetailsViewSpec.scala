@@ -68,7 +68,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     currentDate = testDate,
     partyType = Some("1"),
     userEmailVerified = true,
-    emailAddress = Some("testsi1222@gmail.com")
+    emailAddress = Some("testsi1222@gmail.com"),
+    mandationStatus = "MTDfB"
   )
   val nonMtdDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     None,
@@ -76,7 +77,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     showSignUp = Some(true),
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val hybridDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2018-12-31"),
@@ -84,7 +86,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     isHybridUser = true,
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val overdueReturnDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2017-01-01"),
@@ -92,7 +95,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     returnObligationOverdue = true,
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val multipleReturnsDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2017-01-01"),
@@ -100,7 +104,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     hasMultipleReturnObligations = true,
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val paymentErrorDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     None,
@@ -108,7 +113,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     paymentError = true,
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val returnErrorDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2018-12-31"),
@@ -116,7 +122,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     returnObligationError = true,
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val bothErrorDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     None,
@@ -127,7 +134,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     showSignUp = None,
     customerInfoError = true,
     currentDate = testDate,
-    partyType = Some("1")
+    partyType = Some("1"),
+    mandationStatus = "MTDfB"
   )
   val unverifiedUserDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2018-12-31"),
@@ -135,7 +143,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     Some("Cheapo Clothing"),
     currentDate = testDate,
     partyType = Some("1"),
-    userEmailVerified = true
+    userEmailVerified = true,
+    mandationStatus = "MTDfB"
   )
 
   "Rendering the VAT details page for an mtd user" should {
@@ -370,7 +379,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       entityName = None,
       customerInfoError = true,
       currentDate = testDate,
-      partyType = Some("1"))
+      partyType = Some("1"),
+      mandationStatus = "2")
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

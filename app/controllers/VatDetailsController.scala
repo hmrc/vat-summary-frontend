@@ -25,7 +25,6 @@ import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.DDInterruptPredicate
-
 import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
@@ -39,7 +38,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.vatDetails.Details
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -169,6 +167,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val deregDate: Option[LocalDate] = retrieveDeregDate(accountDetails)
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
     val emailAddress: Option[String] = accountDetails.fold(_ => None, _.emailAddress.flatMap(_.email))
+    val mandationStatus: String = accountDetails.fold(_ => "ERROR", _.mandationStatus)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -189,7 +188,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       partyType,
       retrieveEmailVerifiedIfExist(accountDetails),
       emailAddress,
-      penaltyInformation
+      penaltyInformation,
+      mandationStatus
     )
   }
 
