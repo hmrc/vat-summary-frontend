@@ -28,7 +28,6 @@ import models.viewModels.{WhatYouOweChargeModel, WhatYouOweViewModel}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountDetailsService, DateService, PaymentsService, ServiceInfoService}
-import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
