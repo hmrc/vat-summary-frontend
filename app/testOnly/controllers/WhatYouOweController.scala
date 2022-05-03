@@ -62,7 +62,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         payments match {
           case Right(Some(payments)) =>
 
-            val mandationStatus = mandationStatusCall.fold(_ => "Error", status => status)
+            val mandationStatus = mandationStatusCall.getOrElse("")
 
             constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
               case Some(model) =>
@@ -73,7 +73,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             }
           case Right(_) =>
             val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-            Ok(noPayments(user, serviceInfoContent, clientName, mandationStatusCall.fold(_ => "Error", status => status)))
+            Ok(noPayments(user, serviceInfoContent, clientName, mandationStatusCall.getOrElse("")))
           case Left(error) =>
             logger.warn(s"[WhatYouOweController][show] Payments error: $error")
             InternalServerError(paymentsError())
@@ -83,7 +83,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
   }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User, messages: Messages, hc: HeaderCarrier): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
 
 
     val totalAmount = payments.map(_.outstandingAmount).sum

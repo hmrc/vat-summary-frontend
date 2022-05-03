@@ -36,6 +36,10 @@ class MtdBannerNotificationSpec extends ViewBaseSpec {
         element(".govuk-notification-banner")
       }
 
+      "have the correct title" in {
+        elementText(".govuk-notification-banner__title") shouldBe "Important"
+      }
+
       "have the correct heading" in {
         elementText(".govuk-heading-m") shouldBe "The way you submit your VAT returns changed on 1 April due to Making Tax Digital"
       }
