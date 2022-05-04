@@ -70,7 +70,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), false, messages)
 
         "return the description of the charge" in {
-          helper.description shouldBe Some("interest charged on the officer’s assessment")
+          helper.description shouldBe Some("charged on the officer’s assessment")
         }
       }
 
@@ -169,7 +169,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("interest charged on the officer’s assessment")
+          helper.description shouldBe Some("charged on the officer’s assessment")
         }
       }
 
@@ -178,7 +178,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("further interest charged on the officer’s assessment")
+          helper.description shouldBe Some("charged on the officer’s assessment")
         }
       }
 
@@ -187,7 +187,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AACharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("additional assessment based on further information for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("based on further information for the period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -196,7 +196,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AAInterestCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("interest charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -205,7 +205,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AAFurtherInterestCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("further interest charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -389,7 +389,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), true, messages)
 
         "return the description of the charge" in {
-          helper.description shouldBe Some("interest charged on the officer’s assessment")
+          helper.description shouldBe Some("charged on the officer’s assessment")
         }
       }
 
@@ -488,7 +488,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OADefaultInterestCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("interest charged on the officer’s assessment")
+          helper.description shouldBe Some("charged on the officer’s assessment")
         }
       }
 
@@ -497,7 +497,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OAFurtherInterestCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("further interest charged on the officer’s assessment")
+          helper.description shouldBe Some("charged on the officer’s assessment")
         }
       }
 
@@ -506,7 +506,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AACharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("additional assessment based on further information for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("based on further information for the period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -515,7 +515,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AAInterestCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("interest charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -524,7 +524,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AAFurtherInterestCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("further interest charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("charged on additional tax assessed for the period 1 Jan to 2 Feb 2018")
         }
       }
 

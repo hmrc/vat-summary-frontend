@@ -365,7 +365,7 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
 
         "return the correct description message" in {
           WhatYouOweChargeModel.description(paymentNoPeriodNoDate, userIsAgent = false) shouldBe
-            Some("interest charged on the officer’s assessment")
+            Some("charged on the officer’s assessment")
         }
 
       }
