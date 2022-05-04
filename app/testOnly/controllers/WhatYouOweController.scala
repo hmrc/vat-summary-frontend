@@ -61,9 +61,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         payments match {
           case Right(Some(payments)) =>
 
-            val mandationStatus = mandationStatusCall.getOrElse("")
-
-            constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
+            constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount)) match {
               case Some(model) =>
                 Ok(view(model, serviceInfoContent))
               case None =>
@@ -82,7 +80,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
   }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment])(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
 
 
     val totalAmount = payments.map(_.outstandingAmount).sum
@@ -104,7 +102,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         )
     }
     if(payments.length == chargeModels.length) {
-      Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus))
+      Some(WhatYouOweViewModel(totalAmount, chargeModels))
     } else {
       None
     }

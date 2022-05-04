@@ -17,5 +17,4 @@
 package models.viewModels
 
 case class WhatYouOweViewModel(totalAmount: BigDecimal,
-                               charges: Seq[WhatYouOweChargeModel],
-                               mandationStatus: String)
+                               charges: Seq[WhatYouOweChargeModel])

@@ -207,7 +207,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return a view model with 1 charge model and the correct total amount" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(payment), mandationStatus = "MTDfB")
+          controller.constructViewModel(Seq(payment))
         }
         result shouldBe Some(whatYouOweViewModel)
       }
@@ -220,7 +220,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(payment, payment, payment), mandationStatus = "MTDfB")
+          controller.constructViewModel(Seq(payment, payment, payment))
         } map (_.totalAmount)
         val expectedTotal = 30000
 
@@ -233,7 +233,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return None" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(payment.copy(originalAmount = None)), mandationStatus = "MTDfB")
+          controller.constructViewModel(Seq(payment.copy(originalAmount = None)))
         }
         result shouldBe None
       }
@@ -247,8 +247,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(Seq(
             payment, payment, payment.copy(originalAmount = None)
-          ),
-            mandationStatus = "MTDfB")
+          ))
         }
         result shouldBe None
       }
@@ -261,8 +260,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(Seq(
             payment.copy(chargeType = MiscPenaltyCharge)
-          ),
-            mandationStatus = "MTDfB")
+          ))
         }
         result shouldBe Some(viewModelNoChargeDescription)
       }

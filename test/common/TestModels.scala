@@ -18,7 +18,6 @@ package common
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import java.time.LocalDate
-
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
@@ -28,7 +27,6 @@ import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel, WhatYouO
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
-
 import scala.concurrent.Future
 
 object TestModels {
@@ -336,8 +334,7 @@ object TestModels {
 
   val whatYouOweViewModel = WhatYouOweViewModel(
     10000,
-    Seq(whatYouOweChargeModel),
-    mandationStatus = "MTDfB"
+    Seq(whatYouOweChargeModel)
   )
 
   val viewModelNoChargeDescription = whatYouOweViewModel.copy(

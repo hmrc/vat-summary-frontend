@@ -46,7 +46,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
   val chargeModel2: WhatYouOweChargeModel =
     chargeModel1.copy(isOverdue = false, outstandingAmount = 456.00, dueDate = LocalDate.parse("2018-12-01"))
 
-  val model: WhatYouOweViewModel = WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
+  val model: WhatYouOweViewModel = WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2))
 
   "The what you owe page for a principal user" should {
 
