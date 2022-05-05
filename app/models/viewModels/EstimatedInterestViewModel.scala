@@ -18,22 +18,21 @@ package models.viewModels
 
 import play.api.data.Form
 import play.api.data.Forms._
-
 import java.time.LocalDate
 
-case class InterestChargeViewModel(periodFrom: LocalDate,
-                                   periodTo: LocalDate,
-                                   chargeTitle: String,
-                                   interestRate: BigDecimal,
-                                   numberOfDaysLate: Int,
-                                   currentAmount: BigDecimal,
-                                   amountReceived: BigDecimal,
-                                   leftToPay: BigDecimal,
-                                   isPenalty: Boolean)
+case class EstimatedInterestViewModel(periodFrom: LocalDate,
+                                      periodTo: LocalDate,
+                                      chargeTitle: String,
+                                      interestRate: BigDecimal,
+                                      numberOfDaysLate: Int,
+                                      currentAmount: BigDecimal,
+                                      amountReceived: BigDecimal,
+                                      leftToPay: BigDecimal,
+                                      isPenalty: Boolean)
 
-object InterestChargeViewModel {
+object EstimatedInterestViewModel {
 
-  val form: Form[InterestChargeViewModel] = Form(mapping(
+  val form: Form[EstimatedInterestViewModel] = Form(mapping(
     "periodFrom" -> localDate,
     "periodTo" -> localDate,
     "chargeTitle" -> text,
@@ -43,5 +42,5 @@ object InterestChargeViewModel {
     "amountReceived" -> bigDecimal,
     "leftToPay" -> bigDecimal,
     "isPenalty" -> boolean
-  )(InterestChargeViewModel.apply)(InterestChargeViewModel.unapply))
+  )(EstimatedInterestViewModel.apply)(EstimatedInterestViewModel.unapply))
 }

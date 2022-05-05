@@ -23,7 +23,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, InterestChargeDetailsView}
+import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
@@ -34,7 +34,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
-    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[InterestChargeDetailsView],
+    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
     injector.instanceOf[PaymentsError], mockServiceErrorHandler
   )
 
