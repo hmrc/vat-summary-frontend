@@ -161,7 +161,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "for the second payment" should {
 
         "render the correct title" in {
-          elementText(Selectors.title(2)) shouldBe "Additional assessment interest interest charged on additional " +
+          elementText(Selectors.title(2)) shouldBe "Additional assessment interest charged on additional " +
             "tax assessed for the period 1 Jan to 31 Mar 2003"
         }
 
@@ -309,7 +309,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "for the second payment" should {
 
       "render the correct title" in {
-        elementText(Selectors.title(2)) shouldBe "Additional assessment interest interest charged on additional " +
+        elementText(Selectors.title(2)) shouldBe "Additional assessment interest charged on additional " +
           "tax assessed for the period 1 Jan to 31 Mar 2003"
       }
 

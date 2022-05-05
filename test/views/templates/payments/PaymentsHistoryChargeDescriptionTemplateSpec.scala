@@ -265,7 +265,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "interest charged on the officer’s assessment"
+          elementText(Selectors.description) shouldBe "charged on the officer’s assessment"
         }
       }
 
@@ -288,7 +288,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "further interest charged on the officer’s assessment"
+          elementText(Selectors.description) shouldBe "charged on the officer’s assessment"
         }
       }
 
@@ -311,7 +311,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "additional assessment based on further information" +
+          elementText(Selectors.description) shouldBe "based on further information" +
             " for the period 1 Jan to 1 Apr 2018"
         }
       }
@@ -335,7 +335,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "interest charged on additional tax assessed" +
+          elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
             " for the period 1 Jan to 1 Apr 2018"
         }
       }
@@ -359,7 +359,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "further interest charged on additional tax assessed" +
+          elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
             " for the period 1 Jan to 1 Apr 2018"
         }
       }
@@ -986,7 +986,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "interest charged on the officer’s assessment"
+        elementText(Selectors.description) shouldBe "charged on the officer’s assessment"
       }
     }
 
@@ -1009,7 +1009,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "further interest charged on the officer’s assessment"
+        elementText(Selectors.description) shouldBe "charged on the officer’s assessment"
       }
     }
 
@@ -1032,7 +1032,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "additional assessment based on further information" +
+        elementText(Selectors.description) shouldBe "based on further information" +
           " for the period 1 Jan to 1 Apr 2018"
       }
     }
@@ -1056,7 +1056,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "interest charged on additional tax assessed" +
+        elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
           " for the period 1 Jan to 1 Apr 2018"
       }
     }
@@ -1080,7 +1080,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "further interest charged on additional tax assessed" +
+        elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
           " for the period 1 Jan to 1 Apr 2018"
       }
     }
