@@ -19,7 +19,7 @@ package testOnly.controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.viewModels.{EstimatedInterestViewModel, WhatYouOweChargeModel}
+import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, WhatYouOweChargeModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
@@ -66,6 +66,25 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
               InternalServerError(errorView())
             },
             model => Ok(estimatedInterestView(model, navLinks))
+          )
+        }
+      } else {
+        Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
+      }
+    }
+  }
+
+  def crystallisedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+    implicit user => DDInterrupt.interruptCheck { _ =>
+      if(appConfig.features.interestBreakdownEnabled()) {
+        serviceInfoService.getPartial.map { navLinks =>
+          CrystallisedInterestViewModel.form.bindFromRequest.fold(
+            errorForm => {
+              logger.warn("[ChargeBreakdownController][crystallisedInterestBreakdown] - " +
+                s"Unexpected error when binding form: $errorForm")
+              InternalServerError(errorView())
+            },
+            model => Ok("success") // TODO load new view
           )
         }
       } else {
