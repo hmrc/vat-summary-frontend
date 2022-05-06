@@ -35,7 +35,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           mcc: MessagesControllerComponents,
                                           serviceInfoService: ServiceInfoService,
                                           chargeBreakdownView: ChargeTypeDetailsView,
-                                          interestBreakdownView: EstimatedInterestView,
+                                          estimatedInterestView: EstimatedInterestView,
                                           errorView: PaymentsError,
                                           serviceErrorHandler: ServiceErrorHandler)
                                          (implicit ec: ExecutionContext,
@@ -56,16 +56,16 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
     }
   }
 
-  def interestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+  def estimatedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
       if(appConfig.features.interestBreakdownEnabled()) {
         serviceInfoService.getPartial.map { navLinks =>
           EstimatedInterestViewModel.form.bindFromRequest.fold(
             errorForm => {
-              logger.warn(s"[ChargeBreakdownController][interestBreakdown] - Unexpected error when binding form: $errorForm")
+              logger.warn(s"[ChargeBreakdownController][estimatedInterestBreakdown] - Unexpected error when binding form: $errorForm")
               InternalServerError(errorView())
             },
-            model => Ok(interestBreakdownView(model, navLinks))
+            model => Ok(estimatedInterestView(model, navLinks))
           )
         }
       } else {
