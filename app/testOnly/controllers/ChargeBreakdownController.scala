@@ -19,15 +19,14 @@ package testOnly.controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.viewModels.{InterestChargeViewModel, WhatYouOweChargeModel}
+import models.viewModels.{EstimatedInterestViewModel, WhatYouOweChargeModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, InterestChargeDetailsView}
-
+import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -36,7 +35,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           mcc: MessagesControllerComponents,
                                           serviceInfoService: ServiceInfoService,
                                           chargeBreakdownView: ChargeTypeDetailsView,
-                                          interestBreakdownView: InterestChargeDetailsView,
+                                          estimatedInterestView: EstimatedInterestView,
                                           errorView: PaymentsError,
                                           serviceErrorHandler: ServiceErrorHandler)
                                          (implicit ec: ExecutionContext,
@@ -57,16 +56,16 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
     }
   }
 
-  def interestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+  def estimatedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
       if(appConfig.features.interestBreakdownEnabled()) {
         serviceInfoService.getPartial.map { navLinks =>
-          InterestChargeViewModel.form.bindFromRequest.fold(
+          EstimatedInterestViewModel.form.bindFromRequest.fold(
             errorForm => {
-              logger.warn(s"[ChargeBreakdownController][interestBreakdown] - Unexpected error when binding form: $errorForm")
+              logger.warn(s"[ChargeBreakdownController][estimatedInterestBreakdown] - Unexpected error when binding form: $errorForm")
               InternalServerError(errorView())
             },
-            model => Ok(interestBreakdownView(model, navLinks))
+            model => Ok(estimatedInterestView(model, navLinks))
           )
         }
       } else {

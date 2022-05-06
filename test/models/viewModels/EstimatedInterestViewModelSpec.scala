@@ -16,16 +16,15 @@
 
 package models.viewModels
 
-import models.viewModels.InterestChargeViewModel.form
+import models.viewModels.EstimatedInterestViewModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
-
 import java.time.LocalDate
 
-class InterestChargeViewModelSpec extends AnyWordSpecLike with Matchers {
+class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
 
-  val model: InterestChargeViewModel = InterestChargeViewModel(
+  val model: EstimatedInterestViewModel = EstimatedInterestViewModel(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
     "Example interest charge title",
@@ -37,7 +36,7 @@ class InterestChargeViewModelSpec extends AnyWordSpecLike with Matchers {
     isPenalty = false
   )
 
-  "The InterestChargeViewModel form" should {
+  "The EstimatedInterestViewModel form" should {
 
     "bind successfully" when {
 
