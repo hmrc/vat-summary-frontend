@@ -23,7 +23,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, InterestChargeDetailsView}
+import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
@@ -34,7 +34,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
-    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[InterestChargeDetailsView],
+    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
     injector.instanceOf[PaymentsError], mockServiceErrorHandler
   )
 
@@ -207,7 +207,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockPrincipalAuth()
           mockServiceInfoCall()
-          controller.interestBreakdown(requestWithForm(fakeRequestWithSession))
+          controller.estimatedInterestBreakdown(requestWithForm(fakeRequestWithSession))
         }
 
         "return 200" in {
@@ -225,7 +225,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockAgentAuth()
           mockServiceInfoCall()
-          controller.interestBreakdown(requestWithForm(agentFinancialRequest))
+          controller.estimatedInterestBreakdown(requestWithForm(agentFinancialRequest))
         }
 
         "return 200" in {
@@ -243,7 +243,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "return 404" in {
           mockAppConfig.features.interestBreakdownEnabled(false)
           mockPrincipalAuth()
-          val result = controller.interestBreakdown(requestWithForm(fakeRequestWithSession))
+          val result = controller.estimatedInterestBreakdown(requestWithForm(fakeRequestWithSession))
 
           status(result) shouldBe NOT_FOUND
         }
@@ -255,7 +255,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
-        controller.interestBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+        controller.estimatedInterestBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
       }
 
       "return 500" in {
@@ -273,7 +273,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
-        controller.interestBreakdown(fakeRequestWithSession)
+        controller.estimatedInterestBreakdown(fakeRequestWithSession)
       }
 
       "return 500" in {
@@ -290,7 +290,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockMissingBearerToken()
-        controller.interestBreakdown(fakeRequest)
+        controller.estimatedInterestBreakdown(fakeRequest)
       }
 
       "return status 303" in {
@@ -305,7 +305,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "return 403" in {
         mockInsufficientEnrolments()
-        val result = controller.interestBreakdown()(fakeRequest)
+        val result = controller.estimatedInterestBreakdown()(fakeRequest)
         status(result) shouldBe FORBIDDEN
       }
     }
@@ -314,7 +314,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "return 403" in {
         mockPrincipalAuth()
-        val result = controller.interestBreakdown()(insolventRequest)
+        val result = controller.estimatedInterestBreakdown()(insolventRequest)
         status(result) shouldBe FORBIDDEN
       }
     }
@@ -323,7 +323,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockPrincipalAuth()
-        controller.interestBreakdown()(DDInterruptRequest)
+        controller.estimatedInterestBreakdown()(DDInterruptRequest)
       }
 
       "return 303" in {

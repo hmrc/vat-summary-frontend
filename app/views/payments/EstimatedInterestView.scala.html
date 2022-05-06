@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import models.viewModels.InterestChargeViewModel
+@import models.viewModels.EstimatedInterestViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import views.html.templates.formatters.money.DisplayMoney
 
@@ -24,7 +24,7 @@
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink)
 
-@(model: InterestChargeViewModel, serviceInfoContent: Html)(
+@(model: EstimatedInterestViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
@@ -59,9 +59,9 @@
 
 @lateByHtml = {
   @if(model.numberOfDaysLate == 1) {
-    @messages("interestChargeDetails.day")
+    @messages("estimatedInterest.day")
   } else {
-    @messages("interestChargeDetails.days", model.numberOfDaysLate)
+    @messages("estimatedInterest.days", model.numberOfDaysLate)
   }
 }
 
@@ -80,40 +80,40 @@
         @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
       </span>
       <h1 class="govuk-heading-xl">@model.chargeTitle</h1>
-      <p class="govuk-body">@messages(s"interestChargeDetails.${interestTypeMessageKey}ChargeInterest")</p>
-      <p class="govuk-body">@messages(s"interestChargeDetails.${interestTypeMessageKey}IncreaseDaily")</p>
+      <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}ChargeInterest")</p>
+      <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
       <p class="govuk-body">
-        @messages(s"interestChargeDetails.calculation")
+        @messages(s"estimatedInterest.calculation")
         <br>
-        @messages(s"interestChargeDetails.${interestTypeMessageKey}Calculation", model.interestRate)
+        @messages(s"estimatedInterest.${interestTypeMessageKey}Calculation", model.interestRate)
       </p>
 
       @govukSummaryList(SummaryList(
         rows = Seq(
           SummaryListRow(
-            key = Key(content = Text(messages(s"interestChargeDetails.${interestTypeMessageKey}LateBy"))),
+            key = Key(content = Text(messages(s"estimatedInterest.${interestTypeMessageKey}LateBy"))),
             value = Value(content = HtmlContent(lateByHtml))
           ),
           SummaryListRow(
-            key = Key(content = Text(messages(s"interestChargeDetails.currentAmount"))),
+            key = Key(content = Text(messages(s"estimatedInterest.currentAmount"))),
             value = Value(content = HtmlContent(displayMoney(model.currentAmount)))
           ),
           SummaryListRow(
-            key = Key(content = Text(messages("interestChargeDetails.amountReceived"))),
+            key = Key(content = Text(messages("estimatedInterest.amountReceived"))),
             value = Value(content = HtmlContent(displayMoney(model.amountReceived)))
           ),
           SummaryListRow(
-            key = Key(content = Text(messages("interestChargeDetails.leftToPay"))),
+            key = Key(content = Text(messages("estimatedInterest.leftToPay"))),
             value = Value(content = HtmlContent(displayMoney(model.leftToPay)))
           )
         )
       ))
 
-      <h2 class="govuk-heading-s">@messages("interestChargeDetails.estimates")</h2>
-      <p class="govuk-body">@messages(s"interestChargeDetails.estimatesExplanation")</p>
+      <h2 class="govuk-heading-s">@messages("estimatedInterest.estimates")</h2>
+      <p class="govuk-body">@messages(s"estimatedInterest.estimatesExplanation")</p>
       <p class="govuk-body">
         <a class="govuk-link" href="#" target="_blank" rel="noreferrer noopener">
-          @messages(s"interestChargeDetails.calculationLink")
+          @messages(s"estimatedInterest.calculationLink")
         </a>
       </p>
 

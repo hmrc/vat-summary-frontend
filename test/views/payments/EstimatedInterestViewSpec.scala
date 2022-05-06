@@ -16,21 +16,20 @@
 
 package views.payments
 
-import models.viewModels.InterestChargeViewModel
+import models.viewModels.EstimatedInterestViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
-import views.html.payments.InterestChargeDetailsView
 import views.ViewBaseSpec
-
+import views.html.payments.EstimatedInterestView
 import java.time.LocalDate
 
-class InterestChargeDetailsViewSpec extends ViewBaseSpec {
+class EstimatedInterestViewSpec extends ViewBaseSpec {
 
-  val injectedView: InterestChargeDetailsView = injector.instanceOf[InterestChargeDetailsView]
+  val injectedView: EstimatedInterestView = injector.instanceOf[EstimatedInterestView]
   val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
-  val viewModel: InterestChargeViewModel = InterestChargeViewModel(
+  val viewModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
     "Example interest charge title",
