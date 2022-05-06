@@ -45,6 +45,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       "the user is logged in as a principal entity" should {
 
         val request = fakeRequestWithSession.withFormUrlEncodedBody(
+          "chargeValue" -> "Charge Value",
           "chargeDescription" -> "Example Description",
           "chargeTitle" -> "Example Charge",
           "outstandingAmount" -> "1234.56",
@@ -73,6 +74,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       "the user is logged in as an agent" should {
 
         lazy val request = agentFinancialRequest.withFormUrlEncodedBody(
+          "chargeValue" -> "Charge Value",
           "chargeDescription" -> "Example Description",
           "chargeTitle" -> "Example Charge",
           "outstandingAmount" -> "1234.56",

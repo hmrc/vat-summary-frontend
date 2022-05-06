@@ -20,12 +20,13 @@ import play.api.data.Form
 import play.api.data.Forms._
 import java.time.LocalDate
 
-import models.payments.{Payment, PaymentNoPeriod, PaymentWithPeriod}
+import models.payments._
 import play.api.i18n.Messages
 import utils.LoggerUtil
 import views.templates.payments.PaymentMessageHelper
 
-case class WhatYouOweChargeModel(chargeDescription: String,
+case class WhatYouOweChargeModel(chargeValue: String,
+                                 chargeDescription: String,
                                  chargeTitle: String,
                                  outstandingAmount: BigDecimal,
                                  originalAmount: BigDecimal,
@@ -41,6 +42,7 @@ case class WhatYouOweChargeModel(chargeDescription: String,
 object WhatYouOweChargeModel extends LoggerUtil {
 
   val form: Form[WhatYouOweChargeModel] = Form(mapping(
+    "chargeValue" -> text,
     "chargeDescription" -> text,
     "chargeTitle" -> text,
     "outstandingAmount" -> bigDecimal,
@@ -83,6 +85,14 @@ object WhatYouOweChargeModel extends LoggerUtil {
   def periodTo(payment: Payment): Option[LocalDate] = payment match {
     case p: PaymentWithPeriod => Some(p.periodTo)
     case _ => None
+  }
+
+  def viewReturnEnabled(chargeValue: String): Boolean = ChargeType.apply(chargeValue) match {
+    case ReturnDebitCharge |
+         ErrorCorrectionDebitCharge |
+         PaymentOnAccountReturnDebitCharge |
+         AAReturnDebitCharge => true
+    case _ => false
   }
 
   def description(payment: Payment, userIsAgent: Boolean)(implicit messages: Messages): Option[String] = {

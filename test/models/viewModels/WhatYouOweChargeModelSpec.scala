@@ -35,7 +35,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
       "all fields are present" should {
 
         val formWithValues = form.mapping.bind(
-          Map("chargeDescription" -> "Charge Description",
+          Map(
+          "chargeValue" -> "Charge Value",
+          "chargeDescription" -> "Charge Description",
           "chargeTitle" -> "Charge Title",
           "outstandingAmount" -> "1234.56",
           "originalAmount" -> "2345.67",
@@ -52,6 +54,7 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
         "produce a WhatYouOweChargeModel" in {
 
           formWithValues shouldBe Right(WhatYouOweChargeModel(
+            chargeValue = "Charge Value",
             chargeDescription = "Charge Description",
             chargeTitle = "Charge Title",
             outstandingAmount = BigDecimal(1234.56),
@@ -72,7 +75,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
       "only required fields are present" should {
 
         val formWithValues = form.mapping.bind(
-          Map("chargeDescription" -> "Charge Description",
+          Map(
+            "chargeValue" -> "Charge Value",
+            "chargeDescription" -> "Charge Description",
             "chargeTitle" -> "Charge Title",
             "outstandingAmount" -> "1234.56",
             "originalAmount" -> "1234.56",
@@ -83,6 +88,7 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
 
         "produce a WhatYouOweChargeModel" in {
           formWithValues shouldBe Right(WhatYouOweChargeModel(
+            chargeValue = "Charge Value",
             chargeDescription = "Charge Description",
             chargeTitle = "Charge Title",
             outstandingAmount = BigDecimal(1234.56),
@@ -105,7 +111,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
       "the charge description is missing" should {
 
         val formWithValues = form.mapping.bind(
-          Map("chargeTitle" -> "Charge Title",
+          Map(
+            "chargeValue" -> "Charge Value",
+            "chargeTitle" -> "Charge Title",
             "outstandingAmount" -> "1234.56",
             "originalAmount" -> "1234.56",
             "dueDate" -> "2021-04-08",
@@ -120,7 +128,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
         "the charge title is missing" should {
 
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "1234.56",
               "dueDate" -> "2021-04-08",
@@ -133,10 +143,30 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
           }
         }
 
+        "the charge value is missing" should {
+
+          val formWithValues = form.mapping.bind(
+            Map(
+              "chargeTitle" -> "Charge Title",
+              "chargeDescription" -> "Charge Description",
+              "outstandingAmount" -> "1234.56",
+              "originalAmount" -> "1234.56",
+              "dueDate" -> "2021-04-08",
+              "isOverdue" -> "true",
+              "makePaymentRedirect" -> "payment-redirect"
+            ))
+
+          "return a form error" in {
+            formWithValues shouldBe Left(List(FormError("chargeValue", List("error.required"), List())))
+          }
+        }
+
         "the outstanding amount is invalid" should {
 
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "abcd",
               "originalAmount" -> "1234.56",
@@ -153,7 +183,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
         "the original amount is invalid" should {
 
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "abcd",
@@ -170,7 +202,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
         "the cleared amount is invalid" should {
 
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "2345.67",
@@ -188,7 +222,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
         "the due date is invalid" should {
 
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "2345.67",
@@ -204,7 +240,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
 
         "the isOverdue value is invalid" should {
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "2345.67",
@@ -220,7 +258,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
 
         "the makePaymentRedirect entry is missing" should {
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "2345.67",
@@ -235,7 +275,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
 
         "the period from is invalid" should {
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "1234.56",
@@ -255,7 +297,9 @@ class WhatYouOweChargeModelSpec extends ViewBaseSpec with AnyWordSpecLike with M
         "the period to is invalid" should {
 
           val formWithValues = form.mapping.bind(
-            Map("chargeDescription" -> "Charge Description",
+            Map(
+              "chargeValue" -> "Charge Value",
+              "chargeDescription" -> "Charge Description",
               "chargeTitle" -> "Charge Title",
               "outstandingAmount" -> "1234.56",
               "originalAmount" -> "1234.56",

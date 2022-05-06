@@ -84,11 +84,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
 
-
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels: Seq[WhatYouOweChargeModel] = payments.collect {
       case payment if payment.originalAmount.isDefined =>
         WhatYouOweChargeModel(
+          chargeValue = payment.chargeType.value,
           chargeDescription = description(payment, user.isAgent).getOrElse(""),
           chargeTitle = title(payment.chargeType.value),
           outstandingAmount = payment.outstandingAmount,

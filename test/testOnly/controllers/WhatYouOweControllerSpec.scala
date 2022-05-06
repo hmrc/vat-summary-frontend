@@ -261,8 +261,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(Seq(
             payment.copy(chargeType = MiscPenaltyCharge)
-          ),
-            mandationStatus = "MTDfB")
+          ), mandationStatus = "MTDfB")
         }
         result shouldBe Some(viewModelNoChargeDescription)
       }

@@ -225,6 +225,27 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "the accountDetails call for mandation status fails" should {
+
+      lazy val result = {
+        commonPaymentHistoryMocks()
+        mockCustomerInfo(Right(customerInformationMax))
+        mockCustomerInfo(Left(UnknownError))
+        mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
+        controller.openPayments()(agentFinancialRequest)
+      }
+
+      "return 200 (OK)" in {
+        status(result) shouldBe Status.OK
+      }
+
+      "return the payments view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select("h1").first().text() shouldBe "What you owe"
+      }
+
+    }
+
     "Calling the .getModel function" when {
 
         "due date of payments is in the past" when {

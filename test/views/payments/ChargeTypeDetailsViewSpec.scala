@@ -49,6 +49,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
   }
 
   val whatYouOweCharge: WhatYouOweChargeModel = WhatYouOweChargeModel(
+    chargeValue = "Charge Value",
     chargeDescription = "Some Charge",
     chargeTitle = "Charge Title",
     outstandingAmount = BigDecimal(1111.11),

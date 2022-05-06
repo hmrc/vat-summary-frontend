@@ -92,6 +92,7 @@ whatYouOwe.agentTitle = What your client owes
 whatYouOwe.totalAmountToPay = Total amount to pay
 whatYouOwe.total = Total
 whatYouOwe.due = due
+whatYouOwe.viewReturn = View VAT Return
 whatYouOwe.headCell.paymentType = Payment type
 whatYouOwe.headCell.amountDue = Amount due
 whatYouOwe.anyPaymentsYouMake = Any payments you make:

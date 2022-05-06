@@ -113,6 +113,8 @@ openPayments.whatOweHelp.headingAgent = Mae’r swm sy’n ddyledus yn anghywir 
 openPayments.vatReturn = ar gyfer y cyfnod {0}
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
+whatYouOwe.viewReturn = Bwrw golwg dros y Ffurflen TAW
+
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
