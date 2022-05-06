@@ -103,6 +103,7 @@ object MessageLookup {
         case VATPOAInstalmentCharge.name => ("Payment on account instalment", s"for the period $datePeriod")
         case VATPOAReturnDebitCharge.name => ("Payment on account balance", s"for the period $datePeriod")
         case VATPOAReturnCreditCharge.name => ("Payment on account repayment", s"for the period $datePeriod")
+        case VATReturn1stLPP.name => ("Penalty", s"for late payment of VAT for VAT period $datePeriod")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }
