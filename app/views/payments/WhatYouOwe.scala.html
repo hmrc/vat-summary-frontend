@@ -16,6 +16,7 @@
 
 @import models.User
 @import models.viewModels.WhatYouOweChargeModel
+@import models.viewModels.WhatYouOweChargeModel._
 @import models.viewModels.WhatYouOweViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.html.templates.formatters.money.DisplayMoney
@@ -90,7 +91,13 @@
   }
   <span class="govuk-hint govuk-!-margin-0">
     @messages("whatYouOwe.due") @displayDate(charge.dueDate)
+    @if(viewReturnEnabled(charge.chargeValue)) {
+      <a class="govuk-link govuk-!-padding-left-1" href="@appConfig.vatReturnUrl(charge.periodKey.getOrElse("0000"))">
+        @messages("whatYouOwe.viewReturn")
+      </a>
+    }
   </span>
+
 }
 
 @chargeRows = @{

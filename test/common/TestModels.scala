@@ -320,6 +320,7 @@ object TestModels {
   val redirectLinkNoPeriod = "/vat-through-software/make-payment/0/Payment%20on%20account/2017-01-01/XD002750002155"
 
   val whatYouOweChargeModel = WhatYouOweChargeModel(
+    chargeValue = "VAT Return Debit Charge",
     chargeDescription = "for the period 1 Jan to 2 Feb 2019",
     chargeTitle = "Return",
     outstandingAmount = 10000,
@@ -342,9 +343,31 @@ object TestModels {
 
   val viewModelNoChargeDescription = whatYouOweViewModel.copy(
     charges = Seq(whatYouOweChargeModel.copy(
+      chargeValue = "VAT Miscellaneous Penalty",
       chargeDescription = "",
       chargeTitle = "VAT general penalty",
       makePaymentRedirect = redirectLinkWithPeriodMiscPenalty)
   ))
+
+  val chargeModel1: WhatYouOweChargeModel = WhatYouOweChargeModel(
+    "VAT Return Debit Charge",
+    "Example description",
+    "Example Charge",
+    111.11,
+    333.33,
+    Some(222.22),
+    LocalDate.parse("2018-03-01"),
+    Some("18AA"),
+    isOverdue = true,
+    Some("ABCD"),
+    "http://localhost:9152/vat-through-software/make-payment/11111/02/2018/2018-02-01/Example%20Charge/2018-03-01/ABCD",
+    Some(LocalDate.parse("2018-01-01")),
+    Some(LocalDate.parse("2018-02-01"))
+  )
+
+  val chargeModel2: WhatYouOweChargeModel =
+    chargeModel1.copy(chargeValue = "VAT Carter Penalty", isOverdue = false, outstandingAmount = 456.00, dueDate = LocalDate.parse("2018-12-01"))
+
+  val whatYouOweViewModel2Charge: WhatYouOweViewModel = WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
 
 }

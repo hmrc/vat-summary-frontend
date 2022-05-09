@@ -16,41 +16,20 @@
 
 package views.payments
 
-import models.viewModels.{WhatYouOweChargeModel, WhatYouOweViewModel}
+import common.TestModels.{chargeModel1, chargeModel2, whatYouOweViewModel2Charge}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.WhatYouOwe
 
-import java.time.LocalDate
-
 class WhatYouOweViewSpec extends ViewBaseSpec {
 
   val whatYouOweView: WhatYouOwe = injector.instanceOf[WhatYouOwe]
 
-  val chargeModel1: WhatYouOweChargeModel = WhatYouOweChargeModel(
-    "Example description",
-    "Example Charge",
-    111.11,
-    333.33,
-    Some(222.22),
-    LocalDate.parse("2018-03-01"),
-    Some("18AA"),
-    isOverdue = true,
-    Some("ABCD"),
-    "http://localhost:9152/vat-through-software/make-payment/11111/02/2018/2018-02-01/Example%20Charge/2018-03-01/ABCD",
-    Some(LocalDate.parse("2018-01-01")),
-    Some(LocalDate.parse("2018-02-01"))
-  )
-  val chargeModel2: WhatYouOweChargeModel =
-    chargeModel1.copy(isOverdue = false, outstandingAmount = 456.00, dueDate = LocalDate.parse("2018-12-01"))
-
-  val model: WhatYouOweViewModel = WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
-
   "The what you owe page for a principal user" should {
 
-    lazy val view = whatYouOweView(model, Html(""))
+    lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
@@ -86,7 +65,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     }
 
     "have the correct total amount" in {
-      elementText("p.govuk-body:nth-of-type(2)") shouldBe "£" + model.totalAmount
+      elementText("p.govuk-body:nth-of-type(2)") shouldBe "£" + whatYouOweViewModel2Charge.totalAmount
     }
 
     "have a charges table" which {
@@ -105,11 +84,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
       }
 
-      "has the correct row for an example first charge" which {
+      "has the correct row for an example first charge showing the View VAT Return link" which {
 
-        "has the correct charge description text" in {
+        "has the correct charge description text for a charge" in {
           elementText(tableBodyCell(1, 1)) shouldBe
-            "overdue " + chargeModel1.chargeTitle + " " + chargeModel1.chargeDescription + " due 1 March 2018"
+            "overdue " + chargeModel1.chargeTitle + " " + chargeModel1.chargeDescription + " due 1 March 2018 View VAT Return"
         }
 
         "has an overdue label" in {
@@ -117,7 +96,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct due hint text" in {
-          elementText(tableBodyCell(1, 1) + "> span") shouldBe "due 1 March 2018"
+          elementText(tableBodyCell(1, 1) + "> span") shouldBe "due 1 March 2018 View VAT Return"
         }
 
         "has a form with the correct action" in {
@@ -130,10 +109,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
       }
 
-      "has the correct row for an example second charge" which {
+      "has the correct row for an example second charge not showing the View VAT Return link" which {
 
-        "has the correct charge description text" in {
-          elementText(tableBodyCell(2, 1)) shouldBe chargeModel2.chargeTitle + " " + chargeModel2.chargeDescription + " due 1 December 2018"
+        "has the correct charge description text for a charge that does not allow a user to view a VAT return" in {
+          elementText(tableBodyCell(2, 1)) shouldBe
+            chargeModel2.chargeTitle + " " + chargeModel2.chargeDescription + " due 1 December 2018"
         }
 
         "does not have an overdue label" in {
@@ -161,7 +141,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct total amount" in {
-          elementText(tableBodyCell(3, 2)) shouldBe "£" + model.totalAmount
+          elementText(tableBodyCell(3, 2)) shouldBe "£" + whatYouOweViewModel2Charge.totalAmount
         }
       }
     }
@@ -267,7 +247,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
   "The what you owe page for an agent" should {
 
-    lazy val view = whatYouOweView(model, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct title" in {
