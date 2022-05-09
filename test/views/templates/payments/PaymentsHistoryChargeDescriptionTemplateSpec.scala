@@ -1476,5 +1476,28 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "cannot be repaid after 4 years"
       }
     }
+
+    "there is a VAT return 1st LPP Charge" should {
+
+      val model: PaymentsHistoryModel = PaymentsHistoryModel(
+        clearingSAPDocument = Some("002828853334"),
+        VatReturn1stLPP,
+        Some(LocalDate.parse("2018-03-02")),
+        Some(LocalDate.parse("2018-04-02")),
+        300,
+        Some(LocalDate.parse("2018-10-16"))
+      )
+
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for late payment of VAT for VAT period 2 Mar to 2 Apr 2018"
+      }
+    }
   }
 }
