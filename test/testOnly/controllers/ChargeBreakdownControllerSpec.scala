@@ -293,10 +293,11 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         controller.estimatedInterestBreakdown(fakeRequest)
       }
 
-      "return status 303" in {
+      "return 303" in {
         status(result) shouldBe SEE_OTHER
       }
-      "return the correct redirect location which should be sign in" in {
+
+      "redirect to the sign-in URL" in {
         redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
       }
     }
@@ -324,6 +325,159 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         controller.estimatedInterestBreakdown()(DDInterruptRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the DD interrupt controller" in {
+        redirectLocation(result) shouldBe
+          Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
+    }
+  }
+
+  "The crystallisedInterestBreakdown action" when {
+
+    "valid form information is submitted in the request" when {
+
+      def requestWithForm(request: FakeRequest[_]): FakeRequest[AnyContentAsFormUrlEncoded] = request.withFormUrlEncodedBody(
+        "periodFrom" -> "2018-01-01",
+        "periodTo" -> "2018-02-02",
+        "chargeType" -> "VAT Default Interest",
+        "interestRate" -> "2.6",
+        "dueDate" -> "2018-03-03",
+        "interestAmount" -> "300.33",
+        "amountReceived" -> "200.22",
+        "leftToPay" -> "100.11",
+        "isOverdue" -> "false",
+        "chargeReference" -> "XXXXXX0123456789"
+      )
+
+      "the user is logged in as a principal entity" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          controller.crystallisedInterestBreakdown(requestWithForm(fakeRequestWithSession))
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "" // TODO
+        }
+      }
+
+      "the user is logged in as an agent" should {
+
+        lazy val result = {
+          mockAgentAuth()
+          mockServiceInfoCall()
+          controller.crystallisedInterestBreakdown(requestWithForm(agentFinancialRequest))
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "" // TODO
+        }
+      }
+
+      "the interest breakdown feature switch is disabled" should {
+
+        "return 404" in {
+          mockAppConfig.features.interestBreakdownEnabled(false)
+          mockPrincipalAuth()
+          val result = controller.crystallisedInterestBreakdown(requestWithForm(fakeRequestWithSession))
+
+          status(result) shouldBe NOT_FOUND
+        }
+      }
+    }
+
+    "invalid form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.crystallisedInterestBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "no form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.crystallisedInterestBreakdown(fakeRequestWithSession)
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "the user is not logged in" should {
+
+      lazy val result = {
+        mockMissingBearerToken()
+        controller.crystallisedInterestBreakdown(fakeRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the sign-in URL" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the user has invalid credentials" should {
+
+      "return 403" in {
+        mockInsufficientEnrolments()
+        val result = controller.crystallisedInterestBreakdown()(fakeRequest)
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
+    "the user is insolvent without access" should {
+
+      "return 403" in {
+        mockPrincipalAuth()
+        val result = controller.crystallisedInterestBreakdown()(insolventRequest)
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
+    "the user has no viewDirectDebitInterrupt in session" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.crystallisedInterestBreakdown()(DDInterruptRequest)
       }
 
       "return 303" in {
