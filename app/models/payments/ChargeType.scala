@@ -200,6 +200,10 @@ case object Refund extends ChargeType {
   override val value: String = "Refund"
 }
 
+case object VatReturn1stLPP extends ChargeType {
+  override val value: String = "VAT Return 1st LPP"
+}
+
 object ChargeType extends LoggerUtil {
 
   val positiveOrNegativeChargeTypes: Set[ChargeType] = Set(
@@ -262,7 +266,8 @@ object ChargeType extends LoggerUtil {
     PaymentOnAccountReturnCreditCharge,
     PaymentOnAccountInstalments,
     UnallocatedPayment,
-    Refund
+    Refund,
+    VatReturn1stLPP
   ) ++ positiveOrNegativeChargeTypes
 
   def apply: String => ChargeType = input => {

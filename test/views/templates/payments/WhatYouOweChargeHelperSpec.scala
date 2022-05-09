@@ -361,6 +361,15 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
           helper.description shouldBe Some("cannot be repaid after 4 years")
         }
       }
+
+      "there is a VAT Return 1st LPP Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPP), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
+        }
+      }
     }
 
     "the user is an agent" when {
@@ -748,6 +757,14 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
         "return Pay now" in {
           helper.viewReturnEnabled shouldBe false
+        }
+      }
+      "there is a VAT Return 1st LPP Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
         }
       }
 

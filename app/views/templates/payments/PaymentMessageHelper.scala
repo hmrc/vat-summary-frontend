@@ -412,6 +412,13 @@ object PaymentMessageHelper {
     Some("chargeType.POAChargeDescription")
   )
 
+  object VATReturn1stLPP extends PaymentMessageHelper(
+    VatReturn1stLPP.value,
+    "chargeType.VATReturn1stLPPTitle",
+    Some("chargeType.VATReturn1stLPPDescription"),
+    Some("chargeType.VATReturn1stLPPDescription")
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
@@ -467,7 +474,8 @@ object PaymentMessageHelper {
     RefundsCharge,
     VATPOAInstalmentCharge,
     VATPOAReturnDebitCharge,
-    VATPOAReturnCreditCharge
+    VATPOAReturnCreditCharge,
+    VATReturn1stLPP
   )
 
   def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
