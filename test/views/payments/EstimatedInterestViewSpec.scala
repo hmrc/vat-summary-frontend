@@ -32,7 +32,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
   val viewModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
-    "Example interest charge title",
+    "VAT Return Debit Charge",
     2.6,
     3,
     300.33,
@@ -49,11 +49,11 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe "Example interest charge title - Manage your VAT account - GOV.UK"
+        document.title shouldBe "Return - Manage your VAT account - GOV.UK"
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "Example interest charge title"
+        elementText("h1") shouldBe "Return"
       }
 
       "have a period caption" in {

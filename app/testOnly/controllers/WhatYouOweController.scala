@@ -23,8 +23,7 @@ import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
 import models.User
 import models.payments.{Payment, PaymentOnAccount}
-import models.viewModels.WhatYouOweChargeModel._
-import models.viewModels.{WhatYouOweChargeModel, WhatYouOweViewModel}
+import models.viewModels._
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountDetailsService, DateService, PaymentsService, ServiceInfoService}
@@ -32,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
+
 import scala.concurrent.ExecutionContext
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
@@ -82,15 +82,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
   }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
-
-    val totalAmount = payments.map(_.outstandingAmount).sum
-    val chargeModels: Seq[WhatYouOweChargeModel] = payments.collect {
+  private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] =
+    payments.collect {
       case payment if payment.originalAmount.isDefined =>
-        WhatYouOweChargeModel(
-          chargeValue = payment.chargeType.value,
-          chargeDescription = description(payment, user.isAgent).getOrElse(""),
-          chargeTitle = title(payment.chargeType.value),
+        StandardChargeViewModel(
+          chargeType = payment.chargeType.value,
           outstandingAmount = payment.outstandingAmount,
           originalAmount = payment.originalAmount.get,
           clearedAmount = payment.clearedAmount,
@@ -98,11 +94,16 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodKey = if (payment.periodKey == "0000") None else Some(payment.periodKey),
           isOverdue = payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress,
           chargeReference = payment.chargeReference,
-          makePaymentRedirect = makePaymentRedirect(payment),
-          periodFrom = periodFrom(payment),
-          periodTo = periodTo(payment)
+          periodFrom = StandardChargeViewModel.periodFrom(payment),
+          periodTo = StandardChargeViewModel.periodTo(payment)
         )
     }
+
+  def constructViewModel(payments: Seq[Payment], mandationStatus: String)
+                        (implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
+
+    val totalAmount = payments.map(_.outstandingAmount).sum
+    val chargeModels = categoriseCharges(payments)
     if(payments.length == chargeModels.length) {
       Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus))
     } else {
