@@ -16,6 +16,8 @@
 
 package testOnly.controllers
 
+import java.time.LocalDate
+
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
@@ -26,8 +28,9 @@ import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView}
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
@@ -41,6 +44,8 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
+
+
 
   def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
@@ -84,7 +89,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                 s"Unexpected error when binding form: $errorForm")
               InternalServerError(errorView())
             },
-            model => Ok("success") // TODO load new view
+            model => Ok("success")
           )
         }
       } else {
