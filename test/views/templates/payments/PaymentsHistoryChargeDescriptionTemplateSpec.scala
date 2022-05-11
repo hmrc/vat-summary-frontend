@@ -1492,7 +1492,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Penalty"
+        elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
       }
 
       "display the correct description" in {
