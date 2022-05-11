@@ -22,7 +22,6 @@ import models.payments._
 import play.api.i18n.Messages
 import utils.LoggerUtil
 import views.templates.payments.PaymentMessageHelper
-
 import java.time.LocalDate
 
 case class StandardChargeViewModel(chargeType: String,
@@ -73,6 +72,15 @@ case class StandardChargeViewModel(chargeType: String,
       message
     }
   }
+
+  def viewReturnEnabled: Boolean = ChargeType.apply(chargeType) match {
+    case ReturnDebitCharge |
+         ErrorCorrectionDebitCharge |
+         PaymentOnAccountReturnDebitCharge |
+         AAReturnDebitCharge => true
+    case _ => false
+  }
+
 }
 
 object StandardChargeViewModel extends LoggerUtil {
@@ -100,11 +108,4 @@ object StandardChargeViewModel extends LoggerUtil {
     case _ => None
   }
 
-  def viewReturnEnabled(chargeValue: String): Boolean = ChargeType.apply(chargeValue) match {
-    case ReturnDebitCharge |
-         ErrorCorrectionDebitCharge |
-         PaymentOnAccountReturnDebitCharge |
-         AAReturnDebitCharge => true
-    case _ => false
-  }
 }

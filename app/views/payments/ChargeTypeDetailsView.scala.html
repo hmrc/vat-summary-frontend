@@ -94,6 +94,14 @@
                 @model.title
             </h1>
 
+            @if(model.viewReturnEnabled) {
+                <p class="govuk-body" id="view-return">
+                    @messages("chargeTypeDetails.viewThis")
+                    <a href="@appConfig.vatReturnUrl(model.periodKey.getOrElse("0000"))"
+                       class="govuk-link">@messages("chargeTypeDetails.vatReturn")</a>.
+                </p>
+            }
+
             @govukSummaryList(SummaryList(
                 rows = Seq(
                     SummaryListRow(

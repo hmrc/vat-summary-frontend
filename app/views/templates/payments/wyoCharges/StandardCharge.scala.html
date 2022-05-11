@@ -44,7 +44,7 @@
 }
 <span class="govuk-hint govuk-!-margin-0">
   @messages("whatYouOwe.due") @displayDate(charge.dueDate)
-  @if(StandardChargeViewModel.viewReturnEnabled(charge.chargeType)) {
+  @if(charge.viewReturnEnabled) {
     <a class="govuk-link govuk-!-padding-left-1" href="@appConfig.vatReturnUrl(charge.periodKey.getOrElse("0000"))">
       @messages("whatYouOwe.viewReturn")
     </a>

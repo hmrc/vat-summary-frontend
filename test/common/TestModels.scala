@@ -363,4 +363,33 @@ object TestModels {
 
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
     WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
+
+  val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
+    chargeType = "VAT Return Debit Charge",
+    outstandingAmount = BigDecimal(1111.11),
+    originalAmount = BigDecimal(3333.33),
+    clearedAmount = Some(BigDecimal(2222.22)),
+    dueDate = LocalDate.parse("2021-04-08"),
+    periodKey = None,
+    isOverdue = false,
+    chargeReference = None,
+    periodFrom = Some(LocalDate.parse("2021-01-01")),
+    periodTo = Some(LocalDate.parse("2021-03-31"))
+  )
+
+  val whatYouOweChargeOverdue: StandardChargeViewModel = whatYouOweCharge.copy(isOverdue = true)
+
+  val whatYouOweChargeNoPeriod: StandardChargeViewModel = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
+
+  val whatYouOweChargeNoPeriodFrom: StandardChargeViewModel = whatYouOweCharge.copy(periodFrom = None)
+
+  val whatYouOweChargeNoPeriodTo: StandardChargeViewModel = whatYouOweCharge.copy(periodTo = None)
+
+  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = None)
+
+  val whatYouOweChargeNoViewReturn: StandardChargeViewModel = whatYouOweCharge.copy(chargeType = "VAT Repayment Supplement Rec")
+
+  val whatYouOweUrl: String = testOnly.controllers.routes.WhatYouOweController.show.url
+
+  val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
 }
