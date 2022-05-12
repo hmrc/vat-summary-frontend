@@ -155,7 +155,7 @@ crystallisedInterest.dueDate = Due date
 crystallisedInterest.interestAmount = Interest amount
 crystallisedInterest.amountReceived = Amount received
 crystallisedInterest.leftToPay = Left to pay
-crystallisedInterest.guidanceLink = Read the guidance about how interest is calculated (opens in new tab)
+crystallisedInterest.guidanceLink = Read the guidance about how interest is calculated (opens in a new tab)
 
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.

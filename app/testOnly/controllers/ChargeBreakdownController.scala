@@ -16,8 +16,6 @@
 
 package testOnly.controllers
 
-import java.time.LocalDate
-
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
@@ -28,7 +26,7 @@ import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
 import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}

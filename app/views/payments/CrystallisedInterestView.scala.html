@@ -17,13 +17,15 @@
 @import models.viewModels.CrystallisedInterestViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import views.html.templates.formatters.money.DisplayMoney
+@import views.templates.payments.PaymentMessageHelper
 
 @this(mainTemplate: MainTemplate,
 displayMoney: DisplayMoney,
 govukBreadcrumbs: GovukBreadcrumbs,
 govukSummaryList: GovukSummaryList,
 govukBackLink: GovukBackLink,
-govukButton: GovukButton
+govukButton: GovukButton,
+govukTag: GovukTag
 )
 
 @(model: CrystallisedInterestViewModel, serviceInfoContent: Html)(
@@ -55,6 +57,13 @@ href = testOnly.controllers.routes.WhatYouOweController.show.url
 ))
 }
 
+@dueDateHtml = {
+@displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
+content = Text(messages("common.overdue")),
+classes = "govuk-tag--red"))
+}
+}
+
 @mainTemplate(
 title = model.chargeType,
 appConfig = appConfig,
@@ -69,7 +78,7 @@ navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
       <span class="govuk-caption-xl">
         @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
       </span>
-  <h1 class="govuk-heading-xl">@model.chargeType</h1>
+  <h1 class="govuk-heading-xl">@messages(PaymentMessageHelper.getChargeType(s"${model.chargeType}").title)</h1>
   <p class="govuk-body">@messages("crystallisedInterest.vatChargeInterest")</p>
   <p class="govuk-body">@messages("crystallisedInterest.vatIncreaseDaily")</p>
   <p class="govuk-body">
@@ -82,7 +91,7 @@ navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
   rows = Seq(
   SummaryListRow(
   key = Key(content = Text(messages("crystallisedInterest.dueDate"))),
-  value = Value(content = HtmlContent(displayDate(model.dueDate)))
+  value = Value(content = HtmlContent(dueDateHtml))
   ),
   SummaryListRow(
   key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
