@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import models.viewModels.WhatYouOweChargeModel
+@import models.viewModels.StandardChargeViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import views.html.templates.formatters.money.DisplayMoney
 
@@ -26,7 +26,7 @@
       govukTag: GovukTag,
       govukBackLink: GovukBackLink)
 
-@(model: WhatYouOweChargeModel, serviceInfoContent: Html)(
+@(model: StandardChargeViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
@@ -76,7 +76,7 @@
 }
 
 @mainTemplate(
-    title = model.chargeTitle,
+    title = model.title,
     appConfig = appConfig,
     serviceInfoContent = serviceInfoContent,
     user = Some(user),
@@ -87,11 +87,11 @@
         <div class="govuk-grid-column-two-thirds">
             @if(model.periodFrom && model.periodTo) {
                 <span class="govuk-caption-xl">
-                    @displayDateRange(model.periodFrom.get, model.periodTo.get, false, true)
+                    @displayDateRange(model.periodFrom.get, model.periodTo.get, alwaysUseYear = true)
                 </span>
             }
             <h1 class="govuk-heading-xl">
-                @model.chargeTitle
+                @model.title
             </h1>
 
             @govukSummaryList(SummaryList(

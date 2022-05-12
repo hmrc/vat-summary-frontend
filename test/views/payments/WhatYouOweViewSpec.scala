@@ -88,7 +88,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has the correct charge description text for a charge" in {
           elementText(tableBodyCell(1, 1)) shouldBe
-            "overdue " + chargeModel1.chargeTitle + " " + chargeModel1.chargeDescription + " due 1 March 2018 View VAT Return"
+            s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)} due 1 March 2018 View VAT Return"
         }
 
         "has an overdue label" in {
@@ -113,7 +113,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has the correct charge description text for a charge that does not allow a user to view a VAT return" in {
           elementText(tableBodyCell(2, 1)) shouldBe
-            chargeModel2.chargeTitle + " " + chargeModel2.chargeDescription + " due 1 December 2018"
+            s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)} due 1 December 2018"
         }
 
         "does not have an overdue label" in {

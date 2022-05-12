@@ -16,6 +16,6 @@
 
 package models.viewModels
 
-case class WhatYouOweViewModel(totalAmount: BigDecimal,
-                               charges: Seq[ChargeDetailsViewModel],
-                               mandationStatus: String)
+trait ChargeDetailsViewModel {
+  val outstandingAmount: BigDecimal
+}

@@ -478,24 +478,24 @@ object PaymentMessageHelper {
     VATReturn1stLPP
   )
 
-  def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
-                        (implicit messages: Messages): String = {
+  private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
+                                (implicit messages: Messages): String =
     (from, to) match {
-      case (Some(fromDate), Some(toDate)) => messages(descriptionMessageKey, displayDateRange(fromDate, toDate, useShortDayFormat = true))
-      case _ => messages(descriptionMessageKey)
+      case (Some(fromDate), Some(toDate)) =>
+        messages(descriptionMessageKey, displayDateRange(fromDate, toDate, useShortDayFormat = true))
+      case _ =>
+        messages(descriptionMessageKey)
     }
-  }
 
-  def getCorrectDescription(principalMessageKey: String, agentMessageKey: String, from: Option[LocalDate], to: Option[LocalDate], userIsAgent: Boolean)
-                           (implicit messages: Messages): String = {
+  def getCorrectDescription(principalMessageKey: String, agentMessageKey: String, from: Option[LocalDate],
+                            to: Option[LocalDate], userIsAgent: Boolean)
+                           (implicit messages: Messages): String =
     if(userIsAgent) {
       getFullDescription(agentMessageKey, from, to)
     } else {
       getFullDescription(principalMessageKey, from, to)
     }
-  }
 
-  def getChargeType(lookupName: String): PaymentMessageHelper = {
+  def getChargeType(lookupName: String): PaymentMessageHelper =
     values.find(_.name == lookupName).getOrElse(throw new IllegalArgumentException(s"Invalid charge type: $lookupName"))
-  }
 }
