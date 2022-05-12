@@ -66,7 +66,7 @@
 }
 
 @mainTemplate(
-  title = model.chargeTitle,
+  title = model.title,
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
@@ -79,7 +79,7 @@
       <span class="govuk-caption-xl">
         @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
       </span>
-      <h1 class="govuk-heading-xl">@model.chargeTitle</h1>
+      <h1 class="govuk-heading-xl">@model.title</h1>
       <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}ChargeInterest")</p>
       <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
       <p class="govuk-body">

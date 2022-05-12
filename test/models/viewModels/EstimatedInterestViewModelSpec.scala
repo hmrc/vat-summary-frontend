@@ -27,7 +27,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
   val model: EstimatedInterestViewModel = EstimatedInterestViewModel(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
-    "Example interest charge title",
+    "VAT Return Debit Charge",
     2.6,
     3,
     300.33,
@@ -44,7 +44,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "VAT Return Debit Charge",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
@@ -67,14 +67,14 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isPenalty" -> "false"
-        )) shouldBe Left(List(FormError("chargeTitle", List("error.required"), List())))
+        )) shouldBe Left(List(FormError("chargeType", List("error.required"), List())))
       }
 
       "the periodFrom field is invalid" in {
         form.mapping.bind(Map(
           "periodFrom" -> "date",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
@@ -88,7 +88,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "date",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
@@ -102,7 +102,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "rate",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
@@ -116,7 +116,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "days",
           "currentAmount" -> "300.33",
@@ -130,7 +130,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "amount",
@@ -144,7 +144,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
@@ -158,7 +158,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
@@ -172,7 +172,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         form.mapping.bind(Map(
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
-          "chargeTitle" -> "Example interest charge title",
+          "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
           "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",

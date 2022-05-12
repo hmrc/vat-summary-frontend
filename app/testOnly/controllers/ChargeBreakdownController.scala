@@ -19,7 +19,7 @@ package testOnly.controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, WhatYouOweChargeModel}
+import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
@@ -45,7 +45,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
   def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
       serviceInfoService.getPartial.map { navLinks =>
-        WhatYouOweChargeModel.form.bindFromRequest.fold(
+        StandardChargeViewModel.form.bindFromRequest.fold(
           errorForm => {
             logger.warn(s"[ChargeBreakdownController][chargeBreakdown] - Unexpected error when binding form: $errorForm")
             InternalServerError(errorView())

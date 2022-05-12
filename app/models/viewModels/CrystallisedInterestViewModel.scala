@@ -18,6 +18,8 @@ package models.viewModels
 
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Messages
+import views.templates.payments.PaymentMessageHelper
 
 import java.time.LocalDate
 
@@ -30,7 +32,9 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          amountReceived: BigDecimal,
                                          leftToPay: BigDecimal,
                                          isOverdue: Boolean,
-                                         chargeReference: String) {
+                                         chargeReference: String) extends ChargeDetailsViewModel {
+
+  override val outstandingAmount: BigDecimal = interestAmount
 
   val makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (interestAmount * 100).toLong,
@@ -41,6 +45,16 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
     dueDate = dueDate.toString,
     chargeReference = chargeReference
   ).url
+
+  val title: String = PaymentMessageHelper.getChargeType(chargeType).title
+
+  def description(isAgent: Boolean)(implicit messages: Messages): String =
+    PaymentMessageHelper.getCorrectDescription(
+      PaymentMessageHelper.getChargeType(chargeType).principalUserDescription.getOrElse(""),
+      PaymentMessageHelper.getChargeType(chargeType).agentDescription.getOrElse(""),
+      Some(periodFrom),
+      Some(periodTo),
+      isAgent)
 }
 
 object CrystallisedInterestViewModel {

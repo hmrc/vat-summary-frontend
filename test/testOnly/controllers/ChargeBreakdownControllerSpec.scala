@@ -45,14 +45,11 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       "the user is logged in as a principal entity" should {
 
         val request = fakeRequestWithSession.withFormUrlEncodedBody(
-          "chargeValue" -> "Charge Value",
-          "chargeDescription" -> "Example Description",
-          "chargeTitle" -> "Example Charge",
+          "chargeType" -> "VAT Return Debit Charge",
           "outstandingAmount" -> "1234.56",
           "originalAmount" -> "1234.56",
           "dueDate" -> "2018-01-01",
-          "isOverdue" -> "true",
-          "makePaymentRedirect" -> "/payment-redirect"
+          "isOverdue" -> "true"
         )
 
         lazy val result = {
@@ -67,21 +64,18 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Example Charge - Manage your VAT account - GOV.UK"
+          document.title() shouldBe "Return - Manage your VAT account - GOV.UK"
         }
       }
 
       "the user is logged in as an agent" should {
 
         lazy val request = agentFinancialRequest.withFormUrlEncodedBody(
-          "chargeValue" -> "Charge Value",
-          "chargeDescription" -> "Example Description",
-          "chargeTitle" -> "Example Charge",
+          "chargeType" -> "VAT Return Debit Charge",
           "outstandingAmount" -> "1234.56",
           "originalAmount" -> "1234.56",
           "dueDate" -> "2018-01-01",
-          "isOverdue" -> "true",
-          "makePaymentRedirect" -> "/payment-redirect"
+          "isOverdue" -> "true"
         )
 
         lazy val result = {
@@ -96,7 +90,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Example Charge - Your client’s VAT details - GOV.UK"
+          document.title() shouldBe "Return - Your client’s VAT details - GOV.UK"
         }
       }
     }
@@ -195,7 +189,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       def requestWithForm(request: FakeRequest[_]): FakeRequest[AnyContentAsFormUrlEncoded] = request.withFormUrlEncodedBody(
         "periodFrom" -> "2018-01-01",
         "periodTo" -> "2018-02-02",
-        "chargeTitle" -> "Example interest charge title",
+        "chargeType" -> "VAT Return Debit Charge",
         "interestRate" -> "2.6",
         "numberOfDaysLate" -> "3",
         "currentAmount" -> "300.33",
@@ -218,7 +212,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Example interest charge title - Manage your VAT account - GOV.UK"
+          document.title() shouldBe "Return - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -236,7 +230,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Example interest charge title - Your client’s VAT details - GOV.UK"
+          document.title() shouldBe "Return - Your client’s VAT details - GOV.UK"
         }
       }
 

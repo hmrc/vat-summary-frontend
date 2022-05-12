@@ -18,24 +18,40 @@ package models.viewModels
 
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.i18n.Messages
+import views.templates.payments.PaymentMessageHelper
+
 import java.time.LocalDate
 
 case class EstimatedInterestViewModel(periodFrom: LocalDate,
                                       periodTo: LocalDate,
-                                      chargeTitle: String,
+                                      chargeType: String,
                                       interestRate: BigDecimal,
                                       numberOfDaysLate: Int,
                                       currentAmount: BigDecimal,
                                       amountReceived: BigDecimal,
                                       leftToPay: BigDecimal,
-                                      isPenalty: Boolean)
+                                      isPenalty: Boolean) extends ChargeDetailsViewModel {
+
+  override val outstandingAmount: BigDecimal = currentAmount
+
+  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
+
+  def description(isAgent: Boolean)(implicit messages: Messages): String =
+    PaymentMessageHelper.getCorrectDescription(
+      PaymentMessageHelper.getChargeType(chargeType).principalUserDescription.getOrElse(""),
+      PaymentMessageHelper.getChargeType(chargeType).agentDescription.getOrElse(""),
+      Some(periodFrom),
+      Some(periodTo),
+      isAgent)
+}
 
 object EstimatedInterestViewModel {
 
   val form: Form[EstimatedInterestViewModel] = Form(mapping(
     "periodFrom" -> localDate,
     "periodTo" -> localDate,
-    "chargeTitle" -> text,
+    "chargeType" -> text,
     "interestRate" -> bigDecimal,
     "numberOfDaysLate" -> number,
     "currentAmount" -> bigDecimal,

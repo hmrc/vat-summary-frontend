@@ -24,7 +24,7 @@ import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
 import models.penalties.PenaltiesSummary
-import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel, WhatYouOweChargeModel, WhatYouOweViewModel}
+import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel, StandardChargeViewModel, WhatYouOweViewModel}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -72,7 +72,7 @@ object TestModels {
 
   val defaultInterestPaymentNoPeriod: PaymentNoPeriod = paymentNoPeriodNoDate.copy(chargeType = VatDefaultInterest)
 
-  val paymentWithDifferentAgentMessage = payment.copy(chargeType = BnpRegPost2010Charge)
+  val paymentWithDifferentAgentMessage: PaymentWithPeriod = payment.copy(chargeType = BnpRegPost2010Charge)
 
   val paymentOnAccount: PaymentNoPeriod = Payment(
     PaymentOnAccount,
@@ -315,14 +315,8 @@ object TestModels {
   val penaltySummaryResponse: HttpGetResult[PenaltiesSummary] = Right(penaltiesSummaryModel)
   val penaltySummaryNoResponse: HttpGetResult[PenaltiesSummary] = Left(PenaltiesFeatureSwitchError)
 
-  val redirectLinkWithPeriod = "/vat-through-software/make-payment/1000000/2/2019/2019-02-02/VAT%20Return%20Debit%20Charge/2019-03-03/XD002750002155"
-  val redirectLinkWithPeriodMiscPenalty = "/vat-through-software/make-payment/1000000/2/2019/2019-02-02/VAT%20Miscellaneous%20Penalty/2019-03-03/XD002750002155"
-  val redirectLinkNoPeriod = "/vat-through-software/make-payment/0/Payment%20on%20account/2017-01-01/XD002750002155"
-
-  val whatYouOweChargeModel = WhatYouOweChargeModel(
-    chargeValue = "VAT Return Debit Charge",
-    chargeDescription = "for the period 1 Jan to 2 Feb 2019",
-    chargeTitle = "Return",
+  val whatYouOweChargeModel: StandardChargeViewModel = StandardChargeViewModel(
+    chargeType = "VAT Return Debit Charge",
     outstandingAmount = 10000,
     originalAmount = 1000.00,
     clearedAmount = Some(00.00),
@@ -330,29 +324,24 @@ object TestModels {
     periodKey = Some("ABCD"),
     isOverdue = false,
     chargeReference = Some("XD002750002155"),
-    makePaymentRedirect = redirectLinkWithPeriod,
     periodFrom = Some(LocalDate.parse("2019-01-01")),
     periodTo = Some(LocalDate.parse("2019-02-02"))
   )
 
-  val whatYouOweViewModel = WhatYouOweViewModel(
+  val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
     10000,
     Seq(whatYouOweChargeModel),
     mandationStatus = "MTDfB"
   )
 
-  val viewModelNoChargeDescription = whatYouOweViewModel.copy(
+  val viewModelNoChargeDescription: WhatYouOweViewModel = whatYouOweViewModel.copy(
     charges = Seq(whatYouOweChargeModel.copy(
-      chargeValue = "VAT Miscellaneous Penalty",
-      chargeDescription = "",
-      chargeTitle = "VAT general penalty",
-      makePaymentRedirect = redirectLinkWithPeriodMiscPenalty)
-  ))
+      chargeType = "VAT Miscellaneous Penalty"
+    ))
+  )
 
-  val chargeModel1: WhatYouOweChargeModel = WhatYouOweChargeModel(
+  val chargeModel1: StandardChargeViewModel = StandardChargeViewModel(
     "VAT Return Debit Charge",
-    "Example description",
-    "Example Charge",
     111.11,
     333.33,
     Some(222.22),
@@ -360,14 +349,18 @@ object TestModels {
     Some("18AA"),
     isOverdue = true,
     Some("ABCD"),
-    "http://localhost:9152/vat-through-software/make-payment/11111/02/2018/2018-02-01/Example%20Charge/2018-03-01/ABCD",
     Some(LocalDate.parse("2018-01-01")),
     Some(LocalDate.parse("2018-02-01"))
   )
 
-  val chargeModel2: WhatYouOweChargeModel =
-    chargeModel1.copy(chargeValue = "VAT Carter Penalty", isOverdue = false, outstandingAmount = 456.00, dueDate = LocalDate.parse("2018-12-01"))
+  val chargeModel2: StandardChargeViewModel =
+    chargeModel1.copy(
+      chargeType = "VAT Carter Penalty",
+      isOverdue = false,
+      outstandingAmount = 456.00,
+      dueDate = LocalDate.parse("2018-12-01")
+    )
 
-  val whatYouOweViewModel2Charge: WhatYouOweViewModel = WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
-
+  val whatYouOweViewModel2Charge: WhatYouOweViewModel =
+    WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
 }

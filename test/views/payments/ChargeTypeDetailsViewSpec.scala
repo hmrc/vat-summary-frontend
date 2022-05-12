@@ -16,7 +16,7 @@
 
 package views.payments
 
-import models.viewModels.WhatYouOweChargeModel
+import models.viewModels.StandardChargeViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
@@ -48,10 +48,8 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     val whatYouOweLink = "#whatYouOweLink"
   }
 
-  val whatYouOweCharge: WhatYouOweChargeModel = WhatYouOweChargeModel(
-    chargeValue = "Charge Value",
-    chargeDescription = "Some Charge",
-    chargeTitle = "Charge Title",
+  val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
+    chargeType = "VAT Return Debit Charge",
     outstandingAmount = BigDecimal(1111.11),
     originalAmount = BigDecimal(3333.33),
     clearedAmount = Some(BigDecimal(2222.22)),
@@ -59,20 +57,19 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     periodKey = None,
     isOverdue = false,
     chargeReference = None,
-    makePaymentRedirect = "/paymentPageRedirect",
     periodFrom = Some(LocalDate.parse("2021-01-01")),
     periodTo = Some(LocalDate.parse("2021-03-31"))
   )
 
-  val whatYouOweChargeOverdue: WhatYouOweChargeModel = whatYouOweCharge.copy(isOverdue = true)
+  val whatYouOweChargeOverdue: StandardChargeViewModel = whatYouOweCharge.copy(isOverdue = true)
 
-  val whatYouOweChargeNoPeriod: WhatYouOweChargeModel = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
+  val whatYouOweChargeNoPeriod: StandardChargeViewModel = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
 
-  val whatYouOweChargeNoPeriodFrom: WhatYouOweChargeModel = whatYouOweCharge.copy(periodFrom = None)
+  val whatYouOweChargeNoPeriodFrom: StandardChargeViewModel = whatYouOweCharge.copy(periodFrom = None)
 
-  val whatYouOweChargeNoPeriodTo: WhatYouOweChargeModel = whatYouOweCharge.copy(periodTo = None)
+  val whatYouOweChargeNoPeriodTo: StandardChargeViewModel = whatYouOweCharge.copy(periodTo = None)
 
-  val whatYouOweChargeNoClearedAmount: WhatYouOweChargeModel = whatYouOweCharge.copy(clearedAmount = None)
+  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = None)
 
   val whatYouOweUrl: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
@@ -90,11 +87,11 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
-          document.title shouldBe "Charge Title - Manage your VAT account - GOV.UK"
+          document.title shouldBe "Return - Manage your VAT account - GOV.UK"
         }
 
         "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe "Charge Title"
+          elementText(Selectors.pageHeading) shouldBe "Return"
         }
 
         "have a period caption" in {
@@ -167,7 +164,8 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "has the correct href location" in {
-            element(Selectors.button).attr("href") shouldBe "/paymentPageRedirect"
+            element(Selectors.button).attr("href") shouldBe
+              "/vat-through-software/make-payment/111111/3/2021/2021-03-31/VAT%20Return%20Debit%20Charge/2021-04-08/noCR"
           }
         }
 
