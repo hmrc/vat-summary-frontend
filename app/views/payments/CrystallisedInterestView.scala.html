@@ -108,10 +108,13 @@ navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
   )
   ))
 
+  @if(!user.isAgent) {
   @govukButton(Button(
   content = Text(messages("chargeTypeDetails.button")),
   href    = Some(model.makePaymentRedirect)
   ))
+  }
+
 
   <p class="govuk-body">
   <a class="govuk-link" href="@appConfig.govUkHoldingUrl" target="_blank" rel="noreferrer noopener">

@@ -138,7 +138,8 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
           elementText("#content > div > div > a") shouldBe "Pay now"
         }
         "has the correct href" in {
-          element("#content > div > div > a").attr("href") shouldBe mockConfig.unauthenticatedPaymentsUrl
+          element("#content > div > div > a").attr("href") shouldBe
+            "/vat-through-software/make-payment/771/12/2022/2022-12-31/VAT%20OA%20Default%20Interest/2023-03-30/chargeRef"
         }
 
       }
@@ -167,7 +168,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
     }
   }
-  "Rendering the Crystallised Interest Page for an agent" when {
+  "Rendering the Crystallised Interest Page for an agent" should {
 
     lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -175,12 +176,29 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(9) > a") shouldBe "Return to what your client owes"
+        elementText("#content > div > div > p:nth-child(8) > a") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe whatYouOweLink
+        element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
       }
+    }
+    "not render breadcrumbs" in {
+      elementExtinct(".govuk-breadcrumbs")
+    }
+
+    "have a backLink" which {
+
+      "has the text Back" in {
+        elementText(".govuk-back-link") shouldBe "Back"
+      }
+
+      "has the correct href" in {
+        element(".govuk-back-link").attr("href") shouldBe whatYouOweLink
+      }
+    }
+    "not have a pay now button" in {
+      elementExtinct("#content > div > div > a")
     }
 
   }
