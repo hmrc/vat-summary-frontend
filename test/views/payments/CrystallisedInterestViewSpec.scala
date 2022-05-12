@@ -30,7 +30,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
   val injectedView: CrystallisedInterestView = injector.instanceOf[CrystallisedInterestView]
   val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
-  val viewModel : CrystallisedInterestViewModel = CrystallisedInterestViewModel(
+  val viewModel: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     LocalDate.parse("2022-10-01"),
     LocalDate.parse("2022-12-31"),
     "VAT OA Default Interest",
