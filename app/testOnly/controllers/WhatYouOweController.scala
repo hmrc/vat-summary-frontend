@@ -21,10 +21,9 @@ import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.User
 import models.payments.{Payment, PaymentOnAccount}
 import models.viewModels._
-import play.api.i18n.{I18nSupport, Messages}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountDetailsService, DateService, PaymentsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -99,8 +98,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         )
     }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String)
-                        (implicit user: User, messages: Messages): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
 
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels = categoriseCharges(payments)

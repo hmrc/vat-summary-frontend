@@ -121,6 +121,8 @@ whatYouOwe.details.agent.paymentHelpTwo = If your client cannot pay a tax bill, 
 whatYouOwe.details.agent.paymentHelpThree = setting up a Time to Pay Arrangement (opens in a new tab)
 whatYouOwe.details.agent.paymentHelpFour = This allows them to pay their bill in instalments.
 
+chargeTypeDetails.viewThis = View this
+chargeTypeDetails.vatReturn = VAT Return
 chargeTypeDetails.dueDate = Due date
 chargeTypeDetails.chargeDue = Charge due
 chargeTypeDetails.amountReceived = Amount received

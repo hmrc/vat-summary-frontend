@@ -16,18 +16,18 @@
 
 package views.payments
 
-import models.viewModels.StandardChargeViewModel
+import common.TestModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.ChargeTypeDetailsView
-
-import java.time.LocalDate
+import common.TestModels._
 
 class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
   val chargeTypeDetailsView: ChargeTypeDetailsView = injector.instanceOf[ChargeTypeDetailsView]
+
   object Selectors {
     val pageHeading = "h1"
     val caption = ".govuk-caption-xl"
@@ -46,34 +46,9 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     val outstandingAmountValue = ".govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__value"
     val button = ".govuk-button"
     val whatYouOweLink = "#whatYouOweLink"
+    val viewReturn = "#view-return"
+    val viewReturnLink = "#view-return > a"
   }
-
-  val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
-    chargeType = "VAT Return Debit Charge",
-    outstandingAmount = BigDecimal(1111.11),
-    originalAmount = BigDecimal(3333.33),
-    clearedAmount = Some(BigDecimal(2222.22)),
-    dueDate = LocalDate.parse("2021-04-08"),
-    periodKey = None,
-    isOverdue = false,
-    chargeReference = None,
-    periodFrom = Some(LocalDate.parse("2021-01-01")),
-    periodTo = Some(LocalDate.parse("2021-03-31"))
-  )
-
-  val whatYouOweChargeOverdue: StandardChargeViewModel = whatYouOweCharge.copy(isOverdue = true)
-
-  val whatYouOweChargeNoPeriod: StandardChargeViewModel = whatYouOweCharge.copy(periodFrom = None, periodTo = None)
-
-  val whatYouOweChargeNoPeriodFrom: StandardChargeViewModel = whatYouOweCharge.copy(periodFrom = None)
-
-  val whatYouOweChargeNoPeriodTo: StandardChargeViewModel = whatYouOweCharge.copy(periodTo = None)
-
-  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = None)
-
-  val whatYouOweUrl: String = testOnly.controllers.routes.WhatYouOweController.show.url
-
-  val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
 
   "Rendering the Charge Type Details page for a principal user" when {
 
@@ -245,6 +220,39 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         elementText(Selectors.clearedAmountValue) shouldBe "£0"
       }
     }
+
+    "the charge allows the user to view a VAT return" should {
+
+      lazy val view = {
+        chargeTypeDetailsView(chargeModel1, Html(""))(request, messages, mockConfig, user)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have a link to view the VAT return" that {
+
+        "has the correct text" in {
+          elementText(Selectors.viewReturn) shouldBe "View this VAT Return."
+        }
+
+        "has the correct href" in {
+          element(Selectors.viewReturnLink).attr("href") shouldBe mockConfig.vatReturnUrl("18AA")
+        }
+      }
+    }
+
+    "the charge does not allow the user to view a VAT return" should {
+
+      lazy val view = {
+        chargeTypeDetailsView(whatYouOweChargeNoViewReturn, Html(""))(request, messages, mockConfig, user)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not have a link to view the VAT return" in {
+        elementExtinct(Selectors.viewReturn)
+      }
+
+    }
+
   }
 
   "Rendering the Charge Type Details page for an agent" should {

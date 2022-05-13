@@ -113,6 +113,9 @@ openPayments.whatOweHelp.headingAgent = Mae’r swm sy’n ddyledus yn anghywir 
 openPayments.vatReturn = ar gyfer y cyfnod {0}
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
+chargeTypeDetails.viewThis = Bwrw golwg dros y
+chargeTypeDetails.vatReturn = Ffurflen TAW hon
+
 whatYouOwe.viewReturn = Bwrw golwg dros y Ffurflen TAW
 
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.

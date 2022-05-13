@@ -95,8 +95,16 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           elementText(tableBodyCell(1, 1) + " .govuk-tag") shouldBe "overdue"
         }
 
-        "has the correct due hint text" in {
-          elementText(tableBodyCell(1, 1) + "> span") shouldBe "due 1 March 2018 View VAT Return"
+        "has due hint text" which {
+
+          "has the correct text" in {
+            elementText(tableBodyCell(1, 1) + "> span") shouldBe "due 1 March 2018 View VAT Return"
+          }
+
+          "has the correct href" in {
+            element(tableBodyCell(1, 1) + "> span > a").attr("href") shouldBe mockConfig.vatReturnUrl("18AA")
+          }
+
         }
 
         "has a form with the correct action" in {
