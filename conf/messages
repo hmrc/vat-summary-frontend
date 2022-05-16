@@ -428,8 +428,8 @@ penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Estimated further penal
 penaltiesBanner.linkSingular = Find out why you have a penalty
 penaltiesBanner.linkPlural = Find out why you have penalties
 
-mtdNotification.heading = The way you submit your VAT returns changed on 1 April due to Making Tax Digital
+mtdNotification.heading = The way to submit VAT returns  changed on 1 April due to Making Tax Digital
 mtdNotification.message.1 = You cannot use this service to submit returns for accounting periods starting after 1 April 2022.
-mtdNotification.message.2 = Instead you’ll need to keep digital records and submit returns using HMRC compatible software.
-mtdNotification.link = Find out when you need to sign up and start using Making Tax Digital for VAT (opens in a new tab).
+mtdNotification.message.2 = Instead, digital records must be kept and returns must be submitted using HMRC compatible software.
+mtdNotification.link = Find out when you need to sign up and start using Making Tax Digital for VAT (opens in a new tab)
 mtdNotification.important = Important
