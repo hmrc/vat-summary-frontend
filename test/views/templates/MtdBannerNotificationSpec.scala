@@ -46,13 +46,13 @@ class MtdBannerNotificationSpec extends ViewBaseSpec {
 
       "have the correct body message" in {
         elementText(".govuk-body") shouldBe
-          "You cannot use this service to submit returns for accounting periods starting after 1 April 2022. Instead, digital records must be kept and returns must be submitted using HMRC compatible software. Find out when you need to sign up and start using Making Tax Digital for VAT (opens in a new tab)."
+          "You cannot use this service to submit returns for accounting periods starting after 1 April 2022. Instead, digital records must be kept and returns must be submitted using HMRC compatible software. Find out when to sign up and start using Making Tax Digital for VAT (opens in a new tab)."
       }
 
       "have a link to MTD sign up guidance page" which {
 
         "has the correct text" in {
-          elementText("a") shouldBe "Find out when you need to sign up and start using Making Tax Digital for VAT (opens in a new tab)"
+          elementText("a") shouldBe "Find out when to sign up and start using Making Tax Digital for VAT (opens in a new tab)"
         }
 
         "has the correct link destination" in {

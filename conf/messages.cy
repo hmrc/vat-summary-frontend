@@ -404,5 +404,5 @@ penaltiesBanner.linkPlural = Cael gwybod pam mae gennych gosbau
 mtdNotification.heading = Newidiodd y ffordd i gyflwyno ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
 mtdNotification.message.1 = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno Ffurflenni TAW ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022.
 mtdNotification.message.2 = Yn lle hynny, rhaid cadw cofnodion digidol a rhaid cyflwyno ffurflenni gan ddefnyddio meddalwedd sy’n gydnaws â CThEM.
-mtdNotification.link = Dysgwch pryd y mae angen i chi gofrestru a dechrau defnyddio Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd)
+mtdNotification.link = Darganfod pryd i gofrestru a dechrau defnyddio Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd)
 mtdNotification.important = Pwysig
