@@ -52,7 +52,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
       "have the correct document title" in {
 
-        document.title shouldBe "VAT OA Default Interest - Manage your VAT account - GOV.UK"
+        document.title shouldBe "VAT officer’s assessment interest - Manage your VAT account - GOV.UK"
 
       }
 

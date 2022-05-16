@@ -46,7 +46,7 @@ case class  CrystallisedInterestViewModel(periodFrom: LocalDate,
     chargeReference = chargeReference
   ).url
 
-  val title: String = PaymentMessageHelper.getChargeType(chargeType).title
+  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
 
   def description(isAgent: Boolean)(implicit messages: Messages): String =
     PaymentMessageHelper.getCorrectDescription(
