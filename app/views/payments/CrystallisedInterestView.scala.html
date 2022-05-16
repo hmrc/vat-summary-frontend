@@ -20,56 +20,55 @@
 @import views.templates.payments.PaymentMessageHelper
 
 @this(mainTemplate: MainTemplate,
-displayMoney: DisplayMoney,
-govukBreadcrumbs: GovukBreadcrumbs,
-govukSummaryList: GovukSummaryList,
-govukBackLink: GovukBackLink,
-govukButton: GovukButton,
-govukTag: GovukTag
-)
+      displayMoney: DisplayMoney,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukSummaryList: GovukSummaryList,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      govukTag: GovukTag)
 
 @(model: CrystallisedInterestViewModel, serviceInfoContent: Html)(
-implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
-@govukBreadcrumbs(Breadcrumbs(
-items = Seq(
-BreadcrumbsItem(
-content = Text(messages("breadcrumbs.bta")),
-href = Some(appConfig.btaHomeUrl)
-),
-BreadcrumbsItem(
-content = Text(messages("vatDetails.title")),
-href = Some(controllers.routes.VatDetailsController.details.url)
-),
-BreadcrumbsItem(
-content = Text(messages("openPayments.title")),
-href = Some(testOnly.controllers.routes.WhatYouOweController.show.url)
-)
-)
-))
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+     ),
+     BreadcrumbsItem(
+       content = Text(messages("vatDetails.title")),
+       href = Some(controllers.routes.VatDetailsController.details.url)
+     ),
+     BreadcrumbsItem(
+       content = Text(messages("openPayments.title")),
+       href = Some(testOnly.controllers.routes.WhatYouOweController.show.url)
+     )
+   )
+  ))
 }
 
 @backLink = {
-@govukBackLink(BackLink(
-content = Text(messages("base.back")),
-href = testOnly.controllers.routes.WhatYouOweController.show.url
-))
+  @govukBackLink(BackLink(
+    content = Text(messages("base.back")),
+    href = testOnly.controllers.routes.WhatYouOweController.show.url
+  ))
 }
 
 @dueDateHtml = {
-@displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
-content = Text(messages("common.overdue")),
-classes = "govuk-tag--red"))
-}
+  @displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
+    content = Text(messages("common.overdue")),
+    classes = "govuk-tag--red"))
+    }
 }
 
 @mainTemplate(
-title = model.title,
-appConfig = appConfig,
-serviceInfoContent = serviceInfoContent,
-user = Some(user),
-navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+  title = model.title,
+  appConfig = appConfig,
+  serviceInfoContent = serviceInfoContent,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
 ) {
 
 <div class="govuk-grid-row">
@@ -88,31 +87,31 @@ navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
         </p>
 
         @govukSummaryList(SummaryList(
-        rows = Seq(
-        SummaryListRow(
-        key = Key(content = Text(messages("crystallisedInterest.dueDate"))),
-        value = Value(content = HtmlContent(dueDateHtml))
-        ),
-        SummaryListRow(
-        key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
-        value = Value(content = HtmlContent(displayMoney(model.interestAmount)))
-        ),
-        SummaryListRow(
-        key = Key(content = Text(messages("crystallisedInterest.amountReceived"))),
-        value = Value(content =HtmlContent(displayMoney(model.amountReceived)))
-        ),
-        SummaryListRow(
-        key = Key(content = Text(messages("crystallisedInterest.leftToPay"))),
-        value = Value(content =HtmlContent(displayMoney(model.leftToPay)))
-        ),
+          rows = Seq(
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.dueDate"))),
+              value = Value(content = HtmlContent(dueDateHtml))
+            ),
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
+              value = Value(content = HtmlContent(displayMoney(model.interestAmount)))
+            ),
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.amountReceived"))),
+              value = Value(content =HtmlContent(displayMoney(model.amountReceived)))
+            ),
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.leftToPay"))),
+              value = Value(content =HtmlContent(displayMoney(model.leftToPay)))
+           )
         )
         ))
 
         @if(!user.isAgent) {
-        @govukButton(Button(
-        content = Text(messages("chargeTypeDetails.button")),
-        href = Some(model.makePaymentRedirect)
-        ))
+            @govukButton(Button(
+                content = Text(messages("chargeTypeDetails.button")),
+                href = Some(model.makePaymentRedirect)
+            ))
         }
 
 
