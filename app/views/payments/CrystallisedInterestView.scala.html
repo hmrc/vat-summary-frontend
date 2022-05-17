@@ -1,0 +1,132 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.viewModels.CrystallisedInterestViewModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import views.html.templates.formatters.money.DisplayMoney
+@import views.templates.payments.PaymentMessageHelper
+
+@this(mainTemplate: MainTemplate,
+      displayMoney: DisplayMoney,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukSummaryList: GovukSummaryList,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      govukTag: GovukTag)
+
+@(model: CrystallisedInterestViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+     ),
+     BreadcrumbsItem(
+       content = Text(messages("vatDetails.title")),
+       href = Some(controllers.routes.VatDetailsController.details.url)
+     ),
+     BreadcrumbsItem(
+       content = Text(messages("openPayments.title")),
+       href = Some(testOnly.controllers.routes.WhatYouOweController.show.url)
+     )
+   )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    content = Text(messages("base.back")),
+    href = testOnly.controllers.routes.WhatYouOweController.show.url
+  ))
+}
+
+@dueDateHtml = {
+  @displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
+    content = Text(messages("common.overdue")),
+    classes = "govuk-tag--red"))
+    }
+}
+
+@mainTemplate(
+  title = model.title,
+  appConfig = appConfig,
+  serviceInfoContent = serviceInfoContent,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <span class="govuk-caption-xl">
+        @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+      </span>
+        <h1 class="govuk-heading-xl">@messages(model.title)</h1>
+        <p class="govuk-body">@messages("crystallisedInterest.vatChargeInterest")</p>
+        <p class="govuk-body">@messages("crystallisedInterest.vatIncreaseDaily")</p>
+        <p class="govuk-body">
+            @messages(s"crystallisedInterest.calculation")
+            <br>
+            @messages(s"crystallisedInterest.vatCalculation", model.interestRate)
+        </p>
+
+        @govukSummaryList(SummaryList(
+          rows = Seq(
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.dueDate"))),
+              value = Value(content = HtmlContent(dueDateHtml))
+            ),
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
+              value = Value(content = HtmlContent(displayMoney(model.interestAmount)))
+            ),
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.amountReceived"))),
+              value = Value(content =HtmlContent(displayMoney(model.amountReceived)))
+            ),
+            SummaryListRow(
+              key = Key(content = Text(messages("crystallisedInterest.leftToPay"))),
+              value = Value(content =HtmlContent(displayMoney(model.leftToPay)))
+           )
+        )
+        ))
+
+        @if(!user.isAgent) {
+            @govukButton(Button(
+                content = Text(messages("chargeTypeDetails.button")),
+                href = Some(model.makePaymentRedirect)
+            ))
+        }
+
+
+        <p class="govuk-body">
+            <a class="govuk-link" href="@appConfig.govUkHoldingUrl" target="_blank" rel="noreferrer noopener">
+                @messages(s"crystallisedInterest.guidanceLink")
+            </a>
+        </p>
+
+        <p class="govuk-body">
+            <a class="govuk-link" href="@testOnly.controllers.routes.WhatYouOweController.show.url">
+                @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+            </a>
+        </p>
+
+    </div>
+</div>
+}

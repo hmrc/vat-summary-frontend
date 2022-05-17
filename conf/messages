@@ -149,6 +149,16 @@ estimatedInterest.estimates = Estimates
 estimatedInterest.estimatesExplanation = Penalties and interest will show as estimates if HMRC has not been given enough information to calculate the final amounts.
 estimatedInterest.calculationLink = Read the guidance about how interest is calculated (opens in a new tab)
 
+crystallisedInterest.vatChargeInterest = We charge interest on any unpaid VAT.
+crystallisedInterest.vatIncreaseDaily = The total increases daily based on the amount of unpaid VAT for the period.
+crystallisedInterest.calculation = The calculation we use for each day is:
+crystallisedInterest.vatCalculation = (Interest rate of {0}% × VAT amount unpaid) ÷ days in a year
+crystallisedInterest.dueDate = Due date
+crystallisedInterest.interestAmount = Interest amount
+crystallisedInterest.amountReceived = Amount received
+crystallisedInterest.leftToPay = Left to pay
+crystallisedInterest.guidanceLink = Read the guidance about how interest is calculated (opens in a new tab)
+
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.

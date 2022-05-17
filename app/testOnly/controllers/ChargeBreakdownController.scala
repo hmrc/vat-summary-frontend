@@ -28,6 +28,7 @@ import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
@@ -41,6 +42,8 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
+
+
 
   def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
