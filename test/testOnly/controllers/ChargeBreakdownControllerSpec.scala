@@ -23,7 +23,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView, CrystallisedInterestView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
@@ -35,7 +35,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
-    injector.instanceOf[PaymentsError], mockServiceErrorHandler
+    injector.instanceOf[PaymentsError], injector.instanceOf[CrystallisedInterestView], mockServiceErrorHandler
   )
 
   "The chargeBreakdown action" when {
@@ -365,7 +365,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "" // TODO
+          document.title() shouldBe "Default interest - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -383,7 +383,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "" // TODO
+          document.title() shouldBe "Default interest - Your client’s VAT details - GOV.UK"
         }
       }
 

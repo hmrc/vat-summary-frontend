@@ -26,9 +26,8 @@ import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView, CrystallisedInterestView}
 import javax.inject.Inject
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
@@ -38,6 +37,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           chargeBreakdownView: ChargeTypeDetailsView,
                                           estimatedInterestView: EstimatedInterestView,
                                           errorView: PaymentsError,
+                                          crystallisedInterestView: CrystallisedInterestView,
                                           serviceErrorHandler: ServiceErrorHandler)
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends
@@ -87,7 +87,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                 s"Unexpected error when binding form: $errorForm")
               InternalServerError(errorView())
             },
-            model => Ok("success") // TODO load new view
+            model => Ok(crystallisedInterestView(model, navLinks))
           )
         }
       } else {
