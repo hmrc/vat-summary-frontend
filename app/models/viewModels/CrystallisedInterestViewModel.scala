@@ -20,7 +20,6 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
 import views.templates.payments.PaymentMessageHelper
-
 import java.time.LocalDate
 
 case class CrystallisedInterestViewModel(periodFrom: LocalDate,
