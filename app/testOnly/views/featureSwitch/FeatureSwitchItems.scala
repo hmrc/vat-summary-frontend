@@ -30,10 +30,7 @@ class FeatureSwitchItems @Inject() () {
       name = Some(form(configKey).name),
       content = Text(description),
       value = "true",
-      checked = form(configKey).value match {
-        case Some("true") => true
-        case _ => false
-      }
+      checked = form(configKey).value.contains("true")
     )
   }
 
@@ -43,7 +40,8 @@ class FeatureSwitchItems @Inject() () {
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
       formCheckBoxItem(form, ConfigKeys.directDebitInterrupt, "DD interrupt screen"),
       formCheckBoxItem(form, ConfigKeys.penaltiesServiceEnabledFeature, "Enable penalties service features"),
-      formCheckBoxItem(form, ConfigKeys.interestBreakdownFeature, "Enable interest breakdown")
+      formCheckBoxItem(form, ConfigKeys.interestBreakdownFeature, "Enable interest breakdown"),
+      formCheckBoxItem(form, ConfigKeys.chargeReferenceInsetFeature, "Charge reference inset text on default surcharge breakdown")
     )
   }
 }

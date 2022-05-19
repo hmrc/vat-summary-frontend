@@ -20,4 +20,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               staticDateEnabled: Boolean,
                               directDebitInterrupt: Boolean,
                               penaltiesServiceEnabled: Boolean,
-                              interestBreakdownEnabled: Boolean)
+                              interestBreakdownEnabled: Boolean,
+                              chargeReferenceInsetEnabled: Boolean)
