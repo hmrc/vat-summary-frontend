@@ -53,7 +53,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse(endDate),
           due = LocalDate.parse(dueDate),
           outstandingAmount = 9999,
-          periodKey = "#001",
+          periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )
@@ -80,7 +80,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           chargeType = ReturnDebitCharge,
           due = LocalDate.parse(dueDate),
           outstandingAmount = -9999,
-          periodKey = "#001",
+          periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )
@@ -134,7 +134,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         periodTo = LocalDate.parse(endDate),
         due = LocalDate.parse(dueDate),
         outstandingAmount = 0,
-        periodKey = "#001",
+        periodKey = Some("#001"),
         Some("XD002750002155"),
         ddCollectionInProgress = true
       )
@@ -204,7 +204,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse(endDate),
           due = LocalDate.parse(dueDate),
           outstandingAmount = 0,
-          periodKey = "#001",
+          periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = true,
           originalAmount = Some(10000),
@@ -239,7 +239,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           chargeType = ReturnDebitCharge,
           due = LocalDate.parse(dueDate),
           outstandingAmount = 0,
-          periodKey = "#001",
+          periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = true,
           originalAmount = Some(10000),

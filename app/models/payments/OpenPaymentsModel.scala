@@ -25,7 +25,7 @@ sealed trait OpenPaymentsModel {
   val chargeType: ChargeType
   val amount: BigDecimal
   val due: LocalDate
-  val periodKey: String
+  val periodKey: Option[String]
   val isOverdue: Boolean
   val chargeReference: Option[String]
   def makePaymentRedirect: String
@@ -38,7 +38,7 @@ object OpenPaymentsModel {
             due: LocalDate,
             periodFrom: LocalDate,
             periodTo: LocalDate,
-            periodKey: String,
+            periodKey: Option[String],
             isOverdue: Boolean): OpenPaymentsModel = OpenPaymentsModelWithPeriod(
     chargeType,
     amount,
@@ -53,7 +53,7 @@ object OpenPaymentsModel {
   def apply(chargeType: ChargeType,
             amount: BigDecimal,
             due: LocalDate,
-            periodKey: String,
+            periodKey: Option[String],
             isOverdue: Boolean): OpenPaymentsModel = OpenPaymentsModelNoPeriod(
     chargeType,
     amount,
@@ -96,7 +96,7 @@ case class OpenPaymentsModelWithPeriod(chargeType: ChargeType,
                                        due: LocalDate,
                                        periodFrom: LocalDate,
                                        periodTo: LocalDate,
-                                       periodKey: String,
+                                       periodKey: Option[String],
                                        chargeReference: Option[String],
                                        isOverdue: Boolean) extends OpenPaymentsModel {
 
@@ -127,7 +127,7 @@ object OpenPaymentsModelWithPeriod {
 case class OpenPaymentsModelNoPeriod(chargeType: ChargeType,
                                      amount: BigDecimal,
                                      due: LocalDate,
-                                     periodKey: String,
+                                     periodKey: Option[String],
                                      chargeReference: Option[String],
                                      isOverdue: Boolean) extends OpenPaymentsModel {
 

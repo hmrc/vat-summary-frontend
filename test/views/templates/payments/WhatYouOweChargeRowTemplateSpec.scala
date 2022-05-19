@@ -51,7 +51,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
       LocalDate.parse("2018-03-03"),
       LocalDate.parse("2018-01-01"),
       LocalDate.parse("2018-02-02"),
-      "18AA",
+      Some("18AA"),
       Some("XD002750002155"),
       isOverdue = false
     )
@@ -123,7 +123,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
             LocalDate.parse("2018-03-03"),
             LocalDate.parse("2018-01-01"),
             LocalDate.parse("2018-02-02"),
-            "18AA",
+            Some("18AA"),
             Some("XD002750002155"),
             isOverdue = false
           )
@@ -146,7 +146,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
             LocalDate.parse("2018-03-03"),
             LocalDate.parse("2018-01-01"),
             LocalDate.parse("2018-02-02"),
-            "18AA",
+            Some("18AA"),
             Some("XD002750002155"),
             isOverdue = true
           )

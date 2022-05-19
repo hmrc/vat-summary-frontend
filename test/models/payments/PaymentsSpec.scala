@@ -32,7 +32,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
       LocalDate.parse("2017-03-01"),
       LocalDate.parse("2017-03-08"),
       9999,
-      "#001",
+      Some("#001"),
       Some("XD002750002155"),
       ddCollectionInProgress = false
     )
@@ -66,7 +66,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           LocalDate.parse("2017-03-01"),
           LocalDate.parse("2017-03-08"),
           9999,
-          "#001",
+          Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -76,7 +76,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           LocalDate.parse("2017-04-01"),
           LocalDate.parse("2017-05-08"),
           7777,
-          "#002",
+          Some("#002"),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )

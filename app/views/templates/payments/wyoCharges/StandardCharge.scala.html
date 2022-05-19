@@ -44,8 +44,8 @@
 }
 <span class="govuk-hint govuk-!-margin-0">
   @messages("whatYouOwe.due") @displayDate(charge.dueDate)
-  @if(charge.viewReturnEnabled) {
-    <a class="govuk-link govuk-!-padding-left-1" href="@appConfig.vatReturnUrl(charge.periodKey.getOrElse("0000"))">
+  @if(charge.viewReturnEnabled && charge.periodKey.isDefined) {
+    <a class="govuk-link govuk-!-padding-left-1" href="@appConfig.vatReturnUrl(charge.periodKey.get)">
       @messages("whatYouOwe.viewReturn")
     </a>
   }

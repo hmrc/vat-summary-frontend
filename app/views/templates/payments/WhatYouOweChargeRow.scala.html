@@ -58,9 +58,9 @@
           </a>
         }
 
-        @if(chargeDetails.viewReturnEnabled) {
+        @if(chargeDetails.viewReturnEnabled && payment.periodKey.isDefined) {
           <p class="govuk-body">
-            <a class="govuk-link what-you-owe-links" href="@appConfig.vatReturnUrl(payment.periodKey)">
+            <a class="govuk-link what-you-owe-links" href="@appConfig.vatReturnUrl(payment.periodKey.get)">
               <span class="govuk-visually-hidden">@chargeDetails.viewReturnContext</span>
               <span>@messages("openPayments.viewReturnLink")</span>
             </a>

@@ -29,7 +29,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     LocalDate.parse("2018-03-03"),
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
-    "18AA",
+    Some("18AA"),
     isOverdue = false
   )
 
@@ -37,7 +37,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
     chargeType,
     BigDecimal(100.00),
     LocalDate.parse("2018-03-03"),
-    "18AA",
+    Some("18AA"),
     Some("XD002750002155"),
     isOverdue = false
   )

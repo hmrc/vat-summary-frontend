@@ -54,7 +54,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-11-29"),
           BigDecimal("21.22"),
-          "",
+          Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )
@@ -64,7 +64,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-12-01"),
           BigDecimal("21.22"),
-          "",
+          Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )
@@ -74,7 +74,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2009-01-01"),
           BigDecimal("21.22"),
-          "",
+          Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )
@@ -84,7 +84,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           LocalDate.parse("2009-01-01"),
           LocalDate.parse("2008-11-30"),
           BigDecimal("21.22"),
-          "",
+          Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )
@@ -113,7 +113,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           LocalDate.parse("2009-01-04"),
           LocalDate.parse("2008-12-06"),
           BigDecimal("-1000"),
-          "",
+          Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false
         )))

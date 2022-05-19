@@ -30,7 +30,7 @@ sealed trait Payment extends Obligation {
   val originalAmount: Option[BigDecimal]
   val chargeReference: Option[String]
   val clearedAmount: Option[BigDecimal]
-  val periodKey: String
+  val periodKey: Option[String]
   val ddCollectionInProgress: Boolean
   val auditDetails: Map[String, String]
 }
@@ -40,7 +40,7 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              periodTo: LocalDate,
                              due: LocalDate,
                              outstandingAmount: BigDecimal,
-                             periodKey: String,
+                             periodKey: Option[String],
                              chargeReference: Option[String],
                              ddCollectionInProgress: Boolean,
                              originalAmount: Option[BigDecimal] = None,
@@ -58,7 +58,7 @@ case class PaymentWithPeriod(chargeType: ChargeType,
 case class PaymentNoPeriod(chargeType: ChargeType,
                            due: LocalDate,
                            outstandingAmount: BigDecimal,
-                           periodKey: String,
+                           periodKey: Option[String],
                            chargeReference: Option[String],
                            ddCollectionInProgress: Boolean,
                            originalAmount: Option[BigDecimal] = None,
@@ -108,7 +108,7 @@ object Payment {
       periodTo,
       due,
       outstandingAmount,
-      periodKey.getOrElse("0000"),
+      periodKey,
       chargeReference,
       ddCollectionInProgress,
       originalAmount,
@@ -129,7 +129,7 @@ object Payment {
       periodTo,
       due,
       outstandingAmount,
-      periodKey.getOrElse("0000"),
+      periodKey,
       chargeReference,
       ddCollectionInProgress
     )
@@ -146,7 +146,7 @@ object Payment {
       chargeType,
       due,
       outstandingAmount,
-      periodKey.getOrElse("0000"),
+      periodKey,
       chargeReference,
       ddCollectionInProgress,
       originalAmount,
@@ -163,7 +163,7 @@ object Payment {
       chargeType,
       due,
       outstandingAmount,
-      periodKey.getOrElse("0000"),
+      periodKey,
       chargeReference,
       ddCollectionInProgress
     )

@@ -94,10 +94,10 @@
                 @model.title
             </h1>
 
-            @if(model.viewReturnEnabled) {
+            @if(model.viewReturnEnabled && model.periodKey.isDefined) {
                 <p class="govuk-body" id="view-return">
                     @messages("chargeTypeDetails.viewThis")
-                    <a href="@appConfig.vatReturnUrl(model.periodKey.getOrElse("0000"))"
+                    <a href="@appConfig.vatReturnUrl(model.periodKey.get)"
                        class="govuk-link">@messages("chargeTypeDetails.vatReturn")</a>.
                 </p>
             }

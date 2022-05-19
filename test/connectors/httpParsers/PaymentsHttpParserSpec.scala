@@ -582,7 +582,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.50),
-          periodKey = "#001",
+          periodKey = Some("#001"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -592,7 +592,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2018-10-25"),
           outstandingAmount = BigDecimal(1000.51),
-          periodKey = "#002",
+          periodKey = Some("#002"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -602,7 +602,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.52),
-          periodKey = "#003",
+          periodKey = Some("#003"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -612,7 +612,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2018-01-01"),
           due = LocalDate.parse("2017-10-25"),
           outstandingAmount = BigDecimal(1000.53),
-          periodKey = "#004",
+          periodKey = Some("#004"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -622,7 +622,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2017-01-01"),
           due = LocalDate.parse("2016-10-25"),
           outstandingAmount = BigDecimal(1000.25),
-          periodKey = "#005",
+          periodKey = Some("#005"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -632,7 +632,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2015-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.27),
-          periodKey = "#006",
+          periodKey = Some("#006"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -642,7 +642,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2015-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(-1000.27),
-          periodKey = "#006",
+          periodKey = Some("#006"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -652,7 +652,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.29),
-          periodKey = "#007",
+          periodKey = Some("#007"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -662,7 +662,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#007",
+          periodKey = Some("#007"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -672,7 +672,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#008",
+          periodKey = Some("#008"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -682,7 +682,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#009",
+          periodKey = Some("#009"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -692,7 +692,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#010",
+          periodKey = Some("#010"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -702,7 +702,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#011",
+          periodKey = Some("#011"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -712,7 +712,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#012",
+          periodKey = Some("#012"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -722,7 +722,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-01-01"),
           due = LocalDate.parse("2015-10-25"),
           outstandingAmount = BigDecimal(1000.30),
-          periodKey = "#018",
+          periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -732,7 +732,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#009",
+          periodKey = Some("#009"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -742,7 +742,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2016-06-21"),
           due = LocalDate.parse("2016-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#010",
+          periodKey = Some("#010"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -752,7 +752,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#019",
+          periodKey = Some("#019"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -762,7 +762,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2015-06-21"),
           due = LocalDate.parse("2015-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#011",
+          periodKey = Some("#011"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -772,7 +772,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2014-06-21"),
           due = LocalDate.parse("2014-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#012",
+          periodKey = Some("#012"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -782,7 +782,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2013-06-21"),
           due = LocalDate.parse("2013-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#013",
+          periodKey = Some("#013"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -792,7 +792,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2012-06-21"),
           due = LocalDate.parse("2012-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#014",
+          periodKey = Some("#014"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -802,7 +802,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2011-06-21"),
           due = LocalDate.parse("2011-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#015",
+          periodKey = Some("#015"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -812,7 +812,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2010-06-21"),
           due = LocalDate.parse("2010-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#016",
+          periodKey = Some("#016"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -822,7 +822,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2009-06-21"),
           due = LocalDate.parse("2009-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#017",
+          periodKey = Some("#017"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
@@ -832,7 +832,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodTo = LocalDate.parse("2008-06-21"),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
-          periodKey = "#018",
+          periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
