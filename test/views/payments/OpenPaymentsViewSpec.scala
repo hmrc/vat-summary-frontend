@@ -70,7 +70,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       due = LocalDate.parse("2001-04-08"),
       periodFrom = LocalDate.parse("2001-01-01"),
       periodTo = LocalDate.parse("2001-03-31"),
-      periodKey = "#001",
+      periodKey = Some("#001"),
       chargeReference = Some("XD002750002155"),
       isOverdue = false
     ),
@@ -80,7 +80,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       LocalDate.parse("2003-04-05"),
       LocalDate.parse("2003-01-01"),
       LocalDate.parse("2003-03-31"),
-      "#003",
+      Some("#003"),
       chargeReference = Some("XD002750002155"),
       isOverdue = false
     )
@@ -215,7 +215,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
               due = LocalDate.parse("2008-04-08"),
               periodFrom = LocalDate.parse("2018-01-01"),
               periodTo = LocalDate.parse("2018-02-01"),
-              periodKey = "#001",
+              periodKey = Some("#001"),
               chargeReference = Some("XD002750002155"),
               isOverdue = false
             )),

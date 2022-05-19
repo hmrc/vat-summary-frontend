@@ -49,7 +49,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodTo = LocalDate.parse("2015-03-31"),
           due = LocalDate.parse("2019-01-15"),
           outstandingAmount = 10000,
-          periodKey = "15AC",
+          periodKey = Some("15AC"),
           ddCollectionInProgress = false,
           chargeReference = Some("XD002750002155"),
           originalAmount = Some(10000)
@@ -60,7 +60,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodTo = LocalDate.parse("2015-03-31"),
           due = LocalDate.parse("2019-01-16"),
           outstandingAmount = 10000,
-          periodKey = "15AC",
+          periodKey = Some("15AC"),
           ddCollectionInProgress = false,
           chargeReference = Some("XD002750002155"),
           originalAmount = Some(10000)

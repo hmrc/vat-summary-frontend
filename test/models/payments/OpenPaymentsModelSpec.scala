@@ -63,7 +63,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             due = LocalDate.parse("2003-04-05"),
             periodFrom = LocalDate.parse("2001-01-01"),
             periodTo = LocalDate.parse("2001-03-31"),
-            periodKey = "#003",
+            periodKey = Some("#003"),
             isOverdue = false
           )
 
@@ -79,7 +79,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
             chargeType = OADebitCharge,
             amount = 300.00,
             due = LocalDate.parse("2003-04-05"),
-            periodKey = "#003",
+            periodKey = Some("#003"),
             isOverdue = false
           )
 
@@ -148,7 +148,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         chargeType = OADebitCharge,
         due = LocalDate.parse("2003-04-05"),
         amount = 300.00,
-        periodKey = "#003",
+        periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
         isOverdue = false
       )
@@ -194,7 +194,7 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
         periodFrom = LocalDate.parse("2001-01-01"),
         periodTo = LocalDate.parse("2001-03-31"),
         amount = 300.00,
-        periodKey = "#003",
+        periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
         isOverdue = false
       )
