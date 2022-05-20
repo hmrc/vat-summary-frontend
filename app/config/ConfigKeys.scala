@@ -30,6 +30,7 @@ object ConfigKeys {
   val staticDateValue: String = "date-service.staticDate.value"
   val directDebitInterrupt: String = "features.directDebitInterrupt.enabled"
   val interestBreakdownFeature: String = "features.interestBreakdown.enabled"
+  val chargeReferenceInsetFeature: String = "features.chargeReferenceInset.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"

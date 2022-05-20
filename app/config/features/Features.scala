@@ -28,4 +28,5 @@ class Features @Inject()(implicit config: Configuration) {
   val directDebitInterrupt = new Feature(ConfigKeys.directDebitInterrupt)
   val penaltiesServiceEnabled = new Feature(ConfigKeys.penaltiesServiceEnabledFeature)
   val interestBreakdownEnabled = new Feature(ConfigKeys.interestBreakdownFeature)
+  val chargeReferenceInsetEnabled = new Feature(ConfigKeys.chargeReferenceInsetFeature)
 }

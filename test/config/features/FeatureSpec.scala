@@ -16,12 +16,12 @@
 
 package config.features
 
+import controllers.ControllerBaseSpec
 import org.scalatest.BeforeAndAfterEach
-import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 
-class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
+class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
   private val features = new Features()(app.injector.instanceOf[Configuration])
 
@@ -29,29 +29,81 @@ class FeatureSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterE
     super.beforeEach()
     features.userResearchBanner(true)
     features.penaltiesServiceEnabled(true)
+    features.staticDateEnabled(true)
+    features.directDebitInterrupt(true)
+    features.interestBreakdownEnabled(true)
+    features.chargeReferenceInsetEnabled(true)
   }
 
   "The User Research Banner Feature" should {
 
     "return its current state" in {
-      features.userResearchBanner() mustBe true
+      features.userResearchBanner() shouldBe true
     }
 
     "switch to a new state" in {
       features.userResearchBanner(false)
-      features.userResearchBanner() mustBe false
+      features.userResearchBanner() shouldBe false
     }
   }
 
   "The Penalties Service feature" should {
 
     "return its current state" in {
-      features.penaltiesServiceEnabled() mustBe true
+      features.penaltiesServiceEnabled() shouldBe true
     }
 
     "switch to a new state" in {
       features.penaltiesServiceEnabled(false)
-      features.penaltiesServiceEnabled() mustBe false
+      features.penaltiesServiceEnabled() shouldBe false
+    }
+  }
+
+  "The static date feature" should {
+
+    "return its current state" in {
+      features.staticDateEnabled() shouldBe true
+    }
+
+    "switch to a new state" in {
+      features.staticDateEnabled(false)
+      features.staticDateEnabled() shouldBe false
+    }
+  }
+
+  "The direct debit interrupt feature" should {
+
+    "return its current state" in {
+      features.directDebitInterrupt() shouldBe true
+    }
+
+    "switch to a new state" in {
+      features.directDebitInterrupt(false)
+      features.directDebitInterrupt() shouldBe false
+    }
+  }
+
+  "The interest breakdown feature" should {
+
+    "return its current state" in {
+      features.interestBreakdownEnabled() shouldBe true
+    }
+
+    "switch to a new state" in {
+      features.interestBreakdownEnabled(false)
+      features.interestBreakdownEnabled() shouldBe false
+    }
+  }
+
+  "The charge reference inset text feature" should {
+
+    "return its current state" in {
+      features.chargeReferenceInsetEnabled() shouldBe true
+    }
+
+    "switch to a new state" in {
+      features.chargeReferenceInsetEnabled(false)
+      features.chargeReferenceInsetEnabled() shouldBe false
     }
   }
 }
