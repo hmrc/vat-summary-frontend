@@ -17,6 +17,7 @@
 @import models.viewModels.StandardChargeViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import views.html.templates.formatters.money.DisplayMoney
+@import models.payments._
 
 @this(mainTemplate: MainTemplate,
       displayMoney: DisplayMoney,
@@ -144,12 +145,13 @@
                 )
             ))
 
-            @(model.chargeType == "VatDebitDefaultSurcharge" || model.chargeType == "VatCreditDefaultSurcharge", appConfig.features.chargeReferenceInsetEnabled()) match {
-                case (true, true) => {
+            @(model.chargeType == DebitDefaultSurcharge.value || model.chargeType == CreditDefaultSurcharge.value, appConfig.features.chargeReferenceInsetEnabled(), model.chargeReference) match {
+                case (true, true, Some(_)) => {
                     @govukInsetText(InsetText(
                         content = HtmlContent(insetMessage)
                     ))
                 }
+                case _ => {}
             }
 
             @if(!user.isAgent) {
