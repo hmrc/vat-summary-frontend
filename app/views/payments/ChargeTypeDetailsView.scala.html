@@ -24,7 +24,8 @@
       govukSummaryList: GovukSummaryList,
       govukButton: GovukButton,
       govukTag: GovukTag,
-      govukBackLink: GovukBackLink)
+      govukBackLink: GovukBackLink,
+      govukInsetText : GovukInsetText)
 
 @(model: StandardChargeViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
@@ -53,6 +54,10 @@
         content = Text(messages("base.back")),
         href = testOnly.controllers.routes.WhatYouOweController.show.url
     ))
+}
+
+@insetMessage = {
+@if(user.isAgent) {@messages("chargeTypeDetails.insetTextReferenceAgent", model.chargeReference.getOrElse(""))} else {@messages("chargeTypeDetails.insetTextReference", model.chargeReference.getOrElse(""))}
 }
 
 @dueDateHtml = {
@@ -138,6 +143,14 @@
                     )
                 )
             ))
+
+            @(model.chargeType == "VatDebitDefaultSurcharge" || model.chargeType == "VatCreditDefaultSurcharge", appConfig.features.chargeReferenceInsetEnabled()) match {
+                case (true, true) => {
+                    @govukInsetText(InsetText(
+                        content = HtmlContent(insetMessage)
+                    ))
+                }
+            }
 
             @if(!user.isAgent) {
                 @govukButton(Button(

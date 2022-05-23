@@ -130,6 +130,8 @@ chargeTypeDetails.amountLeft = Amount left to pay
 chargeTypeDetails.button = Pay now
 chargeTypeDetails.link = Return to what you owe
 chargeTypeDetails.agentLink = Return to what your client owes
+chargeTypeDetails.insetTextReference = You must use the 14-character reference number {0} when making this payment.
+chargeTypeDetails.insetTextReferenceAgent = Your client must use the 14-character reference number {0} when making this payment.
 
 estimatedInterest.vatChargeInterest = We charge interest on any unpaid VAT.
 estimatedInterest.penaltyChargeInterest = We charge interest on any unpaid late payment penalties.
