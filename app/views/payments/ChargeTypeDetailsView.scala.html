@@ -58,7 +58,10 @@
 }
 
 @insetMessage = {
-@if(user.isAgent) {@messages("chargeTypeDetails.insetTextReferenceAgent", model.chargeReference.getOrElse(""))} else {@messages("chargeTypeDetails.insetTextReference", model.chargeReference.getOrElse(""))}
+    @user.isAgent match {
+        case true => {@messages("chargeTypeDetails.insetTextReferenceAgent", model.chargeReference.getOrElse(""))}
+        case false => {@messages("chargeTypeDetails.insetTextReference", model.chargeReference.getOrElse(""))}
+    }
 }
 
 @dueDateHtml = {
@@ -145,7 +148,7 @@
                 )
             ))
 
-            @(model.chargeType == DebitDefaultSurcharge.value || model.chargeType == CreditDefaultSurcharge.value, appConfig.features.chargeReferenceInsetEnabled(), model.chargeReference) match {
+            @(model.chargeType == DebitDefaultSurcharge.value, appConfig.features.chargeReferenceInsetEnabled(), model.chargeReference) match {
                 case (true, true, Some(_)) => {
                     @govukInsetText(InsetText(
                         content = HtmlContent(insetMessage)
