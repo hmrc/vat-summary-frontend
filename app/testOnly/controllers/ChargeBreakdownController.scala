@@ -43,8 +43,6 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-
-
   def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user => DDInterrupt.interruptCheck { _ =>
       serviceInfoService.getPartial.map { navLinks =>

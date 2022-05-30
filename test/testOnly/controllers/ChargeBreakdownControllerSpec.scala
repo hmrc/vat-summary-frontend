@@ -23,7 +23,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView, CrystallisedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
@@ -44,7 +44,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "the user is logged in as a principal entity" should {
 
-        val request = fakeRequestWithSession.withFormUrlEncodedBody(
+        val request = fakePostWithSession.withFormUrlEncodedBody(
           "chargeType" -> "VAT Return Debit Charge",
           "outstandingAmount" -> "1234.56",
           "originalAmount" -> "1234.56",
@@ -70,7 +70,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "the user is logged in as an agent" should {
 
-        lazy val request = agentFinancialRequest.withFormUrlEncodedBody(
+        lazy val request = agentPostFinancialRequest.withFormUrlEncodedBody(
           "chargeType" -> "VAT Return Debit Charge",
           "outstandingAmount" -> "1234.56",
           "originalAmount" -> "1234.56",
@@ -203,7 +203,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockPrincipalAuth()
           mockServiceInfoCall()
-          controller.estimatedInterestBreakdown(requestWithForm(fakeRequestWithSession))
+          controller.estimatedInterestBreakdown(requestWithForm(fakePostWithSession))
         }
 
         "return 200" in {
@@ -221,7 +221,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockAgentAuth()
           mockServiceInfoCall()
-          controller.estimatedInterestBreakdown(requestWithForm(agentFinancialRequest))
+          controller.estimatedInterestBreakdown(requestWithForm(agentPostFinancialRequest))
         }
 
         "return 200" in {
@@ -356,7 +356,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockPrincipalAuth()
           mockServiceInfoCall()
-          controller.crystallisedInterestBreakdown(requestWithForm(fakeRequestWithSession))
+          controller.crystallisedInterestBreakdown(requestWithForm(fakePostWithSession))
         }
 
         "return 200" in {
@@ -374,7 +374,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockAgentAuth()
           mockServiceInfoCall()
-          controller.crystallisedInterestBreakdown(requestWithForm(agentFinancialRequest))
+          controller.crystallisedInterestBreakdown(requestWithForm(agentPostFinancialRequest))
         }
 
         "return 200" in {

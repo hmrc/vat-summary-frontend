@@ -26,16 +26,14 @@ import play.api.test.Helpers._
 
 class LanguageSpec extends IntegrationBaseSpec {
 
-  private trait Test {
-    def request(): WSRequest = {
-      AuthStub.authorised()
-      CustomerInfoStub.stubCustomerInfo(customerInfoJson(
-        isPartialMigration = false,
-        hasVerifiedEmail = true)
-      )
-      ServiceInfoStub.stubServiceInfoPartial
-      buildRequest("/vat-certificate")
-    }
+  def request(lang: String = "en"): WSRequest = {
+    AuthStub.authorised()
+    CustomerInfoStub.stubCustomerInfo(customerInfoJson(
+      isPartialMigration = false,
+      hasVerifiedEmail = true)
+    )
+    ServiceInfoStub.stubServiceInfoPartial
+    buildRequest("/vat-certificate", lang = lang)
   }
 
   "Calling a generic page route" when {
@@ -44,10 +42,9 @@ class LanguageSpec extends IntegrationBaseSpec {
 
       "language is 'en'" should {
 
-        "return the page in English" in new Test {
+        "return the page in English" in {
 
-          val response: WSResponse = await(request().withHttpHeaders("Cookie" -> "PLAY_LANG=en;").get())
-
+          val response: WSResponse = await(request().get())
           lazy val document: Document = Jsoup.parse(response.body)
 
           document.title() shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
@@ -56,9 +53,9 @@ class LanguageSpec extends IntegrationBaseSpec {
 
       "language is 'cy'" should {
 
-        "return the page in Welsh" in new Test {
+        "return the page in Welsh" in {
 
-          val response: WSResponse = await(request().withHttpHeaders("Cookie" -> "PLAY_LANG=cy;").get())
+          val response: WSResponse = await(request("cy").get())
 
           lazy val document: Document = Jsoup.parse(response.body)
 
@@ -69,7 +66,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
     "language preference is not set in the cookie" should {
 
-      "return the page in English" in new Test {
+      "return the page in English" in {
 
         val response: WSResponse = await(request().get())
 

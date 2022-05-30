@@ -57,8 +57,10 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
 
   implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
-  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.viewedDDInterrupt -> "true")
+
+  val baseSession = Seq(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.viewedDDInterrupt -> "true")
+  implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(baseSession: _*)
+  implicit lazy val fakePostRequest = FakeRequest("POST", "").withSession(baseSession: _*)
 
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
@@ -85,12 +87,16 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   )
   val ddInterruptPredicate: DDInterruptPredicate = new DDInterruptPredicate(mcc)
 
-  lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(
+  val requestSession = Seq(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
     GovUKSessionKeys.authToken -> "Bearer Token",
     SessionKeys.migrationToETMP -> "2018-01-01",
     SessionKeys.financialAccess -> "true"
   )
+
+  lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(requestSession: _*)
+
+  lazy val fakePostWithSession = fakePostRequest.withSession(requestSession: _*)
 
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
@@ -99,12 +105,17 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     FakeRequest("GET","/homepage")
       .withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
 
+  val agentSession = Seq(
+    SessionKeys.financialAccess -> "true",
+    SessionKeys.mtdVatvcClientVrn -> "123456789",
+    SessionKeys.viewedDDInterrupt -> "false"
+  )
+
   lazy val agentFinancialRequest: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest().withSession(
-      SessionKeys.financialAccess -> "true",
-      SessionKeys.mtdVatvcClientVrn -> "123456789",
-      SessionKeys.viewedDDInterrupt -> "false"
-    )
+    FakeRequest().withSession(agentSession: _*)
+
+  lazy val agentPostFinancialRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("POST", "").withSession(agentSession: _*)
 
   def fakeRequestToPOSTWithSession(input: (String, String)*): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequestWithSession.withFormUrlEncodedBody(input: _*)

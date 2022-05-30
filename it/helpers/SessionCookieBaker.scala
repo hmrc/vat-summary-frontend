@@ -26,7 +26,7 @@ object SessionCookieBaker {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="
   private val cookieSigner = new DefaultCookieSigner(SecretConfiguration(cookieKey))
 
-  private def cookieValue(sessionData: Map[String, String]) = {
+  private def cookieValue(sessionData: Map[String, String], lang: String) = {
     def encode(data: Map[String, String]): PlainText = {
       val encoded = data.map {
         case (k, v) => URLEncoder.encode(k, "UTF-8") + "=" + URLEncoder.encode(v, "UTF-8")
@@ -38,10 +38,10 @@ object SessionCookieBaker {
     val encodedCookie = encode(sessionData)
     val encrypted = CompositeSymmetricCrypto.aesGCM(cookieKey, Seq()).encrypt(encodedCookie).value
 
-    s"""mdtp="$encrypted"; Path=/; HTTPOnly"; Path=/; HTTPOnly"""
+    s"""mdtp="$encrypted"; Path=/; HTTPOnly"; Path=/; HTTPOnly; PLAY_LANG=$lang;"""
   }
 
-  def bakeSessionCookie(additionalData: Map[String, String] = Map()): String = {
-    cookieValue(additionalData)
+  def bakeSessionCookie(additionalData: Map[String, String] = Map(), lang: String): String = {
+    cookieValue(additionalData, lang)
   }
 }
