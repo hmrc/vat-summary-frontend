@@ -84,7 +84,9 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
     super.afterAll()
   }
 
-  def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty, lang: String = "en"): WSRequest = {
+  def buildRequest(path: String,
+                   additionalCookies: Map[String, String] = Map.empty,
+                   lang: Option[String] = Some("en")): WSRequest = {
     val authSession = Map("authToken"-> "mock-bearer-token")
     client.url(s"http://localhost:$port$appRouteContext$path")
       .withHttpHeaders(

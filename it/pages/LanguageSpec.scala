@@ -26,7 +26,7 @@ import play.api.test.Helpers._
 
 class LanguageSpec extends IntegrationBaseSpec {
 
-  def request(lang: String = "en"): WSRequest = {
+  def request(lang: Option[String] = Some("en")): WSRequest = {
     AuthStub.authorised()
     CustomerInfoStub.stubCustomerInfo(customerInfoJson(
       isPartialMigration = false,
@@ -55,7 +55,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
         "return the page in Welsh" in {
 
-          val response: WSResponse = await(request("cy").get())
+          val response: WSResponse = await(request(lang = Some("cy")).get())
 
           lazy val document: Document = Jsoup.parse(response.body)
 
@@ -68,7 +68,7 @@ class LanguageSpec extends IntegrationBaseSpec {
 
       "return the page in English" in {
 
-        val response: WSResponse = await(request().get())
+        val response: WSResponse = await(request(lang = None).get())
 
         lazy val document: Document = Jsoup.parse(response.body)
 
