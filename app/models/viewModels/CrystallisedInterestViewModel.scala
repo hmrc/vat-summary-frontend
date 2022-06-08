@@ -31,7 +31,8 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          amountReceived: BigDecimal,
                                          leftToPay: BigDecimal,
                                          isOverdue: Boolean,
-                                         chargeReference: String) extends ChargeDetailsViewModel {
+                                         chargeReference: String,
+                                         isPenalty: Boolean) extends ChargeDetailsViewModel {
 
   override val outstandingAmount: BigDecimal = interestAmount
 
@@ -68,6 +69,7 @@ object CrystallisedInterestViewModel {
     "amountReceived" -> bigDecimal,
     "leftToPay" -> bigDecimal,
     "isOverdue" -> boolean,
-    "chargeReference" -> text
+    "chargeReference" -> text,
+    "isPenalty" -> boolean
   )(CrystallisedInterestViewModel.apply)(CrystallisedInterestViewModel.unapply))
 }

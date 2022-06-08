@@ -40,20 +40,19 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     0.00,
     7.71,
     isOverdue = true,
-    "chargeRef"
+    "chargeRef",
+    isPenalty = false
   )
 
   "Rendering the Crystallised Interest Page for a principal user" when {
 
-    "the user has interest on VAT charge" should {
+    "the interest is not for a penalty charge" should {
 
       lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-
         document.title shouldBe "VAT officer’s assessment interest - Manage your VAT account - GOV.UK"
-
       }
 
       "have the correct page heading" in {
@@ -87,6 +86,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
             whatYouOweLink
         }
       }
+
       "have the correct first explanation paragraph" in {
         elementText("#content > div > div > p:nth-child(3)") shouldBe "We charge interest on any unpaid VAT."
       }
@@ -100,6 +100,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         elementText("#content > div > div > p:nth-child(5)") shouldBe "The calculation we use for each day is: " +
           s"(Interest rate of ${viewModel.interestRate}% × VAT amount unpaid) ÷ days in a year"
       }
+
       "have the correct heading for the first row" in {
         elementText(".govuk-summary-list__row:nth-child(1) > dt") shouldBe "Due date"
       }
@@ -137,11 +138,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         "has the correct link text" in {
           elementText("#content > div > div > a") shouldBe "Pay now"
         }
+
         "has the correct href" in {
           element("#content > div > div > a").attr("href") shouldBe
             "/vat-through-software/make-payment/771/12/2022/2022-12-31/VAT%20OA%20Default%20Interest/2023-03-30/chargeRef"
         }
-
       }
 
       "have a link to guidance on how interest is calculated" which {
@@ -152,7 +153,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe "/gov-uk"
+          element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
         }
       }
 
@@ -167,7 +168,27 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         }
       }
     }
+
+    "the interest is for a penalty charge" should {
+
+      lazy val view = injectedView(viewModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first explanation paragraph" in {
+        elementText("#content > div > div > p:nth-child(3)") shouldBe "We charge interest on any unpaid penalties."
+      }
+
+      "have the correct second explanation paragraph" in {
+        elementText("#content > div > div > p:nth-child(4)") shouldBe "The total increases daily based on the unpaid amount."
+      }
+
+      "have the correct third explanation paragraph" in {
+        elementText("#content > div > div > p:nth-child(5)") shouldBe "The calculation we use for each day is: " +
+          s"(Interest rate of ${viewModel.interestRate}% × penalty amount unpaid) ÷ days in a year"
+      }
+    }
   }
+
   "Rendering the Crystallised Interest Page for an agent" should {
 
     lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, agentUser)
@@ -183,6 +204,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
       }
     }
+
     "not render breadcrumbs" in {
       elementExtinct(".govuk-breadcrumbs")
     }
@@ -197,9 +219,9 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         element(".govuk-back-link").attr("href") shouldBe whatYouOweLink
       }
     }
+
     "not have a pay now button" in {
       elementExtinct("#content > div > div > a")
     }
-
   }
 }

@@ -53,13 +53,10 @@ val compile: Seq[ModuleID] = Seq(
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "org.scalatest"           %% "scalatest"                    % "3.1.4"             % scope,
-  "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
-  "org.jsoup"               %  "jsoup"                        % "1.14.3"            % scope,
-  "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.1.0"             % scope,
-  "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
-  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
-  "com.vladsch.flexmark"    % "flexmark-all"                  % "0.36.8"            % scope
+  "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % "5.24.0",
+  "org.pegdown"   %  "pegdown"                     % "1.6.0"   % scope,
+  "org.jsoup"     %  "jsoup"                       % "1.14.3"  % scope,
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0"   % scope,
 )
 
 TwirlKeys.templateImports ++= Seq(

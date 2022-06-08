@@ -63,6 +63,10 @@
     }
 }
 
+@interestTypeMessageKey = @{
+  if(model.isPenalty) "penalty" else "vat"
+}
+
 @mainTemplate(
   title = model.title,
   appConfig = appConfig,
@@ -78,12 +82,12 @@
         @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
       </span>
         <h1 class="govuk-heading-xl">@messages(model.title)</h1>
-        <p class="govuk-body">@messages("crystallisedInterest.vatChargeInterest")</p>
-        <p class="govuk-body">@messages("crystallisedInterest.vatIncreaseDaily")</p>
+        <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")</p>
+        <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
         <p class="govuk-body">
             @messages(s"crystallisedInterest.calculation")
             <br>
-            @messages(s"crystallisedInterest.vatCalculation", model.interestRate)
+            @messages(s"crystallisedInterest.${interestTypeMessageKey}Calculation", model.interestRate)
         </p>
 
         @govukSummaryList(SummaryList(
