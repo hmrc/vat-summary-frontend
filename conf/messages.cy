@@ -113,6 +113,11 @@ openPayments.whatOweHelp.headingAgent = Mae’r swm sy’n ddyledus yn anghywir 
 openPayments.vatReturn = ar gyfer y cyfnod {0}
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
+chargeTypeDetails.dueDate = Dyddiad dyledus
+chargeTypeDetails.chargeDue = Tâl gwreiddiol
+chargeTypeDetails.amountReceived = Amount received
+chargeTypeDetails.amountLeft = Yn weddill i’w dalu
+
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon
 

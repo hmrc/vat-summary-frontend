@@ -114,7 +114,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "have the correct first column in the second line" in {
-            elementText(Selectors.chargeDueKey) shouldBe "Charge due"
+            elementText(Selectors.chargeDueKey) shouldBe "Original charge"
           }
 
           "display the correct total amount due" in {
@@ -130,7 +130,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "have the correct first column in the fourth line" in {
-            elementText(Selectors.outstandingAmountKey) shouldBe "Amount left to pay"
+            elementText(Selectors.outstandingAmountKey) shouldBe "Left to pay"
           }
 
           "display the correct outstanding amount" in {
