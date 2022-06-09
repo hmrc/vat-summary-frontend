@@ -152,9 +152,12 @@ estimatedInterest.estimatesExplanation = Penalties and interest will show as est
 estimatedInterest.calculationLink = Read the guidance about how interest is calculated (opens in a new tab)
 
 crystallisedInterest.vatChargeInterest = We charge interest on any unpaid VAT.
+crystallisedInterest.penaltyChargeInterest = We charge interest on any unpaid penalties.
 crystallisedInterest.vatIncreaseDaily = The total increases daily based on the amount of unpaid VAT for the period.
+crystallisedInterest.penaltyIncreaseDaily = The total increases daily based on the unpaid amount.
 crystallisedInterest.calculation = The calculation we use for each day is:
 crystallisedInterest.vatCalculation = (Interest rate of {0}% × VAT amount unpaid) ÷ days in a year
+crystallisedInterest.penaltyCalculation = (Interest rate of {0}% × penalty amount unpaid) ÷ days in a year
 crystallisedInterest.dueDate = Due date
 crystallisedInterest.interestAmount = Interest amount
 crystallisedInterest.amountReceived = Amount received

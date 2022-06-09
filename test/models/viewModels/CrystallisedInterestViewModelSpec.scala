@@ -35,7 +35,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
     200.22,
     100.11,
     isOverdue = false,
-    "XXXXXX1234567890"
+    "XXXXXX1234567890",
+    isPenalty = false
   )
 
   "The makePaymentRedirect value" should {
@@ -44,9 +45,10 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
       val amountInPence = (model.interestAmount * 100).toLong
       val chargeTypeEncoded = model.chargeType.replace(" ", "%20")
 
-      model.makePaymentRedirect shouldBe
-        s"/vat-through-software/make-payment/$amountInPence/${model.periodTo.getMonthValue}/${model.periodTo.getYear}" +
+      model.makePaymentRedirect should include(
+        s"/make-payment/$amountInPence/${model.periodTo.getMonthValue}/${model.periodTo.getYear}" +
         s"/${model.periodTo}/$chargeTypeEncoded/${model.dueDate}/${model.chargeReference}"
+      )
     }
   }
 
@@ -65,7 +67,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Right(model)
       }
     }
@@ -82,7 +85,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("chargeType", List("error.required"), List())))
       }
 
@@ -97,7 +101,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("periodFrom", List("error.date"), List())))
       }
 
@@ -112,7 +117,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("periodTo", List("error.date"), List())))
       }
 
@@ -127,7 +133,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("interestRate", List("error.real"), List())))
       }
 
@@ -142,7 +149,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("dueDate", List("error.date"), List())))
       }
 
@@ -157,7 +165,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("interestAmount", List("error.real"), List())))
       }
 
@@ -172,7 +181,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "nope",
           "leftToPay" -> "100.11",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("amountReceived", List("error.real"), List())))
       }
 
@@ -187,7 +197,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11.0",
           "isOverdue" -> "false",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("leftToPay", List("error.real"), List())))
       }
 
@@ -202,9 +213,26 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isOverdue" -> "5",
-          "chargeReference" -> "XXXXXX1234567890"
+          "chargeReference" -> "XXXXXX1234567890",
+          "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("isOverdue", List("error.boolean"), List())))
       }
+    }
+
+    "the isPenalty field is invalid" in {
+      form.mapping.bind(Map(
+        "periodFrom" -> "2018-01-01",
+        "periodTo" -> "2018-02-02",
+        "chargeType" -> "VAT Default Interest",
+        "interestRate" -> "2.6",
+        "dueDate" -> "2018-03-03",
+        "interestAmount" -> "300.33",
+        "amountReceived" -> "200.22",
+        "leftToPay" -> "100.11",
+        "isOverdue" -> "true",
+        "chargeReference" -> "XXXXXX1234567890",
+        "isPenalty" -> "100"
+      )) shouldBe Left(List(FormError("isPenalty", List("error.boolean"), List())))
     }
   }
 }
