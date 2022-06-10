@@ -115,7 +115,7 @@ openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfno
 
 chargeTypeDetails.dueDate = Dyddiad dyledus
 chargeTypeDetails.chargeDue = Tâl gwreiddiol
-chargeTypeDetails.amountReceived = Amount received
+chargeTypeDetails.amountReceived = Swm a gafwyd
 chargeTypeDetails.amountLeft = Yn weddill i’w dalu
 
 chargeTypeDetails.viewThis = Bwrw golwg dros y
