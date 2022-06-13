@@ -64,7 +64,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Manage your VAT account - GOV.UK"
+          document.title() shouldBe "VAT - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -90,7 +90,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Your client’s VAT details - GOV.UK"
+          document.title() shouldBe "VAT - Your client’s VAT details - GOV.UK"
         }
       }
     }
@@ -212,7 +212,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Manage your VAT account - GOV.UK"
+          document.title() shouldBe "VAT - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -230,7 +230,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Your client’s VAT details - GOV.UK"
+          document.title() shouldBe "VAT - Your client’s VAT details - GOV.UK"
         }
       }
 

@@ -54,11 +54,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Return"
+          elementText(Selectors.chargeTitle) shouldBe "VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
 
@@ -100,11 +100,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment"
+          elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for underpaying by this amount"
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
         }
       }
 
@@ -123,11 +123,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment"
+          elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for overpaying by this amount"
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
         }
       }
 
@@ -146,11 +146,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Estimate"
+          elementText(Selectors.chargeTitle) shouldBe "Central assessment of VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the 12 Jan to 23 Mar 2018 return"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
 
@@ -215,11 +215,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Error correction repayment from HMRC"
+          elementText(Selectors.chargeTitle) shouldBe "Error correction of VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for correcting the 12 Jan to 23 Mar 2018 return"
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
         }
       }
 
@@ -238,11 +238,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Error correction payment"
+          elementText(Selectors.chargeTitle) shouldBe "Error correction of VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for correcting the 12 Jan to 23 Mar 2018 return"
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
         }
       }
 
@@ -311,8 +311,8 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "based on further information" +
-            " for the period 1 Jan to 1 Apr 2018"
+          elementText(Selectors.description) shouldBe "of VAT for " +
+            "1 Jan to 1 Apr 2018"
         }
       }
 
@@ -591,7 +591,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
         }
       }
 
@@ -614,7 +614,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
         }
       }
 
@@ -637,7 +637,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
         }
       }
 
@@ -706,7 +706,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
         }
       }
 
@@ -775,11 +775,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Return"
+        elementText(Selectors.chargeTitle) shouldBe "VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -821,11 +821,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment"
+        elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for underpaying by this amount"
+        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -844,11 +844,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "VAT officer’s assessment"
+        elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for overpaying by this amount"
+        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -867,11 +867,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Estimate"
+        elementText(Selectors.chargeTitle) shouldBe "Central assessment of VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -936,11 +936,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Error correction repayment from HMRC"
+        elementText(Selectors.chargeTitle) shouldBe "Error correction of VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for correcting the 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -959,11 +959,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Error correction payment"
+        elementText(Selectors.chargeTitle) shouldBe "Error correction of VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for correcting the 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
       }
     }
 
@@ -1032,8 +1032,8 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "based on further information" +
-          " for the period 1 Jan to 1 Apr 2018"
+        elementText(Selectors.description) shouldBe "of VAT for " +
+          "1 Jan to 1 Apr 2018"
       }
     }
 
@@ -1312,7 +1312,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
       }
     }
 
@@ -1335,7 +1335,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
       }
     }
 
@@ -1358,7 +1358,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
       }
     }
 
@@ -1427,7 +1427,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
       }
     }
 

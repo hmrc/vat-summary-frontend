@@ -70,7 +70,7 @@ class WhatYouOweChargeRowTemplateSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(s"<table>${view.body}</table>")
 
           "display the correct title" in {
-            elementText(Selectors.title) shouldBe "Return for the period 1 Jan to 2 Feb 2018"
+            elementText(Selectors.title) shouldBe "VAT for period 1 Jan to 2 Feb 2018"
           }
 
           "display the correct due text" in {

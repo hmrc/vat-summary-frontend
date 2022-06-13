@@ -134,7 +134,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
       "for the first payment" should {
 
         "render the correct title" in {
-          elementText(Selectors.title(1)) shouldBe "Return for the period 1 Jan to 31 Mar 2001"
+          elementText(Selectors.title(1)) shouldBe "VAT for period 1 Jan to 31 Mar 2001"
         }
 
         "render the correct amount" in {
@@ -282,7 +282,7 @@ class OpenPaymentsViewSpec extends ViewBaseSpec {
     "for the first payment" should {
 
       "render the correct title" in {
-        elementText(Selectors.title(1)) shouldBe "Return for the period 1 Jan to 31 Mar 2001"
+        elementText(Selectors.title(1)) shouldBe "VAT for period 1 Jan to 31 Mar 2001"
       }
 
       "render the correct amount" in {

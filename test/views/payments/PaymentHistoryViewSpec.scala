@@ -167,8 +167,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct charge description in the second column" in {
-          elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
-          elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
+          elementText(Selectors.descriptionTableChargeType) shouldBe "VAT"
+          elementText(Selectors.descriptionTableContent) shouldBe "for period 1 Jan to 1 Feb 2018"
         }
 
         "has the correct payment amount in the third column" in {
@@ -308,8 +308,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct charge description in the second column" in {
-          elementText(Selectors.descriptionTableChargeType) shouldBe "Return"
-          elementText(Selectors.descriptionTableContent) shouldBe "for the period 1 Jan to 1 Feb 2018"
+          elementText(Selectors.descriptionTableChargeType) shouldBe "VAT"
+          elementText(Selectors.descriptionTableContent) shouldBe "for period 1 Jan to 1 Feb 2018"
         }
 
         "has the correct payment amount in the third column" in {
