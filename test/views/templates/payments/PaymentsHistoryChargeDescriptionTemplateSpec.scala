@@ -307,11 +307,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Additional assessment"
+          elementText(Selectors.chargeTitle) shouldBe "Additional assessment of VAT"
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "of VAT for " +
+          elementText(Selectors.description) shouldBe "for " +
             "1 Jan to 1 Apr 2018"
         }
       }
@@ -1028,11 +1028,11 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Additional assessment"
+        elementText(Selectors.chargeTitle) shouldBe "Additional assessment of VAT"
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "of VAT for " +
+        elementText(Selectors.description) shouldBe "for " +
           "1 Jan to 1 Apr 2018"
       }
     }
