@@ -100,7 +100,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
+          elementText(Selectors.chargeTitle) shouldBe "Officer’s assessment of VAT"
         }
 
         "display the correct description" in {
@@ -123,7 +123,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
+          elementText(Selectors.chargeTitle) shouldBe "Officer’s assessment of VAT"
         }
 
         "display the correct description" in {
@@ -215,7 +215,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Error correction of VAT"
+          elementText(Selectors.chargeTitle) shouldBe "Error correction repayment from HMRC"
         }
 
         "display the correct description" in {
@@ -821,7 +821,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
+        elementText(Selectors.chargeTitle) shouldBe "Officer’s assessment of VAT"
       }
 
       "display the correct description" in {
@@ -844,7 +844,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Officers assessment of VAT"
+        elementText(Selectors.chargeTitle) shouldBe "Officer’s assessment of VAT"
       }
 
       "display the correct description" in {
@@ -936,7 +936,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Error correction of VAT"
+        elementText(Selectors.chargeTitle) shouldBe "Error correction repayment from HMRC"
       }
 
       "display the correct description" in {
