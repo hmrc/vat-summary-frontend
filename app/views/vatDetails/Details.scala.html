@@ -92,15 +92,15 @@
   @unverifiedUserEmailContent
 
   <div class="flex-container govuk-grid-row govuk-!-margin-top-6">
-    @nextPaymentSection(
+      @nextPaymentSection(
       detailsViewModel.paymentsData,
       detailsViewModel.hasMultiplePayments,
       detailsViewModel.paymentError,
       detailsViewModel.isHybridUser,
       detailsViewModel.paymentOverdue
-    )
+      )
 
-    @nextReturnSection(
+      @nextReturnSection(
       detailsViewModel.obligationData,
       detailsViewModel.hasMultipleReturnObligations,
       detailsViewModel.returnObligationOverdue,

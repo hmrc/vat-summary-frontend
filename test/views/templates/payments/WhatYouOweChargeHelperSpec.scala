@@ -51,7 +51,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge),false, messages)
 
         "return the description of the charge" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -88,7 +88,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -106,7 +106,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OADebitCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for underpaying by this amount")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -115,7 +115,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OACreditCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for overpaying by this amount")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -124,7 +124,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(CentralAssessmentCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the 1 Jan to 2 Feb 2018 return")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -151,7 +151,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionCreditCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for correcting the 1 Jan to 2 Feb 2018 return")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -160,7 +160,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for correcting the 1 Jan to 2 Feb 2018 return")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -187,7 +187,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AACharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("based on further information for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -295,7 +295,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountInstalments), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -304,7 +304,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnDebitCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -313,7 +313,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnCreditCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -340,7 +340,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -379,7 +379,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), true, messages)
 
         "return the description of the charge" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -416,7 +416,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ReturnDebitCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -434,7 +434,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OADebitCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for underpaying by this amount")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -443,7 +443,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(OACreditCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for overpaying by this amount")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -452,7 +452,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(CentralAssessmentCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the 1 Jan to 2 Feb 2018 return")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -479,7 +479,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionCreditCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for correcting the 1 Jan to 2 Feb 2018 return")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -488,7 +488,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(ErrorCorrectionDebitCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for correcting the 1 Jan to 2 Feb 2018 return")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -515,7 +515,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AACharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("based on further information for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -623,7 +623,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountInstalments), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -632,7 +632,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnDebitCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -641,7 +641,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnCreditCharge),true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -668,7 +668,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(AAReturnDebitCharge), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for the period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
