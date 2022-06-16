@@ -29,7 +29,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
     LocalDate.parse("2018-02-02"),
     "VAT Return Debit Charge",
     2.6,
-    3,
     300.33,
     200.22,
     100.11,
@@ -46,7 +45,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "VAT Return Debit Charge",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
@@ -62,7 +60,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodFrom" -> "2018-01-01",
           "periodTo" -> "2018-02-02",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
@@ -76,7 +73,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
@@ -90,7 +86,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "date",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
@@ -104,26 +99,11 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "rate",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isPenalty" -> "false"
         )) shouldBe Left(List(FormError("interestRate", List("error.real"), List())))
-      }
-
-      "the numberOfDaysLate field is invalid" in {
-        form.mapping.bind(Map(
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Example interest charge title",
-          "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "days",
-          "currentAmount" -> "300.33",
-          "amountReceived" -> "200.22",
-          "leftToPay" -> "100.11",
-          "isPenalty" -> "false"
-        )) shouldBe Left(List(FormError("numberOfDaysLate", List("error.number"), List())))
       }
 
       "the currentAmount field is invalid" in {
@@ -132,7 +112,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "amount",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
@@ -146,7 +125,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "amount",
           "leftToPay" -> "100.11",
@@ -160,7 +138,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "left",
@@ -174,7 +151,6 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "periodTo" -> "2018-02-02",
           "chargeType" -> "Example interest charge title",
           "interestRate" -> "2.6",
-          "numberOfDaysLate" -> "3",
           "currentAmount" -> "300.33",
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
