@@ -42,7 +42,7 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
   "The makePaymentRedirect value" should {
 
     "be a payment handoff URL generated from the model's parameters" in {
-      val amountInPence = (model.interestAmount * 100).toLong
+      val amountInPence = (model.leftToPay * 100).toLong
       val chargeTypeEncoded = model.chargeType.replace(" ", "%20")
 
       model.makePaymentRedirect should include(

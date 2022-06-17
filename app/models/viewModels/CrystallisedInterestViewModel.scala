@@ -34,10 +34,10 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          chargeReference: String,
                                          isPenalty: Boolean) extends ChargeDetailsViewModel {
 
-  override val outstandingAmount: BigDecimal = interestAmount
+  override val outstandingAmount: BigDecimal = leftToPay
 
   val makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
-    amountInPence = (interestAmount * 100).toLong,
+    amountInPence = (leftToPay * 100).toLong,
     taxPeriodMonth = periodTo.getMonthValue,
     taxPeriodYear = periodTo.getYear,
     vatPeriodEnding = periodTo.toString,
