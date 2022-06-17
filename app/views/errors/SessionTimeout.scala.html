@@ -19,8 +19,8 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(title = messages("sessionTimeout.title"), appConfig = appConfig, showLogout = false) {
- <h1 class="govuk-heading-l">@messages("sessionTimeout.title")</h1>
- <h2 class="govuk-heading-m">@messages("sessionTimeout.helpOne")</h2>
+ <h1 id="timeout-heading" class="govuk-heading-l">@messages("sessionTimeout.title")</h1>
+ <h2 id="timeout-subheading" class="govuk-heading-m">@messages("sessionTimeout.helpOne")</h2>
  <p class="govuk-body">
    @messages("sessionTimeout.helpTwo")
    <a class="govuk-link" href=@appConfig.signInUrl>@messages("sessionTimeout.helpThree")</a>@messages("common.fullStop")
