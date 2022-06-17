@@ -27,7 +27,6 @@ import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations
 import models.payments._
 import uk.gov.hmrc.http.HeaderCarrier
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsServiceSpec extends ControllerBaseSpec {
@@ -41,7 +40,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       periodKey = "#001"
     )))
 
-    val payments: Payments = Payments(Seq(
+    val payments: Seq[Payment] = Seq(
       PaymentWithPeriod(
         ReturnDebitCharge,
         periodFrom = LocalDate.parse("2017-11-22"),
@@ -52,7 +51,30 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false
       )
-      ))
+    )
+
+  val POAPayments: Seq[Payment] = Seq(
+      PaymentWithPeriod(
+        PaymentOnAccount,
+        periodFrom = LocalDate.parse("2017-11-22"),
+        periodTo = LocalDate.parse("2017-12-22"),
+        due = LocalDate.parse("2017-12-26"),
+        outstandingAmount = BigDecimal(1000.00),
+        periodKey = Some("#003"),
+        chargeReference = Some("XD002750002155"),
+        ddCollectionInProgress = false
+      ),
+      PaymentWithPeriod(
+        CentralAssessmentCharge,
+        periodFrom = LocalDate.parse("2017-11-22"),
+        periodTo = LocalDate.parse("2017-12-22"),
+        due = LocalDate.parse("2017-12-26"),
+        outstandingAmount = BigDecimal(0),
+        periodKey = Some("#003"),
+        chargeReference = Some("XD002750002155"),
+        ddCollectionInProgress = false
+      )
+    )
 
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
@@ -65,7 +87,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
       .expects(*, *, *, *, *, *)
       .returns(Future.successful(obligationResult))
   }
-    def callFinancialDataConnector(paymentsResult: HttpGetResult[Payments] = Right(payments)): Any = {
+    def callFinancialDataConnector(paymentsResult: HttpGetResult[Payments] = Right(Payments(payments))): Any = {
       (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
         .returns(Future.successful(paymentsResult))
@@ -118,10 +140,20 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     "the connector returns some outstanding payment obligations" should {
 
       "return the most recent outstanding payment obligation" in {
-        callFinancialDataConnector(paymentsResult = Right(payments))
+        callFinancialDataConnector(paymentsResult = Right(Payments(payments)))
         val result: ServiceResponse[Option[Payments]] =
           await(vatDetailsService.getPaymentObligations("1111"))
-        result shouldBe Right(Some(payments))
+        result shouldBe Right(Some(Payments(payments)))
+      }
+    }
+
+    "the connector filters out charge type POA and outstandingAmount = 0" should {
+
+      "return the expected amount of outstanding payment" in {
+        callFinancialDataConnector(paymentsResult = Right(Payments(payments ++ POAPayments)))
+        val result: ServiceResponse[Option[Payments]] =
+          await(vatDetailsService.getPaymentObligations("1111"))
+        result shouldBe Right(Some(Payments(payments)))
       }
     }
 
