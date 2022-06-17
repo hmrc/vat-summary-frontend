@@ -57,14 +57,6 @@
   if(model.isPenalty) "penalty" else "vat"
 }
 
-@lateByHtml = {
-  @if(model.numberOfDaysLate == 1) {
-    @messages("estimatedInterest.day")
-  } else {
-    @messages("estimatedInterest.days", model.numberOfDaysLate)
-  }
-}
-
 @mainTemplate(
   title = model.title,
   appConfig = appConfig,
@@ -90,10 +82,6 @@
 
       @govukSummaryList(SummaryList(
         rows = Seq(
-          SummaryListRow(
-            key = Key(content = Text(messages(s"estimatedInterest.${interestTypeMessageKey}LateBy"))),
-            value = Value(content = HtmlContent(lateByHtml))
-          ),
           SummaryListRow(
             key = Key(content = Text(messages(s"estimatedInterest.currentAmount"))),
             value = Value(content = HtmlContent(displayMoney(model.currentAmount)))
