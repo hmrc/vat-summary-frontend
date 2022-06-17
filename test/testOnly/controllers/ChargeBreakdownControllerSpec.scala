@@ -191,7 +191,6 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "periodTo" -> "2018-02-02",
         "chargeType" -> "VAT Return Debit Charge",
         "interestRate" -> "2.6",
-        "numberOfDaysLate" -> "3",
         "currentAmount" -> "300.33",
         "amountReceived" -> "200.22",
         "leftToPay" -> "100.11",
