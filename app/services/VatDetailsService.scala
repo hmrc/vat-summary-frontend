@@ -17,7 +17,6 @@
 package services
 
 import java.time.LocalDate
-
 import config.AppConfig
 import connectors.{FinancialDataConnector, VatObligationsConnector}
 import javax.inject.{Inject, Singleton}
@@ -27,7 +26,6 @@ import models.obligations.Obligation.Status._
 import models.obligations.VatReturnObligations
 import models.payments.{Payments, PaymentOnAccount}
 import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -51,7 +49,9 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
 
     financialDataConnector.getOpenPayments(vrn).map {
       case Right(payments) =>
-        val outstandingPayments = payments.financialTransactions.filter(_.outstandingAmount > 0).filterNot(_.chargeType equals PaymentOnAccount)
+        val outstandingPayments = payments.financialTransactions
+          .filter(_.outstandingAmount > 0)
+          .filterNot(_.chargeType equals PaymentOnAccount)
         if(outstandingPayments.nonEmpty) {
           Right(Some(Payments(outstandingPayments)))
         } else {
