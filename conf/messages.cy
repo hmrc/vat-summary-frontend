@@ -123,6 +123,16 @@ chargeTypeDetails.vatReturn = Ffurflen TAW hon
 
 whatYouOwe.viewReturn = Bwrw golwg dros y Ffurflen TAW
 
+crystallisedLPP1.explanation = ???
+crystallisedLPP1.onePart = ???
+crystallisedLPP1.twoParts = ???
+crystallisedLPP1.calculation = ???
+crystallisedLPP1.dueDate = Dyddiad dyledus
+crystallisedLPP1.penaltyAmount = ???
+crystallisedLPP1.amountReceived = Swm a gafwyd
+crystallisedLPP1.leftToPay = Yn weddill i’w dalu
+crystallisedLPP1.guidanceLink = ???
+
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.

@@ -34,7 +34,6 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
     LocalDate.parse("2018-02-02"),
     "VAT Return Debit Charge",
     2.6,
-    3,
     300.33,
     200.22,
     100.11,
@@ -103,35 +102,27 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct heading for the first row" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dt") shouldBe "VAT late by"
-      }
-
-      "display the number of days the interest is late by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"${viewModel.numberOfDaysLate} days"
-      }
-
-      "have the correct heading for the second row" in {
-        elementText(".govuk-summary-list__row:nth-child(2) > dt") shouldBe "Current amount (estimate)"
+        elementText(".govuk-summary-list__row:nth-child(1) > dt") shouldBe "Current amount (estimate)"
       }
 
       "display the current amount of interest accumulated" in {
-        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${viewModel.currentAmount}"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${viewModel.currentAmount}"
       }
 
-      "have the correct heading for the third row" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dt") shouldBe "Amount received"
+      "have the correct heading for the second row" in {
+        elementText(".govuk-summary-list__row:nth-child(2) > dt") shouldBe "Amount received"
       }
 
       "display the amount received" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${viewModel.amountReceived}"
+        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${viewModel.amountReceived}"
       }
 
-      "have the correct heading for the fourth row" in {
-        elementText(".govuk-summary-list__row:nth-child(4) > dt") shouldBe "Left to pay"
+      "have the correct heading for the third row" in {
+        elementText(".govuk-summary-list__row:nth-child(3) > dt") shouldBe "Left to pay"
       }
 
       "display the outstanding amount" in {
-        elementText(".govuk-summary-list__row:nth-child(4) > dd") shouldBe s"£${viewModel.leftToPay}"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${viewModel.leftToPay}"
       }
 
       "have the correct subheading" in {
@@ -184,20 +175,6 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       "have the correct third explanation paragraph" in {
         elementText("p.govuk-body:nth-of-type(3)") shouldBe "The calculation we use for each day is: " +
           s"(Interest rate of ${viewModel.interestRate}% × penalty amount unpaid) ÷ days in a year"
-      }
-
-      "have the correct heading for the first row" in {
-        elementText(".govuk-summary-list__key") shouldBe "Late payment penalty late by"
-      }
-    }
-
-    "the accumulated interest is only 1 day late" should {
-
-      lazy val view = injectedView(viewModel.copy(numberOfDaysLate = 1), Html(""))(request, messages, mockConfig, user)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "display the number of days the interest is late by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1 day"
       }
     }
   }

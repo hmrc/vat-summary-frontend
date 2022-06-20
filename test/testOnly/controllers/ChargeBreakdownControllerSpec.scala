@@ -90,7 +90,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Your client’s VAT details - GOV.UK"
+          document.title() shouldBe "VAT - Your client’s VAT details - GOV.UK"
         }
       }
     }
@@ -191,7 +191,6 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "periodTo" -> "2018-02-02",
         "chargeType" -> "VAT Return Debit Charge",
         "interestRate" -> "2.6",
-        "numberOfDaysLate" -> "3",
         "currentAmount" -> "300.33",
         "amountReceived" -> "200.22",
         "leftToPay" -> "100.11",
@@ -212,7 +211,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Manage your VAT account - GOV.UK"
+          document.title() shouldBe "VAT - Manage your VAT account - GOV.UK"
         }
       }
 
@@ -230,7 +229,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Return - Your client’s VAT details - GOV.UK"
+          document.title() shouldBe "VAT - Your client’s VAT details - GOV.UK"
         }
       }
 
@@ -508,42 +507,6 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "chargeReference" -> "XXXXXX1234567890",
         "isOverdue" -> "false"
       )
-
-      "the user is logged in as a principal entity" should {
-
-        lazy val result = {
-          mockPrincipalAuth()
-          mockServiceInfoCall()
-          controller.crystallisedLPP1Breakdown(requestWithForm(fakePostWithSession))
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "load the page" in {
-          val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Default interest - Manage your VAT account - GOV.UK"
-        }
-      }
-
-      "the user is logged in as an agent" should {
-
-        lazy val result = {
-          mockAgentAuth()
-          mockServiceInfoCall()
-          controller.crystallisedLPP1Breakdown(requestWithForm(agentPostFinancialRequest))
-        }
-
-        "return 200" in {
-          status(result) shouldBe OK
-        }
-
-        "load the page" in {
-          val document: Document = Jsoup.parse(contentAsString(result))
-          document.title() shouldBe "Default interest - Your client’s VAT details - GOV.UK"
-        }
-      }
 
       "the interest breakdown feature switch is disabled" should {
 

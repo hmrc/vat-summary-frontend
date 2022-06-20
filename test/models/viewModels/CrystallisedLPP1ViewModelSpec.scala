@@ -16,37 +16,37 @@
 
 package models.viewModels
 
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import java.time.LocalDate
 
 import models.viewModels.CrystallisedLPP1ViewModel.form
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
 
-class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers{
+class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
 
   val model: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
-    numberOfDays = 30,
-    part1Days = 15,
-    part2Days = 30,
-    interestRate = 15.0,
-    part1UnpaidVAT = 77.00,
-    Some(77.00),
-    LocalDate.parse("2018-01-01"),
-    154.00,
-    0.00,
-    154.00,
-    LocalDate.parse("2018-01-01"),
-    LocalDate.parse("2018-02-02"),
-    "Late Payment Penalty",
-    "XXXXXX1234567890",
+    99,
+    10,
+    Some(20),
+    2.4,
+    111.11,
+    Some(222.22),
+    LocalDate.parse("2020-01-01"),
+    500.55,
+    100.11,
+    400.44,
+    LocalDate.parse("2020-03-03"),
+    LocalDate.parse("2020-04-04"),
+    "VAT Return 1st LPP",
+    "CHARGEREF",
     isOverdue = false
   )
 
   "The makePaymentRedirect value" should {
 
     "be a payment handoff URL generated from the model's parameters" in {
-      val amountInPence = (model.penaltyAmount * 100).toLong
+      val amountInPence = (model.leftToPay * 100).toLong
       val chargeTypeEncoded = model.chargeType.replace(" ", "%20")
 
       model.makePaymentRedirect should include(
@@ -55,205 +55,203 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers{
       )
     }
   }
-
   "The CrystallisedLPP1ViewModel form" should {
 
     "bind successfully" when {
 
       "all values are provided and valid" in {
         form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
+          "numberOfDays" -> "99",
+          "part1Days" -> "10",
+          "part2Days" -> "20",
+          "interestRate" -> "2.4",
+          "part1UnpaidVAT" -> "111.11",
+          "part2UnpaidVAT" -> "222.22",
+          "dueDate" -> "2020-01-01",
+          "penaltyAmount" -> "500.55",
+          "amountReceived" -> "100.11",
+          "leftToPay" -> "400.44",
+          "periodFrom" -> "2020-03-03",
+          "periodTo" -> "2020-04-04",
+          "chargeType" -> "VAT Return 1st LPP",
+          "chargeReference" -> "CHARGEREF",
           "isOverdue" -> "false"
         )) shouldBe Right(model)
       }
     }
+  }
+  "fail to bind" when {
 
-    "fail to bind" when {
-
-      "a field is not provided" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("chargeType", List("error.required"), List())))
-      }
-
-      "the periodFrom field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "12-13-14-15",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("periodFrom", List("error.date"), List())))
-      }
-      "the periodTo field is invalid" in {
+    "a field is not provided" in {
       form.mapping.bind(Map(
-        "numberOfDays" -> "30",
-        "part1Days" -> "15",
-        "part2Days" -> "30",
-        "interestRate" -> "15.0",
-        "part1UnpaidVAT" -> "77.00",
-        "part2UnpaidVAT" -> "77.00",
-        "dueDate" -> "2018-01-01",
-        "penaltyAmount" -> "154.00",
-        "amountReceived" -> "0.00",
-        "leftToPay" -> "154.00",
-        "periodFrom" -> "2018-01-01",
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("chargeType", List("error.required"), List())))
+    }
+
+    "the periodFrom field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "12-13-14-15",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("periodFrom", List("error.date"), List())))
+    }
+    "the periodTo field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
         "periodTo" -> "nope",
-        "chargeType" -> "Late Payment Penalty",
-        "chargeReference" -> "XXXXXX1234567890",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
         "isOverdue" -> "false"
       )) shouldBe Left(List(FormError("periodTo", List("error.date"), List())))
-      }
-      "the interest rate field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "true",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("interestRate", List("error.real"), List())))
-      }
-      "the dueDate field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "true",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("dueDate", List("error.date"), List())))
-      }
-      "the penalty amount field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "300.33.44.55",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("penaltyAmount", List("error.real"), List())))
-      }
-      "the amountReceived field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "nope",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("amountReceived", List("error.real"), List())))
-      }
-      "the leftToPay field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "100.11.0",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "false"
-        )) shouldBe Left(List(FormError("leftToPay", List("error.real"), List())))
-      }
-      "isOverdue field is invalid" in {
-        form.mapping.bind(Map(
-          "numberOfDays" -> "30",
-          "part1Days" -> "15",
-          "part2Days" -> "30",
-          "interestRate" -> "15.0",
-          "part1UnpaidVAT" -> "77.00",
-          "part2UnpaidVAT" -> "77.00",
-          "dueDate" -> "2018-01-01",
-          "penaltyAmount" -> "154.00",
-          "amountReceived" -> "0.00",
-          "leftToPay" -> "154.00",
-          "periodFrom" -> "2018-01-01",
-          "periodTo" -> "2018-02-02",
-          "chargeType" -> "Late Payment Penalty",
-          "chargeReference" -> "XXXXXX1234567890",
-          "isOverdue" -> "12.0"
-        )) shouldBe Left(List(FormError("isOverdue", List("error.boolean"), List())))
-      }
+    }
+    "the interest rate field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "true",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("interestRate", List("error.real"), List())))
+    }
+    "the dueDate field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "true",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("dueDate", List("error.date"), List())))
+    }
+    "the penalty amount field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "300.33.44.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("penaltyAmount", List("error.real"), List())))
+    }
+    "the amountReceived field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "nope",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("amountReceived", List("error.real"), List())))
+    }
+    "the leftToPay field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "100.11.0",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("leftToPay", List("error.real"), List())))
+    }
+    "isOverdue field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "interestRate" -> "2.4",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "12.0"
+      )) shouldBe Left(List(FormError("isOverdue", List("error.boolean"), List())))
     }
   }
 }

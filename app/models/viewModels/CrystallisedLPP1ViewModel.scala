@@ -16,27 +16,31 @@
 
 package models.viewModels
 
+import play.api.i18n.Messages
+import views.templates.payments.PaymentMessageHelper
 import java.time.LocalDate
 
 import play.api.data.Form
-import play.api.data.Forms.mapping
 import play.api.data.Forms._
+import play.api.data.Forms.mapping
 
-case class CrystallisedLPP1ViewModel(numberOfDays : Int,
-                                    part1Days: Int,
-                                    part2Days: Int,
-                                    interestRate: BigDecimal,
-                                    part1UnpaidVAT: BigDecimal,
-                                    part2UnpaidVAT: Option[BigDecimal],
-                                    dueDate: LocalDate,
-                                    penaltyAmount: BigDecimal,
-                                    amountReceived: BigDecimal,
-                                    leftToPay: BigDecimal,
-                                    periodFrom: LocalDate,
-                                    periodTo: LocalDate,
-                                    chargeType: String,
-                                    chargeReference: String,
-                                    isOverdue: Boolean) {
+case class CrystallisedLPP1ViewModel(numberOfDays: Int,
+                                     part1Days: Int,
+                                     part2Days: Option[Int],
+                                     interestRate: BigDecimal,
+                                     part1UnpaidVAT: BigDecimal,
+                                     part2UnpaidVAT: Option[BigDecimal],
+                                     dueDate: LocalDate,
+                                     penaltyAmount: BigDecimal,
+                                     amountReceived: BigDecimal,
+                                     leftToPay: BigDecimal,
+                                     periodFrom: LocalDate,
+                                     periodTo: LocalDate,
+                                     chargeType: String,
+                                     chargeReference: String,
+                                     isOverdue: Boolean) extends ChargeDetailsViewModel {
+
+  override val outstandingAmount: BigDecimal = leftToPay
 
   val makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (leftToPay * 100).toLong,
@@ -47,6 +51,8 @@ case class CrystallisedLPP1ViewModel(numberOfDays : Int,
     dueDate = dueDate.toString,
     chargeReference = chargeReference
   ).url
+
+  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
 }
 
 object CrystallisedLPP1ViewModel {
@@ -54,7 +60,7 @@ object CrystallisedLPP1ViewModel {
   val form: Form[CrystallisedLPP1ViewModel] = Form(mapping(
     "numberOfDays" -> number,
     "part1Days" -> number,
-    "part2Days" -> number,
+    "part2Days" -> optional(number),
     "interestRate" -> bigDecimal,
     "part1UnpaidVAT" -> bigDecimal,
     "part2UnpaidVAT" -> optional(bigDecimal),
