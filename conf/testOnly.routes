@@ -20,6 +20,7 @@ GET         /vat-through-software/test-only/what-you-owe                       t
 POST        /vat-through-software/test-only/amount-to-pay                      testOnly.controllers.ChargeBreakdownController.chargeBreakdown
 POST        /vat-through-software/test-only/estimated-interest                 testOnly.controllers.ChargeBreakdownController.estimatedInterestBreakdown
 POST        /vat-through-software/test-only/crystallised-interest              testOnly.controllers.ChargeBreakdownController.crystallisedInterestBreakdown
+POST        /vat-through-software/test-only/crystallised-lpp1                  testOnly.controllers.ChargeBreakdownController.crystallisedLPP1Breakdown
 
 GET         /vat-through-software/test-only/:vrn/portal-stub                   testOnly.controllers.PortalStubController.show(vrn: String)
 

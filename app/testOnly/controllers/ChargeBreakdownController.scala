@@ -19,15 +19,16 @@ package testOnly.controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
+import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, EstimatedInterestView, CrystallisedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView}
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
@@ -86,6 +87,25 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
               InternalServerError(errorView())
             },
             model => Ok(crystallisedInterestView(model, navLinks))
+          )
+        }
+      } else {
+        Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
+      }
+    }
+  }
+
+  def crystallisedLPP1Breakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
+    implicit user => DDInterrupt.interruptCheck { _ =>
+      if(appConfig.features.interestBreakdownEnabled()) {
+        serviceInfoService.getPartial.map { navLinks =>
+          CrystallisedLPP1ViewModel.form.bindFromRequest.fold(
+            errorForm => {
+              logger.warn("[ChargeBreakdownController][crystallisedLPP1Breakdown] - " +
+                s"Unexpected error when binding form: $errorForm")
+              InternalServerError(errorView())
+            },
+            model => Ok("success") // TODO load new view
           )
         }
       } else {
