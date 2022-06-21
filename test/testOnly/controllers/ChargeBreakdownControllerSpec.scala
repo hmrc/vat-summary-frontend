@@ -485,4 +485,126 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "The crystallisedLPP1Breakdown action" when {
+
+    "valid form information is submitted in the request" when {
+
+      def requestWithForm(request: FakeRequest[_]): FakeRequest[AnyContentAsFormUrlEncoded] = request.withFormUrlEncodedBody(
+        "numberOfDays" -> "30",
+        "part1Days" -> "15",
+        "part2Days" -> "30",
+        "interestRate" -> "15.0",
+        "part1UnpaidVAT" -> "77.00",
+        "part2UnpaidVAT" -> "77.00",
+        "dueDate" -> "2018-01-01",
+        "penaltyAmount" -> "154.00",
+        "amountReceived" -> "0.00",
+        "leftToPay" -> "154.00",
+        "periodFrom" -> "2018-01-01",
+        "periodTo" -> "2018-02-02",
+        "chargeType" -> "VAT Default Interest",
+        "chargeReference" -> "XXXXXX1234567890",
+        "isOverdue" -> "false"
+      )
+
+      "the interest breakdown feature switch is disabled" should {
+
+        "return 404" in {
+          mockAppConfig.features.interestBreakdownEnabled(false)
+          mockPrincipalAuth()
+          val result = controller.crystallisedLPP1Breakdown(requestWithForm(fakeRequestWithSession))
+
+          status(result) shouldBe NOT_FOUND
+        }
+      }
+    }
+
+    "invalid form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.crystallisedLPP1Breakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "no form information is submitted in the request" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockServiceInfoCall()
+        controller.crystallisedLPP1Breakdown(fakeRequestWithSession)
+      }
+
+      "return 500" in {
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+
+      "load the payments error view" in {
+        val document: Document = Jsoup.parse(contentAsString(result))
+        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      }
+    }
+
+    "the user is not logged in" should {
+
+      lazy val result = {
+        mockMissingBearerToken()
+        controller.crystallisedLPP1Breakdown(fakeRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the sign-in URL" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the user has invalid credentials" should {
+
+      "return 403" in {
+        mockInsufficientEnrolments()
+        val result = controller.crystallisedLPP1Breakdown()(fakeRequest)
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
+    "the user is insolvent without access" should {
+
+      "return 403" in {
+        mockPrincipalAuth()
+        val result = controller.crystallisedLPP1Breakdown()(insolventRequest)
+        status(result) shouldBe FORBIDDEN
+      }
+    }
+
+    "the user has no viewDirectDebitInterrupt in session" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.crystallisedLPP1Breakdown()(DDInterruptRequest)
+      }
+
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the DD interrupt controller" in {
+        redirectLocation(result) shouldBe
+          Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
+      }
+    }
+  }
 }

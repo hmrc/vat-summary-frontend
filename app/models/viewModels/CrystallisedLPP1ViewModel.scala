@@ -18,8 +18,11 @@ package models.viewModels
 
 import play.api.i18n.Messages
 import views.templates.payments.PaymentMessageHelper
-
 import java.time.LocalDate
+
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.data.Forms.mapping
 
 case class CrystallisedLPP1ViewModel(numberOfDays: Int,
                                      part1Days: Int,
@@ -50,4 +53,26 @@ case class CrystallisedLPP1ViewModel(numberOfDays: Int,
   ).url
 
   def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
+}
+
+object CrystallisedLPP1ViewModel {
+
+  val form: Form[CrystallisedLPP1ViewModel] = Form(mapping(
+    "numberOfDays" -> number,
+    "part1Days" -> number,
+    "part2Days" -> optional(number),
+    "interestRate" -> bigDecimal,
+    "part1UnpaidVAT" -> bigDecimal,
+    "part2UnpaidVAT" -> optional(bigDecimal),
+    "dueDate" -> localDate,
+    "penaltyAmount" -> bigDecimal,
+    "amountReceived" -> bigDecimal,
+    "leftToPay" -> bigDecimal,
+    "periodFrom" -> localDate,
+    "periodTo" -> localDate,
+    "chargeType" -> text,
+    "chargeReference" -> text,
+    "isOverdue" -> boolean
+  )(CrystallisedLPP1ViewModel.apply)(CrystallisedLPP1ViewModel.unapply))
+
 }
