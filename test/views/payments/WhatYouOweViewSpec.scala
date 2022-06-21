@@ -196,7 +196,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "have a section for guidance if the user cannot pay today" which {
 
       "has the correct heading" in {
-        elementText("h2:nth-of-type(1)") shouldBe "If you cannot pay today"
+        elementText("#cannot-pay-heading") shouldBe "If you cannot pay today"
       }
 
       "has the correct paragraph text" in {

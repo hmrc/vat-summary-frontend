@@ -126,7 +126,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct subheading" in {
-        elementText("h2") shouldBe "Estimates"
+        elementText("#estimates-subheading") shouldBe "Estimates"
       }
 
       "have the correct paragraph explaining estimates" in {
