@@ -30,7 +30,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   object Selectors {
     val pageHeading = "h1"
     val caption = ".govuk-caption-xl"
-    val secondaryHeading = "h2"
+    val secondaryHeading = "#no-payments-subheading"
     val backLink = ".govuk-back-link"
     val noPaymentsDetail = "#noPaymentsDetail p:nth-of-type(1)"
     val paymentLink = "#noPaymentsDetail p:nth-of-type(1) a"

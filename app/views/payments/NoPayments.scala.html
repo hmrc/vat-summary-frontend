@@ -65,7 +65,7 @@
       @mtdNotificationBanner(mandationStatus)
 
       <div class="govuk-form-group" id="noPaymentsDetail">
-        <h2 class="govuk-body-l">
+        <h2 id="no-payments-subheading" class="govuk-body-l">
             @if(user.isAgent) {@messages("noPayments.oweNothingAgent")} else {@messages("noPayments.oweNothing")}
         </h2>
         <p class="govuk-body">
