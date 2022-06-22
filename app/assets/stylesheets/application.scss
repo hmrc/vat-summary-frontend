@@ -17,12 +17,18 @@ $hmrc-assets-path: "/vat-through-software/assets/lib/hmrc-frontend/hmrc/assets/"
   margin-bottom: 30px;
 }
 
-dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__key {
-  width: 70%;
+dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__key,
+.vat-cert-value,
+.stp {
+  width: 50%;
 }
 
-.govuk-summary-list__value {
-  width: 30%;
+.what-you-owe-key {
+  width: 60%
+}
+
+.what-you-owe-amount, .what-you-owe-links {
+  width: 17%
 }
 
 @media screen {

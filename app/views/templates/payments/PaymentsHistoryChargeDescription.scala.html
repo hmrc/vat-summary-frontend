@@ -25,8 +25,8 @@
   PaymentMessageHelper.getChargeType(transaction.chargeType.value)
 }
 
-<span class="govuk-!-font-weight-bold">@messages(s"${chargeType.title}")</span>
-        <span class="govuk-hint">
+<span class="govuk-!-font-weight-bold">@messages(s"${chargeType.title}")</span><br>
+        <p class="govuk-hint govuk-!-margin-top-0">
             @PaymentMessageHelper.getCorrectDescription(chargeType.principalUserDescription.getOrElse(""),
             chargeType.agentDescription.getOrElse(""), transaction.taxPeriodFrom, transaction.taxPeriodTo, user.isAgent)
-        </span>
+        </p>

@@ -31,8 +31,8 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     injector.instanceOf[PaymentsHistoryChargeDescription]
 
   object Selectors {
-    val chargeTitle = "span:nth-of-type(1)"
-    val description = "span:nth-of-type(2)"
+    val chargeTitle = "span"
+    val description = "p"
   }
 
   "The PaymentsHistoryChargeDescription template" when {

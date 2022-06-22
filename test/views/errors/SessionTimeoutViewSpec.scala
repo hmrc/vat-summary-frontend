@@ -27,8 +27,8 @@ class SessionTimeoutViewSpec extends ViewBaseSpec {
   "Rendering the session timeout page" should {
 
     object Selectors {
-      val pageHeading = "h1"
-      val subheading = "h2"
+      val pageHeading = "#timeout-heading"
+      val subheading = "#timeout-subheading"
       val instructions = "p.govuk-body"
       val signInLink = s"$instructions > a"
     }
