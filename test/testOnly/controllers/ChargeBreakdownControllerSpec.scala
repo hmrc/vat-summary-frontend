@@ -23,7 +23,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView, CrystallisedLPP1View}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
@@ -35,7 +35,8 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
-    injector.instanceOf[PaymentsError], injector.instanceOf[CrystallisedInterestView], mockServiceErrorHandler
+    injector.instanceOf[PaymentsError], injector.instanceOf[CrystallisedInterestView],
+    injector.instanceOf[CrystallisedLPP1View], mockServiceErrorHandler
   )
 
   "The chargeBreakdown action" when {
@@ -507,6 +508,42 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "chargeReference" -> "XXXXXX1234567890",
         "isOverdue" -> "false"
       )
+
+      "the user is logged in as a principal entity" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          controller.crystallisedLPP1Breakdown(requestWithForm(fakePostWithSession))
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "Default interest - Manage your VAT account - GOV.UK"
+        }
+      }
+
+      "the user is logged in as an agent" should {
+
+        lazy val result = {
+          mockAgentAuth()
+          mockServiceInfoCall()
+          controller.crystallisedLPP1Breakdown(requestWithForm(agentPostFinancialRequest))
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "Default interest - Your client’s VAT details - GOV.UK"
+        }
+      }
 
       "the interest breakdown feature switch is disabled" should {
 
