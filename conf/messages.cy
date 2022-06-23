@@ -216,13 +216,13 @@ deregPartial.cancelRegistration.title = Canslo cofrestriad TAW
 deregPartial.cancelRegistration.content = Canslo’ch cofrestriad TAW os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i chi fod wedi cofrestru ar gyfer TAW.
 deregPartial.historicDeregistration.title = Eich cofrestriad TAW
 deregPartial.historicDeregistration.content = Cafodd eich cofrestriad TAW ei ganslo ar {0}.
-deregPartial.historicDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor ffenestr neu dab newydd)
+deregPartial.historicDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor mewn tab newydd)
 deregPartial.pendingDeregistration.title = Canslo cofrestriad TAW
 deregPartial.pendingDeregistration.content = Mae’r cais i ganslo’ch cofrestriad TAW ar y gweill.
 deregPartial.futureDeregistration.title = Eich cofrestriad TAW
 deregPartial.futureDeregistration.content = Bydd eich cofrestriad TAW yn cael ei ganslo ar {0}.
-deregPartial.futureDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor ffenestr neu dab newydd)
-deregPartial.vatGroup.title = Canslo cofrestriad TAW (yn agor ffenestr neu dab newydd)
+deregPartial.futureDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor mewn tab newydd)
+deregPartial.vatGroup.title = Canslo cofrestriad TAW (yn agor mewn tab newydd)
 deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ganslo’r cofrestriad drwy ddefnyddio ffurflen VAT7.
 
 
@@ -399,10 +399,6 @@ returnPeriod.MA = Ebrill, Gorffennaf, Hydref a Ionawr
 returnPeriod.MB = Mai, Awst, Thachwedd a Chwefror
 returnPeriod.MC = Mawrth, Mehefin, Medi a Rhagfyr
 returnPeriod.nonStandard = Ansafonol
-
-global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW – GOV.UK
-global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
-global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 
 emailVerification.message.1 = Nid yw’ch cyfeiriad e-bost
 emailVerification.message.2 = yn gweithio.
