@@ -13,6 +13,32 @@ base.back = Back
 base.signOut = Sign out
 base.pageTitle = {0} - {1} - GOV.UK
 
+month.1 = January
+month.2 = February
+month.3 = March
+month.4 = April
+month.5 = May
+month.6 = June
+month.7 = July
+month.8 = August
+month.9 = September
+month.10 = October
+month.11 = November
+month.12 = December
+
+month.short.1 = Jan
+month.short.2 = Feb
+month.short.3 = Mar
+month.short.4 = Apr
+month.short.5 = May
+month.short.6 = Jun
+month.short.7 = Jul
+month.short.8 = Aug
+month.short.9 = Sep
+month.short.10 = Oct
+month.short.11 = Nov
+month.short.12 = Dec
+
 breadcrumbs.bta = Business tax account
 
 btaNavLinks.home = Home
@@ -253,13 +279,13 @@ deregPartial.cancelRegistration.title = Cancel VAT registration
 deregPartial.cancelRegistration.content = Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.
 deregPartial.historicDeregistration.title = Your VAT registration
 deregPartial.historicDeregistration.content = Your VAT registration was cancelled on {0}.
-deregPartial.historicDeregistration.link = How to register for VAT (opens in a new window or tab).
+deregPartial.historicDeregistration.link = How to register for VAT (opens in a new tab).
 deregPartial.pendingDeregistration.title = Cancel VAT registration
 deregPartial.pendingDeregistration.content = The request to cancel your VAT registration is pending.
 deregPartial.futureDeregistration.title = Your VAT registration
 deregPartial.futureDeregistration.content = Your VAT registration will be cancelled on {0}.
-deregPartial.futureDeregistration.link = How to register for VAT (opens in new window or tab).
-deregPartial.vatGroup.title = Cancel VAT registration (opens in a new window or tab)
+deregPartial.futureDeregistration.link = How to register for VAT (opens in a new tab).
+deregPartial.vatGroup.title = Cancel VAT registration (opens in a new tab)
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
