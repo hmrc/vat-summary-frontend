@@ -219,7 +219,7 @@ paymentsHistory.title = Payment history
 paymentsHistory.noCurrentYearHistory = You have not made or received any payments using the new VAT service this year.
 paymentsHistory.previousPayments.heading = Previous payments
 paymentsHistory.previousPayments.youCan = You can
-paymentsHistory.previousPayments.viewPreviousPayments = view your previous payments (opens in a new tab)
+paymentsHistory.previousPayments.viewPreviousPayments = view your previous payments
 paymentsHistory.previousPayments.beforeMtd = if you made payments before joining Making Tax Digital.
 paymentsHistory.backToTop = Back to top
 paymentsHistory.insolvencyNotice = You cannot view payments made before the insolvency date.
@@ -285,7 +285,7 @@ deregPartial.pendingDeregistration.content = The request to cancel your VAT regi
 deregPartial.futureDeregistration.title = Your VAT registration
 deregPartial.futureDeregistration.content = Your VAT registration will be cancelled on {0}.
 deregPartial.futureDeregistration.link = How to register for VAT (opens in a new tab).
-deregPartial.vatGroup.title = Cancel VAT registration (opens in a tab)
+deregPartial.vatGroup.title = Cancel VAT registration (opens in a new tab)
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
