@@ -29,8 +29,8 @@ object PaymentMessageHelper {
   object UnrepayableOverpayment extends PaymentMessageHelper(
     VatUnrepayableOverpayment.value,
     "chargeType.vatUnrepayableOverpaymentTitle",
-    Some("chargeType.UnrepayableOverpaymentDescription"),
-    Some("chargeType.UnrepayableOverpaymentDescription")
+    Some("chargeType.vatUnrepayableOverpaymentDescription"),
+    Some("chargeType.vatUnrepayableOverpaymentDescription")
   )
 
   object RepaymentSupplementRecovery extends PaymentMessageHelper(

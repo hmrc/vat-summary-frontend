@@ -5,6 +5,10 @@ common.fullStop = .
 common.notProvided = Heb ddarparu
 common.warning = Rhybudd
 
+navTitle.nonAgent = Rheoli eich cyfrif TAW
+navTitle.agent = Manylion TAW eich cleient
+navTitle.vat = TAW
+
 base.back = Yn ôl
 base.signOut = Allgofnodi
 base.pageTitle = {0} - {1} - GOV.UK
@@ -34,10 +38,6 @@ month.short.9 = Medi
 month.short.10 = Hyd
 month.short.11 = Tach
 month.short.12 = Rhag
-
-navTitle.nonAgent = Rheoli eich cyfrif TAW
-navTitle.agent = Manylion TAW eich cleient
-navTitle.vat = TAW
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
@@ -113,15 +113,79 @@ openPayments.whatOweHelp.headingAgent = Mae’r swm sy’n ddyledus yn anghywir 
 openPayments.vatReturn = ar gyfer y cyfnod {0}
 openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
+whatYouOwe.title = ???
+whatYouOwe.agentTitle = ???
+whatYouOwe.totalAmountToPay = ???
+whatYouOwe.total = ???
+whatYouOwe.due = ???
+whatYouOwe.viewReturn = Bwrw golwg dros y Ffurflen TAW
+whatYouOwe.headCell.paymentType = ???
+whatYouOwe.headCell.amountDue = ???
+whatYouOwe.anyPaymentsYouMake = ???
+whatYouOwe.agent.anyPaymentsYouMake = ???
+whatYouOwe.anyPaymentsYouMake.firstBullet = ???
+whatYouOwe.anyPaymentsYouMake.firstBulletLink = ???
+whatYouOwe.anyPaymentsYouMake.agent.firstBulletLink = ???
+whatYouOwe.anyPaymentsYouMake.secondBullet = ???
+whatYouOwe.anyPaymentsYouMake.agent.secondBullet = ???
+whatYouOwe.makePayment = ???
+whatYouOwe.ifYouCannotPayOne = ???
+whatYouOwe.ifYouCannotPayTwo = ???
+whatYouOwe.ifYouCannotPayThree = ???
+whatYouOwe.ifYouCannotPayFour = ???
+whatYouOwe.isIncorrectOne = ???
+whatYouOwe.agent.isIncorrectOne = ???
+whatYouOwe.isIncorrectTwo = ???
+whatYouOwe.agent.isIncorrectTwo = ???
+whatYouOwe.isIncorrectThree = ???
+whatYouOwe.agent.isIncorrectThree = ???
+whatYouOwe.isIncorrectFour = ???
+whatYouOwe.agent.isIncorrectFour = ???
+whatYouOwe.isIncorrectFive = ???
+whatYouOwe.details.agent.paymentHelpOne = ???
+whatYouOwe.details.agent.paymentHelpTwo = ???
+whatYouOwe.details.agent.paymentHelpThree = ???
+whatYouOwe.details.agent.paymentHelpFour = ???
+
+chargeTypeDetails.viewThis = Bwrw golwg dros y
+chargeTypeDetails.vatReturn = Ffurflen TAW hon
 chargeTypeDetails.dueDate = Dyddiad dyledus
 chargeTypeDetails.chargeDue = Tâl gwreiddiol
 chargeTypeDetails.amountReceived = Swm a gafwyd
 chargeTypeDetails.amountLeft = Yn weddill i’w dalu
 
-chargeTypeDetails.viewThis = Bwrw golwg dros y
-chargeTypeDetails.vatReturn = Ffurflen TAW hon
+chargeTypeDetails.button = ???
+chargeTypeDetails.link = ???
+chargeTypeDetails.agentLink = ???
+chargeTypeDetails.insetTextReference = ???
+chargeTypeDetails.insetTextReferenceAgent = ???
 
-whatYouOwe.viewReturn = Bwrw golwg dros y Ffurflen TAW
+estimatedInterest.vatChargeInterest = ???
+estimatedInterest.penaltyChargeInterest = ???
+estimatedInterest.vatIncreaseDaily = ???
+estimatedInterest.penaltyIncreaseDaily = ???
+estimatedInterest.calculation = ???
+estimatedInterest.vatCalculation = ???
+estimatedInterest.penaltyCalculation = ???
+estimatedInterest.currentAmount = ???
+estimatedInterest.amountReceived = ???
+estimatedInterest.leftToPay = ???
+estimatedInterest.estimates = ???
+estimatedInterest.estimatesExplanation = ???
+estimatedInterest.calculationLink = ???
+
+crystallisedInterest.vatChargeInterest = ???
+crystallisedInterest.penaltyChargeInterest = ???
+crystallisedInterest.vatIncreaseDaily = ???
+crystallisedInterest.penaltyIncreaseDaily = ???
+crystallisedInterest.calculation = ???
+crystallisedInterest.vatCalculation = ???
+crystallisedInterest.penaltyCalculation = ???
+crystallisedInterest.dueDate = ???
+crystallisedInterest.interestAmount = ???
+crystallisedInterest.amountReceived = ???
+crystallisedInterest.leftToPay = ???
+crystallisedInterest.guidanceLink = ???
 
 crystallisedLPP1.explanation = ???
 crystallisedLPP1.onePart = ???
@@ -225,57 +289,74 @@ deregPartial.futureDeregistration.link = Sut i gofrestru ar gyfer TAW (yn agor m
 deregPartial.vatGroup.title = Canslo cofrestriad TAW (yn agor mewn tab newydd)
 deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ganslo’r cofrestriad drwy ddefnyddio ffurflen VAT7.
 
-
-
 # Charge types
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
-chargeType.UnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
+chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
+
 chargeType.repaymentSupplementRecTitle = Adennill atodiad ad-dalu
 chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd gan CThEM
+
 chargeType.indirectRevRecoveryTitle = Adennill taliadau
 chargeType.indirectRevRecoveryDescription = er mwyn adennill taliad a wnaed ar gam gan CThEM
+
 chargeType.defaultInterestTitle = Llog diffygdalu
 chargeType.furtherInterestTitle = Llog pellach
 chargeType.defaultAndFurtherInterestDescription = yn seiliedig ar ein hasesiad o’r dreth ar gyfer y cyfnod {0}
+
 chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
 chargeType.vatReturnCreditChargeDescription = ar gyfer y Ffurflen TAW ar gyfer {0}
+
 chargeType.vatReturnDebitChargeTitle = TAW
 chargeType.vatReturnDebitChargeDescription = ar gyfer y cyfnod {0}
+
 chargeType.officerAssessmentChargeTitle = Asesiad swyddog o TAW
 chargeType.officerAssessmentDebitChargeDescription = ar gyfer {0}
 chargeType.officerAssessmentCreditChargeDescription = ar gyfer y cyfnod {0}
+
 chargeType.vatCentralAssessmentTitle = Asesiad canolog o TAW
 chargeType.vatCentralAssessmentDescription = ar gyfer y cyfnod {0}
+
 chargeType.vatDefaultSurchargeTitle = Gordal
 chargeType.vatDefaultSurchargeDescription = ar gyfer talu’r dreth sy’n codi o’r Ffurflen TAW ar gyfer {0} yn hwyr
+
 chargeType.vatErrorCorrectionDebitChargeTitle = Cywiriad gwall TAW
 chargeType.vatErrorCorrectionCreditChargeTitle =  Ad-daliad gan CThEM ar gyfer cywiro gwall
 chargeType.vatErrorCorrectionChargeDescription =  ar gyfer {0}
+
 chargeType.vatRepaymentSupplementTitle = Iawndal gan CThEM am ad-dalu’n hwyr
 chargeType.vatRepaymentSupplementDescription = gwnaethom gymryd gormod o amser i ad-dalu’r dreth yn codi o’r Ffurflen TAW ar gyfer {0}
+
 chargeType.OADefaultInterestTitle = Llog ar asesiad y swyddog TAW
 chargeType.OADefaultInterestDescription = a godir ar asesiad y swyddog
+
 chargeType.bnpRegPre2010ChargeTitle = Cosb am gofrestru’n hwyr
 chargeType.bnpRegPre2010ChargeDescription = oherwydd y dylech fod wedi’ch cofrestru ar gyfer TAW yn gynt
 chargeType.bnpRegPre2010ChargeDescription.agent = oherwydd y dylai’ch cleient fod wedi’i gofrestru ar gyfer TAW yn gynt
+
 chargeType.bnpRegPost2010ChargeTitle = Cosb am gofrestru’n hwyr
 chargeType.bnpRegPost2010ChargeDescription = oherwydd y dylech fod wedi’ch cofrestru ar gyfer TAW yn gynt
 chargeType.bnpRegPost2010ChargeDescription.agent = oherwydd y dylai’ch cleient fod wedi’i gofrestru ar gyfer TAW yn gynt
+
 chargeType.ftnMatPre2010ChargeTitle = Cosb am fethu â hysbysu
 chargeType.ftnMatPre2010ChargeDescription = oherwydd na wnaethoch roi gwybod i ni nad ydych wedi’ch eithrio mwyach rhag cofrestru ar gyfer TAW
 chargeType.ftnMatPre2010ChargeDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni nad oedd wedi’i eithrio mwyach rhag cofrestru ar gyfer TAW
+
 chargeType.ftnMatPost2010ChargeTitle = Cosb am fethu â hysbysu
 chargeType.ftnMatPost2010ChargeDescription = oherwydd na wnaethoch roi gwybod i ni nad ydych wedi’ch eithrio mwyach rhag cofrestru ar gyfer TAW
 chargeType.ftnMatPost2010ChargeDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni nad oedd wedi’i eithrio mwyach rhag cofrestru ar gyfer TAW
+
 chargeType.miscPenaltyCharge = Cosb gyffredinol TAW
+
 chargeType.VatOfficersAssessmentFurtherInterestTitle = Llog pellach ar asesiad y swyddog TAW
 chargeType.VatOfficersAssessmentFurtherInterestDescription = a godir ar asesiad y swyddog
+
 chargeType.VatAdditionalAssessmentTitle = Asesiad ychwanegol o TAW
 chargeType.VatAdditionalAssessmentDescription = ar gyfer {0}
 chargeType.VatAdditionalAssessmentDefaultInterestTitle = Llog asesiad ychwanegol
 chargeType.VatAdditionalAssessmentDefaultInterestDescription = a godir ar y dreth ychwanegol a aseswyd ar gyfer y cyfnod {0}
 chargeType.VatAdditionalAssessmentFurtherInterestTitle = Llog pellach ar asesiad ychwanegol
 chargeType.VatAdditionalAssessmentFurtherInterestDescription = a godir ar y dreth ychwanegol a aseswyd ar gyfer y cyfnod {0}
+
 chargeType.VatAnnualAccountMonthlyInstalmentTitle = Rhandaliad misol cyfrifyddu blynyddol
 chargeType.VatAnnualAccountMonthlyInstalmentDescription = ar gyfer y cyfnod {0}
 chargeType.VatAnnualAccountQuarterlyInstalmentsTitle = Rhandaliad chwarterol cyfrifyddu blynyddol
@@ -284,71 +365,98 @@ chargeType.VatAnnualAccountReturnDebitChargeTitle = Balans cyfrifyddu blynyddol
 chargeType.VatAnnualAccountReturnDebitChargeDescription = ar gyfer y cyfnod {0}
 chargeType.VatAnnualAccountReturnCreditChargeTitle = Ad-daliad cyfrifyddu blynyddol
 chargeType.VatAnnualAccountReturnCreditChargeDescription = ar gyfer y cyfnod {0}
+
 chargeType.VatStatutoryInterestTitle = Llog statudol
 chargeType.VatStatutoryInterestDescription = llog a delir oherwydd gwall gan CThEM
+
 chargeType.vatSecurityDepositRequestTitle = Blaendal sicrwydd gofynnol
 chargeType.vatSecurityDepositRequestDescription = oherwydd nad ydych wedi talu TAW yn eich busnes presennol neu mewn busnes blaenorol
 chargeType.vatSecurityDepositRequestDescription.agent = oherwydd na wnaeth eich cleient dalu TAW yn ei fusnes presennol neu mewn busnes blaenorol
+
 chargeType.vatEcNoticeFurtherInterestTitle = Llog pellach ar gywiro gwall
 chargeType.vatEcNoticeFurtherInterestDescription = a godir ar y swm a aseswyd
+
 chargeType.civilEvasionPenaltyTitle = Cosb osgoi sifil TAW
 chargeType.civilEvasionPenaltyDescription = oherwydd ein bod wedi darganfod anghysondebau yn ymwneud ag anonestrwydd
+
 chargeType.vatInaccuraciesInECSalesTitle = Cosb am anghywirdebau
 chargeType.vatInaccuraciesInECSalesDescription = oherwydd eich bod wedi rhoi gwybodaeth wallus yn eich Rhestr Gwerthiannau yn y GE
 chargeType.vatInaccuraciesInECSalesDescription.agent = oherwydd bod eich cleient wedi rhoi gwybodaeth anghywir yn ei Restr Gwerthiannau yn y GE
+
 chargeType.vatFailureToSubmitECSalesTitle = Cosb Rhestr Gwerthiannau yn y GE
 chargeType.vatFailureToSubmitECSalesDescription = oherwydd na wnaethoch gyflwyno Rhestr Gwerthiannau yn y GE neu rydych wedi ei chyflwyno’n hwyr
 chargeType.vatFailureToSubmitECSalesDescription.agent = oherwydd na wnaeth eich cleient gyflwyno Rhestr Gwerthiannau yn y GE neu ei fod wedi’i chyflwyno’n hwyr
+
 chargeType.ftnEachPartnerTitle = Cosb am fethu â hysbysu
 chargeType.ftnEachPartnerDescription = oherwydd na wnaethoch roi gwybod i ni am yr holl bartneriaid a newidiadau yn eich partneriaeth
 chargeType.ftnEachPartnerDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni am yr holl bartneriaid a newidiadau yn ei bartneriaeth
+
 chargeType.vatOAInaccuraciesFrom2009Title = Cosb am anghywirdebau
 chargeType.vatOAInaccuraciesFrom2009Description = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = oherwydd bod eich cleient wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
+
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Cosb am anghywirdebau
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 chargeType.vatInaccuracyAssessmentsPenChargeDescription.agent = oherwydd bod eich cleient wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
+
 chargeType.vatMpPre2009ChargeTitle = Cosb am gam-ddatgan
 chargeType.vatMpPre2009ChargeDescription = oherwydd eich bod wedi gwneud datganiad anghywir
 chargeType.vatMpPre2009ChargeDescription.agent = oherwydd bod eich cleient wedi gwneud datganiad anghywir
+
 chargeType.vatMpRepeatedPre2009ChargeTitle = Cosb am gam-ddatgan dro ar ôl tro
 chargeType.vatMpRepeatedPre2009ChargeDescription = oherwydd eich bod wedi gwneud datganiadau anghywir dro ar ôl tro
 chargeType.vatMpRepeatedPre2009ChargeDescription.agent = oherwydd bod eich cleient wedi gwneud datganiadau anghywir dro ar ôl tro
+
 chargeType.vatInaccuraciesReturnReplacedChargeTitle = Cosb am anghywirdebau
 chargeType.vatInaccuraciesReturnReplacedChargeDescription = oherwydd eich bod wedi cyflwyno gwybodaeth wallus ar gyfer y cyfnod {0}
 chargeType.vatInaccuraciesReturnReplacedChargeDescription.agent = oherwydd bod eich cleient wedi cyflwyno gwybodaeth anghywir ar gyfer y cyfnod {0}
+
 chargeType.vatWrongDoingPenaltyChargeTitle = Cosb am gamweddu
 chargeType.vatWrongDoingPenaltyChargeDescription = oherwydd eich bod wedi codi TAW pan na ddylech fod wedi gwneud hynny
 chargeType.vatWrongDoingPenaltyChargeDescription.agent = oherwydd bod eich cleient wedi codi TAW pan na ddylai fod wedi gwneud hynny
+
 chargeType.vatPADefaultInterestTitle = Llog diffygdalu ar asesiad i ddiogelu
 chargeType.vatPADefaultInterestDescription = a godir ar yr asesiad i ddiogelu
+
 chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Llog diffygdalu ar gywiro gwall
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = a godir ar y swm a aseswyd
+
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
 chargeType.vatPaFurtherInterestDescription = sy’n ddyledus ar yr asesiad i ddiogelu oherwydd na thalwyd hyn mewn pryd
+
 chargeType.vatCarterPenaltyChargeTitle = Cosb am beidio â chyflwyno’n gywir
 chargeType.vatCarterPenaltyChargeDescription = oherwydd na wnaethoch ddefnyddio’r sianel ddigidol gywir ar gyfer y cyfnod {0}
 chargeType.vatCarterPenaltyChargeDescription.agent = oherwydd na wnaeth eich cleient ddefnyddio’r sianel ddigidol gywir ar gyfer y cyfnod {0}
+
 chargeType.vatFailureToNotifyRCSLTitle = Cosb am fethu â hysbysu
 chargeType.vatFailureToNotifyRCSLDescription = oherwydd eich bod wedi methu â rhoi gwybod i ni am y dyddiad y gwnaethoch werthiant tâl gwrthdro neu roi’r gorau i wneud cyflenwadau
 chargeType.vatFailureToNotifyRCSLDescription.agent = oherwydd bod eich cleient wedi methu â rhoi gwybod i ni am y dyddiad y gwnaeth werthiant tâl gwrthdro neu roi’r gorau i wneud cyflenwadau
 chargeType.vatFailureToSubmitRCSLTitle = Cosb Rhestr Gwerthiannau Tâl Gwrthdro
 chargeType.vatFailureToSubmitRCSLDescription = oherwydd eich bod wedi methu â chyflwyno Rhestr Gwerthiannau Tâl Gwrthdro
 chargeType.vatFailureToSubmitRCSLDescription.agent = oherwydd bod eich cleient wedi methu â chyflwyno Rhestr Gwerthiannau Tâl Gwrthdro
+
 chargeType.vatCreditReturnOffsetChargeTitle = Ad-daliad rhannol o ordaliad
 chargeType.vatCreditReturnOffsetChargeDescription = ad-daliad rhannol ar gyfer y cyfnod {0}
+
 chargeType.vatProtectiveAssessmentChargeTitle = Asesiad i ddiogelu
 chargeType.vatProtectiveAssessmentChargeDescription = ar gyfer y cyfnod {0}
+
 chargeType.unallocatedPaymentTitle = Taliad heb ei ddyranu
 chargeType.unallocatedPaymentDescription = gwnaethoch ordaliad y gellir ei ad-dalu i chi, neu y gellir ei gadw ar gyfrif
 chargeType.unallocatedPaymentDescription.agent = gwnaeth eich cleient ordaliad y gellir ei ad-dalu iddo, neu y gellir ei gadw ar gyfrif
+
 chargeType.refundTitle = Ad-daliad oddi wrth CThEM
 chargeType.refundDescription = gan i chi ofyn am ad-daliad o ordaliad a wnaethoch
 chargeType.refundDescription.agent = oherwydd i’ch cleient ofyn am ad-daliad o ordaliad a wnaeth
+
 chargeType.POAInstalmentTitle = Rhandaliad taliad ar gyfrif
+
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
 chargeType.POAChargeDescription =  ar gyfer y cyfnod {0}
+
+chargeType.VATReturn1stLPPTitle = ???
+chargeType.VATReturn1stLPPDescription = ???
 
 notFound.title = Heb ddod o hyd i’r dudalen
 notFound.heading = Ni ellir dod o hyd i’r dudalen hon
@@ -362,7 +470,6 @@ banner.phaseName = BETA
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau
-
 
 partyType.1 = Unig Fasnachwr
 partyType.2 = Partneriaeth Atebolrwydd Cyfyngedig

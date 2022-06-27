@@ -153,6 +153,7 @@ chargeTypeDetails.dueDate = Due date
 chargeTypeDetails.chargeDue = Original charge
 chargeTypeDetails.amountReceived = Amount received
 chargeTypeDetails.amountLeft = Left to pay
+
 chargeTypeDetails.button = Pay now
 chargeTypeDetails.link = Return to what you owe
 chargeTypeDetails.agentLink = Return to what your client owes
@@ -290,53 +291,72 @@ deregPartial.vatGroup.content = To disband VAT group, you need to cancel the reg
 
 # Charge types
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
-chargeType.UnrepayableOverpaymentDescription = cannot be repaid after 4 years
+chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
+
 chargeType.repaymentSupplementRecTitle = Repayment supplement recovery
 chargeType.repaymentSupplementRecDescription = to recover the amount overpaid by HMRC
+
 chargeType.indirectRevRecoveryTitle = Payment recovery
 chargeType.indirectRevRecoveryDescription = to recover a payment made in error by HMRC
+
 chargeType.defaultInterestTitle = Default interest
 chargeType.furtherInterestTitle = Further interest
 chargeType.defaultAndFurtherInterestDescription = based on our assessment of tax for the period {0}
+
 chargeType.vatReturnCreditChargeTitle = Repayment from HMRC
 chargeType.vatReturnCreditChargeDescription = for the {0} return
+
 chargeType.vatReturnDebitChargeTitle = VAT
 chargeType.vatReturnDebitChargeDescription = for period {0}
+
 chargeType.officerAssessmentChargeTitle = Officer’s assessment of VAT
 chargeType.officerAssessmentDebitChargeDescription = for {0}
 chargeType.officerAssessmentCreditChargeDescription = for {0}
+
 chargeType.vatCentralAssessmentTitle = Central assessment of VAT
 chargeType.vatCentralAssessmentDescription = for period {0}
+
 chargeType.vatDefaultSurchargeTitle = Surcharge
 chargeType.vatDefaultSurchargeDescription = for late payment of the {0} return
+
 chargeType.vatErrorCorrectionDebitChargeTitle = Error correction of VAT
 chargeType.vatErrorCorrectionCreditChargeTitle =  Error correction repayment from HMRC
 chargeType.vatErrorCorrectionChargeDescription = for {0}
+
 chargeType.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 chargeType.vatRepaymentSupplementDescription = we took too long to repay the {0} return
+
 chargeType.OADefaultInterestTitle = VAT officer’s assessment interest
 chargeType.OADefaultInterestDescription = charged on the officer’s assessment
+
 chargeType.bnpRegPre2010ChargeTitle = Penalty for late registration
 chargeType.bnpRegPre2010ChargeDescription = because you should have been registered for VAT earlier
 chargeType.bnpRegPre2010ChargeDescription.agent = because your client should have been registered for VAT earlier
+
 chargeType.bnpRegPost2010ChargeTitle = Penalty for late registration
 chargeType.bnpRegPost2010ChargeDescription = because you should have been registered for VAT earlier
 chargeType.bnpRegPost2010ChargeDescription.agent = because your client should have been registered for VAT earlier
+
 chargeType.ftnMatPre2010ChargeTitle = Failure to notify penalty
 chargeType.ftnMatPre2010ChargeDescription = because you did not tell us you are no longer exempt from VAT registration
 chargeType.ftnMatPre2010ChargeDescription.agent = because your client did not tell us they were no longer exempt from VAT registration
+
 chargeType.ftnMatPost2010ChargeTitle = Failure to notify penalty
 chargeType.ftnMatPost2010ChargeDescription = because you did not tell us you are no longer exempt from VAT registration
 chargeType.ftnMatPost2010ChargeDescription.agent = because your client did not tell us they were no longer exempt from VAT registration
+
 chargeType.miscPenaltyCharge = VAT general penalty
+
 chargeType.VatOfficersAssessmentFurtherInterestTitle = VAT officer’s assessment further interest
 chargeType.VatOfficersAssessmentFurtherInterestDescription = charged on the officer’s assessment
+
 chargeType.VatAdditionalAssessmentTitle = Additional assessment of VAT
 chargeType.VatAdditionalAssessmentDescription = for {0}
 chargeType.VatAdditionalAssessmentDefaultInterestTitle = Additional assessment interest
 chargeType.VatAdditionalAssessmentDefaultInterestDescription = charged on additional tax assessed for the period {0}
 chargeType.VatAdditionalAssessmentFurtherInterestTitle = Additional assessment further interest
 chargeType.VatAdditionalAssessmentFurtherInterestDescription = charged on additional tax assessed for the period {0}
+
 chargeType.VatAnnualAccountMonthlyInstalmentTitle = Annual accounting monthly instalment
 chargeType.VatAnnualAccountMonthlyInstalmentDescription = for the period {0}
 chargeType.VatAnnualAccountQuarterlyInstalmentsTitle = Annual accounting quarterly instalment
@@ -345,74 +365,98 @@ chargeType.VatAnnualAccountReturnDebitChargeTitle = Annual accounting balance
 chargeType.VatAnnualAccountReturnDebitChargeDescription = for period {0}
 chargeType.VatAnnualAccountReturnCreditChargeTitle = Annual accounting repayment
 chargeType.VatAnnualAccountReturnCreditChargeDescription = for the period {0}
+
 chargeType.VatStatutoryInterestTitle = Statutory interest
 chargeType.VatStatutoryInterestDescription = interest paid because of an error by HMRC
+
 chargeType.vatSecurityDepositRequestTitle = Security deposit requirement
 chargeType.vatSecurityDepositRequestDescription = because you have not paid VAT in your current business or a previous business
 chargeType.vatSecurityDepositRequestDescription.agent = because your client did not pay VAT in their current business or a previous business
+
 chargeType.vatEcNoticeFurtherInterestTitle = Error correction further interest
 chargeType.vatEcNoticeFurtherInterestDescription = charged on assessed amount
+
 chargeType.civilEvasionPenaltyTitle = VAT civil evasion penalty
 chargeType.civilEvasionPenaltyDescription = because we have identified irregularities involving dishonesty
+
 chargeType.vatInaccuraciesInECSalesTitle = Inaccuracies penalty
 chargeType.vatInaccuraciesInECSalesDescription = because you have provided inaccurate information in your EC sales list
 chargeType.vatInaccuraciesInECSalesDescription.agent = because your client has provided inaccurate information in their EC sales list
+
 chargeType.vatFailureToSubmitECSalesTitle = EC sales list penalty
 chargeType.vatFailureToSubmitECSalesDescription = because you have not submitted an EC sales list or you have submitted it late
 chargeType.vatFailureToSubmitECSalesDescription.agent = because your client has not submitted an EC sales list or has submitted it late
+
 chargeType.ftnEachPartnerTitle = Failure to notify penalty
 chargeType.ftnEachPartnerDescription = because you did not tell us about all the partners and changes in your partnership
 chargeType.ftnEachPartnerDescription.agent = because your client did not tell us about all the partners and changes in their partnership
+
 chargeType.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 chargeType.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = because your client submitted an inaccurate document for the period {0}
+
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Inaccuracies penalty
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = because you submitted an inaccurate document for the period {0}
 chargeType.vatInaccuracyAssessmentsPenChargeDescription.agent = because your client submitted an inaccurate document for the period {0}
+
 chargeType.vatMpPre2009ChargeTitle = Misdeclaration penalty
 chargeType.vatMpPre2009ChargeDescription = because you have made an incorrect declaration
 chargeType.vatMpPre2009ChargeDescription.agent = because your client has made an incorrect declaration
+
 chargeType.vatMpRepeatedPre2009ChargeTitle = Misdeclaration repeat penalty
 chargeType.vatMpRepeatedPre2009ChargeDescription = because you have repeatedly made incorrect declarations
 chargeType.vatMpRepeatedPre2009ChargeDescription.agent = because your client has repeatedly made incorrect declarations
+
 chargeType.vatInaccuraciesReturnReplacedChargeTitle = Inaccuracies penalty
 chargeType.vatInaccuraciesReturnReplacedChargeDescription = because you have submitted inaccurate information for the period {0}
 chargeType.vatInaccuraciesReturnReplacedChargeDescription.agent = because your client submitted inaccurate information for the period {0}
+
 chargeType.vatWrongDoingPenaltyChargeTitle = Wrongdoing penalty
 chargeType.vatWrongDoingPenaltyChargeDescription = because you charged VAT when you should not have done
 chargeType.vatWrongDoingPenaltyChargeDescription.agent = because your client charged VAT when they should not have done
+
 chargeType.vatPADefaultInterestTitle = Protective assessment default interest
 chargeType.vatPADefaultInterestDescription = charged on the protective assessment
+
 chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = charged on assessed amount
+
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
 chargeType.vatPaFurtherInterestDescription = due on the protective assessment as this was not paid on time
+
 chargeType.vatCarterPenaltyChargeTitle = Penalty for not filing correctly
 chargeType.vatCarterPenaltyChargeDescription = because you did not use the correct digital channel for the period {0}
 chargeType.vatCarterPenaltyChargeDescription.agent = because your client did not use the correct digital channel for the period {0}
+
 chargeType.vatFailureToNotifyRCSLTitle = Failure to notify penalty
 chargeType.vatFailureToNotifyRCSLDescription = because you failed to notify us of the date you made a reverse charge sale or stopped making supplies
 chargeType.vatFailureToNotifyRCSLDescription.agent = because your client failed to notify us of the date they made a reverse charge sale or stopped making supplies
 chargeType.vatFailureToSubmitRCSLTitle = Reverse Charge sales list penalty
 chargeType.vatFailureToSubmitRCSLDescription = because you have failed to submit a Reverse Charge sales list
 chargeType.vatFailureToSubmitRCSLDescription.agent = because your client failed to submit a reverse charge sales list
+
 chargeType.vatCreditReturnOffsetChargeTitle = Overpayment partial refund
 chargeType.vatCreditReturnOffsetChargeDescription = partial repayment for period {0}
+
 chargeType.vatProtectiveAssessmentChargeTitle = Protective assessment
 chargeType.vatProtectiveAssessmentChargeDescription = of VAT for period {0}
+
 chargeType.unallocatedPaymentTitle = Unallocated payment
 chargeType.unallocatedPaymentDescription = you made an overpayment which can be refunded to you or left on account
 chargeType.unallocatedPaymentDescription.agent = your client made an overpayment which can be refunded to them or left on account
+
 chargeType.refundTitle = Refund payment from HMRC
 chargeType.refundDescription = as you requested a refund on an overpayment you made
 chargeType.refundDescription.agent = as your client requested a refund on an overpayment they made
+
 chargeType.POAInstalmentTitle = Payment on account instalment
+
 chargeType.POAReturnDebitChargeTitle = Payment on account balance
 chargeType.POAReturnCreditChargeTitle = Payment on account repayment
 chargeType.POAChargeDescription = for period {0}
+
 chargeType.VATReturn1stLPPTitle =  Late payment penalty
 chargeType.VATReturn1stLPPDescription = for late payment of VAT for VAT period {0}
-
 
 notFound.title = Page not found
 notFound.heading = This page cannot be found
