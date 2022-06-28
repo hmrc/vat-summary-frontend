@@ -41,24 +41,18 @@ month.short.12 = Dec
 
 breadcrumbs.bta = Business tax account
 
-btaNavLinks.home = Home
-btaNavLinks.manageAccount = Manage account
-btaNavLinks.messages = Messages
-btaNavLinks.helpAndContact = Help and contact
-
 sessionTimeout.title = Session timed out
 sessionTimeout.helpOne = Sorry, your session has timed out due to inactivity.
 sessionTimeout.helpTwo = To use this service you need to
 sessionTimeout.helpThree = sign in
 
+notFound.title = Page not found
+notFound.heading = This page cannot be found
+notFound.message = Please check that you have entered the correct web address.
+
 unauthorised.title = You are not authorised to use this service
 unauthorised.signUpWithSoftware = You need to sign up to use software to submit your VAT Returns.
 unauthorised.alreadySignedUp = If you have already signed up, you need to sign in with the correct Government Gateway details.
-
-userResearch.heading = Please help us improve our service
-userResearch.enterSurvey = Enter our survey
-userResearch.close = No thanks
-userResearch.close.context = I do not want to enter the survey
 
 vatDetails.title = Your VAT account
 vatDetails.manageYourVat = Manage your VAT
@@ -457,15 +451,6 @@ chargeType.POAChargeDescription = for period {0}
 
 chargeType.VATReturn1stLPPTitle =  Late payment penalty
 chargeType.VATReturn1stLPPDescription = for late payment of VAT for VAT period {0}
-
-notFound.title = Page not found
-notFound.heading = This page cannot be found
-notFound.message = Please check that you have entered the correct web address.
-
-banner.newService = This is a new service – your
-banner.feedback = feedback
-banner.feedbackImprove = will help us to improve it.
-banner.phaseName = BETA
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

@@ -41,24 +41,18 @@ month.short.12 = Rhag
 
 breadcrumbs.bta = Cyfrif Treth Busnes
 
-btaNavLinks.home = Hafan
-btaNavLinks.manageAccount = Rheoli’r cyfrif
-btaNavLinks.messages = Negeseuon
-btaNavLinks.helpAndContact = Cymorth a chysylltu
-
 sessionTimeout.title = Sesiwn wedi dod i ben
 sessionTimeout.helpOne = Mae’n flin gennym, mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch.
 sessionTimeout.helpTwo = I ddefnyddio’r gwasanaeth hwn, rhaid i chi
 sessionTimeout.helpThree = fewngofnodi
 
+notFound.title = Heb ddod o hyd i’r dudalen
+notFound.heading = Ni ellir dod o hyd i’r dudalen hon
+notFound.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
+
 unauthorised.title = Nid ydych wedi’ch awdurdodi i ddefnyddio’r gwasanaeth hwn
 unauthorised.signUpWithSoftware = Mae angen i chi gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno’ch Ffurflenni TAW.
 unauthorised.alreadySignedUp = Os ydych eisoes wedi cofrestru, bydd angen i chi fewngofnodi gan ddefnyddio’r manylion cywir ar gyfer Porth y Llywodraeth.
-
-userResearch.heading = Helpwch ni i wella ein gwasanaeth
-userResearch.enterSurvey = Cymerwch ran yn ein harolwg
-userResearch.close = Dim diolch
-userResearch.close.context = Nid wyf eisiau cymryd rhan yn yr arolwg
 
 vatDetails.title = Eich cyfrif TAW
 vatDetails.manageYourVat = Rheoli’ch TAW
@@ -457,15 +451,6 @@ chargeType.POAChargeDescription =  ar gyfer y cyfnod {0}
 
 chargeType.VATReturn1stLPPTitle = ???
 chargeType.VATReturn1stLPPDescription = ???
-
-notFound.title = Heb ddod o hyd i’r dudalen
-notFound.heading = Ni ellir dod o hyd i’r dudalen hon
-notFound.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
-
-banner.newService = Gwasanaeth newydd yw hwn – bydd eich
-banner.feedback = adborth
-banner.feedbackImprove = yn ein helpu i’w wella.
-banner.phaseName = BETA
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
