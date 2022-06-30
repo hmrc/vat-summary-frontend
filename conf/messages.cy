@@ -498,9 +498,9 @@ emailVerification.message.3 = Ewch ati i gywiro hyn nawr
 
 penaltiesBanner.heading = Cosbau am gyflwyno’n hwyr ac am dalu’n hwyr
 penaltiesBanner.totalPoints = Cyfanswm y pwyntiau cosb: {0}
-penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu: £{0}
-penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb: £{0}
-penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach: £{0}
+penaltiesBanner.crystalisedPenalty = Swm y gosb sydd i’w dalu:
+penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty = Amcangyfrif o swm y gosb:
+penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gosb bellach:
 penaltiesBanner.linkSingular = Cael gwybod pam mae gennych gosb
 penaltiesBanner.linkPlural = Cael gwybod pam mae gennych gosbau
 

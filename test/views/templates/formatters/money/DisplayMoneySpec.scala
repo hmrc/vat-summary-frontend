@@ -27,7 +27,10 @@ class DisplayMoneySpec extends ViewBaseSpec {
 
     val displayMoney = injector.instanceOf[DisplayMoney]
     val positiveWholeValue = BigDecimal(3000)
-    val positiveDecimalValue = BigDecimal(3000.75)
+    val positiveZeroDecimalValue = BigDecimal(3000.00)
+    val positiveDecimalValue = BigDecimal(3000.99)
+    val positiveOneDecimalValue = BigDecimal(3000.9)
+    val positiveOneZeroDecimalValue = BigDecimal(3000.0)
 
     "the value passed is whole" should {
 
@@ -45,7 +48,37 @@ class DisplayMoneySpec extends ViewBaseSpec {
       lazy val document: Document = Jsoup.parse(template.body)
 
       "return a monetary decimal value" in {
-        document.body.text() shouldBe "£3,000.75"
+        document.body.text() shouldBe "£3,000.99"
+      }
+    }
+
+    "the value passed is has only one decimal" should {
+
+      lazy val template = displayMoney(positiveOneDecimalValue)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "return a monetary decimal value" in {
+        document.body.text() shouldBe "£3,000.90"
+      }
+    }
+
+    "the value passed is has one zero decimal" should {
+
+      lazy val template = displayMoney(positiveOneZeroDecimalValue)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "return a monetary decimal value" in {
+        document.body.text() shouldBe "£3,000"
+      }
+    }
+
+    "the value passed is has zero decimals" should {
+
+      lazy val template = displayMoney(positiveZeroDecimalValue)
+      lazy val document: Document = Jsoup.parse(template.body)
+
+      "return a monetary decimal value" in {
+        document.body.text() shouldBe "£3,000"
       }
     }
   }

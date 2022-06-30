@@ -15,21 +15,22 @@
  *@
 
 @import models.penalties.PenaltiesSummary
+@import views.html.templates.formatters.money.DisplayMoney
 
-@this(govukNotificationBanner: GovukNotificationBanner)
+@this(displayMoney: DisplayMoney, govukNotificationBanner: GovukNotificationBanner)
 
 @(penaltiesSummary: PenaltiesSummary)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @bannerContent = {
   <div class="govuk-!-margin-bottom-3">
       @if(penaltiesSummary.noOfCrystalisedPenalties > 0) {
-        <div>@messages("penaltiesBanner.crystalisedPenalty", penaltiesSummary.crystalisedPenaltyAmountDue)</div>
+        <div>@messages("penaltiesBanner.crystalisedPenalty") @displayMoney(penaltiesSummary.crystalisedPenaltyAmountDue)</div>
       }
       @if(penaltiesSummary.noOfEstimatedPenalties > 0 && penaltiesSummary.noOfCrystalisedPenalties == 0) {
-        <div>@messages("penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty", penaltiesSummary.estimatedPenaltyAmount)</div>
+        <div>@messages("penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty") @displayMoney(penaltiesSummary.estimatedPenaltyAmount)</div>
       }
       @if(penaltiesSummary.noOfEstimatedPenalties > 0 && penaltiesSummary.noOfCrystalisedPenalties > 0) {
-        <div>@messages("penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty", penaltiesSummary.estimatedPenaltyAmount)</div>
+        <div>@messages("penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty") @displayMoney(penaltiesSummary.estimatedPenaltyAmount)</div>
       }
       @if(penaltiesSummary.noOfPoints > 0) {
         <div>@messages("penaltiesBanner.totalPoints", penaltiesSummary.noOfPoints)</div>

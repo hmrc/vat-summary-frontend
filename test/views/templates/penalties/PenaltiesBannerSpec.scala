@@ -118,11 +118,11 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is more than one crystalised penalty" should {
 
-          lazy val view = injectedView(model.copy(noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.99))
+          lazy val view = injectedView(model.copy(noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.9))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct penalty information" in {
-            elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £200.99"
+            elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £200.90"
           }
 
           "have the correct link text" in {
@@ -140,7 +140,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is one estimated penalty" should {
 
-          lazy val view = injectedView(model.copy(noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 100.00))
+          lazy val view = injectedView(model.copy(noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 100.0))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
