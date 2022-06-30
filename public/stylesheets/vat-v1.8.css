@@ -111,3 +111,15 @@ html[data-useragent*='MSIE 10.0'] .flex-container {
 .js-enabled .govuk-header__navigation {
     display: block;
 }
+
+.what-you-owe-link-charge {
+    text-align: left;
+    font-size: 1.1875rem;
+    color: #069;
+    cursor: pointer;
+    text-decoration: underline;
+    border: none;
+    background-color: #FFFFFF;
+    padding: 0;
+}
+
