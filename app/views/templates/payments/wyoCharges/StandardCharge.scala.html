@@ -34,13 +34,18 @@
   <input type="hidden" name="makePaymentRedirect" value="@charge.makePaymentRedirect">
   <input type="hidden" name="periodFrom" value="@charge.periodFrom">
   <input type="hidden" name="periodTo" value="@charge.periodTo">
-  <button class = "what-you-owe-link-charge govuk-link" type="submit">
+  <div class='flex'>
+  <span class="overflow">
     @if(charge.isOverdue){@govukTag(Tag(
       content = Text(messages("common.overdue")),
       classes = "govuk-tag--red"
-      ))}
+    ))}
+  </span>
+  <span class="float-right">
+  <button class="what-you-owe-link-charge govuk-link" type="submit">
     @charge.title @charge.description(user.isAgent)
   </button>
+  </span></div>
 }
 
 <span class="govuk-hint govuk-!-margin-0">
