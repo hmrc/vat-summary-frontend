@@ -16,7 +16,7 @@
 
 package testOnly.controllers
 
-import config.{AppConfig, ServiceErrorHandler}
+import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
 import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
@@ -28,7 +28,7 @@ import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView, CrystallisedLPP1View}
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
                                           DDInterrupt: DDInterruptPredicate,
@@ -38,29 +38,29 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           estimatedInterestView: EstimatedInterestView,
                                           errorView: PaymentsError,
                                           crystallisedInterestView: CrystallisedInterestView,
-                                          crystallisedLPP1View: CrystallisedLPP1View,
-                                          serviceErrorHandler: ServiceErrorHandler)
+                                          crystallisedLPP1View: CrystallisedLPP1View)
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user => DDInterrupt.interruptCheck { _ =>
-      serviceInfoService.getPartial.map { navLinks =>
-        StandardChargeViewModel.form.bindFromRequest.fold(
-          errorForm => {
-            logger.warn(s"[ChargeBreakdownController][chargeBreakdown] - Unexpected error when binding form: $errorForm")
-            InternalServerError(errorView())
-          },
-          model => Ok(chargeBreakdownView(model, navLinks))
-        )
+    implicit user =>
+      DDInterrupt.interruptCheck { _ =>
+        serviceInfoService.getPartial.map { navLinks =>
+          StandardChargeViewModel.form.bindFromRequest.fold(
+            errorForm => {
+              logger.warn(s"[ChargeBreakdownController][chargeBreakdown] - Unexpected error when binding form: $errorForm")
+              InternalServerError(errorView())
+            },
+            model => Ok(chargeBreakdownView(model, navLinks))
+          )
+        }
       }
-    }
   }
 
   def estimatedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user => DDInterrupt.interruptCheck { _ =>
-      if(appConfig.features.interestBreakdownEnabled()) {
+    implicit user =>
+      DDInterrupt.interruptCheck { _ =>
         serviceInfoService.getPartial.map { navLinks =>
           EstimatedInterestViewModel.form.bindFromRequest.fold(
             errorForm => {
@@ -70,15 +70,12 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
             model => Ok(estimatedInterestView(model, navLinks))
           )
         }
-      } else {
-        Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
       }
-    }
   }
 
   def crystallisedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user => DDInterrupt.interruptCheck { _ =>
-      if(appConfig.features.interestBreakdownEnabled()) {
+    implicit user =>
+      DDInterrupt.interruptCheck { _ =>
         serviceInfoService.getPartial.map { navLinks =>
           CrystallisedInterestViewModel.form.bindFromRequest.fold(
             errorForm => {
@@ -89,15 +86,12 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
             model => Ok(crystallisedInterestView(model, navLinks))
           )
         }
-      } else {
-        Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
       }
-    }
   }
 
   def crystallisedLPP1Breakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user => DDInterrupt.interruptCheck { _ =>
-      if(appConfig.features.interestBreakdownEnabled()) {
+    implicit user =>
+      DDInterrupt.interruptCheck { _ =>
         serviceInfoService.getPartial.map { navLinks =>
           CrystallisedLPP1ViewModel.form.bindFromRequest.fold(
             errorForm => {
@@ -108,9 +102,6 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
             model => Ok(crystallisedLPP1View(model, navLinks))
           )
         }
-      } else {
-        Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
       }
-    }
   }
 }

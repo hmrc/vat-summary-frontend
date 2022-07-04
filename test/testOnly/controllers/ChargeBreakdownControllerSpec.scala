@@ -27,16 +27,11 @@ import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, Est
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    mockAppConfig.features.interestBreakdownEnabled(true)
-  }
-
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
     injector.instanceOf[PaymentsError], injector.instanceOf[CrystallisedInterestView],
-    injector.instanceOf[CrystallisedLPP1View], mockServiceErrorHandler
+    injector.instanceOf[CrystallisedLPP1View]
   )
 
   "The chargeBreakdown action" when {
@@ -234,16 +229,6 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the interest breakdown feature switch is disabled" should {
-
-        "return 404" in {
-          mockAppConfig.features.interestBreakdownEnabled(false)
-          mockPrincipalAuth()
-          val result = controller.estimatedInterestBreakdown(requestWithForm(fakeRequestWithSession))
-
-          status(result) shouldBe NOT_FOUND
-        }
-      }
     }
 
     "invalid form information is submitted in the request" should {
@@ -387,16 +372,6 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the interest breakdown feature switch is disabled" should {
-
-        "return 404" in {
-          mockAppConfig.features.interestBreakdownEnabled(false)
-          mockPrincipalAuth()
-          val result = controller.crystallisedInterestBreakdown(requestWithForm(fakeRequestWithSession))
-
-          status(result) shouldBe NOT_FOUND
-        }
-      }
     }
 
     "invalid form information is submitted in the request" should {
@@ -545,16 +520,6 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the interest breakdown feature switch is disabled" should {
-
-        "return 404" in {
-          mockAppConfig.features.interestBreakdownEnabled(false)
-          mockPrincipalAuth()
-          val result = controller.crystallisedLPP1Breakdown(requestWithForm(fakeRequestWithSession))
-
-          status(result) shouldBe NOT_FOUND
-        }
-      }
     }
 
     "invalid form information is submitted in the request" should {
