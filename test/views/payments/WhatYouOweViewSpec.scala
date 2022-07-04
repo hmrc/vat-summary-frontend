@@ -16,7 +16,7 @@
 
 package views.payments
 
-import common.TestModels.{chargeModel1, chargeModel2, whatYouOweViewModel2Charge}
+import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInterestCharge, whatYouOweViewModel2Charge}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
@@ -27,7 +27,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
   val whatYouOweView: WhatYouOwe = injector.instanceOf[WhatYouOwe]
 
-  "The what you owe page for a principal user" should {
+  "The what you owe page for a principal user and a standard charge" should {
 
     lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -141,15 +141,34 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           elementText(tableBodyCell(2, 2)) shouldBe "£" + chargeModel2.outstandingAmount.toInt
         }
       }
+      "has the correct row for an example overdue crystallised charge" which {
+        "has the correct charge description" in {
+          elementText(tableBodyCell(3, 1)) shouldBe
+            s"overdue Dummy charge type due 8 April 2021"
+        }
+        "has an overdue label" in {
+          elementText(tableBodyCell(3, 1) + " .govuk-tag") shouldBe "overdue"
+        }
+        "has the correct due hint text" in {
+          elementText(tableBodyCell(3, 1) + "> span") shouldBe "due 8 April 2021"
+        }
+        "has a form with the correct action" in {
+          element(tableBodyCell(3, 1) + " > form").attr("action") shouldBe
+            testOnly.controllers.routes.ChargeBreakdownController.crystallisedInterestBreakdown.url
+        }
+        "has the correct amount" in {
+          elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedInterestCharge.leftToPay.toInt
+        }
+      }
 
       "has the correct total row" which {
 
         "has the correct description text" in {
-          elementText(tableBodyCell(3, 1)) shouldBe "Total"
+          elementText(tableBodyCell(4, 1)) shouldBe "Total"
         }
 
         "has the correct total amount" in {
-          elementText(tableBodyCell(3, 2)) shouldBe "£" + whatYouOweViewModel2Charge.totalAmount
+          elementText(tableBodyCell(4, 2)) shouldBe "£" + whatYouOweViewModel2Charge.totalAmount
         }
       }
     }
