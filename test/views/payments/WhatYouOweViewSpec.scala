@@ -27,7 +27,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
   val whatYouOweView: WhatYouOwe = injector.instanceOf[WhatYouOwe]
 
-  "The what you owe page for a principal user and a standard charge" should {
+  "The what you owe page for a principal user" should {
 
     lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))
     lazy implicit val document: Document = Jsoup.parse(view.body)
