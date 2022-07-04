@@ -71,30 +71,30 @@ object PaymentMessageHelper {
   object VatReturnDebitCharge extends PaymentMessageHelper(
     ReturnDebitCharge.value,
     "chargeType.vatReturnDebitChargeTitle",
-    Some("chargeType.vatReturnDebitChargeDescription"),
-    Some("chargeType.vatReturnDebitChargeDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
 
   object VatOfficerAssessmentCreditCharge extends PaymentMessageHelper(
     OACreditCharge.value,
     "chargeType.officerAssessmentChargeTitle",
-    Some("chargeType.officerAssessmentCreditChargeDescription"),
-    Some("chargeType.officerAssessmentCreditChargeDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VatOfficerAssessmentDebitCharge extends PaymentMessageHelper(
     OADebitCharge.value,
     "chargeType.officerAssessmentChargeTitle",
-    Some("chargeType.officerAssessmentDebitChargeDescription"),
-    Some("chargeType.officerAssessmentDebitChargeDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VatCentralAssessment extends PaymentMessageHelper(
     CentralAssessmentCharge.value,
     "chargeType.vatCentralAssessmentTitle",
-    Some("chargeType.vatCentralAssessmentDescription"),
-    Some("chargeType.vatCentralAssessmentDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object VatDebitDefaultSurcharge extends PaymentMessageHelper(
@@ -114,15 +114,15 @@ object PaymentMessageHelper {
   object VatErrorCorrectionDebitCharge extends PaymentMessageHelper(
     ErrorCorrectionDebitCharge.value,
     "chargeType.vatErrorCorrectionDebitChargeTitle",
-    Some("chargeType.vatErrorCorrectionChargeDescription"),
-    Some("chargeType.vatErrorCorrectionChargeDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VatErrorCorrectionCreditCharge extends PaymentMessageHelper(
     ErrorCorrectionCreditCharge.value,
     "chargeType.vatErrorCorrectionCreditChargeTitle",
-    Some("chargeType.vatErrorCorrectionChargeDescription"),
-    Some("chargeType.vatErrorCorrectionChargeDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VatRepaymentSupplement extends PaymentMessageHelper(
@@ -184,8 +184,8 @@ object PaymentMessageHelper {
   object VatAdditionalAssessment extends PaymentMessageHelper(
     AACharge.value,
     "chargeType.VatAdditionalAssessmentTitle",
-    Some("chargeType.VatAdditionalAssessmentDescription"),
-    Some("chargeType.VatAdditionalAssessmentDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VatAADefaultInterest extends PaymentMessageHelper(
@@ -205,29 +205,29 @@ object PaymentMessageHelper {
   object VatAAMonthlyInstalment extends PaymentMessageHelper(
     AAMonthlyInstalment.value,
     "chargeType.VatAnnualAccountMonthlyInstalmentTitle",
-    Some("chargeType.VatAnnualAccountMonthlyInstalmentDescription"),
-    Some("chargeType.VatAnnualAccountMonthlyInstalmentDescription")
+    Some("chargeType.forThePeriod"),
+    Some("chargeType.forThePeriod")
   )
 
   object VatAAQuarterlyInstalments extends PaymentMessageHelper(
     AAQuarterlyInstalments.value,
     "chargeType.VatAnnualAccountQuarterlyInstalmentsTitle",
-    Some("chargeType.VatAnnualAccountQuarterlyInstalmentsDescription"),
-    Some("chargeType.VatAnnualAccountQuarterlyInstalmentsDescription")
+    Some("chargeType.forThePeriod"),
+    Some("chargeType.forThePeriod")
   )
 
   object VatAAReturnDebitCharge extends PaymentMessageHelper(
     AAReturnDebitCharge.value,
     "chargeType.VatAnnualAccountReturnDebitChargeTitle",
-    Some("chargeType.VatAnnualAccountReturnDebitChargeDescription"),
-    Some("chargeType.VatAnnualAccountReturnDebitChargeDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object VatAAReturnCreditCharge extends PaymentMessageHelper(
     AAReturnCreditCharge.value,
     "chargeType.VatAnnualAccountReturnCreditChargeTitle",
-    Some("chargeType.VatAnnualAccountReturnCreditChargeDescription"),
-    Some("chargeType.VatAnnualAccountReturnCreditChargeDescription")
+    Some("chargeType.forThePeriod"),
+    Some("chargeType.forThePeriod")
   )
 
   object VatStatutoryInterestCharge extends PaymentMessageHelper(
@@ -394,22 +394,22 @@ object PaymentMessageHelper {
   object VATPOAInstalmentCharge extends PaymentMessageHelper(
     PaymentOnAccountInstalments.value,
     "chargeType.POAInstalmentTitle",
-    Some("chargeType.POAChargeDescription"),
-    Some("chargeType.POAChargeDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object VATPOAReturnDebitCharge extends PaymentMessageHelper(
     PaymentOnAccountReturnDebitCharge.value,
     "chargeType.POAReturnDebitChargeTitle",
-    Some("chargeType.POAChargeDescription"),
-    Some("chargeType.POAChargeDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object VATPOAReturnCreditCharge extends PaymentMessageHelper(
     PaymentOnAccountReturnCreditCharge.value,
     "chargeType.POAReturnCreditChargeTitle",
-    Some("chargeType.POAChargeDescription"),
-    Some("chargeType.POAChargeDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object VATReturn1stLPP extends PaymentMessageHelper(
@@ -417,6 +417,34 @@ object PaymentMessageHelper {
     "chargeType.VATReturn1stLPPTitle",
     Some("chargeType.VATReturn1stLPPDescription"),
     Some("chargeType.VATReturn1stLPPDescription")
+  )
+
+  object VATReturnLPI extends PaymentMessageHelper(
+    VatReturnLPI.value,
+    "chargeType.vatReturnLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATReturn1stLPPLPI extends PaymentMessageHelper(
+    VatReturn1stLPPLPI.value,
+    "chargeType.vatReturn1stLPPLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATReturn2ndLPPLPI extends PaymentMessageHelper(
+    VatReturn2ndLPPLPI.value,
+    "chargeType.vatReturn2ndLPPLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATCentralAssessmentLPI extends PaymentMessageHelper(
+    VatCentralAssessmentLPI.value,
+    "chargeType.vatCentralAssessmentLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(
@@ -475,7 +503,11 @@ object PaymentMessageHelper {
     VATPOAInstalmentCharge,
     VATPOAReturnDebitCharge,
     VATPOAReturnCreditCharge,
-    VATReturn1stLPP
+    VATReturn1stLPP,
+    VATReturnLPI,
+    VATReturn1stLPPLPI,
+    VATReturn2ndLPPLPI,
+    VATCentralAssessmentLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

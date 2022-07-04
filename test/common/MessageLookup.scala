@@ -104,6 +104,10 @@ object MessageLookup {
         case VATPOAReturnDebitCharge.name => ("Payment on account balance", s"for period $datePeriod")
         case VATPOAReturnCreditCharge.name => ("Payment on account repayment", s"for period $datePeriod")
         case VATReturn1stLPP.name => ("Late payment penalty", s"for late payment of VAT for VAT period $datePeriod")
+        case VATReturnLPI.name => ("Interest on VAT", s"for period $datePeriod")
+        case VATReturn1stLPPLPI.name => ("Interest on penalty", s"for period $datePeriod")
+        case VATReturn2ndLPPLPI.name => ("Interest on second penalty", s"for period $datePeriod")
+        case VATCentralAssessmentLPI.name => ("Interest on central assessment of VAT", s"for period $datePeriod")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }
@@ -142,7 +146,7 @@ object MessageLookup {
   }
 
   object paymentHistoryMessages {
-    val insetText = "If you cannot see your all of your client’s history, " +
+    val insetText: String = "If you cannot see your all of your client’s history, " +
       "you may be able to access more through your HMRC online services for agents account. You’ll need to sign in separately."
   }
 }

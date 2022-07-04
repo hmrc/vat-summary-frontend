@@ -370,6 +370,42 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
           helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
         }
       }
+
+      "there is a VAT Return LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return 1st LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPPLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return 2nd LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn2ndLPPLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Central Assessment LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatCentralAssessmentLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
     }
 
     "the user is an agent" when {
@@ -689,6 +725,51 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
           helper.description shouldBe Some("cannot be repaid after 4 years")
         }
       }
+
+      "there is a VAT Return 1st LPP Charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return 1st LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPPLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return 2nd LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn2ndLPPLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Central Assessment LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatCentralAssessmentLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
     }
 
     "WhatYouOweChargeHelper .title" should {
@@ -759,15 +840,6 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
           helper.viewReturnEnabled shouldBe false
         }
       }
-      "there is a VAT Return 1st LPP Charge" should {
-
-        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPP), true, messages)
-
-        "display the correct description" in {
-          helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
-        }
-      }
-
     }
   }
 
