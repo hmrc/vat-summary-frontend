@@ -199,9 +199,20 @@ case object UnallocatedPayment extends ChargeType {
 case object Refund extends ChargeType {
   override val value: String = "Refund"
 }
-
 case object VatReturn1stLPP extends ChargeType {
   override val value: String = "VAT Return 1st LPP"
+}
+case object VatReturnLPI extends ChargeType {
+  override val value: String = "VAT Return LPI"
+}
+case object VatReturn1stLPPLPI extends ChargeType {
+  override val value: String = "VAT Return 1st LPP LPI"
+}
+case object VatReturn2ndLPPLPI extends ChargeType {
+  override val value: String = "VAT Return 2nd LPP LPI"
+}
+case object VatCentralAssessmentLPI extends ChargeType {
+  override val value: String = "VAT Central Assessment LPI"
 }
 
 object ChargeType extends LoggerUtil {
@@ -267,8 +278,28 @@ object ChargeType extends LoggerUtil {
     PaymentOnAccountInstalments,
     UnallocatedPayment,
     Refund,
-    VatReturn1stLPP
+    VatReturn1stLPP,
+    VatReturnLPI,
+    VatReturn1stLPPLPI,
+    VatReturn2ndLPPLPI,
+    VatCentralAssessmentLPI
   ) ++ positiveOrNegativeChargeTypes
+
+  val interestChargeTypes = Seq(
+    VatReturnLPI,
+    VatReturn1stLPPLPI,
+    VatReturn2ndLPPLPI,
+    VatCentralAssessmentLPI
+  )
+
+  val penaltyInterestChargeTypes = Seq(
+    VatReturn1stLPPLPI,
+    VatReturn2ndLPPLPI
+  )
+
+  val penaltyChargeTypes = Seq(
+    VatReturn1stLPP
+  )
 
   def apply: String => ChargeType = input => {
     allChargeTypes.find { chargeType =>
