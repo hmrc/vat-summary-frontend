@@ -284,6 +284,10 @@ deregPartial.vatGroup.title = Canslo cofrestriad TAW (yn agor mewn tab newydd)
 deregPartial.vatGroup.content = I ddiddymu’r grŵp TAW, mae’n rhaid i chi ganslo’r cofrestriad drwy ddefnyddio ffurflen VAT7.
 
 # Charge types
+chargeType.for = ar gyfer {0}
+chargeType.forPeriod = ar gyfer y cyfnod {0}
+chargeType.forThePeriod = ar gyfer y cyfnod {0}
+
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 
@@ -301,21 +305,16 @@ chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
 chargeType.vatReturnCreditChargeDescription = ar gyfer y Ffurflen TAW ar gyfer {0}
 
 chargeType.vatReturnDebitChargeTitle = TAW
-chargeType.vatReturnDebitChargeDescription = ar gyfer y cyfnod {0}
 
 chargeType.officerAssessmentChargeTitle = Asesiad swyddog o TAW
-chargeType.officerAssessmentDebitChargeDescription = ar gyfer {0}
-chargeType.officerAssessmentCreditChargeDescription = ar gyfer y cyfnod {0}
 
 chargeType.vatCentralAssessmentTitle = Asesiad canolog o TAW
-chargeType.vatCentralAssessmentDescription = ar gyfer y cyfnod {0}
 
 chargeType.vatDefaultSurchargeTitle = Gordal
 chargeType.vatDefaultSurchargeDescription = ar gyfer talu’r dreth sy’n codi o’r Ffurflen TAW ar gyfer {0} yn hwyr
 
 chargeType.vatErrorCorrectionDebitChargeTitle = Cywiriad gwall TAW
 chargeType.vatErrorCorrectionCreditChargeTitle =  Ad-daliad gan CThEM ar gyfer cywiro gwall
-chargeType.vatErrorCorrectionChargeDescription =  ar gyfer {0}
 
 chargeType.vatRepaymentSupplementTitle = Iawndal gan CThEM am ad-dalu’n hwyr
 chargeType.vatRepaymentSupplementDescription = gwnaethom gymryd gormod o amser i ad-dalu’r dreth yn codi o’r Ffurflen TAW ar gyfer {0}
@@ -345,20 +344,15 @@ chargeType.VatOfficersAssessmentFurtherInterestTitle = Llog pellach ar asesiad y
 chargeType.VatOfficersAssessmentFurtherInterestDescription = a godir ar asesiad y swyddog
 
 chargeType.VatAdditionalAssessmentTitle = Asesiad ychwanegol o TAW
-chargeType.VatAdditionalAssessmentDescription = ar gyfer {0}
 chargeType.VatAdditionalAssessmentDefaultInterestTitle = Llog asesiad ychwanegol
 chargeType.VatAdditionalAssessmentDefaultInterestDescription = a godir ar y dreth ychwanegol a aseswyd ar gyfer y cyfnod {0}
 chargeType.VatAdditionalAssessmentFurtherInterestTitle = Llog pellach ar asesiad ychwanegol
 chargeType.VatAdditionalAssessmentFurtherInterestDescription = a godir ar y dreth ychwanegol a aseswyd ar gyfer y cyfnod {0}
 
 chargeType.VatAnnualAccountMonthlyInstalmentTitle = Rhandaliad misol cyfrifyddu blynyddol
-chargeType.VatAnnualAccountMonthlyInstalmentDescription = ar gyfer y cyfnod {0}
 chargeType.VatAnnualAccountQuarterlyInstalmentsTitle = Rhandaliad chwarterol cyfrifyddu blynyddol
-chargeType.VatAnnualAccountQuarterlyInstalmentsDescription = ar gyfer y cyfnod {0}
 chargeType.VatAnnualAccountReturnDebitChargeTitle = Balans cyfrifyddu blynyddol
-chargeType.VatAnnualAccountReturnDebitChargeDescription = ar gyfer y cyfnod {0}
 chargeType.VatAnnualAccountReturnCreditChargeTitle = Ad-daliad cyfrifyddu blynyddol
-chargeType.VatAnnualAccountReturnCreditChargeDescription = ar gyfer y cyfnod {0}
 
 chargeType.VatStatutoryInterestTitle = Llog statudol
 chargeType.VatStatutoryInterestDescription = llog a delir oherwydd gwall gan CThEM
@@ -447,7 +441,11 @@ chargeType.POAInstalmentTitle = Rhandaliad taliad ar gyfrif
 
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
-chargeType.POAChargeDescription =  ar gyfer y cyfnod {0}
+
+chargeType.vatReturnLPITitle = ???
+chargeType.vatReturn1stLPPLPITitle = ???
+chargeType.vatReturn2ndLPPLPITitle = ???
+chargeType.vatCentralAssessmentLPITitle = ???
 
 chargeType.VATReturn1stLPPTitle = ???
 chargeType.VATReturn1stLPPDescription = ???

@@ -284,6 +284,10 @@ deregPartial.vatGroup.title = Cancel VAT registration (opens in a new tab)
 deregPartial.vatGroup.content = To disband VAT group, you need to cancel the registration using the VAT7 form.
 
 # Charge types
+chargeType.for = for {0}
+chargeType.forPeriod = for period {0}
+chargeType.forThePeriod = for the period {0}
+
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
 
@@ -301,21 +305,16 @@ chargeType.vatReturnCreditChargeTitle = Repayment from HMRC
 chargeType.vatReturnCreditChargeDescription = for the {0} return
 
 chargeType.vatReturnDebitChargeTitle = VAT
-chargeType.vatReturnDebitChargeDescription = for period {0}
 
 chargeType.officerAssessmentChargeTitle = Officer’s assessment of VAT
-chargeType.officerAssessmentDebitChargeDescription = for {0}
-chargeType.officerAssessmentCreditChargeDescription = for {0}
 
 chargeType.vatCentralAssessmentTitle = Central assessment of VAT
-chargeType.vatCentralAssessmentDescription = for period {0}
 
 chargeType.vatDefaultSurchargeTitle = Surcharge
 chargeType.vatDefaultSurchargeDescription = for late payment of the {0} return
 
 chargeType.vatErrorCorrectionDebitChargeTitle = Error correction of VAT
 chargeType.vatErrorCorrectionCreditChargeTitle =  Error correction repayment from HMRC
-chargeType.vatErrorCorrectionChargeDescription = for {0}
 
 chargeType.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 chargeType.vatRepaymentSupplementDescription = we took too long to repay the {0} return
@@ -345,20 +344,15 @@ chargeType.VatOfficersAssessmentFurtherInterestTitle = VAT officer’s assessmen
 chargeType.VatOfficersAssessmentFurtherInterestDescription = charged on the officer’s assessment
 
 chargeType.VatAdditionalAssessmentTitle = Additional assessment of VAT
-chargeType.VatAdditionalAssessmentDescription = for {0}
 chargeType.VatAdditionalAssessmentDefaultInterestTitle = Additional assessment interest
 chargeType.VatAdditionalAssessmentDefaultInterestDescription = charged on additional tax assessed for the period {0}
 chargeType.VatAdditionalAssessmentFurtherInterestTitle = Additional assessment further interest
 chargeType.VatAdditionalAssessmentFurtherInterestDescription = charged on additional tax assessed for the period {0}
 
 chargeType.VatAnnualAccountMonthlyInstalmentTitle = Annual accounting monthly instalment
-chargeType.VatAnnualAccountMonthlyInstalmentDescription = for the period {0}
 chargeType.VatAnnualAccountQuarterlyInstalmentsTitle = Annual accounting quarterly instalment
-chargeType.VatAnnualAccountQuarterlyInstalmentsDescription = for the period {0}
 chargeType.VatAnnualAccountReturnDebitChargeTitle = Annual accounting balance
-chargeType.VatAnnualAccountReturnDebitChargeDescription = for period {0}
 chargeType.VatAnnualAccountReturnCreditChargeTitle = Annual accounting repayment
-chargeType.VatAnnualAccountReturnCreditChargeDescription = for the period {0}
 
 chargeType.VatStatutoryInterestTitle = Statutory interest
 chargeType.VatStatutoryInterestDescription = interest paid because of an error by HMRC
@@ -447,9 +441,13 @@ chargeType.POAInstalmentTitle = Payment on account instalment
 
 chargeType.POAReturnDebitChargeTitle = Payment on account balance
 chargeType.POAReturnCreditChargeTitle = Payment on account repayment
-chargeType.POAChargeDescription = for period {0}
 
-chargeType.VATReturn1stLPPTitle =  Late payment penalty
+chargeType.vatReturnLPITitle = Interest on VAT
+chargeType.vatReturn1stLPPLPITitle = Interest on penalty
+chargeType.vatReturn2ndLPPLPITitle = Interest on second penalty
+chargeType.vatCentralAssessmentLPITitle = Interest on central assessment of VAT
+
+chargeType.VATReturn1stLPPTitle = Late payment penalty
 chargeType.VATReturn1stLPPDescription = for late payment of VAT for VAT period {0}
 
 unauthorised.agent.title = You can’t use this service yet

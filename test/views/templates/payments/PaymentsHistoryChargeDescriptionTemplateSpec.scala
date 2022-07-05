@@ -35,22 +35,22 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
     val description = "p"
   }
 
+  val exampleModel: PaymentsHistoryModel = PaymentsHistoryModel(
+    clearingSAPDocument = Some("002828853334"),
+    ReturnDebitCharge,
+    Some(LocalDate.parse("2018-01-12")),
+    Some(LocalDate.parse("2018-03-23")),
+    1,
+    Some(LocalDate.parse("2018-02-14"))
+  )
+
   "The PaymentsHistoryChargeDescription template" when {
 
     "user is not an agent" when {
 
       "there is a vat return debit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          ReturnDebitCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
-        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy val template = paymentsHistoryChargeDescription(exampleModel)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
@@ -64,15 +64,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a vat return credit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          ReturnCreditCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          -123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = ReturnCreditCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -87,15 +79,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a vat officer assessment debit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          OADebitCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = OADebitCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -110,15 +94,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a vat officer assessment credit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          OACreditCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = OACreditCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -133,15 +109,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a vat central assessment charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          CentralAssessmentCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          -123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = CentralAssessmentCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -156,15 +124,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a VAT Debit Default Surcharge charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          DebitDefaultSurcharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = DebitDefaultSurcharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -179,15 +139,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a VAT Credit Default Surcharge charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          CreditDefaultSurcharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          -123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = CreditDefaultSurcharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -202,15 +154,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is an error correction credit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          ErrorCorrectionCreditCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          1000,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = ErrorCorrectionCreditCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -225,15 +169,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is an error correction debit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          ErrorCorrectionDebitCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          2000,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = ErrorCorrectionDebitCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -248,15 +184,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a vat officer assessment default interest charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          OADefaultInterestCharge,
-          Some(LocalDate.parse("2018-01-12")),
-          Some(LocalDate.parse("2018-03-23")),
-          123456,
-          Some(LocalDate.parse("2018-02-14"))
-        )
-
+        val model = exampleModel.copy(chargeType = OADefaultInterestCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -271,15 +199,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a VAT Officer Assessment Further Interest charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          OAFurtherInterestCharge,
-          Some(LocalDate.parse("2018-02-12")),
-          Some(LocalDate.parse("2018-03-24")),
-          1500.00,
-          Some(LocalDate.parse("2018-04-18"))
-        )
-
+        val model = exampleModel.copy(chargeType = OAFurtherInterestCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -294,15 +214,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a VAT Additional Assessment charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AACharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-04-01")),
-          2000.00,
-          Some(LocalDate.parse("2018-05-01"))
-        )
-
+        val model = exampleModel.copy(chargeType = AACharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -311,22 +223,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for " +
-            "1 Jan to 1 Apr 2018"
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT AA Default Interest charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AAInterestCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-04-01")),
-          2000.00,
-          Some(LocalDate.parse("2018-05-01"))
-        )
-
+        val model = exampleModel.copy(chargeType = AAInterestCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -336,21 +239,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-            " for the period 1 Jan to 1 Apr 2018"
+            " for the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT AA Further Interest charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AAFurtherInterestCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-04-01")),
-          2000.00,
-          Some(LocalDate.parse("2018-05-01"))
-        )
-
+        val model = exampleModel.copy(chargeType = AAFurtherInterestCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -360,21 +255,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-            " for the period 1 Jan to 1 Apr 2018"
+            " for the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT Statutory Interest charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          StatutoryInterestCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-04-01")),
-          -1500.00,
-          Some(LocalDate.parse("2018-05-01"))
-        )
-
+        val model = exampleModel.copy(chargeType = StatutoryInterestCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -389,15 +276,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a Vat Inaccuracy Assessments Pen charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          InaccuraciesAssessmentsPenCharge,
-          Some(LocalDate.parse("2018-09-10")),
-          Some(LocalDate.parse("2018-10-11")),
-          1000.00,
-          Some(LocalDate.parse("2018-10-15"))
-        )
-
+        val model = exampleModel.copy(chargeType = InaccuraciesAssessmentsPenCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -406,21 +285,14 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "because you submitted an inaccurate document for the period 10 Sep to 11 Oct 2018"
+          elementText(Selectors.description) shouldBe
+            "because you submitted an inaccurate document for the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a Vat Mp Pre 2009 Charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          MpPre2009Charge,
-          Some(LocalDate.parse("2018-09-10")),
-          Some(LocalDate.parse("2018-10-11")),
-          1100.00,
-          Some(LocalDate.parse("2018-10-15"))
-        )
-
+        val model = exampleModel.copy(chargeType = MpPre2009Charge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -435,15 +307,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a Vat Mp Repeated Pre 2009 Charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          MpRepeatedPre2009Charge,
-          Some(LocalDate.parse("2018-09-10")),
-          Some(LocalDate.parse("2018-10-11")),
-          1100.00,
-          Some(LocalDate.parse("2018-10-15"))
-        )
-
+        val model = exampleModel.copy(chargeType = MpRepeatedPre2009Charge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -458,15 +322,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a Vat Inaccuracies Return Replaced Charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          InaccuraciesReturnReplacedCharge,
-          Some(LocalDate.parse("2018-09-12")),
-          Some(LocalDate.parse("2018-10-13")),
-          390.00,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = InaccuraciesReturnReplacedCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -476,21 +332,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "because you have submitted inaccurate information for" +
-            " the period 12 Sep to 13 Oct 2018"
+            " the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a Vat Wrong Doing Penalty Charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          WrongDoingPenaltyCharge,
-          Some(LocalDate.parse("2018-09-12")),
-          Some(LocalDate.parse("2018-10-13")),
-          390.00,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = WrongDoingPenaltyCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -505,15 +353,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a Vat Credit Return Offset Charge Charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          CreditReturnOffsetCharge,
-          Some(LocalDate.parse("2018-09-12")),
-          Some(LocalDate.parse("2018-10-13")),
-          390.00,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = CreditReturnOffsetCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -522,21 +362,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "partial repayment for period 12 Sep to 13 Oct 2018"
+          elementText(Selectors.description) shouldBe "partial repayment for period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is an Unallocated Payment Charge Type" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          UnallocatedPayment,
-          None,
-          None,
-          -500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = UnallocatedPayment)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -551,15 +383,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is an Refund Charge Type" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          Refund,
-          None,
-          None,
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = Refund)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -574,15 +398,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a VAT POA Instalment charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          PaymentOnAccountInstalments,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = PaymentOnAccountInstalments)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -591,21 +407,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT POA Return Debit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          PaymentOnAccountReturnDebitCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = PaymentOnAccountReturnDebitCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -614,21 +422,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT POA Return Credit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          PaymentOnAccountReturnCreditCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = PaymentOnAccountReturnCreditCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -637,21 +437,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT AA Monthly Instalment charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AAMonthlyInstalment,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = AAMonthlyInstalment)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -660,21 +452,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT AA Quarterly Instalment charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AAQuarterlyInstalments,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = AAQuarterlyInstalments)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -683,21 +467,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT AA Return Debit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AAReturnDebitCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = AAReturnDebitCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -706,21 +482,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT AA Return Credit charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          AAReturnCreditCharge,
-          Some(LocalDate.parse("2018-01-01")),
-          Some(LocalDate.parse("2018-02-02")),
-          500,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = AAReturnCreditCharge)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -729,21 +497,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
         }
       }
 
       "there is a VAT Unrepayable Overpayment Charge" should {
 
-        val model: PaymentsHistoryModel = PaymentsHistoryModel(
-          clearingSAPDocument = Some("002828853334"),
-          VatUnrepayableOverpayment,
-          Some(LocalDate.parse("2018-03-02")),
-          Some(LocalDate.parse("2018-04-02")),
-          300,
-          Some(LocalDate.parse("2018-10-16"))
-        )
-
+        val model = exampleModel.copy(chargeType = VatUnrepayableOverpayment)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -755,6 +515,81 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
           elementText(Selectors.description) shouldBe "cannot be repaid after 4 years"
         }
       }
+
+      "there is a VAT return 1st LPP Charge" should {
+
+        val model = exampleModel.copy(chargeType = VatReturn1stLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for late payment of VAT for VAT period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Return LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatReturnLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on VAT"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Return 1st LPP LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatReturn1stLPPLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Return 2nd LPP LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatReturn2ndLPPLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on second penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Central Assessment LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatCentralAssessmentLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on central assessment of VAT"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
     }
   }
 
@@ -762,16 +597,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a vat return debit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        ReturnDebitCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
-      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy val template = paymentsHistoryChargeDescription(exampleModel)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
@@ -785,15 +611,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a vat return credit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        ReturnCreditCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        -123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = ReturnCreditCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -808,15 +626,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a vat officer assessment debit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        OADebitCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = OADebitCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -831,15 +641,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a vat officer assessment credit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        OACreditCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = OACreditCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -854,15 +656,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a vat central assessment charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        CentralAssessmentCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        -123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = CentralAssessmentCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -877,15 +671,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT Debit Default Surcharge charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        DebitDefaultSurcharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = DebitDefaultSurcharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -900,15 +686,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT Credit Default Surcharge charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        CreditDefaultSurcharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        -123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = CreditDefaultSurcharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -923,15 +701,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is an error correction credit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        ErrorCorrectionCreditCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        1000,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = ErrorCorrectionCreditCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -946,15 +716,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is an error correction debit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        ErrorCorrectionDebitCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        2000,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = ErrorCorrectionDebitCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -969,15 +731,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a vat officer assessment default interest charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        OADefaultInterestCharge,
-        Some(LocalDate.parse("2018-01-12")),
-        Some(LocalDate.parse("2018-03-23")),
-        123456,
-        Some(LocalDate.parse("2018-02-14"))
-      )
-
+      val model = exampleModel.copy(chargeType = OADefaultInterestCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -992,15 +746,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT Officer Assessment Further Interest charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        OAFurtherInterestCharge,
-        Some(LocalDate.parse("2018-02-12")),
-        Some(LocalDate.parse("2018-03-24")),
-        1500.00,
-        Some(LocalDate.parse("2018-04-18"))
-      )
-
+      val model = exampleModel.copy(chargeType = OAFurtherInterestCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1015,15 +761,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT Additional Assessment charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AACharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-04-01")),
-        2000.00,
-        Some(LocalDate.parse("2018-05-01"))
-      )
-
+      val model = exampleModel.copy(chargeType = AACharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1032,22 +770,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for " +
-          "1 Jan to 1 Apr 2018"
+        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT AA Default Interest charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AAInterestCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-04-01")),
-        2000.00,
-        Some(LocalDate.parse("2018-05-01"))
-      )
-
+      val model = exampleModel.copy(chargeType = AAInterestCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1057,21 +786,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-          " for the period 1 Jan to 1 Apr 2018"
+          " for the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT AA Further Interest charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AAFurtherInterestCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-04-01")),
-        2000.00,
-        Some(LocalDate.parse("2018-05-01"))
-      )
-
+      val model = exampleModel.copy(chargeType = AAFurtherInterestCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1081,21 +802,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-          " for the period 1 Jan to 1 Apr 2018"
+          " for the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT Statutory Interest charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        StatutoryInterestCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-04-01")),
-        -1500.00,
-        Some(LocalDate.parse("2018-05-01"))
-      )
-
+      val model = exampleModel.copy(chargeType = StatutoryInterestCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1110,15 +823,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a Vat Inaccuracy Assessments Pen charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        InaccuraciesAssessmentsPenCharge,
-        Some(LocalDate.parse("2018-09-10")),
-        Some(LocalDate.parse("2018-10-11")),
-        1000.00,
-        Some(LocalDate.parse("2018-10-15"))
-      )
-
+      val model = exampleModel.copy(chargeType = InaccuraciesAssessmentsPenCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1127,21 +832,14 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "because your client submitted an inaccurate document for the period 10 Sep to 11 Oct 2018"
+        elementText(Selectors.description) shouldBe
+          "because your client submitted an inaccurate document for the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a Vat Mp Pre 2009 Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        MpPre2009Charge,
-        Some(LocalDate.parse("2018-09-10")),
-        Some(LocalDate.parse("2018-10-11")),
-        1100.00,
-        Some(LocalDate.parse("2018-10-15"))
-      )
-
+      val model = exampleModel.copy(chargeType = MpPre2009Charge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1156,15 +854,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a Vat Mp Repeated Pre 2009 Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        MpRepeatedPre2009Charge,
-        Some(LocalDate.parse("2018-09-10")),
-        Some(LocalDate.parse("2018-10-11")),
-        1100.00,
-        Some(LocalDate.parse("2018-10-15"))
-      )
-
+      val model = exampleModel.copy(chargeType = MpRepeatedPre2009Charge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1179,15 +869,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a Vat Inaccuracies Return Replaced Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        InaccuraciesReturnReplacedCharge,
-        Some(LocalDate.parse("2018-09-12")),
-        Some(LocalDate.parse("2018-10-13")),
-        390.00,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = InaccuraciesReturnReplacedCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1197,21 +879,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "because your client submitted inaccurate information for" +
-          " the period 12 Sep to 13 Oct 2018"
+          " the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a Vat Wrong Doing Penalty Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        WrongDoingPenaltyCharge,
-        Some(LocalDate.parse("2018-09-12")),
-        Some(LocalDate.parse("2018-10-13")),
-        390.00,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = WrongDoingPenaltyCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1226,15 +900,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a Vat Credit Return Offset Charge Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        CreditReturnOffsetCharge,
-        Some(LocalDate.parse("2018-09-12")),
-        Some(LocalDate.parse("2018-10-13")),
-        390.00,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = CreditReturnOffsetCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1243,21 +909,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "partial repayment for period 12 Sep to 13 Oct 2018"
+        elementText(Selectors.description) shouldBe "partial repayment for period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is an Unallocated Payment Charge Type" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        UnallocatedPayment,
-        None,
-        None,
-        -500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = UnallocatedPayment)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1266,21 +924,14 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "your client made an overpayment which can be refunded to them or left on account"
+        elementText(Selectors.description) shouldBe
+          "your client made an overpayment which can be refunded to them or left on account"
       }
     }
 
     "there is an Refund Charge Type" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        Refund,
-        None,
-        None,
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = Refund)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1295,15 +946,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT POA Instalment charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        PaymentOnAccountInstalments,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = PaymentOnAccountInstalments)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1312,21 +955,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT POA Return Debit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        PaymentOnAccountReturnDebitCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = PaymentOnAccountReturnDebitCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1335,21 +970,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT POA Return Credit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        PaymentOnAccountReturnCreditCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = PaymentOnAccountReturnCreditCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1358,21 +985,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT AA Monthly Instalment charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AAMonthlyInstalment,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = AAMonthlyInstalment)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1381,21 +1000,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT AA Quarterly Instalment charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AAQuarterlyInstalments,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = AAQuarterlyInstalments)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1404,21 +1015,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT AA Return Debit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AAReturnDebitCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = AAReturnDebitCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1427,21 +1030,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT AA Return Credit charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        AAReturnCreditCharge,
-        Some(LocalDate.parse("2018-01-01")),
-        Some(LocalDate.parse("2018-02-02")),
-        500,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = AAReturnCreditCharge)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1450,21 +1045,13 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 1 Jan to 2 Feb 2018"
+        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
       }
     }
 
     "there is a VAT Unrepayable Overpayment Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        VatUnrepayableOverpayment,
-        Some(LocalDate.parse("2018-03-02")),
-        Some(LocalDate.parse("2018-04-02")),
-        300,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = VatUnrepayableOverpayment)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1479,15 +1066,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT return 1st LPP Charge" should {
 
-      val model: PaymentsHistoryModel = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        VatReturn1stLPP,
-        Some(LocalDate.parse("2018-03-02")),
-        Some(LocalDate.parse("2018-04-02")),
-        300,
-        Some(LocalDate.parse("2018-10-16"))
-      )
-
+      val model = exampleModel.copy(chargeType = VatReturn1stLPP)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
@@ -1496,7 +1075,67 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for late payment of VAT for VAT period 2 Mar to 2 Apr 2018"
+        elementText(Selectors.description) shouldBe "for late payment of VAT for VAT period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Return LPI charge" should {
+
+      val model = exampleModel.copy(chargeType = VatReturnLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on VAT"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Return 1st LPP LPI charge" should {
+
+      val model = exampleModel.copy(chargeType = VatReturn1stLPPLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Return 2nd LPP LPI charge" should {
+
+      val model = exampleModel.copy(chargeType = VatReturn2ndLPPLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on second penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Central Assessment LPI charge" should {
+
+      val model = exampleModel.copy(chargeType = VatCentralAssessmentLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on central assessment of VAT"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
   }
