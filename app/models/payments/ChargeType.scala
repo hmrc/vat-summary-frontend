@@ -215,6 +215,26 @@ case object VatCentralAssessmentLPI extends ChargeType {
   override val value: String = "VAT Central Assessment LPI"
 }
 
+case object VaTCA1stLPPLPI extends ChargeType {
+  override val value: String = "VAT CA 1st LPP LPI"
+}
+
+case object VaTCA2ndLPPLPI extends ChargeType {
+  override val value: String = "VAT CA 2nd LPP LPI"
+}
+
+case object VatOfficersAssessmentLPI extends ChargeType {
+  override val value: String = "VAT Officer's Assessment LPI"
+}
+
+case object VatOA1stLPPLPI extends ChargeType {
+  override val value: String = "VAT OA 1st LPP LPI"
+}
+
+case object VatOA2ndLPPLPI extends ChargeType {
+  override val value: String = "VAT OA 2nd LPP LPI"
+}
+
 object ChargeType extends LoggerUtil {
 
   val positiveOrNegativeChargeTypes: Set[ChargeType] = Set(
@@ -282,19 +302,33 @@ object ChargeType extends LoggerUtil {
     VatReturnLPI,
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
-    VatCentralAssessmentLPI
+    VatCentralAssessmentLPI,
+    VaTCA1stLPPLPI,
+    VaTCA2ndLPPLPI,
+    VatOfficersAssessmentLPI,
+    VatOA1stLPPLPI,
+    VatOA2ndLPPLPI
   ) ++ positiveOrNegativeChargeTypes
 
   val interestChargeTypes = Seq(
     VatReturnLPI,
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
-    VatCentralAssessmentLPI
+    VatCentralAssessmentLPI,
+    VaTCA1stLPPLPI,
+    VaTCA2ndLPPLPI,
+    VatOfficersAssessmentLPI,
+    VatOA1stLPPLPI,
+    VatOA2ndLPPLPI
   )
 
   val penaltyInterestChargeTypes = Seq(
     VatReturn1stLPPLPI,
-    VatReturn2ndLPPLPI
+    VatReturn2ndLPPLPI,
+    VaTCA1stLPPLPI,
+    VaTCA2ndLPPLPI,
+    VatOA1stLPPLPI,
+    VatOA2ndLPPLPI
   )
 
   val penaltyChargeTypes = Seq(
