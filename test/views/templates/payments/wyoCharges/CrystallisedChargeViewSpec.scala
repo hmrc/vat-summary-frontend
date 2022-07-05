@@ -35,7 +35,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
 
       "have the correct charge description text" in {
         elementText(".what-you-owe-link") shouldBe
-          "overdue Dummy charge type"
+          "overdue Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
       "have an overdue label" in {
@@ -59,7 +59,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
 
       "have the correct charge description text" in {
         elementText(".what-you-owe-link") shouldBe
-          "Dummy charge type"
+          "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
       "not have an overdue label" in {

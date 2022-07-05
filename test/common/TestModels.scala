@@ -364,7 +364,7 @@ object TestModels {
   val overdueCrystallisedInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     periodFrom = LocalDate.parse("2021-01-01"),
     periodTo = LocalDate.parse("2021-03-01"),
-    chargeType = "Dummy Charge",
+    chargeType = "VAT Central Assessment LPI",
     interestRate = 17.4,
     dueDate = LocalDate.parse("2021-04-08"),
     interestAmount = 3333.33,

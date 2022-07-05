@@ -41,7 +41,7 @@
     content = Text(messages("common.overdue")),
     classes = "govuk-tag--red"
     ))}
-    <a class="govuk-link" tabindex="0">Dummy charge type</a>
+    <a class="govuk-link" tabindex="0">@charge.title @charge.description(user.isAgent)</a>
 </button>
 }
 <span class="govuk-hint govuk-!-margin-0">

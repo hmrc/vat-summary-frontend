@@ -144,7 +144,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "has the correct row for an example overdue crystallised charge" which {
         "has the correct charge description" in {
           elementText(tableBodyCell(3, 1)) shouldBe
-            s"overdue Dummy charge type due 8 April 2021"
+            s"overdue Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021 due 8 April 2021"
         }
         "has an overdue label" in {
           elementText(tableBodyCell(3, 1) + " .govuk-tag") shouldBe "overdue"
