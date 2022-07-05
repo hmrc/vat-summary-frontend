@@ -27,7 +27,7 @@ month.11 = Tachwedd
 month.12 = Rhagfyr
 
 month.short.1 = Ion
-month.short.2 = Chwe
+month.short.2 = Chwef
 month.short.3 = Maw
 month.short.4 = Ebr
 month.short.5 = Mai
