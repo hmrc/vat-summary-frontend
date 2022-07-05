@@ -294,7 +294,7 @@ object ChargeType extends LoggerUtil {
 
   val penaltyInterestChargeTypes = Seq(
     VatReturn1stLPPLPI,
-    VatReturn2ndLPPLPI,
+    VatReturn2ndLPPLPI
   )
 
   val penaltyChargeTypes = Seq(
