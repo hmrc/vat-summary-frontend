@@ -108,6 +108,11 @@ object MessageLookup {
         case VATReturn1stLPPLPI.name => ("Interest on penalty", s"for period $datePeriod")
         case VATReturn2ndLPPLPI.name => ("Interest on second penalty", s"for period $datePeriod")
         case VATCentralAssessmentLPI.name => ("Interest on central assessment of VAT", s"for period $datePeriod")
+        case VATCA1stLPPLPI.name =>("Interest on central assessment penalty",s"for period $datePeriod")
+        case VATCA2ndLPPLPI.name =>("Interest on central assessment second penalty",s"for period $datePeriod")
+        case VATOfficersAssessmentLPI.name =>("Interest on officer’s assessment of VAT",s"for $datePeriod")
+        case VATOA1stLPPLPI.name =>("Interest on officer’s assessment penalty",s"for $datePeriod")
+        case VATOA2ndLPPLPI.name =>("Interest on officer’s assessment second penalty",s"for $datePeriod")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }

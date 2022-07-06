@@ -447,6 +447,41 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object VATCA1stLPPLPI extends PaymentMessageHelper(
+    VatCA1stLPPLPI.value,
+    "chargeType.VATCA1stLPPLPPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATCA2ndLPPLPI extends PaymentMessageHelper(
+    VatCA2ndLPPLPI.value,
+    "chargeType.VATCA2ndLPPLPPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATOfficersAssessmentLPI extends PaymentMessageHelper(
+    VatOfficersAssessmentLPI.value,
+    "chargeType.VATOfficersAssessmentLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATOA1stLPPLPI extends PaymentMessageHelper(
+    VatOA1stLPPLPI.value,
+    "chargeType.VATOA1stLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATOA2ndLPPLPI extends PaymentMessageHelper(
+    VatOA2ndLPPLPI.value,
+    "chargeType.VATOA2ndLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
@@ -507,7 +542,12 @@ object PaymentMessageHelper {
     VATReturnLPI,
     VATReturn1stLPPLPI,
     VATReturn2ndLPPLPI,
-    VATCentralAssessmentLPI
+    VATCentralAssessmentLPI,
+    VATCA1stLPPLPI,
+    VATCA2ndLPPLPI,
+    VATOfficersAssessmentLPI,
+    VATOA1stLPPLPI,
+    VATOA2ndLPPLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

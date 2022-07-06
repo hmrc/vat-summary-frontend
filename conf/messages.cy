@@ -450,6 +450,12 @@ chargeType.vatCentralAssessmentLPITitle = ???
 chargeType.VATReturn1stLPPTitle = ???
 chargeType.VATReturn1stLPPDescription = ???
 
+chargeType.VATCA1stLPPLPPITitle = ???
+chargeType.VATCA2ndLPPLPPITitle = ???
+chargeType.VATOfficersAssessmentLPITitle = ???
+chargeType.VATOA1stLPPLPITitle = ???
+chargeType.VATOA2ndLPPLPITitle = ???
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

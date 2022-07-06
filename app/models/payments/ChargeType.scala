@@ -215,11 +215,11 @@ case object VatCentralAssessmentLPI extends ChargeType {
   override val value: String = "VAT Central Assessment LPI"
 }
 
-case object VaTCA1stLPPLPI extends ChargeType {
+case object VatCA1stLPPLPI extends ChargeType {
   override val value: String = "VAT CA 1st LPP LPI"
 }
 
-case object VaTCA2ndLPPLPI extends ChargeType {
+case object VatCA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT CA 2nd LPP LPI"
 }
 
@@ -303,8 +303,8 @@ object ChargeType extends LoggerUtil {
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
     VatCentralAssessmentLPI,
-    VaTCA1stLPPLPI,
-    VaTCA2ndLPPLPI,
+    VatCA1stLPPLPI,
+    VatCA2ndLPPLPI,
     VatOfficersAssessmentLPI,
     VatOA1stLPPLPI,
     VatOA2ndLPPLPI
@@ -315,8 +315,8 @@ object ChargeType extends LoggerUtil {
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
     VatCentralAssessmentLPI,
-    VaTCA1stLPPLPI,
-    VaTCA2ndLPPLPI,
+    VatCA1stLPPLPI,
+    VatCA2ndLPPLPI,
     VatOfficersAssessmentLPI,
     VatOA1stLPPLPI,
     VatOA2ndLPPLPI
@@ -325,8 +325,8 @@ object ChargeType extends LoggerUtil {
   val penaltyInterestChargeTypes = Seq(
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
-    VaTCA1stLPPLPI,
-    VaTCA2ndLPPLPI,
+    VatCA1stLPPLPI,
+    VatCA2ndLPPLPI,
     VatOA1stLPPLPI,
     VatOA2ndLPPLPI
   )
