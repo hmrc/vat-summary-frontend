@@ -35,18 +35,16 @@
   <input type="hidden" name="periodFrom" value="@charge.periodFrom">
   <input type="hidden" name="periodTo" value="@charge.periodTo">
 
-  <button class="what-you-owe-link-charge govuk-link" type="submit">
   @if(charge.isOverdue){
     @govukTag(Tag(
       content = Text(messages("common.overdue")),
       classes = "govuk-tag--red"
     ))
   }
-  <span class="what-you-owe-link-charge govuk-link">
-    @charge.title @charge.description(user.isAgent)
-  </span>
-  </button>
 
+  <button class="what-you-owe-link govuk-link" type="submit">
+    @charge.title @charge.description(user.isAgent)
+  </button>
 }
 
 <span class="govuk-hint govuk-!-margin-0">

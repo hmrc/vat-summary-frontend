@@ -20,29 +20,30 @@
 
 @this(form: FormWithCSRF, govukTag: GovukTag)
 
-@(charge: CrystallisedInterestViewModel)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, user: User)
+@(charge: CrystallisedInterestViewModel)(implicit request: Request[_], messages: Messages, user: User)
 
 @form(action = testOnly.controllers.routes.ChargeBreakdownController.crystallisedInterestBreakdown) {
-<input type="hidden" name="periodFrom" value="@charge.periodFrom">
-<input type="hidden" name="periodTo" value="@charge.periodTo">
-<input type="hidden" name="chargeType" value="@charge.chargeType">
-<input type="hidden" name="interestRate" value="@charge.interestRate">
-<input type="hidden" name="dueDate" value="@charge.dueDate">
-<input type="hidden" name="interestAmount" value="@charge.interestAmount">
-<input type="hidden" name="amountReceived" value="@charge.amountReceived">
-<input type="hidden" name="leftToPay" value="@charge.leftToPay">
-<input type="hidden" name="isOverdue" value="@charge.isOverdue">
-<input type="hidden" name="chargeReference" value="@charge.chargeReference">
-<input type="hidden" name="isPenalty" value="@charge.isPenalty">
-<input type="hidden" name="makePaymentRedirect" value="@charge.makePaymentRedirect">
+  <input type="hidden" name="periodFrom" value="@charge.periodFrom">
+  <input type="hidden" name="periodTo" value="@charge.periodTo">
+  <input type="hidden" name="chargeType" value="@charge.chargeType">
+  <input type="hidden" name="interestRate" value="@charge.interestRate">
+  <input type="hidden" name="dueDate" value="@charge.dueDate">
+  <input type="hidden" name="interestAmount" value="@charge.interestAmount">
+  <input type="hidden" name="amountReceived" value="@charge.amountReceived">
+  <input type="hidden" name="leftToPay" value="@charge.leftToPay">
+  <input type="hidden" name="isOverdue" value="@charge.isOverdue">
+  <input type="hidden" name="chargeReference" value="@charge.chargeReference">
+  <input type="hidden" name="isPenalty" value="@charge.isPenalty">
+  <input type="hidden" name="makePaymentRedirect" value="@charge.makePaymentRedirect">
 
-<button class="what-you-owe-link" type="submit">
-    @if(charge.isOverdue){@govukTag(Tag(
+  @if(charge.isOverdue){@govukTag(Tag(
     content = Text(messages("common.overdue")),
     classes = "govuk-tag--red"
-    ))}
-    <a class="govuk-link" tabindex="0">@charge.title @charge.description(user.isAgent)</a>
-</button>
+  ))}
+
+  <button class="what-you-owe-link govuk-link" type="submit">
+    @charge.title @charge.description(user.isAgent)
+  </button>
 }
 <span class="govuk-hint govuk-!-margin-0">
   @messages("whatYouOwe.due") @displayDate(charge.dueDate)

@@ -34,7 +34,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(".what-you-owe-link") shouldBe
+        elementText("form") shouldBe
           "overdue Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
@@ -58,7 +58,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(".what-you-owe-link") shouldBe
+        elementText("form") shouldBe
           "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 

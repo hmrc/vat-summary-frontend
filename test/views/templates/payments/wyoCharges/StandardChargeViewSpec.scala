@@ -34,7 +34,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(".what-you-owe-link") shouldBe
+        elementText("form") shouldBe
           s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
       }
 
@@ -69,7 +69,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(".what-you-owe-link") shouldBe
+        elementText("form") shouldBe
           s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
       }
 
