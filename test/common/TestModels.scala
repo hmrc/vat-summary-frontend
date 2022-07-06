@@ -24,7 +24,7 @@ import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
 import models.penalties.PenaltiesSummary
-import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel, StandardChargeViewModel, WhatYouOweViewModel}
+import models.viewModels.{VatCertificateViewModel, VatDetailsViewModel, StandardChargeViewModel, WhatYouOweViewModel, CrystallisedInterestViewModel}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -361,8 +361,25 @@ object TestModels {
       dueDate = LocalDate.parse("2018-12-01")
     )
 
+  val overdueCrystallisedInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
+    periodFrom = LocalDate.parse("2021-01-01"),
+    periodTo = LocalDate.parse("2021-03-01"),
+    chargeType = "VAT Central Assessment LPI",
+    interestRate = 17.4,
+    dueDate = LocalDate.parse("2021-04-08"),
+    interestAmount = 3333.33,
+    amountReceived = 3333.33,
+    leftToPay = 111.00,
+    isOverdue = true,
+    chargeReference = "ChargeRef",
+    isPenalty = false
+  )
+
+  val crystallisedInterestCharge: CrystallisedInterestViewModel = overdueCrystallisedInterestCharge.copy(isOverdue = false)
+
+
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
-    WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2), mandationStatus = "")
+    WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "")
 
   val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
     chargeType = "VAT Return Debit Charge",
