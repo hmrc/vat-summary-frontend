@@ -17,7 +17,7 @@
 @import models.User
 @import models.viewModels._
 @import views.html.templates.formatters.money.DisplayMoney
-@import views.html.templates.payments.wyoCharges.StandardCharge
+@import views.html.templates.payments.wyoCharges._
 @import views.html.templates.MtdNotificationBanner
 
 @this(mainTemplate: MainTemplate,
@@ -28,7 +28,8 @@
       govukDetails: GovukDetails,
       displayMoney: DisplayMoney,
       mtdNotificationBanner: MtdNotificationBanner,
-      standardCharge: StandardCharge)
+      standardCharge: StandardCharge,
+      crystallisedCharge: CrystallisedCharge)
 
 @(model: WhatYouOweViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
@@ -67,6 +68,7 @@
 @paymentHtml(chargeModel: ChargeDetailsViewModel) = {
   @chargeModel match {
     case charge: StandardChargeViewModel => {@standardCharge(charge)}
+    case crystallised: CrystallisedInterestViewModel => {@crystallisedCharge(crystallised)}
   }
 }
 
