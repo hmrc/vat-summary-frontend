@@ -21,7 +21,7 @@ import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.payments.{Payment, PaymentOnAccount}
+import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -66,7 +66,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
               case Some(model) =>
                 Ok(view(model, serviceInfoContent))
               case None =>
-                logger.warn("[WhatYouOweController][show] originalAmount field missing from payment; failed to render view")
+                logger.warn("[WhatYouOweController][show] required field(s) missing from payment(s); failed to render view")
                 InternalServerError(paymentsError())
             }
           case Right(_) =>
@@ -81,22 +81,57 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
   }
 
-  private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] =
-    payments.collect {
-      case payment if payment.originalAmount.isDefined =>
-        StandardChargeViewModel(
-          chargeType = payment.chargeType.value,
-          outstandingAmount = payment.outstandingAmount,
-          originalAmount = payment.originalAmount.get,
-          clearedAmount = payment.clearedAmount,
-          dueDate = payment.due,
-          periodKey = payment.periodKey,
-          isOverdue = payment.due.isBefore(dateService.now()) && !payment.ddCollectionInProgress,
-          chargeReference = payment.chargeReference,
-          periodFrom = StandardChargeViewModel.periodFrom(payment),
-          periodTo = StandardChargeViewModel.periodTo(payment)
-        )
+  private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] = {
+
+    val interestPayments = if (appConfig.features.interestBreakdownEnabled()) {
+      payments.filter(p => ChargeType.interestChargeTypes.contains(p.chargeType))
+    } else {
+      Seq()
     }
+
+    val standardPayments = payments.filter(!interestPayments.contains(_))
+
+    val interestCharges: Seq[PaymentWithPeriod] = interestPayments
+      .collect {
+        case p: PaymentWithPeriod if p.chargeReference.isDefined => p
+      }
+    val standardCharges = standardPayments.filter(_.originalAmount.isDefined)
+
+    standardCharges.map(buildStandardChargeViewModel) ++ interestCharges.map(buildCrystallisedIntViewModel)
+
+  }
+
+  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): CrystallisedInterestViewModel = {
+    CrystallisedInterestViewModel(
+      periodFrom = payment.periodFrom,
+      periodTo = payment.periodTo,
+      chargeType = payment.chargeType.value,
+      interestRate = 5.00, // TODO replace with API field
+      dueDate = payment.due,
+      interestAmount = 100.00, // TODO replace with calculation
+      amountReceived = payment.clearedAmount.getOrElse(0),
+      leftToPay = payment.outstandingAmount,
+      isOverdue = payment.isOverdue(dateService.now()),
+      chargeReference = payment.chargeReference.get,
+      isPenalty = ChargeType.penaltyChargeTypes.contains(payment.chargeType)
+    )
+  }
+
+  private[controllers] def buildStandardChargeViewModel(payment: Payment): StandardChargeViewModel = {
+    import StandardChargeViewModel._
+    StandardChargeViewModel(
+      chargeType = payment.chargeType.value,
+      outstandingAmount = payment.outstandingAmount,
+      originalAmount = payment.originalAmount.get,
+      clearedAmount = payment.clearedAmount.getOrElse(0),
+      dueDate = payment.due,
+      periodKey = payment.periodKey,
+      isOverdue = payment.isOverdue(dateService.now()),
+      chargeReference = payment.chargeReference,
+      periodFrom = periodFrom(payment),
+      periodTo = periodTo(payment)
+    )
+  }
 
   def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
 

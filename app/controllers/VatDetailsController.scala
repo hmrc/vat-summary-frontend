@@ -128,7 +128,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
   }
 
   private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {
-    val isOverdue = payments.head.due.isBefore(dateService.now()) && !payments.head.ddCollectionInProgress
+    val isOverdue = payments.head.isOverdue(dateService.now())
     getObligationDetails(
       payments,
       isOverdue

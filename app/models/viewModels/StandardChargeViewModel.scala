@@ -26,7 +26,7 @@ import java.time.LocalDate
 case class StandardChargeViewModel(chargeType: String,
                                    outstandingAmount: BigDecimal,
                                    originalAmount: BigDecimal,
-                                   clearedAmount: Option[BigDecimal],
+                                   clearedAmount: BigDecimal,
                                    dueDate: LocalDate,
                                    periodKey: Option[String],
                                    isOverdue: Boolean,
@@ -81,7 +81,7 @@ case class StandardChargeViewModel(chargeType: String,
   }
 
   override def toString: String =
-    s"$chargeType+$outstandingAmount+$originalAmount+${clearedAmount.getOrElse(0)}+$dueDate+${periodKey.getOrElse(none)}" +
+    s"$chargeType+$outstandingAmount+$originalAmount+$clearedAmount+$dueDate+${periodKey.getOrElse(none)}" +
     s"+$isOverdue+${chargeReference.getOrElse(none)}+${periodFrom.getOrElse(none)}+${periodTo.getOrElse(none)}"
 }
 

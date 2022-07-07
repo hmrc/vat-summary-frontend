@@ -20,7 +20,7 @@ import common.TestModels._
 import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.{MiscPenaltyCharge, Payments}
+import models.payments.{MiscPenaltyCharge, Payments, VatReturn1stLPPLPI, VatReturnLPI}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -252,6 +252,54 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         }
         result shouldBe None
       }
+    }
+
+    "there are multiple payments and some are interest payments" should {
+
+      "return a view model with some CrystallisedInterestViewModels" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(
+            payment, payment, payment.copy(chargeType = VatReturnLPI), payment.copy(chargeType = VatReturn1stLPPLPI)
+          ),
+            mandationStatus = "MTDfB")
+        }
+        result shouldBe Some(whatYouOweViewModelInterestCharges)
+      }
+    }
+
+    "an interest payment doesn't have the charge reference defined" should {
+
+      "not build a view model" in {
+        val result = {
+          mockAppConfig.features.interestBreakdownEnabled(true)
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(
+            payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)
+          ),
+            mandationStatus = "MTDfB")
+        }
+        result shouldBe None
+      }
+
+    }
+
+    "there is an interest payment but the interestBreakdownEnabled() feature switch is off" should {
+
+      "make a StandardChargeViewModel instead of a CrystallisedInterestViewModel" in {
+        val result = {
+          mockAppConfig.features.interestBreakdownEnabled(false)
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(
+            payment.copy(chargeType = VatReturn1stLPPLPI)
+          ),
+            mandationStatus = "MTDfB")
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(
+          charges = Seq(whatYouOweChargeModel.copy(chargeType = "VAT Return 1st LPP LPI"))
+        ))
+      }
+
     }
 
     "description() cannot retrieve a charge description" should {

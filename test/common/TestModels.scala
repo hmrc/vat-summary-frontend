@@ -319,7 +319,7 @@ object TestModels {
     chargeType = "VAT Return Debit Charge",
     outstandingAmount = 10000,
     originalAmount = 1000.00,
-    clearedAmount = Some(00.00),
+    clearedAmount = 00.00,
     dueDate = LocalDate.parse("2019-03-03"),
     periodKey = Some("ABCD"),
     isOverdue = false,
@@ -328,9 +328,33 @@ object TestModels {
     periodTo = Some(LocalDate.parse("2019-02-02"))
   )
 
+  val whatYouOweChargeModelInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    chargeType = "VAT Return LPI",
+    interestRate = 5.00,
+    dueDate = LocalDate.parse("2019-03-03"),
+    interestAmount = 100.00,
+    amountReceived = 00.00,
+    leftToPay = 10000,
+    isOverdue = false,
+    chargeReference = "XD002750002155",
+    isPenalty = false
+  )
+
   val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
     10000,
     Seq(whatYouOweChargeModel),
+    mandationStatus = "MTDfB"
+  )
+
+  val whatYouOweViewModelInterestCharges: WhatYouOweViewModel = WhatYouOweViewModel(
+    40000,
+    Seq(whatYouOweChargeModel,
+      whatYouOweChargeModel,
+      whatYouOweChargeModelInterestCharge,
+      whatYouOweChargeModelInterestCharge.copy(chargeType = "VAT Return 1st LPP LPI")
+    ),
     mandationStatus = "MTDfB"
   )
 
@@ -344,7 +368,7 @@ object TestModels {
     "VAT Return Debit Charge",
     111.11,
     333.33,
-    Some(222.22),
+    222.22,
     LocalDate.parse("2018-03-01"),
     Some("18AA"),
     isOverdue = true,
@@ -385,7 +409,7 @@ object TestModels {
     chargeType = "VAT Return Debit Charge",
     outstandingAmount = BigDecimal(1111.11),
     originalAmount = BigDecimal(3333.33),
-    clearedAmount = Some(BigDecimal(2222.22)),
+    clearedAmount = BigDecimal(2222.22),
     dueDate = LocalDate.parse("2021-04-08"),
     periodKey = None,
     isOverdue = false,
@@ -402,7 +426,7 @@ object TestModels {
 
   val whatYouOweChargeNoPeriodTo: StandardChargeViewModel = whatYouOweCharge.copy(periodTo = None)
 
-  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = None)
+  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = 0)
 
   val whatYouOweChargeNoViewReturn: StandardChargeViewModel = whatYouOweCharge.copy(chargeType = "VAT Repayment Supplement Rec")
 

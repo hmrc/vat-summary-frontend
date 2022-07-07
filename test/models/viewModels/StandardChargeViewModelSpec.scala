@@ -29,7 +29,7 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
     chargeType = "VAT Inaccuracy return replaced",
     outstandingAmount = BigDecimal(1234.56),
     originalAmount = BigDecimal(2345.67),
-    clearedAmount = Some(BigDecimal(1111.11)),
+    clearedAmount = BigDecimal(1111.11),
     dueDate = LocalDate.parse("2021-04-08"),
     periodKey = Some("18AA"),
     isOverdue = true,
@@ -144,9 +144,9 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
 
     "some parameters are not defined" in {
       val minModel = model.copy(
-        clearedAmount = None, periodKey = None, chargeReference = None, periodTo = None, periodFrom = None
+        periodKey = None, chargeReference = None, periodTo = None, periodFrom = None
       )
-      minModel.toString shouldBe "VAT Inaccuracy return replaced+1234.56+2345.67+0+2021-04-08+None+true+None+None+None"
+      minModel.toString shouldBe "VAT Inaccuracy return replaced+1234.56+2345.67+1111.11+2021-04-08+None+true+None+None+None"
     }
   }
 }

@@ -25,7 +25,7 @@ class PathBindablesSpec extends AnyWordSpecLike with Matchers {
   "standardChargePathBinder" should {
 
     val minModel = chargeModel1.copy(
-      clearedAmount = None, periodKey = None, chargeReference = None, periodTo = None, periodFrom = None
+      clearedAmount = 0, periodKey = None, chargeReference = None, periodTo = None, periodFrom = None
     )
     val maxUrl = "VAT Return Debit Charge+111.11+333.33+222.22+2018-03-01+18AA+true+ABCD+2018-01-01+2018-02-01"
     val minUrl = "VAT Return Debit Charge+111.11+333.33+0+2018-03-01+None+true+None+None+None"
@@ -45,33 +45,27 @@ class PathBindablesSpec extends AnyWordSpecLike with Matchers {
 
       "there is an invalid value provided for a date parameter" in {
         val url = "VAT Return Debit Charge+111.11+333.33+0+2018-03-33+None+true+None+None+None"
-        PathBindables.standardChargePathBinder.bind("", url) shouldBe
-          Left("Failed to bind due to error: java.time.format.DateTimeParseException: Text '2018-03-33' " +
-            "could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 33")
+        PathBindables.standardChargePathBinder.bind("", url).isLeft shouldBe true
       }
 
       "there is an invalid value provided for a numeric parameter" in {
         val url = "VAT Return Debit Charge+one+333.33+0+2018-03-01+None+true+None+None+None"
-        PathBindables.standardChargePathBinder.bind("", url) shouldBe
-          Left("Failed to bind due to error: java.lang.NumberFormatException")
+        PathBindables.standardChargePathBinder.bind("", url).isLeft shouldBe true
       }
 
       "there is an invalid value provided for a boolean parameter" in {
         val url = "VAT Return Debit Charge+111.11+333.33+0+2018-03-01+None+truest+None+None+None"
-        PathBindables.standardChargePathBinder.bind("", url) shouldBe
-          Left("Failed to bind due to error: java.lang.IllegalArgumentException: For input string: \"truest\"")
+        PathBindables.standardChargePathBinder.bind("", url).isLeft shouldBe true
       }
 
       "there are not enough parameters" in {
         val url = "VAT Return Debit Charge+111.11+333.33"
-        PathBindables.standardChargePathBinder.bind("", url) shouldBe
-          Left("Failed to bind due to error: java.lang.ArrayIndexOutOfBoundsException: 3")
+        PathBindables.standardChargePathBinder.bind("", url).isLeft shouldBe true
       }
 
       "the URL is in an unexpected format" in {
         val url = "what-you-owe"
-        PathBindables.standardChargePathBinder.bind("", url) shouldBe
-          Left("Failed to bind due to error: java.lang.ArrayIndexOutOfBoundsException: 1")
+        PathBindables.standardChargePathBinder.bind("", url).isLeft shouldBe true
       }
     }
 
