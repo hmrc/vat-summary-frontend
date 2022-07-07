@@ -16,14 +16,16 @@
 
 package testOnly.controllers
 
+import common.TestModels.chargeModel1
 import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.mvc.Http.HeaderNames
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView, CrystallisedLPP1View}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
@@ -34,24 +36,21 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
     injector.instanceOf[CrystallisedLPP1View]
   )
 
+  lazy val requestWithReferrer: FakeRequest[AnyContentAsEmpty.type] =
+    fakeRequestWithSession.withHeaders(HeaderNames.REFERER -> "/home")
+  lazy val agentRequestWithReferrer: FakeRequest[AnyContentAsEmpty.type] =
+    agentFinancialRequest.withHeaders(HeaderNames.REFERER -> "/home")
+
   "The chargeBreakdown action" when {
 
-    "valid form information is submitted in the request" when {
+    "there is a HTTP referrer" when {
 
       "the user is logged in as a principal entity" should {
-
-        val request = fakePostWithSession.withFormUrlEncodedBody(
-          "chargeType" -> "VAT Return Debit Charge",
-          "outstandingAmount" -> "1234.56",
-          "originalAmount" -> "1234.56",
-          "dueDate" -> "2018-01-01",
-          "isOverdue" -> "true"
-        )
 
         lazy val result = {
           mockPrincipalAuth()
           mockServiceInfoCall()
-          controller.chargeBreakdown(request)
+          controller.chargeBreakdown(chargeModel1)(requestWithReferrer)
         }
 
         "return 200" in {
@@ -66,18 +65,10 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "the user is logged in as an agent" should {
 
-        lazy val request = agentPostFinancialRequest.withFormUrlEncodedBody(
-          "chargeType" -> "VAT Return Debit Charge",
-          "outstandingAmount" -> "1234.56",
-          "originalAmount" -> "1234.56",
-          "dueDate" -> "2018-01-01",
-          "isOverdue" -> "true"
-        )
-
         lazy val result = {
           mockAgentAuth()
           mockServiceInfoCall()
-          controller.chargeBreakdown(request)
+          controller.chargeBreakdown(chargeModel1)(agentRequestWithReferrer)
         }
 
         "return 200" in {
@@ -91,39 +82,20 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "invalid form information is submitted in the request" should {
+    "there is no HTTP referrer" should {
 
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
-        controller.chargeBreakdown(fakeRequestWithSession.withFormUrlEncodedBody("field" -> "value"))
+        controller.chargeBreakdown(chargeModel1)(fakeRequestWithSession)
       }
 
-      "return 500" in {
-        status(result) shouldBe INTERNAL_SERVER_ERROR
+      "return 303" in {
+        status(result) shouldBe SEE_OTHER
       }
 
-      "load the payments error view" in {
-        val document: Document = Jsoup.parse(contentAsString(result))
-        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
-      }
-    }
-
-    "no form information is submitted in the request" should {
-
-      lazy val result = {
-        mockPrincipalAuth()
-        mockServiceInfoCall()
-        controller.chargeBreakdown(fakeRequestWithSession)
-      }
-
-      "return 500" in {
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-      }
-
-      "load the payments error view" in {
-        val document: Document = Jsoup.parse(contentAsString(result))
-        document.select(".govuk-body").text() shouldBe "If you know how much you owe, you can still pay now."
+      "redirect to the What You Owe page" in {
+        redirectLocation(result) shouldBe Some(routes.WhatYouOweController.show.url)
       }
     }
 
@@ -131,7 +103,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockMissingBearerToken()
-        controller.chargeBreakdown(fakeRequest)
+        controller.chargeBreakdown(chargeModel1)(requestWithReferrer)
       }
 
       "return status 303" in {
@@ -146,7 +118,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "return 403" in {
         mockInsufficientEnrolments()
-        val result = controller.chargeBreakdown()(fakeRequest)
+        val result = controller.chargeBreakdown(chargeModel1)(requestWithReferrer)
         status(result) shouldBe FORBIDDEN
       }
     }
@@ -155,7 +127,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       "return 403" in {
         mockPrincipalAuth()
-        val result = controller.chargeBreakdown()(insolventRequest)
+        val result = controller.chargeBreakdown(chargeModel1)(insolventRequest)
         status(result) shouldBe FORBIDDEN
       }
     }
@@ -164,7 +136,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
       lazy val result = {
         mockPrincipalAuth()
-        controller.chargeBreakdown()(DDInterruptRequest)
+        controller.chargeBreakdown(chargeModel1)(DDInterruptRequest)
       }
 
       "return 303" in {

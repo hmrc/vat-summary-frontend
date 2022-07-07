@@ -17,7 +17,7 @@ POST        /vat-through-software/test-only/feature-switch                     t
 GET         /vat-through-software/test-only/payments-stub                      testOnly.controllers.PaymentsStubController.stub
 
 GET         /vat-through-software/test-only/what-you-owe                       testOnly.controllers.WhatYouOweController.show
-POST        /vat-through-software/test-only/amount-to-pay                      testOnly.controllers.ChargeBreakdownController.chargeBreakdown
+GET         /vat-through-software/test-only/amount-to-pay/:model               testOnly.controllers.ChargeBreakdownController.chargeBreakdown(model: StandardChargeViewModel)
 POST        /vat-through-software/test-only/estimated-interest                 testOnly.controllers.ChargeBreakdownController.estimatedInterestBreakdown
 POST        /vat-through-software/test-only/crystallised-interest              testOnly.controllers.ChargeBreakdownController.crystallisedInterestBreakdown
 POST        /vat-through-software/test-only/crystallised-lpp1                  testOnly.controllers.ChargeBreakdownController.crystallisedLPP1Breakdown

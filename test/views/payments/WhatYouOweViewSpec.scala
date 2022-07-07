@@ -91,6 +91,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
             s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)} due 1 March 2018 View VAT Return"
         }
 
+        "has a link to the breakdown page" in {
+          element(tableBodyCell(1, 1) + "> a").attr("href") shouldBe
+            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel1).url
+        }
+
         "has an overdue label" in {
           elementText(tableBodyCell(1, 1) + " .govuk-tag") shouldBe "overdue"
         }
@@ -107,11 +112,6 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         }
 
-        "has a form with the correct action" in {
-          element(tableBodyCell(1, 1) + " > form").attr("action") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown.url
-        }
-
         "has the correct amount" in {
           elementText(tableBodyCell(1, 2)) shouldBe "£" + chargeModel1.outstandingAmount
         }
@@ -124,17 +124,17 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
             s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)} due 1 December 2018"
         }
 
+        "has a link to the breakdown page" in {
+          element(tableBodyCell(2, 1) + "> a").attr("href") shouldBe
+            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel2).url
+        }
+
         "does not have an overdue label" in {
           elementExtinct(tableBodyCell(2, 1) + " .govuk-tag")
         }
 
         "has the correct due hint text" in {
           elementText(tableBodyCell(2, 1) + "> span") shouldBe "due 1 December 2018"
-        }
-
-        "has a form with the correct action" in {
-          element(tableBodyCell(2, 1) + " > form").attr("action") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown.url
         }
 
         "has the correct amount" in {

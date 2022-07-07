@@ -21,12 +21,15 @@ import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
 import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
+import play.mvc.Http.HeaderNames
+import play.twirl.api.Html
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, EstimatedInterestView, CrystallisedLPP1View}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
+
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
@@ -43,17 +46,18 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  def chargeBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user =>
+  private def referrerCheck(view: Html)(implicit request: Request[_]): Result =
+    if(request.headers.get(HeaderNames.REFERER).isDefined) {
+      Ok(view)
+    } else {
+      Redirect(routes.WhatYouOweController.show)
+    }
+
+  def chargeBreakdown(model: StandardChargeViewModel): Action[AnyContent] = authorisedController.financialAction {
+    implicit request => implicit user =>
       DDInterrupt.interruptCheck { _ =>
         serviceInfoService.getPartial.map { navLinks =>
-          StandardChargeViewModel.form.bindFromRequest.fold(
-            errorForm => {
-              logger.warn(s"[ChargeBreakdownController][chargeBreakdown] - Unexpected error when binding form: $errorForm")
-              InternalServerError(errorView())
-            },
-            model => Ok(chargeBreakdownView(model, navLinks))
-          )
+          referrerCheck(chargeBreakdownView(model, navLinks))
         }
       }
   }
