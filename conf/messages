@@ -450,6 +450,13 @@ chargeType.vatCentralAssessmentLPITitle = Interest on central assessment of VAT
 chargeType.VATReturn1stLPPTitle = Late payment penalty
 chargeType.VATReturn1stLPPDescription = for late payment of VAT for VAT period {0}
 
+chargeType.VATCA1stLPPLPPITitle = Interest on central assessment penalty
+chargeType.VATCA2ndLPPLPPITitle = Interest on central assessment second penalty
+chargeType.VATOfficersAssessmentLPITitle = Interest on officer’s assessment of VAT
+chargeType.VATOA1stLPPLPITitle = Interest on officer’s assessment penalty
+chargeType.VATOA2ndLPPLPITitle = Interest on officer’s assessment second penalty
+
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
