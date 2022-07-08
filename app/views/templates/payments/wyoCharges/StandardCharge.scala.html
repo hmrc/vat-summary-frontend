@@ -20,7 +20,7 @@
 
 @this(govukTag: GovukTag)
 
-@(charge: StandardChargeViewModel)(implicit request: Request[_], messages: Messages, appConfig: AppConfig, user: User)
+@(charge: StandardChargeViewModel)(implicit messages: Messages, appConfig: AppConfig, user: User)
 
 @if(charge.isOverdue){
   @govukTag(Tag(
