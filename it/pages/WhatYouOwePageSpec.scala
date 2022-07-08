@@ -35,7 +35,7 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
   }
 
   val totalAmountSelector = "p.govuk-body:nth-of-type(2)"
-  val chargeRowsSelector = "tr.govuk-table__row > td > form > button"
+  val chargeRowsSelector = "tr.govuk-table__row > td > a"
 
   "Calling the What You Owe route as an authenticated user" when {
 

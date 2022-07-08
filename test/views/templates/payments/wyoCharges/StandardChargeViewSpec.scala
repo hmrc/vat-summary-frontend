@@ -34,8 +34,12 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("form") shouldBe
-          s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
+        elementText("a") shouldBe s"${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
+      }
+
+      "have a link to the breakdown page" in {
+        element("a").attr("href") shouldBe
+          testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel1).url
       }
 
       "have an overdue label" in {
@@ -56,11 +60,6 @@ class StandardChargeViewSpec extends ViewBaseSpec {
           element("span > a").attr("href") shouldBe mockConfig.vatReturnUrl(chargeModel1.periodKey.get)
         }
       }
-
-      "have a form with the correct action" in {
-        element("form").attr("action") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown.url
-      }
     }
 
     "a charge is not overdue and view return is not enabled" should {
@@ -69,8 +68,12 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("form") shouldBe
-          s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
+        elementText("a") shouldBe s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
+      }
+
+      "have a link to the breakdown page" in {
+        element("a").attr("href") shouldBe
+          testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel2).url
       }
 
       "not have an overdue label" in {
@@ -83,11 +86,6 @@ class StandardChargeViewSpec extends ViewBaseSpec {
 
       "not have a link to view the VAT return" in {
         elementExtinct("span > a")
-      }
-
-      "have a form with the correct action" in {
-        element("form").attr("action") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown.url
       }
     }
   }

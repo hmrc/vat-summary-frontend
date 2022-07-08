@@ -16,11 +16,10 @@
 
 package models.viewModels
 
-import play.api.data.Form
-import play.api.data.Forms._
 import models.payments._
 import play.api.i18n.Messages
 import utils.LoggerUtil
+import utils.PathBindables.none
 import views.templates.payments.PaymentMessageHelper
 import java.time.LocalDate
 
@@ -81,22 +80,12 @@ case class StandardChargeViewModel(chargeType: String,
     case _ => false
   }
 
+  override def toString: String =
+    s"$chargeType+$outstandingAmount+$originalAmount+${clearedAmount.getOrElse(0)}+$dueDate+${periodKey.getOrElse(none)}" +
+    s"+$isOverdue+${chargeReference.getOrElse(none)}+${periodFrom.getOrElse(none)}+${periodTo.getOrElse(none)}"
 }
 
-object StandardChargeViewModel extends LoggerUtil {
-
-  val form: Form[StandardChargeViewModel] = Form(mapping(
-    "chargeType" -> text,
-    "outstandingAmount" -> bigDecimal,
-    "originalAmount" -> bigDecimal,
-    "clearedAmount" -> optional(bigDecimal),
-    "dueDate" -> localDate,
-    "periodKey" -> optional(text),
-    "isOverdue" -> boolean,
-    "chargeReference" -> optional(text),
-    "periodFrom" -> optional(localDate),
-    "periodTo" -> optional(localDate)
-  )(StandardChargeViewModel.apply)(StandardChargeViewModel.unapply))
+object StandardChargeViewModel {
 
   def periodFrom(payment: Payment): Option[LocalDate] = payment match {
     case p: PaymentWithPeriod => Some(p.periodFrom)
@@ -107,5 +96,4 @@ object StandardChargeViewModel extends LoggerUtil {
     case p: PaymentWithPeriod => Some(p.periodTo)
     case _ => None
   }
-
 }
