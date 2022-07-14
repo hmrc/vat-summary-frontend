@@ -33,6 +33,9 @@ sealed trait Payment extends Obligation {
   val periodKey: Option[String]
   val ddCollectionInProgress: Boolean
   val auditDetails: Map[String, String]
+
+  def isOverdue(now: LocalDate): Boolean = due.isBefore(now) && !ddCollectionInProgress
+
 }
 
 case class PaymentWithPeriod(chargeType: ChargeType,

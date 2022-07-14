@@ -33,7 +33,7 @@ object PathBindables extends LoggerUtil {
         val chargeType = params(0)
         val outstandingAmount = BigDecimal(params(1))
         val originalAmount = BigDecimal(params(2))
-        val clearedAmount = if(params(3) == "0") None else Some(BigDecimal(params(3)))
+        val clearedAmount = BigDecimal(params(3))
         val dueDate = LocalDate.parse(params(4))
         val periodKey = if(params(5) == none) None else Some(params(5))
         val isOverdue = params(6).toBoolean

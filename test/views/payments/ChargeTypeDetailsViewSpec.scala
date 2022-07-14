@@ -210,22 +210,6 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
-      "the user has no cleared amount" should {
-
-        lazy val view = {
-          chargeTypeDetailsView(whatYouOweChargeNoClearedAmount, Html(""))(request, messages, mockConfig, user)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct first column in the third line" in {
-          elementText(Selectors.clearedAmountKey) shouldBe "Amount received"
-        }
-
-        "display 0 as the cleared amount" in {
-          elementText(Selectors.clearedAmountValue) shouldBe "£0"
-        }
-      }
-
       "the charge allows the user to view a VAT return" should {
 
         lazy val view = {
