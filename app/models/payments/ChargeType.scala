@@ -314,7 +314,7 @@ object ChargeType extends LoggerUtil {
     VatOA2ndLPPLPI
   ) ++ positiveOrNegativeChargeTypes
 
-  val interestChargeTypes = Seq(
+  val interestChargeTypes: Set[ChargeType] = Set(
     VatReturnLPI,
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
@@ -326,7 +326,7 @@ object ChargeType extends LoggerUtil {
     VatOA2ndLPPLPI
   )
 
-  val penaltyInterestChargeTypes = Seq(
+  val penaltyInterestChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
     VatCA1stLPPLPI,
@@ -335,7 +335,7 @@ object ChargeType extends LoggerUtil {
     VatOA2ndLPPLPI
   )
 
-  val penaltyChargeTypes = Seq(
+  val penaltyChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPP
   )
 

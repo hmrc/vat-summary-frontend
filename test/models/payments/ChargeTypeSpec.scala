@@ -90,7 +90,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
       }
     }
 
-    TestModels.nonInterestChargeTypes.foreach { charge =>
+    allChargeTypes.diff(interestChargeTypes).foreach { charge =>
       s"return true for $charge" in {
         charge.notInterest shouldBe true
       }
