@@ -334,7 +334,7 @@ object TestModels {
     chargeType = "VAT Return LPI",
     interestRate = 5.00,
     dueDate = LocalDate.parse("2019-03-03"),
-    interestAmount = 100.00,
+    interestAmount = 1000.00,
     amountReceived = 00.00,
     leftToPay = 10000,
     isOverdue = false,
