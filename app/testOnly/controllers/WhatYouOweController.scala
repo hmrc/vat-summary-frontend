@@ -83,7 +83,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] = {
 
-    val interestPayments = if (appConfig.features.interestBreakdownEnabled()) {
+    val interestPayments = if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
       payments.filter(p => ChargeType.interestChargeTypes.contains(p.chargeType))
     } else {
       Seq()

@@ -31,7 +31,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.penaltiesServiceEnabled(true)
     features.staticDateEnabled(true)
     features.directDebitInterrupt(true)
-    features.interestBreakdownEnabled(true)
+    features.penaltiesAndInterestWYOEnabled(true)
     features.chargeReferenceInsetEnabled(true)
   }
 
@@ -83,15 +83,15 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     }
   }
 
-  "The interest breakdown feature" should {
+  "The penalties and interest WYO feature" should {
 
     "return its current state" in {
-      features.interestBreakdownEnabled() shouldBe true
+      features.penaltiesAndInterestWYOEnabled() shouldBe true
     }
 
     "switch to a new state" in {
-      features.interestBreakdownEnabled(false)
-      features.interestBreakdownEnabled() shouldBe false
+      features.penaltiesAndInterestWYOEnabled(false)
+      features.penaltiesAndInterestWYOEnabled() shouldBe false
     }
   }
 
