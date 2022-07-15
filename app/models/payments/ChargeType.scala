@@ -16,6 +16,7 @@
 
 package models.payments
 
+import models.payments.ChargeType.{interestChargeTypes, penaltyChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
@@ -28,6 +29,10 @@ sealed trait ChargeType {
   def toPathElement: String = {
     value.map(_.toLower).replace(' ', '-')
   }
+
+  def isInterest: Boolean = interestChargeTypes.contains(this)
+  def notInterest: Boolean = !isInterest
+
 }
 
 case object VatUnrepayableOverpayment extends ChargeType {
@@ -282,7 +287,6 @@ object ChargeType extends LoggerUtil {
     FailureToNotifyRCSLCharge,
     FailureToSubmitRCSLCharge,
     VatInaccuraciesInECSalesCharge,
-    VatFailureToSubmitECSalesCharge,
     StatutoryInterestCharge,
     VatPADefaultInterestCharge,
     VatProtectiveAssessmentCharge,

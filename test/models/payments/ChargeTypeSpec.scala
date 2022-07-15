@@ -18,6 +18,8 @@ package models.payments
 
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.matchers.should.Matchers
+import ChargeType._
+import common.TestModels
 
 class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
 
@@ -79,4 +81,31 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
     }
 
   }
+
+  "notInterest" should {
+
+    interestChargeTypes.foreach { charge =>
+      s"return false for $charge" in {
+        charge.notInterest shouldBe false
+      }
+    }
+
+    TestModels.nonInterestChargeTypes.foreach { charge =>
+      s"return true for $charge" in {
+        charge.notInterest shouldBe true
+      }
+    }
+
+  }
+
+  "isInterest" should {
+
+    interestChargeTypes.foreach { charge =>
+      s"return true for $charge" in {
+        charge.isInterest shouldBe true
+      }
+    }
+
+  }
+
 }
