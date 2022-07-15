@@ -16,42 +16,25 @@
 
 package models.viewModels
 
+import common.TestModels.{crystallisedLPP1JsonMax, crystallisedLPP1JsonMin, crystallisedLPP1Model, crystallisedLPP1ModelMin}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import java.time.LocalDate
-
 import models.viewModels.CrystallisedLPP1ViewModel.form
 import play.api.data.FormError
+import play.api.libs.json.Json
 
 class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
-
-  val model: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
-    99,
-    10,
-    Some(20),
-    2.4,
-    111.11,
-    Some(222.22),
-    LocalDate.parse("2020-01-01"),
-    500.55,
-    100.11,
-    400.44,
-    LocalDate.parse("2020-03-03"),
-    LocalDate.parse("2020-04-04"),
-    "VAT Return 1st LPP",
-    "CHARGEREF",
-    isOverdue = false
-  )
 
   "The makePaymentRedirect value" should {
 
     "be a payment handoff URL generated from the model's parameters" in {
-      val amountInPence = (model.leftToPay * 100).toLong
-      val chargeTypeEncoded = model.chargeType.replace(" ", "%20")
+      val amountInPence = (crystallisedLPP1Model.leftToPay * 100).toLong
+      val chargeTypeEncoded = crystallisedLPP1Model.chargeType.replace(" ", "%20")
 
-      model.makePaymentRedirect should include(
-        s"/make-payment/$amountInPence/${model.periodTo.getMonthValue}/${model.periodTo.getYear}" +
-          s"/${model.periodTo}/$chargeTypeEncoded/${model.dueDate}/${model.chargeReference}"
+      crystallisedLPP1Model.makePaymentRedirect should include(
+        s"/make-payment/$amountInPence/${crystallisedLPP1Model.periodTo.getMonthValue}/" +
+          s"${crystallisedLPP1Model.periodTo.getYear}/${crystallisedLPP1Model.periodTo}/$chargeTypeEncoded/" +
+          s"${crystallisedLPP1Model.dueDate}/${crystallisedLPP1Model.chargeReference}"
       )
     }
   }
@@ -76,7 +59,7 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
           "chargeType" -> "VAT Return 1st LPP",
           "chargeReference" -> "CHARGEREF",
           "isOverdue" -> "false"
-        )) shouldBe Right(model)
+        )) shouldBe Right(crystallisedLPP1Model)
       }
     }
   }
@@ -252,6 +235,31 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "chargeReference" -> "CHARGEREF",
         "isOverdue" -> "12.0"
       )) shouldBe Left(List(FormError("isOverdue", List("error.boolean"), List())))
+    }
+  }
+
+  "The CrystallisedLPP1ViewModel" should {
+
+    "read from JSON" when {
+
+      "all fields are populated" in {
+        crystallisedLPP1JsonMax.as[CrystallisedLPP1ViewModel] shouldBe crystallisedLPP1Model
+      }
+
+      "optional fields are missing" in {
+        crystallisedLPP1JsonMin.as[CrystallisedLPP1ViewModel] shouldBe crystallisedLPP1ModelMin
+      }
+    }
+
+    "write to JSON" when {
+
+      "all fields are populated" in {
+        Json.toJson(crystallisedLPP1Model) shouldBe crystallisedLPP1JsonMax
+      }
+
+      "optional fields are missing" in {
+        Json.toJson(crystallisedLPP1ModelMin) shouldBe crystallisedLPP1JsonMin
+      }
     }
   }
 }
