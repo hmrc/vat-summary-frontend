@@ -16,24 +16,13 @@
 
 package models.viewModels
 
+import common.TestModels.estimatedInterestModel
 import models.viewModels.EstimatedInterestViewModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
-import java.time.LocalDate
 
 class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
-
-  val model: EstimatedInterestViewModel = EstimatedInterestViewModel(
-    LocalDate.parse("2018-01-01"),
-    LocalDate.parse("2018-02-02"),
-    "VAT Return Debit Charge",
-    2.6,
-    300.33,
-    200.22,
-    100.11,
-    isPenalty = false
-  )
 
   "The EstimatedInterestViewModel form" should {
 
@@ -49,7 +38,7 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "amountReceived" -> "200.22",
           "leftToPay" -> "100.11",
           "isPenalty" -> "false"
-        )) shouldBe Right(model)
+        )) shouldBe Right(estimatedInterestModel)
       }
     }
 
