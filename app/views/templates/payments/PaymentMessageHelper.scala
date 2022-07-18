@@ -373,8 +373,8 @@ object PaymentMessageHelper {
   object ProtectiveAssessmentCharge extends PaymentMessageHelper(
     VatProtectiveAssessmentCharge.value,
     "chargeType.vatProtectiveAssessmentChargeTitle",
-    Some("chargeType.vatProtectiveAssessmentChargeDescription"),
-    Some("chargeType.vatProtectiveAssessmentChargeDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object UnallocatedPaymentCharge extends PaymentMessageHelper(

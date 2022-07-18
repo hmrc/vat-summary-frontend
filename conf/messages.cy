@@ -129,7 +129,7 @@ whatYouOwe.ifYouCannotPayThree = sefydlu Trefniant Amser i Dalu (yn agor tab new
 whatYouOwe.ifYouCannotPayFour = Mae hyn yn eich galluogi i dalu’ch bil fesul rhandaliad.
 whatYouOwe.isIncorrectOne = Mae’r hyn sydd arnoch yn anghywir neu ar goll
 whatYouOwe.agent.isIncorrectOne = Mae’r swm sy’n ddyledus yn anghywir neu ar goll
-whatYouOwe.isIncorrectTwo = 'Os yw’r hyn sydd arnoch yn anghywir, gwiriwch a oes modd i chi
+whatYouOwe.isIncorrectTwo = Os yw’r hyn sydd arnoch yn anghywir, gwiriwch a oes modd i chi
 whatYouOwe.agent.isIncorrectTwo = Os yw’r swm sy’n ddyledus yn anghywir, gwiriwch a oes modd i chi
 whatYouOwe.isIncorrectThree = gywiro gwallau ar eich Ffurflen TAW (yn agor dab newydd)
 whatYouOwe.agent.isIncorrectThree = gywiro gwallau ar Ffurflen TAW eich cleient (yn agor tab newydd)
@@ -426,8 +426,7 @@ chargeType.vatFailureToSubmitRCSLDescription.agent = oherwydd bod eich cleient w
 chargeType.vatCreditReturnOffsetChargeTitle = Ad-daliad rhannol o ordaliad
 chargeType.vatCreditReturnOffsetChargeDescription = ad-daliad rhannol ar gyfer y cyfnod {0}
 
-chargeType.vatProtectiveAssessmentChargeTitle = Asesiad i ddiogelu
-chargeType.vatProtectiveAssessmentChargeDescription = ar gyfer y cyfnod {0}
+chargeType.vatProtectiveAssessmentChargeTitle = Asesiad i ddiogelu o ran TAW
 
 chargeType.unallocatedPaymentTitle = Taliad heb ei ddyranu
 chargeType.unallocatedPaymentDescription = gwnaethoch ordaliad y gellir ei ad-dalu i chi, neu y gellir ei gadw ar gyfrif
