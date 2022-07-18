@@ -83,21 +83,16 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] = {
 
-    val interestPayments = if (appConfig.features.interestBreakdownEnabled()) {
-      payments.filter(p => ChargeType.interestChargeTypes.contains(p.chargeType))
-    } else {
-      Seq()
+    payments collect {
+      case p: PaymentWithPeriod if
+        p.chargeType.isInterest
+        && p.chargeReference.isDefined
+        && p.originalAmount.isDefined => buildCrystallisedIntViewModel(p)
+
+      case p if
+        p.originalAmount.isDefined
+        && p.chargeType.notInterest => buildStandardChargeViewModel(p)
     }
-
-    val standardPayments = payments.filter(!interestPayments.contains(_))
-
-    val interestCharges: Seq[PaymentWithPeriod] = interestPayments
-      .collect {
-        case p: PaymentWithPeriod if p.chargeReference.isDefined => p
-      }
-    val standardCharges = standardPayments.filter(_.originalAmount.isDefined)
-
-    standardCharges.map(buildStandardChargeViewModel) ++ interestCharges.map(buildCrystallisedIntViewModel)
 
   }
 
@@ -108,7 +103,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       chargeType = payment.chargeType.value,
       interestRate = 5.00, // TODO replace with API field
       dueDate = payment.due,
-      interestAmount = 100.00, // TODO replace with calculation
+      interestAmount = payment.originalAmount.get,
       amountReceived = payment.clearedAmount.getOrElse(0),
       leftToPay = payment.outstandingAmount,
       isOverdue = payment.isOverdue(dateService.now()),

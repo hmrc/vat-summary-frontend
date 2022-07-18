@@ -272,7 +272,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "not build a view model" in {
         val result = {
-          mockAppConfig.features.interestBreakdownEnabled(true)
+          mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
           mockDateServiceCall()
           controller.constructViewModel(Seq(
             payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)
@@ -284,20 +284,17 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     }
 
-    "there is an interest payment but the interestBreakdownEnabled() feature switch is off" should {
+    "an interest payment doesn't have the original amount defined" should {
 
-      "make a StandardChargeViewModel instead of a CrystallisedInterestViewModel" in {
+      "not build a view model" in {
         val result = {
-          mockAppConfig.features.interestBreakdownEnabled(false)
           mockDateServiceCall()
           controller.constructViewModel(Seq(
-            payment.copy(chargeType = VatReturn1stLPPLPI)
+            payment.copy(originalAmount = None, chargeType = VatReturn1stLPPLPI)
           ),
             mandationStatus = "MTDfB")
         }
-        result shouldBe Some(whatYouOweViewModel.copy(
-          charges = Seq(whatYouOweChargeModel.copy(chargeType = "VAT Return 1st LPP LPI"))
-        ))
+        result shouldBe None
       }
 
     }

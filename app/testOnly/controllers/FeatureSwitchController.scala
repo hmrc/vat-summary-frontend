@@ -38,7 +38,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         directDebitInterrupt = appConfig.features.directDebitInterrupt(),
         penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled(),
-        interestBreakdownEnabled = appConfig.features.interestBreakdownEnabled(),
+        penaltiesAndInterestWYOEnabled = appConfig.features.penaltiesAndInterestWYOEnabled(),
         chargeReferenceInsetEnabled = appConfig.features.chargeReferenceInsetEnabled()
       )
     )))
@@ -56,7 +56,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
-    appConfig.features.interestBreakdownEnabled(model.interestBreakdownEnabled)
+    appConfig.features.penaltiesAndInterestWYOEnabled(model.penaltiesAndInterestWYOEnabled)
     appConfig.features.chargeReferenceInsetEnabled(model.chargeReferenceInsetEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
