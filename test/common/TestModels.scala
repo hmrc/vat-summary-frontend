@@ -17,15 +17,14 @@
 package common
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import java.time.LocalDate
 
+import java.time.LocalDate
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
-import models.penalties.{LPPDetails, PenaltiesSummary, PenaltyDetails}
-import models.viewModels.{CrystallisedInterestViewModel, StandardChargeViewModel, VatCertificateViewModel, VatDetailsViewModel, WhatYouOweViewModel}
-import play.api.libs.json.{JsObject, Json}
+import models.penalties.PenaltiesSummary
+import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, StandardChargeViewModel, VatCertificateViewModel, VatDetailsViewModel, WhatYouOweViewModel}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
@@ -402,6 +401,16 @@ object TestModels {
 
   val crystallisedInterestCharge: CrystallisedInterestViewModel = overdueCrystallisedInterestCharge.copy(isOverdue = false)
 
+  val estimatedInterestModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
+    LocalDate.parse("2018-01-01"),
+    LocalDate.parse("2018-02-02"),
+    "VAT Return Debit Charge",
+    2.6,
+    300.33,
+    200.22,
+    100.11,
+    isPenalty = false
+  )
 
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
     WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "")
