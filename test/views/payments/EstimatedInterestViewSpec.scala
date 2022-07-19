@@ -16,35 +16,23 @@
 
 package views.payments
 
-import models.viewModels.EstimatedInterestViewModel
+import common.TestModels.estimatedInterestModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.EstimatedInterestView
-import java.time.LocalDate
 
 class EstimatedInterestViewSpec extends ViewBaseSpec {
 
   val injectedView: EstimatedInterestView = injector.instanceOf[EstimatedInterestView]
   val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
-  val viewModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
-    LocalDate.parse("2018-01-01"),
-    LocalDate.parse("2018-02-02"),
-    "VAT Return Debit Charge",
-    2.6,
-    300.33,
-    200.22,
-    100.11,
-    isPenalty = false
-  )
-
   "Rendering the Interest Charge Details page for a principal user" when {
 
     "the interest is not for a penalty charge" should {
 
-      lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedInterestModel, Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -98,7 +86,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
       "have the correct third explanation paragraph" in {
         elementText("p.govuk-body:nth-of-type(3)") shouldBe "The calculation we use for each day is: " +
-          s"(Interest rate of ${viewModel.interestRate}% × VAT amount unpaid) ÷ days in a year"
+          s"(Interest rate of ${estimatedInterestModel.interestRate}% × VAT amount unpaid) ÷ days in a year"
       }
 
       "have the correct heading for the first row" in {
@@ -106,7 +94,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the current amount of interest accumulated" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${viewModel.currentAmount}"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedInterestModel.currentAmount}"
       }
 
       "have the correct heading for the second row" in {
@@ -114,7 +102,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the amount received" in {
-        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${viewModel.amountReceived}"
+        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${estimatedInterestModel.amountReceived}"
       }
 
       "have the correct heading for the third row" in {
@@ -122,7 +110,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the outstanding amount" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${viewModel.leftToPay}"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedInterestModel.leftToPay}"
       }
 
       "have the correct subheading" in {
@@ -160,7 +148,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is for a penalty charge" should {
 
-      lazy val view = injectedView(viewModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedInterestModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
@@ -174,14 +162,14 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
       "have the correct third explanation paragraph" in {
         elementText("p.govuk-body:nth-of-type(3)") shouldBe "The calculation we use for each day is: " +
-          s"(Interest rate of ${viewModel.interestRate}% × penalty amount unpaid) ÷ days in a year"
+          s"(Interest rate of ${estimatedInterestModel.interestRate}% × penalty amount unpaid) ÷ days in a year"
       }
     }
   }
 
   "Rendering the Interest Charge Details page for an agent" should {
 
-    lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(estimatedInterestModel, Html(""))(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render breadcrumbs" in {
