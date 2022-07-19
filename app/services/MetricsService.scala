@@ -43,6 +43,9 @@ trait MetricsService {
   val getDirectDebitStatusTimer: Timer
   val getDirectDebitStatusFailureCounter: Counter
 
+  val getPenaltyDataTimer: Timer
+  val getPenaltyDataFailureCounter: Counter
+
 }
 
 @Singleton
@@ -69,4 +72,6 @@ class MetricsServiceImpl @Inject()(metrics: Metrics) extends MetricsService {
   val getDirectDebitStatusTimer: Timer = metrics.defaultRegistry.timer("get-direct-debit-status-from-financial-transactions-timer")
   val getDirectDebitStatusFailureCounter: Counter = metrics.defaultRegistry.counter("get-open-payments-from-financial-transactions-failure-counter")
 
+  val getPenaltyDataTimer: Timer = metrics.defaultRegistry.timer("get-penalty-data-from-financial-transactions-timer")
+  val getPenaltyDataFailureCounter: Counter = metrics.defaultRegistry.counter("\"get-penalty-data-from-financial-transactions-failure-counter")
 }

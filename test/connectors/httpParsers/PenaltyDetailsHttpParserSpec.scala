@@ -23,7 +23,7 @@ import common.TestModels._
 import models.errors._
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 
 class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
 
@@ -88,6 +88,37 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
 
       "return a UnknownError" in {
         result shouldEqual expected
+      }
+    }
+
+    "the HTTP response status is 5xx" should {
+
+      val body: JsObject = Json.obj(
+        "code" -> "GATEWAY_TIMEOUT",
+        "message" -> "GATEWAY_TIMEOUT"
+      )
+
+      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
+      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
+      val result = PenaltyDetailsReads.read("", "", httpResponse)
+
+      "return a ServerSideError" in {
+        result shouldBe expected
+      }
+    }
+    "the HTTP response status isn't handled" should {
+
+      val body: JsObject = Json.obj(
+        "code" -> "Conflict",
+        "message" -> "CONFLCIT"
+      )
+
+      val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
+      val expected = Left(UnexpectedStatusError("409", httpResponse.body))
+      val result = PenaltyDetailsReads.read("", "", httpResponse)
+
+      "return an UnexpectedStatusError" in {
+        result shouldBe expected
       }
     }
 
