@@ -16,11 +16,12 @@
 
 package models.viewModels
 
-import common.TestModels.estimatedInterestModel
+import common.TestModels.{estimatedInterestJson, estimatedInterestModel}
 import models.viewModels.EstimatedInterestViewModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
+import play.api.libs.json.Json
 
 class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
 
@@ -146,6 +147,17 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
           "isPenalty" -> "50"
         )) shouldBe Left(List(FormError("isPenalty", List("error.boolean"), List())))
       }
+    }
+  }
+
+  "The EstimatedInterestViewModel" should {
+
+    "read from JSON" in {
+      estimatedInterestJson.as[EstimatedInterestViewModel] shouldBe estimatedInterestModel
+    }
+
+    "write to JSON" in {
+      Json.toJson(estimatedInterestModel) shouldBe estimatedInterestJson
     }
   }
 }

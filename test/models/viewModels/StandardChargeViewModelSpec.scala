@@ -17,10 +17,10 @@
 package models.viewModels
 
 import java.time.LocalDate
-
 import common.TestModels._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import play.api.libs.json.Json
 import views.ViewBaseSpec
 
 class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
@@ -147,6 +147,31 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
         periodKey = None, chargeReference = None, periodTo = None, periodFrom = None
       )
       minModel.toString shouldBe "VAT Inaccuracy return replaced+1234.56+2345.67+1111.11+2021-04-08+None+true+None+None+None"
+    }
+  }
+
+  "The StandardChargeViewModel" should {
+
+    "read from JSON" when {
+
+      "all fields are populated" in {
+        standardChargeModelMaxJson.as[StandardChargeViewModel] shouldBe chargeModel1
+      }
+
+      "optional fields are missing" in {
+        standardChargeModelMinJson.as[StandardChargeViewModel] shouldBe standardChargeModelMin
+      }
+    }
+
+    "write to JSON" when {
+
+      "all fields are populated" in {
+        Json.toJson(chargeModel1) shouldBe standardChargeModelMaxJson
+      }
+
+      "optional fields are missing" in {
+        Json.toJson(standardChargeModelMin) shouldBe standardChargeModelMinJson
+      }
     }
   }
 }

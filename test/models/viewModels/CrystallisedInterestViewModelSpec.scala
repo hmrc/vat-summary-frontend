@@ -16,10 +16,12 @@
 
 package models.viewModels
 
+import common.TestModels.{crystallisedInterestCharge, crystallisedInterestJson}
 import models.viewModels.CrystallisedInterestViewModel.form
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
+import play.api.libs.json.Json
 
 import java.time.LocalDate
 
@@ -233,6 +235,17 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
         "chargeReference" -> "XXXXXX1234567890",
         "isPenalty" -> "100"
       )) shouldBe Left(List(FormError("isPenalty", List("error.boolean"), List())))
+    }
+  }
+
+  "The CrystallisedInterestViewModel" should {
+
+    "read from JSON" in {
+      crystallisedInterestJson.as[CrystallisedInterestViewModel] shouldBe crystallisedInterestCharge
+    }
+
+    "write to JSON" in {
+      Json.toJson(crystallisedInterestCharge) shouldBe crystallisedInterestJson
     }
   }
 }

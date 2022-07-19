@@ -18,9 +18,11 @@ package models.viewModels
 
 import models.payments._
 import play.api.i18n.Messages
+import play.api.libs.json.{Json, OFormat}
 import utils.LoggerUtil
 import utils.PathBindables.none
 import views.templates.payments.PaymentMessageHelper
+
 import java.time.LocalDate
 
 case class StandardChargeViewModel(chargeType: String,
@@ -86,6 +88,8 @@ case class StandardChargeViewModel(chargeType: String,
 }
 
 object StandardChargeViewModel {
+
+  implicit val format: OFormat[StandardChargeViewModel] = Json.format[StandardChargeViewModel]
 
   def periodFrom(payment: Payment): Option[LocalDate] = payment match {
     case p: PaymentWithPeriod => Some(p.periodFrom)
