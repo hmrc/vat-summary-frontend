@@ -17,17 +17,18 @@
 package common
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-
 import java.time.LocalDate
+
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
-import models.penalties.PenaltiesSummary
+import models.penalties.{LPPDetails, PenaltiesSummary, PenaltyDetails}
 import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, StandardChargeViewModel, VatCertificateViewModel, VatDetailsViewModel, WhatYouOweViewModel}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
+import play.api.libs.json.{JsObject, Json}
 
 import scala.concurrent.Future
 
