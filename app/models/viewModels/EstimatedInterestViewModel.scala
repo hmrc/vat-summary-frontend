@@ -19,6 +19,7 @@ package models.viewModels
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
+import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
 
 import java.time.LocalDate
@@ -46,6 +47,8 @@ case class EstimatedInterestViewModel(periodFrom: LocalDate,
 }
 
 object EstimatedInterestViewModel {
+
+  implicit val format: OFormat[EstimatedInterestViewModel] = Json.format[EstimatedInterestViewModel]
 
   val form: Form[EstimatedInterestViewModel] = Form(mapping(
     "periodFrom" -> localDate,

@@ -17,18 +17,17 @@
 package common
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import java.time.LocalDate
-
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
 import models.penalties.{LPPDetails, PenaltiesSummary, PenaltyDetails}
-import models.viewModels.{CrystallisedInterestViewModel, EstimatedInterestViewModel, StandardChargeViewModel, VatCertificateViewModel, VatDetailsViewModel, WhatYouOweViewModel}
+import models.viewModels._
+import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
-import play.api.libs.json.{JsObject, Json}
+import java.time.LocalDate
 
 import scala.concurrent.Future
 
@@ -289,10 +288,10 @@ object TestModels {
   ))
 
   val exampleNonStandardTaxPeriods: Seq[TaxPeriod] = Seq(
-      TaxPeriod("2018-12-29", "2018-12-30"),
-      TaxPeriod("2018-12-31", "2019-01-01"),
-      TaxPeriod("2019-01-02", "2019-01-03"),
-      TaxPeriod("2019-01-04", "2019-01-05")
+    TaxPeriod("2018-12-29", "2018-12-30"),
+    TaxPeriod("2018-12-31", "2019-01-01"),
+    TaxPeriod("2019-01-02", "2019-01-03"),
+    TaxPeriod("2019-01-04", "2019-01-05")
   )
 
   val exampleNonNSTP: Option[TaxPeriod] = Some(TaxPeriod("2019-01-06", "2019-01-31"))
@@ -378,6 +377,31 @@ object TestModels {
     Some(LocalDate.parse("2018-02-01"))
   )
 
+  val standardChargeModelMaxJson: JsObject = Json.obj(
+    "chargeType" -> "VAT Return Debit Charge",
+    "outstandingAmount" -> 111.11,
+    "originalAmount" -> 333.33,
+    "clearedAmount" -> 222.22,
+    "dueDate" -> "2018-03-01",
+    "periodKey" -> "18AA",
+    "isOverdue" -> true,
+    "chargeReference" -> "ABCD",
+    "periodFrom" -> "2018-01-01",
+    "periodTo" -> "2018-02-01"
+  )
+
+  val standardChargeModelMin: StandardChargeViewModel =
+    chargeModel1.copy(periodKey = None, periodFrom = None, periodTo = None, chargeReference = None)
+
+  val standardChargeModelMinJson: JsObject = Json.obj(
+    "chargeType" -> "VAT Return Debit Charge",
+    "outstandingAmount" -> 111.11,
+    "originalAmount" -> 333.33,
+    "clearedAmount" -> 222.22,
+    "dueDate" -> "2018-03-01",
+    "isOverdue" -> true
+  )
+
   val chargeModel2: StandardChargeViewModel =
     chargeModel1.copy(
       chargeType = "VAT Carter Penalty",
@@ -402,6 +426,20 @@ object TestModels {
 
   val crystallisedInterestCharge: CrystallisedInterestViewModel = overdueCrystallisedInterestCharge.copy(isOverdue = false)
 
+  val crystallisedInterestJson: JsObject = Json.obj(
+    "periodFrom" -> "2021-01-01",
+    "periodTo" -> "2021-03-01",
+    "chargeType" -> "VAT Central Assessment LPI",
+    "interestRate" -> 17.4,
+    "dueDate" -> "2021-04-08",
+    "interestAmount" -> 3333.33,
+    "amountReceived" -> 3333.33,
+    "leftToPay" -> 111.00,
+    "isOverdue" -> false,
+    "chargeReference" -> "ChargeRef",
+    "isPenalty" -> false
+  )
+
   val estimatedInterestModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
@@ -411,6 +449,72 @@ object TestModels {
     200.22,
     100.11,
     isPenalty = false
+  )
+
+  val estimatedInterestJson: JsObject = Json.obj(
+    "periodFrom" -> "2018-01-01",
+    "periodTo" -> "2018-02-02",
+    "chargeType" -> "VAT Return Debit Charge",
+    "interestRate" -> 2.6,
+    "currentAmount" -> 300.33,
+    "amountReceived" -> 200.22,
+    "leftToPay" -> 100.11,
+    "isPenalty" -> false
+  )
+
+  val crystallisedLPP1Model: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
+    99,
+    10,
+    Some(20),
+    2.4,
+    111.11,
+    Some(222.22),
+    LocalDate.parse("2020-01-01"),
+    500.55,
+    100.11,
+    400.44,
+    LocalDate.parse("2020-03-03"),
+    LocalDate.parse("2020-04-04"),
+    "VAT Return 1st LPP",
+    "CHARGEREF",
+    isOverdue = false
+  )
+
+  val crystallisedLPP1JsonMax: JsObject = Json.obj(
+    "numberOfDays" -> 99,
+    "part1Days" -> 10,
+    "part2Days" -> 20,
+    "interestRate" -> 2.4,
+    "part1UnpaidVAT" -> 111.11,
+    "part2UnpaidVAT" -> 222.22,
+    "dueDate" -> "2020-01-01",
+    "penaltyAmount" -> 500.55,
+    "amountReceived" -> 100.11,
+    "leftToPay" -> 400.44,
+    "periodFrom" -> "2020-03-03",
+    "periodTo" -> "2020-04-04",
+    "chargeType" -> "VAT Return 1st LPP",
+    "chargeReference" -> "CHARGEREF",
+    "isOverdue" -> false
+  )
+
+  val crystallisedLPP1ModelMin: CrystallisedLPP1ViewModel =
+    crystallisedLPP1Model.copy(part2Days = None, part2UnpaidVAT = None)
+
+  val crystallisedLPP1JsonMin: JsObject = Json.obj(
+    "numberOfDays" -> 99,
+    "part1Days" -> 10,
+    "interestRate" -> 2.4,
+    "part1UnpaidVAT" -> 111.11,
+    "dueDate" -> "2020-01-01",
+    "penaltyAmount" -> 500.55,
+    "amountReceived" -> 100.11,
+    "leftToPay" -> 400.44,
+    "periodFrom" -> "2020-03-03",
+    "periodTo" -> "2020-04-04",
+    "chargeType" -> "VAT Return 1st LPP",
+    "chargeReference" -> "CHARGEREF",
+    "isOverdue" -> false
   )
 
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
