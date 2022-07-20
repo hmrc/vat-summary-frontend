@@ -17,11 +17,11 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import models.errors.{ServerSideError, UnexpectedStatusError}
+import models.errors.UnexpectedStatusError
 import models.penalties.PenaltyDetails
 import utils.LoggerUtil
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import play.api.http.Status.{BAD_REQUEST, OK}
+import play.api.http.Status.{NOT_FOUND, OK}
 
 object PenaltyDetailsHttpParser extends ResponseHttpParsers with LoggerUtil{
 
@@ -29,9 +29,11 @@ object PenaltyDetailsHttpParser extends ResponseHttpParsers with LoggerUtil{
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[PenaltyDetails] = {
       response.status match {
         case OK => Right(response.json.as[PenaltyDetails])
-        case BAD_REQUEST => handleBadRequest(response.json)
-        case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
-        case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
+        case NOT_FOUND => Right(PenaltyDetails(Seq.empty))
+        case _ =>
+          logger.warn(s"[PenaltyDetailsReads][read] unexpected ${response.status} returned from financial transactions" +
+          s"Status code:'${response.status}', Body: '${response.body}")
+          Left(UnexpectedStatusError(response.status.toString, response.body))
       }
     }
   }

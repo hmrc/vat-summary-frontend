@@ -20,15 +20,13 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import javax.inject.Inject
 import models.penalties.PenaltyDetails
-import services.MetricsService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PenaltyDetailsConnector @Inject()(http: HttpClient,
-                                        appConfig: AppConfig,
-                                        metrics: MetricsService) extends LoggerUtil {
+                                        appConfig: AppConfig) extends LoggerUtil {
 
   private[connectors] def penaltyDetailsUrl(idType: String, idValue: String): String = s"${appConfig.financialDataBaseUrl}/penalty/$idType/$idValue"
 
@@ -37,14 +35,10 @@ class PenaltyDetailsConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PenaltyDetailsHttpParser.PenaltyDetailsReads
 
-    val timer = metrics.getPenaltyDataTimer.time()
-
     http.GET(penaltyDetailsUrl(idType,idValue)).map {
       case penaltyDetails@Right(_) =>
-        timer.stop()
         penaltyDetails
       case httpError@Left(error) =>
-        metrics.getPenaltyDataFailureCounter.inc()
         logger.warn("PenaltyDetailsConnector received error: " + error.message)
         httpError
     }

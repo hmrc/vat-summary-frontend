@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import models.errors.ServerSideError
+import models.errors.UnexpectedStatusError
 import uk.gov.hmrc.http.HeaderCarrier
 import stubs.PenaltyDetailsStub
 import stubs.PenaltyDetailsStub._
@@ -55,7 +55,7 @@ class PenaltyDetailsISpec extends IntegrationBaseSpec{
       override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(INTERNAL_SERVER_ERROR, errorJson, idType, idValue)
 
       val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
-      val expected = Left(ServerSideError("500", message))
+      val expected = Left(UnexpectedStatusError(INTERNAL_SERVER_ERROR.toString,message))
 
       setupStubs()
       private val result = await(connector.getPenaltyDetails(idType, idValue))

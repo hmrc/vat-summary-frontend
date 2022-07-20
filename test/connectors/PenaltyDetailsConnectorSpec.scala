@@ -17,14 +17,13 @@
 package connectors
 
 import controllers.ControllerBaseSpec
-import mocks.MockMetricsService
 import uk.gov.hmrc.http.HttpClient
 
 class PenaltyDetailsConnectorSpec extends ControllerBaseSpec {
 
   "The penalty details connector" should {
 
-    val connector = new PenaltyDetailsConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+    val connector = new PenaltyDetailsConnector(mock[HttpClient], mockAppConfig)
 
     "generate the correct endpoint URL" in {
 

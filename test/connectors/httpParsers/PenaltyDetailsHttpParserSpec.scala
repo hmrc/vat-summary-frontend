@@ -21,8 +21,10 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import common.TestModels._
 import models.errors._
+import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status
+import play.api.http.Status.{BAD_REQUEST, GATEWAY_TIMEOUT}
 import play.api.libs.json.{JsObject, Json}
 
 class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
@@ -41,10 +43,10 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       }
     }
 
-    "the http response status is 404 NOT_FOUND" should {
+    "the http response status is 404 NOT_FOUND no LPP data is returned" should {
 
       val httpResponse = HttpResponse(Status.NOT_FOUND, "")
-      val expected = Left(UnexpectedStatusError("404", ""))
+      val expected = Right(PenaltyDetails(List()))
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
       "return a 404 error" in {
@@ -61,10 +63,9 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
         ).toString()
       )
 
-      val expected = Left(BadRequestError(
-        code = "VRN_INVALID",
-        errorResponse = "Fail!"
-      ))
+      val expected = Left(UnexpectedStatusError(BAD_REQUEST.toString,"""{"code":"VRN_INVALID","reason":"Fail!"}"""))
+
+
 
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
@@ -73,7 +74,7 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       }
     }
 
-    "the http response status is 400 BAD_REQUEST (unknown API error json)" should {
+    "the http response status is 400 BAD_REQUEST (unknown status error)" should {
 
       val httpResponse = HttpResponse(Status.BAD_REQUEST,
         Json.obj(
@@ -82,7 +83,7 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
         ).toString()
       )
 
-      val expected = Left(UnknownError)
+      val expected = Left(UnexpectedStatusError(BAD_REQUEST.toString,"""{"foo":"INVALID","bar":"Fail!"}"""))
 
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
@@ -99,7 +100,7 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       )
 
       val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
-      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
+      val expected =Left(UnexpectedStatusError(GATEWAY_TIMEOUT.toString,"""{"code":"GATEWAY_TIMEOUT","message":"GATEWAY_TIMEOUT"}"""))
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
