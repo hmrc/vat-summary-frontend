@@ -426,8 +426,7 @@ chargeType.vatFailureToSubmitRCSLDescription.agent = because your client failed 
 chargeType.vatCreditReturnOffsetChargeTitle = Overpayment partial refund
 chargeType.vatCreditReturnOffsetChargeDescription = partial repayment for period {0}
 
-chargeType.vatProtectiveAssessmentChargeTitle = Protective assessment
-chargeType.vatProtectiveAssessmentChargeDescription = of VAT for period {0}
+chargeType.vatProtectiveAssessmentChargeTitle = Protective assessment of VAT
 
 chargeType.unallocatedPaymentTitle = Unallocated payment
 chargeType.unallocatedPaymentDescription = you made an overpayment which can be refunded to you or left on account
