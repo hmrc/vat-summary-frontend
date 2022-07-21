@@ -16,7 +16,7 @@
 
 package models.penalties
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Reads, Json}
 
 case class LPPDetails(principalChargeReference: String,
                       penaltyCategory: String,
@@ -32,6 +32,6 @@ case class LPPDetails(principalChargeReference: String,
 
 object LPPDetails {
 
-  implicit val format: Format[LPPDetails] = Json.format[LPPDetails]
+  implicit val format: Reads[LPPDetails] = Json.reads[LPPDetails]
 
 }

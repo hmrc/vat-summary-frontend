@@ -27,8 +27,8 @@ class PenaltyDetailsConnectorSpec extends ControllerBaseSpec {
 
     "generate the correct endpoint URL" in {
 
-      connector.penaltyDetailsUrl("vatType","vatValue") shouldEqual
-        "/penalty/vatType/vatValue"
+      connector.penaltyDetailsUrl("vatValue") shouldEqual
+        "/penalty/VAT/vatValue"
 
     }
   }

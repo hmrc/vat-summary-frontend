@@ -23,10 +23,10 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 
 object PenaltyDetailsStub extends WireMockMethods{
 
-  private val penaltyDetailsServiceUrl: (String, String) => String = (idType,idValue) => s"/penalty/$idType/$idValue"
+  private val penaltyDetailsServiceUrl: String => String = idValue => s"/penalty/VAT/$idValue"
 
-  def stubPenaltyDetails(status: Int, response: JsValue, idType: String, idValue : String): StubMapping = {
-    when(method = GET, uri = penaltyDetailsServiceUrl(idType,idValue))
+  def stubPenaltyDetails(status: Int, response: JsValue , idValue : String): StubMapping = {
+    when(method = GET, uri = penaltyDetailsServiceUrl(idValue))
       .thenReturn(status = status, body = response)
 
   }
@@ -63,10 +63,6 @@ object PenaltyDetailsStub extends WireMockMethods{
     None
   )
 
-  val penaltyDetailsModelMin: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(LPPDetailsModelMin)
-  )
-
 
   val LPPDetailsJsonMax: JsObject = Json.obj(
     "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
@@ -82,23 +78,13 @@ object PenaltyDetailsStub extends WireMockMethods{
     "penaltyChargeReference" -> "BCDEFGHIJKLMNOPQ"
   )
 
-  val LPPDetailsJsonMin: JsObject = Json.obj(
-    "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
-    "penaltyCategory" -> "LPP1"
-  )
-
   val penaltyDetailsJsonMax : JsObject = Json.obj(
     "LPPDetails" -> Json.arr(LPPDetailsJsonMax)
-  )
-
-  val penaltyDetailsJsonMin : JsObject = Json.obj(
-    "LPPDetails" -> Json.arr(LPPDetailsJsonMin)
   )
 
   val errorJson = Json.obj(
     "code" -> "500",
     "message" -> "INTERNAL_SERVER_ERROR"
   )
-
 
 }

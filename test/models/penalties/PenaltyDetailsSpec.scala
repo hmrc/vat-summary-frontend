@@ -18,7 +18,6 @@ package models.penalties
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.Json
 import common.TestModels._
 
 class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
@@ -27,27 +26,12 @@ class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
 
     "parse from json" when {
 
-      "optional fields are present" in {
+      "all fields are present" in {
         penaltyDetailsJsonMax.as[PenaltyDetails] shouldBe penaltyDetailsModelMax
       }
 
-      "optional fields are not present" in {
-       penaltyDetailsJsonMin.as[PenaltyDetails] shouldBe penaltyDetailsModelMin
-      }
     }
 
-    "serialize to json" when {
-
-      "optional fields are present" in {
-        Json.toJson(penaltyDetailsModelMax) shouldBe penaltyDetailsJsonMax
-      }
-
-      "optional fields are not present" in {
-        Json.toJson(penaltyDetailsModelMin) shouldBe penaltyDetailsJsonMin
-      }
-
     }
-
-  }
 
 }

@@ -18,7 +18,6 @@ package models.penalties
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.Json
 import common.TestModels._
 
 
@@ -34,16 +33,6 @@ class LPPDetailsSpec extends AnyWordSpec with Matchers{
       }
       "optional are not present" in {
         LPPDetailsJsonMin.as[LPPDetails] shouldBe LPPDetailsModelMin
-      }
-    }
-
-    "serialize to json" when {
-
-      "optional fields are present" in {
-        Json.toJson(LPPDetailsModelMax) shouldBe LPPDetailsJsonMax
-      }
-      "optional fields are not present" in {
-        Json.toJson(LPPDetailsModelMin) shouldBe LPPDetailsJsonMin
       }
     }
   }

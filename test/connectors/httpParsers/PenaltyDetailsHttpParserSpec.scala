@@ -24,7 +24,6 @@ import models.errors._
 import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.HttpResponse
 import play.api.http.Status
-import play.api.http.Status.{BAD_REQUEST, GATEWAY_TIMEOUT}
 import play.api.libs.json.{JsObject, Json}
 
 class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
@@ -54,59 +53,6 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       }
     }
 
-    "the http response status is 400 BAD_REQUEST (single error)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        Json.obj(
-          "code" -> "VRN_INVALID",
-          "reason" -> "Fail!"
-        ).toString()
-      )
-
-      val expected = Left(UnexpectedStatusError(BAD_REQUEST.toString,"""{"code":"VRN_INVALID","reason":"Fail!"}"""))
-
-
-
-      val result = PenaltyDetailsReads.read("", "", httpResponse)
-
-      "return a BadRequestError" in {
-        result shouldEqual expected
-      }
-    }
-
-    "the http response status is 400 BAD_REQUEST (unknown status error)" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        Json.obj(
-          "foo" -> "INVALID",
-          "bar" -> "Fail!"
-        ).toString()
-      )
-
-      val expected = Left(UnexpectedStatusError(BAD_REQUEST.toString,"""{"foo":"INVALID","bar":"Fail!"}"""))
-
-      val result = PenaltyDetailsReads.read("", "", httpResponse)
-
-      "return a UnknownError" in {
-        result shouldEqual expected
-      }
-    }
-
-    "the HTTP response status is 5xx" should {
-
-      val body: JsObject = Json.obj(
-        "code" -> "GATEWAY_TIMEOUT",
-        "message" -> "GATEWAY_TIMEOUT"
-      )
-
-      val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
-      val expected =Left(UnexpectedStatusError(GATEWAY_TIMEOUT.toString,"""{"code":"GATEWAY_TIMEOUT","message":"GATEWAY_TIMEOUT"}"""))
-      val result = PenaltyDetailsReads.read("", "", httpResponse)
-
-      "return a ServerSideError" in {
-        result shouldBe expected
-      }
-    }
     "the HTTP response status isn't handled" should {
 
       val body: JsObject = Json.obj(
@@ -122,8 +68,5 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
         result shouldBe expected
       }
     }
-
   }
-
-
 }

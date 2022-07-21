@@ -27,7 +27,6 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 class PenaltyDetailsISpec extends IntegrationBaseSpec{
 
-  val idType = "vatIdType"
   val idValue = "vatIdValue"
 
   private trait Test {
@@ -40,25 +39,25 @@ class PenaltyDetailsISpec extends IntegrationBaseSpec{
 
     "return a users penaltyDetails information" in new Test {
       override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(
-        OK, penaltyDetailsJsonMax, idType, idValue
+        OK, penaltyDetailsJsonMax, idValue
       )
 
       val expected = Right(penaltyDetailsModelMax)
 
       setupStubs()
-      private val result = await(connector.getPenaltyDetails(idType, idValue))
+      private val result = await(connector.getPenaltyDetails(idValue))
 
       result shouldEqual expected
     }
 
     "return an HttpError if one is received" in new Test {
-      override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(INTERNAL_SERVER_ERROR, errorJson, idType, idValue)
+      override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(INTERNAL_SERVER_ERROR, errorJson, idValue)
 
       val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
       val expected = Left(UnexpectedStatusError(INTERNAL_SERVER_ERROR.toString,message))
 
       setupStubs()
-      private val result = await(connector.getPenaltyDetails(idType, idValue))
+      private val result = await(connector.getPenaltyDetails(idValue))
 
       result shouldEqual expected
     }

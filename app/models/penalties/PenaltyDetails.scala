@@ -16,12 +16,12 @@
 
 package models.penalties
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Reads, Json}
 
 case class PenaltyDetails(LPPDetails : Seq[LPPDetails])
 
 object PenaltyDetails {
 
-  implicit val format: Format[PenaltyDetails] = Json.format[PenaltyDetails]
+  implicit val format: Reads[PenaltyDetails] = Json.reads[PenaltyDetails]
 
 }
