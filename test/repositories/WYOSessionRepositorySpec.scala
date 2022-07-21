@@ -16,22 +16,23 @@
 
 package repositories
 
+import akka.util.Timeout
 import config.AppConfig
 import mocks.MockAppConfig
 import models.WYODatabaseModel
-import org.mongodb.scala.bson.{BsonInt64, Document}
 import org.mongodb.scala.model.Indexes.ascending
 import org.mongodb.scala.model.{IndexModel, IndexOptions}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsObject, Json}
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.await
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.DurationInt
 
 class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite with
   DefaultPlayMongoRepositorySupport[WYODatabaseModel] {
@@ -39,6 +40,7 @@ class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceO
   val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
   override lazy val repository = new WYOSessionRepository(mockAppConfig, mongoComponent)
+  implicit val timeout: Timeout = 40.seconds
 
   val time: LocalDateTime = LocalDateTime.parse("2022-01-01T09:00:00.000")
   val exampleJson: JsObject = Json.obj("chargeType" -> "VAT Return Debit Charge", "periodKey" -> "18AA")
