@@ -48,7 +48,7 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       val expected = Right(PenaltyDetails(List()))
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
-      "return an empty Penalty Details model" in {
+      "return an empty Penalty Details object with an empty sequence" in {
         result shouldEqual expected
       }
     }
