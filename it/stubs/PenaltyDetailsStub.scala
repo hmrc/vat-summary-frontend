@@ -49,20 +49,6 @@ object PenaltyDetailsStub extends WireMockMethods{
     LPPDetails = Seq(LPPDetailsModelMax)
   )
 
-  val LPPDetailsModelMin: LPPDetails = LPPDetails(
-    principalChargeReference = "ABCDEFGHIJKLMNOP",
-    penaltyCategory = "LPP1",
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None,
-    None
-  )
-
 
   val LPPDetailsJsonMax: JsObject = Json.obj(
     "principalChargeReference" -> "ABCDEFGHIJKLMNOP",

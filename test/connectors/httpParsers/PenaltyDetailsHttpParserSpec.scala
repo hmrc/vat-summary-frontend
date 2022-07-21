@@ -48,7 +48,7 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       val expected = Right(PenaltyDetails(List()))
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
-      "return a 404 error" in {
+      "return an empty Penalty Details model" in {
         result shouldEqual expected
       }
     }
