@@ -125,5 +125,4 @@ object ConfigKeys {
   val penaltiesFrontendHost: String = "penalties-frontend.host"
   val penaltiesFrontendUrl: String = "penalties-frontend.endpointUrl"
 
-  val timeToLive: String = "mongodb.timeToLiveInSeconds"
 }
