@@ -21,14 +21,14 @@ import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
-import models.penalties.PenaltiesSummary
+import models.penalties.{LPPDetails, PenaltiesSummary, PenaltyDetails}
 import models.viewModels._
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
-
 import java.time.LocalDate
+
 import scala.concurrent.Future
 
 object TestModels {
@@ -288,10 +288,10 @@ object TestModels {
   ))
 
   val exampleNonStandardTaxPeriods: Seq[TaxPeriod] = Seq(
-      TaxPeriod("2018-12-29", "2018-12-30"),
-      TaxPeriod("2018-12-31", "2019-01-01"),
-      TaxPeriod("2019-01-02", "2019-01-03"),
-      TaxPeriod("2019-01-04", "2019-01-05")
+    TaxPeriod("2018-12-29", "2018-12-30"),
+    TaxPeriod("2018-12-31", "2019-01-01"),
+    TaxPeriod("2019-01-02", "2019-01-03"),
+    TaxPeriod("2019-01-04", "2019-01-05")
   )
 
   val exampleNonNSTP: Option[TaxPeriod] = Some(TaxPeriod("2019-01-06", "2019-01-31"))
@@ -548,4 +548,68 @@ object TestModels {
   val whatYouOweUrl: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
   val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
+
+  val LPPDetailsModelMax: LPPDetails = LPPDetails(
+    principalChargeReference = "ABCDEFGHIJKLMNOP",
+    penaltyCategory = "LPP1",
+    Some(100.11),
+    Some("15"),
+    Some(2.4),
+    Some(200.22),
+    Some("30"),
+    Some(4.2),
+    Some("31"),
+    Some(5.5),
+    penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ")
+  )
+
+  val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
+    LPPDetails = Seq(LPPDetailsModelMax)
+  )
+
+  val LPPDetailsModelMin: LPPDetails = LPPDetails(
+    principalChargeReference = "ABCDEFGHIJKLMNOP",
+    penaltyCategory = "LPP1",
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None,
+    None
+  )
+
+  val penaltyDetailsModelMin: PenaltyDetails = PenaltyDetails(
+    LPPDetails = Seq(LPPDetailsModelMin)
+  )
+
+
+  val LPPDetailsJsonMax: JsObject = Json.obj(
+    "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
+    "penaltyCategory" -> "LPP1",
+    "LPP1LRCalculationAmount" -> 100.11,
+    "LPP1LRDays" -> "15",
+    "LPP1LRPercentage" -> 2.4,
+    "LPP1HRCalculationAmount" -> 200.22,
+    "LPP1HRDays" -> "30",
+    "LPP1HRPercentage" -> 4.2,
+    "LPP2Days" -> "31",
+    "LPP2Percentage" -> 5.5,
+    "penaltyChargeReference" -> "BCDEFGHIJKLMNOPQ"
+  )
+
+  val LPPDetailsJsonMin: JsObject = Json.obj(
+    "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
+    "penaltyCategory" -> "LPP1"
+  )
+
+  val penaltyDetailsJsonMax : JsObject = Json.obj(
+    "LPPDetails" -> Json.arr(LPPDetailsJsonMax)
+  )
+
+  val penaltyDetailsJsonMin : JsObject = Json.obj(
+    "LPPDetails" -> Json.arr(LPPDetailsJsonMin)
+  )
 }

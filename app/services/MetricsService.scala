@@ -68,5 +68,4 @@ class MetricsServiceImpl @Inject()(metrics: Metrics) extends MetricsService {
 
   val getDirectDebitStatusTimer: Timer = metrics.defaultRegistry.timer("get-direct-debit-status-from-financial-transactions-timer")
   val getDirectDebitStatusFailureCounter: Counter = metrics.defaultRegistry.counter("get-open-payments-from-financial-transactions-failure-counter")
-
 }
