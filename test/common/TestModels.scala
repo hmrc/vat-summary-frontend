@@ -517,6 +517,34 @@ object TestModels {
     "isOverdue" -> false
   )
 
+  val crystallisedLPP2Model: CrystallisedLPP2ViewModel = CrystallisedLPP2ViewModel(
+    "31",
+    4.0,
+    LocalDate.parse("2020-01-01"),
+    130.13,
+    0,
+    130.13,
+    LocalDate.parse("2020-03-03"),
+    LocalDate.parse("2020-04-04"),
+    "VAT OA 2nd LPP LPI",
+    "CHARGEREF",
+    isOverdue = false
+  )
+
+  val crystallisedLPP2Json: JsObject = Json.obj(
+    "day" -> "31",
+    "interestRate" -> 4.0,
+    "dueDate" -> "2020-01-01",
+    "penaltyAmount" -> 130.13,
+    "amountReceived" -> 0,
+    "leftToPay" -> 130.13,
+    "periodFrom" -> "2020-03-03",
+    "periodTo" -> "2020-04-04",
+    "chargeType" -> "VAT OA 2nd LPP LPI",
+    "chargeReference" -> "CHARGEREF",
+    "isOverdue" -> false
+  )
+
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
     WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "")
 

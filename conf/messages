@@ -191,6 +191,15 @@ crystallisedLPP1.amountReceived = Amount received
 crystallisedLPP1.leftToPay = Left to pay
 crystallisedLPP1.guidanceLink = Read the guidance about late payment penalties (opens in a new tab)
 
+crystallisedLPP2.explanation = This penalty applies from day {0}, if any VAT remains unpaid.
+crystallisedLPP2.interestExplanation = The total increases daily based on the amount of unpaid VAT for the period.
+crystallisedLPP2.calculation = The calculation we use for each day is:
+crystallisedLPP2.calculationExplanation = (Penalty rate of {0}% × unpaid VAT) ÷ days in a year
+crystallisedLPP2.dueDate = Due date
+crystallisedLPP2.penaltyAmount = Penalty amount
+crystallisedLPP2.amountReceived = Amount received
+crystallisedLPP2.leftToPay = Left to pay
+
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.

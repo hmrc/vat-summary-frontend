@@ -191,6 +191,15 @@ crystallisedLPP1.amountReceived = Swm a gafwyd
 crystallisedLPP1.leftToPay = Yn weddill i’w dalu
 crystallisedLPP1.guidanceLink = ???
 
+crystallisedLPP2.explanation = ???
+crystallisedLPP2.interestExplanation = ???
+crystallisedLPP2.calculation = ???
+crystallisedLPP2.calculationExplanation = ???
+crystallisedLPP2.dueDate = ???
+crystallisedLPP2.penaltyAmount = ???
+crystallisedLPP2.amountReceived = ???
+crystallisedLPP2.leftToPay = ???
+
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
