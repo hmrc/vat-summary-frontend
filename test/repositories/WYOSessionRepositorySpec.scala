@@ -31,7 +31,6 @@ import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
 import java.time.LocalDateTime
 import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionContext
-import scala.concurrent.duration.DurationInt
 
 class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite with
   DefaultPlayMongoRepositorySupport[WYODatabaseModel] {
@@ -39,7 +38,6 @@ class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceO
   val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
   override lazy val repository = new WYOSessionRepository(mockAppConfig, mongoComponent)
-  override implicit val patienceConfig: PatienceConfig = PatienceConfig(timeout = 60.seconds, interval = 200.millis)
 
   val time: LocalDateTime = LocalDateTime.parse("2022-01-01T09:00:00.000")
   val exampleJson: JsObject = Json.obj("chargeType" -> "VAT Return Debit Charge", "periodKey" -> "18AA")
