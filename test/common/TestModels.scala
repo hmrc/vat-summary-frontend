@@ -628,6 +628,8 @@ object TestModels {
     "penaltyChargeReference" -> "BCDEFGHIJKLMNOPQ"
   )
 
+  val penaltyDetailsResponse: HttpGetResult[PenaltyDetails] = Right(penaltyDetailsModelMax)
+
   val LPPDetailsJsonMin: JsObject = Json.obj(
     "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
     "penaltyCategory" -> "LPP1"

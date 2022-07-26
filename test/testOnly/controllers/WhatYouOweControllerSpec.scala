@@ -47,7 +47,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     mockPaymentsError,
     whatYouOwe,
     noPayments,
-    mockAccountDetailsService
+    mockAccountDetailsService,
+    mockPenaltyDetailsService
   )
 
   "The WhatYouOweController .show method" when {
@@ -63,6 +64,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
+          mockPenaltyDetailsServiceCall()
           controller.show(fakeRequest)
         }
 
@@ -102,7 +104,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockOpenPayments(Right(None))
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
-          mockDateServiceCall
+          mockDateServiceCall()
+          mockPenaltyDetailsServiceCall()
           controller.show(fakeRequest)
         }
 
@@ -125,7 +128,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockOpenPayments(Left(PaymentsError))
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
-          mockDateServiceCall
+          mockDateServiceCall()
+          mockPenaltyDetailsServiceCall()
           controller.show(fakeRequest)
         }
 
@@ -148,6 +152,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
         mockCustomerInfo(Right(customerInformationMax))
         mockDateServiceCall()
+        mockPenaltyDetailsServiceCall()
         controller.show(agentFinancialRequest)
       }
 
