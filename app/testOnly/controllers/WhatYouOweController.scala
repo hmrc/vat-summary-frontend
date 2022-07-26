@@ -21,17 +21,18 @@ import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
+import models.errors.PenaltiesFeatureSwitchError
 import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{AccountDetailsService, DateService, PaymentsService, ServiceInfoService}
+import services.{AccountDetailsService, DateService, PaymentsService, PenaltyDetailsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      ddInterrupt: DDInterruptPredicate,
@@ -42,7 +43,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      paymentsError: PaymentsError,
                                      view: WhatYouOwe,
                                      noPayments: NoPayments,
-                                     accountDetailsService: AccountDetailsService)
+                                     accountDetailsService: AccountDetailsService,
+                                     penaltyDetailsService: PenaltyDetailsService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -55,7 +57,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         serviceInfoContent <- serviceInfoService.getPartial
         payments <- paymentsService.getOpenPayments(user.vrn)
         mandationStatusCall <- accountDetailsService.getAccountDetails(user.vrn).map(_.map(_.mandationStatus))
-
+        penaltiesCall <- if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
+          penaltyDetailsService.getPenaltyDetails(user.vrn)
+        } else {
+          Future(Left(PenaltiesFeatureSwitchError))
+        }
       } yield {
         payments match {
           case Right(Some(payments)) =>

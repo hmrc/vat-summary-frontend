@@ -19,7 +19,7 @@ package controllers
 import audit.AuditingService
 import audit.models.{AuditModel, ExtendedAuditModel}
 import common.SessionKeys
-import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, successfulAuthResult}
+import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, penaltyDetailsResponse, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
@@ -32,7 +32,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
-import services.{AccountDetailsService, DateService, EnrolmentsAuthService, PaymentsService, ServiceInfoService}
+import services._
 import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -60,7 +60,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
 
   val baseSession = Seq(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.viewedDDInterrupt -> "true")
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(baseSession: _*)
-  implicit lazy val fakePostRequest = FakeRequest("POST", "").withSession(baseSession: _*)
+  implicit lazy val fakePostRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "").withSession(baseSession: _*)
 
   val mockPaymentsService: PaymentsService = mock[PaymentsService]
   val agentUnauthorised: AgentUnauthorised = injector.instanceOf[AgentUnauthorised]
@@ -70,6 +70,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockDateService: DateService = mock[DateService]
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   val mockAuditService: AuditingService = mock[AuditingService]
+  val mockPenaltyDetailsService: PenaltyDetailsService = mock[PenaltyDetailsService]
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -144,6 +145,11 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))
       .stubs(*, *, *, *)
       .returns(Future.successful(Html("")))
+
+  def mockPenaltyDetailsServiceCall(): Any =
+    (mockPenaltyDetailsService.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(penaltyDetailsResponse))
 
   def mockAuth(isAgent: Boolean, authResult: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])
