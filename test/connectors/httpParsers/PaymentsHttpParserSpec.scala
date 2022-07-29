@@ -1129,28 +1129,6 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
       }
     }
 
-    "the http response is 200 OK and there are no valid charge types" should {
-      val httpResponse = HttpResponse(Status.OK,
-        Json.obj(
-          "financialTransactions" -> Json.arr(
-            Json.obj(
-              "mainType" -> "VAT Return Charge",
-              "chargeType" -> "Other Charge Type",
-              "outstandingAmount" -> 99
-            )
-          )
-        ).toString()
-      )
-
-      val expected = Right(Payments(Seq.empty))
-
-      val result = PaymentsReads.read("", "", httpResponse)
-
-      "return an empty Payments instance" in {
-        result shouldBe expected
-      }
-    }
-
     "the http response status is 404 NOT_FOUND" should {
 
       val httpResponse = HttpResponse(Status.NOT_FOUND, "")

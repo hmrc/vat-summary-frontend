@@ -28,7 +28,7 @@ object PaymentsHttpParser extends ResponseHttpParsers {
   implicit object PaymentsReads extends HttpReads[HttpGetResult[Payments]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Payments] = {
       response.status match {
-        case OK => Right(removeInvalidCharges(response.json).as[Payments])
+        case OK => Right(response.json.as[Payments])
         case NOT_FOUND => Right(Payments(Seq.empty))
         case BAD_REQUEST => handleBadRequest(response.json)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
@@ -37,17 +37,4 @@ object PaymentsHttpParser extends ResponseHttpParsers {
     }
   }
 
-  private def removeInvalidCharges(json: JsValue): JsValue = {
-
-    val validCharges: Set[String] = ChargeType.allChargeTypes.map(_.value)
-
-    val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
-
-    val vatReturnCharges = charges.filter { charge =>
-      val chargeType: String = (charge \ "chargeType").as[String]
-      validCharges.map(_.toUpperCase).contains(chargeType.toUpperCase)
-    }
-
-    Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
-  }
 }
