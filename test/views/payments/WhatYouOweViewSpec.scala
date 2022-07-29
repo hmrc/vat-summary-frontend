@@ -26,6 +26,7 @@ import views.html.payments.WhatYouOwe
 class WhatYouOweViewSpec extends ViewBaseSpec {
 
   val whatYouOweView: WhatYouOwe = injector.instanceOf[WhatYouOwe]
+  val id = "1236543"
 
   "The what you owe page for a principal user" should {
 
@@ -93,7 +94,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has a link to the breakdown page" in {
           element(tableBodyCell(1, 1) + "> a").attr("href") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel1).url
+            s"/vat-through-software/test-only/amount-to-pay/${chargeModel1.generateHash(user.vrn)}"
         }
 
         "has an overdue label" in {
@@ -126,7 +127,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has a link to the breakdown page" in {
           element(tableBodyCell(2, 1) + "> a").attr("href") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel2).url
+            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
         }
 
         "does not have an overdue label" in {
@@ -151,10 +152,6 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
         "has the correct due hint text" in {
           elementText(tableBodyCell(3, 1) + "> span") shouldBe "due 8 April 2021"
-        }
-        "has a form with the correct action" in {
-          element(tableBodyCell(3, 1) + " > form").attr("action") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.crystallisedInterestBreakdown.url
         }
         "has the correct amount" in {
           elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedInterestCharge.leftToPay.toInt

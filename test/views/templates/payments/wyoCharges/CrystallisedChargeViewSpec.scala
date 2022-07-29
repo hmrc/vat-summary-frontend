@@ -25,6 +25,7 @@ import views.html.templates.payments.wyoCharges.CrystallisedCharge
 class CrystallisedChargeViewSpec extends ViewBaseSpec{
 
   val injectedView: CrystallisedCharge = injector.instanceOf[CrystallisedCharge]
+  val id = "1234656897"
 
   "the crystallised charge template" when {
 
@@ -34,8 +35,8 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("form") shouldBe
-          "overdue Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
+        elementText("#crystallised-charge-link") shouldBe
+          "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
       "have an overdue label" in {
@@ -46,11 +47,6 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
         elementText("span") shouldBe "due 8 April 2021"
       }
 
-      "have a form with the correct action" in {
-        element("form").attr("action") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.crystallisedInterestBreakdown.url
-      }
-
     }
 
     "the charge is not overdue" should {
@@ -58,7 +54,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("form") shouldBe
+        elementText("#crystallised-charge-link") shouldBe
           "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
@@ -68,11 +64,6 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
 
       "have the correct due hint text" in {
         elementText("span") shouldBe "due 8 April 2021"
-      }
-
-      "have a form with the correct action" in {
-        element("form").attr("action") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.crystallisedInterestBreakdown.url
       }
 
     }

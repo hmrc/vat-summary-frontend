@@ -19,23 +19,24 @@ package testOnly.controllers
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
+import javax.inject.Inject
+import models.WYODatabaseModel.modelTypes
 import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
-import play.mvc.Http.HeaderNames
-import play.twirl.api.Html
-import services.ServiceInfoService
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.{ServiceInfoService, WYOSessionService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
-import javax.inject.Inject
+
 import scala.concurrent.ExecutionContext
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
                                           DDInterrupt: DDInterruptPredicate,
                                           mcc: MessagesControllerComponents,
                                           serviceInfoService: ServiceInfoService,
+                                          wyoSessionService: WYOSessionService,
                                           chargeBreakdownView: ChargeTypeDetailsView,
                                           estimatedInterestView: EstimatedInterestView,
                                           errorView: PaymentsError,
@@ -45,66 +46,29 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  private def referrerCheck(view: Html)(implicit request: Request[_]): Result =
-    if(request.headers.get(HeaderNames.REFERER).isDefined) {
-      Ok(view)
-    } else {
-      Redirect(routes.WhatYouOweController.show)
-    }
-
-  def chargeBreakdown(model: StandardChargeViewModel): Action[AnyContent] = authorisedController.financialAction {
+  def showBreakdown(id: String): Action[AnyContent] = authorisedController.financialAction {
     implicit request => implicit user =>
       DDInterrupt.interruptCheck { _ =>
-        serviceInfoService.getPartial.map { navLinks =>
-          referrerCheck(chargeBreakdownView(model, navLinks))
+        for {
+          navLinks <- serviceInfoService.getPartial
+          model <- wyoSessionService.retrieveViewModel(id)
+        } yield {
+          model match {
+            case Some(m) => m.modelType match {
+              case modelTypes.standard => Ok(chargeBreakdownView(m.data.as[StandardChargeViewModel], navLinks))
+              case modelTypes.estimated => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
+              case modelTypes.crystallised => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
+              case modelTypes.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
+              case _ =>
+                logger.warn("[ChargeBreakdownController][showBreakdown] Retrieved model type was unknown")
+                InternalServerError(errorView())
+            }
+            case _ =>
+              logger.warn("[ChargeBreakdownController][showBreakdown] Unexpected error retrieving model from database")
+              InternalServerError(errorView())
+          }
         }
       }
   }
 
-  def estimatedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user =>
-      DDInterrupt.interruptCheck { _ =>
-        serviceInfoService.getPartial.map { navLinks =>
-          EstimatedInterestViewModel.form.bindFromRequest.fold(
-            errorForm => {
-              logger.warn(s"[ChargeBreakdownController][estimatedInterestBreakdown] - Unexpected error when binding form: $errorForm")
-              InternalServerError(errorView())
-            },
-            model => Ok(estimatedInterestView(model, navLinks))
-          )
-        }
-      }
-  }
-
-  def crystallisedInterestBreakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user =>
-      DDInterrupt.interruptCheck { _ =>
-        serviceInfoService.getPartial.map { navLinks =>
-          CrystallisedInterestViewModel.form.bindFromRequest.fold(
-            errorForm => {
-              logger.warn("[ChargeBreakdownController][crystallisedInterestBreakdown] - " +
-                s"Unexpected error when binding form: $errorForm")
-              InternalServerError(errorView())
-            },
-            model => Ok(crystallisedInterestView(model, navLinks))
-          )
-        }
-      }
-  }
-
-  def crystallisedLPP1Breakdown: Action[AnyContent] = authorisedController.financialAction { implicit request =>
-    implicit user =>
-      DDInterrupt.interruptCheck { _ =>
-        serviceInfoService.getPartial.map { navLinks =>
-          CrystallisedLPP1ViewModel.form.bindFromRequest.fold(
-            errorForm => {
-              logger.warn("[ChargeBreakdownController][crystallisedLPP1Breakdown] - " +
-                s"Unexpected error when binding form: $errorForm")
-              InternalServerError(errorView())
-            },
-            model => Ok(crystallisedLPP1View(model, navLinks))
-          )
-        }
-      }
-  }
 }

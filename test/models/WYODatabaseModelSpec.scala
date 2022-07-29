@@ -16,46 +16,22 @@
 
 package models
 
+import common.TestModels.{wyoDBjsonModel, wyoStandardDBModel}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.libs.json.{Format, JsObject, Json}
-import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-import java.time.LocalDateTime
+import play.api.libs.json.Json
 
 class WYODatabaseModelSpec extends AnyWordSpecLike with Matchers {
 
-  implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
-  val time = LocalDateTime.parse("2022-07-15T14:42:50.125")
 
-  val exampleData: JsObject = Json.obj(
-    "chargeType" -> "VAT Return Debit Charge",
-    "mainType" -> "VAT Return Charge",
-    "periodKey" -> "18AB",
-    "etc" -> "Remaining fields"
-  )
+  "WYODatabaseModel" should {
 
-  val model: WYODatabaseModel = WYODatabaseModel(
-    "testId",
-    "StandardChargeViewModel",
-    exampleData,
-    time
-  )
+    "correctly parse to Json" in {
+      Json.toJson(wyoStandardDBModel) shouldBe wyoDBjsonModel
+    }
 
-  val jsonModel: JsObject = Json.obj(
-    "_id" -> "testId",
-    "modelType" -> "StandardChargeViewModel",
-    "data" -> exampleData,
-    "creationTimestamp" -> time
-  )
-
-    "WYODatabaseModel" should {
-
-      "correctly parse to Json" in {
-        Json.toJson(model) shouldBe jsonModel
-      }
-
-      "correctly parse from Json" in {
-        jsonModel.as[WYODatabaseModel] shouldBe model
-      }
+    "correctly parse from Json" in {
+      wyoDBjsonModel.as[WYODatabaseModel] shouldBe wyoStandardDBModel
     }
   }
+}

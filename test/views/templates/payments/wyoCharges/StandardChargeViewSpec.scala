@@ -25,6 +25,10 @@ import views.html.templates.payments.wyoCharges.StandardCharge
 class StandardChargeViewSpec extends ViewBaseSpec {
 
   val injectedView: StandardCharge = injector.instanceOf[StandardCharge]
+  val id = "12345689"
+
+  val breakdownLinkSelector = "#standard-charge-breakdown-link"
+  val viewReturnLinkSelector = "#view-return-link"
 
   "The StandardCharge template" when {
 
@@ -34,12 +38,12 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe s"${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
+        elementText(breakdownLinkSelector) shouldBe s"${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
       }
 
       "have a link to the breakdown page" in {
-        element("a").attr("href") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel1).url
+        element(breakdownLinkSelector).attr("href") shouldBe
+          testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
       }
 
       "have an overdue label" in {
@@ -53,11 +57,11 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       "have a link to view the VAT return" which {
 
         "has the correct text" in {
-          elementText("span > a") shouldBe "View VAT Return"
+          elementText(viewReturnLinkSelector) shouldBe "View VAT Return"
         }
 
         "has the correct link destination" in {
-          element("span > a").attr("href") shouldBe mockConfig.vatReturnUrl(chargeModel1.periodKey.get)
+          element(viewReturnLinkSelector).attr("href") shouldBe mockConfig.vatReturnUrl(chargeModel1.periodKey.get)
         }
       }
     }
@@ -68,12 +72,12 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
+        elementText(breakdownLinkSelector) shouldBe s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
       }
 
       "have a link to the breakdown page" in {
-        element("a").attr("href") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.chargeBreakdown(chargeModel2).url
+        element(breakdownLinkSelector).attr("href") shouldBe
+          testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
       }
 
       "not have an overdue label" in {
@@ -85,7 +89,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       }
 
       "not have a link to view the VAT return" in {
-        elementExtinct("span > a")
+        elementExtinct(viewReturnLinkSelector)
       }
     }
   }

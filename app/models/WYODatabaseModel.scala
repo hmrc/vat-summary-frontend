@@ -27,9 +27,14 @@ case class WYODatabaseModel(_id: String,
                            )
 
 object WYODatabaseModel {
+
+  object modelTypes {
+    val standard = "StandardChargeViewModel"
+    val estimated = "EstimatedInterestViewModel"
+    val crystallised = "CrystallisedInterestViewModel"
+    val crystallisedLPP1 = "CrystallisedLPP1ViewModel"
+  }
+
   implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
   implicit val format: Format[WYODatabaseModel] = Json.format[WYODatabaseModel]
 }
-
-
-

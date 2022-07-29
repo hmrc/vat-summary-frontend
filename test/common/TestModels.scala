@@ -23,11 +23,14 @@ import models.obligations.{VatReturnObligation, VatReturnObligations}
 import models.payments._
 import models.penalties.{LPPDetails, PenaltiesSummary, PenaltyDetails}
 import models.viewModels._
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{Format, JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
+
+import WYODatabaseModel.modelTypes._
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import scala.concurrent.Future
 
@@ -631,7 +634,6 @@ object TestModels {
     LPPDetails = Seq(LPPDetailsModelMin)
   )
 
-
   val LPPDetailsJsonMax: JsObject = Json.obj(
     "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
     "penaltyCategory" -> "LPP1",
@@ -660,4 +662,27 @@ object TestModels {
   val penaltyDetailsJsonMin : JsObject = Json.obj(
     "LPPDetails" -> Json.arr(LPPDetailsJsonMin)
   )
+
+  implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
+  val time: LocalDateTime = LocalDateTime.parse("2022-07-15T14:42:50.125")
+
+  def wyoDBModel(modelType: String, json: JsValue): WYODatabaseModel = WYODatabaseModel(
+    "testId",
+    modelType,
+    json,
+    time
+  )
+
+  val wyoStandardDBModel: WYODatabaseModel = wyoDBModel(standard, standardChargeModelMaxJson)
+  val wyoEstimatedIntDBModel: WYODatabaseModel = wyoDBModel(estimated, estimatedInterestJson)
+  val wyoCrystallisedIntDBModel: WYODatabaseModel = wyoDBModel(crystallised, crystallisedInterestJson)
+  val wyoCrystallisedLPP1DBModel: WYODatabaseModel = wyoDBModel(crystallisedLPP1, crystallisedLPP1JsonMax)
+
+  val wyoDBjsonModel: JsObject = Json.obj(
+    "_id" -> "testId",
+    "modelType" -> "StandardChargeViewModel",
+    "data" -> standardChargeModelMaxJson,
+    "creationTimestamp" -> time
+  )
+
 }

@@ -76,7 +76,7 @@
       <span class="govuk-caption-xl">
         @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
       </span>
-      <h1 class="govuk-heading-xl">@messages(model.title)</h1>
+      <h1 class="govuk-heading-xl" id="crystallised-lpp1-heading">@messages(model.title)</h1>
       <p class="govuk-body">@messages("crystallisedLPP1.explanation", model.numberOfDays)</p>
 
       @(model.part2Days, model.part2UnpaidVAT) match {
