@@ -29,7 +29,7 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
   implicit object PaymentsHistoryReads extends HttpReads[HttpGetResult[Seq[PaymentsHistoryModel]]] {
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Seq[PaymentsHistoryModel]] = {
       response.status match {
-        case OK => Right(removeNonVatReturnCharges(response.json).as[Seq[PaymentsHistoryModel]])
+        case OK => Right(response.json.as[Seq[PaymentsHistoryModel]])
         case NOT_FOUND =>
           Right(Seq.empty[PaymentsHistoryModel])
         case BAD_REQUEST => handleBadRequest(response.json)
@@ -39,14 +39,4 @@ object PaymentsHistoryHttpParser extends ResponseHttpParsers {
     }
   }
 
-  private def removeNonVatReturnCharges(json: JsValue): JsValue = {
-
-    val charges: Seq[JsValue] = (json \ "financialTransactions").as[JsArray].value
-
-    val vatReturnCharges = charges.filter { charge =>
-      val chargeType: String = (charge \ "chargeType").as[String]
-      ChargeType.isValidChargeType(chargeType)
-    }
-    Json.obj("financialTransactions" -> JsArray(vatReturnCharges))
-  }
 }

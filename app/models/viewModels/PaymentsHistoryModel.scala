@@ -35,29 +35,23 @@ object PaymentsHistoryModel {
 
   implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
 
-  implicit val reads: Reads[Seq[PaymentsHistoryModel]] = new Reads[Seq[PaymentsHistoryModel]] {
+  implicit val reads: Reads[Seq[PaymentsHistoryModel]] = json => {
 
-    override def reads(json: JsValue): JsResult[Seq[PaymentsHistoryModel]] = {
+    val transactions: Seq[JsValue] = (json \ FinancialTransactionsConstants.financialTransactions).as[Seq[JsValue]]
 
-      val transactions: Seq[JsValue] = (json \ FinancialTransactionsConstants.financialTransactions).as[Seq[JsValue]]
-      val filteredTransactions: Seq[JsValue] = transactions.filter { transaction =>
-        ChargeType.isValidChargeType((transaction \ FinancialTransactionsConstants.chargeType).as[String])
-      }
+    JsSuccess(
+      transactions flatMap { transaction =>
 
-      JsSuccess(
-        filteredTransactions flatMap { transaction =>
+        val chargeType: ChargeType = ChargeType.apply((transaction \ FinancialTransactionsConstants.chargeType).as[String])
 
-          val chargeType: ChargeType =  ChargeType.apply((transaction \ FinancialTransactionsConstants.chargeType).as[String])
-
-          val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction)
-            .filterNot(_.clearingReason.map(_.toLowerCase).contains(allocatedCharge))map {
-            subItem => generatePaymentModel(chargeType, subItem, transaction)
-          }
-
-          transactions.flatten.filter(_.clearedDate.isDefined)
+        val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction)
+          .filterNot(_.clearingReason.map(_.toLowerCase).contains(allocatedCharge)) map {
+          subItem => generatePaymentModel(chargeType, subItem, transaction)
         }
-      )
-    }
+
+        transactions.flatten.filter(_.clearedDate.isDefined)
+      }
+    )
   }
 
   private[models] def generatePaymentModel(chargeType: ChargeType,

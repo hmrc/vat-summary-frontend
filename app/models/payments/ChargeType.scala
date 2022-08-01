@@ -348,17 +348,6 @@ object ChargeType extends LoggerUtil {
 
   def unapply(arg: ChargeType): String = arg.value
 
-  def isValidChargeType(input: String): Boolean = {
-    try {
-      ChargeType.apply(input)
-      true
-    } catch {
-      case ex: IllegalArgumentException =>
-        logger.info(s"Invalid Charge Type - Received $input", ex)
-        false
-    }
-  }
-
   implicit val reads: Reads[ChargeType] = __.read[String].map(apply)
 
   implicit val writes: Writes[ChargeType] = Writes { charge => JsString(charge.value) }
