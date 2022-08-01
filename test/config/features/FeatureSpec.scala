@@ -33,6 +33,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.directDebitInterrupt(true)
     features.penaltiesAndInterestWYOEnabled(true)
     features.chargeReferenceInsetEnabled(true)
+    features.overdueTimeToPayDescriptionEnabled(true)
   }
 
   "The User Research Banner Feature" should {
@@ -104,6 +105,18 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "switch to a new state" in {
       features.chargeReferenceInsetEnabled(false)
       features.chargeReferenceInsetEnabled() shouldBe false
+    }
+  }
+
+  "The overdue label description feature" should {
+
+    "return its current state" in {
+      features.overdueTimeToPayDescriptionEnabled() shouldBe true
+    }
+
+    "switch to a new state" in {
+      features.overdueTimeToPayDescriptionEnabled(false)
+      features.overdueTimeToPayDescriptionEnabled() shouldBe false
     }
   }
 }

@@ -29,7 +29,8 @@ object FeatureSwitchForm {
       ConfigKeys.directDebitInterrupt -> boolean,
       ConfigKeys.penaltiesServiceEnabledFeature -> boolean,
       ConfigKeys.penaltiesAndInterestWYOFeature -> boolean,
-      ConfigKeys.chargeReferenceInsetFeature -> boolean
+      ConfigKeys.chargeReferenceInsetFeature -> boolean,
+      ConfigKeys.overdueTimeToPayDescriptionFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

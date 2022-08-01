@@ -29,4 +29,5 @@ class Features @Inject()(implicit config: Configuration) {
   val penaltiesServiceEnabled = new Feature(ConfigKeys.penaltiesServiceEnabledFeature)
   val penaltiesAndInterestWYOEnabled = new Feature(ConfigKeys.penaltiesAndInterestWYOFeature)
   val chargeReferenceInsetEnabled = new Feature(ConfigKeys.chargeReferenceInsetFeature)
+  val overdueTimeToPayDescriptionEnabled = new Feature(ConfigKeys.overdueTimeToPayDescriptionFeature)
 }

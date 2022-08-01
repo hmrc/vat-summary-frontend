@@ -31,6 +31,7 @@ object ConfigKeys {
   val directDebitInterrupt: String = "features.directDebitInterrupt.enabled"
   val penaltiesAndInterestWYOFeature: String = "features.penaltiesAndInterestWYO.enabled"
   val chargeReferenceInsetFeature: String = "features.chargeReferenceInset.enabled"
+  val overdueTimeToPayDescriptionFeature: String = "features.overdueTimeToPayDescription.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"
