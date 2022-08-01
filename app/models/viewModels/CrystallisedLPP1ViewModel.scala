@@ -25,9 +25,9 @@ import play.api.data.Forms._
 import play.api.data.Forms.mapping
 import play.api.libs.json.{Json, OFormat}
 
-case class CrystallisedLPP1ViewModel(numberOfDays: Int,
-                                     part1Days: Int,
-                                     part2Days: Option[Int],
+case class CrystallisedLPP1ViewModel(numberOfDays: String,
+                                     part1Days: String,
+                                     part2Days: Option[String],
                                      interestRate: BigDecimal,
                                      part1UnpaidVAT: BigDecimal,
                                      part2UnpaidVAT: Option[BigDecimal],
@@ -61,9 +61,9 @@ object CrystallisedLPP1ViewModel {
   implicit val format: OFormat[CrystallisedLPP1ViewModel] = Json.format[CrystallisedLPP1ViewModel]
 
   val form: Form[CrystallisedLPP1ViewModel] = Form(mapping(
-    "numberOfDays" -> number,
-    "part1Days" -> number,
-    "part2Days" -> optional(number),
+    "numberOfDays" -> text,
+    "part1Days" -> text,
+    "part2Days" -> optional(text),
     "interestRate" -> bigDecimal,
     "part1UnpaidVAT" -> bigDecimal,
     "part2UnpaidVAT" -> optional(bigDecimal),

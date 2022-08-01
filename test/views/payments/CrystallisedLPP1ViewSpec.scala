@@ -31,9 +31,9 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
   val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
   val viewModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
-    99,
-    10,
-    Some(20),
+    "99",
+    "10",
+    Some("20"),
     2.4,
     111.11,
     Some(222.22),
