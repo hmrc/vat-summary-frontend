@@ -20,7 +20,6 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.payments._
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
-import play.api.libs.json.{JsArray, JsValue, Json}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object PaymentsHttpParser extends ResponseHttpParsers {

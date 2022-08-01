@@ -56,23 +56,6 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
     }
   }
 
-  "ChargeType .isValidChargeType" when {
-
-    "given an invalid charge type" should {
-
-      "return false" in {
-        ChargeType.isValidChargeType("VAAAAAAAT") shouldBe false
-      }
-    }
-
-    "given a valid charge type" should {
-
-      "return true" in {
-        ChargeType.isValidChargeType("VAT FTN RCSL") shouldBe true
-      }
-    }
-  }
-
   "The charge type .toPathElement method" should {
 
     "correctly hyphenate and lowercase a string" in {
