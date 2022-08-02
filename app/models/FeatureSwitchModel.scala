@@ -21,4 +21,5 @@ case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
                               directDebitInterrupt: Boolean,
                               penaltiesServiceEnabled: Boolean,
                               penaltiesAndInterestWYOEnabled: Boolean,
-                              chargeReferenceInsetEnabled: Boolean)
+                              chargeReferenceInsetEnabled: Boolean,
+                              overdueTimeToPayDescriptionEnabled: Boolean)

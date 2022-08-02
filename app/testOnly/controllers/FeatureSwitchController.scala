@@ -23,7 +23,6 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import testOnly.views.html.featureSwitch.FeatureSwitch
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 
 class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
@@ -39,7 +38,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
         directDebitInterrupt = appConfig.features.directDebitInterrupt(),
         penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled(),
         penaltiesAndInterestWYOEnabled = appConfig.features.penaltiesAndInterestWYOEnabled(),
-        chargeReferenceInsetEnabled = appConfig.features.chargeReferenceInsetEnabled()
+        chargeReferenceInsetEnabled = appConfig.features.chargeReferenceInsetEnabled(),
+        overdueTimeToPayDescriptionEnabled = appConfig.features.overdueTimeToPayDescriptionEnabled()
       )
     )))
   }
@@ -57,7 +57,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
     appConfig.features.penaltiesAndInterestWYOEnabled(model.penaltiesAndInterestWYOEnabled)
-    appConfig.features.chargeReferenceInsetEnabled(model.chargeReferenceInsetEnabled)
+    appConfig.features.chargeReferenceInsetEnabled(model.overdueTimeToPayDescriptionEnabled)
+    appConfig.features.overdueTimeToPayDescriptionEnabled(model.overdueTimeToPayDescriptionEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }
