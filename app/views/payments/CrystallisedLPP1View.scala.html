@@ -84,10 +84,10 @@
           <p class="govuk-body">@messages("crystallisedLPP1.twoParts")</p>
           <ul class="govuk-list govuk-list--bullet">
             <li>@Html(messages(
-              "crystallisedLPP1.calculation", model.interestRate, displayMoney(model.part1UnpaidVAT), model.part1Days
+              "crystallisedLPP1.calculation", model.part1PenaltyRate, displayMoney(model.part1UnpaidVAT), model.part1Days
             ))</li>
             <li>@Html(messages(
-              "crystallisedLPP1.calculation", model.interestRate, displayMoney(part2UnpaidVAT), part2Days
+              "crystallisedLPP1.calculation", model.part2PenaltyRate, displayMoney(part2UnpaidVAT), part2Days
             ))</li>
           </ul>
         }
@@ -95,7 +95,7 @@
           <p class="govuk-body">
             @messages("crystallisedLPP1.onePart")
             <br>
-            @Html(messages("crystallisedLPP1.calculation", model.interestRate, displayMoney(model.part1UnpaidVAT), model.part1Days))
+            @Html(messages("crystallisedLPP1.calculation", model.part1PenaltyRate, displayMoney(model.part1UnpaidVAT), model.part1Days))
           </p>
         }
       }

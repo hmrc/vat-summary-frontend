@@ -47,7 +47,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
           "numberOfDays" -> "99",
           "part1Days" -> "10",
           "part2Days" -> "20",
-          "interestRate" -> "2.4",
+          "part1PenaltyRate" -> "2.4",
+          "part2PenaltyRate" -> "2.6",
           "part1UnpaidVAT" -> "111.11",
           "part2UnpaidVAT" -> "222.22",
           "dueDate" -> "2020-01-01",
@@ -70,7 +71,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -89,7 +91,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -108,7 +111,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -122,12 +126,13 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "isOverdue" -> "false"
       )) shouldBe Left(List(FormError("periodTo", List("error.date"), List())))
     }
-    "the interest rate field is invalid" in {
+    "the part 1 penalty rate field is invalid" in {
       form.mapping.bind(Map(
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "true",
+        "part1PenaltyRate" -> "true",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -139,14 +144,35 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "chargeType" -> "VAT Return 1st LPP",
         "chargeReference" -> "CHARGEREF",
         "isOverdue" -> "false"
-      )) shouldBe Left(List(FormError("interestRate", List("error.real"), List())))
+      )) shouldBe Left(List(FormError("part1PenaltyRate", List("error.real"), List())))
+    }
+    "the part 2 penalty rate field is invalid" in {
+      form.mapping.bind(Map(
+        "numberOfDays" -> "99",
+        "part1Days" -> "10",
+        "part2Days" -> "20",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "false",
+        "part1UnpaidVAT" -> "111.11",
+        "part2UnpaidVAT" -> "222.22",
+        "dueDate" -> "2020-01-01",
+        "penaltyAmount" -> "500.55",
+        "amountReceived" -> "100.11",
+        "leftToPay" -> "400.44",
+        "periodFrom" -> "2020-03-03",
+        "periodTo" -> "2020-04-04",
+        "chargeType" -> "VAT Return 1st LPP",
+        "chargeReference" -> "CHARGEREF",
+        "isOverdue" -> "false"
+      )) shouldBe Left(List(FormError("part2PenaltyRate", List("error.real"), List())))
     }
     "the dueDate field is invalid" in {
       form.mapping.bind(Map(
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "true",
@@ -165,7 +191,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -184,7 +211,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -203,7 +231,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",
@@ -222,7 +251,8 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
         "numberOfDays" -> "99",
         "part1Days" -> "10",
         "part2Days" -> "20",
-        "interestRate" -> "2.4",
+        "part1PenaltyRate" -> "2.4",
+        "part2PenaltyRate" -> "2.6",
         "part1UnpaidVAT" -> "111.11",
         "part2UnpaidVAT" -> "222.22",
         "dueDate" -> "2020-01-01",

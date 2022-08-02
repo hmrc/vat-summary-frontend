@@ -467,6 +467,7 @@ object TestModels {
     "10",
     Some("20"),
     2.4,
+    Some(2.6),
     111.11,
     Some(222.22),
     LocalDate.parse("2020-01-01"),
@@ -484,7 +485,8 @@ object TestModels {
     "numberOfDays" -> "99",
     "part1Days" -> "10",
     "part2Days" -> "20",
-    "interestRate" -> 2.4,
+    "part1PenaltyRate" -> 2.4,
+    "part2PenaltyRate" -> 2.6,
     "part1UnpaidVAT" -> 111.11,
     "part2UnpaidVAT" -> 222.22,
     "dueDate" -> "2020-01-01",
@@ -499,12 +501,12 @@ object TestModels {
   )
 
   val crystallisedLPP1ModelMin: CrystallisedLPP1ViewModel =
-    crystallisedLPP1Model.copy(part2Days = None, part2UnpaidVAT = None)
+    crystallisedLPP1Model.copy(part2Days = None, part2PenaltyRate = None, part2UnpaidVAT = None)
 
   val crystallisedLPP1JsonMin: JsObject = Json.obj(
     "numberOfDays" -> "99",
     "part1Days" -> "10",
-    "interestRate" -> 2.4,
+    "part1PenaltyRate" -> 2.4,
     "part1UnpaidVAT" -> 111.11,
     "dueDate" -> "2020-01-01",
     "penaltyAmount" -> 500.55,
