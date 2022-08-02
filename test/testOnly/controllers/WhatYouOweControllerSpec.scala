@@ -48,7 +48,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     whatYouOwe,
     noPayments,
     mockAccountDetailsService,
-    mockPenaltyDetailsService
+    mockPenaltyDetailsService,
+    mockWYOSessionService
   )
 
   "The WhatYouOweController .show method" when {
@@ -65,6 +66,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockWYOSessionServiceCall()
           controller.show(fakeRequest)
         }
 
@@ -153,6 +155,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationMax))
         mockDateServiceCall()
         mockPenaltyDetailsServiceCall()
+        mockWYOSessionServiceCall()
         controller.show(agentFinancialRequest)
       }
 
@@ -277,7 +280,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "not build a view model" in {
         val result = {
-          mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
           mockDateServiceCall()
           controller.constructViewModel(Seq(
             payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)

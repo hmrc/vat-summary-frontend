@@ -21,6 +21,7 @@ import java.time.LocalDate
 import common.FinancialTransactionsConstants._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
+import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models._
 import models.errors.{NextPaymentError, ObligationsError, _}
@@ -56,8 +57,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       .returns(Future.successful(result))
 
   def mockPenaltiesService(result: HttpGetResult[PenaltiesSummary]): Any =
-    (mockPenaltiesService.getPenaltiesInformation(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .stubs(*, *, *)
+    (mockPenaltiesService.getPenaltiesInformation(_: String)(_: HeaderCarrier, _: ExecutionContext, _: AppConfig))
+      .stubs(*, *, *, *)
       .returns(Future.successful(result))
   
   val controller = new VatDetailsController(

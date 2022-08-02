@@ -22,16 +22,22 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import common.TestModels.penaltySummaryResponse
+import config.AppConfig
 import connectors.PenaltiesConnector
+import mocks.MockAppConfig
+import models.errors.PenaltiesFeatureSwitchError
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matchers {
+class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matchers with GuiceOneAppPerSuite {
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
+
   val mockPenaltiesConnector: PenaltiesConnector = mock[PenaltiesConnector]
 
   def setup(penaltiesSummary: HttpGetResult[PenaltiesSummary]): Any =
@@ -39,16 +45,28 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
       .expects(*,*,*)
       .returns(Future.successful(penaltiesSummary))
 
-  def penaltiesService(): PenaltiesService = {
-    setup(penaltySummaryResponse)
+  def penaltiesService() : PenaltiesService = {
     new PenaltiesService(mockPenaltiesConnector)
   }
 
-  "Calling getPenaltiesDataForVRN" should {
+  "Calling getPenaltiesDataForVRN when the feature switch is enabled" should {
     "retrieve the penalties summary for the vrn" in {
-      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesService().getPenaltiesInformation("123"))
+      mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
+      val summary: HttpGetResult[PenaltiesSummary] = await{
+        setup(penaltySummaryResponse)
+        penaltiesService().getPenaltiesInformation("123")
+      }
       summary shouldBe penaltySummaryResponse
     }
   }
+
+  "Calling getPenaltiesDataForVRN when the feature switch is disabled" should {
+    "return Penalties feature switch error" in {
+      mockAppConfig.features.penaltiesAndInterestWYOEnabled(false)
+      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesService().getPenaltiesInformation("123"))
+      summary shouldBe Left(PenaltiesFeatureSwitchError)
+    }
+  }
+
 
 }

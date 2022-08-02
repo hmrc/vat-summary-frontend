@@ -40,6 +40,7 @@ import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
 import java.time.LocalDate
 
 import models.payments.Payments
+import models.viewModels.ChargeDetailsViewModel
 import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -76,6 +77,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val enrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   val agentPredicate: AgentPredicate = new AgentPredicate(enrolmentsAuthService, mcc, agentUnauthorised, financialPredicate)
+  val mockWYOSessionService: WYOSessionService = mock[WYOSessionService]
   val authorisedController: AuthorisedController = new AuthorisedController(
     mcc,
     enrolmentsAuthService,
@@ -179,4 +181,12 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .stubs(*, *, *, *)
       .returns({})
   }
+
+  def mockWYOSessionServiceCall(): Any = {
+    (mockWYOSessionService.storeChargeModels(_: Seq[ChargeDetailsViewModel],_ : String)(_: ExecutionContext))
+      .stubs(*,*,*)
+      .returns(Future.successful(Seq()))
+  }
+
+
 }
