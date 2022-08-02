@@ -33,6 +33,6 @@ class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
     if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
       penaltiesConnector.getPenaltiesDataForVRN(vrn)
     } else {
-      Future(Left(PenaltiesFeatureSwitchError))
+      Future.successful(Left(PenaltiesFeatureSwitchError))
     }
 }

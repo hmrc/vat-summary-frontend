@@ -21,8 +21,6 @@ import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
-import models.{User, WYODatabaseModel}
-import models.errors.PenaltiesFeatureSwitchError
 import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
 import models.viewModels._
 import play.api.i18n.I18nSupport
@@ -133,7 +131,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     )
   }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
 
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels = categoriseCharges(payments)

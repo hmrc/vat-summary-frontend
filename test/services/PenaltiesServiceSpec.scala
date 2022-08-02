@@ -45,19 +45,17 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
       .expects(*,*,*)
       .returns(Future.successful(penaltiesSummary))
 
-  def penaltiesService(): PenaltiesService = {
-    setup(penaltySummaryResponse)
-    new PenaltiesService(mockPenaltiesConnector)
-  }
-
-  def penaltiesServiceWithoutMock() : PenaltiesService = {
+  def penaltiesService() : PenaltiesService = {
     new PenaltiesService(mockPenaltiesConnector)
   }
 
   "Calling getPenaltiesDataForVRN when the feature switch is enabled" should {
     "retrieve the penalties summary for the vrn" in {
       mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
-      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesService().getPenaltiesInformation("123"))
+      val summary: HttpGetResult[PenaltiesSummary] = await{
+        setup(penaltySummaryResponse)
+        penaltiesService().getPenaltiesInformation("123")
+      }
       summary shouldBe penaltySummaryResponse
     }
   }
@@ -65,7 +63,7 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
   "Calling getPenaltiesDataForVRN when the feature switch is disabled" should {
     "return Penalties feature switch error" in {
       mockAppConfig.features.penaltiesAndInterestWYOEnabled(false)
-      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesServiceWithoutMock().getPenaltiesInformation("123"))
+      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesService().getPenaltiesInformation("123"))
       summary shouldBe Left(PenaltiesFeatureSwitchError)
     }
   }
