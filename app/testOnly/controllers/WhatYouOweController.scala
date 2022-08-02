@@ -21,12 +21,13 @@ import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
+import models.{User, WYODatabaseModel}
 import models.errors.PenaltiesFeatureSwitchError
 import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{AccountDetailsService, DateService, PaymentsService, PenaltyDetailsService, ServiceInfoService}
+import services.{AccountDetailsService, DateService, PaymentsService, PenaltyDetailsService, ServiceInfoService, WYOSessionService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
@@ -44,7 +45,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      view: WhatYouOwe,
                                      noPayments: NoPayments,
                                      accountDetailsService: AccountDetailsService,
-                                     penaltyDetailsService: PenaltyDetailsService)
+                                     penaltyDetailsService: PenaltyDetailsService,
+                                     WYOSessionService: WYOSessionService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -53,37 +55,34 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
     implicit user => ddInterrupt.interruptCheck { _ =>
 
-      for {
-        serviceInfoContent <- serviceInfoService.getPartial
-        payments <- paymentsService.getOpenPayments(user.vrn)
-        mandationStatusCall <- accountDetailsService.getAccountDetails(user.vrn).map(_.map(_.mandationStatus))
-        penaltiesCall <- if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
-          penaltyDetailsService.getPenaltyDetails(user.vrn)
-        } else {
-          Future(Left(PenaltiesFeatureSwitchError))
-        }
-      } yield {
-        payments match {
-          case Right(Some(payments)) =>
+      serviceInfoService.getPartial.flatMap { serviceInfoContent =>
+        paymentsService.getOpenPayments(user.vrn).flatMap { payments =>
+          accountDetailsService.getAccountDetails(user.vrn).flatMap { accountDetails =>
+            val mandationStatus = accountDetails.map(_.mandationStatus).getOrElse("")
 
-            val mandationStatus = mandationStatusCall.getOrElse("")
-
-            constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
-              case Some(model) =>
-                Ok(view(model, serviceInfoContent))
-              case None =>
-                logger.warn("[WhatYouOweController][show] required field(s) missing from payment(s); failed to render view")
-                InternalServerError(paymentsError())
+            penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
+              payments match {
+                case Right(Some(payments)) =>
+                  constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
+                    case Some(model) =>
+                      WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
+                        Ok(view(model, serviceInfoContent))
+                      }
+                    case None =>
+                      logger.warn("[WhatYouOweController][show] required field(s) missing from payment(s); failed to render view")
+                      Future.successful(InternalServerError(paymentsError()))
+                  }
+                case Right(_) =>
+                  val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+                  Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus)))
+                case Left(error) =>
+                  logger.warn(s"[WhatYouOweController][show] Payments error: $error")
+                  Future.successful(InternalServerError(paymentsError()))
+              }
             }
-          case Right(_) =>
-            val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-            Ok(noPayments(user, serviceInfoContent, clientName, mandationStatusCall.getOrElse("")))
-          case Left(error) =>
-            logger.warn(s"[WhatYouOweController][show] Payments error: $error")
-            InternalServerError(paymentsError())
+          }
         }
       }
-
     }
   }
 
@@ -134,14 +133,18 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     )
   }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment], mandationStatus: String)(implicit user: User): Option[WhatYouOweViewModel] = {
 
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels = categoriseCharges(payments)
+
     if(payments.length == chargeModels.length) {
       Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus))
     } else {
       None
     }
   }
+
+
+
 }
