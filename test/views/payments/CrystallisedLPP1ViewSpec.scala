@@ -31,10 +31,11 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
   val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
 
   val viewModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
-    99,
-    10,
-    Some(20),
+    "99",
+    "10",
+    Some("20"),
     2.4,
+    Some(2.6),
     111.11,
     Some(222.22),
     LocalDate.parse("2020-01-01"),
@@ -103,12 +104,12 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       "have a bullet list" which {
 
         "has the first penalty part calculation as the first bullet point" in {
-          elementText("#content ul > li:nth-child(1)") shouldBe s"${viewModel.interestRate}% of " +
+          elementText("#content ul > li:nth-child(1)") shouldBe s"${viewModel.part1PenaltyRate}% of " +
             s"£${viewModel.part1UnpaidVAT} (the unpaid VAT ${viewModel.part1Days} days after the due date)"
         }
 
         "has the second penalty part calculation as the second bullet point" in {
-          elementText("#content ul > li:nth-child(2)") shouldBe s"${viewModel.interestRate}% of " +
+          elementText("#content ul > li:nth-child(2)") shouldBe s"${viewModel.part2PenaltyRate}% of " +
             s"£${viewModel.part2UnpaidVAT.get} (the unpaid VAT ${viewModel.part2Days.get} days after the due date)"
         }
       }
@@ -189,7 +190,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
 
       "have the correct calculation explanation paragraph" in {
         elementText("#content > div > div > p:nth-child(4)") shouldBe
-          s"The calculation we use is: ${viewModel.interestRate}% of £${viewModel.part1UnpaidVAT} " +
+          s"The calculation we use is: ${viewModel.part1PenaltyRate}% of £${viewModel.part1UnpaidVAT} " +
           s"(the unpaid VAT ${viewModel.part1Days} days after the due date)"
       }
 
