@@ -19,8 +19,6 @@ package audit
 import audit.models.{AuditModel, ExtendedAuditModel}
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import org.joda.time.DateTime
-import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
@@ -31,17 +29,11 @@ import utils.LoggerUtil
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConnector) extends LoggerUtil{
-
-  implicit val dateTimeJsReader: Reads[DateTime] = JodaReads.jodaDateReads("yyyyMMddHHmmss")
-  implicit val dateTimeWriter: Writes[DateTime] = JodaWrites.jodaDateWrites("dd/MM/yyyy HH:mm:ss")
-
-  implicit val dataEventWrites: Writes[DataEvent] = Json.writes[DataEvent]
-  implicit val extendedDataEventWrites: Writes[ExtendedDataEvent] = Json.writes[ExtendedDataEvent]
+class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConnector) extends LoggerUtil {
 
   def audit(auditModel: AuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val dataEvent = toDataEvent(appConfig.appName, auditModel, path)
-    logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(dataEvent)}")
+    logger.debug(s"Splunk Audit Event:\n\n$dataEvent")
     handleAuditResult(auditConnector.sendEvent(dataEvent))
   }
 
@@ -54,24 +46,21 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
     )
 
 
-  def extendedAudit(auditModel: ExtendedAuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+  def extendedAudit(auditModel: ExtendedAuditModel, path: String = "-")
+                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val extendedDataEvent = toExtendedDataEvent(appConfig.appName, auditModel, path)
-    logger.debug(s"Splunk Audit Event:\n\n${Json.toJson(extendedDataEvent)}")
+    logger.debug(s"Splunk Audit Event:\n\n$extendedDataEvent")
     handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
   }
 
-  def toExtendedDataEvent(appName: String, auditModel: ExtendedAuditModel, path: String)(implicit hc: HeaderCarrier): ExtendedDataEvent = {
-
-    val details: JsValue =
-      Json.toJson(AuditExtensions.auditHeaderCarrier(hc).toAuditDetails()).as[JsObject].deepMerge(auditModel.detail.as[JsObject])
-
+  def toExtendedDataEvent(appName: String, auditModel: ExtendedAuditModel, path: String)
+                         (implicit hc: HeaderCarrier): ExtendedDataEvent =
     ExtendedDataEvent(
       auditSource = appName,
       auditType = auditModel.auditType,
       tags = AuditExtensions.auditHeaderCarrier(hc).toAuditTags(auditModel.transactionName, path),
-      detail = details
+      detail = auditModel.detail
     )
-  }
 
   private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext): Unit = auditResult.map {
     //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
