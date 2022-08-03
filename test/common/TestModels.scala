@@ -545,6 +545,22 @@ object TestModels {
     "isOverdue" -> false
   )
 
+  val estimatedLPP1Model: EstimatedLPP1ViewModel = EstimatedLPP1ViewModel(
+    "10", "20", 2.2, 4.4, 500.55, 30.33, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT Return 1st LPP"
+  )
+
+  val estimatedLPP1Json: JsObject = Json.obj(
+    "part1Days" -> "10",
+    "part2Days" -> "20",
+    "part1PenaltyRate" -> 2.2,
+    "part2PenaltyRate" -> 4.4,
+    "part1UnpaidVAT" -> 500.55,
+    "penaltyAmount" -> 30.33,
+    "periodFrom" -> "2020-01-01",
+    "periodTo" -> "2020-02-02",
+    "chargeType" -> "VAT Return 1st LPP"
+  )
+
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
     WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "")
 
