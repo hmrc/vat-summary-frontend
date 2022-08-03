@@ -40,7 +40,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "VAT"
+        elementText("h1") shouldBe "1 January 2018 to 2 February 2018 VAT"
       }
 
       "have a period caption" in {

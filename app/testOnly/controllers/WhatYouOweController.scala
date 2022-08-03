@@ -111,7 +111,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       leftToPay = payment.outstandingAmount,
       isOverdue = payment.isOverdue(dateService.now()),
       chargeReference = payment.chargeReference.get,
-      isPenalty = ChargeType.penaltyChargeTypes.contains(payment.chargeType)
+      isPenalty = ChargeType.penaltyInterestChargeTypes.contains(payment.chargeType)
     )
   }
 

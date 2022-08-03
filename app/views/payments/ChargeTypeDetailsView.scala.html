@@ -94,12 +94,14 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @if(model.periodFrom && model.periodTo) {
-                <span class="govuk-caption-xl">
-                    @displayDateRange(model.periodFrom.get, model.periodTo.get, alwaysUseYear = true)
-                </span>
-            }
+
             <h1 class="govuk-heading-xl" id="standard-charge-heading">
+
+                @if(model.periodFrom && model.periodTo) {
+                  <span class="govuk-caption-xl">
+                      @displayDateRange(model.periodFrom.get, model.periodTo.get, alwaysUseYear = true)
+                  </span>
+                }
                 @model.title
             </h1>
 
