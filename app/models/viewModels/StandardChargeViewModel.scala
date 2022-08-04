@@ -20,7 +20,6 @@ import models.payments._
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import utils.LoggerUtil
-import utils.PathBindables.none
 import views.templates.payments.PaymentMessageHelper
 
 import java.time.LocalDate
@@ -81,10 +80,6 @@ case class StandardChargeViewModel(chargeType: String,
          AAReturnDebitCharge => true
     case _ => false
   }
-
-  override def toString: String =
-    s"$chargeType+$outstandingAmount+$originalAmount+$clearedAmount+$dueDate+${periodKey.getOrElse(none)}" +
-    s"+$isOverdue+${chargeReference.getOrElse(none)}+${periodFrom.getOrElse(none)}+${periodTo.getOrElse(none)}"
 }
 
 object StandardChargeViewModel {

@@ -17,13 +17,10 @@
 package models.viewModels
 
 import play.api.i18n.Messages
+import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
 
 import java.time.LocalDate
-import play.api.data.Form
-import play.api.data.Forms._
-import play.api.data.Forms.mapping
-import play.api.libs.json.{Json, OFormat}
 
 case class CrystallisedLPP1ViewModel(numberOfDays: String,
                                      part1Days: String,
@@ -60,24 +57,5 @@ case class CrystallisedLPP1ViewModel(numberOfDays: String,
 object CrystallisedLPP1ViewModel {
 
   implicit val format: OFormat[CrystallisedLPP1ViewModel] = Json.format[CrystallisedLPP1ViewModel]
-
-  val form: Form[CrystallisedLPP1ViewModel] = Form(mapping(
-    "numberOfDays" -> text,
-    "part1Days" -> text,
-    "part2Days" -> optional(text),
-    "part1PenaltyRate" -> bigDecimal,
-    "part2PenaltyRate" -> optional(bigDecimal),
-    "part1UnpaidVAT" -> bigDecimal,
-    "part2UnpaidVAT" -> optional(bigDecimal),
-    "dueDate" -> localDate,
-    "penaltyAmount" -> bigDecimal,
-    "amountReceived" -> bigDecimal,
-    "leftToPay" -> bigDecimal,
-    "periodFrom" -> localDate,
-    "periodTo" -> localDate,
-    "chargeType" -> text,
-    "chargeReference" -> text,
-    "isOverdue" -> boolean
-  )(CrystallisedLPP1ViewModel.apply)(CrystallisedLPP1ViewModel.unapply))
 
 }

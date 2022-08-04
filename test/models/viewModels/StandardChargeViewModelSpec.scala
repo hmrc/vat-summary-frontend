@@ -135,21 +135,6 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
     }
   }
 
-  ".toString should generate a String representation of the model to be used in a URL" when {
-
-    "all parameters are defined" in {
-      model.toString shouldBe "VAT Inaccuracy return replaced+1234.56+2345.67+1111.11+2021-04-08+18AA" +
-        "+true+XD002750002155+2021-01-01+2021-03-31"
-    }
-
-    "some parameters are not defined" in {
-      val minModel = model.copy(
-        periodKey = None, chargeReference = None, periodTo = None, periodFrom = None
-      )
-      minModel.toString shouldBe "VAT Inaccuracy return replaced+1234.56+2345.67+1111.11+2021-04-08+None+true+None+None+None"
-    }
-  }
-
   "The StandardChargeViewModel" should {
 
     "read from JSON" when {
