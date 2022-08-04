@@ -55,10 +55,11 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      @clientName.map { name =>
-        <span class="govuk-caption-xl">@name</span>
-      }
+
       <h1 class="govuk-heading-xl">
+          @clientName.map { name =>
+          <span class="govuk-caption-xl">@name</span>
+          }
           @if(user.isAgent) {@messages("openPayments.agentTitle")} else {@messages("openPayments.title")}
       </h1>
 

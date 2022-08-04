@@ -112,7 +112,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "What your client owes"
+      elementText(Selectors.pageHeading) shouldBe "Capgemini What your client owes"
     }
 
     "have the client name caption" in {
