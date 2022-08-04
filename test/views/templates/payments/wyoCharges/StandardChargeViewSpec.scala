@@ -25,10 +25,9 @@ import views.html.templates.payments.wyoCharges.StandardCharge
 class StandardChargeViewSpec extends ViewBaseSpec {
 
   val injectedView: StandardCharge = injector.instanceOf[StandardCharge]
-  val id = "12345689"
 
-  val breakdownLinkSelector = "#standard-charge-breakdown-link"
-  val viewReturnLinkSelector = "#view-return-link"
+  val breakdownLinkSelector = ".standard-charge-breakdown-link"
+  val viewReturnLinkSelector = ".view-return-link"
 
   "The StandardCharge template" when {
 

@@ -93,8 +93,8 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has a link to the breakdown page" in {
-          element(tableBodyCell(1, 1) + "> a").attr("href") shouldBe
-            s"/vat-through-software/test-only/amount-to-pay/${chargeModel1.generateHash(user.vrn)}"
+          val url = testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
+          element(tableBodyCell(1, 1) + "> a").attr("href") shouldBe url
         }
 
         "has an overdue label" in {
@@ -126,8 +126,8 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has a link to the breakdown page" in {
-          element(tableBodyCell(2, 1) + "> a").attr("href") shouldBe
-            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
+          val url = testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
+          element(tableBodyCell(2, 1) + "> a").attr("href") shouldBe url
         }
 
         "does not have an overdue label" in {
@@ -142,20 +142,33 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           elementText(tableBodyCell(2, 2)) shouldBe "£" + chargeModel2.outstandingAmount.toInt
         }
       }
+
       "has the correct row for an example overdue crystallised charge" which {
+
         "has the correct charge description" in {
           elementText(tableBodyCell(3, 1)) shouldBe
             s"overdue Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021 due 8 April 2021"
         }
+
         "has an overdue label" in {
           elementText(tableBodyCell(3, 1) + " .govuk-tag") shouldBe "overdue"
         }
+
         "has the correct due hint text" in {
           elementText(tableBodyCell(3, 1) + "> span") shouldBe "due 8 April 2021"
         }
+
+        "has a link with the correct href" in {
+          element(tableBodyCell(3, 1) + "> a").attr("href") shouldBe
+            testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
+              overdueCrystallisedInterestCharge.generateHash(user.vrn)
+            ).url
+        }
+
         "has the correct amount" in {
           elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedInterestCharge.leftToPay.toInt
         }
+
       }
 
       "has the correct total row" which {

@@ -37,7 +37,7 @@
   appConfig.vatReturnUrl(charge.periodKey.get)
 }
 
-<a id="standard-charge-breakdown-link" class="govuk-link" href="@chargeHref">
+<a class="standard-charge-breakdown-link govuk-link" href="@chargeHref">
   @charge.title @charge.description(user.isAgent)
 </a>
 
@@ -46,7 +46,7 @@
 <span class="govuk-hint govuk-!-margin-0">
   @messages("whatYouOwe.due") @displayDate(charge.dueDate)
   @if(charge.viewReturnEnabled && charge.periodKey.isDefined) {
-    <a id="view-return-link" class="govuk-link govuk-!-padding-left-1" href="@viewReturnHref">
+    <a class="view-return-link govuk-link govuk-!-padding-left-1" href="@viewReturnHref">
       @messages("whatYouOwe.viewReturn")
     </a>
   }

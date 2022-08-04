@@ -25,7 +25,8 @@ import views.html.templates.payments.wyoCharges.CrystallisedCharge
 class CrystallisedChargeViewSpec extends ViewBaseSpec{
 
   val injectedView: CrystallisedCharge = injector.instanceOf[CrystallisedCharge]
-  val id = "1234656897"
+
+  val chargeLinkSelector = ".crystallised-charge-link"
 
   "the crystallised charge template" when {
 
@@ -35,7 +36,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("#crystallised-charge-link") shouldBe
+        elementText(chargeLinkSelector) shouldBe
           "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
@@ -47,6 +48,12 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
         elementText("span") shouldBe "due 8 April 2021"
       }
 
+      "have a link with the correct href" in {
+        element(chargeLinkSelector).attr("href") shouldBe
+          testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
+            overdueCrystallisedInterestCharge.generateHash(user.vrn)
+          ).url
+      }
     }
 
     "the charge is not overdue" should {
@@ -54,7 +61,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("#crystallised-charge-link") shouldBe
+        elementText(chargeLinkSelector) shouldBe
           "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
@@ -64,6 +71,13 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
 
       "have the correct due hint text" in {
         elementText("span") shouldBe "due 8 April 2021"
+      }
+
+      "have a link with the correct href" in {
+        element(chargeLinkSelector).attr("href") shouldBe
+          testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
+            crystallisedInterestCharge.generateHash(user.vrn)
+          ).url
       }
 
     }

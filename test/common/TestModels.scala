@@ -29,7 +29,7 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 import java.time.{LocalDate, LocalDateTime}
 
-import WYODatabaseModel.modelTypes._
+import common.ChargeViewModelTypes._
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import scala.concurrent.Future

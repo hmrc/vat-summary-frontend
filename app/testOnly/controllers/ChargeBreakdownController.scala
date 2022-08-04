@@ -20,14 +20,14 @@ import config.AppConfig
 import controllers.AuthorisedController
 import controllers.predicates.DDInterruptPredicate
 import javax.inject.Inject
-import models.WYODatabaseModel.modelTypes
+import common.{ChargeViewModelTypes => types}
 import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{ServiceInfoService, WYOSessionService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
-import views.html.errors.PaymentsError
+import views.html.errors.{NotFound, PaymentsError}
 import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
 
 import scala.concurrent.ExecutionContext
@@ -40,6 +40,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           chargeBreakdownView: ChargeTypeDetailsView,
                                           estimatedInterestView: EstimatedInterestView,
                                           errorView: PaymentsError,
+                                          notFound: NotFound,
                                           crystallisedInterestView: CrystallisedInterestView,
                                           crystallisedLPP1View: CrystallisedLPP1View)
                                          (implicit ec: ExecutionContext,
@@ -55,17 +56,15 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
         } yield {
           model match {
             case Some(m) => m.modelType match {
-              case modelTypes.standard => Ok(chargeBreakdownView(m.data.as[StandardChargeViewModel], navLinks))
-              case modelTypes.estimated => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
-              case modelTypes.crystallised => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
-              case modelTypes.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
+              case types.standard => Ok(chargeBreakdownView(m.data.as[StandardChargeViewModel], navLinks))
+              case types.estimated => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
+              case types.crystallised => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
+              case types.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
               case _ =>
                 logger.warn("[ChargeBreakdownController][showBreakdown] Retrieved model type was unknown")
                 InternalServerError(errorView())
             }
-            case _ =>
-              logger.warn("[ChargeBreakdownController][showBreakdown] Unexpected error retrieving model from database")
-              InternalServerError(errorView())
+            case _ => NotFound(notFound())
           }
         }
       }

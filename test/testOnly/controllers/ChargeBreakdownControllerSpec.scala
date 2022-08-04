@@ -21,7 +21,7 @@ import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
-import views.html.errors.PaymentsError
+import views.html.errors.{NotFound, PaymentsError}
 import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
@@ -29,8 +29,8 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
   val controller = new ChargeBreakdownController(
     authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService, mockWYOSessionService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
-    injector.instanceOf[PaymentsError], injector.instanceOf[CrystallisedInterestView],
-    injector.instanceOf[CrystallisedLPP1View]
+    injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
+    injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View]
   )
   val id: String = "1234569"
 
@@ -137,8 +137,8 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
           controller.showBreakdown(id)(fakeRequestWithSession)
         }
 
-        "return ISE (500)" in {
-          status(result) shouldBe INTERNAL_SERVER_ERROR
+        "return not found (404)" in {
+          status(result) shouldBe NOT_FOUND
         }
       }
     }
