@@ -30,6 +30,3 @@ object WYODatabaseModel {
   implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
   implicit val format: Format[WYODatabaseModel] = Json.format[WYODatabaseModel]
 }
-
-
-

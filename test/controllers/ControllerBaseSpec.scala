@@ -24,7 +24,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
 import mocks.MockAppConfig
-import models.{CustomerInformation, ServiceResponse, User}
+import models.{CustomerInformation, ServiceResponse, User, WYODatabaseModel}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -38,9 +38,9 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
 import java.time.LocalDate
-
 import models.payments.Payments
 import models.viewModels.ChargeDetailsViewModel
+import org.scalatest.enablers.Existence
 import org.scalatest.matchers.should.Matchers
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -72,12 +72,12 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   val mockAuditService: AuditingService = mock[AuditingService]
   val mockPenaltyDetailsService: PenaltyDetailsService = mock[PenaltyDetailsService]
+  val mockWYOSessionService: WYOSessionService = mock[WYOSessionService]
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
   val enrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   val agentPredicate: AgentPredicate = new AgentPredicate(enrolmentsAuthService, mcc, agentUnauthorised, financialPredicate)
-  val mockWYOSessionService: WYOSessionService = mock[WYOSessionService]
   val authorisedController: AuthorisedController = new AuthorisedController(
     mcc,
     enrolmentsAuthService,
@@ -148,6 +148,11 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .stubs(*, *, *, *)
       .returns(Future.successful(Html("")))
 
+  def mockWYOSessionServiceCall(model: Option[WYODatabaseModel]): Any =
+    (mockWYOSessionService.retrieveViewModel(_: String))
+      .stubs(*)
+      .returns(Future.successful(model))
+
   def mockPenaltyDetailsServiceCall(): Any =
     (mockPenaltyDetailsService.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *)
@@ -188,5 +193,6 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .returns(Future.successful(Seq()))
   }
 
-
+  implicit def existenceOfElement[Els <: org.jsoup.select.Elements]: Existence[Els] =
+    (els: Els) => els.size > 0
 }

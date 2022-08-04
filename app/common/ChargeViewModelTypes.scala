@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package common
 
-import common.TestModels.{wyoDBjsonModel, wyoStandardDBModel}
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.libs.json.Json
+object ChargeViewModelTypes {
 
-class WYODatabaseModelSpec extends AnyWordSpecLike with Matchers {
+    val standard = "StandardChargeViewModel"
+    val estimated = "EstimatedInterestViewModel"
+    val crystallised = "CrystallisedInterestViewModel"
+    val crystallisedLPP1 = "CrystallisedLPP1ViewModel"
 
-
-  "WYODatabaseModel" should {
-
-    "correctly parse to Json" in {
-      Json.toJson(wyoStandardDBModel) shouldBe wyoDBjsonModel
-    }
-
-    "correctly parse from Json" in {
-      wyoDBjsonModel.as[WYODatabaseModel] shouldBe wyoStandardDBModel
-    }
-  }
 }

@@ -71,7 +71,7 @@
       <span class="govuk-caption-xl">
         @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
       </span>
-      <h1 class="govuk-heading-xl">@model.title</h1>
+      <h1 class="govuk-heading-xl" id="estimated-interest-heading">@model.title</h1>
       <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}ChargeInterest")</p>
       <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
       <p class="govuk-body">
