@@ -16,8 +16,6 @@
 
 package models.viewModels
 
-import play.api.data.Form
-import play.api.data.Forms._
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -62,18 +60,4 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
 object CrystallisedInterestViewModel {
 
   implicit val format: OFormat[CrystallisedInterestViewModel] = Json.format[CrystallisedInterestViewModel]
-
-  val form: Form[CrystallisedInterestViewModel] = Form(mapping(
-    "periodFrom" -> localDate,
-    "periodTo" -> localDate,
-    "chargeType" -> text,
-    "interestRate" -> bigDecimal,
-    "dueDate" -> localDate,
-    "interestAmount" -> bigDecimal,
-    "amountReceived" -> bigDecimal,
-    "leftToPay" -> bigDecimal,
-    "isOverdue" -> boolean,
-    "chargeReference" -> text,
-    "isPenalty" -> boolean
-  )(CrystallisedInterestViewModel.apply)(CrystallisedInterestViewModel.unapply))
 }

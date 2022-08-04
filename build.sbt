@@ -90,7 +90,7 @@ lazy val microservice: Project = Project(appName, file("."))
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
-    routesImport ++= Seq("utils.PathBindables._", "models.viewModels._")
+    routesImport := Seq.empty
   )
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
