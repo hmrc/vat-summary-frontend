@@ -71,7 +71,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "have the correct page heading" in {
-            elementText(Selectors.pageHeading) shouldBe "VAT"
+            elementText(Selectors.pageHeading) shouldBe "1 January 2021 to 31 March 2021 VAT"
           }
 
           "have a period caption" in {

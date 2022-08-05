@@ -76,10 +76,14 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">
-        @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
-      </span>
-        <h1 class="govuk-heading-xl" id="crystallised-interest-heading">@messages(model.title)</h1>
+
+        <h1 class="govuk-heading-xl" id="crystallised-interest-heading">
+          <span class="govuk-caption-xl">
+            @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+          </span>
+            @messages(model.title)
+        </h1>
+
         <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")</p>
         <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
         <p class="govuk-body">

@@ -61,7 +61,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "Late payment penalty"
+        elementText("h1") shouldBe "3 March 2020 to 4 April 2020 Late payment penalty"
       }
 
       "have a period caption" in {
@@ -93,12 +93,12 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct first explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(3)") shouldBe
+        elementText("#content > div > div > p:nth-child(2)") shouldBe
           "This penalty applies if VAT has not been paid for 99 days."
       }
 
       "have the correct calculation explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(4)") shouldBe "It is made up of 2 parts:"
+        elementText("#content > div > div > p:nth-child(3)") shouldBe "It is made up of 2 parts:"
       }
 
       "have a bullet list" which {
@@ -161,23 +161,23 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       "have a link to guidance on late payment penalties" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(8) > a") shouldBe
+          elementText("#content > div > div > p:nth-child(7) > a") shouldBe
             "Read the guidance about late payment penalties (opens in a new tab)"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
+          element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
         }
       }
 
       "have a link to the what you owe page" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(9) > a") shouldBe "Return to what you owe"
+          elementText("#content > div > div > p:nth-child(8) > a") shouldBe "Return to what you owe"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe whatYouOweLink
+          element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
         }
       }
     }
@@ -189,7 +189,8 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct calculation explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(4)") shouldBe
+
+        elementText("#content > div > div > p:nth-child(3)") shouldBe
           s"The calculation we use is: ${viewModel.part1PenaltyRate}% of £${viewModel.part1UnpaidVAT} " +
           s"(the unpaid VAT ${viewModel.part1Days} days after the due date)"
       }
@@ -212,11 +213,11 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(8) > a") shouldBe "Return to what your client owes"
+        elementText("#content > div > div > p:nth-child(7) > a") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
+        element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe whatYouOweLink
       }
     }
 

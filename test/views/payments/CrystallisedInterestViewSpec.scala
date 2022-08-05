@@ -56,7 +56,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "VAT officer’s assessment interest"
+        elementText("h1") shouldBe "1 October 2022 to 31 December 2022 VAT officer’s assessment interest"
       }
 
       "have a period caption" in {
@@ -88,16 +88,16 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct first explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(3)") shouldBe "We charge interest on any unpaid VAT."
+        elementText("#content > div > div > p:nth-child(2)") shouldBe "We charge interest on any unpaid VAT."
       }
 
       "have the correct second explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(4)") shouldBe
+        elementText("#content > div > div > p:nth-child(3)") shouldBe
           "The total increases daily based on the amount of unpaid VAT for the period."
       }
 
       "have the correct third explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(5)") shouldBe "The calculation we use for each day is: " +
+        elementText("#content > div > div > p:nth-child(4)") shouldBe "The calculation we use for each day is: " +
           s"(Interest rate of ${viewModel.interestRate}% × VAT amount unpaid) ÷ days in a year"
       }
 
@@ -148,23 +148,23 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       "have a link to guidance on how interest is calculated" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(8) > a") shouldBe
+          elementText("#content > div > div > p:nth-child(7) > a") shouldBe
             "Read the guidance about how interest is calculated (opens in a new tab)"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
+          element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
         }
       }
 
       "have a link to the what you owe page" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(9) > a") shouldBe "Return to what you owe"
+          elementText("#content > div > div > p:nth-child(8) > a") shouldBe "Return to what you owe"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe whatYouOweLink
+          element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
         }
       }
     }
@@ -175,15 +175,15 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(3)") shouldBe "We charge interest on any unpaid penalties."
+        elementText("#content > div > div > p:nth-child(2)") shouldBe "We charge interest on any unpaid penalties."
       }
 
       "have the correct second explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(4)") shouldBe "The total increases daily based on the unpaid amount."
+        elementText("#content > div > div > p:nth-child(3)") shouldBe "The total increases daily based on the unpaid amount."
       }
 
       "have the correct third explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(5)") shouldBe "The calculation we use for each day is: " +
+        elementText("#content > div > div > p:nth-child(4)") shouldBe "The calculation we use for each day is: " +
           s"(Interest rate of ${viewModel.interestRate}% × penalty amount unpaid) ÷ days in a year"
       }
     }
@@ -197,11 +197,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(8) > a") shouldBe "Return to what your client owes"
+        elementText("#content > div > div > p:nth-child(7) > a") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
+        element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe whatYouOweLink
       }
     }
 

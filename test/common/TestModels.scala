@@ -345,6 +345,20 @@ object TestModels {
     isPenalty = false
   )
 
+  val penaltyInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    chargeType = "VAT Return 1st LPP LPI",
+    interestRate = 5.00,
+    dueDate = LocalDate.parse("2019-03-03"),
+    interestAmount = 1000.00,
+    amountReceived = 00.00,
+    leftToPay = 10000,
+    isOverdue = false,
+    chargeReference = "XD002750002155",
+    isPenalty = true
+  )
+
   val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
     10000,
     Seq(whatYouOweChargeModel),
@@ -356,7 +370,7 @@ object TestModels {
     Seq(whatYouOweChargeModel,
       whatYouOweChargeModel,
       whatYouOweChargeModelInterestCharge,
-      whatYouOweChargeModelInterestCharge.copy(chargeType = "VAT Return 1st LPP LPI")
+      penaltyInterestCharge
     ),
     mandationStatus = "MTDfB"
   )
