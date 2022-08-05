@@ -581,7 +581,7 @@ object TestModels {
   )
 
   val estimatedLPP2Model: EstimatedLPP2ViewModel = EstimatedLPP2ViewModel(
-    "31", 4.4, 4.22, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT Return 2nd LPP"
+    "31", 4.4, 4.22, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT Return 1st LPP"
   )
 
   val estimatedLPP2Json: JsObject = Json.obj(
@@ -590,7 +590,7 @@ object TestModels {
     "penaltyAmount" -> 4.22,
     "periodFrom" -> "2020-01-01",
     "periodTo" -> "2020-02-02",
-    "chargeType" -> "VAT Return 2nd LPP"
+    "chargeType" -> "VAT Return 1st LPP"
   )
 
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
