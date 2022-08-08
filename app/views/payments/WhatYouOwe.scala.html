@@ -166,12 +166,14 @@
         </p>
         <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectFour")</p>
       } else {
-        <h2 id="cannot-pay-heading" class="govuk-heading-s">@messages("whatYouOwe.ifYouCannotPayOne")</h2>
-        <p class="govuk-body">@messages("whatYouOwe.ifYouCannotPayTwo")
-          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
-            @messages("whatYouOwe.ifYouCannotPayThree")</a>.
-          @messages("whatYouOwe.ifYouCannotPayFour")
-        </p>
+        @if(appConfig.features.overdueTimeToPayDescriptionEnabled() && model.containsOverduePayments) {
+          <h2 id="cannot-pay-heading" class="govuk-heading-s">@messages("whatYouOwe.ifYouCannotPayOne")</h2>
+          <p id=id="cannot-pay-paragraph" class="govuk-body">@messages("whatYouOwe.ifYouCannotPayTwo")
+            <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
+              @messages("whatYouOwe.ifYouCannotPayThree")</a>.
+            @messages("whatYouOwe.ifYouCannotPayFour")
+          </p>
+        }
         <h2 class="govuk-heading-s">@messages("whatYouOwe.isIncorrectOne")</h2>
         <p class ="govuk-body">@messages("whatYouOwe.isIncorrectTwo")
           <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKCorrections">
