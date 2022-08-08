@@ -463,8 +463,6 @@ object TestModels {
     "VAT Return Debit Charge",
     2.6,
     300.33,
-    200.22,
-    100.11,
     isPenalty = false
   )
 
@@ -473,9 +471,7 @@ object TestModels {
     "periodTo" -> "2018-02-02",
     "chargeType" -> "VAT Return Debit Charge",
     "interestRate" -> 2.6,
-    "currentAmount" -> 300.33,
-    "amountReceived" -> 200.22,
-    "leftToPay" -> 100.11,
+    "interestAmount" -> 300.33,
     "isPenalty" -> false
   )
 

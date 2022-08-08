@@ -26,12 +26,10 @@ case class EstimatedInterestViewModel(periodFrom: LocalDate,
                                       periodTo: LocalDate,
                                       chargeType: String,
                                       interestRate: BigDecimal,
-                                      currentAmount: BigDecimal,
-                                      amountReceived: BigDecimal,
-                                      leftToPay: BigDecimal,
+                                      interestAmount: BigDecimal,
                                       isPenalty: Boolean) extends ChargeDetailsViewModel {
 
-  override val outstandingAmount: BigDecimal = leftToPay
+  override val outstandingAmount: BigDecimal = interestAmount
 
   def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
 
