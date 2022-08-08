@@ -168,19 +168,20 @@ estimatedInterest.estimates = Estimates
 estimatedInterest.estimatesExplanation = Penalties and interest will show as estimates if HMRC has not been given enough information to calculate the final amounts.
 estimatedInterest.calculationLink = Read the guidance about how interest is calculated (opens in a new tab)
 
-estimatedInterestLPP1.penaltyAppliesForDays = The penalty applies if VAT has not been paid for {0} days
-estimatedInterestLPP1.calculation = The calculation we use is:
-estimatedInterestLPP1.penaltyCalculation = {0}% of {1} (the unpaid VAT {2} days after the due date)
-estimatedInterestLPP1.penaltyAmount = Penalty amount (estimate)
-estimatedInterestLPP1.amountReceived = Amount received
-estimatedInterestLPP1.leftToPay = Left to pay
-estimatedInterestLPP1.warning = The penalty will increase by a further {0}% of the unpaid VAT, if VAT remains unpaid {1} days after the due date.
-estimatedInterestLPP1.estimatesHeading = Estimates
-estimatedInterestLPP1.estimatesSubHeading = Penalties will show as estimates until:
-estimatedInterestLPP1.firstBullet = you pay the VAT bill, or
-estimatedInterestLPP1.secondBullet = 30 days have passed since the VAT due date
-estimatedInterestLPP1.link1 = View your VAT penalties and appeals
-
+estimatedLPP1.penaltyAppliesForDays = The penalty applies if VAT has not been paid for {0} days.
+estimatedLPP1.calculation = The calculation we use is:
+estimatedLPP1.penaltyCalculation = {0}% of {1} (the unpaid VAT {2} days after the due date)
+estimatedLPP1.penaltyAmount = Penalty amount (estimate)
+estimatedLPP1.amountReceived = Amount received
+estimatedLPP1.leftToPay = Left to pay
+estimatedLPP1.warning = The penalty will increase by a further {0}% of the unpaid VAT, if VAT remains unpaid {1} days after the due date.
+estimatedLPP1.estimatesHeading = Estimates
+estimatedLPP1.estimatesSubHeading = Penalties will show as estimates until:
+estimatedLPP1.firstBullet = you pay the VAT bill, or
+estimatedLPP1.firstBulletAgent = your client pays the VAT bill, or
+estimatedLPP1.secondBullet = {0} days have passed since the VAT due date
+estimatedLPP1.penaltiesLink = View your VAT penalties and appeals
+estimatedLPP1.penaltiesLinkAgent = View your client’s VAT penalties and appeals page
 
 crystallisedInterest.vatChargeInterest = We charge interest on any unpaid VAT.
 crystallisedInterest.penaltyChargeInterest = We charge interest on any unpaid penalties.

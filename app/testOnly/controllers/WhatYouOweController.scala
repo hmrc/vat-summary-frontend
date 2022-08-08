@@ -16,8 +16,6 @@
 
 package testOnly.controllers
 
-import java.time.LocalDate
-
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
@@ -31,7 +29,7 @@ import services.{AccountDetailsService, DateService, PaymentsService, PenaltyDet
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
-import views.html.payments.{EstimatedLPP1View, NoPayments, WhatYouOwe}
+import views.html.payments.{NoPayments, WhatYouOwe}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -46,14 +44,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      noPayments: NoPayments,
                                      accountDetailsService: AccountDetailsService,
                                      penaltyDetailsService: PenaltyDetailsService,
-                                     WYOSessionService: WYOSessionService,
-                                     estimatedLPP1View: EstimatedLPP1View)
+                                     WYOSessionService: WYOSessionService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
-
-  val estimatedLPP1ViewModel : EstimatedLPP1ViewModel =
-    EstimatedLPP1ViewModel("10", "20", 2.0, 4.0, 500.55, 30.33, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT Return 1st LPP")
 
   def show: Action[AnyContent] = authorisedController.financialAction { implicit request =>
 
@@ -70,7 +64,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                   constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
                     case Some(model) =>
                       WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
-                        Ok(estimatedLPP1View(estimatedLPP1ViewModel, serviceInfoContent))
+                        Ok(view(model, serviceInfoContent))
                       }
                     case None =>
                       logger.warn("[WhatYouOweController][show] required field(s) missing from payment(s); failed to render view")
