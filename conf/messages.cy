@@ -200,6 +200,19 @@ crystallisedLPP2.penaltyAmount = ???
 crystallisedLPP2.amountReceived = ???
 crystallisedLPP2.leftToPay = ???
 
+estimatedLPP2.explanation = ???
+estimatedLPP2.interestExplanation = ???
+estimatedLPP2.calculation = ???
+estimatedLPP2.calculationExplanation = ???
+estimatedLPP2.penaltyAmount = ???
+estimatedLPP2.amountReceived = ???
+estimatedLPP2.leftToPay = ???
+estimatedLPP2.estimates = ???
+estimatedLPP2.estimatesDescription = ???
+estimatedLPP2.estimatesDescriptionAgent = ???
+estimatedLPP2.penaltiesAndAppeal = ???
+estimatedLPP2.penaltiesAndAppealAgent = ???
+
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
