@@ -168,6 +168,21 @@ estimatedInterest.estimates = ???
 estimatedInterest.estimatesExplanation = ???
 estimatedInterest.calculationLink = ???
 
+estimatedLPP1.penaltyAppliesForDays = ???
+estimatedLPP1.calculation = ???
+estimatedLPP1.penaltyCalculation = ???
+estimatedLPP1.penaltyAmount = ???
+estimatedLPP1.amountReceived = Swm a gafwyd
+estimatedLPP1.leftToPay = Yn weddill i’w dalu
+estimatedLPP1.warning = ???
+estimatedLPP1.estimatesHeading = ???
+estimatedLPP1.estimatesSubHeading = ???
+estimatedLPP1.firstBullet = ???
+estimatedLPP1.firstBulletAgent = ???
+estimatedLPP1.secondBullet = ???
+estimatedLPP1.penaltiesLink = ???
+estimatedLPP1.penaltiesLinkAgent = ???
+
 crystallisedInterest.vatChargeInterest = ???
 crystallisedInterest.penaltyChargeInterest = ???
 crystallisedInterest.vatIncreaseDaily = ???

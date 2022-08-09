@@ -94,7 +94,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the current amount of interest accumulated" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedInterestModel.currentAmount}"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedInterestModel.interestAmount}"
       }
 
       "have the correct heading for the second row" in {
@@ -102,7 +102,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the amount received" in {
-        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${estimatedInterestModel.amountReceived}"
+        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe "£0"
       }
 
       "have the correct heading for the third row" in {
@@ -110,7 +110,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the outstanding amount" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedInterestModel.leftToPay}"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedInterestModel.interestAmount}"
       }
 
       "have the correct subheading" in {

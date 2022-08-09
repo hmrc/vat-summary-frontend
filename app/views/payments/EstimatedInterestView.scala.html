@@ -87,15 +87,15 @@
         rows = Seq(
           SummaryListRow(
             key = Key(content = Text(messages(s"estimatedInterest.currentAmount"))),
-            value = Value(content = HtmlContent(displayMoney(model.currentAmount)))
+            value = Value(content = HtmlContent(displayMoney(model.interestAmount)))
           ),
           SummaryListRow(
             key = Key(content = Text(messages("estimatedInterest.amountReceived"))),
-            value = Value(content = HtmlContent(displayMoney(model.amountReceived)))
+            value = Value(content = HtmlContent(displayMoney(0)))
           ),
           SummaryListRow(
             key = Key(content = Text(messages("estimatedInterest.leftToPay"))),
-            value = Value(content = HtmlContent(displayMoney(model.leftToPay)))
+            value = Value(content = HtmlContent(displayMoney(model.interestAmount)))
           )
         )
       ))

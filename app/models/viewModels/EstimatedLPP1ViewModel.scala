@@ -17,8 +17,10 @@
 package models.viewModels
 
 import play.api.libs.json.{Json, OFormat}
-
 import java.time.LocalDate
+
+import play.api.i18n.Messages
+import views.templates.payments.PaymentMessageHelper
 
 case class EstimatedLPP1ViewModel(part1Days: String,
                                   part2Days: String,
@@ -28,7 +30,10 @@ case class EstimatedLPP1ViewModel(part1Days: String,
                                   penaltyAmount: BigDecimal,
                                   periodFrom: LocalDate,
                                   periodTo: LocalDate,
-                                  chargeType: String)
+                                  chargeType: String) {
+
+  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
+}
 
 object EstimatedLPP1ViewModel {
   implicit val format: OFormat[EstimatedLPP1ViewModel] = Json.format[EstimatedLPP1ViewModel]

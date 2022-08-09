@@ -1,0 +1,127 @@
+@*
+ * Copyright 2022 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.viewModels.EstimatedLPP1ViewModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import views.html.templates.formatters.money.DisplayMoney
+
+@this(mainTemplate: MainTemplate,
+      displayMoney: DisplayMoney,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukSummaryList: GovukSummaryList,
+      govukBackLink: GovukBackLink,
+      govukWarningText : GovukWarningText)
+
+@(model: EstimatedLPP1ViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+  @govukBreadcrumbs(Breadcrumbs(
+    items = Seq(
+      BreadcrumbsItem(
+        content = Text(messages("breadcrumbs.bta")),
+        href = Some(appConfig.btaHomeUrl)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details.url)
+      ),
+      BreadcrumbsItem(
+        content = Text(messages("openPayments.title")),
+        href = Some(testOnly.controllers.routes.WhatYouOweController.show.url)
+      )
+    )
+  ))
+}
+
+@backLink = {
+  @govukBackLink(BackLink(
+    content = Text(messages("base.back")),
+    href = testOnly.controllers.routes.WhatYouOweController.show.url
+  ))
+}
+
+@mainTemplate(
+  title = model.title,
+  appConfig = appConfig,
+  serviceInfoContent = serviceInfoContent,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl" id="estimated-LPP1-heading">
+      <span class="govuk-caption-xl">
+        @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+      </span>
+      @model.title
+    </h1>
+    <p class="govuk-body">@messages("estimatedLPP1.penaltyAppliesForDays", model.part1Days)</p>
+    <p class="govuk-body">
+      @messages("estimatedLPP1.calculation")
+      <br>
+      @Html(messages("estimatedLPP1.penaltyCalculation", model.part1PenaltyRate, displayMoney(model.part1UnpaidVAT), model.part1Days))
+    </p>
+
+    @govukSummaryList(SummaryList(
+      rows = Seq(
+        SummaryListRow(
+          key = Key(content = Text(messages("estimatedLPP1.penaltyAmount"))),
+          value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+        ),
+        SummaryListRow(
+          key = Key(content = Text(messages("estimatedLPP1.amountReceived"))),
+          value = Value(content = HtmlContent(displayMoney(0)))
+        ),
+        SummaryListRow(
+          key = Key(content = Text(messages("estimatedLPP1.leftToPay"))),
+          value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+        )
+      )
+    ))
+
+    @govukWarningText(WarningText(
+      iconFallbackText = messages("common.warning"),
+      content = Text(messages("estimatedLPP1.warning", model.part2PenaltyRate, model.part2Days))
+    ))
+
+    <h2 class="govuk-heading-s">@messages("estimatedLPP1.estimatesHeading")</h2>
+    <p class="govuk-body">@messages("estimatedLPP1.estimatesSubHeading")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>
+          @if(user.isAgent) {@messages("estimatedLPP1.firstBulletAgent")} else {@messages("estimatedLPP1.firstBullet")}
+        </li>
+        <li>@messages("estimatedLPP1.secondBullet", model.part2Days)</li>
+    </ul>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
+        @if(user.isAgent) {@messages("estimatedLPP1.penaltiesLinkAgent")} else {@messages("estimatedLPP1.penaltiesLink")}
+      </a>
+    </p>
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="@testOnly.controllers.routes.WhatYouOweController.show.url">
+        @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+      </a>
+    </p>
+
+  </div>
+</div>
+
+}
