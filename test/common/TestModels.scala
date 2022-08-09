@@ -362,7 +362,8 @@ object TestModels {
   val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
     10000,
     Seq(whatYouOweChargeModel),
-    mandationStatus = "MTDfB"
+    mandationStatus = "MTDfB",
+    false
   )
 
   val whatYouOweViewModelInterestCharges: WhatYouOweViewModel = WhatYouOweViewModel(
@@ -372,7 +373,8 @@ object TestModels {
       whatYouOweChargeModelInterestCharge,
       penaltyInterestCharge
     ),
-    mandationStatus = "MTDfB"
+    mandationStatus = "MTDfB",
+    false
   )
 
   val viewModelNoChargeDescription: WhatYouOweViewModel = whatYouOweViewModel.copy(
@@ -594,7 +596,7 @@ object TestModels {
   )
 
   val whatYouOweViewModel2Charge: WhatYouOweViewModel =
-    WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "")
+    WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "", true)
 
   val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
     chargeType = "VAT Return Debit Charge",

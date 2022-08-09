@@ -18,4 +18,5 @@ package models.viewModels
 
 case class WhatYouOweViewModel(totalAmount: BigDecimal,
                                charges: Seq[ChargeDetailsViewModel],
-                               mandationStatus: String)
+                               mandationStatus: String,
+                               containsOverduePayments: Boolean)
