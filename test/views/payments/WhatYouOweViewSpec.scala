@@ -381,40 +381,26 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       "have a payment help section" which {
 
-        "has the correct title" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
+        lazy val view = {
           mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
+          whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "has the correct title" in {
           elementText(".govuk-details__summary-text") shouldBe "Payment help"
         }
 
         "has the correct paragraph text" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
           elementText(".govuk-details__text") shouldBe "If your client cannot pay a tax bill, they can ask HMRC about " +
             "setting up a Time to Pay Arrangement (opens in a new tab). This allows them to pay their bill in instalments."
         }
 
         "has the correct link text" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
           elementText(".govuk-details__text > p > a") shouldBe "setting up a Time to Pay Arrangement (opens in a new tab)"
         }
 
         "has the correct link location" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
           element(".govuk-details__text > p > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
         }
       }
