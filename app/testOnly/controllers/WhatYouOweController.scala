@@ -137,7 +137,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     val chargeModels = categoriseCharges(payments)
 
     if(payments.length == chargeModels.length) {
-      Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus, payments.map(_.isOverdue(dateService.now())).contains(true)))
+      Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus, payments.exists(_.isOverdue(dateService.now()))))
     } else {
       None
     }

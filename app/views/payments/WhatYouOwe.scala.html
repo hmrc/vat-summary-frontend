@@ -144,7 +144,7 @@
         </li>
       </ul>
 
-      @if(user.isAgent){
+      @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() && model.containsOverduePayments) {
         @govukDetails(Details(
           summary = Text(messages("whatYouOwe.details.agent.paymentHelpOne")),
           content = HtmlContent(paymentHelp)
