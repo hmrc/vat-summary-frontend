@@ -21,14 +21,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
-import views.html.payments.EstimatedILPP2View
+import views.html.payments.EstimatedLPP2View
 
 
 class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
-  val injectedView: EstimatedILPP2View = injector.instanceOf[EstimatedILPP2View]
+  val injectedView: EstimatedLPP2View = injector.instanceOf[EstimatedLPP2View]
   val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
-
 
   "Rendering the Estimated LPP2 Page for a principal user" when {
 
@@ -72,6 +71,10 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       }
     }
 
+    "not render a back link" in {
+      elementExtinct(".govuk-back-link")
+    }
+
     "have the correct first explanation paragraph" in {
       elementText("#content > div > div > p:nth-child(2)") shouldBe
         "This penalty applies from day 31, if any VAT remains unpaid."
@@ -109,6 +112,10 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "display the amount left to pay" in {
       elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedLPP2Model.penaltyAmount}"
+    }
+
+    "have the correct subheading" in {
+      elementText("#estimates-subheading") shouldBe "Estimates"
     }
 
     "have the estimate description" in {
@@ -190,10 +197,6 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       "has the correct href" in {
         element(".govuk-back-link").attr("href") shouldBe whatYouOweLink
       }
-    }
-
-    "not have a pay now button" in {
-      elementExtinct("#content > div > div > a")
     }
   }
 }
