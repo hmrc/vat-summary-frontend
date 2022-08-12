@@ -91,6 +91,7 @@ object MessageLookup {
         case VatInaccuraciesReturnReplacedCharge.name => ("Inaccuracies penalty", s"because you have submitted inaccurate information for the period $datePeriod")
         case VatWrongDoingPenaltyCharge.name => ("Wrongdoing penalty", "because you charged VAT when you should not have done")
         case VatPADefaultInterest.name => ("Protective assessment default interest", "charged on the protective assessment")
+        case VatPALPI.name => ("Interest on protective assessment", s"for $datePeriod")
         case VatECDefaultInterest.name => ("Error correction default interest", "charged on assessed amount")
         case VatPaFurtherInterest.name => ("Protective assessment further interest", "due on the protective assessment as this was not paid on time")
         case VatCarterPenaltyCharge.name => ("Penalty for not filing correctly", s"because you did not use the correct digital channel for the period $datePeriod")

@@ -75,7 +75,6 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
-
   object VatOfficerAssessmentCreditCharge extends PaymentMessageHelper(
     OACreditCharge.value,
     "chargeType.officerAssessmentChargeTitle",
@@ -256,6 +255,13 @@ object PaymentMessageHelper {
     "chargeType.vatPADefaultInterestTitle",
     Some("chargeType.vatPADefaultInterestDescription"),
     Some("chargeType.vatPADefaultInterestDescription")
+  )
+
+  object VatPALPI extends PaymentMessageHelper(
+    VatPALPICharge.value,
+    "chargeType.vatPALPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object CivilEvasionPenalty extends PaymentMessageHelper(
@@ -539,6 +545,7 @@ object PaymentMessageHelper {
     VatInaccuraciesReturnReplacedCharge,
     VatWrongDoingPenaltyCharge,
     VatPADefaultInterest,
+    VatPALPI,
     VatStatutoryInterestCharge,
     VatECDefaultInterest,
     VatPaFurtherInterest,
