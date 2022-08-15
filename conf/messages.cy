@@ -496,6 +496,11 @@ chargeType.VATOA2ndLPPLPITitle = ???
 chargeType.VATPA1stLPPLPITitle = ???
 chargeType.VATPA2ndLPPLPITitle = ???
 
+chargeType.VATPA1stLPPTitle = ???
+chargeType.VATPA1stLPPDescription = ???
+
+chargeType.VATPA2ndLPPTitle = ???
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

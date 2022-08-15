@@ -502,6 +502,20 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+  object VATPA1stLPP extends PaymentMessageHelper(
+    VatPA1stLPP.value,
+    "chargeType.VATPA1stLPPTitle",
+    Some("chargeType.VATPALPPDescription"),
+    Some("chargeType.VATPALPPDescription")
+  )
+
+  object VATPA2ndLPP extends PaymentMessageHelper(
+    VatPA2ndLPP.value,
+    "chargeType.VATPA2ndLPPTitle",
+    Some("chargeType.VATPALPPDescription"),
+    Some("chargeType.VATPALPPDescription")
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
@@ -570,7 +584,9 @@ object PaymentMessageHelper {
     VATOA1stLPPLPI,
     VATOA2ndLPPLPI,
     VATPA1stLPPLPI,
-    VATPA2ndLPPLPI
+    VATPA2ndLPPLPI,
+    VATPA1stLPP,
+    VATPA2ndLPP
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
