@@ -228,12 +228,12 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct paragraph text" in {
-          elementText("p.govuk-body:nth-of-type(4)") shouldBe "If you cannot pay a tax bill, you can ask HMRC about " +
-            "setting up a Time to Pay Arrangement (opens in a new tab). This allows you to pay your bill in instalments."
+          elementText("p.govuk-body:nth-of-type(4)") shouldBe "If you cannot pay what you owe, you might be able to " +
+            "set up a payment plan (opens in a new tab) to pay in monthly instalments."
         }
 
         "has the correct link text" in {
-          elementText("p.govuk-body:nth-of-type(4) > a") shouldBe "setting up a Time to Pay Arrangement (opens in a new tab)"
+          elementText("p.govuk-body:nth-of-type(4) > a") shouldBe "set up a payment plan (opens in a new tab)"
         }
 
         "has the correct link location" in {
@@ -392,12 +392,12 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct paragraph text" in {
-          elementText(".govuk-details__text") shouldBe "If your client cannot pay a tax bill, they can ask HMRC about " +
-            "setting up a Time to Pay Arrangement (opens in a new tab). This allows them to pay their bill in instalments."
+          elementText(".govuk-details__text") shouldBe "If your client cannot pay what they owe, they might be able to " +
+            "set up a payment plan (opens in a new tab) to pay in monthly instalments."
         }
 
         "has the correct link text" in {
-          elementText(".govuk-details__text > p > a") shouldBe "setting up a Time to Pay Arrangement (opens in a new tab)"
+          elementText(".govuk-details__text > p > a") shouldBe "set up a payment plan (opens in a new tab)"
         }
 
         "has the correct link location" in {
