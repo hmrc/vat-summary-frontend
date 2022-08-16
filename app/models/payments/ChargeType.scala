@@ -240,6 +240,18 @@ case object VatOA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT OA 2nd LPP LPI"
 }
 
+case object VatAA1stLPP extends ChargeType {
+  override val value: String = "VAT AA 1st LPP"
+}
+
+case object VatAA2ndLPP extends ChargeType {
+  override val value: String = "VAT AA 2nd LPP"
+}
+
+case object VatAdditionalAssessmentLPI extends ChargeType {
+  override val value: String = "VAT Additional Assessment LPI"
+}
+
 object ChargeType extends LoggerUtil {
 
   val positiveOrNegativeChargeTypes: Set[ChargeType] = Set(
@@ -311,7 +323,10 @@ object ChargeType extends LoggerUtil {
     VatCA2ndLPPLPI,
     VatOfficersAssessmentLPI,
     VatOA1stLPPLPI,
-    VatOA2ndLPPLPI
+    VatOA2ndLPPLPI,
+    VatAA1stLPP,
+    VatAA2ndLPP,
+    VatAdditionalAssessmentLPI
   ) ++ positiveOrNegativeChargeTypes
 
   val interestChargeTypes: Set[ChargeType] = Set(
@@ -323,7 +338,8 @@ object ChargeType extends LoggerUtil {
     VatCA2ndLPPLPI,
     VatOfficersAssessmentLPI,
     VatOA1stLPPLPI,
-    VatOA2ndLPPLPI
+    VatOA2ndLPPLPI,
+    VatAdditionalAssessmentLPI
   )
 
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
@@ -336,7 +352,10 @@ object ChargeType extends LoggerUtil {
   )
 
   val penaltyChargeTypes: Set[ChargeType] = Set(
-    VatReturn1stLPP
+    VatReturn1stLPP,
+    VatAA1stLPP,
+    VatAA2ndLPP
+
   )
 
   def apply: String => ChargeType = input => {
