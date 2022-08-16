@@ -371,6 +371,15 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT PA LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPALPICharge), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+        }
+      }
+
       "there is a VAT Return LPI charge" should {
 
         val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnLPI), false, messages)

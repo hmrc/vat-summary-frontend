@@ -584,6 +584,18 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
+              "chargeType" -> VatPALPICharge.value,
+              "periodKey" -> "18AA",
+              "outstandingAmount" -> 202.10,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.10
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
               "chargeType" -> VatReturn1stLPPLPI.value,
               "periodKey" -> "18AB",
               "outstandingAmount" -> 202.20,
@@ -1074,6 +1086,14 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
         ),
         Payment(
           VatReturnLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.10),
+          periodKey = Some("18AA"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatPALPICharge,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.10),
           periodKey = Some("18AA"),

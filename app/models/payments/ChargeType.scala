@@ -38,7 +38,6 @@ sealed trait ChargeType {
 case object VatUnrepayableOverpayment extends ChargeType {
   override val value: String = "VAT Unrepayable Overpayment"
 }
-
 case object VatRepaymentSupplementRecovery extends ChargeType {
   override val value: String = "VAT Repayment Supplement Rec"
 }
@@ -219,31 +218,27 @@ case object VatReturn2ndLPPLPI extends ChargeType {
 case object VatCentralAssessmentLPI extends ChargeType {
   override val value: String = "VAT Central Assessment LPI"
 }
-
 case object VatCA1stLPPLPI extends ChargeType {
   override val value: String = "VAT CA 1st LPP LPI"
 }
-
 case object VatCA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT CA 2nd LPP LPI"
 }
-
 case object VatOfficersAssessmentLPI extends ChargeType {
   override val value: String = "VAT Officer's Assessment LPI"
 }
-
 case object VatOA1stLPPLPI extends ChargeType {
   override val value: String = "VAT OA 1st LPP LPI"
 }
-
 case object VatOA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT OA 2nd LPP LPI"
 }
-
+case object VatPALPICharge extends ChargeType {
+  override val value: String = "VAT Protective Assessment LPI"
+}
 case object VatPA1stLPPLPI extends ChargeType {
   override val value: String = "VAT PA 1st LPP LPI"
 }
-
 case object VatPA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT PA 2nd LPP LPI"
 }
@@ -297,6 +292,7 @@ object ChargeType extends LoggerUtil {
     VatInaccuraciesInECSalesCharge,
     StatutoryInterestCharge,
     VatPADefaultInterestCharge,
+    VatPALPICharge,
     VatProtectiveAssessmentCharge,
     VatSecurityDepositRequestCharge,
     VatECFurtherInterestCharge,
@@ -335,7 +331,8 @@ object ChargeType extends LoggerUtil {
     VatOA1stLPPLPI,
     VatOA2ndLPPLPI,
     VatPA1stLPPLPI,
-    VatPA2ndLPPLPI
+    VatPA2ndLPPLPI,
+    VatPALPICharge
   )
 
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
