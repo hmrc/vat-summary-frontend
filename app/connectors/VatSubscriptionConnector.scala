@@ -38,12 +38,9 @@ class VatSubscriptionConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.CustomerInfoHttpParser.CustomerInfoReads
 
-    val timer = metrics.getCustomerInfoTimer.time()
-
     http.GET(customerInfoUrl(vrn))
       .map {
         case customerInfo@Right(_) =>
-          timer.stop()
           customerInfo
         case httpError@Left(error) =>
           metrics.getCustomerInfoCallFailureCounter.inc()

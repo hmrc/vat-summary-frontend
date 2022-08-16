@@ -39,13 +39,11 @@ class PaymentsConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsRedirectUrlHttpParser.PaymentsRedirectUrlReads
 
-    val timer = metrics.postSetupPaymentsJourneyTimer.time()
     val url = vatUrl(data.chargeType.toPathElement)
 
     http.POST(url, data)
       .map {
         case url@Right(_) =>
-          timer.stop()
           url
         case httpError@Left(error) =>
           metrics.postSetupPaymentsJourneyCounter.inc()

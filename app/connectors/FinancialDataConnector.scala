@@ -45,12 +45,9 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 
-    val timer = metrics.getOpenPaymentsTimer.time()
-
     http.GET(paymentsUrl(vrn), Seq("onlyOpenItems" -> "true"))
       .map {
         case payments@Right(_) =>
-          timer.stop()
           logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
@@ -65,15 +62,12 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
 
-    val timer = metrics.getPaymentHistoryTimer.time()
-
     http.GET(paymentsUrl(vrn), Seq(
       "dateFrom" -> s"${from.getYear}-01-01",
       "dateTo" -> s"${to.getYear}-12-31"
     ))
       .map {
         case payments@Right(_) =>
-          timer.stop()
           logger.debug(s"[FinancialDataConnector][getVatLiabilities] Payments: \n\n $payments")
           payments
         case httpError@Left(error) =>
@@ -88,11 +82,8 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 
-    val timer = metrics.getDirectDebitStatusTimer.time()
-
     http.GET(directDebitUrl(vrn)).map {
       case directDebitStatus@Right(_) =>
-        timer.stop()
         directDebitStatus
       case httpError@Left(error) =>
         metrics.getDirectDebitStatusFailureCounter.inc()

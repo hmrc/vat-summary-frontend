@@ -47,8 +47,6 @@ class VatObligationsConnector @Inject()(http: HttpClient,
                               to: Option[LocalDate] = None)(implicit hc: HeaderCarrier,
                               ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
 
-    val timer = metrics.getObligationsTimer.time()
-
     import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
 
     val headerCarrier = hc.withExtraHeaders(
@@ -70,7 +68,6 @@ class VatObligationsConnector @Inject()(http: HttpClient,
 
     httpRequest.map {
       case vatReturns@Right(_) =>
-        timer.stop()
         vatReturns
       case httpError@Left(error) =>
         metrics.getObligationsCallFailureCounter.inc()
