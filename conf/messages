@@ -493,6 +493,7 @@ chargeType.VATCA2ndLPPLPPITitle = Interest on central assessment second penalty
 chargeType.VATOfficersAssessmentLPITitle = Interest on officer’s assessment of VAT
 chargeType.VATOA1stLPPLPITitle = Interest on officer’s assessment penalty
 chargeType.VATOA2ndLPPLPITitle = Interest on officer’s assessment second penalty
+
 chargeType.VATPA1stLPPLPITitle = Interest on protective assessment penalty
 chargeType.VATPA2ndLPPLPITitle = Interest on second penalty for protective assessment
 
@@ -500,9 +501,14 @@ chargeType.VATPA1stLPPTitle = Late payment penalty
 chargeType.VATPALPPDescription = for late payment of protective assessment for {0}
 
 chargeType.VATPA2ndLPPTitle = Second late payment penalty
+
 chargeType.VATAA1stLPPTitle = Penalty for late payment of additional assessment
 chargeType.VATAA2ndLPPTitle = Second penalty for late payment of additional assessment
+
 chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment
+
+chargeType.VATAA1stLPPLPITitle = Interest on additional assessment penalty
+chargeType.VATAA2ndLPPLPITitle = Interest on additional assessment second penalty
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

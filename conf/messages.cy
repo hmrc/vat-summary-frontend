@@ -493,6 +493,7 @@ chargeType.VATCA2ndLPPLPPITitle = ???
 chargeType.VATOfficersAssessmentLPITitle = ???
 chargeType.VATOA1stLPPLPITitle = ???
 chargeType.VATOA2ndLPPLPITitle = ???
+
 chargeType.VATPA1stLPPLPITitle = ???
 chargeType.VATPA2ndLPPLPITitle = ???
 
@@ -503,7 +504,11 @@ chargeType.VATPA2ndLPPTitle = ???
 
 chargeType.VATAA1stLPPTitle = ???
 chargeType.VATAA2ndLPPTitle = ???
+
 chargeType.VATAdditionalAssessmentLPITitle = ???
+
+chargeType.VATAA1stLPPLPITitle = ???
+chargeType.VATAA2ndLPPLPITitle = ???
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi

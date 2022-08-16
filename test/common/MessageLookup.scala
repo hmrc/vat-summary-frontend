@@ -126,6 +126,8 @@ object MessageLookup {
         case VATAA1stLPP.name =>("Penalty for late payment of additional assessment",s"for $datePeriod")
         case VATAA2ndLPP.name =>("Second penalty for late payment of additional assessment",s"for $datePeriod")
         case VATAdditionalAssessmentLPI.name =>("Interest on additional assessment",s"for $datePeriod")
+        case VATAA1stLPPLPI.name =>("Interest on additional assessment penalty",s"for $datePeriod")
+        case VATAA2ndLPPLPI.name =>("Interest on additional assessment second penalty",s"for $datePeriod")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }
