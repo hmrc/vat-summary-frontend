@@ -24,7 +24,6 @@ import models.DirectDebitStatus
 import javax.inject.{Inject, Singleton}
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
-import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import utils.LoggerUtil
@@ -33,8 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FinancialDataConnector @Inject()(http: HttpClient,
-                                       appConfig: AppConfig,
-                                       metrics: MetricsService) extends LoggerUtil{
+                                       appConfig: AppConfig) extends LoggerUtil{
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
 
@@ -45,16 +43,12 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 
-    val timer = metrics.getOpenPaymentsTimer.time()
-
     http.GET(paymentsUrl(vrn), Seq("onlyOpenItems" -> "true"))
       .map {
         case payments@Right(_) =>
-          timer.stop()
           logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
-          metrics.getOpenPaymentsCallFailureCounter.inc()
           logger.warn("FinancialDataConnector received error: " + error.message)
           httpError
       }
@@ -65,19 +59,15 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
 
-    val timer = metrics.getPaymentHistoryTimer.time()
-
     http.GET(paymentsUrl(vrn), Seq(
       "dateFrom" -> s"${from.getYear}-01-01",
       "dateTo" -> s"${to.getYear}-12-31"
     ))
       .map {
         case payments@Right(_) =>
-          timer.stop()
           logger.debug(s"[FinancialDataConnector][getVatLiabilities] Payments: \n\n $payments")
           payments
         case httpError@Left(error) =>
-          metrics.getPaymentHistoryFailureCounter.inc()
           logger.warn("[FinancialDataConnector][getVatLiabilities] received error: " + error.message)
           httpError
       }
@@ -88,14 +78,10 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 
-    val timer = metrics.getDirectDebitStatusTimer.time()
-
     http.GET(directDebitUrl(vrn)).map {
       case directDebitStatus@Right(_) =>
-        timer.stop()
         directDebitStatus
       case httpError@Left(error) =>
-        metrics.getDirectDebitStatusFailureCounter.inc()
         logger.warn("FinancialDataConnector received error: " + error.message)
         httpError
     }

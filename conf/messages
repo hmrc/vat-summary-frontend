@@ -465,6 +465,8 @@ chargeType.vatCreditReturnOffsetChargeDescription = partial repayment for period
 
 chargeType.vatProtectiveAssessmentChargeTitle = Protective assessment of VAT
 
+chargeType.vatPALPITitle = Interest on protective assessment
+
 chargeType.unallocatedPaymentTitle = Unallocated payment
 chargeType.unallocatedPaymentDescription = you made an overpayment which can be refunded to you or left on account
 chargeType.unallocatedPaymentDescription.agent = your client made an overpayment which can be refunded to them or left on account
@@ -491,7 +493,13 @@ chargeType.VATCA2ndLPPLPPITitle = Interest on central assessment second penalty
 chargeType.VATOfficersAssessmentLPITitle = Interest on officer’s assessment of VAT
 chargeType.VATOA1stLPPLPITitle = Interest on officer’s assessment penalty
 chargeType.VATOA2ndLPPLPITitle = Interest on officer’s assessment second penalty
+chargeType.VATPA1stLPPLPITitle = Interest on protective assessment penalty
+chargeType.VATPA2ndLPPLPITitle = Interest on second penalty for protective assessment
 
+chargeType.VATPA1stLPPTitle = Late payment penalty
+chargeType.VATPALPPDescription = for late payment of protective assessment for {0}
+
+chargeType.VATPA2ndLPPTitle = Second late payment penalty
 chargeType.VATAA1stLPPTitle = Penalty for late payment of additional assessment
 chargeType.VATAA2ndLPPTitle = Second penalty for late payment of additional assessment
 chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment

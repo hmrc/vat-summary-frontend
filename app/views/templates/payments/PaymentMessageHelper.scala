@@ -75,7 +75,6 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
-
   object VatOfficerAssessmentCreditCharge extends PaymentMessageHelper(
     OACreditCharge.value,
     "chargeType.officerAssessmentChargeTitle",
@@ -256,6 +255,13 @@ object PaymentMessageHelper {
     "chargeType.vatPADefaultInterestTitle",
     Some("chargeType.vatPADefaultInterestDescription"),
     Some("chargeType.vatPADefaultInterestDescription")
+  )
+
+  object VatPALPI extends PaymentMessageHelper(
+    VatPALPICharge.value,
+    "chargeType.vatPALPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object CivilEvasionPenalty extends PaymentMessageHelper(
@@ -482,6 +488,34 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+  object VATPA1stLPPLPI extends PaymentMessageHelper(
+    VatPA1stLPPLPI.value,
+    "chargeType.VATPA1stLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATPA2ndLPPLPI extends PaymentMessageHelper(
+    VatPA2ndLPPLPI.value,
+    "chargeType.VATPA2ndLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATPA1stLPP extends PaymentMessageHelper(
+    VatPA1stLPP.value,
+    "chargeType.VATPA1stLPPTitle",
+    Some("chargeType.VATPALPPDescription"),
+    Some("chargeType.VATPALPPDescription")
+  )
+
+  object VATPA2ndLPP extends PaymentMessageHelper(
+    VatPA2ndLPP.value,
+    "chargeType.VATPA2ndLPPTitle",
+    Some("chargeType.VATPALPPDescription"),
+    Some("chargeType.VATPALPPDescription")
+  )
+
   object VATAA1stLPP extends PaymentMessageHelper(
     VatAA1stLPP.value,
     "chargeType.VATAA1stLPPTitle",
@@ -546,6 +580,7 @@ object PaymentMessageHelper {
     VatInaccuraciesReturnReplacedCharge,
     VatWrongDoingPenaltyCharge,
     VatPADefaultInterest,
+    VatPALPI,
     VatStatutoryInterestCharge,
     VatECDefaultInterest,
     VatPaFurtherInterest,
@@ -569,6 +604,10 @@ object PaymentMessageHelper {
     VATOfficersAssessmentLPI,
     VATOA1stLPPLPI,
     VATOA2ndLPPLPI,
+    VATPA1stLPPLPI,
+    VATPA2ndLPPLPI,
+    VATPA1stLPP,
+    VATPA2ndLPP,
     VATAA1stLPP,
     VATAA2ndLPP,
     VATAdditionalAssessmentLPI

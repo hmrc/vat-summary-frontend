@@ -20,7 +20,6 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import javax.inject.{Inject, Singleton}
 import models.payments.PaymentDetailsModel
-import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import utils.LoggerUtil
@@ -29,8 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentsConnector @Inject()(http: HttpClient,
-                                  appConfig: AppConfig,
-                                  metrics: MetricsService) extends LoggerUtil{
+                                  appConfig: AppConfig) extends LoggerUtil{
 
   private[connectors] def vatUrl(chargeType: String): String =
     appConfig.paymentsServiceUrl + appConfig.payViewAndChange + chargeType + "/journey/start"
@@ -39,16 +37,13 @@ class PaymentsConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsRedirectUrlHttpParser.PaymentsRedirectUrlReads
 
-    val timer = metrics.postSetupPaymentsJourneyTimer.time()
     val url = vatUrl(data.chargeType.toPathElement)
 
     http.POST(url, data)
       .map {
         case url@Right(_) =>
-          timer.stop()
           url
         case httpError@Left(error) =>
-          metrics.postSetupPaymentsJourneyCounter.inc()
           logger.warn("PaymentsConnector received error: " + error.message)
           httpError
       }

@@ -465,6 +465,8 @@ chargeType.vatCreditReturnOffsetChargeDescription = ad-daliad rhannol ar gyfer y
 
 chargeType.vatProtectiveAssessmentChargeTitle = Asesiad i ddiogelu o ran TAW
 
+chargeType.vatPALPITitle = ???
+
 chargeType.unallocatedPaymentTitle = Taliad heb ei ddyranu
 chargeType.unallocatedPaymentDescription = gwnaethoch ordaliad y gellir ei ad-dalu i chi, neu y gellir ei gadw ar gyfrif
 chargeType.unallocatedPaymentDescription.agent = gwnaeth eich cleient ordaliad y gellir ei ad-dalu iddo, neu y gellir ei gadw ar gyfrif
@@ -491,6 +493,13 @@ chargeType.VATCA2ndLPPLPPITitle = ???
 chargeType.VATOfficersAssessmentLPITitle = ???
 chargeType.VATOA1stLPPLPITitle = ???
 chargeType.VATOA2ndLPPLPITitle = ???
+chargeType.VATPA1stLPPLPITitle = ???
+chargeType.VATPA2ndLPPLPITitle = ???
+
+chargeType.VATPA1stLPPTitle = ???
+chargeType.VATPA1stLPPDescription = ???
+
+chargeType.VATPA2ndLPPTitle = ???
 
 chargeType.VATAA1stLPPTitle = ???
 chargeType.VATAA2ndLPPTitle = ???
