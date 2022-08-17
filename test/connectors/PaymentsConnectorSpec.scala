@@ -17,14 +17,13 @@
 package connectors
 
 import controllers.ControllerBaseSpec
-import mocks.MockMetricsService
 import uk.gov.hmrc.http.HttpClient
 
 class PaymentsConnectorSpec extends ControllerBaseSpec {
 
   "The payments connector" should {
 
-    val connector = new PaymentsConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+    val connector = new PaymentsConnector(mock[HttpClient], mockAppConfig)
 
     "generate the correct endpoint URL" in {
 

@@ -24,7 +24,6 @@ import models.DirectDebitStatus
 import javax.inject.{Inject, Singleton}
 import models.payments.Payments
 import models.viewModels.PaymentsHistoryModel
-import services.MetricsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import utils.LoggerUtil
@@ -33,8 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FinancialDataConnector @Inject()(http: HttpClient,
-                                       appConfig: AppConfig,
-                                       metrics: MetricsService) extends LoggerUtil{
+                                       appConfig: AppConfig) extends LoggerUtil{
 
   private[connectors] def paymentsUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions/vat/$vrn"
 
@@ -51,7 +49,6 @@ class FinancialDataConnector @Inject()(http: HttpClient,
           logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
-          metrics.getOpenPaymentsCallFailureCounter.inc()
           logger.warn("FinancialDataConnector received error: " + error.message)
           httpError
       }
@@ -71,7 +68,6 @@ class FinancialDataConnector @Inject()(http: HttpClient,
           logger.debug(s"[FinancialDataConnector][getVatLiabilities] Payments: \n\n $payments")
           payments
         case httpError@Left(error) =>
-          metrics.getPaymentHistoryFailureCounter.inc()
           logger.warn("[FinancialDataConnector][getVatLiabilities] received error: " + error.message)
           httpError
       }
@@ -86,7 +82,6 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       case directDebitStatus@Right(_) =>
         directDebitStatus
       case httpError@Left(error) =>
-        metrics.getDirectDebitStatusFailureCounter.inc()
         logger.warn("FinancialDataConnector received error: " + error.message)
         httpError
     }

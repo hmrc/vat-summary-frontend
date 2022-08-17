@@ -17,14 +17,13 @@
 package connectors
 
 import controllers.ControllerBaseSpec
-import mocks.MockMetricsService
 import uk.gov.hmrc.http.HttpClient
 
 class VatSubscriptionConnectorSpec extends ControllerBaseSpec {
 
   "VatSubscriptionConnector" should {
     "generate the correct customer information url" in {
-      val connector = new VatSubscriptionConnector(mock[HttpClient], mockAppConfig, MockMetricsService)
+      val connector = new VatSubscriptionConnector(mock[HttpClient], mockAppConfig)
       connector.customerInfoUrl("111") shouldEqual "/vat-subscription/111/full-information"
     }
   }
