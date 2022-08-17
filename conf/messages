@@ -496,6 +496,11 @@ chargeType.VATOA2ndLPPLPITitle = Interest on officer’s assessment second penal
 chargeType.VATPA1stLPPLPITitle = Interest on protective assessment penalty
 chargeType.VATPA2ndLPPLPITitle = Interest on second penalty for protective assessment
 
+chargeType.VATPA1stLPPTitle = Late payment penalty
+chargeType.VATPALPPDescription = for late payment of protective assessment for {0}
+
+chargeType.VATPA2ndLPPTitle = Second late payment penalty
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account

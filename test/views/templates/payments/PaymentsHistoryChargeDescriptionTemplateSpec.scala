@@ -681,6 +681,34 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT PA 1st LPP charge" should {
+
+        val model = exampleModel.copy(chargeType = VatPA1stLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for late payment of protective assessment for 12 Jan to 23 Mar 2018"
+        }
+      }
+      "there is a VAT PA 2nd LPP charge" should {
+
+        val model = exampleModel.copy(chargeType = VatPA2ndLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for late payment of protective assessment for 12 Jan to 23 Mar 2018"
+        }
+      }
     }
   }
 
@@ -1317,6 +1345,36 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT PA 1st LPP charge" should {
+
+      val model = exampleModel.copy(chargeType = VatPA1stLPP)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for late payment of protective assessment for 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT PA 2nd LPP charge" should {
+
+      val model = exampleModel.copy(chargeType = VatPA2ndLPP)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for late payment of protective assessment for 12 Jan to 23 Mar 2018"
       }
     }
   }
