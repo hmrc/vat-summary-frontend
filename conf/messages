@@ -500,6 +500,9 @@ chargeType.VATPA1stLPPTitle = Late payment penalty
 chargeType.VATPALPPDescription = for late payment of protective assessment for {0}
 
 chargeType.VATPA2ndLPPTitle = Second late payment penalty
+chargeType.VATAA1stLPPTitle = Penalty for late payment of additional assessment
+chargeType.VATAA2ndLPPTitle = Second penalty for late payment of additional assessment
+chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
