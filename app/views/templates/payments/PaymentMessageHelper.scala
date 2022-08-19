@@ -495,6 +495,20 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+  object VATAA1stLPPLPI extends PaymentMessageHelper(
+    VatAA1stLPPLPI.value,
+    "chargeType.VATAA1stLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATAA2ndLPPLPI extends PaymentMessageHelper(
+    VatAA2ndLPPLPI.value,
+    "chargeType.VATAA2ndLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   object VATPA2ndLPPLPI extends PaymentMessageHelper(
     VatPA2ndLPPLPI.value,
     "chargeType.VATPA2ndLPPLPITitle",
@@ -610,7 +624,9 @@ object PaymentMessageHelper {
     VATPA2ndLPP,
     VATAA1stLPP,
     VATAA2ndLPP,
-    VATAdditionalAssessmentLPI
+    VATAdditionalAssessmentLPI,
+    VATAA1stLPPLPI,
+    VATAA2ndLPPLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
