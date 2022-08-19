@@ -776,6 +776,18 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
+              "chargeType" -> VatAA2ndLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
               "chargeType" -> VatAdditionalAssessmentLPI.value,
               "periodKey" -> "18AD",
               "outstandingAmount" -> 202.40,
@@ -788,7 +800,19 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
-              "chargeType" -> VatAA2ndLPPLPI.value,
+              "chargeType" -> VatLateSubmissionPen.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatLspInterest.value,
               "periodKey" -> "18AD",
               "outstandingAmount" -> 202.40,
               "items" -> Json.arr(
@@ -1305,6 +1329,14 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false
         ),
         Payment(
+          VatAA2ndLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
           VatAdditionalAssessmentLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -1313,13 +1345,21 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false
         ),
         Payment(
-          VatAA2ndLPPLPI,
+          VatLateSubmissionPen,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
         ),
+        Payment(
+          VatLspInterest,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        )
       )))
 
       val result = PaymentsReads.read("", "", httpResponse)

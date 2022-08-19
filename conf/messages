@@ -510,6 +510,10 @@ chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment
 chargeType.VATAA1stLPPLPITitle = Interest on additional assessment penalty
 chargeType.VATAA2ndLPPLPITitle = Interest on additional assessment second penalty
 
+chargeType.VATLateSubPenTitle = Late submission penalty
+
+chargeType.VATLSPIntTitle = Interest on late submission penalty
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
