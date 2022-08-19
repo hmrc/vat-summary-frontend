@@ -683,12 +683,12 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "there is a VAT AA 1st LPP LPI charge" should {
 
-        val model = exampleModel.copy(chargeType = VatOA2ndLPPLPI)
+        val model = exampleModel.copy(chargeType = VatAA1stLPPLPI)
         lazy val template = paymentsHistoryChargeDescription(model)
         lazy implicit val document: Document = Jsoup.parse(template.body)
 
         "display the correct charge title" in {
-          elementText(Selectors.chargeTitle) shouldBe "Interest on officer’s assessment second penalty"
+          elementText(Selectors.chargeTitle) shouldBe "Interest on additional assessment penalty"
         }
 
         "display the correct description" in {
@@ -1500,12 +1500,12 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
     "there is a VAT AA 1st LPP LPI charge" should {
 
-      val model = exampleModel.copy(chargeType = VatOA2ndLPPLPI)
+      val model = exampleModel.copy(chargeType = VatAA1stLPPLPI)
       lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
       lazy implicit val document: Document = Jsoup.parse(template.body)
 
       "display the correct charge title" in {
-        elementText(Selectors.chargeTitle) shouldBe "Interest on officer’s assessment second penalty"
+        elementText(Selectors.chargeTitle) shouldBe "Interest on additional assessment penalty"
       }
 
       "display the correct description" in {

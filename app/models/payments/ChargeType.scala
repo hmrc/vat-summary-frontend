@@ -362,7 +362,9 @@ object ChargeType extends LoggerUtil {
     VatPA1stLPPLPI,
     VatPA2ndLPPLPI,
     VatPALPICharge,
-    VatAdditionalAssessmentLPI
+    VatAdditionalAssessmentLPI,
+    VatAA1stLPPLPI,
+    VatAA2ndLPPLPI
   )
 
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
