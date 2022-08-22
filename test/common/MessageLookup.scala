@@ -116,11 +116,6 @@ object MessageLookup {
         case VATOA2ndLPPLPI.name =>("Interest on officer’s assessment second penalty",s"for $datePeriod")
         case VATPA1stLPPLPI.name =>("Interest on protective assessment penalty",s"for $datePeriod")
         case VATPA2ndLPPLPI.name =>("Interest on second penalty for protective assessment",s"for $datePeriod")
-        case VATCA1stLPPLPI.name => ("Interest on central assessment penalty",s"for period $datePeriod")
-        case VATCA2ndLPPLPI.name => ("Interest on central assessment second penalty",s"for period $datePeriod")
-        case VATOfficersAssessmentLPI.name => ("Interest on officer’s assessment of VAT",s"for $datePeriod")
-        case VATOA1stLPPLPI.name => ("Interest on officer’s assessment penalty",s"for $datePeriod")
-        case VATOA2ndLPPLPI.name => ("Interest on officer’s assessment second penalty",s"for $datePeriod")
         case VATPA1stLPP.name => ("Late payment penalty", s"for late payment of protective assessment for $datePeriod")
         case VATPA2ndLPP.name => ("Second late payment penalty", s"for late payment of protective assessment for $datePeriod")
         case VATAA1stLPP.name =>("Penalty for late payment of additional assessment",s"for $datePeriod")
@@ -128,6 +123,10 @@ object MessageLookup {
         case VATAdditionalAssessmentLPI.name =>("Interest on additional assessment",s"for $datePeriod")
         case VATAA1stLPPLPI.name =>("Interest on additional assessment penalty",s"for $datePeriod")
         case VATAA2ndLPPLPI.name =>("Interest on additional assessment second penalty",s"for $datePeriod")
+        case VATAAQuarterlyInstalLPI.name =>("Interest on annual accounting quarterly instalment",s"for $datePeriod")
+        case VATAAMonthlyInstalLPI.name =>("Interest on annual accounting monthly instalment",s"for $datePeriod")
+        case VATAAReturnCharge1stLPP.name =>("Penalty for late payment – annual accounting balance",s"for $datePeriod")
+        case VATAAReturnCharge2ndLPP.name =>("Second penalty for late payment – annual accounting balance",s"for $datePeriod")
         case _ => throw new IllegalArgumentException(s"[MessageLookup][PaymentMessages][getMessagesForChargeType] Charge type not found in message lookup: $chargeType")
       }
     }
