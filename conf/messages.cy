@@ -513,6 +513,10 @@ chargeType.VATAA2ndLPPLPITitle = ???
 chargeType.VATLateSubPenTitle = ???
 
 chargeType.VATLSPIntTitle = ???
+chargeType.VATReturnAA1stLPPLPITitle = ???
+chargeType.VATReturnAA2ndLPPLPITitle = ???
+chargeType.VATManualLPPTitle = ???
+chargeType.VATManualLPPLPITitle = ???
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
