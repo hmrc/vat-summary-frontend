@@ -271,7 +271,7 @@ case object VatLspInterest extends ChargeType {
 }
 
 case object VatReturnAA1stLPPLPI extends ChargeType {
-  override val value: String = "VAT Return AA 1st LPP LPI "
+  override val value: String = "VAT Return AA 1st LPP LPI"
 }
 
 case object VatReturnAA2ndLPPLPI extends ChargeType {

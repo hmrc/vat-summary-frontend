@@ -582,15 +582,15 @@ object PaymentMessageHelper {
   object VATManualLPP extends PaymentMessageHelper(
     VatManualLPP.value,
     "chargeType.VATManualLPPTitle",
-    None,
-    None
+    Some(""),
+    Some("")
   )
 
   object VATManualLPPLPI extends PaymentMessageHelper(
     VatManualLPPLPI.value,
     "chargeType.VATManualLPPLPITitle",
-    None,
-    None
+    Some(""),
+    Some("")
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(
