@@ -514,6 +514,11 @@ chargeType.VATLateSubPenTitle = Late submission penalty
 
 chargeType.VATLSPIntTitle = Interest on late submission penalty
 
+chargeType.VATReturnAA1stLPPLPITitle = Interest on annual accounting balance penalty
+chargeType.VATReturnAA2ndLPPLPITitle = Interest on annual accounting balance second penalty
+chargeType.VATManualLPPTitle = Late payment penalty
+chargeType.VATManualLPPLPITitle = Interest on late payment penalty
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
