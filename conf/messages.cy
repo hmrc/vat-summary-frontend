@@ -510,6 +510,14 @@ chargeType.VATAdditionalAssessmentLPITitle = ???
 chargeType.VATAA1stLPPLPITitle = ???
 chargeType.VATAA2ndLPPLPITitle = ???
 
+chargeType.VATLateSubPenTitle = ???
+
+chargeType.VATLSPIntTitle = ???
+chargeType.VATReturnAA1stLPPLPITitle = ???
+chargeType.VATReturnAA2ndLPPLPITitle = ???
+chargeType.VATManualLPPTitle = ???
+chargeType.VATManualLPPLPITitle = ???
+
 chargeType.VATAAQuarterlyInstalLPI = ???
 chargeType.VATAAMonthlyInstalLPI = ???
 chargeType.VATAAReturnCharge1stLPP = ???

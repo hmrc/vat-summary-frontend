@@ -38,7 +38,6 @@ sealed trait ChargeType {
 case object VatUnrepayableOverpayment extends ChargeType {
   override val value: String = "VAT Unrepayable Overpayment"
 }
-
 case object VatRepaymentSupplementRecovery extends ChargeType {
   override val value: String = "VAT Repayment Supplement Rec"
 }
@@ -264,6 +263,28 @@ case object VatAA2ndLPP extends ChargeType {
 case object VatAdditionalAssessmentLPI extends ChargeType {
   override val value: String = "VAT Additional Assessment LPI"
 }
+case object VatLateSubmissionPen extends ChargeType {
+  override val value: String = "VAT Late Submission Pen"
+}
+case object VatLspInterest extends ChargeType {
+  override val value: String = "VAT LSP Interest"
+}
+
+case object VatReturnAA1stLPPLPI extends ChargeType {
+  override val value: String = "VAT Return AA 1st LPP LPI"
+}
+
+case object VatReturnAA2ndLPPLPI extends ChargeType {
+  override val value: String = "VAT Return AA 2nd LPP LPI"
+}
+
+case object VatManualLPP extends ChargeType {
+  override val value: String = "VAT Manual LPP"
+}
+
+case object VatManualLPPLPI extends ChargeType {
+  override val value: String = "VAT Manual LPP LPI"
+}
 
 case object VatAAQuarterlyInstalLPI extends ChargeType {
   override val value: String = "VAT AA Quarterly Instal LPI"
@@ -363,6 +384,12 @@ object ChargeType extends LoggerUtil {
     VatAdditionalAssessmentLPI,
     VatAA1stLPPLPI,
     VatAA2ndLPPLPI,
+    VatLateSubmissionPen,
+    VatLspInterest,
+    VatReturnAA1stLPPLPI,
+    VatReturnAA2ndLPPLPI,
+    VatManualLPP,
+    VatManualLPPLPI,
     VatAAQuarterlyInstalLPI,
     VatAAMonthlyInstalLPI,
     VatAAReturnCharge1stLPP,
@@ -385,6 +412,10 @@ object ChargeType extends LoggerUtil {
     VatAdditionalAssessmentLPI,
     VatAA1stLPPLPI,
     VatAA2ndLPPLPI,
+    VatLspInterest,
+    VatReturnAA1stLPPLPI,
+    VatReturnAA2ndLPPLPI,
+    VatManualLPPLPI,
     VatAAQuarterlyInstalLPI,
     VatAAMonthlyInstalLPI
   )
@@ -399,7 +430,11 @@ object ChargeType extends LoggerUtil {
     VatPA1stLPPLPI,
     VatPA2ndLPPLPI,
     VatAA1stLPPLPI,
-    VatAA2ndLPPLPI
+    VatAA2ndLPPLPI,
+    VatLspInterest,
+    VatReturnAA1stLPPLPI,
+    VatReturnAA2ndLPPLPI,
+    VatManualLPPLPI
   )
 
   val penaltyChargeTypes: Set[ChargeType] = Set(
@@ -408,6 +443,8 @@ object ChargeType extends LoggerUtil {
     VatPA2ndLPP,
     VatAA1stLPP,
     VatAA2ndLPP,
+    VatLateSubmissionPen,
+    VatManualLPP,
     VatAAReturnCharge1stLPP,
     VatAAReturnCharge2ndLPP
   )

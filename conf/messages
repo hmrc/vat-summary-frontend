@@ -510,6 +510,15 @@ chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment
 chargeType.VATAA1stLPPLPITitle = Interest on additional assessment penalty
 chargeType.VATAA2ndLPPLPITitle = Interest on additional assessment second penalty
 
+chargeType.VATLateSubPenTitle = Late submission penalty
+
+chargeType.VATLSPIntTitle = Interest on late submission penalty
+
+chargeType.VATReturnAA1stLPPLPITitle = Interest on annual accounting balance penalty
+chargeType.VATReturnAA2ndLPPLPITitle = Interest on annual accounting balance second penalty
+chargeType.VATManualLPPTitle = Late payment penalty
+chargeType.VATManualLPPLPITitle = Interest on late payment penalty
+
 chargeType.VATAAQuarterlyInstalLPI = Interest on annual accounting quarterly instalment
 chargeType.VATAAMonthlyInstalLPI = Interest on annual accounting monthly instalment
 chargeType.VATAAReturnCharge1stLPP = Penalty for late payment – annual accounting balance

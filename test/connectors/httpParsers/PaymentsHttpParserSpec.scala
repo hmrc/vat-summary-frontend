@@ -776,6 +776,18 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
+              "chargeType" -> VatAA2ndLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
               "chargeType" -> VatAdditionalAssessmentLPI.value,
               "periodKey" -> "18AD",
               "outstandingAmount" -> 202.40,
@@ -788,13 +800,73 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "chargeReference" -> "XD002750002155"
             ),
             Json.obj(
-              "chargeType" -> VatAA2ndLPPLPI.value,
+              "chargeType" -> VatLateSubmissionPen.value,
               "periodKey" -> "18AD",
               "outstandingAmount" -> 202.40,
               "items" -> Json.arr(
                 Json.obj(
                   "dueDate" -> "2018-02-01",
                   "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatLspInterest.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatReturnAA1stLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 208.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 208.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatReturnAA2ndLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 208.41,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 208.41
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatManualLPP.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 208.42,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 208.42
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatManualLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 208.43,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 208.43
                 )
               ),
               "chargeReference" -> "XD002750002155"
@@ -1353,6 +1425,14 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false
         ),
         Payment(
+          VatAA2ndLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
           VatAdditionalAssessmentLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -1361,9 +1441,49 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false
         ),
         Payment(
-          VatAA2ndLPPLPI,
+          VatLateSubmissionPen,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatLspInterest,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatReturnAA1stLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(208.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatReturnAA2ndLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(208.41),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatManualLPP,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(208.42),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatManualLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(208.43),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false

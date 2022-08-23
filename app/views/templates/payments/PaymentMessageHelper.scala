@@ -551,6 +551,48 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+  object VATLateSubPen extends PaymentMessageHelper(
+    VatLateSubmissionPen.value,
+    "chargeType.VATLateSubPenTitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATLSPInterest extends PaymentMessageHelper(
+    VatLspInterest.value,
+    "chargeType.VATLSPIntTitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATReturnAA1stLPPLPI extends PaymentMessageHelper(
+    VatReturnAA1stLPPLPI.value,
+    "chargeType.VATReturnAA1stLPPLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATReturnAA2ndLPPLPI extends PaymentMessageHelper(
+    VatReturnAA2ndLPPLPI.value,
+    "chargeType.VATReturnAA2ndLPPLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATManualLPP extends PaymentMessageHelper(
+    VatManualLPP.value,
+    "chargeType.VATManualLPPTitle",
+    None,
+    None
+  )
+
+  object VATManualLPPLPI extends PaymentMessageHelper(
+    VatManualLPPLPI.value,
+    "chargeType.VATManualLPPLPITitle",
+    None,
+    None
+  )
+
   object VATAAQuarterlyInstalLPI  extends PaymentMessageHelper(
     VatAAQuarterlyInstalLPI.value,
     "chargeType.VATAAQuarterlyInstalLPI",
@@ -655,6 +697,12 @@ object PaymentMessageHelper {
     VATAdditionalAssessmentLPI,
     VATAA1stLPPLPI,
     VATAA2ndLPPLPI,
+    VATLateSubPen,
+    VATLSPInterest,
+    VATReturnAA1stLPPLPI,
+    VATReturnAA2ndLPPLPI,
+    VATManualLPP,
+    VATManualLPPLPI,
     VATAAQuarterlyInstalLPI,
     VATAAMonthlyInstalLPI,
     VATAAReturnCharge1stLPP,
