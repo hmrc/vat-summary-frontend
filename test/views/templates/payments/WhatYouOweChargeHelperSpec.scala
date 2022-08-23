@@ -511,7 +511,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAQuarterlyInstalLPI), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -520,7 +520,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAMonthlyInstalLPI), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -529,7 +529,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge1stLPP), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -538,7 +538,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge2ndLPP), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -1019,7 +1019,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAQuarterlyInstalLPI), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -1028,7 +1028,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAMonthlyInstalLPI), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -1037,7 +1037,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge1stLPP), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -1046,7 +1046,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge2ndLPP), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 

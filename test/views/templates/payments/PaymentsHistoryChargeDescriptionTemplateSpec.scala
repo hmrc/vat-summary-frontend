@@ -883,7 +883,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
       "there is a VAT AA Monthly Instal LPI" should {
@@ -897,7 +897,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
       "there is a VAT AA Return Charge 1st LPP" should {
@@ -911,7 +911,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
       "there is a VAT AA Return Charge 2nd LPP" should {
@@ -925,7 +925,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
     }
@@ -1770,7 +1770,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
     "there is a VAT AA Monthly Instal LPI" should {
@@ -1784,7 +1784,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
     "there is a VAT AA Return Charge 1st LPP" should {
@@ -1798,7 +1798,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
     "there is a VAT AA Return Charge 2nd LPP" should {
@@ -1812,7 +1812,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
   }
