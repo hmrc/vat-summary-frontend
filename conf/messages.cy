@@ -518,6 +518,11 @@ chargeType.VATReturnAA2ndLPPLPITitle = ???
 chargeType.VATManualLPPTitle = ???
 chargeType.VATManualLPPLPITitle = ???
 
+chargeType.VATAAQuarterlyInstalLPI = ???
+chargeType.VATAAMonthlyInstalLPI = ???
+chargeType.VATAAReturnCharge1stLPP = ???
+chargeType.VATAAReturnCharge2ndLPP = ???
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

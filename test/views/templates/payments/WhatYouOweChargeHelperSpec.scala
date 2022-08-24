@@ -506,6 +506,42 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT AA Quarterly Instal LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAQuarterlyInstalLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Monthly Instal LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAMonthlyInstalLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Return Charge 1st LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge1stLPP), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Return Charge 2nd LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge2ndLPP), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
       "there is a VAT Return AA 1st LPP LPI" should {
 
         val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnAA1stLPPLPI), false, messages)
@@ -975,6 +1011,42 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Quarterly Instal LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAQuarterlyInstalLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Monthly Instal LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAMonthlyInstalLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Return Charge 1st LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge1stLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT AA Return Charge 2nd LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnCharge2ndLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 

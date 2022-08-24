@@ -519,6 +519,12 @@ chargeType.VATReturnAA2ndLPPLPITitle = Interest on annual accounting balance sec
 chargeType.VATManualLPPTitle = Late payment penalty
 chargeType.VATManualLPPLPITitle = Interest on late payment penalty
 
+chargeType.VATAAQuarterlyInstalLPI = Interest on annual accounting quarterly instalment
+chargeType.VATAAMonthlyInstalLPI = Interest on annual accounting monthly instalment
+chargeType.VATAAReturnCharge1stLPP = Penalty for late payment – annual accounting balance
+chargeType.VATAAReturnCharge2ndLPP = Second penalty for late payment – annual accounting balance
+
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account

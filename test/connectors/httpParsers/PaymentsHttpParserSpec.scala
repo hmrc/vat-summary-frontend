@@ -870,6 +870,54 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatAAQuarterlyInstalLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatAAMonthlyInstalLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatAAReturnCharge1stLPP.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
+            ),
+            Json.obj(
+              "chargeType" -> VatAAReturnCharge2ndLPP.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002155"
             )
           )
         ).toString()
@@ -1436,6 +1484,38 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           VatManualLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(208.43),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatAAQuarterlyInstalLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatAAMonthlyInstalLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatAAReturnCharge1stLPP,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002155"),
+          ddCollectionInProgress = false
+        ),
+        Payment(
+          VatAAReturnCharge2ndLPP,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false
