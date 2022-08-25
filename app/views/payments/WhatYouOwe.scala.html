@@ -72,6 +72,10 @@
   }
 }
 
+@agentSuffix = @{
+if(user.isAgent) {".agent"} else {""}
+}
+
 @chargeRows = @{
   val individualRows = model.charges.map { charge =>
     Seq(
@@ -117,32 +121,12 @@
         )),
         captionClasses = "govuk-table__caption--m"
       ))
+      <p class="govuk-body">@messages("whatYouOwe.paymentClearanceParaOne")
+        <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
+          @messages(s"whatYouOwe.paymentClearanceLink$agentSuffix")</a>@messages("common.fullStop")
+      </p>
 
-      @if(user.isAgent){
-        <p class="govuk-body">@messages("whatYouOwe.agent.anyPaymentsYouMake")</p>
-      } else {
-        <p class="govuk-body">@messages("whatYouOwe.anyPaymentsYouMake")</p>
-      }
-
-      <ul class="govuk-list govuk-list--bullet">
-        <li>
-          @messages("whatYouOwe.anyPaymentsYouMake.firstBullet")
-          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
-            @if(user.isAgent){
-              @messages("whatYouOwe.anyPaymentsYouMake.agent.firstBulletLink")
-            } else {
-              @messages("whatYouOwe.anyPaymentsYouMake.firstBulletLink")
-            }
-          </a>
-        </li>
-        <li>
-          @if(user.isAgent){
-            @messages("whatYouOwe.anyPaymentsYouMake.agent.secondBullet")
-          } else {
-            @messages("whatYouOwe.anyPaymentsYouMake.secondBullet")
-          }
-        </li>
-      </ul>
+      <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
 
       @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() && model.containsOverduePayments) {
         @govukDetails(Details(

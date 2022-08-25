@@ -184,29 +184,21 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       "have a section regarding payments you make" which {
 
-        "has the correct leading text" in {
-          elementText("p.govuk-body:nth-of-type(3)") shouldBe "Any payments you make:"
+        "has the correct first paragraph" in {
+          elementText("p.govuk-body:nth-of-type(3)") shouldBe "Payments can take up to 5 working days to clear, depending on " +
+            "the payment method you use (opens in a new tab)."
         }
 
-        "has the correct first bullet point" which {
-
-          "has the correct text" in {
-            elementText(".govuk-list > li:nth-of-type(1)") shouldBe "may take up to 5 working days to process, " +
-              "depending on the payment method you use (opens in a new tab)"
-          }
-
-          "has the correct link text" in {
-            elementText(".govuk-list > li > a") shouldBe "the payment method you use (opens in a new tab)"
-          }
-
-          "has the correct link location" in {
-            element(".govuk-list > li > a").attr("href") shouldBe mockConfig.govUkPayVATUrl
-          }
+        "has the correct link text in the first paragraph" in {
+          elementText("p.govuk-body:nth-of-type(3) > a") shouldBe "the payment method you use (opens in a new tab)"
         }
 
-        "has the correct text in the second bullet point" in {
-          elementText(".govuk-list > li:nth-of-type(2)") shouldBe "must reach us by the due date - you’ll be charged " +
-            "interest and may have to pay a penalty if your payment is late"
+        "has the correct link location in the first paragraph" in {
+          element("p.govuk-body:nth-of-type(3) > a").attr("href") shouldBe mockConfig.govUkPayVATUrl
+        }
+
+        "has the correct second paragraph" in {
+          elementText("p.govuk-body:nth-of-type(4)") shouldBe "You will be charged interest if your payment does not clear by the payment due date."
         }
       }
 
@@ -228,16 +220,16 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct paragraph text" in {
-          elementText("p.govuk-body:nth-of-type(4)") shouldBe "If you cannot pay what you owe, you might be able to " +
+          elementText("p.govuk-body:nth-of-type(5)") shouldBe "If you cannot pay what you owe, you might be able to " +
             "set up a payment plan (opens in a new tab) to pay in monthly instalments."
         }
 
         "has the correct link text" in {
-          elementText("p.govuk-body:nth-of-type(4) > a") shouldBe "set up a payment plan (opens in a new tab)"
+          elementText("p.govuk-body:nth-of-type(5) > a") shouldBe "set up a payment plan (opens in a new tab)"
         }
 
         "has the correct link location" in {
-          element("p.govuk-body:nth-of-type(4) > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
+          element("p.govuk-body:nth-of-type(5) > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
         }
       }
 
@@ -250,32 +242,32 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         "has the correct first paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(5)") shouldBe "If what you owe is incorrect, check if you can " +
+            elementText("p.govuk-body:nth-of-type(6)") shouldBe "If what you owe is incorrect, check if you can " +
               "correct errors on your VAT Return (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(5) > a") shouldBe "correct errors on your VAT Return (opens in a new tab)"
+            elementText("p.govuk-body:nth-of-type(6) > a") shouldBe "correct errors on your VAT Return (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(5) > a").attr("href") shouldBe mockConfig.govUKCorrections
+            element("p.govuk-body:nth-of-type(6) > a").attr("href") shouldBe mockConfig.govUKCorrections
           }
         }
 
         "has the correct second paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(6)") shouldBe "After you have submitted a return, it can take " +
+            elementText("p.govuk-body:nth-of-type(7)") shouldBe "After you have submitted a return, it can take " +
               "24 hours for what you owe to show here. You can still make a payment (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(6) > a") shouldBe "make a payment (opens in a new tab)"
+            elementText("p.govuk-body:nth-of-type(7) > a") shouldBe "make a payment (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(6) > a").attr("href") shouldBe mockConfig.unauthenticatedPaymentsUrl
+            element("p.govuk-body:nth-of-type(7) > a").attr("href") shouldBe mockConfig.unauthenticatedPaymentsUrl
           }
         }
       }
@@ -349,29 +341,21 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       "have a section regarding payments your client makes" which {
 
-        "has the correct leading text" in {
-          elementText("p.govuk-body:nth-of-type(3)") shouldBe "Any payments your client makes:"
+        "has the correct first paragraph" in {
+          elementText("p.govuk-body:nth-of-type(3)") shouldBe "Payments can take up to 5 working days to clear, depending on " +
+            "the payment method your client uses (opens in a new tab)."
         }
 
-        "has the correct first bullet point" which {
-
-          "has the correct text" in {
-            elementText(".govuk-list > li:nth-of-type(1)") shouldBe "may take up to 5 working days to process, " +
-              "depending on the payment method they use (opens in a new tab)"
-          }
-
-          "has the correct link text" in {
-            elementText(".govuk-list > li > a") shouldBe "the payment method they use (opens in a new tab)"
-          }
-
-          "has the correct link location" in {
-            element(".govuk-list > li > a").attr("href") shouldBe mockConfig.govUkPayVATUrl
-          }
+        "has the correct link text in the first paragraph" in {
+          elementText("p.govuk-body:nth-of-type(3) > a") shouldBe "the payment method your client uses (opens in a new tab)"
         }
 
-        "has the correct text in the second bullet point" in {
-          elementText(".govuk-list > li:nth-of-type(2)") shouldBe "must reach us by the due date - your client will be " +
-            "charged interest and may have to pay a penalty if their payment is late"
+        "has the correct link location in the first paragraph" in {
+          element("p.govuk-body:nth-of-type(3) > a").attr("href") shouldBe mockConfig.govUkPayVATUrl
+        }
+
+        "has the correct second paragraph" in {
+          elementText("p.govuk-body:nth-of-type(4)") shouldBe "They will be charged interest if their payment does not clear by the payment due date."
         }
       }
 
@@ -414,22 +398,22 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         "has the correct first paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(4)") shouldBe "If the amount owed is incorrect, check if you can " +
+            elementText("p.govuk-body:nth-of-type(5)") shouldBe "If the amount owed is incorrect, check if you can " +
               "correct errors on your client’s VAT Return (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(4) > a") shouldBe
+            elementText("p.govuk-body:nth-of-type(5) > a") shouldBe
               "correct errors on your client’s VAT Return (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(4) > a").attr("href") shouldBe mockConfig.govUKCorrections
+            element("p.govuk-body:nth-of-type(5) > a").attr("href") shouldBe mockConfig.govUKCorrections
           }
         }
 
         "has the correct second paragraph" in {
-          elementText("p.govuk-body:nth-of-type(5)") shouldBe "After you have submitted a return, it can take " +
+          elementText("p.govuk-body:nth-of-type(6)") shouldBe "After you have submitted a return, it can take " +
             "24 hours for what is owed to show here."
         }
       }
