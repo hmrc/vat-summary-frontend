@@ -138,6 +138,7 @@ whatYouOwe.details.agent.paymentHelpOne = Help gyda thalu
 whatYouOwe.details.agent.paymentHelpTwo = Os na all eich cleient dalu’r hyn sydd arno, mae’n bosibl y bydd yn gallu
 whatYouOwe.details.agent.paymentHelpThree = trefnu cynllun talu (yn agor tab newydd)
 whatYouOwe.details.agent.paymentHelpFour = er mwyn talu fesul rhandaliad misol.
+whatYouOwe.estimate = ???
 
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon

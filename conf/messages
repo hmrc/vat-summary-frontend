@@ -138,6 +138,7 @@ whatYouOwe.details.agent.paymentHelpOne = Payment help
 whatYouOwe.details.agent.paymentHelpTwo = If your client cannot pay what they owe, they might be able to
 whatYouOwe.details.agent.paymentHelpThree = set up a payment plan (opens in a new tab)
 whatYouOwe.details.agent.paymentHelpFour = to pay in monthly instalments.
+whatYouOwe.estimate = estimate
 
 chargeTypeDetails.viewThis = View this
 chargeTypeDetails.vatReturn = VAT Return

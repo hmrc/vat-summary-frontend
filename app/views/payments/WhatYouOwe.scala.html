@@ -29,7 +29,7 @@
       displayMoney: DisplayMoney,
       mtdNotificationBanner: MtdNotificationBanner,
       standardCharge: StandardCharge,
-      crystallisedCharge: CrystallisedInterestCharge)
+      crystallisedInterestCharge: CrystallisedInterestCharge)
 
 @(model: WhatYouOweViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
@@ -68,7 +68,7 @@
 @paymentHtml(chargeModel: ChargeDetailsViewModel) = {
   @chargeModel match {
     case charge: StandardChargeViewModel => {@standardCharge(charge)}
-    case crystallised: CrystallisedInterestViewModel => {@crystallisedCharge(crystallised)}
+    case crystallised: CrystallisedInterestViewModel => {@crystallisedInterestCharge(crystallised)}
   }
 }
 

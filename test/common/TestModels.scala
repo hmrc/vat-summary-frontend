@@ -462,7 +462,7 @@ object TestModels {
   val estimatedInterestModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
-    "VAT Return Debit Charge",
+    "VAT Central Assessment LPI",
     2.6,
     300.33,
     isPenalty = false
@@ -471,7 +471,7 @@ object TestModels {
   val estimatedInterestJson: JsObject = Json.obj(
     "periodFrom" -> "2018-01-01",
     "periodTo" -> "2018-02-02",
-    "chargeType" -> "VAT Return Debit Charge",
+    "chargeType" -> "VAT Central Assessment LPI",
     "interestRate" -> 2.6,
     "interestAmount" -> 300.33,
     "isPenalty" -> false
