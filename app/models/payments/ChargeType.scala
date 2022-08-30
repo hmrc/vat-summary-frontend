@@ -399,13 +399,13 @@ object ChargeType extends LoggerUtil {
   val interestChargeTypes: Set[ChargeType] = Set(
     VatReturnLPI,
     VatReturn1stLPPLPI,
-    VatReturn2ndLPPLPI,
+    VatReturn2ndLPPLPI, // TODO add interest mapping when parent charge available
     VatCentralAssessmentLPI,
-    VatCA1stLPPLPI,
-    VatCA2ndLPPLPI,
+    VatCA1stLPPLPI, // TODO add interest mapping when parent charge available
+    VatCA2ndLPPLPI, // TODO add interest mapping when parent charge available
     VatOfficersAssessmentLPI,
-    VatOA1stLPPLPI,
-    VatOA2ndLPPLPI,
+    VatOA1stLPPLPI, // TODO add interest mapping when parent charge available
+    VatOA2ndLPPLPI, // TODO add interest mapping when parent charge available
     VatPA1stLPPLPI,
     VatPA2ndLPPLPI,
     VatPALPICharge,
@@ -449,11 +449,29 @@ object ChargeType extends LoggerUtil {
     VatAAReturnCharge2ndLPP
   )
 
+  val interestChargeMapping: Map[ChargeType, ChargeType] = Map(
+    ReturnDebitCharge -> VatReturnLPI,
+    VatReturn1stLPP -> VatReturn1stLPPLPI,
+    CentralAssessmentCharge -> VatCentralAssessmentLPI,
+    OADebitCharge -> VatOfficersAssessmentLPI,
+    VatPA1stLPP -> VatPA1stLPPLPI,
+    VatPA2ndLPP -> VatPA2ndLPPLPI,
+    VatProtectiveAssessmentCharge -> VatPALPICharge,
+    AACharge -> VatAdditionalAssessmentLPI,
+    VatAA1stLPP -> VatAA1stLPPLPI,
+    VatAA2ndLPP -> VatAA2ndLPPLPI,
+    VatLateSubmissionPen -> VatLspInterest,
+    VatAAReturnCharge1stLPP -> VatReturnAA1stLPPLPI,
+    VatAAReturnCharge2ndLPP -> VatReturnAA2ndLPPLPI,
+    VatManualLPP -> VatManualLPPLPI,
+    AAQuarterlyInstalments -> VatAAQuarterlyInstalLPI,
+    AAMonthlyInstalment -> VatAAMonthlyInstalLPI
+  )
+
   def apply: String => ChargeType = input => {
     allChargeTypes.find { chargeType =>
       chargeType.value.toUpperCase.equals(input.trim.toUpperCase)
     }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type"))
-
   }
 
   def unapply(arg: ChargeType): String = arg.value

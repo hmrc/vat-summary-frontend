@@ -90,4 +90,35 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
 
   }
 
+  "The interestChargeMapping collection" when {
+
+    "provided with a supported charge type" should {
+
+      "return the corresponding interest charge" in {
+        ChargeType.interestChargeMapping(ReturnDebitCharge) shouldBe VatReturnLPI
+        ChargeType.interestChargeMapping(VatReturn1stLPP) shouldBe VatReturn1stLPPLPI
+        ChargeType.interestChargeMapping(CentralAssessmentCharge) shouldBe VatCentralAssessmentLPI
+        ChargeType.interestChargeMapping(OADebitCharge) shouldBe VatOfficersAssessmentLPI
+        ChargeType.interestChargeMapping(VatPA1stLPP) shouldBe VatPA1stLPPLPI
+        ChargeType.interestChargeMapping(VatPA2ndLPP) shouldBe VatPA2ndLPPLPI
+        ChargeType.interestChargeMapping(VatProtectiveAssessmentCharge) shouldBe VatPALPICharge
+        ChargeType.interestChargeMapping(AACharge) shouldBe VatAdditionalAssessmentLPI
+        ChargeType.interestChargeMapping(VatAA1stLPP) shouldBe VatAA1stLPPLPI
+        ChargeType.interestChargeMapping(VatAA2ndLPP) shouldBe VatAA2ndLPPLPI
+        ChargeType.interestChargeMapping(VatLateSubmissionPen) shouldBe VatLspInterest
+        ChargeType.interestChargeMapping(VatAAReturnCharge1stLPP) shouldBe VatReturnAA1stLPPLPI
+        ChargeType.interestChargeMapping(VatAAReturnCharge2ndLPP) shouldBe VatReturnAA2ndLPPLPI
+        ChargeType.interestChargeMapping(VatManualLPP) shouldBe VatManualLPPLPI
+        ChargeType.interestChargeMapping(AAQuarterlyInstalments) shouldBe VatAAQuarterlyInstalLPI
+        ChargeType.interestChargeMapping(AAMonthlyInstalment) shouldBe VatAAMonthlyInstalLPI
+      }
+    }
+
+    "provided with an unsupported charge type" should {
+
+      "throw an exception" in {
+        intercept[NoSuchElementException](ChargeType.interestChargeMapping(ReturnCreditCharge))
+      }
+    }
+  }
 }
