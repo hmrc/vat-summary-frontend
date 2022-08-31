@@ -421,8 +421,8 @@ object PaymentMessageHelper {
   object VATReturn1stLPP extends PaymentMessageHelper(
     VatReturn1stLPP.value,
     "chargeType.VATReturn1stLPPTitle",
-    Some("chargeType.VATReturn1stLPPDescription"),
-    Some("chargeType.VATReturn1stLPPDescription")
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
   )
 
   object VATReturnLPI extends PaymentMessageHelper(
@@ -519,15 +519,15 @@ object PaymentMessageHelper {
   object VATPA1stLPP extends PaymentMessageHelper(
     VatPA1stLPP.value,
     "chargeType.VATPA1stLPPTitle",
-    Some("chargeType.VATPALPPDescription"),
-    Some("chargeType.VATPALPPDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VATPA2ndLPP extends PaymentMessageHelper(
     VatPA2ndLPP.value,
     "chargeType.VATPA2ndLPPTitle",
-    Some("chargeType.VATPALPPDescription"),
-    Some("chargeType.VATPALPPDescription")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   object VATAA1stLPP extends PaymentMessageHelper(
@@ -581,7 +581,7 @@ object PaymentMessageHelper {
 
   object VATManualLPP extends PaymentMessageHelper(
     VatManualLPP.value,
-    "chargeType.VATManualLPPTitle",
+    "chargeType.latePaymentPenalty",
     None,
     None
   )

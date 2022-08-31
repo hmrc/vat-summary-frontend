@@ -145,7 +145,6 @@ chargeTypeDetails.dueDate = Due date
 chargeTypeDetails.chargeDue = Original charge
 chargeTypeDetails.amountReceived = Amount received
 chargeTypeDetails.amountLeft = Left to pay
-
 chargeTypeDetails.button = Pay now
 chargeTypeDetails.link = Return to what you owe
 chargeTypeDetails.agentLink = Return to what your client owes
@@ -323,6 +322,9 @@ chargeType.for = for {0}
 chargeType.forPeriod = for period {0}
 chargeType.forThePeriod = for the period {0}
 
+chargeType.latePaymentPenalty = Late payment penalty
+chargeType.secondLatePaymentPenalty = Second late payment penalty
+
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
 
@@ -481,47 +483,39 @@ chargeType.POAReturnCreditChargeTitle = Payment on account repayment
 chargeType.vatReturnLPITitle = Interest on VAT
 chargeType.vatReturn1stLPPLPITitle = Interest on penalty
 chargeType.vatReturn2ndLPPLPITitle = Interest on second penalty
+chargeType.VATReturn1stLPPTitle = Penalty for late payment of VAT
+
 chargeType.vatCentralAssessmentLPITitle = Interest on central assessment of VAT
-
-chargeType.VATReturn1stLPPTitle = Late payment penalty
-chargeType.VATReturn1stLPPDescription = for late payment of VAT for VAT period {0}
-
 chargeType.VATCA1stLPPLPPITitle = Interest on central assessment penalty
 chargeType.VATCA2ndLPPLPPITitle = Interest on central assessment second penalty
+
 chargeType.VATOfficersAssessmentLPITitle = Interest on officer’s assessment of VAT
 chargeType.VATOA1stLPPLPITitle = Interest on officer’s assessment penalty
 chargeType.VATOA2ndLPPLPITitle = Interest on officer’s assessment second penalty
 
 chargeType.VATPA1stLPPLPITitle = Interest on protective assessment penalty
 chargeType.VATPA2ndLPPLPITitle = Interest on second penalty for protective assessment
-
-chargeType.VATPA1stLPPTitle = Late payment penalty
-chargeType.VATPALPPDescription = for late payment of protective assessment for {0}
-
-chargeType.VATPA2ndLPPTitle = Second late payment penalty
-
-chargeType.VATAA1stLPPTitle = Penalty for late payment of additional assessment
-chargeType.VATAA2ndLPPTitle = Second penalty for late payment of additional assessment
+chargeType.VATPA1stLPPTitle = Penalty for late payment of protective assessment
+chargeType.VATPA2ndLPPTitle = Second penalty for late payment of protective assessment
 
 chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment
-
 chargeType.VATAA1stLPPLPITitle = Interest on additional assessment penalty
 chargeType.VATAA2ndLPPLPITitle = Interest on additional assessment second penalty
+chargeType.VATAA1stLPPTitle = Penalty for late payment of additional assessment
+chargeType.VATAA2ndLPPTitle = Second penalty for late payment of additional assessment
 
 chargeType.VATLateSubPenTitle = Late submission penalty
 
 chargeType.VATLSPIntTitle = Interest on late submission penalty
 
-chargeType.VATReturnAA1stLPPLPITitle = Interest on annual accounting balance penalty
-chargeType.VATReturnAA2ndLPPLPITitle = Interest on annual accounting balance second penalty
-chargeType.VATManualLPPTitle = Late payment penalty
 chargeType.VATManualLPPLPITitle = Interest on late payment penalty
 
 chargeType.VATAAQuarterlyInstalLPI = Interest on annual accounting quarterly instalment
 chargeType.VATAAMonthlyInstalLPI = Interest on annual accounting monthly instalment
+chargeType.VATReturnAA1stLPPLPITitle = Interest on annual accounting balance penalty
+chargeType.VATReturnAA2ndLPPLPITitle = Interest on annual accounting balance second penalty
 chargeType.VATAAReturnCharge1stLPP = Penalty for late payment – annual accounting balance
 chargeType.VATAAReturnCharge2ndLPP = Second penalty for late payment – annual accounting balance
-
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

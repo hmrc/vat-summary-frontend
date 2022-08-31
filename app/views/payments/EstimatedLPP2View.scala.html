@@ -54,7 +54,7 @@
 }
 
 @mainTemplate(
-  title = model.title,
+  title = messages("chargeType.secondLatePaymentPenalty"),
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
@@ -65,10 +65,10 @@
     <div class="govuk-grid-column-two-thirds">
 
       <h1 class="govuk-heading-xl" id="estimated-lpp2-heading">
-          <span class="govuk-caption-xl">
-            @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
-          </span>
-            @model.title
+        <span class="govuk-caption-xl">
+          @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+        </span>
+        @messages("chargeType.secondLatePaymentPenalty")
       </h1>
 
       <p class="govuk-body">@messages("estimatedLPP2.explanation", model.day)</p>

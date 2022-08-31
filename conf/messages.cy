@@ -145,7 +145,6 @@ chargeTypeDetails.dueDate = Dyddiad dyledus
 chargeTypeDetails.chargeDue = Tâl gwreiddiol
 chargeTypeDetails.amountReceived = Swm a gafwyd
 chargeTypeDetails.amountLeft = Yn weddill i’w dalu
-
 chargeTypeDetails.button = Talu nawr
 chargeTypeDetails.link = Yn ôl i’r hyn sydd arnoch
 chargeTypeDetails.agentLink = Ewch yn ôl at yr hyn sydd ar eich cleient
@@ -323,6 +322,9 @@ chargeType.for = ar gyfer {0}
 chargeType.forPeriod = ar gyfer y cyfnod {0}
 chargeType.forThePeriod = ar gyfer y cyfnod {0}
 
+chargeType.latePaymentPenalty = ???
+chargeType.secondLatePaymentPenalty = ???
+
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 
@@ -481,43 +483,37 @@ chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
 chargeType.vatReturnLPITitle = ???
 chargeType.vatReturn1stLPPLPITitle = ???
 chargeType.vatReturn2ndLPPLPITitle = ???
-chargeType.vatCentralAssessmentLPITitle = ???
-
 chargeType.VATReturn1stLPPTitle = ???
-chargeType.VATReturn1stLPPDescription = ???
 
+chargeType.vatCentralAssessmentLPITitle = ???
 chargeType.VATCA1stLPPLPPITitle = ???
 chargeType.VATCA2ndLPPLPPITitle = ???
+
 chargeType.VATOfficersAssessmentLPITitle = ???
 chargeType.VATOA1stLPPLPITitle = ???
 chargeType.VATOA2ndLPPLPITitle = ???
 
 chargeType.VATPA1stLPPLPITitle = ???
 chargeType.VATPA2ndLPPLPITitle = ???
-
 chargeType.VATPA1stLPPTitle = ???
-chargeType.VATPA1stLPPDescription = ???
-
 chargeType.VATPA2ndLPPTitle = ???
 
+chargeType.VATAdditionalAssessmentLPITitle = ???
 chargeType.VATAA1stLPPTitle = ???
 chargeType.VATAA2ndLPPTitle = ???
-
-chargeType.VATAdditionalAssessmentLPITitle = ???
-
 chargeType.VATAA1stLPPLPITitle = ???
 chargeType.VATAA2ndLPPLPITitle = ???
 
 chargeType.VATLateSubPenTitle = ???
 
 chargeType.VATLSPIntTitle = ???
-chargeType.VATReturnAA1stLPPLPITitle = ???
-chargeType.VATReturnAA2ndLPPLPITitle = ???
-chargeType.VATManualLPPTitle = ???
+
 chargeType.VATManualLPPLPITitle = ???
 
 chargeType.VATAAQuarterlyInstalLPI = ???
 chargeType.VATAAMonthlyInstalLPI = ???
+chargeType.VATReturnAA1stLPPLPITitle = ???
+chargeType.VATReturnAA2ndLPPLPITitle = ???
 chargeType.VATAAReturnCharge1stLPP = ???
 chargeType.VATAAReturnCharge2ndLPP = ???
 

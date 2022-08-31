@@ -367,7 +367,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPP), false, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
@@ -884,7 +884,7 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn1stLPP), true, messages)
 
         "display the correct description" in {
-          helper.description shouldBe Some("for late payment of VAT for VAT period 1 Jan to 2 Feb 2018")
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
