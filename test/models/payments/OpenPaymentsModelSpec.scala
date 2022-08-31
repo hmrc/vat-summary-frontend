@@ -17,7 +17,6 @@
 package models.payments
 
 import java.time.LocalDate
-
 import play.api.libs.json.Json
 import views.ViewBaseSpec
 
@@ -32,7 +31,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
       chargeReference = None,
-      ddCollectionInProgress = false
+      ddCollectionInProgress = false,
+      accruedInterestAmount = Some(BigDecimal(2))
     ),
     isOverdue = false
   )
@@ -44,7 +44,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
       chargeReference = None,
-      ddCollectionInProgress = false
+      ddCollectionInProgress = false,
+      accruedInterestAmount = Some(BigDecimal(2))
     ),
     isOverdue = false
   )

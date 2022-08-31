@@ -17,7 +17,6 @@
 package services
 
 import java.time.LocalDate
-
 import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import models.errors._
@@ -31,8 +30,6 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers with GuiceOneAppPerSuite {
@@ -56,7 +53,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           BigDecimal("21.22"),
           Some(""),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
         val payment2 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -66,7 +64,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           BigDecimal("21.22"),
           Some(""),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
         val payment3 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -76,7 +75,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           BigDecimal("21.22"),
           Some(""),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
         val payment4 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -86,7 +86,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           BigDecimal("21.22"),
           Some(""),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
 
         val payments = Payments(Seq(payment1, payment2, payment3, payment4))
@@ -115,7 +116,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           BigDecimal("-1000"),
           Some(""),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )))
         lazy val responseFromFinancialDataConnector = Right(payments)
 
