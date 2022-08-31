@@ -17,7 +17,6 @@
 package services
 
 import java.time.LocalDate
-
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
@@ -49,7 +48,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2))
       )
     )
 
@@ -62,7 +62,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(1000.00),
         periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2))
       ),
       PaymentWithPeriod(
         CentralAssessmentCharge,
@@ -72,7 +73,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         outstandingAmount = BigDecimal(0),
         periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2))
       )
     )
 

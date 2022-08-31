@@ -17,7 +17,6 @@
 package models.payments
 
 import java.time.LocalDate
-
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import org.scalatest.matchers.should.Matchers
@@ -44,7 +43,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           ),
           "outstandingAmount" -> 9999,
           "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155"
+          "chargeReference" -> "XD002750002155",
+          "accruedInterest" -> 2
         )
 
         val paymentWithPeriodModel = PaymentWithPeriod(
@@ -55,7 +55,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = 9999,
           periodKey = Some("#001"),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
         paymentJson.as[Payment] shouldBe paymentWithPeriodModel
       }
@@ -73,7 +74,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           ),
           "outstandingAmount" -> -9999,
           "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155"
+          "chargeReference" -> "XD002750002155",
+          "accruedInterest" -> 2
         )
 
         val paymentNoPeriodModel = PaymentNoPeriod(
@@ -82,7 +84,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = -9999,
           periodKey = Some("#001"),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
         paymentJson.as[Payment] shouldBe paymentNoPeriodModel
       }
@@ -123,6 +126,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
             "DDcollectionInProgress" -> true
           )
         ),
+        "accruedInterest" -> 2,
         "outstandingAmount" -> 0,
         "periodKey" -> "#001",
         "chargeReference" -> "XD002750002155"
@@ -136,7 +140,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         outstandingAmount = 0,
         periodKey = Some("#001"),
         Some("XD002750002155"),
-        ddCollectionInProgress = true
+        ddCollectionInProgress = true,
+        accruedInterestAmount = Some(BigDecimal(2))
       )
 
       "read from json correctly" in {
@@ -191,6 +196,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
               "DDcollectionInProgress" -> true
             )
           ),
+          "accruedInterest" -> 2,
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
@@ -207,6 +213,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = true,
+          accruedInterestAmount = Some(BigDecimal(2)),
           originalAmount = Some(10000),
           clearedAmount = Some(100)
         )
@@ -231,6 +238,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
+          "accruedInterest" -> 2,
           "originalAmount" -> "10000",
           "clearedAmount" -> "100"
         )
@@ -242,6 +250,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = true,
+          accruedInterestAmount = Some(BigDecimal(2)),
           originalAmount = Some(10000),
           clearedAmount = Some(100)
         )

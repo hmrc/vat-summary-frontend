@@ -17,7 +17,6 @@
 package audit
 
 import java.time.LocalDate
-
 import _root_.models.User
 import _root_.models.payments.{Payment, Payments, ReturnDebitCharge}
 import audit.models.ViewNextOutstandingVatPaymentAuditModel
@@ -36,7 +35,8 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
         9999,
         Some("#001"),
         chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2))
       )
     )
   )
@@ -51,7 +51,8 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
         9999,
         Some("#001"),
         chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2))
       ),
       Payment(
         ReturnDebitCharge,
@@ -61,7 +62,8 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
         7777,
         Some("#002"),
         chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2))
       )
     )
   )

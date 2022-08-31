@@ -763,7 +763,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 BigDecimal("10000"),
                 Some("ABCD"),
                 chargeReference = Some("XD002750002155"),
-                ddCollectionInProgress = true
+                ddCollectionInProgress = true,
+                accruedInterestAmount = Some(BigDecimal(2))
               )
 
               val result: VatDetailsDataModel = {
@@ -785,7 +786,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 BigDecimal("10000"),
                 Some("ABCD"),
                 chargeReference = Some("XD002750002155"),
-                ddCollectionInProgress = false
+                ddCollectionInProgress = false,
+                accruedInterestAmount = Some(BigDecimal(2))
               )
 
               val result: VatDetailsDataModel = {
@@ -808,7 +810,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
               BigDecimal("10000"),
               Some("ABCD"),
               chargeReference = Some("XD002750002155"),
-              ddCollectionInProgress = false
+              ddCollectionInProgress = false,
+              accruedInterestAmount = Some(BigDecimal(2))
             )
 
             val result: VatDetailsDataModel = {

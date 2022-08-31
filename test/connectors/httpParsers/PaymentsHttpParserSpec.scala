@@ -49,7 +49,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.50,
               "periodKey" -> "#001",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Return Charge",
@@ -61,7 +62,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.51,
               "periodKey" -> "#002",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Officer's Assessment",
@@ -73,7 +75,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.52,
               "periodKey" -> "#003",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Officer's Assessment",
@@ -85,7 +88,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.53,
               "periodKey" -> "#004",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> CentralAssessmentCharge.value,
@@ -97,7 +101,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.25,
               "periodKey" -> "#005",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> DebitDefaultSurcharge.value,
@@ -109,7 +114,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.27,
               "periodKey" -> "#006",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> CreditDefaultSurcharge.value,
@@ -121,7 +127,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> -1000.27,
               "periodKey" -> "#006",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Error Correction",
@@ -133,7 +140,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.29,
               "periodKey" -> "#007",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Error Correction",
@@ -145,7 +153,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#007",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> AAInterestCharge.value,
@@ -157,7 +166,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#008",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT AA Return Charge",
@@ -169,7 +179,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#009",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT AA Return Charge",
@@ -181,7 +192,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#010",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Annual Accounting",
@@ -193,7 +205,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#011",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT Annual Accounting",
@@ -205,7 +218,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#012",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> OADefaultInterestCharge.value,
@@ -217,7 +231,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               ),
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#018",
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> AACharge.value,
@@ -233,7 +248,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> OAFurtherInterestCharge.value,
@@ -249,7 +265,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> BnpRegPre2010Charge.value,
@@ -265,7 +282,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> BnpRegPost2010Charge.value,
@@ -281,7 +299,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT FTN PRE 2010",
@@ -297,7 +316,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> "VAT FTN POST 2010",
@@ -313,7 +333,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> MiscPenaltyCharge.value,
@@ -329,7 +350,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> FtnEachPartnerCharge.value,
@@ -345,7 +367,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> MpPre2009Charge.value,
@@ -361,7 +384,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> MpRepeatedPre2009Charge.value,
@@ -377,7 +401,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> CivilEvasionPenaltyCharge.value,
@@ -393,7 +418,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> VatOAInaccuraciesFrom2009.value,
@@ -409,7 +435,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> InaccuraciesAssessmentsPenCharge.value,
@@ -425,7 +452,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> InaccuraciesReturnReplacedCharge.value,
@@ -441,7 +469,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> CarterPenaltyCharge.value,
@@ -457,7 +486,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> WrongDoingPenaltyCharge.value,
@@ -471,7 +501,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> FailureToSubmitRCSLCharge.value,
@@ -485,7 +516,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> FailureToNotifyRCSLCharge.value,
@@ -499,7 +531,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> paymentOnAccountInstalmentsMainType,
@@ -513,7 +546,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> paymentOnAccountReturnChargeMainType,
@@ -527,7 +561,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> paymentOnAccountReturnChargeMainType,
@@ -541,7 +576,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 50.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> VatUnrepayableOverpayment.value,
@@ -555,7 +591,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 200.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "mainType" -> VatReturn1stLPP.value,
@@ -569,7 +606,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 200.00
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatReturnLPI.value,
@@ -581,7 +619,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.10
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatPALPICharge.value,
@@ -593,7 +632,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.10
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatReturn1stLPPLPI.value,
@@ -605,7 +645,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.20
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatReturn2ndLPPLPI.value,
@@ -617,7 +658,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.30
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatCentralAssessmentLPI.value,
@@ -629,7 +671,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatCA1stLPPLPI.value,
@@ -641,7 +684,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatCA2ndLPPLPI.value,
@@ -653,7 +697,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatOfficersAssessmentLPI.value,
@@ -665,7 +710,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatOA1stLPPLPI.value,
@@ -677,7 +723,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatOA2ndLPPLPI.value,
@@ -689,7 +736,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatPA1stLPPLPI.value,
@@ -701,7 +749,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.50
                 )
               ),
-              "chargeReference" -> "XD002750002156"
+              "chargeReference" -> "XD002750002156",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatPA2ndLPPLPI.value,
@@ -713,7 +762,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.50
                 )
               ),
-              "chargeReference" -> "XD002750002157"
+              "chargeReference" -> "XD002750002157",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatPA1stLPP.value,
@@ -725,7 +775,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatPA2ndLPP.value,
@@ -737,7 +788,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAA1stLPP.value,
@@ -749,7 +801,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAA2ndLPP.value,
@@ -761,7 +814,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAA1stLPPLPI.value,
@@ -773,7 +827,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAA2ndLPPLPI.value,
@@ -785,7 +840,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAdditionalAssessmentLPI.value,
@@ -797,7 +853,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatLateSubmissionPen.value,
@@ -809,7 +866,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatLspInterest.value,
@@ -821,7 +879,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatReturnAA1stLPPLPI.value,
@@ -833,7 +892,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 208.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatReturnAA2ndLPPLPI.value,
@@ -845,7 +905,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 208.41
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatManualLPP.value,
@@ -857,7 +918,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 208.42
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatManualLPPLPI.value,
@@ -869,7 +931,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 208.43
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAAQuarterlyInstalLPI.value,
@@ -881,7 +944,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAAMonthlyInstalLPI.value,
@@ -893,7 +957,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAAReturnCharge1stLPP.value,
@@ -905,7 +970,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             ),
             Json.obj(
               "chargeType" -> VatAAReturnCharge2ndLPP.value,
@@ -917,7 +983,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                   "amount" -> 202.40
                 )
               ),
-              "chargeReference" -> "XD002750002155"
+              "chargeReference" -> "XD002750002155",
+              "accruedInterest" -> 2
             )
           )
         ).toString()
@@ -932,7 +999,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.50),
           periodKey = Some("#001"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -942,7 +1010,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.51),
           periodKey = Some("#002"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           OACreditCharge,
@@ -952,7 +1021,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.52),
           periodKey = Some("#003"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           OADebitCharge,
@@ -962,7 +1032,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.53),
           periodKey = Some("#004"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           CentralAssessmentCharge,
@@ -972,7 +1043,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.25),
           periodKey = Some("#005"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           DebitDefaultSurcharge,
@@ -982,7 +1054,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.27),
           periodKey = Some("#006"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           CreditDefaultSurcharge,
@@ -992,7 +1065,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(-1000.27),
           periodKey = Some("#006"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           ErrorCorrectionCreditCharge,
@@ -1002,7 +1076,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.29),
           periodKey = Some("#007"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           ErrorCorrectionDebitCharge,
@@ -1012,7 +1087,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#007"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           AAInterestCharge,
@@ -1022,7 +1098,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#008"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           AAReturnDebitCharge,
@@ -1032,7 +1109,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#009"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           AAReturnCreditCharge,
@@ -1042,7 +1120,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#010"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           AAMonthlyInstalment,
@@ -1052,7 +1131,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#011"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           AAQuarterlyInstalments,
@@ -1062,7 +1142,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#012"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           OADefaultInterestCharge,
@@ -1072,7 +1153,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(1000.30),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           AACharge,
@@ -1082,7 +1164,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#009"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           OAFurtherInterestCharge,
@@ -1092,7 +1175,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#010"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           BnpRegPre2010Charge,
@@ -1102,7 +1186,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#019"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           BnpRegPost2010Charge,
@@ -1112,7 +1197,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#011"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           FtnMatPre2010Charge,
@@ -1122,7 +1208,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#012"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           FtnMatPost2010Charge,
@@ -1132,7 +1219,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#013"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           MiscPenaltyCharge,
@@ -1142,7 +1230,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#014"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           FtnEachPartnerCharge,
@@ -1152,7 +1241,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#015"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           MpPre2009Charge,
@@ -1162,7 +1252,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#016"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           MpRepeatedPre2009Charge,
@@ -1172,7 +1263,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#017"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         PaymentWithPeriod(
           CivilEvasionPenaltyCharge,
@@ -1182,7 +1274,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatOAInaccuraciesFrom2009,
@@ -1192,7 +1285,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#020"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           InaccuraciesAssessmentsPenCharge,
@@ -1202,7 +1296,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           InaccuraciesReturnReplacedCharge,
@@ -1212,7 +1307,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           CarterPenaltyCharge,
@@ -1222,7 +1318,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           WrongDoingPenaltyCharge,
@@ -1230,7 +1327,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           FailureToSubmitRCSLCharge,
@@ -1238,7 +1336,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           FailureToNotifyRCSLCharge,
@@ -1246,7 +1345,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           PaymentOnAccountInstalments,
@@ -1254,7 +1354,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           PaymentOnAccountReturnDebitCharge,
@@ -1262,7 +1363,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           PaymentOnAccountReturnCreditCharge,
@@ -1270,7 +1372,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatUnrepayableOverpayment,
@@ -1278,7 +1381,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(200.00),
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatReturn1stLPP,
@@ -1286,7 +1390,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(200.00),
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatReturnLPI,
@@ -1294,7 +1399,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.10),
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatPALPICharge,
@@ -1302,7 +1408,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.10),
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatReturn1stLPPLPI,
@@ -1310,7 +1417,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.20),
           periodKey = Some("18AB"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatReturn2ndLPPLPI,
@@ -1318,7 +1426,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.30),
           periodKey = Some("18AC"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatCentralAssessmentLPI,
@@ -1326,7 +1435,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatCA1stLPPLPI,
@@ -1334,7 +1444,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatCA2ndLPPLPI,
@@ -1342,7 +1453,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatOfficersAssessmentLPI,
@@ -1350,7 +1462,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AB"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatOA1stLPPLPI,
@@ -1358,7 +1471,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AC"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatOA2ndLPPLPI,
@@ -1366,7 +1480,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatPA1stLPPLPI,
@@ -1374,7 +1489,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.50),
           periodKey = Some("18AC"),
           chargeReference = Some("XD002750002156"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatPA2ndLPPLPI,
@@ -1382,7 +1498,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.50),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002157"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatPA1stLPP,
@@ -1390,7 +1507,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatPA2ndLPP,
@@ -1398,7 +1516,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAA1stLPP,
@@ -1406,7 +1525,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAA2ndLPP,
@@ -1414,7 +1534,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAA1stLPPLPI,
@@ -1422,7 +1543,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAA2ndLPPLPI,
@@ -1430,7 +1552,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAdditionalAssessmentLPI,
@@ -1438,7 +1561,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatLateSubmissionPen,
@@ -1446,7 +1570,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatLspInterest,
@@ -1454,7 +1579,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatReturnAA1stLPPLPI,
@@ -1462,7 +1588,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(208.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatReturnAA2ndLPPLPI,
@@ -1470,7 +1597,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(208.41),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatManualLPP,
@@ -1478,7 +1606,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(208.42),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatManualLPPLPI,
@@ -1486,7 +1615,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(208.43),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAAQuarterlyInstalLPI,
@@ -1494,7 +1624,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAAMonthlyInstalLPI,
@@ -1502,7 +1633,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAAReturnCharge1stLPP,
@@ -1510,7 +1642,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         ),
         Payment(
           VatAAReturnCharge2ndLPP,
@@ -1518,7 +1651,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           outstandingAmount = BigDecimal(202.40),
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2))
         )
       )))
 

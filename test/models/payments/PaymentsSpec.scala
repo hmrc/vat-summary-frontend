@@ -17,7 +17,6 @@
 package models.payments
 
 import java.time.LocalDate
-
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import org.scalatest.matchers.should.Matchers
@@ -34,7 +33,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
       9999,
       Some("#001"),
       Some("XD002750002155"),
-      ddCollectionInProgress = false
+      ddCollectionInProgress = false,
+      Some(2)
     )
 
     val exampleInputString =
@@ -45,7 +45,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
         |"periodKey":"#001",
-        |"chargeReference": "XD002750002155"
+        |"chargeReference": "XD002750002155",
+        |"accruedInterest": 2
         |}"""
         .stripMargin.replace("\n", "")
 
@@ -68,7 +69,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           9999,
           Some("#001"),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          Some(2)
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -78,7 +80,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           7777,
           Some("#002"),
           Some("XD002750002155"),
-          ddCollectionInProgress = false
+          ddCollectionInProgress = false,
+          Some(2)
         )
       )
     )
@@ -92,7 +95,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"items":[{"dueDate":"2017-03-08"}, {"dueDate":"2017-03-09"}],
         |"outstandingAmount":9999,
         |"periodKey":"#001",
-        |"chargeReference": "XD002750002155"
+        |"chargeReference": "XD002750002155",
+        |"accruedInterest": 2
         |},{
         |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
@@ -100,7 +104,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"items":[{"dueDate":"2017-05-08"}, {"dueDate":"2017-05-09"}],
         |"outstandingAmount":7777,
         |"periodKey":"#002",
-        |"chargeReference": "XD002750002155"
+        |"chargeReference": "XD002750002155",
+        |"accruedInterest": 2
         |}]}"""
         .stripMargin.replace("\n", "")
 

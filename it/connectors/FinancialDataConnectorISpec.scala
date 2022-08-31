@@ -51,6 +51,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           outstandingAmount = 10000,
           periodKey = Some("15AC"),
           ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2)),
           chargeReference = Some("XD002750002155"),
           originalAmount = Some(10000)
         ),
@@ -62,6 +63,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           outstandingAmount = 10000,
           periodKey = Some("15AC"),
           ddCollectionInProgress = false,
+          accruedInterestAmount = Some(BigDecimal(2)),
           chargeReference = Some("XD002750002155"),
           originalAmount = Some(10000)
         )
