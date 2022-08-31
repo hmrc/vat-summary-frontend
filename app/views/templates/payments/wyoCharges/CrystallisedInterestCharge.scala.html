@@ -17,9 +17,9 @@
 @import models.viewModels.CrystallisedInterestViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
-@this(form: FormWithCSRF, govukTag: GovukTag)
+@this(govukTag: GovukTag)
 
-@(charge: CrystallisedInterestViewModel)(implicit request: Request[_], messages: Messages, user: User)
+@(charge: CrystallisedInterestViewModel)(implicit messages: Messages, user: User)
 
 @if(charge.isOverdue){@govukTag(Tag(
   content = Text(messages("common.overdue")),
@@ -28,7 +28,7 @@
 
 @href = @{ testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(charge.generateHash(user.vrn)) }
 
-<a class="crystallised-charge-link govuk-link" href="@href">
+<a class="govuk-link" href="@href">
   @charge.title @charge.description(user.isAgent)
 </a>
 

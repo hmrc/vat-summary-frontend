@@ -36,11 +36,11 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe "VAT - Manage your VAT account - GOV.UK"
+        document.title shouldBe "Interest on central assessment of VAT - Manage your VAT account - GOV.UK"
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1 January 2018 to 2 February 2018 VAT"
+        elementText("h1") shouldBe "1 January 2018 to 2 February 2018 Interest on central assessment of VAT"
       }
 
       "have a period caption" in {

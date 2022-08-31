@@ -20,15 +20,13 @@ import common.TestModels.{crystallisedInterestCharge, overdueCrystallisedInteres
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.payments.wyoCharges.CrystallisedCharge
+import views.html.templates.payments.wyoCharges.CrystallisedInterestCharge
 
-class CrystallisedChargeViewSpec extends ViewBaseSpec{
+class CrystallisedInterestChargeViewSpec extends ViewBaseSpec {
 
-  val injectedView: CrystallisedCharge = injector.instanceOf[CrystallisedCharge]
+  val injectedView: CrystallisedInterestCharge = injector.instanceOf[CrystallisedInterestCharge]
 
-  val chargeLinkSelector = ".crystallised-charge-link"
-
-  "the crystallised charge template" when {
+  "the crystallised interest charge template" when {
 
     "a charge is overdue" should {
 
@@ -36,7 +34,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(chargeLinkSelector) shouldBe
+        elementText("a") shouldBe
           "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
@@ -49,7 +47,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       }
 
       "have a link with the correct href" in {
-        element(chargeLinkSelector).attr("href") shouldBe
+        element("a").attr("href") shouldBe
           testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
             overdueCrystallisedInterestCharge.generateHash(user.vrn)
           ).url
@@ -61,7 +59,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(chargeLinkSelector) shouldBe
+        elementText("a") shouldBe
           "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
       }
 
@@ -74,14 +72,11 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec{
       }
 
       "have a link with the correct href" in {
-        element(chargeLinkSelector).attr("href") shouldBe
+        element("a").attr("href") shouldBe
           testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
             crystallisedInterestCharge.generateHash(user.vrn)
           ).url
       }
-
     }
-
   }
-
 }

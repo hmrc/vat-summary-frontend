@@ -26,7 +26,6 @@ class StandardChargeViewSpec extends ViewBaseSpec {
 
   val injectedView: StandardCharge = injector.instanceOf[StandardCharge]
 
-  val breakdownLinkSelector = ".standard-charge-breakdown-link"
   val viewReturnLinkSelector = ".view-return-link"
 
   "The StandardCharge template" when {
@@ -37,11 +36,11 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(breakdownLinkSelector) shouldBe s"${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
+        elementText("a") shouldBe s"${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
       }
 
       "have a link to the breakdown page" in {
-        element(breakdownLinkSelector).attr("href") shouldBe
+        element("a").attr("href") shouldBe
           testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
       }
 
@@ -71,11 +70,11 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText(breakdownLinkSelector) shouldBe s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
+        elementText("a") shouldBe s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
       }
 
       "have a link to the breakdown page" in {
-        element(breakdownLinkSelector).attr("href") shouldBe
+        element("a").attr("href") shouldBe
           testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
       }
 
