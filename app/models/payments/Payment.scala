@@ -191,7 +191,7 @@ object Payment {
     (JsPath \ "periodKey").readNullable[String] and
     (JsPath \ "chargeReference").readNullable[String] and
     (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false)) and
-    (JsPath \ "accruedInterestAmount").readNullable[BigDecimal] and
+    (JsPath \ "accruedInterest").readNullable[BigDecimal] and
     (JsPath \ "originalAmount").readNullable[BigDecimal] and
     (JsPath \ "clearedAmount").readNullable[BigDecimal]
 

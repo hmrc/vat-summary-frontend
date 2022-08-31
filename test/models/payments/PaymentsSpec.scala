@@ -46,7 +46,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":9999,
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
-        |"accruedInterestAmount": 2
+        |"accruedInterest": 2
         |}"""
         .stripMargin.replace("\n", "")
 
@@ -96,7 +96,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":9999,
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
-        |"accruedInterestAmount": 2
+        |"accruedInterest": 2
         |},{
         |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
@@ -105,7 +105,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":7777,
         |"periodKey":"#002",
         |"chargeReference": "XD002750002155",
-        |"accruedInterestAmount": 2
+        |"accruedInterest": 2
         |}]}"""
         .stripMargin.replace("\n", "")
 
