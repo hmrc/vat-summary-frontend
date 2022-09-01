@@ -449,6 +449,20 @@ object ChargeType extends LoggerUtil {
     VatAAReturnCharge2ndLPP
   )
 
+  val LPP1ChargeTypes: Set[ChargeType] = Set(
+    VatReturn1stLPP,
+    VatPA1stLPP,
+    VatAA1stLPP,
+    VatManualLPP,
+    VatAAReturnCharge1stLPP
+  )
+
+  val LPP2ChargeTypes: Set[ChargeType] = Set(
+    VatPA2ndLPP,
+    VatAA2ndLPP,
+    VatAAReturnCharge2ndLPP
+  )
+
   val interestChargeMapping: Map[ChargeType, ChargeType] = Map(
     ReturnDebitCharge -> VatReturnLPI,
     VatReturn1stLPP -> VatReturn1stLPPLPI,

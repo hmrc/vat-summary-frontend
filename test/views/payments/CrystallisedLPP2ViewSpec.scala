@@ -37,11 +37,11 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Interest on officer’s assessment second penalty - Manage your VAT account - GOV.UK"
+      document.title shouldBe "Second late payment penalty - Manage your VAT account - GOV.UK"
     }
 
     "have the correct page heading" in {
-      elementText("h1") shouldBe "3 March 2020 to 4 April 2020 Interest on officer’s assessment second penalty"
+      elementText("h1") shouldBe "3 March 2020 to 4 April 2020 Second late payment penalty"
     }
 
     "have a period caption" in {
@@ -151,7 +151,7 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Interest on officer’s assessment second penalty - Your client’s VAT details - GOV.UK"
+      document.title shouldBe "Second late payment penalty - Your client’s VAT details - GOV.UK"
     }
 
     "have a link to the what you owe page" which {

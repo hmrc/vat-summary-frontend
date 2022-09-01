@@ -36,11 +36,11 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Late payment penalty - Manage your VAT account - GOV.UK"
+      document.title shouldBe "Second late payment penalty - Manage your VAT account - GOV.UK"
     }
 
     "have the correct page heading" in {
-      elementText("h1") shouldBe "1 January 2020 to 2 February 2020 Late payment penalty"
+      elementText("h1") shouldBe "1 January 2020 to 2 February 2020 Second late payment penalty"
     }
 
     "have a period caption" in {
@@ -154,7 +154,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe "Late payment penalty - Your client’s VAT details - GOV.UK"
+      document.title shouldBe "Second late payment penalty - Your client’s VAT details - GOV.UK"
     }
 
     "have the estimate description" in {
