@@ -29,6 +29,7 @@
       displayMoney: DisplayMoney,
       mtdNotificationBanner: MtdNotificationBanner,
       standardCharge: StandardCharge,
+      estimatedInterestCharge: EstimatedInterestCharge,
       crystallisedInterestCharge: CrystallisedInterestCharge)
 
 @(model: WhatYouOweViewModel, serviceInfoContent: Html)(
@@ -65,15 +66,16 @@
   </p>
 }
 
-@paymentHtml(chargeModel: ChargeDetailsViewModel) = {
-  @chargeModel match {
-    case charge: StandardChargeViewModel => {@standardCharge(charge)}
-    case crystallised: CrystallisedInterestViewModel => {@crystallisedInterestCharge(crystallised)}
+@paymentHtml(chargeModel: ChargeDetailsViewModel) = @{
+  chargeModel match {
+    case charge: StandardChargeViewModel        => standardCharge(charge)
+    case charge: EstimatedInterestViewModel     => estimatedInterestCharge(charge)
+    case charge: CrystallisedInterestViewModel  => crystallisedInterestCharge(charge)
   }
 }
 
 @agentSuffix = @{
-if(user.isAgent) {".agent"} else {""}
+  if(user.isAgent) {".agent"} else {""}
 }
 
 @chargeRows = @{

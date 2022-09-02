@@ -16,7 +16,7 @@
 
 package models.payments
 
-import models.payments.ChargeType.interestChargeTypes
+import models.payments.ChargeType.{interestChargeMapping, interestChargeTypes, penaltyInterestChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
@@ -32,6 +32,7 @@ sealed trait ChargeType {
 
   def isInterest: Boolean = interestChargeTypes.contains(this)
   def notInterest: Boolean = !isInterest
+  def isPenaltyInterest: Boolean = penaltyInterestChargeTypes.contains(this)
 
 }
 

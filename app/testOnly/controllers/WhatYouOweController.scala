@@ -67,7 +67,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                         Ok(view(model, serviceInfoContent))
                       }
                     case None =>
-                      logger.warn("[WhatYouOweController][show] required field(s) missing from payment(s); failed to render view")
+                      logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
                       Future.successful(InternalServerError(paymentsError()))
                   }
                 case Right(_) =>
@@ -90,14 +90,20 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p: PaymentWithPeriod if
         p.chargeType.isInterest
         && p.chargeReference.isDefined
-        && p.originalAmount.isDefined => buildCrystallisedIntViewModel(p)
+        && p.originalAmount.isDefined => decideIfEstimatedInterest(p, buildCrystallisedIntViewModel(p))
 
       case p if
         p.originalAmount.isDefined
-        && p.chargeType.notInterest => buildStandardChargeViewModel(p)
-    }
+        && p.chargeType.notInterest => decideIfEstimatedInterest(p, buildStandardChargeViewModel(p))
+    } flatten
 
   }
+
+  private[controllers] def decideIfEstimatedInterest(p: Payment, charge: ChargeDetailsViewModel)
+    : Seq[ChargeDetailsViewModel] = { p match {
+      case p: PaymentWithPeriod if p.showEstimatedInterest => Seq(charge, buildEstimatedIntViewModel(p))
+      case _ => Seq(charge)
+  }}
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): CrystallisedInterestViewModel = {
     CrystallisedInterestViewModel(
@@ -111,7 +117,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       leftToPay = payment.outstandingAmount,
       isOverdue = payment.isOverdue(dateService.now()),
       chargeReference = payment.chargeReference.get,
-      isPenalty = ChargeType.penaltyInterestChargeTypes.contains(payment.chargeType)
+      isPenalty = payment.chargeType.isPenaltyInterest
     )
   }
 
@@ -131,18 +137,28 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     )
   }
 
+  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): EstimatedInterestViewModel = {
+    EstimatedInterestViewModel(
+      periodFrom = payment.periodFrom,
+      periodTo = payment.periodTo,
+      chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
+      interestRate = 5.00, // TODO replace with API field
+      interestAmount = payment.accruedInterestAmount.get,
+      isPenalty = payment.chargeType.isPenaltyInterest
+    )
+  }
+
   def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
 
     val totalAmount = payments.map(_.outstandingAmount).sum
     val chargeModels = categoriseCharges(payments)
+    val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest)
 
-    if(payments.length == chargeModels.length) {
+    if(totalPaymentCount == chargeModels.length) {
       Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus, payments.exists(_.isOverdue(dateService.now()))))
     } else {
       None
     }
   }
-
-
 
 }

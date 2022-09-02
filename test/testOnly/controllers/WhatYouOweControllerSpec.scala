@@ -210,16 +210,38 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   "The constructViewModel method" when {
 
-    "there is a payment with the originalAmount and charge description defined" should {
+    "there is a payment with the originalAmount, charge description and accrued interest defined" should {
 
-      "return a view model with 1 charge model and the correct total amount" in {
+      "return a view model with 2 charge models including an estimated interest charge and the correct total amount" in {
         val result = {
           mockDateServiceCall()
           controller.constructViewModel(Seq(payment), mandationStatus = "MTDfB")
         }
-        result shouldBe Some(whatYouOweViewModel)
+        result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
       }
 
+    }
+
+    "there is a payment with a charge type that can have estimated interest but accruedInterest is 0" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB")
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(whatYouOweChargeModel)))
+      }
+    }
+
+    "there is a payment that has accrued interest defined but estimated interest is not supported" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB")
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(wyoChargeUnrepayableOverpayment)))
+      }
     }
 
     "there are multiple payments" should {

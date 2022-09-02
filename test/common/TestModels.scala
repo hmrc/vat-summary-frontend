@@ -64,6 +64,9 @@ object TestModels {
     clearedAmount = Some(00.00)
   )
 
+  val paymentNoAccInterest: PaymentWithPeriod = payment.copy(accruedInterestAmount = Some(0))
+  val unrepayableOverpayment: PaymentWithPeriod = payment.copy(chargeType = VatUnrepayableOverpayment)
+
   val paymentNoPeriodNoDate: PaymentNoPeriod = Payment(
     OADefaultInterestCharge,
     LocalDate.parse("2019-03-03"),
@@ -335,6 +338,17 @@ object TestModels {
     periodTo = Some(LocalDate.parse("2019-02-02"))
   )
 
+  val whatYouOweChargeModelEstimatedInterest: EstimatedInterestViewModel = EstimatedInterestViewModel(
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    chargeType = VatReturnLPI.value,
+    interestRate = 5.00,
+    interestAmount = BigDecimal(2),
+    isPenalty = false
+  )
+
+  val wyoChargeUnrepayableOverpayment: StandardChargeViewModel = whatYouOweChargeModel.copy(chargeType = "VAT Unrepayable Overpayment")
+
   val whatYouOweChargeModelInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     periodFrom = LocalDate.parse("2019-01-01"),
     periodTo = LocalDate.parse("2019-02-02"),
@@ -370,10 +384,16 @@ object TestModels {
     false
   )
 
+  val whatYouOweViewModelWithEstimatedInterest: WhatYouOweViewModel = whatYouOweViewModel.copy(
+    charges = Seq(whatYouOweChargeModel, whatYouOweChargeModelEstimatedInterest)
+  )
+
   val whatYouOweViewModelInterestCharges: WhatYouOweViewModel = WhatYouOweViewModel(
     40000,
     Seq(whatYouOweChargeModel,
+      whatYouOweChargeModelEstimatedInterest,
       whatYouOweChargeModel,
+      whatYouOweChargeModelEstimatedInterest,
       whatYouOweChargeModelInterestCharge,
       penaltyInterestCharge
     ),
