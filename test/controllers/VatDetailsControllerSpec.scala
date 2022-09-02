@@ -71,13 +71,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     mockPenaltiesService,
     mcc,
     injector.instanceOf[Details],
-    mockServiceErrorHandler,
-    ddInterruptPredicate
+    mockServiceErrorHandler
   )
   
   "Calling the details action" when {
 
-    "the user is logged in and does not meet the criteria to see an interrupt screen" should {
+    "the user is logged in" should {
 
       lazy val result: Future[Result] = {
         mockPrincipalAuth()
@@ -221,22 +220,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "redirect to the manage-vat-subscription-frontend missing trader URL" in {
         redirectLocation(result) shouldBe Some(mockAppConfig.missingTraderRedirectUrl)
-      }
-    }
-
-    "the user has no ddInterrupt value in session" should {
-
-      lazy val result = {
-        mockPrincipalAuth()
-        controller.details()(DDInterruptRequest)
-      }
-
-      "return 303 (SEE_OTHER)" in {
-        status(result) shouldBe Status.SEE_OTHER
-      }
-      "redirect to the DD interrupt controller" in {
-        redirectLocation(result) shouldBe
-          Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
       }
     }
 

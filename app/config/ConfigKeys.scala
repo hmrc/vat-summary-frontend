@@ -28,7 +28,6 @@ object ConfigKeys {
   val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
-  val directDebitInterrupt: String = "features.directDebitInterrupt.enabled"
   val penaltiesAndInterestWYOFeature: String = "features.penaltiesAndInterestWYO.enabled"
   val chargeReferenceInsetFeature: String = "features.chargeReferenceInset.enabled"
   val overdueTimeToPayDescriptionFeature: String = "features.overdueTimeToPayDescription.enabled"

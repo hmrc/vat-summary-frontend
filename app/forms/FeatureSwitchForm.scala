@@ -26,7 +26,6 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.directDebitInterrupt -> boolean,
       ConfigKeys.penaltiesServiceEnabledFeature -> boolean,
       ConfigKeys.penaltiesAndInterestWYOFeature -> boolean,
       ConfigKeys.chargeReferenceInsetFeature -> boolean,

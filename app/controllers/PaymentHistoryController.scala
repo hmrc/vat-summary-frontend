@@ -22,7 +22,6 @@ import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.DDInterruptPredicate
 
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
@@ -46,7 +45,6 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
                                          serviceErrorHandler: ServiceErrorHandler,
                                          mcc: MessagesControllerComponents,
                                          paymentHistoryView: PaymentHistory,
-                                         DDInterrupt: DDInterruptPredicate,
                                          auditingService: AuditingService)
                                         (implicit appConfig: AppConfig,
                                          ec: ExecutionContext)
@@ -57,7 +55,6 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
 
   def paymentHistory(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
-      DDInterrupt.interruptCheck { _ =>
         for {
           customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
           migrationDate = getMigratedToETMPDate(customerInfo)
@@ -67,12 +64,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
           validYears = getValidYears(migrationDate)
           migratedWithin15Months = customerMigratedWithin15M(migrationDate)
           paymentsServiceYearOne <-
-            if (validYears.contains(currentYear)) {
               paymentsService.getPaymentsHistory(user.vrn, validYears.head)
-            }
-            else {
-              Future.successful(Right(Seq.empty))
-            }
           paymentsServiceYearTwo <-
             if (validYears.contains(previousYear)) {
               paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head)
@@ -107,7 +99,6 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
               serviceErrorHandler.showInternalServerError
           }
         }
-      }
   }
 
   private[controllers] def getMigratedToETMPDate(customerInfo: HttpGetResult[CustomerInformation]): Option[LocalDate] =

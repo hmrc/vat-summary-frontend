@@ -31,7 +31,7 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
     AuthStub.authorised()
     CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true))
     ServiceInfoStub.stubServiceInfoPartial
-    buildRequest("/test-only/what-you-owe", viewedDDInterrupt(Some("true")))
+    buildRequest("/test-only/what-you-owe")
   }
 
   val totalAmountSelector = "p.govuk-body:nth-of-type(2)"

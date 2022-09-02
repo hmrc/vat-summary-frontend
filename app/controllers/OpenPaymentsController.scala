@@ -21,7 +21,6 @@ import audit.models.ViewOutstandingVatPaymentsAuditModel
 import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.DDInterruptPredicate
 import javax.inject.{Inject, Singleton}
 import models.{CustomerInformation, User}
 import models.payments.{OpenPaymentsModel, Payment, PaymentOnAccount}
@@ -47,7 +46,6 @@ class OpenPaymentsController @Inject()(authorisedController: AuthorisedControlle
                                        noPayments: NoPayments,
                                        paymentsError: PaymentsError,
                                        openPaymentsPage: OpenPayments,
-                                       DDInterrupt: DDInterruptPredicate,
                                        accountDetailsService: AccountDetailsService)
                                       (implicit appConfig: AppConfig,
                                        ec: ExecutionContext)
@@ -55,13 +53,11 @@ class OpenPaymentsController @Inject()(authorisedController: AuthorisedControlle
 
   def openPayments(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
-      DDInterrupt.interruptCheck { _ =>
         for {
           serviceInfoContent <- serviceInfoService.getPartial
           accountDetailsCall <- accountDetailsService.getAccountDetails(user.vrn)
           paymentsView <- renderView(serviceInfoContent, accountDetailsCall)
         } yield paymentsView
-      }
   }
 
   private[controllers] def renderView(serviceInfoContent: Html,

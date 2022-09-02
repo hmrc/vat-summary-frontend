@@ -139,37 +139,6 @@ object MessageLookup {
     //scalastyle:on
   }
 
-  object noDDInterruptMessages {
-    val backLinkText: String = "Back"
-    val pageTitle: String = "You need to set up a new Direct Debit - VAT - GOV.UK"
-    val title: String = "You need to set up a new Direct Debit"
-    val insetText: String = "To continue to pay your VAT by Direct Debit you must set up a new Direct Debit, at " +
-      "least 3 working days before your VAT Return payment is due. If you do not pay the amount due on time, " +
-      "you may get a penalty."
-    val para1: String = "If you do not have time to set up a new Direct Debit before your next payment is due or " +
-      "you prefer to pay using a different payment method, you can do this in the ’Payments and repayments’ " +
-      "section of your VAT account."
-    val para2: String = "If you use the link below to ’Set up a new Direct Debit’ you can also check if your new " +
-      "Direct Debit has been activated within the ’Payments and repayments’ section of your VAT account."
-    val para3: String = "If you have already set up a payment method you can continue to your VAT account."
-    val setupButtonText: String = "Set up a new Direct Debit"
-    val continueButtonText: String = "Continue to your VAT account"
-  }
-
-  object existingDDInterruptMessages {
-    val backLinkText: String = "Back"
-    val pageTitle: String = "You need to validate your details for Direct Debit - VAT - GOV.UK"
-    val title: String = "You need to validate your details for Direct Debit"
-    val insetText: String = "You have been transferred to HMRC’s new online system for submitting your VAT Returns. " +
-      "Your Service user name and number will change. The updated details will be sent to you as a secure message."
-    val para1: String = "You currently pay your VAT bill by Direct Debit and your Acknowledgement Screens tell you how much you need to pay and when."
-    val para2: String = "To continue receiving prompts to log into your Acknowledgement Screens and review " +
-      "the information, you need to validate your email address."
-    val para3: String = "If you have already confirmed your email address you do not need to do it again."
-    val validateButtonText: String = "Validate your email"
-    val continueButtonText: String = "Continue to your VAT account"
-  }
-
   object paymentHistoryMessages {
     val insetText: String = "If you cannot see your all of your client’s history, " +
       "you may be able to access more through your HMRC online services for agents account. You’ll need to sign in separately."

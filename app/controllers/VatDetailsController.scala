@@ -24,7 +24,6 @@ import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.DDInterruptPredicate
 import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
@@ -50,15 +49,13 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      penaltiesService: PenaltiesService,
                                      mcc: MessagesControllerComponents,
                                      detailsView: Details,
-                                     serviceErrorHandler: ServiceErrorHandler,
-                                     DDInterrupt: DDInterruptPredicate)
+                                     serviceErrorHandler: ServiceErrorHandler)
                                     (implicit appConfig: AppConfig,
                                      ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
-      DDInterrupt.interruptCheck { _ =>
         val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
         val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn, dateService.now())
         lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user.vrn)
@@ -90,7 +87,6 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             )).addingToSession(newSessionVariables: _*)
           }
         }
-      }
   }
 
   def detailsRedirectToEmailVerification: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>

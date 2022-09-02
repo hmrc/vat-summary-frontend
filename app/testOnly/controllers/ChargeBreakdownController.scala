@@ -18,7 +18,6 @@ package testOnly.controllers
 
 import config.AppConfig
 import controllers.AuthorisedController
-import controllers.predicates.DDInterruptPredicate
 import javax.inject.Inject
 import common.{ChargeViewModelTypes => types}
 import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
@@ -33,7 +32,6 @@ import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, Cry
 import scala.concurrent.ExecutionContext
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,
-                                          DDInterrupt: DDInterruptPredicate,
                                           mcc: MessagesControllerComponents,
                                           serviceInfoService: ServiceInfoService,
                                           wyoSessionService: WYOSessionService,
@@ -49,7 +47,6 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
 
   def showBreakdown(id: String): Action[AnyContent] = authorisedController.financialAction {
     implicit request => implicit user =>
-      DDInterrupt.interruptCheck { _ =>
         for {
           navLinks <- serviceInfoService.getPartial
           model <- wyoSessionService.retrieveViewModel(id)
@@ -67,7 +64,6 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
             case _ => NotFound(notFound())
           }
         }
-      }
   }
 
 }

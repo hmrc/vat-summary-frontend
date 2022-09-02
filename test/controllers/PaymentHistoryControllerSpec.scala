@@ -49,7 +49,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     mockServiceErrorHandler,
     mcc,
     paymentHistory,
-    ddInterruptPredicate,
     mockAuditService
   )
 
@@ -225,6 +224,31 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "the user is logged in and migrated in the current year" when {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockServiceInfoCall()
+        mockAudit()
+        mockPaymentHistory(serviceResultYearOne)
+        mockCustomerInfo(Right(customerMigrated2018))
+        controller.paymentHistory()(fakeRequestWithSession)
+      }
+
+      "return 200" in {
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in {
+        contentType(result) shouldBe Some("text/html")
+      }
+
+      "return charset utf-8" in {
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
+
     "the user is not logged in" should {
 
       lazy val result = {
@@ -325,18 +349,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
       "return 403 (Forbidden)" in {
         status(result) shouldBe Status.FORBIDDEN
-      }
-    }
-
-    "the user has no viewDirectDebitInterrupt in session" should {
-
-      lazy val result = {
-        mockPrincipalAuth()
-        controller.paymentHistory()(DDInterruptRequest)
-      }
-      "return 303(SEE OTHER)" in {
-        status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
       }
     }
 

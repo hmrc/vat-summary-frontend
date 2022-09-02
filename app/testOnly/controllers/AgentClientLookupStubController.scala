@@ -50,7 +50,6 @@ class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfi
       error => InternalServerError(s"Failed to bind model. Error: $error"),
       success => Redirect(success.redirectUrl)
         .addingToSession(SessionKeys.mtdVatvcClientVrn -> success.vrn)
-        .addingToSession(SessionKeys.viewedDDInterrupt -> "true")
     )
   }
 }

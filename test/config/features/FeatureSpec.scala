@@ -30,7 +30,6 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.userResearchBanner(true)
     features.penaltiesServiceEnabled(true)
     features.staticDateEnabled(true)
-    features.directDebitInterrupt(true)
     features.penaltiesAndInterestWYOEnabled(true)
     features.chargeReferenceInsetEnabled(true)
     features.overdueTimeToPayDescriptionEnabled(true)
@@ -69,18 +68,6 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "switch to a new state" in {
       features.staticDateEnabled(false)
       features.staticDateEnabled() shouldBe false
-    }
-  }
-
-  "The direct debit interrupt feature" should {
-
-    "return its current state" in {
-      features.directDebitInterrupt() shouldBe true
-    }
-
-    "switch to a new state" in {
-      features.directDebitInterrupt(false)
-      features.directDebitInterrupt() shouldBe false
     }
   }
 

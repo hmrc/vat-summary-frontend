@@ -289,21 +289,6 @@ vatCertificate.nstp.p2 = This will cover the time between your last non-standard
 vatCertificate.nstp.dateFromTo = {0} to {1}
 vatCertificate.logo = HMRC_Logo
 
-#Direct debit interrupt
-directDebitInterrupt.noDD.title = You need to set up a new Direct Debit
-directDebitInterrupt.noDD.inset = To continue to pay your VAT by Direct Debit you must set up a new Direct Debit, at least 3 working days before your VAT Return payment is due. If you do not pay the amount due on time, you may get a penalty.
-directDebitInterrupt.noDD.para1 =  If you do not have time to set up a new Direct Debit before your next payment is due or you prefer to pay using a different payment method, you can do this in the ’Payments and repayments’ section of your VAT account.
-directDebitInterrupt.noDD.para2 = If you use the link below to ’Set up a new Direct Debit’ you can also check if your new Direct Debit has been activated within the ’Payments and repayments’ section of your VAT account.
-directDebitInterrupt.noDD.para3 = If you have already set up a payment method you can continue to your VAT account.
-directDebitInterrupt.noDD.setupButton = Set up a new Direct Debit
-directDebitInterrupt.existingDD.title = You need to validate your details for Direct Debit
-directDebitInterrupt.existingDD.info = You have been transferred to HMRC’s new online system for submitting your VAT Returns. Your Service user name and number will change. The updated details will be sent to you as a secure message.
-directDebitInterrupt.existingDD.para1 = You currently pay your VAT bill by Direct Debit and your Acknowledgement Screens tell you how much you need to pay and when.
-directDebitInterrupt.existingDD.para2 = To continue receiving prompts to log into your Acknowledgement Screens and review the information, you need to validate your email address.
-directDebitInterrupt.existingDD.para3 = If you have already confirmed your email address you do not need to do it again.
-directDebitInterrupt.existingDD.validateButton = Validate your email
-directDebitInterrupt.continueButton = Continue to your VAT account
-
 #Vat Overview Partials
 deregPartial.cancelRegistration.title = Cancel VAT registration
 deregPartial.cancelRegistration.content = Cancel your VAT registration if you’re closing the business, transferring ownership or do not need to be VAT registered.

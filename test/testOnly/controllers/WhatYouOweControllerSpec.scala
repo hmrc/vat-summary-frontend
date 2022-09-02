@@ -39,7 +39,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   val controller = new WhatYouOweController(
     authorisedController,
-    ddInterruptPredicate,
     mockDateService,
     mockPaymentsService,
     mockServiceInfoService,
@@ -78,24 +77,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           Jsoup.parse(contentAsString(result)).title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
         }
 
-        "the user has no viewDDInterrupt in session" should {
-
-          lazy val result = {
-            mockPrincipalAuth()
-            mockServiceInfoCall()
-            mockDateServiceCall()
-            controller.show(DDInterruptRequest)
-          }
-
-          "return 303" in {
-            status(result) shouldBe SEE_OTHER
-          }
-
-          "redirect to the DD interrupt controller" in {
-            redirectLocation(result) shouldBe
-              Some(controllers.routes.DDInterruptController.directDebitInterruptCall(DDInterruptRequest.uri).url)
-          }
-        }
       }
 
       "the user has no open payments" should {

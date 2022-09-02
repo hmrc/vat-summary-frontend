@@ -289,21 +289,6 @@ vatCertificate.nstp.p2 = Bydd hyn yn cwmpasu’r amser rhwng eich cyfnod treth a
 vatCertificate.nstp.dateFromTo = {0} i {1}
 vatCertificate.logo = HMRC_WelshLogo
 
-#Direct debit interrupt
-directDebitInterrupt.noDD.title = Mae angen i chi drefnu Debyd Uniongyrchol newydd
-directDebitInterrupt.noDD.inset = I barhau i dalu’ch TAW drwy Ddebyd Uniongyrchol, mae’n rhaid i chi drefnu Debyd Uniongyrchol newydd o leiaf 3 diwrnod gwaith cyn bod eich taliad Ffurflen TAW TAW yn ddyledus. Os na fyddwch yn talu’r swm sy’n ddyledus mewn pryd, mae’n bosibl y byddwch yn cael cosb.
-directDebitInterrupt.noDD.para1 = Os nad oes gennych amser i drefnu Debyd Uniongyrchol newydd cyn dyddiad dyledus eich taliad nesaf, neu os yw’n well gennych dalu drwy ddefnyddio dull gwahanol o dalu, gallwch wneud hyn yn adran ‘taliadau ac ad-daliadau’ eich cyfrif TAW.
-directDebitInterrupt.noDD.para2 = Os defnyddiwch y cysylltiad ‘Trefnu Debyd Uniongyrchol newydd’ isod, gallwch hefyd wirio a yw’ch Debyd Uniongyrchol newydd wedi’i actifadu yn adran ‘taliadau ac ad-daliadau’ eich cyfrif TAW.
-directDebitInterrupt.noDD.para3 = Os ydych eisoes wedi trefnu dull talu, gallwch fynd yn eich blaen i’ch cyfrif TAW.
-directDebitInterrupt.noDD.setupButton = Trefnu debyd uniongyrchol newydd
-directDebitInterrupt.existingDD.title = Mae angen i chi ddilysu’ch manylion ar gyfer Debyd Uniongyrchol
-directDebitInterrupt.existingDD.info = Rydych wedi cael eich trosglwyddo i system ar-lein newydd CThEM ar gyfer cyflwyno’ch Ffurflenni TAW. Bydd eich enw a’ch rhif ar gyfer y gwasanaeth yn newid. Bydd y manylion wedi’u diweddaru yn cael eu hanfon atoch fel neges ddiogel.
-directDebitInterrupt.existingDD.para1 =  Ar hyn o bryd, rydych yn talu’ch bil TAW drwy Ddebyd Uniongyrchol ac mae’ch Sgriniau Cydnabyddiaeth yn rhoi gwybod i chi faint y mae angen i chi ei dalu a phryd.
-directDebitInterrupt.existingDD.para2 = I barhau i gael negeseuon yn eich annog i fewngofnodi i’ch Sgriniau Cydnabyddiaeth ac adolygu’r wybodaeth, mae angen i chi ddilysu’ch cyfeiriad e-bost.
-directDebitInterrupt.existingDD.para3 = Os ydych eisoes wedi cadarnhau’ch cyfeiriad e-bost, nid oes angen i chi wneud hyn eto.
-directDebitInterrupt.existingDD.validateButton = Dilysu’ch e-bost
-directDebitInterrupt.continueButton = Yn eich blaen i’ch cyfrif TAW
-
 #Vat Overview Partials
 deregPartial.cancelRegistration.title = Canslo cofrestriad TAW
 deregPartial.cancelRegistration.content = Canslo’ch cofrestriad TAW os ydych yn cau’r busnes, yn trosglwyddo perchnogaeth neu os nad oes angen i chi fod wedi cofrestru ar gyfer TAW.
