@@ -17,7 +17,9 @@
 package models.payments
 
 import java.time.LocalDate
+
 import models.obligations.Obligation
+import models.payments.ChargeType.interestChargeMapping
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -34,7 +36,9 @@ sealed trait Payment extends Obligation {
   val auditDetails: Map[String, String]
   val accruedInterestAmount: Option[BigDecimal]
 
-  def isOverdue(now: LocalDate): Boolean = due.isBefore(now) && !ddCollectionInProgress
+  val hasAccruedInterest: Boolean         = accruedInterestAmount.getOrElse(BigDecimal(0)) > 0
+  val showEstimatedInterest: Boolean      = hasAccruedInterest && interestChargeMapping.contains(this.chargeType)
+  def isOverdue(now: LocalDate): Boolean  = due.isBefore(now) && !ddCollectionInProgress
 
 }
 
