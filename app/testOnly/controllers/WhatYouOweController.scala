@@ -90,7 +90,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p: PaymentWithPeriod if
         p.chargeType.isInterest
         && p.chargeReference.isDefined
-        && p.originalAmount.isDefined => decideIfEstimatedInterest(p, buildCrystallisedIntViewModel(p))
+        && p.originalAmount.isDefined => Seq(buildCrystallisedIntViewModel(p))
 
       case p if
         p.originalAmount.isDefined

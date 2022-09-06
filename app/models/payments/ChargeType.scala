@@ -16,7 +16,7 @@
 
 package models.payments
 
-import models.payments.ChargeType.{interestChargeMapping, interestChargeTypes, penaltyInterestChargeTypes}
+import models.payments.ChargeType.{interestChargeTypes, penaltyInterestChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
