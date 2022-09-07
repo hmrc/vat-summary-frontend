@@ -27,7 +27,7 @@ import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, Cry
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
-    authorisedController, ddInterruptPredicate, mcc, mockServiceInfoService, mockWYOSessionService,
+    authorisedController, mcc, mockServiceInfoService, mockWYOSessionService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
     injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
     injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View]
@@ -195,21 +195,5 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the user has no viewDirectDebitInterrupt in session" should {
-
-      lazy val result = {
-        mockPrincipalAuth()
-        controller.showBreakdown(id)(DDInterruptRequest)
-      }
-
-      "return 303" in {
-        status(result) shouldBe SEE_OTHER
-      }
-
-      "redirect to the DD interrupt controller" in {
-        redirectLocation(result) shouldBe
-          Some(controllers.routes.DDInterruptController.directDebitInterruptCall("/homepage").url)
-      }
-    }
   }
 }

@@ -38,7 +38,7 @@ class VatDetailsPageSpec extends IntegrationBaseSpec {
 
     def request(): WSRequest = {
       setupStubs()
-      buildRequest("/vat-overview",viewedDDInterrupt(Some("true")))
+      buildRequest("/vat-overview")
     }
   }
 

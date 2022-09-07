@@ -42,9 +42,6 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
   def formatSessionVrn: Option[String] => Map[String, String] =
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.mtdVatvcClientVrn -> x))
 
-  def viewedDDInterrupt: Option[String] => Map[String, String] =
-    _.fold(Map.empty[String, String])(x => Map(SessionKeys.viewedDDInterrupt -> x))
-
  override lazy val client: WSClient = app.injector.instanceOf[WSClient]
   implicit val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
 

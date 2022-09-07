@@ -171,6 +171,8 @@ object TestModels {
     mandationStatus = "MTDfB"
   )
 
+  val customerMigrated2018 = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-05-01"), hybridToFullMigrationDate = None)
+
   val customerInformationInsolvent: CustomerInformation = customerInformationMax.copy(details = customerDetailsInsolvent)
   val customerInformationInsolventTrading: CustomerInformation =
     customerInformationMax.copy(details = customerDetailsInsolventTrading)

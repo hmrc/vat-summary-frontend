@@ -35,7 +35,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        directDebitInterrupt = appConfig.features.directDebitInterrupt(),
         penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled(),
         penaltiesAndInterestWYOEnabled = appConfig.features.penaltiesAndInterestWYOEnabled(),
         chargeReferenceInsetEnabled = appConfig.features.chargeReferenceInsetEnabled(),
@@ -54,7 +53,6 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
-    appConfig.features.directDebitInterrupt(model.directDebitInterrupt)
     appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
     appConfig.features.penaltiesAndInterestWYOEnabled(model.penaltiesAndInterestWYOEnabled)
     appConfig.features.chargeReferenceInsetEnabled(model.overdueTimeToPayDescriptionEnabled)

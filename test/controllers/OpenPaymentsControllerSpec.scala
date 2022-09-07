@@ -45,7 +45,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
     noPayments,
     mockPaymentsError,
     openPayments,
-    ddInterruptPredicate,
     mockAccountDetailsService
   )
 
@@ -377,22 +376,5 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the user has no viewDDInterrupt in session" should {
-
-      lazy val result = {
-        mockPrincipalAuth()
-        mockDateServiceCall()
-        controller.openPayments()(DDInterruptRequest)
-      }
-
-      "return 303 (SEE OTHER)" in {
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      "redirect to the DD interrupt controller" in {
-        redirectLocation(result) shouldBe
-          Some(controllers.routes.DDInterruptController.directDebitInterruptCall(DDInterruptRequest.uri).url)
-      }
-    }
   }
 }

@@ -22,8 +22,6 @@ GET        /language/:lang                                                      
 #Vat-correspondence redirect
 GET        /send-verification                                                                     controllers.VatDetailsController.detailsRedirectToEmailVerification
 
-GET        /direct-debit-interrupt                                                                 controllers.DDInterruptController.directDebitInterruptCall(redirectUrl: String)
-
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                                                                           controllers.Assets.at(path="/public", file)
 

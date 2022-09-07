@@ -20,7 +20,6 @@ import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
-import controllers.predicates.DDInterruptPredicate
 import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
 import models.viewModels._
 import play.api.i18n.I18nSupport
@@ -34,7 +33,6 @@ import views.html.payments.{NoPayments, WhatYouOwe}
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
-                                     ddInterrupt: DDInterruptPredicate,
                                      dateService: DateService,
                                      paymentsService: PaymentsService,
                                      serviceInfoService: ServiceInfoService,
@@ -51,8 +49,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   def show: Action[AnyContent] = authorisedController.financialAction { implicit request =>
 
-    implicit user => ddInterrupt.interruptCheck { _ =>
-
+    implicit user =>
       serviceInfoService.getPartial.flatMap { serviceInfoContent =>
         paymentsService.getOpenPayments(user.vrn).flatMap { payments =>
           accountDetailsService.getAccountDetails(user.vrn).flatMap { accountDetails =>
@@ -81,7 +78,6 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           }
         }
       }
-    }
   }
 
   private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] = {

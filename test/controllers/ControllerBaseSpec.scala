@@ -22,7 +22,7 @@ import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, penaltyDetailsResponse, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-import controllers.predicates.{AgentPredicate, DDInterruptPredicate, FinancialPredicate}
+import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import mocks.MockAppConfig
 import models.{CustomerInformation, ServiceResponse, User, WYODatabaseModel}
 import org.scalamock.scalatest.MockFactory
@@ -59,7 +59,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
-  val baseSession = Seq(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.viewedDDInterrupt -> "true")
+  val baseSession = Seq(SessionKeys.insolventWithoutAccessKey -> "false")
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(baseSession: _*)
   implicit lazy val fakePostRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "").withSession(baseSession: _*)
 
@@ -88,7 +88,6 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     unauthorised,
     userInsolvent
   )
-  val ddInterruptPredicate: DDInterruptPredicate = new DDInterruptPredicate(mcc)
 
   val requestSession = Seq(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
@@ -104,14 +103,9 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
 
-  lazy val DDInterruptRequest: FakeRequest[AnyContentAsEmpty.type] =
-    FakeRequest("GET","/homepage")
-      .withSession(SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
-
   val agentSession = Seq(
     SessionKeys.financialAccess -> "true",
-    SessionKeys.mtdVatvcClientVrn -> "123456789",
-    SessionKeys.viewedDDInterrupt -> "false"
+    SessionKeys.mtdVatvcClientVrn -> "123456789"
   )
 
   lazy val agentFinancialRequest: FakeRequest[AnyContentAsEmpty.type] =
@@ -125,7 +119,6 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    mockAppConfig.features.directDebitInterrupt(true)
   }
 
   def mockOpenPayments(result: ServiceResponse[Option[Payments]]): Any =

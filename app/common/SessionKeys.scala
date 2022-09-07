@@ -26,5 +26,4 @@ object SessionKeys {
   val inFlightContactKey: String = "inFlightContactDetailsChange"
   val insolventWithoutAccessKey: String = "insolventWithoutAccess"
   val financialAccess: String = "vatSummaryFinancialAccess"
-  val viewedDDInterrupt: String = "vatViewChangeHasViewedDDInterrupt"
 }
