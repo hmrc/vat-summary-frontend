@@ -569,7 +569,7 @@ object TestModels {
     130.13,
     LocalDate.parse("2020-03-03"),
     LocalDate.parse("2020-04-04"),
-    "VAT OA 2nd LPP LPI",
+    "VAT AA 2nd LPP",
     "CHARGEREF",
     isOverdue = false
   )
@@ -583,7 +583,7 @@ object TestModels {
     "leftToPay" -> 130.13,
     "periodFrom" -> "2020-03-03",
     "periodTo" -> "2020-04-04",
-    "chargeType" -> "VAT OA 2nd LPP LPI",
+    "chargeType" -> "VAT AA 2nd LPP",
     "chargeReference" -> "CHARGEREF",
     "isOverdue" -> false
   )

@@ -20,8 +20,9 @@ import common.TestModels.{crystallisedLPP1JsonMax, crystallisedLPP1JsonMin, crys
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
+import views.ViewBaseSpec
 
-class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
+class CrystallisedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "The makePaymentRedirect value" should {
 
@@ -58,6 +59,17 @@ class CrystallisedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
 
       "optional fields are missing" in {
         Json.toJson(crystallisedLPP1ModelMin) shouldBe crystallisedLPP1JsonMin
+      }
+    }
+
+    "title()" when {
+
+      "the charge type is valid" should {
+
+        "return the charge type title" in {
+          crystallisedLPP1Model.title(messages) shouldBe
+            "Penalty for late payment of VAT"
+        }
       }
     }
   }

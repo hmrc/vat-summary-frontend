@@ -16,12 +16,13 @@
 
 package models.viewModels
 
-import common.TestModels.{estimatedLPP1Json, estimatedLPP1Model}
+import common.TestModels._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
+import views.ViewBaseSpec
 
-class EstimatedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
+class EstimatedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "The EstimatedLPP1ViewModel" should {
 
@@ -31,6 +32,17 @@ class EstimatedLPP1ViewModelSpec extends AnyWordSpecLike with Matchers {
 
     "write to JSON" in {
       Json.toJson(estimatedLPP1Model) shouldBe estimatedLPP1Json
+    }
+
+    "title()" when {
+
+      "the charge type is valid" should {
+
+        "return the charge type title" in {
+          estimatedLPP1Model.title(messages) shouldBe
+            "Penalty for late payment of VAT"
+        }
+      }
     }
   }
 }
