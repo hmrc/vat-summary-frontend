@@ -20,8 +20,9 @@ import common.TestModels.{estimatedLPP2Json, estimatedLPP2Model}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
+import views.ViewBaseSpec
 
-class EstimatedLPP2ViewModelSpec extends AnyWordSpecLike with Matchers {
+class EstimatedLPP2ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "The EstimatedLPP2ViewModel" should {
 
@@ -31,6 +32,17 @@ class EstimatedLPP2ViewModelSpec extends AnyWordSpecLike with Matchers {
 
     "write to JSON" in {
       Json.toJson(estimatedLPP2Model) shouldBe estimatedLPP2Json
+    }
+
+    "title()" when {
+
+      "the charge type is valid" should {
+
+        "return the charge type title" in {
+          estimatedLPP2Model.title(messages) shouldBe
+            "Penalty for late payment of VAT"
+        }
+      }
     }
   }
 }

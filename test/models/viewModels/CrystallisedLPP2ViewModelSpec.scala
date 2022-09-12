@@ -20,8 +20,9 @@ import common.TestModels.{crystallisedLPP2Json, crystallisedLPP2Model}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
+import views.ViewBaseSpec
 
-class CrystallisedLPP2ViewModelSpec extends AnyWordSpecLike with Matchers {
+class CrystallisedLPP2ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "The makePaymentRedirect value" should {
 
@@ -50,6 +51,17 @@ class CrystallisedLPP2ViewModelSpec extends AnyWordSpecLike with Matchers {
 
       "all fields are populated" in {
         Json.toJson(crystallisedLPP2Model) shouldBe crystallisedLPP2Json
+      }
+    }
+
+    "title()" when {
+
+      "the charge type is valid" should {
+
+        "return the charge type title" in {
+          crystallisedLPP2Model.title(messages) shouldBe
+            "Second penalty for late payment of additional assessment"
+        }
       }
     }
   }

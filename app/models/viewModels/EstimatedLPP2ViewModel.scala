@@ -26,7 +26,9 @@ case class EstimatedLPP2ViewModel(day: String,
                                   penaltyAmount: BigDecimal,
                                   periodFrom: LocalDate,
                                   periodTo: LocalDate,
-                                  chargeType: String) {
+                                  chargeType: String) extends ChargeDetailsViewModel {
+
+  override val outstandingAmount: BigDecimal = penaltyAmount
 
   def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
 
