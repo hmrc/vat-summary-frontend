@@ -397,6 +397,20 @@ object PaymentMessageHelper {
     Some("chargeType.refundDescription.agent")
   )
 
+  object VatMigratedLiabilityCharge extends PaymentMessageHelper(
+    VatMigratedLiability.value,
+    "chargeType.migratedLiabilityTitle",
+    None,
+    None
+  )
+
+  object VatMigratedCreditCharge extends PaymentMessageHelper(
+    VatMigratedCredit.value,
+    "chargeType.migratedCreditTitle",
+    Some("chargeType.migratedCreditDescription"),
+    Some("chargeType.migratedCreditDescription")
+  )
+
   object VATPOAInstalmentCharge extends PaymentMessageHelper(
     PaymentOnAccountInstalments.value,
     "chargeType.POAInstalmentTitle",
@@ -675,6 +689,8 @@ object PaymentMessageHelper {
     ProtectiveAssessmentCharge,
     UnallocatedPaymentCharge,
     RefundsCharge,
+    VatMigratedLiabilityCharge,
+    VatMigratedCreditCharge,
     VATPOAInstalmentCharge,
     VATPOAReturnDebitCharge,
     VATPOAReturnCreditCharge,

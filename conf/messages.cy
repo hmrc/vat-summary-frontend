@@ -510,6 +510,10 @@ chargeType.VATReturnAA2ndLPPLPITitle = ???
 chargeType.VATAAReturnCharge1stLPP = ???
 chargeType.VATAAReturnCharge2ndLPP = ???
 
+chargeType.migratedLiabilityTitle = rhwymedigaeth TAW a fudwyd
+chargeType.migratedCreditTitle = credyd TAW a fudwyd
+chargeType.migratedCreditDescription = credyd TAW amrywiol
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

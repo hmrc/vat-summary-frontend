@@ -101,6 +101,8 @@ object MessageLookup {
         case ProtectiveAssessmentCharge.name => ("Protective assessment", s"of VAT for period $datePeriod")
         case UnallocatedPaymentCharge.name => ("Unallocated payment", "you made an overpayment which can be refunded to you or left on account")
         case RefundsCharge.name => ("Refund payment from HMRC", "as you requested a refund on an overpayment you made")
+        case VatMigratedLiabilityCharge.name => ("VAT migrated liability", "")
+        case VatMigratedCreditCharge.name => ("VAT migrated credit", "miscellaneous VAT credit")
         case VATPOAInstalmentCharge.name => ("Payment on account instalment", s"for period $datePeriod")
         case VATPOAReturnDebitCharge.name => ("Payment on account balance", s"for period $datePeriod")
         case VATPOAReturnCreditCharge.name => ("Payment on account repayment", s"for period $datePeriod")
