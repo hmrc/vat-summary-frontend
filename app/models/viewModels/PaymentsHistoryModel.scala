@@ -44,8 +44,7 @@ object PaymentsHistoryModel {
 
         val chargeType: ChargeType = ChargeType.apply((transaction \ FinancialTransactionsConstants.chargeType).as[String])
 
-        val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction)
-          .filterNot(_.clearingReason.map(_.toLowerCase).contains(allocatedCharge)) map {
+        val transactions: Seq[Option[PaymentsHistoryModel]] = getSubItemsForTransaction(transaction) map {
           subItem => generatePaymentModel(chargeType, subItem, transaction)
         }
 
@@ -58,6 +57,7 @@ object PaymentsHistoryModel {
                                            subItem: TransactionSubItem,
                                            transaction: JsValue): Option[PaymentsHistoryModel] =
     (chargeType.value, subItem.paymentAmount) match {
+      case (PaymentOnAccount.value, _) if subItem.clearingReason.map(_.toLowerCase).contains(allocatedCharge) => None
       case (PaymentOnAccount.value, _) if subItem.clearingReason.isEmpty =>
         Some(PaymentsHistoryModel(
           clearingSAPDocument = subItem.clearingSAPDocument,
