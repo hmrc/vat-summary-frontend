@@ -63,7 +63,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -91,7 +91,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
-           |            "paymentAmount" : -600,
+           |            "amount" : -600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-03-10"
            |          }
@@ -156,7 +156,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -184,7 +184,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -212,7 +212,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853336",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -240,7 +240,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853337",
            |            "subItem" : "000",
-           |            "paymentAmount" : -600,
+           |            "amount" : -600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-03-10"
            |          }
@@ -268,7 +268,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853338",
            |            "subItem" : "000",
-           |            "paymentAmount" : -600,
+           |            "amount" : -600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-03-10"
            |          }
@@ -296,7 +296,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853339",
            |            "subItem" : "000",
-           |            "paymentAmount" : 600,
+           |            "amount" : 600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-03-10"
            |          }
@@ -392,7 +392,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -420,7 +420,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
-           |            "paymentAmount" : -600,
+           |            "amount" : -600,
            |            "dueDate" : "2018-09-07",
            |            "clearingDate" : "2018-04-10"
            |          }
@@ -454,7 +454,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
       }
     }
 
-    "there are multiple payments against one charge" should {
+    "there are two partial payments against one charge" should {
 
       val testJson: JsValue = Json.parse(
         s"""{
@@ -481,18 +481,23 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |        "mainTransaction" : "1234",
            |        "subTransaction" : "5678",
            |        "originalAmount" : 250,
+           |        "outstandingAmount": 30,
            |        "items" : [
+           |          {
+           |            "amount": 30,
+           |            "dueDate": "2018-12-07"
+           |          },
            |          {
            |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "001",
-           |            "paymentAmount" : 100,
+           |            "amount" : 100,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-03-10"
            |          },
            |          {
            |            "clearingSAPDocument" : "002828853335",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 120,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -517,12 +522,12 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           chargeType = ReturnDebitCharge,
           taxPeriodFrom = Some(LocalDate.of(2018, 8, 1)),
           taxPeriodTo = Some(LocalDate.of(2018, 10, 31)),
-          amount = 150,
+          amount = 120,
           clearedDate = Some(LocalDate.of(2018, 1, 10))
         )
       )
 
-      "return multiple charges" in {
+      "return two payment models" in {
         Json.fromJson(testJson)(reads) shouldBe JsSuccess(expectedSeq)
       }
     }
@@ -592,7 +597,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
       }
     }
 
-    "there is no paymentAmount" should {
+    "there is no amount" should {
       val testJson = Json.parse(
         s"""{
            |    "idType" : "VRN",
@@ -602,7 +607,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |    "financialTransactions" : [
            |      {
            |        "chargeType" : "$ReturnDebitCharge",
-           |       "mainType" : "VAT Return Charge",
+           |        "mainType" : "VAT Return Charge",
            |        "periodKey" : "17AA",
            |        "periodKeyDescription" : "ABCD",
            |        "taxPeriodFrom" : "2018-08-01",
@@ -624,6 +629,50 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |            "subItem" : "000",
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
+           |          }
+           |        ]
+           |      }
+           |    ]
+           |  }""".stripMargin
+      )
+
+      "return an empty sequence" in {
+        Json.fromJson(testJson)(reads) shouldBe JsSuccess(Seq())
+      }
+    }
+
+    "there is no clearingDate" should {
+      val testJson = Json.parse(
+        s"""{
+           |    "idType" : "VRN",
+           |    "idNumber" : 555555555,
+           |    "regimeType" : "VATC",
+           |    "processingDate" : "2018-03-07T09:30:00.000Z",
+           |    "financialTransactions" : [
+           |      {
+           |        "chargeType" : "$ReturnDebitCharge",
+           |        "mainType" : "VAT Return Charge",
+           |        "periodKey" : "17AA",
+           |        "periodKeyDescription" : "ABCD",
+           |        "taxPeriodFrom" : "2018-08-01",
+           |        "taxPeriodTo" : "2018-10-31",
+           |        "businessPartner" : "0",
+           |        "contractAccountCategory" : "99",
+           |        "contractAccount" : "X",
+           |        "contractObjectType" : "ABCD",
+           |        "contractObject" : "0",
+           |        "sapDocumentNumber" : "0",
+           |        "sapDocumentNumberItem" : "0",
+           |        "chargeReference" : "XD002750002155",
+           |        "mainTransaction" : "1234",
+           |        "subTransaction" : "5678",
+           |        "originalAmount" : 150,
+           |        "items" : [
+           |          {
+           |            "clearingSAPDocument" : "002828853334",
+           |            "subItem" : "000",
+           |            "dueDate" : "2018-12-07",
+           |            "amount" : 150
            |          }
            |        ]
            |      }
@@ -666,7 +715,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -721,7 +770,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
            |          {
            |            "clearingSAPDocument" : "002828853334",
            |            "subItem" : "000",
-           |            "paymentAmount" : 150,
+           |            "amount" : 150,
            |            "dueDate" : "2018-12-07",
            |            "clearingDate" : "2018-01-10"
            |          }
@@ -825,9 +874,8 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
              |          {
              |            "clearingSAPDocument" : "002828853334",
              |            "subItem": "000",
-             |            "amount": -5050,
              |            "paymentReference": "654378944",
-             |            "paymentAmount": -5050,
+             |            "amount": -5050,
              |            "paymentMethod": "BANK GIRO RECEIPTS",
              |            "paymentLot": "RP11",
              |            "paymentLotItem": "000001",
@@ -880,9 +928,8 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
              |          {
              |            "clearingSAPDocument" : "002828853334",
              |            "subItem": "000",
-             |            "amount": -5050,
              |            "paymentReference": "654378944",
-             |            "paymentAmount": -5050,
+             |            "amount": -5050,
              |            "paymentMethod": "BANK GIRO RECEIPTS",
              |            "paymentLot": "RP11",
              |            "paymentLotItem": "000001",
@@ -936,7 +983,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
       }
 
       "return the amount of the sub item" in {
-        result.amount shouldBe subItem.paymentAmount.get
+        result.amount shouldBe subItem.amount.get
       }
 
       "return the cleared date of the sub item" in {
@@ -979,7 +1026,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
         }
 
         "return the correct amount" in {
-          result.amount shouldBe subItem.paymentAmount.get
+          result.amount shouldBe subItem.amount.get
         }
 
         "return a clearing date" in {
