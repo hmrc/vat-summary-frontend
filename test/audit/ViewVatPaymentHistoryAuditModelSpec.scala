@@ -112,7 +112,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "periodFrom": "2018-08-01",
                 "periodTo": "2018-10-31",
                 "clearingDate": "2018-01-10",
-                "paymentAmount": 150
+                "amount": 150
               }]
             }""".stripMargin
       )
@@ -137,7 +137,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                     "periodFrom": "2018-08-01",
                     "periodTo": "2018-10-31",
                     "clearingDate": "2018-01-10",
-                    "paymentAmount": 150
+                    "amount": 150
                   }, {
                     "vrn": "999999999",
                     "clearingSAPDocument" : "002828853335",
@@ -145,7 +145,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                     "periodFrom": "2018-05-01",
                     "periodTo": "2018-07-31",
                     "clearingDate": "2018-03-10",
-                    "paymentAmount": 600
+                    "amount": 600
                   }]
                 }""".stripMargin
       )
@@ -171,7 +171,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "periodFrom": "2018-08-01",
                 "periodTo": "2018-10-31",
                 "clearingDate": "2018-01-10",
-                "paymentAmount": 150
+                "amount": 150
               }, {
                 "vrn": "999999999",
                 "clearingSAPDocument" : "002828853335",
@@ -179,7 +179,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "periodFrom": "2018-08-01",
                 "periodTo": "2018-10-31",
                 "clearingDate": "2018-03-10",
-                "paymentAmount": 100
+                "amount": 100
               }, {
                 "vrn": "999999999",
                 "clearingSAPDocument" : "002828853336",
@@ -187,7 +187,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "periodFrom": "2018-05-01",
                 "periodTo": "2018-07-31",
                 "clearingDate": "2018-04-10",
-                "paymentAmount": 600
+                "amount": 600
               }, {
                 "vrn": "999999999",
                 "clearingSAPDocument" : "002828853337",
@@ -195,7 +195,7 @@ class ViewVatPaymentHistoryAuditModelSpec extends AnyWordSpecLike with Matchers 
                 "periodFrom": "2018-05-01",
                 "periodTo": "2018-07-31",
                 "clearingDate": "2018-05-10",
-                "paymentAmount": 500
+                "amount": 500
               }]
             }""".stripMargin
       )

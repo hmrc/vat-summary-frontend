@@ -102,7 +102,7 @@ object FinancialDataStub extends WireMockMethods {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-01-10",
        |            "dueDate" : "2018-12-07",
-       |            "paymentAmount" : 150
+       |            "amount" : 150
        |          }
        |        ]
        |      },
@@ -130,7 +130,7 @@ object FinancialDataStub extends WireMockMethods {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-03-10",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : -600
+       |            "amount" : -600
        |          }
        |        ]
        |      }

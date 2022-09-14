@@ -62,7 +62,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-01-10",
        |            "dueDate" : "2018-12-07",
-       |            "paymentAmount" : 150
+       |            "amount" : 150
        |          }
        |        ]
        |      },
@@ -90,7 +90,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-03-10",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : -600
+       |            "amount" : -600
        |          }
        |        ]
        |      },
@@ -118,7 +118,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-04-14",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : 200
+       |            "amount" : 200
        |          }
        |        ]
        |      },
@@ -146,7 +146,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-06-28",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : -550
+       |            "amount" : -550
        |          }
        |        ]
        |      },
@@ -174,7 +174,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : 150
+       |            "amount" : 150
        |          }
        |        ]
        |      },
@@ -202,7 +202,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : -150
+       |            "amount" : -150
        |          }
        |        ]
        |      },
@@ -230,7 +230,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-11-10",
        |            "dueDate" : "2018-11-10",
-       |            "paymentAmount" : 150
+       |            "amount" : 150
        |          }
        |        ]
        |      },
@@ -258,7 +258,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-06-10",
        |            "dueDate" : "2018-06-10",
-       |            "paymentAmount" : -150
+       |            "amount" : -150
        |          }
        |        ]
        |      },
@@ -286,7 +286,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : 1000
+       |            "amount" : 1000
        |          }
        |        ]
        |      },
@@ -314,7 +314,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : 1000
+       |            "amount" : 1000
        |          }
        |        ]
        |      },
@@ -342,7 +342,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : 150
+       |            "amount" : 150
        |          }
        |        ]
        |      },
@@ -370,7 +370,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-12-15",
        |            "dueDate" : "2018-09-07",
-       |            "paymentAmount" : 400
+       |            "amount" : 400
        |          }
        |        ]
        |      },
@@ -398,7 +398,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-10-07",
        |            "dueDate" : "2018-10-08",
-       |            "paymentAmount" : 555
+       |            "amount" : 555
        |          }
        |        ]
        |      },
@@ -426,7 +426,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
        |            "subItem" : "000",
        |            "clearingDate" : "2018-10-07",
        |            "dueDate" : "2018-10-08",
-       |            "paymentAmount" : -555
+       |            "amount" : -555
        |          }
        |        ]
        |      }

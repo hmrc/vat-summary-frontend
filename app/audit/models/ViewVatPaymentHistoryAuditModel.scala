@@ -22,7 +22,7 @@ import models.viewModels.PaymentsHistoryModel
 import play.api.libs.json.{JsValue, Json, Writes}
 
 case class ViewVatPaymentHistoryAuditModel(vrn: String,
-                                                payments: Seq[PaymentsHistoryModel]) extends ExtendedAuditModel {
+                                           payments: Seq[PaymentsHistoryModel]) extends ExtendedAuditModel {
 
   override val auditType: String = "PageHistoryPageView"
 
@@ -30,11 +30,11 @@ case class ViewVatPaymentHistoryAuditModel(vrn: String,
 
   case class PaymentHistoryDetails(vrn: String,
                                    clearingSAPDocument: Option[String],
-                                           chargeType: String,
-                                           periodFrom: Option[LocalDate],
-                                           periodTo: Option[LocalDate],
-                                           clearingDate: Option[LocalDate],
-                                           paymentAmount: BigDecimal)
+                                   chargeType: String,
+                                   periodFrom: Option[LocalDate],
+                                   periodTo: Option[LocalDate],
+                                   clearingDate: Option[LocalDate],
+                                   amount: BigDecimal)
 
   implicit val auditPaymentsHistoryWrites: Writes[PaymentHistoryDetails] = Json.writes[PaymentHistoryDetails]
 

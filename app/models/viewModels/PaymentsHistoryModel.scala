@@ -56,7 +56,7 @@ object PaymentsHistoryModel {
   private[models] def generatePaymentModel(chargeType: ChargeType,
                                            subItem: TransactionSubItem,
                                            transaction: JsValue): Option[PaymentsHistoryModel] =
-    (chargeType.value, subItem.paymentAmount) match {
+    (chargeType.value, subItem.amount) match {
       case (PaymentOnAccount.value, _) if subItem.clearingReason.map(_.toLowerCase).contains(allocatedCharge) => None
       case (PaymentOnAccount.value, _) if subItem.clearingReason.isEmpty =>
         Some(PaymentsHistoryModel(
