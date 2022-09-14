@@ -20,7 +20,7 @@ import java.net.URLEncoder
 
 import play.api.http.SecretConfiguration
 import play.api.libs.crypto.DefaultCookieSigner
-import uk.gov.hmrc.crypto.{CompositeSymmetricCrypto, PlainText}
+import uk.gov.hmrc.crypto.{SymmetricCryptoFactory, PlainText}
 
 object SessionCookieBaker {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="
@@ -36,7 +36,7 @@ object SessionCookieBaker {
     }
 
     val encodedCookie = encode(sessionData)
-    val encrypted = CompositeSymmetricCrypto.aesGCM(cookieKey, Seq()).encrypt(encodedCookie).value
+    val encrypted = SymmetricCryptoFactory.aesGcmCrypto(cookieKey).encrypt(encodedCookie).value
     val langValue = lang.fold("")(l => s"PLAY_LANG=$l;")
 
     s"""mdtp="$encrypted"; Path=/; HTTPOnly"; Path=/; HTTPOnly; $langValue"""

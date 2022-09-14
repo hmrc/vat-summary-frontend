@@ -81,7 +81,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockPrincipalAuth()
           mockServiceInfoCall()
-          mockWYOSessionServiceCall(Some(wyoEstimatedIntDBModel))
+          mockWYOSessionServiceCall(Some(wyoEstimatedLPP1DBModel))
           controller.showBreakdown(id)(fakeRequestWithSession)
         }
 
@@ -91,7 +91,7 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
         "load the correct page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
-          document.select("#estimated-interest-heading") should exist
+          document.select("#estimated-LPP1-heading") should exist
         }
       }
 
