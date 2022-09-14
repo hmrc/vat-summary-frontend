@@ -20,14 +20,14 @@ import config.AppConfig
 import controllers.AuthorisedController
 import javax.inject.Inject
 import common.{ChargeViewModelTypes => types}
-import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, StandardChargeViewModel}
+import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, EstimatedInterestViewModel, EstimatedLPP1ViewModel, StandardChargeViewModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{ServiceInfoService, WYOSessionService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.{NotFound, PaymentsError}
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView, EstimatedLPP1View}
 
 import scala.concurrent.ExecutionContext
 
@@ -37,6 +37,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           wyoSessionService: WYOSessionService,
                                           chargeBreakdownView: ChargeTypeDetailsView,
                                           estimatedInterestView: EstimatedInterestView,
+                                          estimatedLPP1View: EstimatedLPP1View,
                                           errorView: PaymentsError,
                                           notFound: NotFound,
                                           crystallisedInterestView: CrystallisedInterestView,
@@ -57,6 +58,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
               case types.estimated => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
               case types.crystallised => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
               case types.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
+              case types.estimatedLPP1 => Ok(estimatedLPP1View(m.data.as[EstimatedLPP1ViewModel], navLinks))
               case _ =>
                 logger.warn("[ChargeBreakdownController][showBreakdown] Retrieved model type was unknown")
                 InternalServerError(errorView())

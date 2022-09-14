@@ -22,14 +22,14 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
 import views.html.errors.{NotFound, PaymentsError}
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView, EstimatedLPP1View}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
     authorisedController, mcc, mockServiceInfoService, mockWYOSessionService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
-    injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
+    injector.instanceOf[EstimatedLPP1View], injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
     injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View]
   )
   val id: String = "1234569"
@@ -58,6 +58,25 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
       }
 
       "the retrieved model is an EstimatedInterestViewModel" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockWYOSessionServiceCall(Some(wyoEstimatedIntDBModel))
+          controller.showBreakdown(id)(fakeRequestWithSession)
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the correct page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.select("#estimated-interest-heading") should exist
+        }
+      }
+
+      "the retrieved model is an EstimatedLPP1ViewModel" should {
 
         lazy val result = {
           mockPrincipalAuth()

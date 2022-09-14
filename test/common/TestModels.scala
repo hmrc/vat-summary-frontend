@@ -726,6 +726,7 @@ object TestModels {
 
   val wyoStandardDBModel: WYODatabaseModel = wyoDBModel(standard, standardChargeModelMaxJson)
   val wyoEstimatedIntDBModel: WYODatabaseModel = wyoDBModel(estimated, estimatedInterestJson)
+  val wyoEstimatedLPP1DBModel: WYODatabaseModel = wyoDBModel(estimatedLPP1, estimatedLPP1Json)
   val wyoCrystallisedIntDBModel: WYODatabaseModel = wyoDBModel(crystallised, crystallisedInterestJson)
   val wyoCrystallisedLPP1DBModel: WYODatabaseModel = wyoDBModel(crystallisedLPP1, crystallisedLPP1JsonMax)
 

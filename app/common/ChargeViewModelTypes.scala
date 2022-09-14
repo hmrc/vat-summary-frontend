@@ -20,6 +20,7 @@ object ChargeViewModelTypes {
 
     val standard = "StandardChargeViewModel"
     val estimated = "EstimatedInterestViewModel"
+    val estimatedLPP1 = "EstimatedLPP1ViewModel"
     val crystallised = "CrystallisedInterestViewModel"
     val crystallisedLPP1 = "CrystallisedLPP1ViewModel"
 

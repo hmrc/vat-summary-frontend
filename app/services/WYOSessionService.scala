@@ -35,6 +35,7 @@ class WYOSessionService @Inject()(repository: WYOSessionRepository) {
       val json = model match {
         case m: StandardChargeViewModel => Json.toJson(m)
         case m: EstimatedInterestViewModel => Json.toJson(m)
+        case m: EstimatedLPP1ViewModel => Json.toJson(m)
         case m: CrystallisedInterestViewModel => Json.toJson(m)
         case m: CrystallisedLPP1ViewModel => Json.toJson(m)
         case m: CrystallisedLPP2ViewModel => Json.toJson(m)
