@@ -19,8 +19,10 @@ package testOnly.controllers
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
+import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.AuthorisedController
 import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
+import models.penalties.{LPPDetails, PenaltyDetails}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -81,7 +83,6 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   }
 
   private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] = {
-
     payments collect {
       case p: PaymentWithPeriod if
         p.chargeType.isInterest
@@ -156,5 +157,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       None
     }
   }
+
+  def findPenaltyCharge(chargeReference: String, penaltyType: String, penalties: Seq[LPPDetails]): Option[LPPDetails] =
+    penalties.find(pen =>
+      pen.principalChargeReference == chargeReference && penaltyType == pen.penaltyCategory
+    )
 
 }

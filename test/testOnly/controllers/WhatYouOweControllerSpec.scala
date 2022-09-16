@@ -322,4 +322,41 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "The findPenaltyCharge method" when {
+
+    val chargeReference = "ABCDEFGHIJKLMNOP"
+    val penaltyType = "LPP1"
+
+    "there is a penalty with a matching reference and charge type" should {
+
+      "return that penalty" in {
+        val res = controller.findPenaltyCharge(chargeReference, penaltyType, Seq(LPPDetailsModelMin, LPPDetailsModelMin))
+        res shouldBe Some(LPPDetailsModelMin)
+      }
+
+    }
+
+    "the reference does not match" should {
+
+      val model = LPPDetailsModelMin.copy(principalChargeReference = "FLJDHGKDJFH")
+
+      "return None" in {
+        val res = controller.findPenaltyCharge(chargeReference, penaltyType, Seq(model))
+        res shouldBe None
+      }
+    }
+
+    "the penalty type does not match" should {
+
+      val model = LPPDetailsModelMin.copy(penaltyCategory = "GHDFKLUJSHDFG")
+
+      "return None" in {
+        val res = controller.findPenaltyCharge(chargeReference, penaltyType, Seq(model))
+        res shouldBe None
+      }
+
+    }
+
+  }
 }
