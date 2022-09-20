@@ -53,7 +53,9 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           chargeReference = Some("XD002750002155"),
-          originalAmount = Some(10000)
+          originalAmount = Some(10000),
+          accruedPenaltyAmount = None,
+          penaltyType = None
         ),
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
@@ -65,7 +67,9 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           chargeReference = Some("XD002750002155"),
-          originalAmount = Some(10000)
+          originalAmount = Some(10000),
+          accruedPenaltyAmount = None,
+          penaltyType = None
         )
       )))
 

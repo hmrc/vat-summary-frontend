@@ -35,6 +35,8 @@ sealed trait Payment extends Obligation {
   val ddCollectionInProgress: Boolean
   val auditDetails: Map[String, String]
   val accruedInterestAmount: Option[BigDecimal]
+  val accruedPenaltyAmount: Option[BigDecimal]
+  val penaltyType: Option[String]
 
   val hasAccruedInterest: Boolean         = accruedInterestAmount.getOrElse(BigDecimal(0)) > 0
   val showEstimatedInterest: Boolean      = hasAccruedInterest && interestChargeMapping.contains(this.chargeType)
@@ -51,6 +53,8 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              chargeReference: Option[String],
                              ddCollectionInProgress: Boolean,
                              accruedInterestAmount: Option[BigDecimal],
+                             accruedPenaltyAmount: Option[BigDecimal],
+                             penaltyType: Option[String],
                              originalAmount: Option[BigDecimal] = None,
                              clearedAmount: Option[BigDecimal] = None) extends Payment {
 
@@ -70,6 +74,8 @@ case class PaymentNoPeriod(chargeType: ChargeType,
                            chargeReference: Option[String],
                            ddCollectionInProgress: Boolean,
                            accruedInterestAmount: Option[BigDecimal],
+                           accruedPenaltyAmount: Option[BigDecimal],
+                           penaltyType: Option[String],
                            originalAmount: Option[BigDecimal] = None,
                            clearedAmount: Option[BigDecimal] = None) extends Payment {
 
@@ -91,13 +97,17 @@ object Payment {
                             chargeReference: Option[String],
                             ddCollectionInProgress: Boolean,
                             accruedInterestAmount: Option[BigDecimal],
+                            accruedPenaltyAmount: Option[BigDecimal],
+                            penaltyType: Option[String],
                             originalAmount: Option[BigDecimal],
                             clearedAmount: Option[BigDecimal]): Payment =
     (periodFrom, periodTo) match {
       case (Some(s), Some(e)) =>
-        apply(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress, accruedInterestAmount, originalAmount, clearedAmount)
+        apply(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference,
+          ddCollectionInProgress, accruedInterestAmount, accruedPenaltyAmount, penaltyType, originalAmount, clearedAmount)
       case (None, None) =>
-        apply(chargeType, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress, accruedInterestAmount, originalAmount, clearedAmount)
+        apply(chargeType, due, outstandingAmount, periodKey, chargeReference,
+          ddCollectionInProgress, accruedInterestAmount, accruedPenaltyAmount, penaltyType, originalAmount, clearedAmount)
       case (s, e) =>
         throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
   }
@@ -111,6 +121,8 @@ object Payment {
             chargeReference: Option[String],
             ddCollectionInProgress: Boolean,
             accruedInterestAmount: Option[BigDecimal],
+            accruedPenaltyAmount: Option[BigDecimal],
+            penaltyType: Option[String],
             originalAmount: Option[BigDecimal],
             clearedAmount: Option[BigDecimal]): PaymentWithPeriod =
     PaymentWithPeriod(
@@ -123,6 +135,8 @@ object Payment {
       chargeReference,
       ddCollectionInProgress,
       accruedInterestAmount,
+      accruedPenaltyAmount,
+      penaltyType,
       originalAmount,
       clearedAmount
     )
@@ -135,7 +149,9 @@ object Payment {
             periodKey: Option[String],
             chargeReference: Option[String],
             ddCollectionInProgress: Boolean,
-            accruedInterestAmount: Option[BigDecimal]): PaymentWithPeriod =
+            accruedInterestAmount: Option[BigDecimal],
+            accruedPenaltyAmount: Option[BigDecimal],
+            penaltyType: Option[String]): PaymentWithPeriod =
     PaymentWithPeriod(
       chargeType,
       periodFrom,
@@ -145,7 +161,9 @@ object Payment {
       periodKey,
       chargeReference,
       ddCollectionInProgress,
-      accruedInterestAmount
+      accruedInterestAmount,
+      accruedPenaltyAmount,
+      penaltyType
     )
 
   def apply(chargeType: ChargeType,
@@ -154,9 +172,12 @@ object Payment {
             periodKey: Option[String],
             chargeReference: Option[String],
             ddCollectionInProgress: Boolean,
+            accruedInterestAmount: Option[BigDecimal],
+            accruedPenaltyAmount: Option[BigDecimal],
+            penaltyType: Option[String],
             originalAmount: Option[BigDecimal],
             clearedAmount: Option[BigDecimal],
-            accruedInterestAmount: Option[BigDecimal]): PaymentNoPeriod =
+            ): PaymentNoPeriod =
     PaymentNoPeriod(
       chargeType,
       due,
@@ -164,9 +185,11 @@ object Payment {
       periodKey,
       chargeReference,
       ddCollectionInProgress,
+      accruedInterestAmount,
+      accruedPenaltyAmount,
+      penaltyType,
       originalAmount,
-      clearedAmount,
-      accruedInterestAmount
+      clearedAmount
     )
 
   def apply(chargeType: ChargeType,
@@ -175,7 +198,9 @@ object Payment {
             periodKey: Option[String],
             chargeReference: Option[String],
             ddCollectionInProgress: Boolean,
-            accruedInterestAmount: Option[BigDecimal]): PaymentNoPeriod =
+            accruedInterestAmount: Option[BigDecimal],
+            accruedPenaltyAmount: Option[BigDecimal],
+            penaltyType: Option[String]): PaymentNoPeriod =
     PaymentNoPeriod(
       chargeType,
       due,
@@ -183,7 +208,9 @@ object Payment {
       periodKey,
       chargeReference,
       ddCollectionInProgress,
-      accruedInterestAmount
+      accruedInterestAmount,
+      accruedPenaltyAmount,
+      penaltyType
     )
 
   implicit val paymentReads: Reads[Payment] = (
@@ -196,6 +223,8 @@ object Payment {
     (JsPath \ "chargeReference").readNullable[String] and
     (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false)) and
     (JsPath \ "accruedInterest").readNullable[BigDecimal] and
+    (JsPath \ "accruedPenaltyAmount").readNullable[BigDecimal] and
+    (JsPath \ "penaltyType").readNullable[String] and
     (JsPath \ "originalAmount").readNullable[BigDecimal] and
     (JsPath \ "clearedAmount").readNullable[BigDecimal]
 

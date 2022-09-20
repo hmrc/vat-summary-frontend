@@ -56,7 +56,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = None,
+          penaltyType = None
         )
         paymentJson.as[Payment] shouldBe paymentWithPeriodModel
       }
@@ -85,7 +87,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = None,
+          penaltyType = None
         )
         paymentJson.as[Payment] shouldBe paymentNoPeriodModel
       }
@@ -141,7 +145,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         periodKey = Some("#001"),
         Some("XD002750002155"),
         ddCollectionInProgress = true,
-        accruedInterestAmount = Some(BigDecimal(2))
+        accruedInterestAmount = Some(BigDecimal(2)),
+        accruedPenaltyAmount = None,
+        penaltyType = None
       )
 
       "read from json correctly" in {
@@ -214,6 +220,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           Some("XD002750002155"),
           ddCollectionInProgress = true,
           accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = None,
+          penaltyType = None,
           originalAmount = Some(10000),
           clearedAmount = Some(100)
         )
@@ -251,6 +259,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           Some("XD002750002155"),
           ddCollectionInProgress = true,
           accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = None,
+          penaltyType = None,
           originalAmount = Some(10000),
           clearedAmount = Some(100)
         )

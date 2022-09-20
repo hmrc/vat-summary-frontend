@@ -47,7 +47,9 @@ object TestModels {
     Some("#001"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2))
+    accruedInterestAmount = Some(BigDecimal(2)),
+    accruedPenaltyAmount = None,
+    penaltyType = None
   )))
 
   val payment: PaymentWithPeriod = Payment(
@@ -61,7 +63,9 @@ object TestModels {
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
     originalAmount = Some(1000.00),
-    clearedAmount = Some(00.00)
+    clearedAmount = Some(00.00),
+    accruedPenaltyAmount = None,
+    penaltyType = None
   )
 
   val paymentNoAccInterest: PaymentWithPeriod = payment.copy(accruedInterestAmount = Some(0))
@@ -75,6 +79,8 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
+    accruedPenaltyAmount = None,
+    penaltyType = None,
     originalAmount = Some(1000.00),
     clearedAmount = Some(00.00)
   )
@@ -90,7 +96,9 @@ object TestModels {
     None,
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2))
+    accruedInterestAmount = Some(BigDecimal(2)),
+    accruedPenaltyAmount = None,
+    penaltyType = None
   )
 
   val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(

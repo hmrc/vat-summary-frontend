@@ -34,7 +34,9 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
       Some("#001"),
       Some("XD002750002155"),
       ddCollectionInProgress = false,
-      Some(2)
+      Some(2),
+      Some(BigDecimal(100.00)),
+      Some("LPP1")
     )
 
     val exampleInputString =
@@ -46,7 +48,9 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":9999,
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
-        |"accruedInterest": 2
+        |"accruedInterest": 2,
+        |"accruedPenaltyAmount" : 100.00,
+        |"penaltyType" : "LPP1"
         |}"""
         .stripMargin.replace("\n", "")
 
@@ -70,7 +74,9 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          Some(2)
+          Some(2),
+          Some(BigDecimal(100.00)),
+          Some("LPP1")
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -81,7 +87,9 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           Some("#002"),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          Some(2)
+          Some(2),
+          Some(BigDecimal(100.00)),
+          Some("LPP1")
         )
       )
     )
@@ -96,7 +104,9 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":9999,
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
-        |"accruedInterest": 2
+        |"accruedInterest": 2,
+        |"accruedPenaltyAmount" : 100.00,
+        |"penaltyType" : "LPP1"
         |},{
         |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
@@ -105,7 +115,9 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":7777,
         |"periodKey":"#002",
         |"chargeReference": "XD002750002155",
-        |"accruedInterest": 2
+        |"accruedInterest": 2,
+        |"accruedPenaltyAmount" : 100.00,
+        |"penaltyType" : "LPP1"
         |}]}"""
         .stripMargin.replace("\n", "")
 

@@ -49,7 +49,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2))
+        accruedInterestAmount = Some(BigDecimal(2)),
+        accruedPenaltyAmount = Some(BigDecimal(100.00)),
+        penaltyType = Some("LPP1")
       )
     )
 
@@ -63,7 +65,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2))
+        accruedInterestAmount = Some(BigDecimal(2)),
+        accruedPenaltyAmount = Some(BigDecimal(100.00)),
+        penaltyType = Some("LPP1")
       ),
       PaymentWithPeriod(
         CentralAssessmentCharge,
@@ -74,7 +78,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         periodKey = Some("#003"),
         chargeReference = Some("XD002750002155"),
         ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2))
+        accruedInterestAmount = Some(BigDecimal(2)),
+        accruedPenaltyAmount = Some(BigDecimal(100.00)),
+        penaltyType = Some("LPP1")
       )
     )
 

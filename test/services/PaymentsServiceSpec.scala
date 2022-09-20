@@ -54,7 +54,9 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          penaltyType = Some("LPP1")
         )
         val payment2 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -65,7 +67,9 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          penaltyType = Some("LPP1")
         )
         val payment3 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -76,7 +80,9 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          penaltyType = Some("LPP1")
         )
         val payment4 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -87,7 +93,9 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          penaltyType = Some("LPP1")
         )
 
         val payments = Payments(Seq(payment1, payment2, payment3, payment4))
@@ -117,7 +125,9 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some(""),
           Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2))
+          accruedInterestAmount = Some(BigDecimal(2)),
+          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          penaltyType = Some("LPP1")
         )))
         lazy val responseFromFinancialDataConnector = Right(payments)
 
