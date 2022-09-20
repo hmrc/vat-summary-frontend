@@ -21,13 +21,13 @@
 @import views.html.templates.formatters.money.DisplayMoney
 
 @this(govukTable: GovukTable,
+      govukTabs : GovukTabs,
       paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription,
       openInNewTab: OpenInNewTab,
       displayMoney: DisplayMoney)
 
 @(years: Seq[Int],
-  transactions: Seq[PaymentsHistoryModel],
-  showPreviousPaymentsTab: Boolean)(implicit messages: Messages, appConfig: AppConfig, user: User)
+  transactions: Seq[PaymentsHistoryModel])(implicit messages: Messages, appConfig: AppConfig, user: User)
 
 @for(year <- years) {
   <div id="year-@year" class="govuk-tabs__panel@if(year != years.head) { govuk-tabs__panel--hidden}">
@@ -64,19 +64,6 @@
       <p class="govuk-body">@messages("paymentsHistory.noCurrentYearHistory")</p>
     }
     </div>
-}
-
-@if(showPreviousPaymentsTab) {
-  <div id="previous-payments" class="govuk-tabs__panel">
-    <p class="govuk-body">
-      @messages("paymentsHistory.previousPayments.youCan")
-      @openInNewTab(
-        link = appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn),
-        linkText = messages("paymentsHistory.previousPayments.viewPreviousPayments")
-      )
-      @messages("paymentsHistory.previousPayments.beforeMtd")
-    </p>
-  </div>
 }
 
 <noscript>

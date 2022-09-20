@@ -19,7 +19,7 @@
 
 @this(mainTemplate: MainTemplate,
       paymentsHistoryTabs: PaymentsHistoryTabs,
-      paymentsHistoryTabsContent: PaymentsHistoryTabsContent,
+      paymentsHistoryTabsContent: NewPaymentHistoryTabsContent,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukTabs: GovukTabs,
       govukBackLink: GovukBackLink,
@@ -52,6 +52,34 @@
 
 @additionalYears = @{
   (model.tabTwo.fold(Seq[Int]())(year=>Seq(year)) ++ model.tabThree.fold(Seq[Int]())(year=>Seq(year+1, year))).distinct
+}
+
+@allYears = @{
+Seq(model.tabOne) ++ additionalYears
+}
+
+@paymentHistoryItems = @{
+    val panels = allYears.map { year =>
+        TabItem(
+            id = Some(s"past-payments-$year"),
+            label = year.toString,
+            panel = TabPanel(
+                content = HtmlContent(paymentsHistoryTabsContent(model, year))
+            )
+        )
+    }
+
+    if(model.previousPaymentsTab) {
+        panels ++ Seq(TabItem(
+            id = Some("previous-payments"),
+            label = messages("paymentsHistory.previousPayments.heading"),
+            panel = TabPanel(
+                content = HtmlContent(paymentsHistoryTabs(model, additionalYears))
+            )
+        ))
+    } else {
+        panels
+    }
 }
 
 @mainTemplate(
@@ -87,17 +115,13 @@
         <div class="govuk-inset-text govuk-form-group">@messages("paymentsHistory.insolvencyNotice")</div>
       }
 
-      <div class="govuk-tabs" data-module="govuk-tabs">
-        @paymentsHistoryTabs(
-          Seq(model.tabOne) ++ additionalYears,
-          model.previousPaymentsTab && !user.isAgent
-        )
-        @paymentsHistoryTabsContent(
-          Seq(model.tabOne) ++ additionalYears,
-          model.transactions,
-          model.previousPaymentsTab && !user.isAgent
-        )
-      </div>
+      @govukTabs(Tabs(
+        items = paymentHistoryItems
+      ))
+
+      @for(year <- allYears) {
+
+      }
     </div>
   </div>
 }
