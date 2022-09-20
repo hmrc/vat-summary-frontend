@@ -176,7 +176,7 @@ object Payment {
             accruedPenaltyAmount: Option[BigDecimal],
             penaltyType: Option[String],
             originalAmount: Option[BigDecimal],
-            clearedAmount: Option[BigDecimal],
+            clearedAmount: Option[BigDecimal]
             ): PaymentNoPeriod =
     PaymentNoPeriod(
       chargeType,
