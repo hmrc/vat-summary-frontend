@@ -17,6 +17,7 @@
 package views.templates
 
 import mocks.MockAppConfig
+import models.User
 import org.jsoup.Jsoup
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -34,6 +35,7 @@ class TemplateBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneApp
   implicit val mockAppConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val messages: MessagesImpl = MessagesImpl(Lang("en-GB"), messagesApi)
   lazy implicit val lang: Lang = injector.instanceOf[Lang]
+  implicit val user: User = User("999999999")
 
   def formatHtml(body: Html): String = Jsoup.parseBodyFragment(s"\n$body\n").toString.trim
 }

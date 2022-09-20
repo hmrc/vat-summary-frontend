@@ -15,55 +15,51 @@
  *@
 
 @import config.AppConfig
+@import java.time.LocalDate
 @import models.viewModels.PaymentsHistoryModel
 @import views.html.templates.formatters.links.OpenInNewTab
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.html.templates.formatters.money.DisplayMoney
+@import models.viewModels.PaymentsHistoryViewModel
 
-@this(govukTable: GovukTable,
-      govukTabs : GovukTabs,
-      paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription,
-      openInNewTab: OpenInNewTab,
-      displayMoney: DisplayMoney)
+@this(govukTabs : GovukTabs,
+govukTable : GovukTable, paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription, displayMoney: DisplayMoney)
 
-@(years: Seq[Int],
-  transactions: Seq[PaymentsHistoryModel])(implicit messages: Messages, appConfig: AppConfig, user: User)
+@(model: PaymentsHistoryViewModel, year: Int)(implicit messages: Messages,
+appConfig: AppConfig,
+user: User)
 
-@for(year <- years) {
-  <div id="year-@year" class="govuk-tabs__panel@if(year != years.head) { govuk-tabs__panel--hidden}">
-    @if(transactions.exists(_.clearedDate.getOrElse("").toString.contains(year.toString))) {
-      @govukTable(Table(
+@if(model.transactions.exists(_.clearedDate.getOrElse("").toString.contains(year.toString))) {
+    @govukTable(Table(
         head = Some(Seq(
-          HeadCell(content = Text(messages("paymentsHistory.date"))),
-          HeadCell(content = Text(messages("paymentsHistory.description"))),
-          HeadCell(content = if(user.isAgent) Text(messages("paymentsHistory.youPaidAgent")) else Text(messages("paymentsHistory.youPaid")), format = Some("numeric")),
-          HeadCell(content = if(user.isAgent) Text(messages("paymentsHistory.paidYouAgent")) else Text(messages("paymentsHistory.paidYou")), format = Some("numeric"))
+            HeadCell(content = Text(messages("paymentsHistory.date"))),
+            HeadCell(content = Text(messages("paymentsHistory.description"))),
+            HeadCell(content = if(user.isAgent) Text(messages("paymentsHistory.youPaidAgent")) else Text(messages("paymentsHistory.youPaid")), format = Some("numeric")),
+            HeadCell(content = if(user.isAgent) Text(messages("paymentsHistory.paidYouAgent")) else Text(messages("paymentsHistory.paidYou")), format = Some("numeric"))
         )),
-        rows = transactions
-                .filter(_.clearedDate.getOrElse("").toString.contains(year.toString))
-                .sortBy(_.clearedDate.toString).reverse.map { transaction =>
-          transaction.clearedDate match {
-            case Some(date) =>
-              Seq(
-                TableRow(content = Text(displayDate(date, useShortDayFormat = true, showYear = false))),
-                TableRow(content = HtmlContent(paymentsHistoryChargeDescription(transaction))),
-                TableRow(
-                  content = HtmlContent(displayMoney(if(transaction.amount > 0) transaction.amount else 0)),
-                  format = Some("numeric")
-                ),
-                TableRow(
-                  content = HtmlContent(displayMoney(if(transaction.amount < 0) transaction.amount.abs else 0)),
-                  format = Some("numeric")
-                )
-              )
-            case None => Seq()
-          }
+        rows = model.transactions
+        .filter(_.clearedDate.getOrElse("").toString.contains(year.toString))
+        .sortBy(_.clearedDate.toString).reverse.map { transaction =>
+            transaction.clearedDate match {
+                case Some(date) =>
+                    Seq(
+                        TableRow(content = Text(displayDate(date, useShortDayFormat = true, showYear = false))),
+                        TableRow(content = HtmlContent(paymentsHistoryChargeDescription(transaction))),
+                        TableRow(
+                            content = HtmlContent(displayMoney(if(transaction.amount > 0) transaction.amount else 0)),
+                            format = Some("numeric")
+                        ),
+                        TableRow(
+                            content = HtmlContent(displayMoney(if(transaction.amount < 0) transaction.amount.abs else 0)),
+                            format = Some("numeric")
+                        )
+                    )
+                case None => Seq()
+            }
         }
-      ))
-    } else {
-      <p class="govuk-body">@messages("paymentsHistory.noCurrentYearHistory")</p>
-    }
-    </div>
+    ))
+} else {
+    <p class="govuk-body">@messages("paymentsHistory.noCurrentYearHistory")</p>
 }
 
 <noscript>

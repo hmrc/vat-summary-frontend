@@ -19,7 +19,7 @@
 
 @this(mainTemplate: MainTemplate,
       paymentsHistoryTabs: PaymentsHistoryTabs,
-      paymentsHistoryTabsContent: NewPaymentHistoryTabsContent,
+      paymentsHistoryTabsContent: PaymentsHistoryTabsContent,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukTabs: GovukTabs,
       govukBackLink: GovukBackLink,
@@ -69,12 +69,12 @@ Seq(model.tabOne) ++ additionalYears
         )
     }
 
-    if(model.previousPaymentsTab) {
+    if(model.previousPaymentsTab && !user.isAgent) {
         panels ++ Seq(TabItem(
             id = Some("previous-payments"),
             label = messages("paymentsHistory.previousPayments.heading"),
             panel = TabPanel(
-                content = HtmlContent(paymentsHistoryTabs(model, additionalYears))
+                content = HtmlContent(paymentsHistoryTabs())
             )
         ))
     } else {
@@ -118,10 +118,6 @@ Seq(model.tabOne) ++ additionalYears
       @govukTabs(Tabs(
         items = paymentHistoryItems
       ))
-
-      @for(year <- allYears) {
-
-      }
     </div>
   </div>
 }

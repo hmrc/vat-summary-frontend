@@ -41,11 +41,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val btaBreadcrumbLink = "li.govuk-breadcrumbs__list-item:nth-child(1) a"
     val vatBreadcrumb = "li.govuk-breadcrumbs__list-item:nth-child(2)"
     val vatBreadcrumbLink = "li.govuk-breadcrumbs__list-item:nth-child(2) a"
-    val tabOne = "li.govuk-tabs__list-item:nth-child(1) a"
-    val tabTwo = "li.govuk-tabs__list-item:nth-child(2) a"
-    val tabThree = "li.govuk-tabs__list-item:nth-child(3) a"
-    val tabFour = "li.govuk-tabs__list-item:nth-child(4) a"
-    val previousYearNoPayments = "#year-2017 > p"
+    val currentYearTab = "li.govuk-tabs__list-item:nth-child(1) a"
+    val previousYearTab = "li.govuk-tabs__list-item:nth-child(2) a"
+    val twoYearsAgoTab = "li.govuk-tabs__list-item:nth-child(3) a"
+    val previousPaymentsTab = "li.govuk-tabs__list-item:nth-child(4) a"
+    val previousYearNoPayments = "#past-payments-2017 > p"
     val prevPaymentsParagraph = "#previous-payments > p"
     val prevPaymentsLink: String = prevPaymentsParagraph + " > a"
     val paymentDateTableHeading = "tr th:nth-of-type(1) div"
@@ -129,19 +129,19 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "display a current year tab" in {
-        elementText(Selectors.tabOne) shouldBe currentYear.toString
+        elementText(Selectors.currentYearTab) shouldBe currentYear.toString
       }
 
       "display a previous year tab" in {
-        elementText(Selectors.tabTwo) shouldBe (currentYear - 1).toString
+        elementText(Selectors.previousYearTab) shouldBe (currentYear - 1).toString
       }
 
       "display a tab for 2 years ago" in {
-        elementText(Selectors.tabThree) shouldBe (currentYear - 2).toString
+        elementText(Selectors.twoYearsAgoTab) shouldBe (currentYear - 2).toString
       }
 
       "display a previous payments tab" in {
-        elementText(Selectors.tabFour) shouldBe "Previous payments"
+        elementText(Selectors.previousPaymentsTab) shouldBe "Previous payments"
       }
 
       "have the correct current year tab content" which {
@@ -270,19 +270,19 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "display a current year tab" in {
-        elementText(Selectors.tabOne) shouldBe currentYear.toString
+        elementText(Selectors.currentYearTab) shouldBe currentYear.toString
       }
 
       "display a previous year tab" in {
-        elementText(Selectors.tabTwo) shouldBe (currentYear - 1).toString
+        elementText(Selectors.previousYearTab) shouldBe (currentYear - 1).toString
       }
 
       "display a tab for 2 years ago" in {
-        elementText(Selectors.tabThree) shouldBe (currentYear - 2).toString
+        elementText(Selectors.twoYearsAgoTab) shouldBe (currentYear - 2).toString
       }
 
       "not display a 'Previous payments' tab, despite the previousPaymentsTab boolean being set to true" in {
-        elementExtinct(Selectors.tabFour)
+        elementExtinct(Selectors.previousPaymentsTab)
       }
 
       "have the correct current year tab content" which {
@@ -327,7 +327,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       }
 
       "not have the 'Previous payments' tab content, despite the previousPaymentsTab boolean being set to true" in {
-        elementExtinct(Selectors.prevPaymentsParagraph)
+        elementExtinct(Selectors.previousPaymentsTab)
       }
 
       "not display the insolvency banner" in {

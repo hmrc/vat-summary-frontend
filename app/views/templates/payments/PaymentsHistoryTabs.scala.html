@@ -19,9 +19,8 @@
 
 @this(openInNewTab: OpenInNewTab)
 
-@(model: PaymentsHistoryViewModel, years: Seq[Int])(implicit messages: Messages, appConfig: config.AppConfig, user: User)
+@()(implicit messages: Messages, appConfig: config.AppConfig, user: User)
 
-<h2 class="govuk-heading-m">@messages("paymentsHistory.previousPayments.heading")</h2>
 <p class="govuk-body" id="previous-payment">
     @messages("paymentsHistory.previousPayments.youCan")
     @openInNewTab(
