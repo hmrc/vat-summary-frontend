@@ -21,7 +21,7 @@ import connectors.{FinancialDataConnector, PaymentsConnector}
 
 import javax.inject.{Inject, Singleton}
 import models.errors._
-import models.payments.{PaymentDetailsModel, Payments}
+import models.payments.{PaymentDetailsModel, PaymentOnAccount, Payments}
 import models.viewModels.PaymentsHistoryModel
 import models.{DirectDebitStatus, ServiceResponse}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -35,7 +35,9 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
   def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] =
     financialDataConnector.getOpenPayments(vrn).map {
       case Right(payments) =>
-        val outstandingPayments = payments.financialTransactions.filter(_.outstandingAmount > 0)
+        val outstandingPayments = payments.financialTransactions
+          .filter(_.outstandingAmount > 0)
+          .filterNot(_.chargeType equals PaymentOnAccount)
         if(outstandingPayments.nonEmpty) {
           Right(Some(Payments(outstandingPayments.sortBy(_.due.toString).reverse)))
         } else {

@@ -20,8 +20,9 @@ import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
-import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
-import models.penalties.LPPDetails
+import models.payments.{ChargeType, Payment, PaymentWithPeriod}
+import models.penalties.{LPPDetails, PenaltyDetails}
+import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -59,7 +60,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
               payments match {
                 case Right(Some(payments)) =>
-                  constructViewModel(payments.financialTransactions.filterNot(_.chargeType equals PaymentOnAccount), mandationStatus) match {
+                  constructViewModel(payments.financialTransactions, mandationStatus) match {
                     case Some(model) =>
                       WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
                         Ok(view(model, serviceInfoContent))
@@ -101,7 +102,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case _ => Seq(charge)
   }}
 
-  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): CrystallisedInterestViewModel = {
+  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): CrystallisedInterestViewModel =
     CrystallisedInterestViewModel(
       periodFrom = payment.periodFrom,
       periodTo = payment.periodTo,
@@ -115,10 +116,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       chargeReference = payment.chargeReference.get,
       isPenalty = payment.chargeType.isPenaltyInterest
     )
-  }
 
-  private[controllers] def buildStandardChargeViewModel(payment: Payment): StandardChargeViewModel = {
-    import StandardChargeViewModel._
+  private[controllers] def buildStandardChargeViewModel(payment: Payment): StandardChargeViewModel =
     StandardChargeViewModel(
       chargeType = payment.chargeType.value,
       outstandingAmount = payment.outstandingAmount,
@@ -131,9 +130,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       periodFrom = periodFrom(payment),
       periodTo = periodTo(payment)
     )
-  }
 
-  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): EstimatedInterestViewModel = {
+  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): EstimatedInterestViewModel =
     EstimatedInterestViewModel(
       periodFrom = payment.periodFrom,
       periodTo = payment.periodTo,
@@ -142,7 +140,6 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       interestAmount = payment.accruedInterestAmount.get,
       isPenalty = payment.chargeType.isPenaltyInterest
     )
-  }
 
   def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
 
