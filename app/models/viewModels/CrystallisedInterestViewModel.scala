@@ -35,6 +35,7 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          isPenalty: Boolean) extends ChargeDetailsViewModel {
 
   override val outstandingAmount: BigDecimal = leftToPay
+  override val overdue: Boolean = isOverdue
 
   val makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (leftToPay * 100).toLong,
@@ -46,9 +47,7 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
     chargeReference = chargeReference
   ).url
 
-  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
-
-  def description(isAgent: Boolean)(implicit messages: Messages): String =
+  override def description(isAgent: Boolean)(implicit messages: Messages): String =
     PaymentMessageHelper.getCorrectDescription(
       PaymentMessageHelper.getChargeType(chargeType).principalUserDescription.getOrElse(""),
       PaymentMessageHelper.getChargeType(chargeType).agentDescription.getOrElse(""),

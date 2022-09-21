@@ -34,9 +34,7 @@ case class EstimatedLPP1ViewModel(part1Days: String,
 
   override val outstandingAmount: BigDecimal = penaltyAmount
 
-  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
-
-  def description(isAgent: Boolean)(implicit messages: Messages): String = PaymentMessageHelper.getCorrectDescription(
+  override def description(isAgent: Boolean)(implicit messages: Messages): String = PaymentMessageHelper.getCorrectDescription(
     PaymentMessageHelper.getChargeType(chargeType).principalUserDescription.getOrElse(""),
     PaymentMessageHelper.getChargeType(chargeType).agentDescription.getOrElse(""),
     Some(periodFrom),
