@@ -16,7 +16,9 @@
 
 package models.viewModels
 
+import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
+
 import java.time.LocalDate
 
 case class EstimatedLPP2ViewModel(day: String,
@@ -27,6 +29,7 @@ case class EstimatedLPP2ViewModel(day: String,
                                   chargeType: String) extends ChargeDetailsViewModel {
 
   override val outstandingAmount: BigDecimal = penaltyAmount
+  override def description(isAgent: Boolean)(implicit messages: Messages): String = "" //TODO: Add description
 }
 
 object EstimatedLPP2ViewModel {
