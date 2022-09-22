@@ -21,7 +21,7 @@ import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
 import models.payments.{ChargeType, Payment, PaymentWithPeriod}
-import models.penalties.{LPPDetails, PenaltyDetails}
+import models.penalties.LPPDetails
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
 import play.api.i18n.I18nSupport
@@ -33,6 +33,7 @@ import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.language.postfixOps
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      dateService: DateService,
@@ -58,9 +59,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             val mandationStatus = accountDetails.map(_.mandationStatus).getOrElse("")
 
             penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
-              payments match {
-                case Right(Some(payments)) =>
-                  constructViewModel(payments.financialTransactions, mandationStatus) match {
+              (payments, penaltyDetails) match {
+                case (Right(Some(payments)), Right(penalties)) =>
+                  constructViewModel(payments.financialTransactions, mandationStatus, penalties.LPPDetails) match {
                     case Some(model) =>
                       WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
                         Ok(view(model, serviceInfoContent))
@@ -69,11 +70,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                       logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
                       Future.successful(InternalServerError(paymentsError()))
                   }
-                case Right(_) =>
+                case (Right(_), _) =>
                   val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
                   Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus)))
-                case Left(error) =>
-                  logger.warn(s"[WhatYouOweController][show] Payments error: $error")
+                case (Left(_), _) | (_, Left(_)) =>
+                  logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
                   Future.successful(InternalServerError(paymentsError()))
               }
             }
@@ -82,70 +83,111 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
   }
 
-  private[controllers] def categoriseCharges(payments: Seq[Payment]): Seq[ChargeDetailsViewModel] = {
+  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
     payments collect {
-      case p: PaymentWithPeriod if
-        p.chargeType.isInterest
-        && p.chargeReference.isDefined
-        && p.originalAmount.isDefined => Seq(buildCrystallisedIntViewModel(p))
-
-      case p if
-        p.originalAmount.isDefined
-        && p.chargeType.notInterest => decideIfEstimatedInterest(p, buildStandardChargeViewModel(p))
+      case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
+      case p => buildChargePlusEstimates(p, penalties)
     } flatten
 
+  private[controllers] def buildChargePlusEstimates(charge: Payment,
+                                                    penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] = {
+    val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, penalties)
+    (charge, matchingPenalty) match {
+      case (p: PaymentWithPeriod, Some(penalty)) if p.showEstimatedInterest && p.showEstimatedPenalty =>
+        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, penalty))
+      case (p: PaymentWithPeriod, Some(penalty)) if p.showEstimatedPenalty =>
+        Seq(buildStandardChargeViewModel(p), buildEstimatedLPPViewModel(p, penalty))
+      case (p: PaymentWithPeriod, _) if p.showEstimatedInterest =>
+        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p))
+      case _ =>
+        Seq(buildStandardChargeViewModel(charge))
+    }
   }
 
-  private[controllers] def decideIfEstimatedInterest(p: Payment, charge: ChargeDetailsViewModel)
-    : Seq[ChargeDetailsViewModel] = { p match {
-      case p: PaymentWithPeriod if p.showEstimatedInterest => Seq(charge, buildEstimatedIntViewModel(p))
-      case _ => Seq(charge)
-  }}
+  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
+    (payment.chargeReference, payment.originalAmount) match {
+      case (Some(chargeRef), Some(originalAmount)) =>
+        Some(CrystallisedInterestViewModel(
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = payment.chargeType.value,
+          interestRate = 5.00, // TODO replace with API field
+          dueDate = payment.due,
+          interestAmount = originalAmount,
+          amountReceived = payment.clearedAmount.getOrElse(0),
+          leftToPay = payment.outstandingAmount,
+          isOverdue = payment.isOverdue(dateService.now()),
+          chargeReference = chargeRef,
+          isPenalty = payment.chargeType.isPenaltyInterest
+        ))
+      case _ => None
+    }
 
-  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): CrystallisedInterestViewModel =
-    CrystallisedInterestViewModel(
-      periodFrom = payment.periodFrom,
-      periodTo = payment.periodTo,
-      chargeType = payment.chargeType.value,
-      interestRate = 5.00, // TODO replace with API field
-      dueDate = payment.due,
-      interestAmount = payment.originalAmount.get,
-      amountReceived = payment.clearedAmount.getOrElse(0),
-      leftToPay = payment.outstandingAmount,
-      isOverdue = payment.isOverdue(dateService.now()),
-      chargeReference = payment.chargeReference.get,
-      isPenalty = payment.chargeType.isPenaltyInterest
-    )
+  private[controllers] def buildStandardChargeViewModel(payment: Payment): Option[StandardChargeViewModel] =
+    payment.originalAmount match {
+      case Some(originalAmount) =>
+        Some(StandardChargeViewModel(
+          chargeType = payment.chargeType.value,
+          outstandingAmount = payment.outstandingAmount,
+          originalAmount = originalAmount,
+          clearedAmount = payment.clearedAmount.getOrElse(0),
+          dueDate = payment.due,
+          periodKey = payment.periodKey,
+          isOverdue = payment.isOverdue(dateService.now()),
+          chargeReference = payment.chargeReference,
+          periodFrom = periodFrom(payment),
+          periodTo = periodTo(payment)
+        ))
+      case _ => None
+    }
 
-  private[controllers] def buildStandardChargeViewModel(payment: Payment): StandardChargeViewModel =
-    StandardChargeViewModel(
-      chargeType = payment.chargeType.value,
-      outstandingAmount = payment.outstandingAmount,
-      originalAmount = payment.originalAmount.get,
-      clearedAmount = payment.clearedAmount.getOrElse(0),
-      dueDate = payment.due,
-      periodKey = payment.periodKey,
-      isOverdue = payment.isOverdue(dateService.now()),
-      chargeReference = payment.chargeReference,
-      periodFrom = periodFrom(payment),
-      periodTo = periodTo(payment)
-    )
+  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
+    payment.accruedInterestAmount match {
+      case Some(interestAmnt) =>
+        Some(EstimatedInterestViewModel(
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
+          interestRate = 5.00, // TODO replace with API field
+          interestAmount = interestAmnt,
+          isPenalty = payment.chargeType.isPenaltyInterest
+        ))
+      case _ => None
+    }
 
-  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): EstimatedInterestViewModel =
-    EstimatedInterestViewModel(
-      periodFrom = payment.periodFrom,
-      periodTo = payment.periodTo,
-      chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
-      interestRate = 5.00, // TODO replace with API field
-      interestAmount = payment.accruedInterestAmount.get,
-      isPenalty = payment.chargeType.isPenaltyInterest
-    )
+  private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod, penaltyDetails: LPPDetails): Option[ChargeDetailsViewModel] =
+    (penaltyDetails, payment.accruedPenaltyAmount) match {
+      case (LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _), Some(penaltyAmnt)) =>
+        Some(EstimatedLPP1ViewModel(
+          part1Days = daysLR,
+          part2Days = daysHR,
+          part1PenaltyRate = rateLR,
+          part2PenaltyRate = rateHR,
+          part1UnpaidVAT = calcAmountLR,
+          penaltyAmount = penaltyAmnt,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value
+        ))
+      case (LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _), Some(penaltyAmnt)) =>
+        Some(EstimatedLPP2ViewModel(
+          day = daysLPP2,
+          penaltyRate = rateLPP2,
+          penaltyAmount = penaltyAmnt,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value
+        ))
+      case _ => None
+    }
 
-  def constructViewModel(payments: Seq[Payment], mandationStatus: String): Option[WhatYouOweViewModel] = {
+  def constructViewModel(payments: Seq[Payment],
+                         mandationStatus: String,
+                         penalties: Seq[LPPDetails]): Option[WhatYouOweViewModel] = {
 
-    val totalAmount = payments.map(_.outstandingAmount).sum
-    val chargeModels = categoriseCharges(payments)
-    val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest)
+    val chargeModels = categoriseCharges(payments, penalties).flatten
+    val totalAmount = chargeModels.map(_.outstandingAmount).sum
+    val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest) + payments.count(_.showEstimatedPenalty)
 
     if(totalPaymentCount == chargeModels.length) {
       Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus, payments.exists(_.isOverdue(dateService.now()))))
@@ -154,9 +196,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
   }
 
-  def findPenaltyCharge(chargeReference: String, penaltyType: String, penalties: Seq[LPPDetails]): Option[LPPDetails] =
+  def findPenaltyCharge(chargeReference: Option[String],
+                        penaltyType: Option[String],
+                        penalties: Seq[LPPDetails]): Option[LPPDetails] =
     penalties.find(pen =>
-      pen.principalChargeReference == chargeReference && penaltyType == pen.penaltyCategory
+      pen.principalChargeReference == chargeReference.getOrElse("") && penaltyType.getOrElse("") == pen.penaltyCategory
     )
 
 }

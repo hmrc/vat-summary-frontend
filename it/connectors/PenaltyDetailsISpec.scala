@@ -27,7 +27,7 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 class PenaltyDetailsISpec extends IntegrationBaseSpec{
 
-  val idValue = "vatIdValue"
+  val idValue = "999999999"
 
   private trait Test {
     def setupStubs(): StubMapping
@@ -38,9 +38,7 @@ class PenaltyDetailsISpec extends IntegrationBaseSpec{
   "calling getPenaltyDetails" should {
 
     "return a users penaltyDetails information" in new Test {
-      override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(
-        OK, penaltyDetailsJsonMax, idValue
-      )
+      override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails()
 
       val expected = Right(penaltyDetailsModelMax)
 
@@ -51,7 +49,7 @@ class PenaltyDetailsISpec extends IntegrationBaseSpec{
     }
 
     "return an HttpError if one is received" in new Test {
-      override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(INTERNAL_SERVER_ERROR, errorJson, idValue)
+      override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(INTERNAL_SERVER_ERROR, errorJson)
 
       val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
       val expected = Left(UnexpectedStatusError(INTERNAL_SERVER_ERROR.toString,message))

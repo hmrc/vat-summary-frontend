@@ -44,7 +44,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "outstandingAmount" -> 9999,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
-          "accruedInterest" -> 2
+          "accruedInterestAmount" -> 2
         )
 
         val paymentWithPeriodModel = PaymentWithPeriod(
@@ -77,7 +77,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "outstandingAmount" -> -9999,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
-          "accruedInterest" -> 2
+          "accruedInterestAmount" -> 2
         )
 
         val paymentNoPeriodModel = PaymentNoPeriod(
@@ -130,7 +130,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
             "DDcollectionInProgress" -> true
           )
         ),
-        "accruedInterest" -> 2,
+        "accruedInterestAmount" -> 2,
         "outstandingAmount" -> 0,
         "periodKey" -> "#001",
         "chargeReference" -> "XD002750002155"
@@ -202,7 +202,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
               "DDcollectionInProgress" -> true
             )
           ),
-          "accruedInterest" -> 2,
+          "accruedInterestAmount" -> 2,
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
@@ -246,7 +246,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
-          "accruedInterest" -> 2,
+          "accruedInterestAmount" -> 2,
           "originalAmount" -> "10000",
           "clearedAmount" -> "100"
         )
