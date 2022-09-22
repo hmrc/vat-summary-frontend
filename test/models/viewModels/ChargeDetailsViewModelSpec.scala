@@ -67,7 +67,7 @@ class ChargeDetailsViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with 
       crystallisedLPP2Model.title shouldBe "Second penalty for late payment of additional assessment"
       estimatedInterestModel.title shouldBe "Interest on central assessment of VAT"
       estimatedLPP1Model.title shouldBe "Penalty for late payment of VAT"
-      estimatedLPP2Model.title shouldBe "Penalty for late payment of VAT"
+      estimatedLPP2Model.title shouldBe "Second penalty for late payment of additional assessment"
     }
   }
 }
