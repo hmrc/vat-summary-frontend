@@ -24,69 +24,26 @@ class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
 
   val paymentsHistoryTabs: PaymentsHistoryTabs = injector.instanceOf[PaymentsHistoryTabs]
 
-  "The payment history tabs template" when {
+  "The payment history tabs template" should {
 
-    val tab1Year = 2022
-    val tab2Year = 2023
-    val prevPayments = "Previous payments"
-    val prevPaymentsHref = "previous-payments"
-    val tabs = Seq(tab1Year, tab2Year)
+    val youCan = "You can"
+    val viewPrefPayments = "view your previous payments (opens in a new tab)"
+    val beforeMTD = "if you made payments before joining Making Tax Digital."
 
-    "the previous payments boolean is set to true" should {
+    "render a series of tabs, including the previous payments tab" in {
 
-      "render a series of tabs, including the previous payments tab" in {
+      val expectedMarkup = Html(
+        s"""
+          |<p class="govuk-body" id="previous-payment">
+          |  $youCan
+          |  <a class="govuk-link" rel="noreferrer noopener" href="/previousPaymentsPortal" target="_blank">$viewPrefPayments</a>
+          |  $beforeMTD
+          |</p>
+        """.stripMargin
+      )
+      val result = paymentsHistoryTabs()(messages, mockAppConfig, user)
 
-        val expectedMarkup = Html(
-          s"""
-            |<ul class="govuk-tabs__list">
-            |  <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-            |    <a class="govuk-tabs__tab" href="#year-$tab1Year">
-            |      $tab1Year
-            |    </a>
-            |  </li>
-            |  <li class="govuk-tabs__list-item">
-            |    <a class="govuk-tabs__tab" href="#year-$tab2Year">
-            |      $tab2Year
-            |    </a>
-            |  </li>
-            |  <li class="govuk-tabs__list-item">
-            |    <a class="govuk-tabs__tab" href="#$prevPaymentsHref">
-            |      $prevPayments
-            |    </a>
-            |  </li>
-            |</ul>
-          """.stripMargin
-        )
-        val result = paymentsHistoryTabs(tabs, showPreviousPaymentsTab = true)
-
-        formatHtml(result) shouldBe formatHtml(expectedMarkup)
-      }
-    }
-
-    "the previous payments boolean is set to false" should {
-
-      "render a series of tabs, excluding the previous payments tab" in {
-
-        val expectedMarkup = Html(
-          s"""
-             |<ul class="govuk-tabs__list">
-             |  <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-             |    <a class="govuk-tabs__tab" href="#year-$tab1Year">
-             |      $tab1Year
-             |    </a>
-             |  </li>
-             |  <li class="govuk-tabs__list-item">
-             |    <a class="govuk-tabs__tab" href="#year-$tab2Year">
-             |      $tab2Year
-             |    </a>
-             |  </li>
-             |</ul>
-          """.stripMargin
-        )
-        val result = paymentsHistoryTabs(tabs, showPreviousPaymentsTab = false)
-
-        formatHtml(result) shouldBe formatHtml(expectedMarkup)
-      }
+      formatHtml(result) shouldBe formatHtml(expectedMarkup)
     }
   }
 }

@@ -14,23 +14,18 @@
  * limitations under the License.
  *@
 
-@this()
+@import models.viewModels.PaymentsHistoryViewModel
+@import views.html.templates.formatters.links.OpenInNewTab
 
-@(years: Seq[Int], showPreviousPaymentsTab: Boolean)(implicit messages: Messages)
+@this(openInNewTab: OpenInNewTab)
 
-<ul class="govuk-tabs__list">
-  @for(year <- years) {
-    <li class="govuk-tabs__list-item@if(year == years.head){ govuk-tabs__list-item--selected}">
-      <a class="govuk-tabs__tab" href="#year-@{year}">
-        @year
-      </a>
-    </li>
-  }
-  @if(showPreviousPaymentsTab) {
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#previous-payments">
-        @messages("paymentsHistory.previousPayments.heading")
-      </a>
-    </li>
-  }
-</ul>
+@()(implicit messages: Messages, appConfig: config.AppConfig, user: User)
+
+<p class="govuk-body" id="previous-payment">
+    @messages("paymentsHistory.previousPayments.youCan")
+    @openInNewTab(
+        link = appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn),
+        linkText = messages("paymentsHistory.previousPayments.viewPreviousPayments")
+    )
+    @messages("paymentsHistory.previousPayments.beforeMtd")
+</p>
