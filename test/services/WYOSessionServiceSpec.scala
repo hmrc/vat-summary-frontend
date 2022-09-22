@@ -54,7 +54,9 @@ class WYOSessionServiceSpec extends AnyWordSpecLike with Matchers with MockitoSu
 
     "throw an exception when an unsupported view model is provided" in {
       val unsupportedModel = new ChargeDetailsViewModel {
+        val chargeType: String = "unsupportedChargeType"
         override val outstandingAmount: BigDecimal = 0
+        override def description(isAgent: Boolean)(implicit messages: play.api.i18n.Messages): String = "description"
       }
 
       intercept[MatchError](service.storeChargeModels(Seq(unsupportedModel), "999999999"))

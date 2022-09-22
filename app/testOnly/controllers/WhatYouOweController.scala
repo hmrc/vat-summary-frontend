@@ -19,10 +19,9 @@ package testOnly.controllers
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import controllers.AuthorisedController
 import models.payments.{ChargeType, Payment, PaymentOnAccount, PaymentWithPeriod}
-import models.penalties.{LPPDetails, PenaltyDetails}
+import models.penalties.LPPDetails
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

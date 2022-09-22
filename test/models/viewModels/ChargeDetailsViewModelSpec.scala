@@ -16,11 +16,12 @@
 
 package models.viewModels
 
-import common.TestModels.{crystallisedInterestCharge, estimatedInterestModel, whatYouOweCharge}
+import common.TestModels._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import views.ViewBaseSpec
 
-class ChargeDetailsViewModelSpec extends AnyWordSpecLike with Matchers {
+class ChargeDetailsViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "The generateHash function" should {
 
@@ -53,6 +54,20 @@ class ChargeDetailsViewModelSpec extends AnyWordSpecLike with Matchers {
 
         oneHundredHashes.distinct.length shouldBe 100
       }
+    }
+  }
+
+  "the title method" should {
+
+    "return the correct title" in {
+
+      whatYouOweCharge.title shouldBe "VAT"
+      crystallisedInterestCharge.title shouldBe "Interest on central assessment of VAT"
+      crystallisedLPP1Model.title shouldBe "Penalty for late payment of VAT"
+      crystallisedLPP2Model.title shouldBe "Second penalty for late payment of additional assessment"
+      estimatedInterestModel.title shouldBe "Interest on central assessment of VAT"
+      estimatedLPP1Model.title shouldBe "Penalty for late payment of VAT"
+      estimatedLPP2Model.title shouldBe "Second penalty for late payment of additional assessment"
     }
   }
 }

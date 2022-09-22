@@ -33,16 +33,5 @@ class EstimatedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with 
     "write to JSON" in {
       Json.toJson(estimatedLPP1Model) shouldBe estimatedLPP1Json
     }
-
-    "title()" when {
-
-      "the charge type is valid" should {
-
-        "return the charge type title" in {
-          estimatedLPP1Model.title(messages) shouldBe
-            "Penalty for late payment of VAT"
-        }
-      }
-    }
   }
 }

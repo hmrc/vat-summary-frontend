@@ -16,10 +16,19 @@
 
 package models.viewModels
 
+import play.api.i18n.Messages
+import views.templates.payments.PaymentMessageHelper
+
 import java.security.MessageDigest
 
 trait ChargeDetailsViewModel {
+  val chargeType: String
   val outstandingAmount: BigDecimal
+  val overdue: Boolean = false
+
+  def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
+  def description(isAgent: Boolean)(implicit messages: Messages): String
+
   def generateHash(vrn: String): String =
     MessageDigest.getInstance("MD5").digest((this.toString + vrn).getBytes("UTF-8")).map("%02x".format(_)).mkString
 }

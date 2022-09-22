@@ -61,16 +61,5 @@ class CrystallisedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike wi
         Json.toJson(crystallisedLPP1ModelMin) shouldBe crystallisedLPP1JsonMin
       }
     }
-
-    "title()" when {
-
-      "the charge type is valid" should {
-
-        "return the charge type title" in {
-          crystallisedLPP1Model.title(messages) shouldBe
-            "Penalty for late payment of VAT"
-        }
-      }
-    }
   }
 }
