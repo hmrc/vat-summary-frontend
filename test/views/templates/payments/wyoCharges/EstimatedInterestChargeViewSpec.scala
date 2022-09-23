@@ -20,11 +20,11 @@ import common.TestModels.estimatedInterestModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.payments.wyoCharges.EstimatedInterestCharge
+import views.html.templates.payments.wyoCharges.EstimatedCharge
 
 class EstimatedInterestChargeViewSpec extends ViewBaseSpec {
 
-  val injectedView: EstimatedInterestCharge = injector.instanceOf[EstimatedInterestCharge]
+  val injectedView: EstimatedCharge = injector.instanceOf[EstimatedCharge]
 
   "The estimated interest charge template" should {
 

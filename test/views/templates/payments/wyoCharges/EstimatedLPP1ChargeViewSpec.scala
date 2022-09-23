@@ -20,11 +20,11 @@ import common.TestModels.estimatedLPP1Model
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.payments.wyoCharges.EstimatedLPP1Charge
+import views.html.templates.payments.wyoCharges.EstimatedCharge
 
 class EstimatedLPP1ChargeViewSpec extends ViewBaseSpec {
 
-  val injectedView: EstimatedLPP1Charge = injector.instanceOf[EstimatedLPP1Charge]
+  val injectedView: EstimatedCharge = injector.instanceOf[EstimatedCharge]
 
   "The estimated LPP1 charge template" should {
 

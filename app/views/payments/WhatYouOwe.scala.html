@@ -29,8 +29,7 @@
       displayMoney: DisplayMoney,
       mtdNotificationBanner: MtdNotificationBanner,
       standardCharge: StandardCharge,
-      estimatedInterestCharge: EstimatedInterestCharge,
-      estimatedLPP1Charge: EstimatedLPP1Charge,
+      estimatedCharge: EstimatedCharge,
       crystallisedInterestCharge: CrystallisedInterestCharge)
 
 @(model: WhatYouOweViewModel, serviceInfoContent: Html)(
@@ -70,9 +69,9 @@
 @paymentHtml(chargeModel: ChargeDetailsViewModel) = @{
   chargeModel match {
     case charge: StandardChargeViewModel        => standardCharge(charge)
-    case charge: EstimatedInterestViewModel     => estimatedInterestCharge(charge)
+    case charge: EstimatedInterestViewModel     => estimatedCharge(charge)
     case charge: CrystallisedInterestViewModel  => crystallisedInterestCharge(charge)
-    case charge: EstimatedLPP1ViewModel         => estimatedLPP1Charge(charge)
+    case charge: EstimatedLPP1ViewModel         => estimatedCharge(charge)
   }
 }
 
