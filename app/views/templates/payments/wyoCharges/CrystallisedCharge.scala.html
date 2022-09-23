@@ -14,12 +14,12 @@
  * limitations under the License.
  *@
 
-@import models.viewModels.CrystallisedInterestViewModel
+@import models.viewModels.CrystallisedViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 
 @this(govukTag: GovukTag)
 
-@(charge: CrystallisedInterestViewModel)(implicit messages: Messages, user: User)
+@(charge: CrystallisedViewModel)(implicit messages: Messages, user: User)
 
 @if(charge.isOverdue){@govukTag(Tag(
   content = Text(messages("common.overdue")),
