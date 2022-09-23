@@ -19,20 +19,20 @@ package stubs
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import models.penalties.{LPPDetails, PenaltyDetails}
+import play.api.http.Status
 import play.api.libs.json.{JsObject, JsValue, Json}
 
 object PenaltyDetailsStub extends WireMockMethods{
 
-  private val penaltyDetailsServiceUrl: String => String = idValue => s"/penalty/VAT/$idValue"
+  private val penaltyDetailsServiceUrl: String = "/penalty/VAT/([0-9]+)"
 
-  def stubPenaltyDetails(status: Int, response: JsValue , idValue : String): StubMapping = {
-    when(method = GET, uri = penaltyDetailsServiceUrl(idValue))
+  def stubPenaltyDetails(status: Int = Status.OK, response: JsValue = penaltyDetailsJsonMax): StubMapping = {
+    when(method = GET, uri = penaltyDetailsServiceUrl)
       .thenReturn(status = status, body = response)
-
   }
 
   val LPPDetailsModelMax: LPPDetails = LPPDetails(
-    principalChargeReference = "ABCDEFGHIJKLMNOP",
+    principalChargeReference = "XD002750002155",
     penaltyCategory = "LPP1",
     Some(100.11),
     Some("15"),
@@ -51,7 +51,7 @@ object PenaltyDetailsStub extends WireMockMethods{
 
 
   val LPPDetailsJsonMax: JsObject = Json.obj(
-    "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
+    "principalChargeReference" -> "XD002750002155",
     "penaltyCategory" -> "LPP1",
     "LPP1LRCalculationAmount" -> 100.11,
     "LPP1LRDays" -> "15",
@@ -68,9 +68,8 @@ object PenaltyDetailsStub extends WireMockMethods{
     "LPPDetails" -> Json.arr(LPPDetailsJsonMax)
   )
 
-  val errorJson = Json.obj(
+  val errorJson: JsObject = Json.obj(
     "code" -> "500",
     "message" -> "INTERNAL_SERVER_ERROR"
   )
-
 }

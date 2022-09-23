@@ -48,7 +48,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":9999,
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
-        |"accruedInterest": 2,
+        |"accruedInterestAmount": 2,
         |"accruedPenaltyAmount" : 100.00,
         |"penaltyType" : "LPP1"
         |}"""
@@ -104,7 +104,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":9999,
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
-        |"accruedInterest": 2,
+        |"accruedInterestAmount": 2,
         |"accruedPenaltyAmount" : 100.00,
         |"penaltyType" : "LPP1"
         |},{
@@ -115,7 +115,7 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"outstandingAmount":7777,
         |"periodKey":"#002",
         |"chargeReference": "XD002750002155",
-        |"accruedInterest": 2,
+        |"accruedInterestAmount": 2,
         |"accruedPenaltyAmount" : 100.00,
         |"penaltyType" : "LPP1"
         |}]}"""

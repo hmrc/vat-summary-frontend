@@ -39,11 +39,11 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementText("h1") shouldBe "1 January 2020 to 2 February 2020 Late payment penalty"
+      elementText("h1") shouldBe "1 January 2019 to 2 February 2019 Late payment penalty"
     }
 
     "have a period caption" in {
-      elementText(".govuk-caption-xl") shouldBe "1 January 2020 to 2 February 2020"
+      elementText(".govuk-caption-xl") shouldBe "1 January 2019 to 2 February 2019"
     }
 
     "not render a back link" in {

@@ -23,7 +23,7 @@ import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import stubs.CustomerInfoStub.customerInfoJson
-import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, ServiceInfoStub}
+import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, PenaltyDetailsStub, ServiceInfoStub}
 
 class WhatYouOwePageSpec extends IntegrationBaseSpec {
 
@@ -44,6 +44,7 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
       "load the page, rendering appropriate content such as the total amount due and the table of charges" in {
         val request = {
           FinancialDataStub.stubOutstandingTransactions
+          PenaltyDetailsStub.stubPenaltyDetails()
           setupRequest()
         }
 
@@ -52,7 +53,7 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
 
         response.status shouldBe Status.OK
         document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
-        document.select(totalAmountSelector).text() shouldBe "£20,000"
+        document.select(totalAmountSelector).text() shouldBe "£20,005"
         document.select(chargeRowsSelector).size() shouldBe 4
       }
     }

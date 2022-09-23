@@ -438,23 +438,10 @@ object ChargeType extends LoggerUtil {
     VatManualLPPLPI
   )
 
-  val penaltyChargeTypes: Set[ChargeType] = Set(
-    VatReturn1stLPP,
-    VatPA1stLPP,
-    VatPA2ndLPP,
-    VatAA1stLPP,
-    VatAA2ndLPP,
-    VatLateSubmissionPen,
-    VatManualLPP,
-    VatAAReturnCharge1stLPP,
-    VatAAReturnCharge2ndLPP
-  )
-
   val LPP1ChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPP,
     VatPA1stLPP,
     VatAA1stLPP,
-    VatManualLPP,
     VatAAReturnCharge1stLPP
   )
 
@@ -463,6 +450,8 @@ object ChargeType extends LoggerUtil {
     VatAA2ndLPP,
     VatAAReturnCharge2ndLPP
   )
+
+  val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
 
   val interestChargeMapping: Map[ChargeType, ChargeType] = Map(
     ReturnDebitCharge -> VatReturnLPI,
@@ -481,6 +470,19 @@ object ChargeType extends LoggerUtil {
     VatManualLPP -> VatManualLPPLPI,
     AAQuarterlyInstalments -> VatAAQuarterlyInstalLPI,
     AAMonthlyInstalment -> VatAAMonthlyInstalLPI
+  )
+
+  val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(
+    ReturnDebitCharge -> VatReturn1stLPP,
+    VatProtectiveAssessmentCharge -> VatPA1stLPP,
+    AACharge -> VatAA1stLPP,
+    AAReturnDebitCharge -> VatAAReturnCharge1stLPP
+  )
+
+  val penaltyChargeMappingLPP2: Map[ChargeType, ChargeType] = Map(
+    VatProtectiveAssessmentCharge -> VatPA2ndLPP,
+    AACharge -> VatAA2ndLPP,
+    AAReturnDebitCharge -> VatAAReturnCharge2ndLPP
   )
 
   def apply: String => ChargeType = input => {

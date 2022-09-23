@@ -32,7 +32,7 @@ class EstimatedLPP1ChargeViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct charge description text" in {
-      elementText("a") shouldBe "Penalty for late payment of VAT for period 1 Jan to 2 Feb 2020"
+      elementText("a") shouldBe "Penalty for late payment of VAT for period 1 Jan to 2 Feb 2019"
     }
 
     "not have an overdue label" in {

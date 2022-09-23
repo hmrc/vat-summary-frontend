@@ -142,6 +142,68 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
       }
     }
 
+    "the user has an outstanding Payment On Account charge" should {
+
+      "filter out the Payment On Account charge" in {
+        val payment1 = PaymentWithPeriod(
+          PaymentOnAccount,
+          LocalDate.parse("2018-01-01"),
+          LocalDate.parse("2018-02-02"),
+          LocalDate.parse("2018-03-03"),
+          BigDecimal("21.22"),
+          None,
+          None,
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = None
+        )
+
+        val payments = Payments(Seq(payment1))
+        lazy val responseFromFinancialDataConnector = Right(payments)
+
+        val paymentsResponse: ServiceResponse[Option[Payments]] = {
+          (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getOpenPayments("123456789"))
+        }
+
+        paymentsResponse shouldBe Right(None)
+      }
+    }
+
+    "the user has a charge returned that has no amount outstanding" should {
+
+      "filter out the invalid charge" in {
+        val payment1 = PaymentWithPeriod(
+          ReturnDebitCharge,
+          LocalDate.parse("2018-01-01"),
+          LocalDate.parse("2018-02-02"),
+          LocalDate.parse("2018-03-03"),
+          BigDecimal("0"),
+          None,
+          None,
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = None
+        )
+
+        val payments = Payments(Seq(payment1))
+        lazy val responseFromFinancialDataConnector = Right(payments)
+
+        val paymentsResponse: ServiceResponse[Option[Payments]] = {
+          (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returns(Future.successful(responseFromFinancialDataConnector))
+          await(paymentsService.getOpenPayments("123456789"))
+        }
+
+        paymentsResponse shouldBe Right(None)
+      }
+    }
+
     "the connector call fails" should {
 
       "return None" in {

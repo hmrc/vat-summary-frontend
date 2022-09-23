@@ -17,9 +17,8 @@
 package models.payments
 
 import java.time.LocalDate
-
 import models.obligations.Obligation
-import models.payments.ChargeType.interestChargeMapping
+import models.payments.ChargeType.{interestChargeMapping, penaltyChargeMappingLPP1, penaltyChargeMappingLPP2}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -38,10 +37,13 @@ sealed trait Payment extends Obligation {
   val accruedPenaltyAmount: Option[BigDecimal]
   val penaltyType: Option[String]
 
-  val hasAccruedInterest: Boolean         = accruedInterestAmount.getOrElse(BigDecimal(0)) > 0
-  val showEstimatedInterest: Boolean      = hasAccruedInterest && interestChargeMapping.contains(this.chargeType)
-  def isOverdue(now: LocalDate): Boolean  = due.isBefore(now) && !ddCollectionInProgress
+  val showEstimatedInterest: Boolean =
+    accruedInterestAmount.getOrElse(BigDecimal(0)) > 0 && interestChargeMapping.contains(chargeType)
+  val showEstimatedPenalty: Boolean =
+    accruedPenaltyAmount.getOrElse(BigDecimal(0)) > 0 &&
+    (penaltyChargeMappingLPP1.contains(chargeType) || penaltyChargeMappingLPP2.contains(chargeType))
 
+  def isOverdue(now: LocalDate): Boolean  = due.isBefore(now) && !ddCollectionInProgress
 }
 
 case class PaymentWithPeriod(chargeType: ChargeType,
@@ -222,7 +224,7 @@ object Payment {
     (JsPath \ "periodKey").readNullable[String] and
     (JsPath \ "chargeReference").readNullable[String] and
     (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false)) and
-    (JsPath \ "accruedInterest").readNullable[BigDecimal] and
+    (JsPath \ "accruedInterestAmount").readNullable[BigDecimal] and
     (JsPath \ "accruedPenaltyAmount").readNullable[BigDecimal] and
     (JsPath \ "penaltyType").readNullable[String] and
     (JsPath \ "originalAmount").readNullable[BigDecimal] and

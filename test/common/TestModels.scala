@@ -62,14 +62,16 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
-    originalAmount = Some(1000.00),
-    clearedAmount = Some(00.00),
-    accruedPenaltyAmount = None,
-    penaltyType = None
+    originalAmount = Some(1000),
+    clearedAmount = Some(0),
+    accruedPenaltyAmount = Some(50.55),
+    penaltyType = Some("LPP1")
   )
 
-  val paymentNoAccInterest: PaymentWithPeriod = payment.copy(accruedInterestAmount = Some(0))
-  val unrepayableOverpayment: PaymentWithPeriod = payment.copy(chargeType = VatUnrepayableOverpayment)
+  val paymentNoAccInterest: PaymentWithPeriod =
+    payment.copy(accruedInterestAmount = Some(0), accruedPenaltyAmount = None)
+  val unrepayableOverpayment: PaymentWithPeriod =
+    payment.copy(chargeType = VatUnrepayableOverpayment, accruedPenaltyAmount = None)
 
   val paymentNoPeriodNoDate: PaymentNoPeriod = Payment(
     OADefaultInterestCharge,
@@ -179,7 +181,8 @@ object TestModels {
     mandationStatus = "MTDfB"
   )
 
-  val customerMigrated2018 = customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-05-01"), hybridToFullMigrationDate = None)
+  val customerMigrated2018: CustomerInformation =
+    customerInformationMax.copy(customerMigratedToETMPDate = Some("2018-05-01"), hybridToFullMigrationDate = None)
 
   val customerInformationInsolvent: CustomerInformation = customerInformationMax.copy(details = customerDetailsInsolvent)
   val customerInformationInsolventTrading: CustomerInformation =
@@ -365,8 +368,8 @@ object TestModels {
     chargeType = "VAT Return LPI",
     interestRate = 5.00,
     dueDate = LocalDate.parse("2019-03-03"),
-    interestAmount = 1000.00,
-    amountReceived = 00.00,
+    interestAmount = 1000,
+    amountReceived = 0,
     leftToPay = 10000,
     isOverdue = false,
     chargeReference = "XD002750002155",
@@ -391,24 +394,12 @@ object TestModels {
     10000,
     Seq(whatYouOweChargeModel),
     mandationStatus = "MTDfB",
-    false
+    containsOverduePayments = false
   )
 
   val whatYouOweViewModelWithEstimatedInterest: WhatYouOweViewModel = whatYouOweViewModel.copy(
+    totalAmount = 10002,
     charges = Seq(whatYouOweChargeModel, whatYouOweChargeModelEstimatedInterest)
-  )
-
-  val whatYouOweViewModelInterestCharges: WhatYouOweViewModel = WhatYouOweViewModel(
-    40000,
-    Seq(whatYouOweChargeModel,
-      whatYouOweChargeModelEstimatedInterest,
-      whatYouOweChargeModel,
-      whatYouOweChargeModelEstimatedInterest,
-      whatYouOweChargeModelInterestCharge,
-      penaltyInterestCharge
-    ),
-    mandationStatus = "MTDfB",
-    false
   )
 
   val viewModelNoChargeDescription: WhatYouOweViewModel = whatYouOweViewModel.copy(
@@ -597,18 +588,18 @@ object TestModels {
   )
 
   val estimatedLPP1Model: EstimatedLPP1ViewModel = EstimatedLPP1ViewModel(
-    "10", "20", 2.2, 4.4, 500.55, 30.33, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT Return 1st LPP"
+    "15", "30", 2.4, 4.2, 100.11, 50.55, LocalDate.parse("2019-01-01"), LocalDate.parse("2019-02-02"), "VAT Return 1st LPP"
   )
 
   val estimatedLPP1Json: JsObject = Json.obj(
-    "part1Days" -> "10",
-    "part2Days" -> "20",
-    "part1PenaltyRate" -> 2.2,
-    "part2PenaltyRate" -> 4.4,
-    "part1UnpaidVAT" -> 500.55,
-    "penaltyAmount" -> 30.33,
-    "periodFrom" -> "2020-01-01",
-    "periodTo" -> "2020-02-02",
+    "part1Days" -> "15",
+    "part2Days" -> "30",
+    "part1PenaltyRate" -> 2.4,
+    "part2PenaltyRate" -> 4.2,
+    "part1UnpaidVAT" -> 100.11,
+    "penaltyAmount" -> 50.55,
+    "periodFrom" -> "2019-01-01",
+    "periodTo" -> "2019-02-02",
     "chargeType" -> "VAT Return 1st LPP"
   )
 
@@ -625,8 +616,12 @@ object TestModels {
     "chargeType" -> "VAT AA 2nd LPP"
   )
 
-  val whatYouOweViewModel2Charge: WhatYouOweViewModel =
-    WhatYouOweViewModel(567.11, Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge), mandationStatus = "", true)
+  val whatYouOweViewModel2Charge: WhatYouOweViewModel = WhatYouOweViewModel(
+    567.11,
+    Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge),
+    mandationStatus = "",
+    containsOverduePayments = true
+  )
 
   val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
     chargeType = "VAT Return Debit Charge",
@@ -639,6 +634,18 @@ object TestModels {
     chargeReference = None,
     periodFrom = Some(LocalDate.parse("2021-01-01")),
     periodTo = Some(LocalDate.parse("2021-03-31"))
+  )
+
+  val whatYouOweViewModelMultipleTypes: WhatYouOweViewModel = WhatYouOweViewModel(
+    20052.55,
+    Seq(
+      whatYouOweChargeModel,
+      whatYouOweChargeModelEstimatedInterest,
+      estimatedLPP1Model,
+      whatYouOweChargeModelInterestCharge
+    ),
+    mandationStatus = "MTDfB",
+    containsOverduePayments = false
   )
 
   val whatYouOweChargeOverdue: StandardChargeViewModel = whatYouOweCharge.copy(isOverdue = true)
@@ -658,7 +665,7 @@ object TestModels {
   val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
 
   val LPPDetailsModelMax: LPPDetails = LPPDetails(
-    principalChargeReference = "ABCDEFGHIJKLMNOP",
+    principalChargeReference = "XD002750002155",
     penaltyCategory = "LPP1",
     Some(100.11),
     Some("15"),
@@ -694,7 +701,7 @@ object TestModels {
   )
 
   val LPPDetailsJsonMax: JsObject = Json.obj(
-    "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
+    "principalChargeReference" -> "XD002750002155",
     "penaltyCategory" -> "LPP1",
     "LPP1LRCalculationAmount" -> 100.11,
     "LPP1LRDays" -> "15",
