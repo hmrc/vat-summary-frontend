@@ -14,11 +14,11 @@
  * limitations under the License.
  *@
 
-@import models.viewModels.EstimatedLPP1ViewModel
+@import models.viewModels.ChargeDetailsViewModel
 
 @this()
 
-@(charge: EstimatedLPP1ViewModel)(implicit messages: Messages, user: User)
+@(charge: ChargeDetailsViewModel)(implicit messages: Messages, user: User)
 
 @href = @{ testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(charge.generateHash(user.vrn)) }
 
