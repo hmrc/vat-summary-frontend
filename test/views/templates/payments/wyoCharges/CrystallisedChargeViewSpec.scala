@@ -20,13 +20,13 @@ import common.TestModels.{crystallisedInterestCharge, overdueCrystallisedInteres
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
-import views.html.templates.payments.wyoCharges.CrystallisedInterestCharge
+import views.html.templates.payments.wyoCharges.CrystallisedCharge
 
-class CrystallisedInterestChargeViewSpec extends ViewBaseSpec {
+class CrystallisedChargeViewSpec extends ViewBaseSpec {
 
-  val injectedView: CrystallisedInterestCharge = injector.instanceOf[CrystallisedInterestCharge]
+  val injectedView: CrystallisedCharge = injector.instanceOf[CrystallisedCharge]
 
-  "the crystallised interest charge template" when {
+  "the crystallised charge template" when {
 
     "a charge is overdue" should {
 

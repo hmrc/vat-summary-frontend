@@ -55,8 +55,6 @@ case class StandardChargeViewModel(chargeType: String,
       ).url
   }
 
-  override val overdue: Boolean = isOverdue
-
   override def description(isAgent: Boolean)(implicit messages: Messages): String = {
     val message = PaymentMessageHelper.getCorrectDescription(
       PaymentMessageHelper.getChargeType(chargeType).principalUserDescription.getOrElse(""),

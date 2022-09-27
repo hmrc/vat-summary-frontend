@@ -31,10 +31,9 @@ case class CrystallisedLPP2ViewModel(day: String,
                                     periodTo: LocalDate,
                                     chargeType: String,
                                     chargeReference: String,
-                                    isOverdue: Boolean) extends ChargeDetailsViewModel {
+                                    isOverdue: Boolean) extends CrystallisedViewModel {
 
   override val outstandingAmount: BigDecimal = leftToPay
-  override val overdue: Boolean = isOverdue
   override def description(isAgent: Boolean)(implicit messages: Messages): String = "" //TODO: Add description
 
   val makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
@@ -53,4 +52,3 @@ object CrystallisedLPP2ViewModel {
   implicit val format: OFormat[CrystallisedLPP2ViewModel] = Json.format[CrystallisedLPP2ViewModel]
 
 }
-
