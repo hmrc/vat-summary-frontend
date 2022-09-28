@@ -91,7 +91,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
                                                     penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] = {
-    val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, penalties)
+    val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties)
     (charge, matchingPenalty) match {
       case (p: PaymentWithPeriod, Some(penalty)) if p.showEstimatedInterest && p.showEstimatedPenalty =>
         Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, penalty))
@@ -198,9 +198,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   def findPenaltyCharge(chargeReference: Option[String],
                         penaltyType: Option[String],
+                        isEstimate: Boolean,
                         penalties: Seq[LPPDetails]): Option[LPPDetails] =
-    penalties.find(pen =>
-      pen.principalChargeReference == chargeReference.getOrElse("") && penaltyType.getOrElse("") == pen.penaltyCategory
-    )
+    penalties.find(pen => {
+      val matchingChargeRef = if (isEstimate) {
+        pen.principalChargeReference == chargeReference.getOrElse("")
+      } else {
+        pen.penaltyChargeReference == chargeReference
+      }
 
+      matchingChargeRef && penaltyType.getOrElse("") == pen.penaltyCategory
+    })
 }

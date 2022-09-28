@@ -320,50 +320,127 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   "The findPenaltyCharge method" when {
 
-    val chargeReference = Some("ABCDEFGHIJKLMNOP")
     val penaltyType = Some("LPP1")
 
-    "there is a penalty with a matching reference and charge type" should {
+    "the penalty is an estimate" when {
 
-      "return that penalty" in {
-        val res = controller.findPenaltyCharge(chargeReference, penaltyType, Seq(LPPDetailsModelMin, LPPDetailsModelMin))
-        res shouldBe Some(LPPDetailsModelMin)
+      val chargeReference = Some("ABCDEFGHIJKLMNOP")
+
+      "there is a penalty with a matching principal charge reference and penalty type" should {
+
+        "return that penalty" in {
+          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))
+          res shouldBe Some(LPPDetailsModelMin)
+        }
+      }
+
+      "the principal charge reference does not match" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(Some("FLJDHGKDJFH"), penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))
+          res shouldBe None
+        }
+      }
+
+      "the penalty charge reference matches" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(Some("BCDEFGHIJKLMNOPQ"), penaltyType, isEstimate = true, Seq(LPPDetailsModelMax))
+          res shouldBe None
+        }
+      }
+
+      "the penalty type does not match" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(chargeReference, Some("LPP2"), isEstimate = true, Seq(LPPDetailsModelMin))
+          res shouldBe None
+        }
+      }
+
+      "a charge reference is not provided" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(None, penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))
+          res shouldBe None
+        }
+      }
+
+      "a penalty type is not provided" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = true, Seq(LPPDetailsModelMin))
+          res shouldBe None
+        }
+      }
+
+      "an empty list of penalties is provided" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = true, Seq())
+          res shouldBe None
+        }
       }
     }
 
-    "the reference does not match" should {
+    "the penalty is crystallised" when {
 
-      val model = LPPDetailsModelMin.copy(principalChargeReference = "FLJDHGKDJFH")
+      val chargeReference = Some("BCDEFGHIJKLMNOPQ")
 
-      "return None" in {
-        val res = controller.findPenaltyCharge(chargeReference, penaltyType, Seq(model))
-        res shouldBe None
+      "there is a penalty with a matching penalty charge reference and penalty type" should {
+
+        "return that penalty" in {
+          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = false, Seq(LPPDetailsModelMax))
+          res shouldBe Some(LPPDetailsModelMax)
+        }
       }
-    }
 
-    "the penalty type does not match" should {
+      "the penalty charge reference does not match" should {
 
-      val model = LPPDetailsModelMin.copy(penaltyCategory = "GHDFKLUJSHDFG")
-
-      "return None" in {
-        val res = controller.findPenaltyCharge(chargeReference, penaltyType, Seq(model))
-        res shouldBe None
+        "return None" in {
+          val res = controller.findPenaltyCharge(Some("FLJDHGKDJFH"), penaltyType, isEstimate = false, Seq(LPPDetailsModelMax))
+          res shouldBe None
+        }
       }
-    }
 
-    "a charge reference is not provided" should {
+      "the principal charge reference matches" should {
 
-      "return None" in {
-        val res = controller.findPenaltyCharge(None, penaltyType, Seq(LPPDetailsModelMin))
-        res shouldBe None
+        "return None" in {
+          val res = controller.findPenaltyCharge(Some("XD002750002155"), penaltyType, isEstimate = false, Seq(LPPDetailsModelMax))
+          res shouldBe None
+        }
       }
-    }
 
-    "a penalty type is not provided" should {
+      "the penalty type does not match" should {
 
-      "return None" in {
-        val res = controller.findPenaltyCharge(chargeReference, None, Seq(LPPDetailsModelMin))
-        res shouldBe None
+        "return None" in {
+          val res = controller.findPenaltyCharge(chargeReference, Some("LPP2"), isEstimate = false, Seq(LPPDetailsModelMax))
+          res shouldBe None
+        }
+      }
+
+      "a charge reference is not provided" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(None, penaltyType, isEstimate = false, Seq(LPPDetailsModelMax))
+          res shouldBe None
+        }
+      }
+
+      "a penalty type is not provided" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = false, Seq(LPPDetailsModelMax))
+          res shouldBe None
+        }
+      }
+
+      "an empty list of penalties is provided" should {
+
+        "return None" in {
+          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = false, Seq())
+          res shouldBe None
+        }
       }
     }
   }
