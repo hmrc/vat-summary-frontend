@@ -616,6 +616,18 @@ object TestModels {
     "chargeType" -> "VAT AA 2nd LPP"
   )
 
+  val lateSubmissionPenaltyModel: LateSubmissionPenaltyViewModel = LateSubmissionPenaltyViewModel(
+    "VAT Late Submission Pen",
+    LocalDate.parse("2020-10-01"),
+    100.55,
+    0,
+    100.55,
+    isOverdue = false,
+    "CHARGEREF",
+    LocalDate.parse("2020-05-05"),
+    LocalDate.parse("2020-06-06")
+  )
+
   val whatYouOweViewModel2Charge: WhatYouOweViewModel = WhatYouOweViewModel(
     567.11,
     Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge),

@@ -226,6 +226,13 @@ estimatedLPP2.estimatesDescriptionAgent = Penalties and interest will show as es
 estimatedLPP2.penaltiesAndAppeal = View your VAT penalties and appeals
 estimatedLPP2.penaltiesAndAppealAgent = View your client’s VAT penalties and appeals page
 
+lateSubmissionPenalty.dueDate = Due date
+lateSubmissionPenalty.penaltyAmount = Penalty amount
+lateSubmissionPenalty.amountReceived = Amount received
+lateSubmissionPenalty.leftToPay = Left to pay
+lateSubmissionPenalty.penaltiesAndAppeal = View your VAT penalties and appeals
+lateSubmissionPenalty.penaltiesAndAppealAgent = View your client’s VAT penalties and appeals page
+
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
