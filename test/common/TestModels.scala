@@ -628,6 +628,18 @@ object TestModels {
     LocalDate.parse("2020-06-06")
   )
 
+  val lateSubmissionPenaltyJson: JsObject = Json.obj(
+    "chargeType" -> "VAT Late Submission Pen",
+    "dueDate" -> "2020-10-01",
+    "penaltyAmount" -> 100.55,
+    "amountReceived" -> 0,
+    "leftToPay" -> 100.55,
+    "isOverdue" -> false,
+    "chargeReference" -> "CHARGEREF",
+    "periodFrom" -> "2020-05-05",
+    "periodTo" -> "2020-06-06"
+  )
+
   val whatYouOweViewModel2Charge: WhatYouOweViewModel = WhatYouOweViewModel(
     567.11,
     Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge),

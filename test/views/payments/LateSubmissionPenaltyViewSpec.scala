@@ -48,6 +48,10 @@ class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
       elementText(".govuk-caption-xl") shouldBe "5 May 2020 to 6 June 2020"
     }
 
+    "not render backlink" in {
+      elementExtinct(".govuk-back-link")
+    }
+
     "render breadcrumbs which" should {
 
       "have the text 'Business tax account'" in {
