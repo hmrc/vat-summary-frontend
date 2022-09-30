@@ -20,7 +20,7 @@ import common.TestModels._
 import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatReturn1stLPPLPI, VatReturnLPI}
+import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -501,7 +501,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         controller.buildStandardChargeViewModel(payment) shouldBe Some(StandardChargeViewModel(
           "VAT Return Debit Charge",
           10000,
-          1000,
+          10000,
           0,
           LocalDate.parse("2019-03-03"),
           Some("ABCD"),
@@ -535,7 +535,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           "VAT Return LPI",
           5.00,
           LocalDate.parse("2019-03-03"),
-          1000,
+          10000,
           0,
           10000,
           isOverdue = false,
@@ -640,6 +640,87 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "penalty type is LPP2 but LPP2 details are missing" in {
         val penalty = LPPDetailsModelMax.copy(penaltyCategory = "LPP2", LPP2Days = None, LPP2Percentage = None)
         controller.buildEstimatedLPPViewModel(payment, penalty) shouldBe None
+      }
+    }
+  }
+
+  "The buildCrystallisedLPPViewModel function" should {
+
+    val penaltyCharge = payment.copy(chargeType = VatReturn1stLPP)
+
+    "return a CrystallisedLPP1ViewModel" when {
+
+      "originalAmount, chargeReference and all appropriate LPP1 penalty details (lower rate) are present" in {
+        val lppDetails = LPPDetailsModelMax.copy(LPP1HRCalculationAmount = None)
+        mockDateServiceCall()
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(lppDetails)) shouldBe Some(CrystallisedLPP1ViewModel(
+          "15",
+          "15",
+          Some("30"),
+          2.4,
+          Some(4.2),
+          100.11,
+          None,
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Return 1st LPP",
+          "XD002750002155",
+          isOverdue = false
+        ))
+      }
+
+      "originalAmount, chargeReference and all appropriate LPP1 penalty details (higher rate) are present" in {
+        mockDateServiceCall()
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(LPPDetailsModelMax)) shouldBe Some(CrystallisedLPP1ViewModel(
+          "30",
+          "15",
+          Some("30"),
+          2.4,
+          Some(4.2),
+          100.11,
+          Some(200.22),
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Return 1st LPP",
+          "XD002750002155",
+          isOverdue = false
+        ))
+      }
+    }
+
+    "return None" when {
+
+      "originalAmount is missing" in {
+        val charge = penaltyCharge.copy(originalAmount = None)
+        controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMax)) shouldBe None
+      }
+
+      "chargeType is missing" in {
+        val charge = penaltyCharge.copy(chargeReference = None)
+        controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMax)) shouldBe None
+      }
+
+      "penalty type is not recognised" in {
+        val penalty = LPPDetailsModelMax.copy(penaltyCategory = "LPP3")
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
+      }
+
+      "no matching penalty is provided" in {
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, None) shouldBe None
+      }
+
+      "penalty type is LPP1 but LPP1 details are missing" in {
+        val penalty = LPPDetailsModelMax.copy(LPP1LRDays = None, LPP1HRDays = None, LPP1LRPercentage = None,
+          LPP1HRPercentage = None, LPP1LRCalculationAmount = None)
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
       }
     }
   }
