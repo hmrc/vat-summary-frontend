@@ -226,6 +226,13 @@ estimatedLPP2.estimatesDescriptionAgent = ???
 estimatedLPP2.penaltiesAndAppeal = ???
 estimatedLPP2.penaltiesAndAppealAgent = ???
 
+lateSubmissionPenalty.dueDate = ???
+lateSubmissionPenalty.penaltyAmount = ???
+lateSubmissionPenalty.amountReceived = ???
+lateSubmissionPenalty.leftToPay = ???
+lateSubmissionPenalty.penaltiesAndAppeal = ???
+lateSubmissionPenalty.penaltiesAndAppealAgent = ???
+
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
