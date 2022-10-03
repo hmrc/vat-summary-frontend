@@ -22,14 +22,15 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
 import views.html.errors.{NotFound, PaymentsError}
-import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView, EstimatedLPP1View}
+import views.html.payments.{ChargeTypeDetailsView, CrystallisedInterestView, CrystallisedLPP1View, EstimatedInterestView, EstimatedLPP1View, LateSubmissionPenaltyView}
 
 class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
     authorisedController, mcc, mockServiceInfoService, mockWYOSessionService,
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
-    injector.instanceOf[EstimatedLPP1View], injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
+    injector.instanceOf[EstimatedLPP1View], injector.instanceOf[LateSubmissionPenaltyView],
+    injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
     injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View]
   )
   val id: String = "1234569"
@@ -92,6 +93,25 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "load the correct page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
           document.select("#estimated-LPP1-heading") should exist
+        }
+      }
+
+      "the retrieved model is a LateSubmissionPenaltyViewModel" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockWYOSessionServiceCall(Some(wyoLSPDBModel))
+          controller.showBreakdown(id)(fakeRequestWithSession)
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the correct page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.select("#late-submission-penalty-heading") should exist
         }
       }
 
