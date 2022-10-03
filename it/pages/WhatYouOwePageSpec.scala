@@ -53,8 +53,8 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
 
         response.status shouldBe Status.OK
         document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
-        document.select(totalAmountSelector).text() shouldBe "£20,005"
-        document.select(chargeRowsSelector).size() shouldBe 4
+        document.select(totalAmountSelector).text() shouldBe "£20,060.55"
+        document.select(chargeRowsSelector).size() shouldBe 5
       }
     }
 

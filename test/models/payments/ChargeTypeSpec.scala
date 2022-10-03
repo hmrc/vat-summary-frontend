@@ -61,7 +61,6 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
     "correctly hyphenate and lowercase a string" in {
       ChargeType.apply("VAT Further Interest").toPathElement shouldBe "vat-further-interest"
     }
-
   }
 
   "notInterest" should {
@@ -77,7 +76,6 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         charge.notInterest shouldBe true
       }
     }
-
   }
 
   "isInterest" should {
@@ -87,7 +85,21 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         charge.isInterest shouldBe true
       }
     }
+  }
 
+  "isPenalty" should {
+
+    penaltyChargeTypes.foreach { charge =>
+      s"return true for $charge" in {
+        charge.isPenalty shouldBe true
+      }
+    }
+
+    allChargeTypes.diff(penaltyChargeTypes).foreach { charge =>
+      s"return false for $charge" in {
+        charge.isPenalty shouldBe false
+      }
+    }
   }
 
   "The interestChargeMapping collection" when {

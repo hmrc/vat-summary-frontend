@@ -16,7 +16,7 @@
 
 package models.payments
 
-import models.payments.ChargeType.{interestChargeTypes, penaltyInterestChargeTypes}
+import models.payments.ChargeType.{interestChargeTypes, penaltyChargeTypes, penaltyInterestChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
@@ -33,7 +33,7 @@ sealed trait ChargeType {
   def isInterest: Boolean = interestChargeTypes.contains(this)
   def notInterest: Boolean = !isInterest
   def isPenaltyInterest: Boolean = penaltyInterestChargeTypes.contains(this)
-
+  def isPenalty: Boolean = penaltyChargeTypes.contains(this)
 }
 
 case object VatUnrepayableOverpayment extends ChargeType {
