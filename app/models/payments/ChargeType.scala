@@ -16,7 +16,7 @@
 
 package models.payments
 
-import models.payments.ChargeType.{interestChargeTypes, penaltyChargeTypes, penaltyInterestChargeTypes}
+import models.payments.ChargeType.{LSPChargeTypes, interestChargeTypes, penaltyChargeTypes, penaltyInterestChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
@@ -34,6 +34,7 @@ sealed trait ChargeType {
   def notInterest: Boolean = !isInterest
   def isPenaltyInterest: Boolean = penaltyInterestChargeTypes.contains(this)
   def isPenalty: Boolean = penaltyChargeTypes.contains(this)
+  def isLateSubmissionPenalty: Boolean = LSPChargeTypes.contains(this)
 }
 
 case object VatUnrepayableOverpayment extends ChargeType {
@@ -449,6 +450,10 @@ object ChargeType extends LoggerUtil {
     VatPA2ndLPP,
     VatAA2ndLPP,
     VatAAReturnCharge2ndLPP
+  )
+
+  val LSPChargeTypes: Set[ChargeType] = Set(
+    VatLateSubmissionPen
   )
 
   val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes

@@ -20,7 +20,7 @@ import common.TestModels._
 import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
+import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatLateSubmissionPen, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -721,6 +721,41 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val penalty = LPPDetailsModelMax.copy(LPP1LRDays = None, LPP1HRDays = None, LPP1LRPercentage = None,
           LPP1HRPercentage = None, LPP1LRCalculationAmount = None)
         controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
+      }
+    }
+  }
+
+  "The buildLateSubmissionPenaltyViewModel function" should {
+
+    "return a LateSubmissionPenaltyViewModel" when {
+
+      "originalAmount and chargeReference are present" in {
+        mockDateServiceCall()
+        val charge = payment.copy(chargeType = VatLateSubmissionPen)
+        controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe Some(LateSubmissionPenaltyViewModel(
+          "VAT Late Submission Pen",
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          isOverdue = false,
+          "XD002750002155",
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02")
+        ))
+      }
+    }
+
+    "return None" when {
+
+      "originalAmount is missing" in {
+        val charge = payment.copy(chargeType = VatLateSubmissionPen, originalAmount = None)
+        controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe None
+      }
+
+      "chargeReference is missing" in {
+        val charge = payment.copy(chargeType = VatLateSubmissionPen, chargeReference = None)
+        controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe None
       }
     }
   }

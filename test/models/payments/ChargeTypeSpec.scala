@@ -102,6 +102,21 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
     }
   }
 
+  "isLateSubmissionPenalty" should {
+
+    LSPChargeTypes.foreach { charge =>
+      s"return true for $charge" in {
+        charge.isLateSubmissionPenalty shouldBe true
+      }
+    }
+
+    allChargeTypes.diff(LSPChargeTypes).foreach { charge =>
+      s"return false for $charge" in {
+        charge.isLateSubmissionPenalty shouldBe false
+      }
+    }
+  }
+
   "The interestChargeMapping collection" when {
 
     "provided with a supported charge type" should {

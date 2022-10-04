@@ -31,7 +31,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
@@ -89,6 +88,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties)
         Seq(buildCrystallisedLPPViewModel(p, matchingPenalty))
       case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
+      case p: PaymentWithPeriod if p.chargeType.isLateSubmissionPenalty => Seq(buildLateSubmissionPenaltyViewModel(p))
       case p => buildChargePlusEstimates(p, penalties)
     } flatten
 
@@ -154,6 +154,23 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isOverdue = payment.isOverdue(dateService.now()),
           chargeReference = chargeRef,
           isPenalty = payment.chargeType.isPenaltyInterest
+        ))
+      case _ => None
+    }
+
+  private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod): Option[LateSubmissionPenaltyViewModel] =
+    (payment.chargeReference, payment.originalAmount) match {
+      case (Some(chargeRef), Some(originalAmount)) =>
+        Some(LateSubmissionPenaltyViewModel(
+          chargeType = payment.chargeType.value,
+          dueDate = payment.due,
+          penaltyAmount = originalAmount,
+          amountReceived = payment.clearedAmount.getOrElse(0),
+          leftToPay = payment.outstandingAmount,
+          isOverdue = payment.isOverdue(dateService.now()),
+          chargeReference = chargeRef,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo
         ))
       case _ => None
     }
