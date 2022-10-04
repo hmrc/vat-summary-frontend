@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
 import controllers.AuthorisedController
-import models.payments.{ChargeType, Payment, PaymentWithPeriod}
+import models.payments.{ChargeType, Payment, PaymentWithPeriod, VatLateSubmissionPen}
 import models.penalties.LPPDetails
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
@@ -88,7 +88,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties)
         Seq(buildCrystallisedLPPViewModel(p, matchingPenalty))
       case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
-      case p: PaymentWithPeriod if p.chargeType.isLateSubmissionPenalty => Seq(buildLateSubmissionPenaltyViewModel(p))
+      case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) => Seq(buildLateSubmissionPenaltyViewModel(p))
       case p => buildChargePlusEstimates(p, penalties)
     } flatten
 

@@ -228,14 +228,18 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "there are multiple payments with a mix of estimated & crystallised interest and penalties" should {
+    "there are multiple payments with a mix of estimated & crystallised interest, LSP and penalties" should {
 
-      val crystallisedInterest =
+      val crystallisedInterest = {
         payment.copy(chargeType = VatReturnLPI, accruedInterestAmount = None, accruedPenaltyAmount = None)
+      }
+      val lateSubmissionPenalty = {
+        payment.copy(chargeType = VatLateSubmissionPen, accruedInterestAmount = None, accruedPenaltyAmount = None, penaltyType = None)
+      }
       lazy val result = {
         mockDateServiceCall()
         controller.constructViewModel(
-          Seq(payment, crystallisedInterest),
+          Seq(payment, crystallisedInterest, lateSubmissionPenalty),
           mandationStatus = "MTDfB",
           Seq(LPPDetailsModelMax)
         )
