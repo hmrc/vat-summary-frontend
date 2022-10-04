@@ -390,6 +390,18 @@ object TestModels {
     isPenalty = true
   )
 
+  val lateSubmissionPenaltyCharge: LateSubmissionPenaltyViewModel = LateSubmissionPenaltyViewModel(
+    chargeType = "VAT Late Submission Pen",
+    dueDate =  LocalDate.parse("2019-03-03"),
+    penaltyAmount = 10000,
+    amountReceived = 0,
+    leftToPay = 10000,
+    isOverdue = false,
+    chargeReference = "XD002750002155",
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02")
+  )
+
   val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
     10000,
     Seq(whatYouOweChargeModel),
@@ -661,12 +673,13 @@ object TestModels {
   )
 
   val whatYouOweViewModelMultipleTypes: WhatYouOweViewModel = WhatYouOweViewModel(
-    20052.55,
+    30052.55,
     Seq(
       whatYouOweChargeModel,
       whatYouOweChargeModelEstimatedInterest,
       estimatedLPP1Model,
-      whatYouOweChargeModelInterestCharge
+      whatYouOweChargeModelInterestCharge,
+      lateSubmissionPenaltyCharge
     ),
     mandationStatus = "MTDfB",
     containsOverduePayments = false
