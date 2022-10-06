@@ -36,7 +36,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
       ddCollectionInProgress = false,
       Some(2),
       Some(BigDecimal(100.00)),
-      Some("LPP1")
+      Some("LPP1"),
+      BigDecimal(10000)
     )
 
     val exampleInputString =
@@ -50,7 +51,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"chargeReference": "XD002750002155",
         |"accruedInterestAmount": 2,
         |"accruedPenaltyAmount" : 100.00,
-        |"penaltyType" : "LPP1"
+        |"penaltyType" : "LPP1",
+        |"originalAmount" : 10000
         |}"""
         .stripMargin.replace("\n", "")
 
@@ -76,7 +78,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false,
           Some(2),
           Some(BigDecimal(100.00)),
-          Some("LPP1")
+          Some("LPP1"),
+          BigDecimal(10000)
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -89,7 +92,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false,
           Some(2),
           Some(BigDecimal(100.00)),
-          Some("LPP1")
+          Some("LPP1"),
+          BigDecimal(10000)
         )
       )
     )
@@ -106,7 +110,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"chargeReference": "XD002750002155",
         |"accruedInterestAmount": 2,
         |"accruedPenaltyAmount" : 100.00,
-        |"penaltyType" : "LPP1"
+        |"penaltyType" : "LPP1",
+        |"originalAmount" : 10000
         |},{
         |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
@@ -117,7 +122,8 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"chargeReference": "XD002750002155",
         |"accruedInterestAmount": 2,
         |"accruedPenaltyAmount" : 100.00,
-        |"penaltyType" : "LPP1"
+        |"penaltyType" : "LPP1",
+        |"originalAmount" : 10000
         |}]}"""
         .stripMargin.replace("\n", "")
 

@@ -109,7 +109,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildStandardChargeViewModel(payment: Payment): Option[StandardChargeViewModel] =
     payment.originalAmount match {
-      case Some(originalAmount) =>
+      case originalAmount =>
         Some(StandardChargeViewModel(
           chargeType = payment.chargeType.value,
           outstandingAmount = payment.outstandingAmount,
@@ -122,7 +122,6 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodFrom = periodFrom(payment),
           periodTo = periodTo(payment)
         ))
-      case _ => None
     }
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
@@ -141,7 +140,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
     (payment.chargeReference, payment.originalAmount) match {
-      case (Some(chargeRef), Some(originalAmount)) =>
+      case (Some(chargeRef), originalAmount) =>
         Some(CrystallisedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
@@ -160,7 +159,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod): Option[LateSubmissionPenaltyViewModel] =
     (payment.chargeReference, payment.originalAmount) match {
-      case (Some(chargeRef), Some(originalAmount)) =>
+      case (Some(chargeRef), originalAmount) =>
         Some(LateSubmissionPenaltyViewModel(
           chargeType = payment.chargeType.value,
           dueDate = payment.due,
@@ -206,7 +205,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                                          penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.originalAmount, payment.chargeReference) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, Some(daysHR), rateHR, _, _, _)),
-            Some(originalAmnt), Some(chargeRef)) =>
+            originalAmnt, Some(chargeRef)) =>
         val numOfDays = if (calcAmountHR.isDefined) daysHR else daysLR
         Some(CrystallisedLPP1ViewModel(
           numberOfDays = numOfDays,

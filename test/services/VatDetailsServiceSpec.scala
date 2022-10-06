@@ -51,7 +51,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         ddCollectionInProgress = false,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = Some(BigDecimal(100.00)),
-        penaltyType = Some("LPP1")
+        penaltyType = Some("LPP1"),
+        originalAmount = BigDecimal(10000)
       )
     )
 
@@ -67,7 +68,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         ddCollectionInProgress = false,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = Some(BigDecimal(100.00)),
-        penaltyType = Some("LPP1")
+        penaltyType = Some("LPP1"),
+        originalAmount = BigDecimal(10000)
       ),
       PaymentWithPeriod(
         CentralAssessmentCharge,
@@ -80,7 +82,8 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
         ddCollectionInProgress = false,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = Some(BigDecimal(100.00)),
-        penaltyType = Some("LPP1")
+        penaltyType = Some("LPP1"),
+        originalAmount = BigDecimal(10000)
       )
     )
 

@@ -49,7 +49,8 @@ object TestModels {
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
     accruedPenaltyAmount = None,
-    penaltyType = None
+    penaltyType = None,
+    originalAmount = BigDecimal(10000)
   )))
 
   val payment: PaymentWithPeriod = Payment(
@@ -62,7 +63,7 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
-    originalAmount = Some(10000),
+    originalAmount = BigDecimal(10000),
     clearedAmount = Some(0),
     accruedPenaltyAmount = Some(50.55),
     penaltyType = Some("LPP1")
@@ -83,7 +84,7 @@ object TestModels {
     accruedInterestAmount = Some(BigDecimal(2)),
     accruedPenaltyAmount = None,
     penaltyType = None,
-    originalAmount = Some(1000.00),
+    originalAmount = BigDecimal(10000),
     clearedAmount = Some(00.00)
   )
 
@@ -100,7 +101,8 @@ object TestModels {
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
     accruedPenaltyAmount = None,
-    penaltyType = None
+    penaltyType = None,
+    originalAmount = BigDecimal(10000)
   )
 
   val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(

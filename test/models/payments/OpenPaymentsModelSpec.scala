@@ -34,7 +34,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       ddCollectionInProgress = false,
       accruedInterestAmount = Some(BigDecimal(2)),
       accruedPenaltyAmount = Some(100.00),
-      penaltyType = Some("LPP1")
+      penaltyType = Some("LPP1"),
+      originalAmount = BigDecimal(10000)
     ),
     isOverdue = false
   )
@@ -49,7 +50,8 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       ddCollectionInProgress = false,
       accruedInterestAmount = Some(BigDecimal(2)),
       accruedPenaltyAmount = Some(BigDecimal(100.00)),
-      penaltyType = Some("LPP1")
+      penaltyType = Some("LPP1"),
+      originalAmount = BigDecimal(10000)
     ),
     isOverdue = false
   )

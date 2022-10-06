@@ -250,32 +250,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "there is a payment with the originalAmount not defined" should {
-
-      "return None" in {
-        val result = {
-          mockDateServiceCall()
-          controller.constructViewModel(Seq(payment.copy(originalAmount = None)), mandationStatus = "MTDfB", Seq(LPPDetailsModelMax))
-        }
-        result shouldBe None
-      }
-    }
-
-    "there are multiple payments and some do not have these fields defined" should {
-
-      "return None" in {
-        val result = {
-          mockDateServiceCall()
-          controller.constructViewModel(
-            Seq(payment, payment, payment.copy(originalAmount = None)),
-            mandationStatus = "MTDfB",
-            Seq(LPPDetailsModelMax)
-          )
-        }
-        result shouldBe None
-      }
-    }
-
     "an interest payment doesn't have the charge reference defined" should {
 
       "not build a view model" in {
@@ -289,23 +263,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         }
         result shouldBe None
       }
-
-    }
-
-    "an interest payment doesn't have the original amount defined" should {
-
-      "not build a view model" in {
-        val result = {
-          mockDateServiceCall()
-          controller.constructViewModel(
-            Seq(payment.copy(originalAmount = None, chargeType = VatReturn1stLPPLPI)),
-            mandationStatus = "MTDfB",
-            Seq(LPPDetailsModelMax)
-          )
-        }
-        result shouldBe None
-      }
-
     }
 
     "description() cannot retrieve a charge description" should {
@@ -517,13 +474,13 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "return None" should {
-
-      "originalAmount is missing" in {
-        val charge = payment.copy(originalAmount = None)
-        controller.buildStandardChargeViewModel(charge) shouldBe None
-      }
-    }
+//    "return None" should {
+//
+//      "originalAmount is missing" in {
+//        val charge = payment.copy(originalAmount = None)
+//        controller.buildStandardChargeViewModel(charge) shouldBe None
+//      }
+//    }
   }
 
   "The buildCrystallisedIntViewModel function" should {
@@ -550,11 +507,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     }
 
     "return None" when {
-
-      "originalAmount is missing" in {
-        val charge = payment.copy(chargeType = VatReturnLPI, originalAmount = None)
-        controller.buildCrystallisedIntViewModel(charge) shouldBe None
-      }
 
       "chargeReference is missing" in {
         val charge = payment.copy(chargeType = VatReturnLPI, chargeReference = None)
@@ -702,11 +654,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return None" when {
 
-      "originalAmount is missing" in {
-        val charge = penaltyCharge.copy(originalAmount = None)
-        controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMax)) shouldBe None
-      }
-
       "chargeType is missing" in {
         val charge = penaltyCharge.copy(chargeReference = None)
         controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMax)) shouldBe None
@@ -751,11 +698,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     }
 
     "return None" when {
-
-      "originalAmount is missing" in {
-        val charge = payment.copy(chargeType = VatLateSubmissionPen, originalAmount = None)
-        controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe None
-      }
 
       "chargeReference is missing" in {
         val charge = payment.copy(chargeType = VatLateSubmissionPen, chargeReference = None)

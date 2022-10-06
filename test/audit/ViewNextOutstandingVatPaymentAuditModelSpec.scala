@@ -38,7 +38,8 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
         ddCollectionInProgress = false,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = None,
-        penaltyType = None
+        penaltyType = None,
+        originalAmount = BigDecimal(10000)
       )
     )
   )
@@ -56,7 +57,8 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
         ddCollectionInProgress = false,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = None,
-        penaltyType = None
+        penaltyType = None,
+        originalAmount = BigDecimal(10000)
       ),
       Payment(
         ReturnDebitCharge,
@@ -69,7 +71,8 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
         ddCollectionInProgress = false,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = None,
-        penaltyType = None
+        penaltyType = None,
+        originalAmount = BigDecimal(10000)
       )
     )
   )
