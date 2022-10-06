@@ -41,7 +41,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
 
       "have a link to the breakdown page" in {
         element("a").attr("href") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
+          controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
       }
 
       "have an overdue label" in {
@@ -75,7 +75,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
 
       "have a link to the breakdown page" in {
         element("a").attr("href") shouldBe
-          testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
+          controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
       }
 
       "not have an overdue label" in {

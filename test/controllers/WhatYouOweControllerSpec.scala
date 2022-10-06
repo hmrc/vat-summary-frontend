@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package testOnly.controllers
+package controllers
 
 import common.TestModels._
-import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatLateSubmissionPen, VatPA2ndLPP, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
+import models.payments._
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -110,6 +109,31 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockPrincipalAuth()
           mockServiceInfoCall()
           mockOpenPayments(Left(PaymentsError))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockDateServiceCall()
+          mockPenaltyDetailsServiceCall()
+          controller.show(fakeRequest)
+        }
+
+        "return ISE (500)" in {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
+
+        "return the payments error view" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
+        }
+      }
+
+      "the view model cannot be built due to invalid or missing financial data" should {
+
+        val invalidCharge = payment.copy(penaltyType = Some("LPP9"))
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockOpenPayments(Right(Some(Payments(Seq(invalidCharge)))))
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()

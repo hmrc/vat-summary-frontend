@@ -16,9 +16,6 @@ POST        /vat-through-software/test-only/feature-switch                     t
 
 GET         /vat-through-software/test-only/payments-stub                      testOnly.controllers.PaymentsStubController.stub
 
-GET         /vat-through-software/test-only/what-you-owe                       testOnly.controllers.WhatYouOweController.show
-GET         /vat-through-software/test-only/amount-to-pay/:id                  testOnly.controllers.ChargeBreakdownController.showBreakdown(id: String)
-
 GET         /vat-through-software/test-only/:vrn/portal-stub                   testOnly.controllers.PortalStubController.show(vrn: String)
 
 GET         /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.show(redirectUrl: String)

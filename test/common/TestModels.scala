@@ -697,7 +697,7 @@ object TestModels {
 
   val whatYouOweChargeNoViewReturn: StandardChargeViewModel = whatYouOweCharge.copy(chargeType = "VAT Repayment Supplement Rec")
 
-  val whatYouOweUrl: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweUrl: String = controllers.routes.WhatYouOweController.show.url
 
   val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
 

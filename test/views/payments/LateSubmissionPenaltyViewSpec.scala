@@ -27,7 +27,7 @@ import views.html.payments.LateSubmissionPenaltyView
 class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
 
   val injectedView: LateSubmissionPenaltyView = injector.instanceOf[LateSubmissionPenaltyView]
-  val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
 
   "Rendering the Late Submission Penalty page for a principal user" when {

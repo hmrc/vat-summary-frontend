@@ -55,31 +55,31 @@
 }
 
 @allYears = @{
-Seq(model.tabOne) ++ additionalYears
+  Seq(model.tabOne) ++ additionalYears
 }
 
 @paymentHistoryItems = @{
-    val panels = allYears.map { year =>
-        TabItem(
-            id = Some(s"past-payments-$year"),
-            label = year.toString,
-            panel = TabPanel(
-                content = HtmlContent(paymentsHistoryTabsContent(model, year))
-            )
-        )
-    }
+  val panels = allYears.map { year =>
+    TabItem(
+      id = Some(s"past-payments-$year"),
+      label = year.toString,
+      panel = TabPanel(
+        content = HtmlContent(paymentsHistoryTabsContent(model, year))
+      )
+    )
+  }
 
-    if(model.previousPaymentsTab && !user.isAgent) {
-        panels ++ Seq(TabItem(
-            id = Some("previous-payments"),
-            label = messages("paymentsHistory.previousPayments.heading"),
-            panel = TabPanel(
-                content = HtmlContent(paymentsHistoryTabs())
-            )
-        ))
-    } else {
-        panels
-    }
+  if(model.previousPaymentsTab && !user.isAgent) {
+    panels ++ Seq(TabItem(
+      id = Some("previous-payments"),
+      label = messages("paymentsHistory.previousPayments.heading"),
+      panel = TabPanel(
+        content = HtmlContent(paymentsHistoryTabs())
+      )
+    ))
+  } else {
+    panels
+  }
 }
 
 @mainTemplate(
@@ -98,16 +98,16 @@ Seq(model.tabOne) ++ additionalYears
       <h1 id="top" class="govuk-heading-xl">@messages("paymentsHistory.title")</h1>
       @if(user.isAgent && migratedWithinThreeYears) {
         @govukInsetText(InsetText(
-            content = Text(messages("paymentsHistory.agentsHandoffMessage"))
+          content = Text(messages("paymentsHistory.agentsHandoffMessage"))
         ))
       }
       <p class="govuk-body govuk-!-margin-bottom-8">
-        <a class="govuk-link" href="@controllers.routes.OpenPaymentsController.openPayments.url">
+        <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url">
           @if(user.isAgent) {
             @messages("paymentsHistory.whatYouOweAgent")
-            } else {
+          } else {
             @messages("paymentsHistory.whatYouOwe")
-            }
+          }
         </a>
       </p>
 

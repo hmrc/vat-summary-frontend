@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package testOnly.controllers
+package controllers
 
-import config.AppConfig
-import controllers.AuthorisedController
-import javax.inject.Inject
 import common.{ChargeViewModelTypes => types}
+import config.AppConfig
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -29,6 +27,7 @@ import utils.LoggerUtil
 import views.html.errors.{NotFound, PaymentsError}
 import views.html.payments._
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class ChargeBreakdownController @Inject()(authorisedController: AuthorisedController,

@@ -27,7 +27,7 @@ import views.html.payments.CrystallisedLPP2View
 class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
 
   val injectedView: CrystallisedLPP2View = injector.instanceOf[CrystallisedLPP2View]
-  val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
 
   "Rendering the Crystallised LPP2 Page for a principal user" when {

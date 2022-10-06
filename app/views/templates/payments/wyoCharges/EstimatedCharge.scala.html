@@ -20,7 +20,7 @@
 
 @(charge: EstimatedViewModel)(implicit messages: Messages, user: User)
 
-@href = @{ testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(charge.generateHash(user.vrn)) }
+@href = @{ controllers.routes.ChargeBreakdownController.showBreakdown(charge.generateHash(user.vrn)) }
 
 <a class="govuk-link" href="@href">
   @charge.title @charge.description(user.isAgent)

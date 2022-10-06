@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package testOnly.controllers
+package controllers
 
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
-import controllers.AuthorisedController
 import models.payments.{ChargeType, Payment, PaymentWithPeriod, VatLateSubmissionPen}
 import models.penalties.LPPDetails
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{AccountDetailsService, DateService, PaymentsService, PenaltyDetailsService, ServiceInfoService, WYOSessionService}
+import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 

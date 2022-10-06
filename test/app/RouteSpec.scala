@@ -30,7 +30,7 @@ class RouteSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with Matchers  
 
   "The route for the Open payments controller" should {
     "be /vat-through-software/what-you-owe" in {
-      controllers.routes.OpenPaymentsController.openPayments.url shouldBe "/vat-through-software/what-you-owe"
+      controllers.routes.WhatYouOweController.show.url shouldBe "/vat-through-software/what-you-owe"
     }
   }
 

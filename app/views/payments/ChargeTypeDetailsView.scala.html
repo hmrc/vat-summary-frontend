@@ -44,7 +44,7 @@
             ),
             BreadcrumbsItem(
                 content = Text(messages("openPayments.title")),
-                href = Some(testOnly.controllers.routes.WhatYouOweController.show.url)
+                href = Some(controllers.routes.WhatYouOweController.show.url)
             )
         )
     ))
@@ -53,7 +53,7 @@
 @backLink = {
     @govukBackLink(BackLink(
         content = Text(messages("base.back")),
-        href = testOnly.controllers.routes.WhatYouOweController.show.url
+        href = controllers.routes.WhatYouOweController.show.url
     ))
 }
 
@@ -167,7 +167,7 @@
             }
 
             <p class="govuk-body">
-                <a class="govuk-link" href="@testOnly.controllers.routes.WhatYouOweController.show.url" id="whatYouOweLink">
+                <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url" id="whatYouOweLink">
                     @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
                 </a>
             </p>

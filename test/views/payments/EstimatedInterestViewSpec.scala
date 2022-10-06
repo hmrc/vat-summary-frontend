@@ -26,7 +26,7 @@ import views.html.payments.EstimatedInterestView
 class EstimatedInterestViewSpec extends ViewBaseSpec {
 
   val injectedView: EstimatedInterestView = injector.instanceOf[EstimatedInterestView]
-  val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
   "Rendering the Interest Charge Details page for a principal user" when {
 

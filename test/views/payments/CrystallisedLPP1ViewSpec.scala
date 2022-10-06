@@ -28,7 +28,7 @@ import java.time.LocalDate
 class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
 
   val injectedView: CrystallisedLPP1View = injector.instanceOf[CrystallisedLPP1View]
-  val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
   val viewModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
     "99",

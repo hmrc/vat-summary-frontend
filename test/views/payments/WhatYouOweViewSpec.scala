@@ -96,7 +96,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           }
 
           "has a link to the breakdown page" in {
-            val url = testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
+            val url = controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel1.generateHash(user.vrn)).url
             element(tableBodyCell(1, 1) + "> a").attr("href") shouldBe url
           }
 
@@ -130,7 +130,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
           "has a link to the breakdown page" in {
 
-            val url = testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
+            val url = controllers.routes.ChargeBreakdownController.showBreakdown(chargeModel2.generateHash(user.vrn)).url
             element(tableBodyCell(2, 1) + "> a").attr("href") shouldBe url
           }
 
@@ -161,7 +161,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           "has a form with the correct action" in {
 
             element(tableBodyCell(3, 1) + "> a").attr("href") shouldBe
-              testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
+              controllers.routes.ChargeBreakdownController.showBreakdown(
                 overdueCrystallisedInterestCharge.generateHash(user.vrn)
               ).url
           }
