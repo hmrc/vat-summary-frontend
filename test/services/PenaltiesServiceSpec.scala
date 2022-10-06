@@ -25,7 +25,6 @@ import common.TestModels.penaltySummaryResponse
 import config.AppConfig
 import connectors.PenaltiesConnector
 import mocks.MockAppConfig
-import models.errors.PenaltiesFeatureSwitchError
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -49,9 +48,8 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
     new PenaltiesService(mockPenaltiesConnector)
   }
 
-  "Calling getPenaltiesDataForVRN when the feature switch is enabled" should {
+  "Calling getPenaltiesDataForVRN" should {
     "retrieve the penalties summary for the vrn" in {
-      mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
       val summary: HttpGetResult[PenaltiesSummary] = await{
         setup(penaltySummaryResponse)
         penaltiesService().getPenaltiesInformation("123")
@@ -59,14 +57,5 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
       summary shouldBe penaltySummaryResponse
     }
   }
-
-  "Calling getPenaltiesDataForVRN when the feature switch is disabled" should {
-    "return Penalties feature switch error" in {
-      mockAppConfig.features.penaltiesAndInterestWYOEnabled(false)
-      val summary: HttpGetResult[PenaltiesSummary] = await(penaltiesService().getPenaltiesInformation("123"))
-      summary shouldBe Left(PenaltiesFeatureSwitchError)
-    }
-  }
-
 
 }

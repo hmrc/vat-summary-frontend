@@ -17,22 +17,26 @@
 package services
 
 import common.TestModels.penaltyDetailsResponse
+import config.AppConfig
 import connectors.PenaltyDetailsConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import mocks.MockAppConfig
 import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.HeaderCarrier
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
-class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers {
+class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers with GuiceOneAppPerSuite {
 
   val mockPenaltyDetailsConnector = mock[PenaltyDetailsConnector]
   implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
   def setup(penaltyDetails: HttpGetResult[PenaltyDetails]): Any =
     (mockPenaltyDetailsConnector.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -44,13 +48,21 @@ class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Ma
     new PenaltyDetailsService(mockPenaltyDetailsConnector)
   }
 
-  "Calling PenaltyDetailsService.getPenaltyDetails" should {
+  "Calling PenaltyDetailsService.getPenaltyDetails when the feature switch is enabled" should {
 
     "return the PenaltyDetails that the connector returns" in {
-
+      mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
       await(service.getPenaltyDetails("123")) shouldBe penaltyDetailsResponse
-
     }
+  }
+
+  "Calling PenaltyDetailsService.getPenaltyDetails when the feature switch is disabled" should {
+
+    "return an empty Penalty details model" in {
+      mockAppConfig.features.penaltiesAndInterestWYOEnabled(false)
+      await(service.getPenaltyDetails("123")) shouldBe Right(PenaltyDetails(Seq.empty))
+    }
+
   }
 
 }
