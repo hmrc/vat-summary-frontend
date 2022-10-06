@@ -16,23 +16,17 @@
 
 package services
 
-import config.AppConfig
 import connectors.PenaltiesConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
-import models.errors.PenaltiesFeatureSwitchError
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
 
   def getPenaltiesInformation(vrn: String)
-                             (implicit hc: HeaderCarrier, ec: ExecutionContext, appConfig: AppConfig): Future[HttpGetResult[PenaltiesSummary]] =
-    if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
-      penaltiesConnector.getPenaltiesDataForVRN(vrn)
-    } else {
-      Future.successful(Left(PenaltiesFeatureSwitchError))
-    }
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[PenaltiesSummary]] =
+    penaltiesConnector.getPenaltiesDataForVRN(vrn)
 }
