@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.{DDIDetails, DirectDebitStatus}
 import models.errors.BadRequestError
-import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnDebitCharge, VatReturn1stLPP}
+import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnDebitCharge, VatProtectiveAssessmentCharge, VatReturn1stLPP}
 import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -53,23 +53,37 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(2),
           chargeReference = Some("XD002750002155"),
-          originalAmount = BigDecimal(10000),
+          originalAmount = 10000,
           accruedPenaltyAmount = None,
           penaltyType = None
         ),
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
-          periodFrom = LocalDate.parse("2015-03-01"),
-          periodTo = LocalDate.parse("2015-03-31"),
+          periodFrom = LocalDate.parse("2016-03-01"),
+          periodTo = LocalDate.parse("2016-03-31"),
           due = LocalDate.parse("2019-01-16"),
           outstandingAmount = 10000,
-          periodKey = Some("15AC"),
+          periodKey = Some("16AC"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
           chargeReference = Some("XD002750002156"),
-          originalAmount = BigDecimal(10000),
+          originalAmount = 10000,
           accruedPenaltyAmount = Some(3),
           penaltyType = Some("LPP1")
+        ),
+        PaymentWithPeriod(
+          chargeType = VatProtectiveAssessmentCharge,
+          periodFrom = LocalDate.parse("2017-03-01"),
+          periodTo = LocalDate.parse("2017-03-31"),
+          due = LocalDate.parse("2019-01-17"),
+          outstandingAmount = 10000,
+          periodKey = Some("17AC"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          chargeReference = Some("XD002750002157"),
+          originalAmount = 10000,
+          accruedPenaltyAmount = Some(5),
+          penaltyType = Some("LPP2")
         ),
         PaymentWithPeriod(
           chargeType = VatReturn1stLPP,
@@ -80,8 +94,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = None,
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
-          chargeReference = Some("XD002750002157"),
-          originalAmount = BigDecimal(55.55),
+          originalAmount = 55.55,
+          chargeReference = Some("XD002750002158"),
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP1")
         )

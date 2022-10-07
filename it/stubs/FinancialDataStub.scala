@@ -18,7 +18,7 @@ package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import models.payments.{ReturnCreditCharge, ReturnDebitCharge, VatReturn1stLPP}
+import models.payments.{ReturnCreditCharge, ReturnDebitCharge, VatProtectiveAssessmentCharge, VatReturn1stLPP}
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 
@@ -149,26 +149,14 @@ object FinancialDataStub extends WireMockMethods {
       |        "chargeType" : "$ReturnDebitCharge",
       |        "mainType" : "VAT Return Charge",
       |        "periodKey" : "15AC",
-      |        "periodKeyDescription" : "March 2015",
       |        "taxPeriodFrom" : "2015-03-01",
       |        "taxPeriodTo" : "2015-03-31",
-      |        "businessPartner" : "0",
-      |        "contractAccountCategory" : "33",
-      |        "contractAccount" : "X",
-      |        "contractObjectType" : "ABCD",
-      |        "contractObject" : "0",
-      |        "sapDocumentNumber" : "0",
-      |        "sapDocumentNumberItem" : "0",
       |        "chargeReference" : "XD002750002155",
       |        "accruedInterestAmount" : 2,
-      |        "mainTransaction" : "1234",
-      |        "subTransaction" : "1174",
       |        "originalAmount" : 10000,
       |        "outstandingAmount" : 10000,
       |        "items" : [
       |          {
-      |            "clearingSAPDocument" : "002828853334",
-      |            "subItem" : "000",
       |            "dueDate" : "2019-01-15",
       |            "amount" : 10000
       |          }
@@ -177,38 +165,43 @@ object FinancialDataStub extends WireMockMethods {
       |      {
       |        "chargeType" : "$ReturnDebitCharge",
       |        "mainType" : "VAT Return Charge",
-      |        "periodKey" : "15AC",
-      |        "periodKeyDescription" : "March 2015",
-      |        "taxPeriodFrom" : "2015-03-01",
-      |        "taxPeriodTo" : "2015-03-31",
-      |        "businessPartner" : "0",
-      |        "contractAccountCategory" : "33",
-      |        "contractAccount" : "X",
-      |        "contractObjectType" : "ABCD",
-      |        "contractObject" : "0",
-      |        "sapDocumentNumber" : "0",
-      |        "sapDocumentNumberItem" : "0",
+      |        "periodKey" : "16AC",
+      |        "taxPeriodFrom" : "2016-03-01",
+      |        "taxPeriodTo" : "2016-03-31",
       |        "chargeReference" : "XD002750002156",
       |        "accruedPenaltyAmount" : 3,
       |        "penaltyType" : "LPP1",
-      |        "mainTransaction" : "1234",
-      |        "subTransaction" : "1174",
       |        "originalAmount" : 10000,
       |        "outstandingAmount" : 10000,
       |        "items" : [
       |          {
-      |            "clearingSAPDocument" : "002828853335",
-      |            "subItem" : "000",
       |            "dueDate" : "2019-01-16",
       |            "amount" : 10000
       |          }
       |        ]
       |      },
-      |            {
+      |      {
+      |        "chargeType" : "$VatProtectiveAssessmentCharge",
+      |        "periodKey" : "17AC",
+      |        "taxPeriodFrom" : "2017-03-01",
+      |        "taxPeriodTo" : "2017-03-31",
+      |        "chargeReference" : "XD002750002157",
+      |        "accruedPenaltyAmount" : 5,
+      |        "penaltyType" : "LPP2",
+      |        "originalAmount" : 10000,
+      |        "outstandingAmount" : 10000,
+      |        "items" : [
+      |          {
+      |            "dueDate" : "2019-01-17",
+      |            "amount" : 10000
+      |          }
+      |        ]
+      |      },
+      |      {
       |        "chargeType" : "$VatReturn1stLPP",
       |        "taxPeriodFrom" : "2019-01-01",
       |        "taxPeriodTo" : "2019-02-02",
-      |        "chargeReference" : "XD002750002157",
+      |        "chargeReference" : "XD002750002158",
       |        "penaltyType" : "LPP1",
       |        "originalAmount" : 55.55,
       |        "outstandingAmount" : 55.55,

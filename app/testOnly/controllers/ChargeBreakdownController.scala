@@ -38,6 +38,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           chargeBreakdownView: ChargeTypeDetailsView,
                                           estimatedInterestView: EstimatedInterestView,
                                           estimatedLPP1View: EstimatedLPP1View,
+                                          estimatedLPP2View: EstimatedLPP2View,
                                           lateSubmissionPenaltyView: LateSubmissionPenaltyView,
                                           errorView: PaymentsError,
                                           notFound: NotFound,
@@ -56,10 +57,11 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
           model match {
             case Some(m) => m.modelType match {
               case types.standard => Ok(chargeBreakdownView(m.data.as[StandardChargeViewModel], navLinks))
-              case types.estimated => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
-              case types.crystallised => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
+              case types.estimatedInterest => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
+              case types.crystallisedInterest => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
               case types.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
               case types.estimatedLPP1 => Ok(estimatedLPP1View(m.data.as[EstimatedLPP1ViewModel], navLinks))
+              case types.estimatedLPP2 => Ok(estimatedLPP2View(m.data.as[EstimatedLPP2ViewModel], navLinks))
               case types.lsp => Ok(lateSubmissionPenaltyView(m.data.as[LateSubmissionPenaltyViewModel], navLinks))
               case _ =>
                 logger.warn("[ChargeBreakdownController][showBreakdown] Retrieved model type was unknown")
