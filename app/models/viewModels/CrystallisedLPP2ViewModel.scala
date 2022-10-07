@@ -18,6 +18,7 @@ package models.viewModels
 
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
+import views.templates.payments.PaymentMessageHelper
 
 import java.time.LocalDate
 
@@ -34,7 +35,14 @@ case class CrystallisedLPP2ViewModel(day: String,
                                     isOverdue: Boolean) extends CrystallisedViewModel {
 
   override val outstandingAmount: BigDecimal = leftToPay
-  override def description(isAgent: Boolean)(implicit messages: Messages): String = "" //TODO: Add description
+
+  override def description(isAgent: Boolean)(implicit messages: Messages): String =
+    PaymentMessageHelper.getCorrectDescription(
+      PaymentMessageHelper.getChargeType(chargeType).principalUserDescription.getOrElse(""),
+      PaymentMessageHelper.getChargeType(chargeType).agentDescription.getOrElse(""),
+      Some(periodFrom),
+      Some(periodTo),
+      isAgent)
 
   val makePaymentRedirect: String = controllers.routes.MakePaymentController.makePayment(
     amountInPence = (leftToPay * 100).toLong,
