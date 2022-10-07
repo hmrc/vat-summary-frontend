@@ -31,7 +31,7 @@ object PenaltyDetailsStub extends WireMockMethods{
       .thenReturn(status = status, body = response)
   }
 
-  val estimatedPenDetailsModel: LPPDetails = LPPDetails(
+  val estimatedLPP1DetailsModel: LPPDetails = LPPDetails(
     principalChargeReference = "XD002750002156",
     penaltyCategory = "LPP1",
     Some(100.11),
@@ -45,18 +45,36 @@ object PenaltyDetailsStub extends WireMockMethods{
     penaltyChargeReference = None
   )
 
-  val crystallisedPenDetailsModel: LPPDetails = estimatedPenDetailsModel.copy(
+  val estimatedLPP2DetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
+    principalChargeReference = "XD002750002157",
+    penaltyCategory = "LPP2"
+  )
+
+  val crystallisedPenDetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
     principalChargeReference = "XXXXXXXXXXXXXXXX",
-    penaltyChargeReference = Some("XD002750002157")
+    penaltyChargeReference = Some("XD002750002158")
   )
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(estimatedPenDetailsModel, crystallisedPenDetailsModel)
+    LPPDetails = Seq(estimatedLPP1DetailsModel, estimatedLPP2DetailsModel, crystallisedPenDetailsModel)
   )
 
-  val estimatedPenDetails: JsObject = Json.obj(
+  val estimatedLPP1PenDetails: JsObject = Json.obj(
     "principalChargeReference" -> "XD002750002156",
     "penaltyCategory" -> "LPP1",
+    "LPP1LRCalculationAmount" -> 100.11,
+    "LPP1LRDays" -> "15",
+    "LPP1LRPercentage" -> 2.4,
+    "LPP1HRCalculationAmount" -> 200.22,
+    "LPP1HRDays" -> "30",
+    "LPP1HRPercentage" -> 4.2,
+    "LPP2Days" -> "31",
+    "LPP2Percentage" -> 5.5
+  )
+
+  val estimatedLPP2PenDetails: JsObject = Json.obj(
+    "principalChargeReference" -> "XD002750002157",
+    "penaltyCategory" -> "LPP2",
     "LPP1LRCalculationAmount" -> 100.11,
     "LPP1LRDays" -> "15",
     "LPP1LRPercentage" -> 2.4,
@@ -78,11 +96,11 @@ object PenaltyDetailsStub extends WireMockMethods{
     "LPP1HRPercentage" -> 4.2,
     "LPP2Days" -> "31",
     "LPP2Percentage" -> 5.5,
-    "penaltyChargeReference" -> "XD002750002157"
+    "penaltyChargeReference" -> "XD002750002158"
   )
 
   val penaltyDetailsJsonMax : JsObject = Json.obj(
-    "LPPDetails" -> Json.arr(estimatedPenDetails, crystallisedPenDetails)
+    "LPPDetails" -> Json.arr(estimatedLPP1PenDetails, estimatedLPP2PenDetails, crystallisedPenDetails)
   )
 
   val errorJson: JsObject = Json.obj(

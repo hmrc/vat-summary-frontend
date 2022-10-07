@@ -68,10 +68,9 @@
 
 @paymentHtml(chargeModel: ChargeDetailsViewModel) = @{
   chargeModel match {
-    case charge: StandardChargeViewModel        => standardCharge(charge)
-    case charge: CrystallisedViewModel          => crystallisedCharge(charge)
-    case charge: EstimatedInterestViewModel     => estimatedCharge(charge)
-    case charge: EstimatedLPP1ViewModel         => estimatedCharge(charge)
+    case charge: StandardChargeViewModel => standardCharge(charge)
+    case charge: CrystallisedViewModel   => crystallisedCharge(charge)
+    case charge: EstimatedViewModel      => estimatedCharge(charge)
   }
 }
 

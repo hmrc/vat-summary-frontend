@@ -19,9 +19,10 @@ package common
 object ChargeViewModelTypes {
 
     val standard = "StandardChargeViewModel"
-    val estimated = "EstimatedInterestViewModel"
+    val estimatedInterest = "EstimatedInterestViewModel"
     val estimatedLPP1 = "EstimatedLPP1ViewModel"
-    val crystallised = "CrystallisedInterestViewModel"
+    val estimatedLPP2 = "EstimatedLPP2ViewModel"
+    val crystallisedInterest = "CrystallisedInterestViewModel"
     val crystallisedLPP1 = "CrystallisedLPP1ViewModel"
     val lsp = "LateSubmissionPenaltyViewModel"
 
