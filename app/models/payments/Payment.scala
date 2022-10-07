@@ -27,7 +27,7 @@ sealed trait Payment extends Obligation {
   val chargeType: ChargeType
   val due: LocalDate
   val outstandingAmount: BigDecimal
-  val originalAmount: Option[BigDecimal]
+  val originalAmount: BigDecimal
   val chargeReference: Option[String]
   val clearedAmount: Option[BigDecimal]
   val periodKey: Option[String]
@@ -57,7 +57,7 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              accruedInterestAmount: Option[BigDecimal],
                              accruedPenaltyAmount: Option[BigDecimal],
                              penaltyType: Option[String],
-                             originalAmount: Option[BigDecimal] = None,
+                             originalAmount: BigDecimal,
                              clearedAmount: Option[BigDecimal] = None) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
@@ -78,7 +78,7 @@ case class PaymentNoPeriod(chargeType: ChargeType,
                            accruedInterestAmount: Option[BigDecimal],
                            accruedPenaltyAmount: Option[BigDecimal],
                            penaltyType: Option[String],
-                           originalAmount: Option[BigDecimal] = None,
+                           originalAmount: BigDecimal,
                            clearedAmount: Option[BigDecimal] = None) extends Payment {
 
   val auditDetails: Map[String, String] = Map(
@@ -101,7 +101,7 @@ object Payment {
                             accruedInterestAmount: Option[BigDecimal],
                             accruedPenaltyAmount: Option[BigDecimal],
                             penaltyType: Option[String],
-                            originalAmount: Option[BigDecimal],
+                            originalAmount: BigDecimal,
                             clearedAmount: Option[BigDecimal]): Payment =
     (periodFrom, periodTo) match {
       case (Some(s), Some(e)) =>
@@ -125,7 +125,7 @@ object Payment {
             accruedInterestAmount: Option[BigDecimal],
             accruedPenaltyAmount: Option[BigDecimal],
             penaltyType: Option[String],
-            originalAmount: Option[BigDecimal],
+            originalAmount: BigDecimal,
             clearedAmount: Option[BigDecimal]): PaymentWithPeriod =
     PaymentWithPeriod(
       chargeType,
@@ -153,7 +153,8 @@ object Payment {
             ddCollectionInProgress: Boolean,
             accruedInterestAmount: Option[BigDecimal],
             accruedPenaltyAmount: Option[BigDecimal],
-            penaltyType: Option[String]): PaymentWithPeriod =
+            penaltyType: Option[String],
+            originalAmount: BigDecimal): PaymentWithPeriod =
     PaymentWithPeriod(
       chargeType,
       periodFrom,
@@ -165,7 +166,8 @@ object Payment {
       ddCollectionInProgress,
       accruedInterestAmount,
       accruedPenaltyAmount,
-      penaltyType
+      penaltyType,
+      originalAmount
     )
 
   def apply(chargeType: ChargeType,
@@ -177,7 +179,7 @@ object Payment {
             accruedInterestAmount: Option[BigDecimal],
             accruedPenaltyAmount: Option[BigDecimal],
             penaltyType: Option[String],
-            originalAmount: Option[BigDecimal],
+            originalAmount: BigDecimal,
             clearedAmount: Option[BigDecimal]
             ): PaymentNoPeriod =
     PaymentNoPeriod(
@@ -202,7 +204,8 @@ object Payment {
             ddCollectionInProgress: Boolean,
             accruedInterestAmount: Option[BigDecimal],
             accruedPenaltyAmount: Option[BigDecimal],
-            penaltyType: Option[String]): PaymentNoPeriod =
+            penaltyType: Option[String],
+            originalAmount: BigDecimal): PaymentNoPeriod =
     PaymentNoPeriod(
       chargeType,
       due,
@@ -212,7 +215,8 @@ object Payment {
       ddCollectionInProgress,
       accruedInterestAmount,
       accruedPenaltyAmount,
-      penaltyType
+      penaltyType,
+      originalAmount
     )
 
   implicit val paymentReads: Reads[Payment] = (
@@ -227,7 +231,7 @@ object Payment {
     (JsPath \ "accruedInterestAmount").readNullable[BigDecimal] and
     (JsPath \ "accruedPenaltyAmount").readNullable[BigDecimal] and
     (JsPath \ "penaltyType").readNullable[String] and
-    (JsPath \ "originalAmount").readNullable[BigDecimal] and
+    (JsPath \ "originalAmount").read[BigDecimal] and
     (JsPath \ "clearedAmount").readNullable[BigDecimal]
 
   )(Payment.createPayment _)

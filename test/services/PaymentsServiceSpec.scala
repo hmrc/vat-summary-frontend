@@ -56,7 +56,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1")
+          penaltyType = Some("LPP1"),
+          BigDecimal("10000")
         )
         val payment2 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -69,7 +70,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1")
+          penaltyType = Some("LPP1"),
+          BigDecimal("10000")
         )
         val payment3 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -82,7 +84,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1")
+          penaltyType = Some("LPP1"),
+          BigDecimal("10000")
         )
         val payment4 = PaymentWithPeriod(
           ReturnDebitCharge,
@@ -95,7 +98,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1")
+          penaltyType = Some("LPP1"),
+          BigDecimal("10000")
         )
 
         val payments = Payments(Seq(payment1, payment2, payment3, payment4))
@@ -127,7 +131,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1")
+          penaltyType = Some("LPP1"),
+          BigDecimal("10000")
         )))
         lazy val responseFromFinancialDataConnector = Right(payments)
 
@@ -156,7 +161,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          BigDecimal("10000")
         )
 
         val payments = Payments(Seq(payment1))
@@ -187,7 +193,8 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          BigDecimal("10000")
         )
 
         val payments = Payments(Seq(payment1))

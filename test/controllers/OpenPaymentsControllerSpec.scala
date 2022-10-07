@@ -264,7 +264,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 ddCollectionInProgress = true,
                 accruedInterestAmount = Some(BigDecimal(2)),
                 accruedPenaltyAmount = Some(BigDecimal(100.00)),
-                penaltyType = Some("LPP1")
+                penaltyType = Some("LPP1"),
+                BigDecimal(10000)
               )
 
               val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
@@ -304,7 +305,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
                 ddCollectionInProgress = false,
                 accruedInterestAmount = Some(BigDecimal(2)),
                 accruedPenaltyAmount = Some(100.00),
-                penaltyType = Some("LPP1")
+                penaltyType = Some("LPP1"),
+                BigDecimal(10000)
               )
 
               val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
@@ -345,7 +347,8 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
               ddCollectionInProgress = false,
               accruedInterestAmount = Some(BigDecimal(2)),
               accruedPenaltyAmount = Some(BigDecimal(100.00)),
-              penaltyType = Some("LPP1")
+              penaltyType = Some("LPP1"),
+              BigDecimal(10000)
             )
 
             val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(

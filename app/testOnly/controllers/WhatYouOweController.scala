@@ -108,22 +108,18 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   }
 
   private[controllers] def buildStandardChargeViewModel(payment: Payment): Option[StandardChargeViewModel] =
-    payment.originalAmount match {
-      case Some(originalAmount) =>
-        Some(StandardChargeViewModel(
-          chargeType = payment.chargeType.value,
-          outstandingAmount = payment.outstandingAmount,
-          originalAmount = originalAmount,
-          clearedAmount = payment.clearedAmount.getOrElse(0),
-          dueDate = payment.due,
-          periodKey = payment.periodKey,
-          isOverdue = payment.isOverdue(dateService.now()),
-          chargeReference = payment.chargeReference,
-          periodFrom = periodFrom(payment),
-          periodTo = periodTo(payment)
-        ))
-      case _ => None
-    }
+    Some(StandardChargeViewModel(
+      chargeType = payment.chargeType.value,
+      outstandingAmount = payment.outstandingAmount,
+      originalAmount = payment.originalAmount,
+      clearedAmount = payment.clearedAmount.getOrElse(0),
+      dueDate = payment.due,
+      periodKey = payment.periodKey,
+      isOverdue = payment.isOverdue(dateService.now()),
+      chargeReference = payment.chargeReference,
+      periodFrom = periodFrom(payment),
+      periodTo = periodTo(payment)
+    ))
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
     payment.accruedInterestAmount match {
@@ -140,15 +136,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
-    (payment.chargeReference, payment.originalAmount) match {
-      case (Some(chargeRef), Some(originalAmount)) =>
+    payment.chargeReference match {
+      case Some(chargeRef) =>
         Some(CrystallisedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = payment.chargeType.value,
           interestRate = 5.00, // TODO replace with API field
           dueDate = payment.due,
-          interestAmount = originalAmount,
+          interestAmount = payment.originalAmount,
           amountReceived = payment.clearedAmount.getOrElse(0),
           leftToPay = payment.outstandingAmount,
           isOverdue = payment.isOverdue(dateService.now()),
@@ -159,12 +155,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod): Option[LateSubmissionPenaltyViewModel] =
-    (payment.chargeReference, payment.originalAmount) match {
-      case (Some(chargeRef), Some(originalAmount)) =>
+    payment.chargeReference match {
+      case Some(chargeRef) =>
         Some(LateSubmissionPenaltyViewModel(
           chargeType = payment.chargeType.value,
           dueDate = payment.due,
-          penaltyAmount = originalAmount,
+          penaltyAmount = payment.originalAmount,
           amountReceived = payment.clearedAmount.getOrElse(0),
           leftToPay = payment.outstandingAmount,
           isOverdue = payment.isOverdue(dateService.now()),
@@ -204,9 +200,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
                                                          penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
-    (penaltyDetails, payment.originalAmount, payment.chargeReference) match {
+    (penaltyDetails, payment.chargeReference) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, Some(daysHR), rateHR, _, _, _)),
-            Some(originalAmnt), Some(chargeRef)) =>
+            Some(chargeRef)) =>
         val numOfDays = if (calcAmountHR.isDefined) daysHR else daysLR
         Some(CrystallisedLPP1ViewModel(
           numberOfDays = numOfDays,
@@ -217,7 +213,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           part1UnpaidVAT = calcAmountLR,
           part2UnpaidVAT = calcAmountHR,
           dueDate = payment.due,
-          penaltyAmount = originalAmnt,
+          penaltyAmount = payment.originalAmount,
           amountReceived = payment.clearedAmount.getOrElse(0),
           leftToPay = payment.outstandingAmount,
           periodFrom = payment.periodFrom,

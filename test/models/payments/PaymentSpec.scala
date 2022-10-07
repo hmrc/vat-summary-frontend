@@ -44,7 +44,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "outstandingAmount" -> 9999,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
-          "accruedInterestAmount" -> 2
+          "accruedInterestAmount" -> 2,
+          "originalAmount" -> 10000
         )
 
         val paymentWithPeriodModel = PaymentWithPeriod(
@@ -58,7 +59,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          originalAmount = BigDecimal(10000)
         )
         paymentJson.as[Payment] shouldBe paymentWithPeriodModel
       }
@@ -77,7 +79,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "outstandingAmount" -> -9999,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
-          "accruedInterestAmount" -> 2
+          "accruedInterestAmount" -> 2,
+          "originalAmount" -> 10000
         )
 
         val paymentNoPeriodModel = PaymentNoPeriod(
@@ -89,7 +92,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          originalAmount = BigDecimal(10000)
         )
         paymentJson.as[Payment] shouldBe paymentNoPeriodModel
       }
@@ -108,7 +112,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           ),
           "outstandingAmount" -> 9999,
           "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155"
+          "chargeReference" -> "XD002750002155",
+          "originalAmount" -> 10000
         )
 
         val exception = intercept[Exception] {
@@ -133,7 +138,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         "accruedInterestAmount" -> 2,
         "outstandingAmount" -> 0,
         "periodKey" -> "#001",
-        "chargeReference" -> "XD002750002155"
+        "chargeReference" -> "XD002750002155",
+        "originalAmount" -> 10000
       )
 
       val model = PaymentWithPeriod(
@@ -147,7 +153,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         ddCollectionInProgress = true,
         accruedInterestAmount = Some(BigDecimal(2)),
         accruedPenaltyAmount = None,
-        penaltyType = None
+        penaltyType = None,
+        originalAmount = BigDecimal(10000)
       )
 
       "read from json correctly" in {
@@ -155,7 +162,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
       }
     }
 
-    "given JSON with no original amount or cleared amount fields" should {
+    "given JSON with no cleared amount fields" should {
 
       val paymentJson = Json.obj(
         "chargeType" -> ReturnDebitCharge.value,
@@ -169,21 +176,17 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
         ),
         "outstandingAmount" -> 0,
         "periodKey" -> "#001",
-        "chargeReference" -> "XD002750002155"
+        "chargeReference" -> "XD002750002155",
+        "originalAmount" -> 10000
       )
 
       val result = paymentJson.as[Payment]
 
       "return a model" that {
 
-        "has None in the originalAmount field" in {
-          result.originalAmount shouldBe None
-        }
-
         "has None in the clearedAmount field" in {
           result.clearedAmount shouldBe None
         }
-
       }
 
     }
@@ -222,7 +225,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = Some(10000),
+          originalAmount = BigDecimal(10000),
           clearedAmount = Some(100)
         )
 
@@ -261,7 +264,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           accruedInterestAmount = Some(BigDecimal(2)),
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = Some(10000),
+          originalAmount = BigDecimal(10000),
           clearedAmount = Some(100)
         )
 

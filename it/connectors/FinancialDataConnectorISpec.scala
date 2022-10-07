@@ -53,7 +53,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(2),
           chargeReference = Some("XD002750002155"),
-          originalAmount = Some(10000),
+          originalAmount = BigDecimal(10000),
           accruedPenaltyAmount = None,
           penaltyType = None
         ),
@@ -67,7 +67,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
           chargeReference = Some("XD002750002156"),
-          originalAmount = Some(10000),
+          originalAmount = BigDecimal(10000),
           accruedPenaltyAmount = Some(3),
           penaltyType = Some("LPP1")
         ),
@@ -81,7 +81,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
           chargeReference = Some("XD002750002157"),
-          originalAmount = Some(55.55),
+          originalAmount = BigDecimal(55.55),
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP1")
         )
