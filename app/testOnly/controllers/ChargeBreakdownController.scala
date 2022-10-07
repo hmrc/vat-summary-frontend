@@ -43,7 +43,8 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           errorView: PaymentsError,
                                           notFound: NotFound,
                                           crystallisedInterestView: CrystallisedInterestView,
-                                          crystallisedLPP1View: CrystallisedLPP1View)
+                                          crystallisedLPP1View: CrystallisedLPP1View,
+                                          crystallisedLPP2View: CrystallisedLPP2View)
                                          (implicit ec: ExecutionContext,
                                           appConfig: AppConfig) extends
   FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -60,6 +61,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
               case types.estimatedInterest => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
               case types.crystallisedInterest => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
               case types.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
+              case types.crystallisedLPP2 => Ok(crystallisedLPP2View(m.data.as[CrystallisedLPP2ViewModel], navLinks))
               case types.estimatedLPP1 => Ok(estimatedLPP1View(m.data.as[EstimatedLPP1ViewModel], navLinks))
               case types.estimatedLPP2 => Ok(estimatedLPP2View(m.data.as[EstimatedLPP2ViewModel], navLinks))
               case types.lsp => Ok(lateSubmissionPenaltyView(m.data.as[LateSubmissionPenaltyViewModel], navLinks))
