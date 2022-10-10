@@ -24,6 +24,7 @@ object ChargeViewModelTypes {
     val estimatedLPP2 = "EstimatedLPP2ViewModel"
     val crystallisedInterest = "CrystallisedInterestViewModel"
     val crystallisedLPP1 = "CrystallisedLPP1ViewModel"
+    val crystallisedLPP2 = "CrystallisedLPP2ViewModel"
     val lsp = "LateSubmissionPenaltyViewModel"
 
 }

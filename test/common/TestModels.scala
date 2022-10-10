@@ -784,6 +784,7 @@ object TestModels {
   val wyoEstimatedLPP2DBModel: WYODatabaseModel = wyoDBModel(estimatedLPP2, estimatedLPP2Json)
   val wyoCrystallisedIntDBModel: WYODatabaseModel = wyoDBModel(crystallisedInterest, crystallisedInterestJson)
   val wyoCrystallisedLPP1DBModel: WYODatabaseModel = wyoDBModel(crystallisedLPP1, crystallisedLPP1JsonMax)
+  val wyoCrystallisedLPP2DBModel: WYODatabaseModel = wyoDBModel(crystallisedLPP2, crystallisedLPP2Json)
   val wyoLSPDBModel: WYODatabaseModel = wyoDBModel(lsp, lateSubmissionPenaltyJson)
 
   val wyoDBjsonModel: JsObject = Json.obj(

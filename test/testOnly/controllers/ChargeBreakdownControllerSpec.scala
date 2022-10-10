@@ -31,8 +31,10 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
     injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
     injector.instanceOf[EstimatedLPP1View], injector.instanceOf[EstimatedLPP2View],
     injector.instanceOf[LateSubmissionPenaltyView], injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
-    injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View]
+    injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View],
+    injector.instanceOf[CrystallisedLPP2View]
   )
+
   val id: String = "1234569"
 
   "The showBreakdown action" when {
@@ -169,6 +171,25 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "load the correct page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
           document.select("#crystallised-lpp1-heading") should exist
+        }
+      }
+
+      "the retrieved model is a CrystallisedLPP2ViewModel" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockWYOSessionServiceCall(Some(wyoCrystallisedLPP2DBModel))
+          controller.showBreakdown(id)(fakeRequestWithSession)
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the correct page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.select("#crystallised-lpp2-heading") should exist
         }
       }
 
