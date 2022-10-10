@@ -19,11 +19,10 @@ package models.viewModels
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
-
 import java.time.LocalDate
 
-case class CrystallisedLPP2ViewModel(day: String,
-                                    interestRate: BigDecimal,
+case class CrystallisedLPP2ViewModel(numberOfDays: String,
+                                    penaltyRate: Double,
                                     dueDate: LocalDate,
                                     penaltyAmount: BigDecimal,
                                     amountReceived: BigDecimal,

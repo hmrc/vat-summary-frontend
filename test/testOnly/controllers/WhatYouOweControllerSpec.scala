@@ -20,7 +20,7 @@ import common.TestModels._
 import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatLateSubmissionPen, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
+import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatLateSubmissionPen, VatPA2ndLPP, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -603,6 +603,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
   "The buildCrystallisedLPPViewModel function" should {
 
     val penaltyCharge = payment.copy(chargeType = VatReturn1stLPP)
+    val penaltyLPP2Charge = payment.copy(chargeType = VatPA2ndLPP)
 
     "return a CrystallisedLPP1ViewModel" when {
 
@@ -652,6 +653,26 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "return a CrystallisedLPP2ViewModel" when {
+
+      "originalAmount, chargeReference and all appropriate LPP2 penalty details are present" in {
+        mockDateServiceCall()
+        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(LPPLPP2DetailsModelMax)) shouldBe Some(CrystallisedLPP2ViewModel(
+          "31",
+          5.5,
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT PA 2nd LPP",
+          "XD002750002155",
+          isOverdue = false
+        ))
+      }
+    }
+
     "return None" when {
 
       "chargeType is missing" in {
@@ -672,6 +693,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val penalty = LPPDetailsModelMax.copy(LPP1LRDays = None, LPP1HRDays = None, LPP1LRPercentage = None,
           LPP1HRPercentage = None, LPP1LRCalculationAmount = None)
         controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
+      }
+
+      "penalty type is LPP2 but LPP2 details are missing" in {
+        val penalty = LPPLPP2DetailsModelMax.copy(LPP2Days = None, LPP2Percentage = None)
+        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(penalty)) shouldBe None
       }
     }
   }
