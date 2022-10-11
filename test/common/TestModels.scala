@@ -28,10 +28,8 @@ import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
 import java.time.{LocalDate, LocalDateTime}
-
 import common.ChargeViewModelTypes._
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-
 import scala.concurrent.Future
 
 object TestModels {
@@ -588,8 +586,8 @@ object TestModels {
   )
 
   val crystallisedLPP2Json: JsObject = Json.obj(
-    "day" -> "31",
-    "interestRate" -> 4.0,
+    "numberOfDays" -> "31",
+    "penaltyRate" -> 4.0,
     "dueDate" -> "2020-01-01",
     "penaltyAmount" -> 130.13,
     "amountReceived" -> 0,
@@ -715,6 +713,20 @@ object TestModels {
     Some("31"),
     Some(5.5),
     penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ")
+  )
+
+  val LPPLPP2DetailsModelMax: LPPDetails = LPPDetails(
+    principalChargeReference = "XD002750002156",
+    penaltyCategory = "LPP2",
+    Some(100.11),
+    Some("15"),
+    Some(2.4),
+    Some(200.22),
+    Some("30"),
+    Some(4.2),
+    Some("31"),
+    Some(5.5),
+    penaltyChargeReference = Some("ABCDEFGHIJKL")
   )
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(

@@ -222,6 +222,21 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeReference = chargeRef,
           isOverdue = payment.isOverdue(dateService.now())
         ))
+      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _)),
+      Some(chargeRef)) =>
+        Some(CrystallisedLPP2ViewModel(
+          numberOfDays = daysLPP2,
+          penaltyRate = rateLPP2,
+          dueDate = payment.due,
+          penaltyAmount = payment.originalAmount,
+          amountReceived = payment.clearedAmount.getOrElse(0),
+          leftToPay = payment.outstandingAmount,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = payment.chargeType.value,
+          chargeReference = chargeRef,
+          isOverdue = payment.isOverdue(dateService.now())
+        ))
       case _ => None
     }
 

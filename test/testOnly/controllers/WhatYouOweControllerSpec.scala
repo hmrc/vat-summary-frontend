@@ -20,7 +20,7 @@ import common.TestModels._
 import controllers.ControllerBaseSpec
 import models.User
 import models.errors.PaymentsError
-import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatLateSubmissionPen, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
+import models.payments.{AACharge, MiscPenaltyCharge, Payments, VatLateSubmissionPen, VatPA2ndLPP, VatReturn1stLPP, VatReturn1stLPPLPI, VatReturnLPI}
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -28,7 +28,6 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
-
 import java.time.LocalDate
 
 class WhatYouOweControllerSpec extends ControllerBaseSpec {
@@ -193,7 +192,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   "The constructViewModel method" when {
 
-    "there is a payment with the originalAmount, charge description and accrued interest defined" should {
+    "there is a payment with the charge description and accrued interest defined" should {
 
       "return a view model with 2 charge models including an estimated interest charge and the correct total amount" in {
         val charge = payment.copy(accruedPenaltyAmount = None)
@@ -455,9 +454,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   "The buildStandardChargeViewModel function" should {
 
-    "return a StandardChargeViewModel" when {
-
-      "originalAmount is present" in {
+    "return a StandardChargeViewModel" in {
         mockDateServiceCall()
         controller.buildStandardChargeViewModel(payment) shouldBe Some(StandardChargeViewModel(
           "VAT Return Debit Charge",
@@ -474,20 +471,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
-//    "return None" should {
-//
-//      "originalAmount is missing" in {
-//        val charge = payment.copy(originalAmount = None)
-//        controller.buildStandardChargeViewModel(charge) shouldBe None
-//      }
-//    }
-  }
-
   "The buildCrystallisedIntViewModel function" should {
 
     "return a CrystallisedInterestViewModel" when {
 
-      "originalAmount and chargeReference are present" in {
+      "chargeReference is present" in {
         mockDateServiceCall()
         val charge = payment.copy(chargeType = VatReturnLPI)
         controller.buildCrystallisedIntViewModel(charge) shouldBe Some(CrystallisedInterestViewModel(
@@ -603,10 +591,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
   "The buildCrystallisedLPPViewModel function" should {
 
     val penaltyCharge = payment.copy(chargeType = VatReturn1stLPP)
+    val penaltyLPP2Charge = payment.copy(chargeType = VatPA2ndLPP)
 
     "return a CrystallisedLPP1ViewModel" when {
 
-      "originalAmount, chargeReference and all appropriate LPP1 penalty details (lower rate) are present" in {
+      "chargeReference and all appropriate LPP1 penalty details (lower rate) are present" in {
         val lppDetails = LPPDetailsModelMax.copy(LPP1HRCalculationAmount = None)
         mockDateServiceCall()
         controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(lppDetails)) shouldBe Some(CrystallisedLPP1ViewModel(
@@ -629,7 +618,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         ))
       }
 
-      "originalAmount, chargeReference and all appropriate LPP1 penalty details (higher rate) are present" in {
+      "chargeReference and all appropriate LPP1 penalty details (higher rate) are present" in {
         mockDateServiceCall()
         controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(LPPDetailsModelMax)) shouldBe Some(CrystallisedLPP1ViewModel(
           "30",
@@ -646,6 +635,26 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return 1st LPP",
+          "XD002750002155",
+          isOverdue = false
+        ))
+      }
+    }
+
+    "return a CrystallisedLPP2ViewModel" when {
+
+      "chargeReference and all appropriate LPP2 penalty details are present" in {
+        mockDateServiceCall()
+        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(LPPLPP2DetailsModelMax)) shouldBe Some(CrystallisedLPP2ViewModel(
+          "31",
+          5.5,
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT PA 2nd LPP",
           "XD002750002155",
           isOverdue = false
         ))
@@ -673,6 +682,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LPP1HRPercentage = None, LPP1LRCalculationAmount = None)
         controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
       }
+
+      "penalty type is LPP2 but LPP2 details are missing" in {
+        val penalty = LPPLPP2DetailsModelMax.copy(LPP2Days = None, LPP2Percentage = None)
+        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(penalty)) shouldBe None
+      }
     }
   }
 
@@ -680,7 +694,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return a LateSubmissionPenaltyViewModel" when {
 
-      "originalAmount and chargeReference are present" in {
+      "chargeReference is present" in {
         mockDateServiceCall()
         val charge = payment.copy(chargeType = VatLateSubmissionPen)
         controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe Some(LateSubmissionPenaltyViewModel(
