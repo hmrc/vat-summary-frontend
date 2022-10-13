@@ -18,7 +18,7 @@ package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import models.payments.{ReturnCreditCharge, ReturnDebitCharge, VatProtectiveAssessmentCharge, VatReturn1stLPP}
+import models.payments.{ReturnCreditCharge, ReturnDebitCharge, VatProtectiveAssessmentCharge, VatReturn1stLPP, VatPA2ndLPP}
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 
@@ -209,6 +209,21 @@ object FinancialDataStub extends WireMockMethods {
       |          {
       |            "dueDate" : "2019-03-03",
       |            "amount" : 55.55
+      |          }
+      |        ]
+      |      },
+      |            {
+      |        "chargeType" : "$VatPA2ndLPP",
+      |        "taxPeriodFrom" : "2019-01-01",
+      |        "taxPeriodTo" : "2019-02-02",
+      |        "chargeReference" : "XD002750002159",
+      |        "penaltyType" : "LPP2",
+      |        "originalAmount" : 99.99,
+      |        "outstandingAmount" : 99.99,
+      |        "items" : [
+      |          {
+      |            "dueDate" : "2019-03-03",
+      |            "amount" : 99.99
       |          }
       |        ]
       |      }

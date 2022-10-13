@@ -50,13 +50,19 @@ object PenaltyDetailsStub extends WireMockMethods{
     penaltyCategory = "LPP2"
   )
 
-  val crystallisedPenDetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
+  val crystallisedLPP1DetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
     principalChargeReference = "XXXXXXXXXXXXXXXX",
     penaltyChargeReference = Some("XD002750002158")
   )
 
+  val crystallisedLPP2DetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
+    principalChargeReference = "XXXXXXXXXXXXXXXX",
+    penaltyChargeReference = Some("XD002750002159"),
+    penaltyCategory = "LPP2"
+  )
+
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(estimatedLPP1DetailsModel, estimatedLPP2DetailsModel, crystallisedPenDetailsModel)
+    LPPDetails = Seq(estimatedLPP1DetailsModel, estimatedLPP2DetailsModel, crystallisedLPP1DetailsModel, crystallisedLPP2DetailsModel)
   )
 
   val estimatedLPP1PenDetails: JsObject = Json.obj(
@@ -85,7 +91,7 @@ object PenaltyDetailsStub extends WireMockMethods{
     "LPP2Percentage" -> 5.5
   )
 
-  val crystallisedPenDetails: JsObject = Json.obj(
+  val crystallisedLPP1Details: JsObject = Json.obj(
     "principalChargeReference" -> "XXXXXXXXXXXXXXXX",
     "penaltyCategory" -> "LPP1",
     "LPP1LRCalculationAmount" -> 100.11,
@@ -99,8 +105,22 @@ object PenaltyDetailsStub extends WireMockMethods{
     "penaltyChargeReference" -> "XD002750002158"
   )
 
+  val crystallisedLPP2Details: JsObject = Json.obj(
+    "principalChargeReference" -> "XXXXXXXXXXXXXXXX",
+    "penaltyCategory" -> "LPP2",
+    "LPP1LRCalculationAmount" -> 100.11,
+    "LPP1LRDays" -> "15",
+    "LPP1LRPercentage" -> 2.4,
+    "LPP1HRCalculationAmount" -> 200.22,
+    "LPP1HRDays" -> "30",
+    "LPP1HRPercentage" -> 4.2,
+    "LPP2Days" -> "31",
+    "LPP2Percentage" -> 5.5,
+    "penaltyChargeReference" -> "XD002750002159"
+  )
+
   val penaltyDetailsJsonMax : JsObject = Json.obj(
-    "LPPDetails" -> Json.arr(estimatedLPP1PenDetails, estimatedLPP2PenDetails, crystallisedPenDetails)
+    "LPPDetails" -> Json.arr(estimatedLPP1PenDetails, estimatedLPP2PenDetails, crystallisedLPP1Details, crystallisedLPP2Details)
   )
 
   val errorJson: JsObject = Json.obj(
