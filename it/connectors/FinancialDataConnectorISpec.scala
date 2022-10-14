@@ -21,7 +21,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.{DDIDetails, DirectDebitStatus}
 import models.errors.BadRequestError
-import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnDebitCharge, VatProtectiveAssessmentCharge, VatReturn1stLPP}
+import models.payments.{PaymentWithPeriod, Payments, ReturnCreditCharge, ReturnDebitCharge, VatPA2ndLPP, VatProtectiveAssessmentCharge, VatReturn1stLPP}
 import models.viewModels.PaymentsHistoryModel
 import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
@@ -98,6 +98,20 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           chargeReference = Some("XD002750002158"),
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP1")
+        ),
+        PaymentWithPeriod(
+          chargeType = VatPA2ndLPP,
+          periodFrom = LocalDate.parse("2019-01-01"),
+          periodTo = LocalDate.parse("2019-02-02"),
+          due = LocalDate.parse("2019-03-03"),
+          outstandingAmount = 99.99,
+          periodKey = None,
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          originalAmount = 99.99,
+          chargeReference = Some("XD002750002159"),
+          accruedPenaltyAmount = None,
+          penaltyType = Some("LPP2")
         )
       )))
 
