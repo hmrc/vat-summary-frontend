@@ -45,7 +45,7 @@ class EstimatedInterestChargeViewSpec extends ViewBaseSpec {
 
     "have a link with the correct href" in {
       element("a").attr("href") shouldBe
-        testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
+        controllers.routes.ChargeBreakdownController.showBreakdown(
           estimatedInterestModel.generateHash(user.vrn)
         ).url
     }

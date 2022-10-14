@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package testOnly.controllers
+package controllers
 
 import common.TestModels._
-import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._

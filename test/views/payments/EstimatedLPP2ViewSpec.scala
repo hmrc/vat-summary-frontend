@@ -27,7 +27,7 @@ import views.html.payments.EstimatedLPP2View
 class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
   val injectedView: EstimatedLPP2View = injector.instanceOf[EstimatedLPP2View]
-  val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
   "Rendering the Estimated LPP2 Page for a principal user" when {
 

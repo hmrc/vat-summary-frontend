@@ -45,7 +45,7 @@ class EstimatedLPP1ChargeViewSpec extends ViewBaseSpec {
 
     "have a link with the correct href" in {
       element("a").attr("href") shouldBe
-        testOnly.controllers.routes.ChargeBreakdownController.showBreakdown(
+        controllers.routes.ChargeBreakdownController.showBreakdown(
           estimatedLPP1Model.generateHash(user.vrn)
         ).url
     }

@@ -31,7 +31,7 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
     AuthStub.authorised()
     CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true))
     ServiceInfoStub.stubServiceInfoPartial
-    buildRequest("/test-only/what-you-owe")
+    buildRequest("/what-you-owe")
   }
 
   val totalAmountSelector = "p.govuk-body:nth-of-type(2)"
@@ -73,6 +73,23 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
         document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
         document.select(totalAmountSelector).size() shouldBe 0
         document.select(chargeRowsSelector).size() shouldBe 0
+      }
+    }
+
+    "the user has a partial migration" should {
+
+      "redirect to /vat-overview" in {
+
+        val request = {
+          AuthStub.authorised()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = true, hasVerifiedEmail = true))
+          buildRequest("/what-you-owe")
+        }
+
+        val response: WSResponse = await(request.get())
+
+        response.status shouldBe Status.SEE_OTHER
+        response.header("Location").get shouldBe "/vat-through-software/vat-overview"
       }
     }
   }

@@ -28,9 +28,10 @@
 
 <div class="tile tile-no-border">
   <div id="payments" class="tile-body">
-    <h2 class="govuk-heading-m push--top">@(hasMultiple) match {
-      case (true) => {@messages("payment.nextPayments")}
-      case (false) => {@messages("payment.nextPayment")}
+    <h2 class="govuk-heading-m push--top">
+      @hasMultiple match {
+        case true => {@messages("payment.nextPayments")}
+        case false => {@messages("payment.nextPayment")}
       }
     </h2>
 
@@ -58,7 +59,7 @@
       </p>
 
       <p class="govuk-body">
-        <a class="govuk-link" href="@{controllers.routes.OpenPaymentsController.openPayments.url}">
+        <a class="govuk-link" href="@{controllers.routes.WhatYouOweController.show.url}">
           @messages("payment.check")
         </a>
       </p>

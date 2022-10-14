@@ -105,7 +105,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments.url
+          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.WhatYouOweController.show.url
         }
       }
 
@@ -254,7 +254,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.OpenPaymentsController.openPayments.url
+          element(Selectors.whatYouOweLink).attr("href") shouldBe controllers.routes.WhatYouOweController.show.url
         }
       }
 

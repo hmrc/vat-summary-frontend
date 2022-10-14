@@ -28,7 +28,7 @@ import org.jsoup.Jsoup
 class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
   val injectedView: CrystallisedInterestView = injector.instanceOf[CrystallisedInterestView]
-  val whatYouOweLink: String = testOnly.controllers.routes.WhatYouOweController.show.url
+  val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
   val viewModel: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     LocalDate.parse("2022-10-01"),

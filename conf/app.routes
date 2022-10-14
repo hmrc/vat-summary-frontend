@@ -1,7 +1,8 @@
 # microservice specific routes
 
 GET        /vat-overview                                                                           controllers.VatDetailsController.details
-GET        /what-you-owe                                                                           controllers.OpenPaymentsController.openPayments
+GET        /what-you-owe                                                                           controllers.WhatYouOweController.show
+GET        /amount-to-pay/:id                                                                      controllers.ChargeBreakdownController.showBreakdown(id: String)
 GET        /payment-history                                                                        controllers.PaymentHistoryController.paymentHistory
 GET        /vat-certificate                                                                        controllers.VatCertificateController.show
 
