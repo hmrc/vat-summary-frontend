@@ -392,7 +392,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "have a section for guidance if what the user owes is missing" which {
 
         "has the correct heading" in {
-          elementText("h3:nth-of-type(1)") shouldBe "The amount owed is incorrect or missing"
+          elementText("#content h2") shouldBe "The amount owed is incorrect or missing"
         }
 
         "has the correct first paragraph" which {
