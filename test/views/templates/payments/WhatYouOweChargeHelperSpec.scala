@@ -290,6 +290,15 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT Migrated Liability Charge Type" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatMigratedLiability), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe None
+        }
+      }
+
       "there is a VAT POA Instalment charge" should {
 
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountInstalments), false, messages)

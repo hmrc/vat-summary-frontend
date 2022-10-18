@@ -204,6 +204,12 @@ case object UnallocatedPayment extends ChargeType {
 case object Refund extends ChargeType {
   override val value: String = "Refund"
 }
+case object VatMigratedLiability extends ChargeType {
+  override val value: String = "VAT Migrated Liabilities debit"
+}
+case object VatMigratedCredit extends ChargeType {
+  override val value: String = "VAT Migrated Credit"
+}
 case object VatReturn1stLPP extends ChargeType {
   override val value: String = "VAT Return 1st LPP"
 }
@@ -270,35 +276,27 @@ case object VatLateSubmissionPen extends ChargeType {
 case object VatLspInterest extends ChargeType {
   override val value: String = "VAT LSP Interest"
 }
-
 case object VatReturnAA1stLPPLPI extends ChargeType {
   override val value: String = "VAT Return AA 1st LPP LPI"
 }
-
 case object VatReturnAA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT Return AA 2nd LPP LPI"
 }
-
 case object VatManualLPP extends ChargeType {
   override val value: String = "VAT Manual LPP"
 }
-
 case object VatManualLPPLPI extends ChargeType {
   override val value: String = "VAT Manual LPP LPI"
 }
-
 case object VatAAQuarterlyInstalLPI extends ChargeType {
   override val value: String = "VAT AA Quarterly Instal LPI"
 }
-
 case object VatAAMonthlyInstalLPI extends ChargeType {
   override val value: String = "VAT AA Monthly Instal LPI"
 }
-
 case object VatAAReturnCharge1stLPP extends ChargeType {
   override val value: String = "VAT AA Return Charge 1st LPP"
 }
-
 case object VatAAReturnCharge2ndLPP extends ChargeType {
   override val value: String = "VAT AA Return Charge 2nd LPP"
 }
@@ -366,6 +364,8 @@ object ChargeType extends LoggerUtil {
     PaymentOnAccountInstalments,
     UnallocatedPayment,
     Refund,
+    VatMigratedLiability,
+    VatMigratedCredit,
     VatReturn1stLPP,
     VatReturnLPI,
     VatReturn1stLPPLPI,

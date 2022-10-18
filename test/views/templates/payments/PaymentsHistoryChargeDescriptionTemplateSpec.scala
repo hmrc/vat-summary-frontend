@@ -396,6 +396,32 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is an VAT Migrated Credit Charge Type" should {
+
+        val model = exampleModel.copy(chargeType = VatMigratedCredit)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "VAT migrated credit"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "miscellaneous VAT credit"
+        }
+      }
+
+      "there is an VAT Migrated Liability Charge Type" should {
+
+        val model = exampleModel.copy(chargeType = VatMigratedLiability)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "VAT migrated liability"
+        }
+      }
+
       "there is a VAT POA Instalment charge" should {
 
         val model = exampleModel.copy(chargeType = PaymentOnAccountInstalments)
@@ -1279,6 +1305,32 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "as your client requested a refund on an overpayment they made"
+      }
+    }
+
+    "there is an VAT Migrated Credit Charge Type" should {
+
+      val model = exampleModel.copy(chargeType = VatMigratedCredit)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "VAT migrated credit"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "miscellaneous VAT credit"
+      }
+    }
+
+    "there is an VAT Migrated Liability Charge Type" should {
+
+      val model = exampleModel.copy(chargeType = VatMigratedLiability)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "VAT migrated liability"
       }
     }
 
