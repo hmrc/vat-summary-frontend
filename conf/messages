@@ -316,7 +316,7 @@ chargeType.forPeriod = for period {0}
 chargeType.forThePeriod = for the period {0}
 
 chargeType.latePaymentPenalty = Late payment penalty
-chargeType.secondLatePaymentPenalty = Second late payment penalty
+    chargeType.secondLatePaymentPenalty = Second late payment penalty
 
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
@@ -514,8 +514,6 @@ chargeType.VATReturn2ndLPP = Second penalty for late payment of VAT
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit
-
-
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

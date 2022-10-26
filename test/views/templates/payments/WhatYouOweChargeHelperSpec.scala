@@ -1085,6 +1085,15 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
           helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
+
+      "there is a VAT Return 2nd LPP" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn2ndLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
     }
 
     "WhatYouOweChargeHelper .title" should {
@@ -1144,15 +1153,6 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
         "return true" in {
           helper.viewReturnEnabled shouldBe true
-        }
-      }
-
-      "there is a VAT Return 2nd LPP" should {
-
-        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturn2ndLPP), true, messages)
-
-        "display the correct description" in {
-          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
