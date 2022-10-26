@@ -316,7 +316,7 @@ chargeType.forPeriod = for period {0}
 chargeType.forThePeriod = for the period {0}
 
 chargeType.latePaymentPenalty = Late payment penalty
-    chargeType.secondLatePaymentPenalty = Second late payment penalty
+chargeType.secondLatePaymentPenalty = Second late payment penalty
 
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
