@@ -637,7 +637,7 @@ object PaymentMessageHelper {
 
   object VATReturn2ndLPP extends PaymentMessageHelper(
     VatReturn2ndLPP.value,
-    "chargeType.VATReturn2ndLPP",
+    "chargeType.secondLatePaymentPenalty",
     Some("chargeType.forPeriod"),
     Some("chargeType.forPeriod")
   )
