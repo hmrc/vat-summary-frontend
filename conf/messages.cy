@@ -509,6 +509,7 @@ chargeType.VATReturnAA1stLPPLPITitle = ???
 chargeType.VATReturnAA2ndLPPLPITitle = ???
 chargeType.VATAAReturnCharge1stLPP = ???
 chargeType.VATAAReturnCharge2ndLPP = ???
+chargeType.VATReturn2ndLPP = ???
 
 chargeType.migratedLiabilityTitle = rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = credyd TAW a fudwyd
