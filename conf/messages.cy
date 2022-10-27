@@ -511,8 +511,8 @@ chargeType.VATAAReturnCharge1stLPP = ???
 chargeType.VATAAReturnCharge2ndLPP = ???
 chargeType.VATReturn2ndLPP = ???
 
-chargeType.migratedLiabilityTitle = rhwymedigaeth TAW a fudwyd
-chargeType.migratedCreditTitle = credyd TAW a fudwyd
+chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
+chargeType.migratedCreditTitle = Credyd TAW a fudwyd
 chargeType.migratedCreditDescription = credyd TAW amrywiol
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
