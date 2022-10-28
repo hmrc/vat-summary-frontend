@@ -16,7 +16,7 @@
 
 @import config.AppConfig
 @import models.viewModels.StandardChargeViewModel
-@import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
+@import views.templates.formatters.dates.DisplayDateRangeHelper._
 
 @this(govukTag: GovukTag)
 
@@ -44,10 +44,13 @@
 <br>
 
 <span class="govuk-hint govuk-!-margin-0">
-  @messages("whatYouOwe.due") @displayDate(charge.dueDate)
+  <span id="what-you-owe-due-date">@messages("whatYouOwe.due") @displayDate(charge.dueDate)</span>
   @if(charge.viewReturnEnabled && charge.periodKey.isDefined) {
     <a class="view-return-link govuk-link govuk-!-padding-left-1" href="@viewReturnHref">
-      @messages("whatYouOwe.viewReturn")
+      <span id="what-you-owe-view-return">@messages("whatYouOwe.viewReturn")</span>
+      @if(charge.periodFrom.isDefined && charge.periodTo.isDefined) {
+        <span id="what-you-owe-view-return-hidden-text" class="govuk-visually-hidden">@messages("whatYouOwe.viewReturn") @messages("openPayments.vatReturn", displayDateRange(charge.periodFrom.get, charge.periodTo.get))</span>
+      }
     </a>
   }
 </span>
