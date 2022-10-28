@@ -65,6 +65,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
         "has the correct hidden text" in {
           elementText("#what-you-owe-view-return-hidden-text") shouldBe "View VAT Return for the period 1 January to 1 February 2018"
         }
+
       }
     }
 
