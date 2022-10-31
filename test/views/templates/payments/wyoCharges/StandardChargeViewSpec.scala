@@ -49,13 +49,13 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       }
 
       "have the correct due hint text" in {
-        elementText("#what-you-owe-due-date") + " " + elementText("#what-you-owe-view-return") shouldBe "due 1 March 2018 View VAT Return"
+        elementText(".what-you-owe-due-date") + " " + elementText(".what-you-owe-view-return") shouldBe "due 1 March 2018 View VAT Return"
       }
 
       "have a link to view the VAT return" which {
 
         "has the correct text" in {
-          elementText(viewReturnLinkSelector + "> #what-you-owe-view-return") shouldBe "View VAT Return"
+          elementText(viewReturnLinkSelector + "> .what-you-owe-view-return") shouldBe "View VAT Return"
         }
 
         "has the correct link destination" in {
@@ -63,7 +63,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
         }
 
         "has the correct hidden text" in {
-          elementText("#what-you-owe-view-return-hidden-text") shouldBe "View VAT Return for the period 1 January to 1 February 2018"
+          elementText(".what-you-owe-view-return-hidden-text") shouldBe "View VAT Return for the period 1 January to 1 February 2018"
         }
 
       }
