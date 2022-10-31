@@ -93,8 +93,8 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           "has the correct charge description text for a charge" in {
             elementText(tableBodyCell(1, 1) + " .govuk-tag") + " " +
               elementText(tableBodyCell(1, 1) + "> a") + " " +
-              elementText(tableBodyCell(1, 1) + "> span > #what-you-owe-due-date") + " " +
-              elementText(tableBodyCell(1, 1) + "> span > a > #what-you-owe-view-return") shouldBe
+              elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
+              elementText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe
               s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)} due 1 March 2018 View VAT Return"
           }
 
@@ -110,8 +110,8 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           "has due hint text" which {
 
             "has the correct text" in {
-              elementText(tableBodyCell(1, 1) + "> span > #what-you-owe-due-date") + " " +
-                elementText(tableBodyCell(1, 1) + "> span > a > #what-you-owe-view-return") shouldBe "due 1 March 2018 View VAT Return"
+              elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
+                elementText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe "due 1 March 2018 View VAT Return"
             }
 
             "has the correct href" in {

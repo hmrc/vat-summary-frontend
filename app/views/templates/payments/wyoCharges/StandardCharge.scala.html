@@ -44,12 +44,12 @@
 <br>
 
 <span class="govuk-hint govuk-!-margin-0">
-  <span id="what-you-owe-due-date">@messages("whatYouOwe.due") @displayDate(charge.dueDate)</span>
+  <span class="what-you-owe-due-date">@messages("whatYouOwe.due") @displayDate(charge.dueDate)</span>
   @if(charge.viewReturnEnabled && charge.periodKey.isDefined) {
     <a class="view-return-link govuk-link govuk-!-padding-left-1" href="@viewReturnHref">
-      <span id="what-you-owe-view-return">@messages("whatYouOwe.viewReturn")</span>
+      <span class="what-you-owe-view-return">@messages("whatYouOwe.viewReturn")</span>
       @if(charge.periodFrom.isDefined && charge.periodTo.isDefined) {
-        <span id="what-you-owe-view-return-hidden-text" class="govuk-visually-hidden">@messages("whatYouOwe.viewReturn") @messages("openPayments.vatReturn", displayDateRange(charge.periodFrom.get, charge.periodTo.get))</span>
+        <span class="what-you-owe-view-return-hidden-text govuk-visually-hidden">@messages("whatYouOwe.viewReturn") @messages("openPayments.vatReturn", displayDateRange(charge.periodFrom.get, charge.periodTo.get))</span>
       }
     </a>
   }
