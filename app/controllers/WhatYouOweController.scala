@@ -260,12 +260,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                         isEstimate: Boolean,
                         penalties: Seq[LPPDetails]): Option[LPPDetails] =
     penalties.find(pen => {
-      val matchingChargeRef = if (isEstimate) {
-        pen.principalChargeReference == chargeReference.getOrElse("")
+      if (isEstimate) {
+        pen.principalChargeReference == chargeReference.getOrElse("") && penaltyType.getOrElse("") == pen.penaltyCategory
       } else {
         pen.penaltyChargeReference == chargeReference
       }
-
-      matchingChargeRef && penaltyType.getOrElse("") == pen.penaltyCategory
     })
 }
