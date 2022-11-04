@@ -82,15 +82,15 @@
 
       <p class="govuk-body">@messages("crystallisedLPP1.explanation", model.numberOfDays)</p>
 
-      @(model.part2Days, model.part2UnpaidVAT) match {
-        case (Some(part2Days), Some(part2UnpaidVAT)) => {
+      @(model.part2Days, model.part2UnpaidVAT, model.part2PenaltyRate) match {
+        case (Some(part2Days), Some(part2UnpaidVAT), Some(part2PenaltyRate)) => {
           <p class="govuk-body">@messages("crystallisedLPP1.twoParts")</p>
           <ul class="govuk-list govuk-list--bullet">
             <li>@Html(messages(
               "crystallisedLPP1.calculation", model.part1PenaltyRate, displayMoney(model.part1UnpaidVAT), model.part1Days
             ))</li>
             <li>@Html(messages(
-              "crystallisedLPP1.calculation", model.part2PenaltyRate, displayMoney(part2UnpaidVAT), part2Days
+              "crystallisedLPP1.calculation", part2PenaltyRate, displayMoney(part2UnpaidVAT), part2Days
             ))</li>
           </ul>
         }

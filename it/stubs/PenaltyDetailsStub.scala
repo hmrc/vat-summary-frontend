@@ -22,9 +22,9 @@ import models.penalties.{LPPDetails, PenaltyDetails}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, JsValue, Json}
 
-object PenaltyDetailsStub extends WireMockMethods{
+object PenaltyDetailsStub extends WireMockMethods {
 
-  private val penaltyDetailsServiceUrl: String = "/penalty/VAT/([0-9]+)"
+  private val penaltyDetailsServiceUrl: String = "/financial-transactions/penalty/VAT/([0-9]+)"
 
   def stubPenaltyDetails(status: Int = Status.OK, response: JsValue = penaltyDetailsJsonMax): StubMapping = {
     when(method = GET, uri = penaltyDetailsServiceUrl)

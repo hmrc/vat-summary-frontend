@@ -109,7 +109,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
         }
 
         "has the second penalty part calculation as the second bullet point" in {
-          elementText("#content ul > li:nth-child(2)") shouldBe s"${viewModel.part2PenaltyRate}% of " +
+          elementText("#content ul > li:nth-child(2)") shouldBe s"${viewModel.part2PenaltyRate.get}% of " +
             s"£${viewModel.part2UnpaidVAT.get} (the unpaid VAT ${viewModel.part2Days.get} days after the due date)"
         }
       }

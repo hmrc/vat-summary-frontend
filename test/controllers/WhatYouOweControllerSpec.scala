@@ -671,7 +671,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return None" when {
 
-      "chargeType is missing" in {
+      "charge reference is missing" in {
         val charge = penaltyCharge.copy(chargeReference = None)
         controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMax)) shouldBe None
       }

@@ -132,7 +132,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           interestAmount = interestAmnt,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
-      case _ => None
+      case _ =>
+        logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
+        None
     }
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
@@ -151,7 +153,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeReference = chargeRef,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
-      case _ => None
+      case _ =>
+        logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")
+        None
     }
 
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod): Option[LateSubmissionPenaltyViewModel] =
@@ -168,7 +172,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo
         ))
-      case _ => None
+      case _ =>
+        logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] - Missing charge reference")
+        None
     }
 
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
@@ -195,7 +201,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value
         ))
-      case _ => None
+      case _ =>
+        val missingData = if(payment.accruedPenaltyAmount.isDefined) {
+          s"LPP details for ${penaltyDetails.penaltyCategory} penalty type"
+        } else {
+          "accrued penalty amount"
+        }
+        logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - Missing $missingData")
+        None
     }
 
   private[controllers] def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
@@ -237,7 +250,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeReference = chargeRef,
           isOverdue = payment.isOverdue(dateService.now())
         ))
-      case _ => None
+      case (Some(penDetails), _) =>
+        logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - " +
+          s"Missing LPP details for ${penDetails.penaltyCategory} penalty type")
+        None
+      case _ =>
+        val missingData = if(payment.chargeReference.isDefined) "matching penalty" else "charge reference"
+        logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing $missingData")
+        None
     }
 
   def constructViewModel(payments: Seq[Payment],
