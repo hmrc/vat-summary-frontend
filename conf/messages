@@ -439,6 +439,12 @@ chargeType.vatPADefaultInterestDescription = charged on the protective assessmen
 chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction default interest
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = charged on assessed amount
 
+chargeType.vatErrorCorrectionLPITitle = Interest on error correction
+chargeType.vatErrorCorrection1stLPPTitle = Late payment penalty
+chargeType.vatErrorCorrection2ndLPPTitle = Second late payment penalty
+chargeType.vatErrorCorrection1stLPPLPITitle = Interest on error correction penalty
+chargeType.vatErrorCorrection2ndLPPLPITitle = Interest on error correction second penalty
+
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
 chargeType.vatPaFurtherInterestDescription = due on the protective assessment as this was not paid on time
 
