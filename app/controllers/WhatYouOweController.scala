@@ -214,13 +214,16 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
                                                          penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.chargeReference) match {
-      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, Some(daysHR), rateHR, _, _, _)),
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _)),
             Some(chargeRef)) =>
-        val numOfDays = if (calcAmountHR.isDefined) daysHR else daysLR
+        val numOfDays = (calcAmountHR, daysHR) match {
+          case (Some(_), Some(days)) => days
+          case _ => daysLR
+        }
         Some(CrystallisedLPP1ViewModel(
           numberOfDays = numOfDays,
           part1Days = daysLR,
-          part2Days = Some(daysHR),
+          part2Days = daysHR,
           part1PenaltyRate = rateLR,
           part2PenaltyRate = rateHR,
           part1UnpaidVAT = calcAmountLR,

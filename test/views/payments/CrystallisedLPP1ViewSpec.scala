@@ -98,7 +98,11 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct calculation explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(3)") shouldBe "It is made up of 2 parts:"
+        elementText("#two-parts-explanation") shouldBe "It is made up of 2 parts:"
+      }
+
+      "not have a paragraph for the 1 part calculation" in {
+        elementExtinct("#one-part-explanation")
       }
 
       "have a bullet list" which {
@@ -189,10 +193,13 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct calculation explanation paragraph" in {
-
-        elementText("#content > div > div > p:nth-child(3)") shouldBe
+        elementText("#one-part-explanation") shouldBe
           s"The calculation we use is: ${viewModel.part1PenaltyRate}% of £${viewModel.part1UnpaidVAT} " +
           s"(the unpaid VAT ${viewModel.part1Days} days after the due date)"
+      }
+
+      "not have a paragraph for the 2 parts calculation" in {
+        elementExtinct("#two-parts-explanation")
       }
 
       "not have a bullet list" in {

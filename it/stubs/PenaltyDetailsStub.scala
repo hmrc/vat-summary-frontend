@@ -40,29 +40,34 @@ object PenaltyDetailsStub extends WireMockMethods {
     Some(200.22),
     Some("30"),
     Some(4.2),
-    Some("31"),
-    Some(5.5),
+    None,
+    None,
     penaltyChargeReference = None
   )
 
   val estimatedLPP2DetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
-    principalChargeReference = "XD002750002157",
-    penaltyCategory = "LPP2"
+    principalChargeReference = "XD002750002157", penaltyCategory = "LPP2",
+    LPP2Days = Some("31"), LPP2Percentage = Some(5.5)
   )
 
   val crystallisedLPP1DetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
-    principalChargeReference = "XXXXXXXXXXXXXXXX",
-    penaltyChargeReference = Some("XD002750002158")
+    principalChargeReference = "XXXXXXXXXXXXXXXX", penaltyChargeReference = Some("XD002750002158")
+  )
+
+  val crystallisedLPP1Part1OnlyModel: LPPDetails = crystallisedLPP1DetailsModel.copy(
+    penaltyChargeReference = Some("X-PART-1-ONLY-X"),
+    LPP1HRDays = None, LPP1HRCalculationAmount = None, LPP1HRPercentage = None
   )
 
   val crystallisedLPP2DetailsModel: LPPDetails = estimatedLPP1DetailsModel.copy(
-    principalChargeReference = "XXXXXXXXXXXXXXXX",
-    penaltyChargeReference = Some("XD002750002159"),
-    penaltyCategory = "LPP2"
+    principalChargeReference = "XXXXXXXXXXXXXXXX", penaltyChargeReference = Some("XD002750002159"), penaltyCategory = "LPP2",
+    LPP2Days = Some("31"), LPP2Percentage = Some(5.5)
   )
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(estimatedLPP1DetailsModel, estimatedLPP2DetailsModel, crystallisedLPP1DetailsModel, crystallisedLPP2DetailsModel)
+    LPPDetails = Seq(
+      estimatedLPP1DetailsModel, estimatedLPP2DetailsModel, crystallisedLPP1DetailsModel,
+      crystallisedLPP1Part1OnlyModel, crystallisedLPP2DetailsModel)
   )
 
   val estimatedLPP1PenDetails: JsObject = Json.obj(
@@ -73,9 +78,7 @@ object PenaltyDetailsStub extends WireMockMethods {
     "LPP1LRPercentage" -> 2.4,
     "LPP1HRCalculationAmount" -> 200.22,
     "LPP1HRDays" -> "30",
-    "LPP1HRPercentage" -> 4.2,
-    "LPP2Days" -> "31",
-    "LPP2Percentage" -> 5.5
+    "LPP1HRPercentage" -> 4.2
   )
 
   val estimatedLPP2PenDetails: JsObject = Json.obj(
@@ -100,9 +103,16 @@ object PenaltyDetailsStub extends WireMockMethods {
     "LPP1HRCalculationAmount" -> 200.22,
     "LPP1HRDays" -> "30",
     "LPP1HRPercentage" -> 4.2,
-    "LPP2Days" -> "31",
-    "LPP2Percentage" -> 5.5,
     "penaltyChargeReference" -> "XD002750002158"
+  )
+
+  val crystallisedLPP1Part1OnlyDetails: JsObject = Json.obj(
+    "principalChargeReference" -> "XXXXXXXXXXXXXXXX",
+    "penaltyCategory" -> "LPP1",
+    "LPP1LRCalculationAmount" -> 100.11,
+    "LPP1LRDays" -> "15",
+    "LPP1LRPercentage" -> 2.4,
+    "penaltyChargeReference" -> "X-PART-1-ONLY-X"
   )
 
   val crystallisedLPP2Details: JsObject = Json.obj(
@@ -120,7 +130,10 @@ object PenaltyDetailsStub extends WireMockMethods {
   )
 
   val penaltyDetailsJsonMax : JsObject = Json.obj(
-    "LPPDetails" -> Json.arr(estimatedLPP1PenDetails, estimatedLPP2PenDetails, crystallisedLPP1Details, crystallisedLPP2Details)
+    "LPPDetails" -> Json.arr(
+      estimatedLPP1PenDetails, estimatedLPP2PenDetails, crystallisedLPP1Details,
+      crystallisedLPP1Part1OnlyDetails, crystallisedLPP2Details
+    )
   )
 
   val errorJson: JsObject = Json.obj(
