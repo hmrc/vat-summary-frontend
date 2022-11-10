@@ -440,8 +440,8 @@ chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Error correction defau
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = charged on assessed amount
 
 chargeType.vatErrorCorrectionLPITitle = Interest on error correction
-chargeType.vatErrorCorrection1stLPPTitle = Late payment penalty
-chargeType.vatErrorCorrection2ndLPPTitle = Second late payment penalty
+chargeType.vatErrorCorrection1stLPPTitle = Penalty for late payment of error correction
+chargeType.vatErrorCorrection2ndLPPTitle = Second penalty for late payment of error correction
 chargeType.vatErrorCorrection1stLPPLPITitle = Interest on error correction penalty
 chargeType.vatErrorCorrection2ndLPPLPITitle = Interest on error correction second penalty
 
