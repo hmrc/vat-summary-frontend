@@ -97,7 +97,21 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           originalAmount = 55.55,
           chargeReference = Some("XD002750002158"),
           accruedPenaltyAmount = None,
-          penaltyType = Some("LPP1")
+          penaltyType = None
+        ),
+        PaymentWithPeriod(
+          chargeType = VatReturn1stLPP,
+          periodFrom = LocalDate.parse("2019-01-01"),
+          periodTo = LocalDate.parse("2019-02-02"),
+          due = LocalDate.parse("2019-03-03"),
+          outstandingAmount = 555.55,
+          periodKey = None,
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          originalAmount = 555.55,
+          chargeReference = Some("X-PART-1-ONLY-X"),
+          accruedPenaltyAmount = None,
+          penaltyType = None
         ),
         PaymentWithPeriod(
           chargeType = VatPA2ndLPP,
@@ -111,7 +125,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           originalAmount = 99.99,
           chargeReference = Some("XD002750002159"),
           accruedPenaltyAmount = None,
-          penaltyType = Some("LPP2")
+          penaltyType = None
         )
       )))
 

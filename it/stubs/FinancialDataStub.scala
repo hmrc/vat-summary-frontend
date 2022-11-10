@@ -202,7 +202,6 @@ object FinancialDataStub extends WireMockMethods {
       |        "taxPeriodFrom" : "2019-01-01",
       |        "taxPeriodTo" : "2019-02-02",
       |        "chargeReference" : "XD002750002158",
-      |        "penaltyType" : "LPP1",
       |        "originalAmount" : 55.55,
       |        "outstandingAmount" : 55.55,
       |        "items" : [
@@ -212,12 +211,25 @@ object FinancialDataStub extends WireMockMethods {
       |          }
       |        ]
       |      },
-      |            {
+      |      {
+      |        "chargeType" : "$VatReturn1stLPP",
+      |        "taxPeriodFrom" : "2019-01-01",
+      |        "taxPeriodTo" : "2019-02-02",
+      |        "chargeReference" : "X-PART-1-ONLY-X",
+      |        "originalAmount" : 555.55,
+      |        "outstandingAmount" : 555.55,
+      |        "items" : [
+      |          {
+      |            "dueDate" : "2019-03-03",
+      |            "amount" : 555.55
+      |          }
+      |        ]
+      |      },
+      |      {
       |        "chargeType" : "$VatPA2ndLPP",
       |        "taxPeriodFrom" : "2019-01-01",
       |        "taxPeriodTo" : "2019-02-02",
       |        "chargeReference" : "XD002750002159",
-      |        "penaltyType" : "LPP2",
       |        "originalAmount" : 99.99,
       |        "outstandingAmount" : 99.99,
       |        "items" : [

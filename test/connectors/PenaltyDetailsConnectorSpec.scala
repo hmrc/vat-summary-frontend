@@ -26,11 +26,7 @@ class PenaltyDetailsConnectorSpec extends ControllerBaseSpec {
     val connector = new PenaltyDetailsConnector(mock[HttpClient], mockAppConfig)
 
     "generate the correct endpoint URL" in {
-
-      connector.penaltyDetailsUrl("vatValue") shouldEqual
-        "/penalty/VAT/vatValue"
-
+      connector.penaltyDetailsUrl("999999999") shouldEqual "/financial-transactions/penalty/VAT/999999999"
     }
   }
-
 }

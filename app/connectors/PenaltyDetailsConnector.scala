@@ -27,7 +27,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class PenaltyDetailsConnector @Inject()(http: HttpClient,
                                         appConfig: AppConfig) {
 
-  private[connectors] def penaltyDetailsUrl(idValue: String): String = s"${appConfig.financialDataBaseUrl}/penalty/VAT/$idValue"
+  private[connectors] def penaltyDetailsUrl(idValue: String): String =
+    s"${appConfig.financialDataBaseUrl}/financial-transactions/penalty/VAT/$idValue"
 
   def getPenaltyDetails(idValue: String)
                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[PenaltyDetails]] = {

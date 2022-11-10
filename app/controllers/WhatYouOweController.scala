@@ -132,7 +132,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           interestAmount = interestAmnt,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
-      case _ => None
+      case _ =>
+        logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
+        None
     }
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
@@ -151,7 +153,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeReference = chargeRef,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
-      case _ => None
+      case _ =>
+        logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")
+        None
     }
 
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod): Option[LateSubmissionPenaltyViewModel] =
@@ -168,7 +172,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo
         ))
-      case _ => None
+      case _ =>
+        logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] - Missing charge reference")
+        None
     }
 
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
@@ -195,19 +201,29 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value
         ))
-      case _ => None
+      case _ =>
+        val missingData = if(payment.accruedPenaltyAmount.isDefined) {
+          s"LPP details for ${penaltyDetails.penaltyCategory} penalty type"
+        } else {
+          "accrued penalty amount"
+        }
+        logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - Missing $missingData")
+        None
     }
 
   private[controllers] def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
                                                          penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.chargeReference) match {
-      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, Some(daysHR), rateHR, _, _, _)),
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _)),
             Some(chargeRef)) =>
-        val numOfDays = if (calcAmountHR.isDefined) daysHR else daysLR
+        val numOfDays = (calcAmountHR, daysHR) match {
+          case (Some(_), Some(days)) => days
+          case _ => daysLR
+        }
         Some(CrystallisedLPP1ViewModel(
           numberOfDays = numOfDays,
           part1Days = daysLR,
-          part2Days = Some(daysHR),
+          part2Days = daysHR,
           part1PenaltyRate = rateLR,
           part2PenaltyRate = rateHR,
           part1UnpaidVAT = calcAmountLR,
@@ -237,7 +253,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeReference = chargeRef,
           isOverdue = payment.isOverdue(dateService.now())
         ))
-      case _ => None
+      case (Some(penDetails), _) =>
+        logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - " +
+          s"Missing LPP details for ${penDetails.penaltyCategory} penalty type")
+        None
+      case _ =>
+        val missingData = if(payment.chargeReference.isDefined) "matching penalty" else "charge reference"
+        logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing $missingData")
+        None
     }
 
   def constructViewModel(payments: Seq[Payment],
@@ -260,12 +283,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                         isEstimate: Boolean,
                         penalties: Seq[LPPDetails]): Option[LPPDetails] =
     penalties.find(pen => {
-      val matchingChargeRef = if (isEstimate) {
-        pen.principalChargeReference == chargeReference.getOrElse("")
+      if (isEstimate) {
+        pen.principalChargeReference == chargeReference.getOrElse("") && penaltyType.getOrElse("") == pen.penaltyCategory
       } else {
         pen.penaltyChargeReference == chargeReference
       }
-
-      matchingChargeRef && penaltyType.getOrElse("") == pen.penaltyCategory
     })
 }
