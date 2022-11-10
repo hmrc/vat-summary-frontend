@@ -124,6 +124,8 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.interestChargeMapping(AAQuarterlyInstalments) shouldBe VatAAQuarterlyInstalLPI
         ChargeType.interestChargeMapping(AAMonthlyInstalment) shouldBe VatAAMonthlyInstalLPI
         ChargeType.interestChargeMapping(VatReturn2ndLPP) shouldBe VatReturn2ndLPPLPI
+        ChargeType.interestChargeMapping(VatErrorCorrection1stLPP) shouldBe VatErrorCorrection1stLPPLPI
+        ChargeType.interestChargeMapping(VatErrorCorrection2ndLPP) shouldBe VatErrorCorrection2ndLPPLPI
       }
     }
 
