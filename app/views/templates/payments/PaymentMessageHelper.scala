@@ -467,6 +467,48 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object VATReturnPOALPI extends PaymentMessageHelper(
+    VatReturnPOALPI.value,
+    "chargeType.VatReturnPOALPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATPOAInstalmentLPI extends PaymentMessageHelper(
+    VatPOAInstalmentLPI.value,
+    "chargeType.VatPOAInstalmentLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATPOAReturn1stLPP extends PaymentMessageHelper(
+    VatPOAReturn1stLPP.value,
+    "chargeType.VatPOAReturn1stLPPTitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATPOAReturn2ndLPP extends PaymentMessageHelper(
+    VatPOAReturn2ndLPP.value,
+    "chargeType.VatPOAReturn2ndLPPTitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATReturnPOA1stLPPLPI extends PaymentMessageHelper(
+    VatReturnPOA1stLPPLPI.value,
+    "chargeType.VatReturnPOA1stLPPLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATReturnPOA2ndLPPLPI extends PaymentMessageHelper(
+    VatReturnPOA2ndLPPLPI.value,
+    "chargeType.VatReturnPOA2ndLPPLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object VATReturn1stLPP extends PaymentMessageHelper(
     VatReturn1stLPP.value,
     "chargeType.VATReturn1stLPPTitle",
@@ -770,7 +812,13 @@ object PaymentMessageHelper {
     VATAAMonthlyInstalLPI,
     VATAAReturnCharge1stLPP,
     VATAAReturnCharge2ndLPP,
-    VATReturn2ndLPP
+    VATReturn2ndLPP,
+    VATReturnPOALPI,
+    VATPOAInstalmentLPI,
+    VATPOAReturn1stLPP,
+    VATPOAReturn2ndLPP,
+    VATReturnPOA1stLPPLPI,
+    VATReturnPOA2ndLPPLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

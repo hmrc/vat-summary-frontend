@@ -308,6 +308,60 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT Return POA LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnPOALPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Instalment LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAInstalmentLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Return 1st LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAReturn1stLPP), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Return 2nd LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAReturn2ndLPP), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return POA 1st LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnPOA1stLPPLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return POA 2nd LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnPOA2ndLPPLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
       "there is a VAT POA Return Debit charge" should {
 
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountReturnDebitCharge), false, messages)
@@ -873,6 +927,60 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
       "there is a VAT POA Instalment charge" should {
 
         val helper = new WhatYouOweChargeHelper(paymentModel(PaymentOnAccountInstalments), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return POA LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnPOALPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Instalment LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAInstalmentLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Return 1st LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAReturn1stLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Return 2nd LPP charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAReturn2ndLPP), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return POA 1st LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnPOA1stLPPLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return POA 2nd LPP LPI charge" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatReturnPOA2ndLPPLPI), true, messages)
 
         "display the correct description" in {
           helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")

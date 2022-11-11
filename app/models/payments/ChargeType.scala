@@ -198,6 +198,31 @@ case object PaymentOnAccountReturnCreditCharge extends ChargeType {
 case object PaymentOnAccountInstalments extends ChargeType {
   override val value: String = "VAT POA Instalments"
 }
+
+case object VatReturnPOALPI extends ChargeType {
+  override val value: String = "VAT Return POA LPI"
+}
+
+case object VatPOAInstalmentLPI extends ChargeType {
+  override val value: String = "VAT POA Instalment LPI"
+}
+
+case object VatPOAReturn1stLPP extends ChargeType {
+  override val value: String = "VAT POA Return 1st LPP"
+}
+
+case object VatPOAReturn2ndLPP extends ChargeType {
+  override val value: String = "VAT POA Return 2nd LPP"
+}
+
+case object VatReturnPOA1stLPPLPI extends ChargeType {
+  override val value: String = "VAT Return POA 1st LPP LPI"
+}
+
+case object VatReturnPOA2ndLPPLPI extends ChargeType {
+  override val value: String = "VAT Return POA 2nd LPP LPI"
+}
+
 case object UnallocatedPayment extends ChargeType {
   override val value: String = "Unallocated payment"
 }
@@ -383,6 +408,12 @@ object ChargeType extends LoggerUtil {
     PaymentOnAccountReturnDebitCharge,
     PaymentOnAccountReturnCreditCharge,
     PaymentOnAccountInstalments,
+    VatReturnPOALPI,
+    VatPOAInstalmentLPI,
+    VatPOAReturn1stLPP,
+    VatPOAReturn2ndLPP,
+    VatReturnPOA1stLPPLPI,
+    VatReturnPOA2ndLPPLPI,
     UnallocatedPayment,
     Refund,
     VatMigratedLiability,
@@ -448,7 +479,10 @@ object ChargeType extends LoggerUtil {
     VatAAMonthlyInstalLPI,
     VatErrorCorrectionLPI,
     VatErrorCorrection1stLPPLPI,
-    VatErrorCorrection2ndLPPLPI
+    VatErrorCorrection2ndLPPLPI,
+    VatReturnPOALPI,
+    VatReturnPOA1stLPPLPI,
+    VatReturnPOA2ndLPPLPI
   )
 
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
@@ -467,7 +501,9 @@ object ChargeType extends LoggerUtil {
     VatReturnAA2ndLPPLPI,
     VatManualLPPLPI,
     VatErrorCorrection1stLPPLPI,
-    VatErrorCorrection2ndLPPLPI
+    VatErrorCorrection2ndLPPLPI,
+    VatReturnPOA1stLPPLPI,
+    VatReturnPOA2ndLPPLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -475,7 +511,8 @@ object ChargeType extends LoggerUtil {
     VatPA1stLPP,
     VatAA1stLPP,
     VatAAReturnCharge1stLPP,
-    VatErrorCorrection1stLPP
+    VatErrorCorrection1stLPP,
+    VatPOAReturn1stLPP
   )
 
   val LPP2ChargeTypes: Set[ChargeType] = Set(
@@ -483,7 +520,8 @@ object ChargeType extends LoggerUtil {
     VatAA2ndLPP,
     VatAAReturnCharge2ndLPP,
     VatReturn2ndLPP,
-    VatErrorCorrection2ndLPP
+    VatErrorCorrection2ndLPP,
+    VatPOAReturn2ndLPP
   )
 
   val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
@@ -507,7 +545,11 @@ object ChargeType extends LoggerUtil {
     AAMonthlyInstalment -> VatAAMonthlyInstalLPI,
     VatReturn2ndLPP -> VatReturn2ndLPPLPI,
     VatErrorCorrection1stLPP -> VatErrorCorrection1stLPPLPI,
-    VatErrorCorrection2ndLPP -> VatErrorCorrection2ndLPPLPI
+    VatErrorCorrection2ndLPP -> VatErrorCorrection2ndLPPLPI,
+    PaymentOnAccount -> VatReturnPOALPI,
+    PaymentOnAccountInstalments -> VatPOAInstalmentLPI,
+    VatPOAReturn1stLPP -> VatReturnPOA1stLPPLPI,
+    VatPOAReturn2ndLPP -> VatReturnPOA2ndLPPLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(
@@ -515,7 +557,8 @@ object ChargeType extends LoggerUtil {
     VatProtectiveAssessmentCharge -> VatPA1stLPP,
     AACharge -> VatAA1stLPP,
     AAReturnDebitCharge -> VatAAReturnCharge1stLPP,
-    ErrorCorrectionDebitCharge -> VatErrorCorrection1stLPP
+    ErrorCorrectionDebitCharge -> VatErrorCorrection1stLPP,
+    PaymentOnAccount -> VatPOAReturn1stLPP
   )
 
   val penaltyChargeMappingLPP2: Map[ChargeType, ChargeType] = Map(
@@ -523,7 +566,8 @@ object ChargeType extends LoggerUtil {
     AACharge -> VatAA2ndLPP,
     AAReturnDebitCharge -> VatAAReturnCharge2ndLPP,
     ReturnDebitCharge -> VatReturn2ndLPP,
-    ErrorCorrectionDebitCharge -> VatErrorCorrection2ndLPP
+    ErrorCorrectionDebitCharge -> VatErrorCorrection2ndLPP,
+    PaymentOnAccount -> VatPOAReturn2ndLPP
   )
 
   def apply: String => ChargeType = input => {
