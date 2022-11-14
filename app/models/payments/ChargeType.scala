@@ -305,14 +305,31 @@ case object VatReturn2ndLPP extends ChargeType {
   override val value: String = "VAT Return 2nd LPP"
 }
 
+case object VatErrorCorrectionLPI extends ChargeType {
+  override val value: String = "VAT Error Correction LPI"
+}
+
+case object VatErrorCorrection1stLPP extends ChargeType {
+  override val value: String = "VAT Error Correction 1st LPP"
+}
+
+case object VatErrorCorrection2ndLPP extends ChargeType {
+  override val value: String = "VAT Error Correction 2nd LPP"
+}
+
+case object VatErrorCorrection1stLPPLPI extends ChargeType {
+  override val value: String = "VAT Error Correct 1st LPP LPI"
+}
+
+case object VatErrorCorrection2ndLPPLPI extends ChargeType {
+  override val value: String = "VAT Error Correct 2nd LPP LPI"
+}
+
 object ChargeType extends LoggerUtil {
 
-  val positiveOrNegativeChargeTypes: Set[ChargeType] = Set(
-    VatDefaultInterest,
-    VatFurtherInterest
-  )
-
   val allChargeTypes: Set[ChargeType] = Set(
+    VatDefaultInterest,
+    VatFurtherInterest,
     VatUnrepayableOverpayment,
     VatRepaymentSupplementRecovery,
     VatIndirectTaxRevenueRecovery,
@@ -399,8 +416,13 @@ object ChargeType extends LoggerUtil {
     VatAAMonthlyInstalLPI,
     VatAAReturnCharge1stLPP,
     VatAAReturnCharge2ndLPP,
-    VatReturn2ndLPP
-  ) ++ positiveOrNegativeChargeTypes
+    VatReturn2ndLPP,
+    VatErrorCorrectionLPI,
+    VatErrorCorrection1stLPP,
+    VatErrorCorrection2ndLPP,
+    VatErrorCorrection1stLPPLPI,
+    VatErrorCorrection2ndLPPLPI
+  )
 
   val interestChargeTypes: Set[ChargeType] = Set(
     VatReturnLPI,
@@ -423,7 +445,10 @@ object ChargeType extends LoggerUtil {
     VatReturnAA2ndLPPLPI,
     VatManualLPPLPI,
     VatAAQuarterlyInstalLPI,
-    VatAAMonthlyInstalLPI
+    VatAAMonthlyInstalLPI,
+    VatErrorCorrectionLPI,
+    VatErrorCorrection1stLPPLPI,
+    VatErrorCorrection2ndLPPLPI
   )
 
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
@@ -440,21 +465,25 @@ object ChargeType extends LoggerUtil {
     VatLspInterest,
     VatReturnAA1stLPPLPI,
     VatReturnAA2ndLPPLPI,
-    VatManualLPPLPI
+    VatManualLPPLPI,
+    VatErrorCorrection1stLPPLPI,
+    VatErrorCorrection2ndLPPLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPP,
     VatPA1stLPP,
     VatAA1stLPP,
-    VatAAReturnCharge1stLPP
+    VatAAReturnCharge1stLPP,
+    VatErrorCorrection1stLPP
   )
 
   val LPP2ChargeTypes: Set[ChargeType] = Set(
     VatPA2ndLPP,
     VatAA2ndLPP,
     VatAAReturnCharge2ndLPP,
-    VatReturn2ndLPP
+    VatReturn2ndLPP,
+    VatErrorCorrection2ndLPP
   )
 
   val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
@@ -476,21 +505,25 @@ object ChargeType extends LoggerUtil {
     VatManualLPP -> VatManualLPPLPI,
     AAQuarterlyInstalments -> VatAAQuarterlyInstalLPI,
     AAMonthlyInstalment -> VatAAMonthlyInstalLPI,
-    VatReturn2ndLPP -> VatReturn2ndLPPLPI
+    VatReturn2ndLPP -> VatReturn2ndLPPLPI,
+    VatErrorCorrection1stLPP -> VatErrorCorrection1stLPPLPI,
+    VatErrorCorrection2ndLPP -> VatErrorCorrection2ndLPPLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(
     ReturnDebitCharge -> VatReturn1stLPP,
     VatProtectiveAssessmentCharge -> VatPA1stLPP,
     AACharge -> VatAA1stLPP,
-    AAReturnDebitCharge -> VatAAReturnCharge1stLPP
+    AAReturnDebitCharge -> VatAAReturnCharge1stLPP,
+    ErrorCorrectionDebitCharge -> VatErrorCorrection1stLPP
   )
 
   val penaltyChargeMappingLPP2: Map[ChargeType, ChargeType] = Map(
     VatProtectiveAssessmentCharge -> VatPA2ndLPP,
     AACharge -> VatAA2ndLPP,
     AAReturnDebitCharge -> VatAAReturnCharge2ndLPP,
-    ReturnDebitCharge -> VatReturn2ndLPP
+    ReturnDebitCharge -> VatReturn2ndLPP,
+    ErrorCorrectionDebitCharge -> VatErrorCorrection2ndLPP
   )
 
   def apply: String => ChargeType = input => {

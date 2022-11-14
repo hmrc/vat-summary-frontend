@@ -439,6 +439,12 @@ chargeType.vatPADefaultInterestDescription = a godir ar yr asesiad i ddiogelu
 chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Llog diffygdalu ar gywiro gwall
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = a godir ar y swm a aseswyd
 
+chargeType.vatErrorCorrectionLPITitle = ???
+chargeType.vatErrorCorrection1stLPPTitle = ???
+chargeType.vatErrorCorrection2ndLPPTitle = ???
+chargeType.vatErrorCorrection1stLPPLPITitle = ???
+chargeType.vatErrorCorrection2ndLPPLPITitle = ???
+
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
 chargeType.vatPaFurtherInterestDescription = sy’n ddyledus ar yr asesiad i ddiogelu oherwydd na thalwyd hyn mewn pryd
 

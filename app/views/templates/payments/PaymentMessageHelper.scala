@@ -341,6 +341,41 @@ object PaymentMessageHelper {
     Some("chargeType.vatErrorCorrectionNoticeDefaultInterestDescription")
   )
 
+  object VATErrorCorrectionLPI extends PaymentMessageHelper(
+    VatErrorCorrectionLPI.value,
+    "chargeType.vatErrorCorrectionLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATErrorCorrection1stLPP extends PaymentMessageHelper(
+    VatErrorCorrection1stLPP.value,
+    "chargeType.vatErrorCorrection1stLPPTitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATErrorCorrection2ndLPP extends PaymentMessageHelper(
+    VatErrorCorrection2ndLPP.value,
+    "chargeType.vatErrorCorrection2ndLPPTitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATErrorCorrection1stLPPLPI extends PaymentMessageHelper(
+    VatErrorCorrection1stLPPLPI.value,
+    "chargeType.vatErrorCorrection1stLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATErrorCorrection2ndLPPLPI extends PaymentMessageHelper(
+    VatErrorCorrection2ndLPPLPI.value,
+    "chargeType.vatErrorCorrection2ndLPPLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   object VatPaFurtherInterest extends PaymentMessageHelper(
     VatPaFurtherInterestCharge.value,
     "chargeType.vatPaFurtherInterestTitle",
@@ -688,6 +723,11 @@ object PaymentMessageHelper {
     VatPALPI,
     VatStatutoryInterestCharge,
     VatECDefaultInterest,
+    VATErrorCorrectionLPI,
+    VATErrorCorrection1stLPP,
+    VATErrorCorrection2ndLPP,
+    VATErrorCorrection1stLPPLPI,
+    VATErrorCorrection2ndLPPLPI,
     VatPaFurtherInterest,
     VatCarterPenaltyCharge,
     VatFailureToNotifyRCSL,

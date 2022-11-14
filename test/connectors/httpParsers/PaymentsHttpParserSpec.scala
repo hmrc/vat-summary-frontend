@@ -1140,6 +1140,80 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "accruedInterest" -> 0,
               "originalAmount" -> -202.40
             ),
+            Json.obj(
+              "chargeType" -> VatErrorCorrectionLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 502.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 502.40
+                )
+              ),
+              "chargeReference" -> "XD002750002140",
+              "accruedInterest" -> 0,
+              "originalAmount" -> 502.40
+            ),
+            Json.obj(
+              "chargeType" -> VatErrorCorrection1stLPP.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 502.41,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 502.41
+                )
+              ),
+              "chargeReference" -> "XD002750002141",
+              "accruedInterest" -> 0,
+            "penaltyType" -> "LPP",
+              "originalAmount" -> 502.41
+            ),
+            Json.obj(
+              "chargeType" -> VatErrorCorrection2ndLPP.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 502.42,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 502.42
+                )
+              ),
+              "chargeReference" -> "XD002750002142",
+              "accruedInterest" -> 0,
+            "penaltyType" -> "LPP",
+              "originalAmount" -> 502.42
+            ),
+            Json.obj(
+              "chargeType" -> VatErrorCorrection1stLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 502.43,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 502.43
+                )
+              ),
+              "chargeReference" -> "XD002750002143",
+              "accruedInterest" -> 0,
+            "penaltyType" -> "LPP",
+              "originalAmount" -> 502.43
+            ),
+            Json.obj(
+              "chargeType" -> VatErrorCorrection2ndLPPLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 502.44,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 502.44
+                )
+              ),
+              "chargeReference" -> "XD002750002144",
+              "accruedInterest" -> 0,
+              "penaltyType" -> "LPP",
+              "originalAmount" -> 502.44
+            )
           )
         ).toString()
       )
@@ -2044,6 +2118,66 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           accruedPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(-202.40)
+        ),
+        Payment(
+          VatErrorCorrectionLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(502.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002140"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = None,
+          originalAmount = BigDecimal(502.40)
+        ),
+        Payment(
+          VatErrorCorrection1stLPP,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(502.41),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002141"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = Some("LPP"),
+          originalAmount = BigDecimal(502.41)
+        ),
+        Payment(
+          VatErrorCorrection2ndLPP,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(502.42),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002142"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = Some("LPP"),
+          originalAmount = BigDecimal(502.42)
+        ),
+        Payment(
+          VatErrorCorrection1stLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(502.43),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002143"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = Some("LPP"),
+          originalAmount = BigDecimal(502.43)
+        ),
+        Payment(
+          VatErrorCorrection2ndLPPLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(502.44),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002144"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = Some("LPP"),
+          originalAmount = BigDecimal(502.44)
         )
       )))
 
