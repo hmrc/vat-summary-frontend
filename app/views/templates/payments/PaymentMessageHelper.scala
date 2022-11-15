@@ -712,6 +712,20 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object VATPOAInstalLPI extends PaymentMessageHelper(
+    VatPOAInstalmentLPI.value,
+    "chargeType.POAInstalLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATAAReturnLPI extends PaymentMessageHelper(
+    VatAAReturnChargeLPI.value,
+    "chargeType.VATReturnAALPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
@@ -806,6 +820,8 @@ object PaymentMessageHelper {
     VATAAReturnCharge1stLPP,
     VATAAReturnCharge2ndLPP,
     VATReturn2ndLPP,
+    VATAAReturnLPI,
+    VATPOAInstalLPI,
     VATReturnPOALPI,
     VATPOAReturn1stLPP,
     VATPOAReturn2ndLPP,

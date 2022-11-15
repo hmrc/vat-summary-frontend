@@ -475,6 +475,7 @@ chargeType.refundDescription = gan i chi ofyn am ad-daliad o ordaliad a wnaethoc
 chargeType.refundDescription.agent = oherwydd i’ch cleient ofyn am ad-daliad o ordaliad a wnaeth
 
 chargeType.POAInstalmentTitle = Rhandaliad taliad ar gyfrif
+chargeType.POAInstalLPITitle = ???
 
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
@@ -522,6 +523,7 @@ chargeType.VATReturnAA2ndLPPLPITitle = ???
 chargeType.VATAAReturnCharge1stLPP = ???
 chargeType.VATAAReturnCharge2ndLPP = ???
 chargeType.VATReturn2ndLPP = ???
+chargeType.VATReturnAALPITitle = ???
 
 chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd

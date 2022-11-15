@@ -533,6 +533,24 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT POA Instalment LPI" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAInstalmentLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return AA LPI" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnChargeLPI), false, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
       "there is a VAT AA 1st LPP charge" should {
 
         val helper = new WhatYouOweChargeHelper(paymentModel(VatAA1stLPP), false, messages)
@@ -1137,6 +1155,24 @@ class WhatYouOweChargeHelperSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           helper.description shouldBe Some("for 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT Return AA LPI" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatAAReturnChargeLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
+        }
+      }
+
+      "there is a VAT POA Instalment LPI" should {
+
+        val helper = new WhatYouOweChargeHelper(paymentModel(VatPOAInstalmentLPI), true, messages)
+
+        "display the correct description" in {
+          helper.description shouldBe Some("for period 1 Jan to 2 Feb 2018")
         }
       }
 
