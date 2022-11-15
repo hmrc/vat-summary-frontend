@@ -112,7 +112,6 @@ object MessageLookup {
         case VATPOAReturnDebitCharge.name => ("Payment on account balance", s"for period $datePeriod")
         case VATPOAReturnCreditCharge.name => ("Payment on account repayment", s"for period $datePeriod")
         case VATReturnPOALPI.name => ("Interest on payment on account", s"for period $datePeriod")
-        case VATPOAInstalmentLPI.name => ("Interest on payment on account instalment", s"for period $datePeriod")
         case VATPOAReturn1stLPP.name => ("Penalty for late payment – payment on account", s"for period $datePeriod")
         case VATPOAReturn2ndLPP.name => ("Second penalty for late payment – payment on account", s"for period $datePeriod")
         case VATReturnPOA1stLPPLPI.name => ("Interest on payment on account penalty", s"for period $datePeriod")

@@ -474,13 +474,6 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
-  object VATPOAInstalmentLPI extends PaymentMessageHelper(
-    VatPOAInstalmentLPI.value,
-    "chargeType.VatPOAInstalmentLPITitle",
-    Some("chargeType.forPeriod"),
-    Some("chargeType.forPeriod")
-  )
-
   object VATPOAReturn1stLPP extends PaymentMessageHelper(
     VatPOAReturn1stLPP.value,
     "chargeType.VatPOAReturn1stLPPTitle",
@@ -814,7 +807,6 @@ object PaymentMessageHelper {
     VATAAReturnCharge2ndLPP,
     VATReturn2ndLPP,
     VATReturnPOALPI,
-    VATPOAInstalmentLPI,
     VATPOAReturn1stLPP,
     VATPOAReturn2ndLPP,
     VATReturnPOA1stLPPLPI,
