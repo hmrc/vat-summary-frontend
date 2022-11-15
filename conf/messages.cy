@@ -480,7 +480,6 @@ chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
 
 chargeType.VatReturnPOALPITitle = ???
-chargeType.VatPOAInstalmentLPITitle = ???
 chargeType.VatPOAReturn1stLPPTitle = ???
 chargeType.VatPOAReturn2ndLPPTitle = ???
 chargeType.VatReturnPOA1stLPPLPITitle = ???

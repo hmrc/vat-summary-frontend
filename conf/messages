@@ -480,7 +480,6 @@ chargeType.POAReturnDebitChargeTitle = Payment on account balance
 chargeType.POAReturnCreditChargeTitle = Payment on account repayment
 
 chargeType.VatReturnPOALPITitle = Interest on payment on account
-chargeType.VatPOAInstalmentLPITitle = Interest on payment on account instalment
 chargeType.VatPOAReturn1stLPPTitle = Penalty for late payment – payment on account
 chargeType.VatPOAReturn2ndLPPTitle = Second penalty for late payment – payment on account
 chargeType.VatReturnPOA1stLPPLPITitle = Interest on payment on account penalty
