@@ -479,6 +479,12 @@ chargeType.POAInstalmentTitle = Rhandaliad taliad ar gyfrif
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
 
+chargeType.VatReturnPOALPITitle = ???
+chargeType.VatPOAReturn1stLPPTitle = ???
+chargeType.VatPOAReturn2ndLPPTitle = ???
+chargeType.VatReturnPOA1stLPPLPITitle = ???
+chargeType.VatReturnPOA2ndLPPLPITitle = ???
+
 chargeType.vatReturnLPITitle = ???
 chargeType.vatReturn1stLPPLPITitle = ???
 chargeType.vatReturn2ndLPPLPITitle = ???

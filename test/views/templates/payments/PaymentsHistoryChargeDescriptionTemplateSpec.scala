@@ -1042,6 +1042,76 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
           elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
         }
       }
+
+      "there is a VAT Return POA LPI" should {
+        val model = exampleModel.copy(chargeType = VatReturnPOALPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on payment on account"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT POA Return 1st LPP" should {
+        val model = exampleModel.copy(chargeType = VatPOAReturn1stLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT POA Return 2nd LPP" should {
+        val model = exampleModel.copy(chargeType = VatPOAReturn2ndLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Return POA 1st LPP LPI" should {
+        val model = exampleModel.copy(chargeType = VatReturnPOA1stLPPLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on payment on account penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Return POA 2nd LPP LPI" should {
+        val model = exampleModel.copy(chargeType = VatReturnPOA2ndLPPLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on payment on account second penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
     }
   }
 
@@ -2041,6 +2111,76 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Return POA LPI" should {
+      val model = exampleModel.copy(chargeType = VatReturnPOALPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on payment on account"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT POA Return 1st LPP" should {
+      val model = exampleModel.copy(chargeType = VatPOAReturn1stLPP)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT POA Return 2nd LPP" should {
+      val model = exampleModel.copy(chargeType = VatPOAReturn2ndLPP)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Return POA 1st LPP LPI" should {
+      val model = exampleModel.copy(chargeType = VatReturnPOA1stLPPLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on payment on account penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+      }
+    }
+
+    "there is a VAT Return POA 2nd LPP LPI" should {
+      val model = exampleModel.copy(chargeType = VatReturnPOA2ndLPPLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on payment on account second penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
       }
     }
   }
