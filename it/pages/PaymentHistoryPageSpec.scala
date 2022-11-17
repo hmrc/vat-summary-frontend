@@ -33,7 +33,7 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
     val youPaidHmrcSelector = "#past-payments-2018 > table > tbody > tr:nth-child(1) > td:nth-child(3)"
     val noPaymentsInset = "#past-payments-2017 > p"
 
-    def setupRequest(isPartialMigration : Boolean = false): WSRequest = {
+    def setupRequest(isPartialMigration: Boolean = false): WSRequest = {
       AuthStub.authorised()
       CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = isPartialMigration, hasVerifiedEmail = true))
       ServiceInfoStub.stubServiceInfoPartial
@@ -43,6 +43,7 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
     "the user has payments" should {
 
       "load the page and render the appropriate content" in {
+
         val request = {
           FinancialDataStub.stubPaidTransactions
           setupRequest()
@@ -57,9 +58,11 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
         document.select(youPaidHmrcSelector).text() shouldBe "£0"
       }
     }
+
     "the user has no payments" should {
 
       "load the page and render the appropriate content" in {
+
         val request = {
           FinancialDataStub.stubNoPayments
           setupRequest()
@@ -72,50 +75,44 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
         document.title shouldBe "Payment history - Manage your VAT account - GOV.UK"
         document.select(noPaymentsInset).text() shouldBe "You have not made or received any payments using the new VAT service this year."
       }
-
     }
 
-      "the user sees the previous payments tab" should {
+    "the user sees the previous payments tab" should {
 
-        "load the page and render the appropriate content" in {
+      "load the page and render the appropriate content" in {
 
-           val request = {
-             FinancialDataStub.stubPaidTransactions
-             AuthStub.authorisedMultipleEnrolments()
-             CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true))
-             ServiceInfoStub.stubServiceInfoPartial
-             buildRequest("/payment-history")
-          }
-
-          val response: WSResponse = await(request.get())
-          val document: Document = Jsoup.parse(response.body)
-
-          response.status shouldBe Status.OK
-          document.title shouldBe "Payment history - Manage your VAT account - GOV.UK"
-          document.select("#previous-payment").text shouldBe
-            "You can view your previous payments (opens in a new tab) if you made payments before joining Making Tax Digital."
-
+        val request = {
+          FinancialDataStub.stubPaidTransactions
+          AuthStub.authorisedMultipleEnrolments()
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true))
+          ServiceInfoStub.stubServiceInfoPartial
+          buildRequest("/payment-history")
         }
 
+        val response: WSResponse = await(request.get())
+        val document: Document = Jsoup.parse(response.body)
+
+        response.status shouldBe Status.OK
+        document.title shouldBe "Payment history - Manage your VAT account - GOV.UK"
+        document.select("#previous-payment").text shouldBe
+          "You can view your previous payments (opens in a new tab) if you made payments before joining Making Tax Digital."
       }
+    }
 
-      "the user is hybrid / partial migration" should {
+    "the user is hybrid / partial migration" should {
 
-        "be redirected away" in {
+      "be redirected away" in {
 
-          val request = {
-            FinancialDataStub.stubPaidTransactions
-            setupRequest(isPartialMigration = true)
-          }
-
-          val response: WSResponse = await(request.get())
-
-          response.status shouldBe Status.SEE_OTHER
-          response.header("Location").get shouldBe "/vat-through-software/vat-overview"
-
+        val request = {
+          FinancialDataStub.stubPaidTransactions
+          setupRequest(isPartialMigration = true)
         }
-      }
 
+        val response: WSResponse = await(request.get())
+
+        response.status shouldBe Status.SEE_OTHER
+        response.header("Location").get shouldBe "/vat-through-software/vat-overview"
+      }
+    }
   }
-
 }
