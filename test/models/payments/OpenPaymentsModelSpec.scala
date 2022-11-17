@@ -25,17 +25,19 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
   val openPaymentsModelWithPeriod: OpenPaymentsModel = OpenPaymentsModel(
     payment = Payment(
       chargeType = OADebitCharge,
-      periodFrom = LocalDate.parse("2001-01-01"),
-      periodTo = LocalDate.parse("2001-03-31"),
+      periodFrom = Some(LocalDate.parse("2001-01-01")),
+      periodTo = Some(LocalDate.parse("2001-03-31")),
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
       chargeReference = None,
       ddCollectionInProgress = false,
       accruedInterestAmount = Some(BigDecimal(2)),
+      interestRate = Some(2.22),
       accruedPenaltyAmount = Some(100.00),
       penaltyType = Some("LPP1"),
-      originalAmount = BigDecimal(10000)
+      originalAmount = BigDecimal(10000),
+      clearedAmount = None
     ),
     isOverdue = false
   )
@@ -43,15 +45,19 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
   val openPaymentsModelNoPeriod: OpenPaymentsModel = OpenPaymentsModel(
     payment = Payment(
       chargeType = OADebitCharge,
+      periodFrom = None,
+      periodTo = None,
       due = LocalDate.parse("2003-04-05"),
       outstandingAmount = 300.00,
       periodKey = Some("#003"),
       chargeReference = None,
       ddCollectionInProgress = false,
       accruedInterestAmount = Some(BigDecimal(2)),
+      interestRate = Some(2.22),
       accruedPenaltyAmount = Some(BigDecimal(100.00)),
       penaltyType = Some("LPP1"),
-      originalAmount = BigDecimal(10000)
+      originalAmount = BigDecimal(10000),
+      clearedAmount = None
     ),
     isOverdue = false
   )

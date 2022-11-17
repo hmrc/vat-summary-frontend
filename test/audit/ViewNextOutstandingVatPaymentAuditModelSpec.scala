@@ -25,59 +25,26 @@ import org.scalatest.matchers.should.Matchers
 
 class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with Matchers {
 
-  val onePayment = Payments(
-    Seq(
-      Payment(
-        ReturnDebitCharge,
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-03-01"),
-        LocalDate.parse("2017-03-08"),
-        9999,
-        Some("#001"),
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = None,
-        penaltyType = None,
-        originalAmount = BigDecimal(10000)
-      )
-    )
+  val paymentModel: Payment = Payment(
+    ReturnDebitCharge,
+    Some(LocalDate.parse("2017-01-01")),
+    Some(LocalDate.parse("2017-03-01")),
+    LocalDate.parse("2017-03-08"),
+    9999,
+    Some("#001"),
+    chargeReference = Some("XD002750002155"),
+    ddCollectionInProgress = false,
+    accruedInterestAmount = Some(BigDecimal(2)),
+    interestRate = Some(2.22),
+    accruedPenaltyAmount = None,
+    penaltyType = None,
+    originalAmount = BigDecimal(10000),
+    clearedAmount = None
   )
 
-  val twoPayments = Payments(
-    Seq(
-      Payment(
-        ReturnDebitCharge,
-        LocalDate.parse("2017-01-01"),
-        LocalDate.parse("2017-03-01"),
-        LocalDate.parse("2017-03-08"),
-        9999,
-        Some("#001"),
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = None,
-        penaltyType = None,
-        originalAmount = BigDecimal(10000)
-      ),
-      Payment(
-        ReturnDebitCharge,
-        LocalDate.parse("2017-02-01"),
-        LocalDate.parse("2017-04-01"),
-        LocalDate.parse("2017-05-08"),
-        7777,
-        Some("#002"),
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = None,
-        penaltyType = None,
-        originalAmount = BigDecimal(10000)
-      )
-    )
-  )
-
-  val user = User("999999999")
+  val onePayment: Payments = Payments(Seq(paymentModel))
+  val twoPayments: Payments = Payments(Seq(paymentModel, paymentModel))
+  val user: User = User("999999999")
 
   "ViewNextOutstandingVatPaymentAuditModel" should {
 

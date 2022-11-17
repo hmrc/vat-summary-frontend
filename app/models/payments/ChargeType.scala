@@ -455,7 +455,7 @@ object ChargeType extends LoggerUtil {
   val interestChargeTypes: Set[ChargeType] = Set(
     VatReturnLPI,
     VatReturn1stLPPLPI,
-    VatReturn2ndLPPLPI, // TODO add interest mapping when parent charge available
+    VatReturn2ndLPPLPI,
     VatCentralAssessmentLPI,
     VatCA1stLPPLPI, // TODO add interest mapping when parent charge available
     VatCA2ndLPPLPI, // TODO add interest mapping when parent charge available

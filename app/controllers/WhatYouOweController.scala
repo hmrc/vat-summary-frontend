@@ -122,29 +122,31 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     ))
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
-    payment.accruedInterestAmount match {
-      case Some(interestAmnt) =>
+    (payment.accruedInterestAmount, payment.interestRate) match {
+      case (Some(interestAmnt), Some(intRate)) =>
         Some(EstimatedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
-          interestRate = 5.00, // TODO replace with API field
+          interestRate = intRate,
           interestAmount = interestAmnt,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
       case _ =>
-        logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
+        logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing one or more required values:" +
+          s"${payment.accruedInterestAmount.fold("\naccrued interest amount")(_ => "")}" +
+          s"${payment.interestRate.fold("\ninterest rate")(_ => "")}")
         None
     }
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
-    payment.chargeReference match {
-      case Some(chargeRef) =>
+    (payment.chargeReference, payment.interestRate) match {
+      case (Some(chargeRef), Some(intRate)) =>
         Some(CrystallisedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = payment.chargeType.value,
-          interestRate = 5.00, // TODO replace with API field
+          interestRate = intRate,
           dueDate = payment.due,
           interestAmount = payment.originalAmount,
           amountReceived = payment.clearedAmount.getOrElse(0),
@@ -154,7 +156,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
       case _ =>
-        logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")
+        logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing one or more required values:" +
+          s"${payment.chargeReference.fold("\ncharge reference")(_ => "")}" +
+          s"${payment.interestRate.fold("\ninterest rate")(_ => "")}")
         None
     }
 

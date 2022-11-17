@@ -30,67 +30,43 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsServiceSpec extends ControllerBaseSpec {
   
-    val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
-      periodFrom = LocalDate.parse("2017-01-01"),
-      periodTo = LocalDate.parse("2017-03-30"),
-      due = LocalDate.parse("2017-04-30"),
-      status = "O",
-      received = None,
-      periodKey = "#001"
-    )))
+  val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
+    periodFrom = LocalDate.parse("2017-01-01"),
+    periodTo = LocalDate.parse("2017-03-30"),
+    due = LocalDate.parse("2017-04-30"),
+    status = "O",
+    received = None,
+    periodKey = "#001"
+  )))
 
-    val payments: Seq[Payment] = Seq(
-      PaymentWithPeriod(
-        ReturnDebitCharge,
-        periodFrom = LocalDate.parse("2017-11-22"),
-        periodTo = LocalDate.parse("2017-12-22"),
-        due = LocalDate.parse("2017-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        periodKey = Some("#003"),
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = Some(BigDecimal(100.00)),
-        penaltyType = Some("LPP1"),
-        originalAmount = BigDecimal(10000)
-      )
-    )
+  val payment: PaymentWithPeriod = PaymentWithPeriod(
+    ReturnDebitCharge,
+    periodFrom = LocalDate.parse("2017-11-22"),
+    periodTo = LocalDate.parse("2017-12-22"),
+    due = LocalDate.parse("2017-12-26"),
+    outstandingAmount = BigDecimal(1000.00),
+    periodKey = Some("#003"),
+    chargeReference = Some("XD002750002155"),
+    ddCollectionInProgress = false,
+    accruedInterestAmount = Some(BigDecimal(2)),
+    interestRate = Some(2.22),
+    accruedPenaltyAmount = Some(BigDecimal(100.00)),
+    penaltyType = Some("LPP1"),
+    originalAmount = BigDecimal(10000),
+    clearedAmount = Some(50.55)
+  )
+
+  val payments: Seq[Payment] = Seq(payment)
 
   val POAPayments: Seq[Payment] = Seq(
-      PaymentWithPeriod(
-        PaymentOnAccount,
-        periodFrom = LocalDate.parse("2017-11-22"),
-        periodTo = LocalDate.parse("2017-12-22"),
-        due = LocalDate.parse("2017-12-26"),
-        outstandingAmount = BigDecimal(1000.00),
-        periodKey = Some("#003"),
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = Some(BigDecimal(100.00)),
-        penaltyType = Some("LPP1"),
-        originalAmount = BigDecimal(10000)
-      ),
-      PaymentWithPeriod(
-        CentralAssessmentCharge,
-        periodFrom = LocalDate.parse("2017-11-22"),
-        periodTo = LocalDate.parse("2017-12-22"),
-        due = LocalDate.parse("2017-12-26"),
-        outstandingAmount = BigDecimal(0),
-        periodKey = Some("#003"),
-        chargeReference = Some("XD002750002155"),
-        ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = Some(BigDecimal(100.00)),
-        penaltyType = Some("LPP1"),
-        originalAmount = BigDecimal(10000)
-      )
-    )
+    payment.copy(chargeType = PaymentOnAccount),
+    payment.copy(chargeType = CentralAssessmentCharge, outstandingAmount = 0)
+  )
 
-    implicit val hc: HeaderCarrier = HeaderCarrier()
-    val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
-    val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
-    val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  val mockObligationsConnector: VatObligationsConnector = mock[VatObligationsConnector]
+  val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
+  val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
   def callObligationsConnector(obligationResult: HttpGetResult[VatReturnObligations] = Right(obligations)): Any = {
     (mockObligationsConnector.getVatReturnObligations(_: String, _: Obligation.Status.Value, _: Option[LocalDate], _: Option[LocalDate])

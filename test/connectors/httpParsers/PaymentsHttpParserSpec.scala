@@ -1331,9 +1331,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(3),
           penaltyType = Some("LPP1"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -1345,9 +1347,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           OACreditCharge,
@@ -1359,9 +1363,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           OADebitCharge,
@@ -1373,9 +1379,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           CentralAssessmentCharge,
@@ -1387,9 +1395,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           DebitDefaultSurcharge,
@@ -1401,9 +1411,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           CreditDefaultSurcharge,
@@ -1415,9 +1427,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           ErrorCorrectionCreditCharge,
@@ -1429,9 +1443,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           ErrorCorrectionDebitCharge,
@@ -1443,9 +1459,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           AAInterestCharge,
@@ -1457,9 +1475,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           AAReturnDebitCharge,
@@ -1471,9 +1491,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           AAReturnCreditCharge,
@@ -1485,9 +1507,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           AAMonthlyInstalment,
@@ -1499,9 +1523,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           AAQuarterlyInstalments,
@@ -1513,9 +1539,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           OADefaultInterestCharge,
@@ -1527,9 +1555,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           AACharge,
@@ -1541,9 +1571,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           OAFurtherInterestCharge,
@@ -1555,9 +1587,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           BnpRegPre2010Charge,
@@ -1569,9 +1603,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           BnpRegPost2010Charge,
@@ -1583,9 +1619,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           FtnMatPre2010Charge,
@@ -1597,9 +1635,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           FtnMatPost2010Charge,
@@ -1611,9 +1651,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           MiscPenaltyCharge,
@@ -1625,9 +1667,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           FtnEachPartnerCharge,
@@ -1639,9 +1683,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           MpPre2009Charge,
@@ -1653,9 +1699,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           MpRepeatedPre2009Charge,
@@ -1667,9 +1715,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           CivilEvasionPenaltyCharge,
@@ -1681,67 +1731,77 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         Payment(
           VatOAInaccuraciesFrom2009,
-          periodFrom = LocalDate.parse("2017-03-20"),
-          periodTo = LocalDate.parse("2017-06-21"),
+          periodFrom = Some(LocalDate.parse("2017-03-20")),
+          periodTo = Some(LocalDate.parse("2017-06-21")),
           due = LocalDate.parse("2017-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#020"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         Payment(
           InaccuraciesAssessmentsPenCharge,
-          periodFrom = LocalDate.parse("2008-03-20"),
-          periodTo = LocalDate.parse("2008-06-21"),
+          periodFrom = Some(LocalDate.parse("2008-03-20")),
+          periodTo = Some(LocalDate.parse("2008-06-21")),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         Payment(
           InaccuraciesReturnReplacedCharge,
-          periodFrom = LocalDate.parse("2008-03-20"),
-          periodTo = LocalDate.parse("2008-06-21"),
+          periodFrom = Some(LocalDate.parse("2008-03-20")),
+          periodTo = Some(LocalDate.parse("2008-06-21")),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
         Payment(
           CarterPenaltyCharge,
-          periodFrom = LocalDate.parse("2008-03-20"),
-          periodTo = LocalDate.parse("2008-06-21"),
+          periodFrom = Some(LocalDate.parse("2008-03-20")),
+          periodTo = Some(LocalDate.parse("2008-06-21")),
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           WrongDoingPenaltyCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1749,11 +1809,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           FailureToSubmitRCSLCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1761,11 +1823,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           FailureToNotifyRCSLCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1773,11 +1837,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           PaymentOnAccountInstalments,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1785,11 +1851,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturnPOALPI,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1797,11 +1865,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPOAReturn1stLPP,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1809,11 +1879,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPOAReturn2ndLPP,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1821,11 +1893,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturnPOA1stLPPLPI,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1833,11 +1907,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturnPOA2ndLPPLPI,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1845,11 +1921,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           PaymentOnAccountReturnDebitCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1857,11 +1935,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           PaymentOnAccountReturnCreditCharge,
           due = LocalDate.parse("2008-09-27"),
           outstandingAmount = BigDecimal(50.00),
@@ -1869,11 +1949,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatUnrepayableOverpayment,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(200.00),
@@ -1881,11 +1963,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturn1stLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(200.00),
@@ -1893,11 +1977,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturnLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.10),
@@ -1905,11 +1991,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPALPICharge,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.10),
@@ -1917,11 +2005,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturn1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.20),
@@ -1929,11 +2019,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturn2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.30),
@@ -1941,11 +2033,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatCentralAssessmentLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -1953,11 +2047,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatCA1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -1965,11 +2061,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.0)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatCA2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -1977,11 +2075,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.0)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatOfficersAssessmentLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -1989,11 +2089,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatOA1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2001,11 +2103,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatOA2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2013,11 +2117,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPA1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.50),
@@ -2025,11 +2131,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002156"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPA2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.50),
@@ -2037,11 +2145,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002157"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPA1stLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2049,11 +2159,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPA2ndLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2061,11 +2173,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAA1stLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2073,11 +2187,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAA2ndLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2085,11 +2201,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAA1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2097,11 +2215,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAA2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2109,11 +2229,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAdditionalAssessmentLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2121,11 +2243,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatLateSubmissionPen,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2133,11 +2257,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatLspInterest,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2145,11 +2271,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturnAA1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(208.40),
@@ -2157,11 +2285,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturnAA2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(208.41),
@@ -2169,11 +2299,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatManualLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(208.42),
@@ -2181,11 +2313,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatManualLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(208.43),
@@ -2193,11 +2327,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatPOAInstalmentLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2205,11 +2341,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002156"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(202.40)
+          originalAmount = BigDecimal(202.40),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAAReturnChargeLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2217,11 +2355,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002157"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(202.40)
+          originalAmount = BigDecimal(202.40),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAAQuarterlyInstalLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2229,11 +2369,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAAMonthlyInstalLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2241,11 +2383,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAAReturnCharge1stLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2253,11 +2397,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatAAReturnCharge2ndLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2265,11 +2411,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = None,
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(10000)
+          originalAmount = BigDecimal(10000),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatMigratedLiability,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(202.40),
@@ -2277,11 +2425,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(202.40)
+          originalAmount = BigDecimal(202.40),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatMigratedCredit,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(-202.40),
@@ -2289,11 +2439,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(-202.40)
+          originalAmount = BigDecimal(-202.40),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatReturn2ndLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(-202.40),
@@ -2301,11 +2453,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(-202.40)
+          originalAmount = BigDecimal(-202.40),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatErrorCorrectionLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(502.40),
@@ -2313,11 +2467,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002140"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          originalAmount = BigDecimal(502.40)
+          originalAmount = BigDecimal(502.40),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatErrorCorrection1stLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(502.41),
@@ -2325,11 +2481,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002141"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(502.41)
+          originalAmount = BigDecimal(502.41),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatErrorCorrection2ndLPP,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(502.42),
@@ -2337,11 +2495,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002142"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(502.42)
+          originalAmount = BigDecimal(502.42),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatErrorCorrection1stLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(502.43),
@@ -2349,11 +2509,13 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002143"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(502.43)
+          originalAmount = BigDecimal(502.43),
+          clearedAmount = None
         ),
-        Payment(
+        PaymentNoPeriod(
           VatErrorCorrection2ndLPPLPI,
           due = LocalDate.parse("2018-02-01"),
           outstandingAmount = BigDecimal(502.44),
@@ -2361,9 +2523,11 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           chargeReference = Some("XD002750002144"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = Some("LPP"),
-          originalAmount = BigDecimal(502.44)
+          originalAmount = BigDecimal(502.44),
+          clearedAmount = None
         )
       )))
 

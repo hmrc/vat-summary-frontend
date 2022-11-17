@@ -153,6 +153,7 @@ object FinancialDataStub extends WireMockMethods {
       |        "taxPeriodTo" : "2015-03-31",
       |        "chargeReference" : "XD002750002155",
       |        "accruedInterestAmount" : 2,
+      |        "interestRate" : 2.22,
       |        "originalAmount" : 10000,
       |        "outstandingAmount" : 10000,
       |        "items" : [

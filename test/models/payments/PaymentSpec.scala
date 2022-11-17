@@ -29,169 +29,24 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
     val endDate = "2017-03-01"
     val dueDate = "2017-03-08"
 
-    "given a start and end date and no direct debit collection flag" should {
+    val model = PaymentWithPeriod(
+      chargeType = ReturnDebitCharge,
+      periodFrom = LocalDate.parse(startDate),
+      periodTo = LocalDate.parse(endDate),
+      due = LocalDate.parse(dueDate),
+      outstandingAmount = 0,
+      periodKey = Some("#001"),
+      Some("XD002750002155"),
+      ddCollectionInProgress = true,
+      accruedInterestAmount = Some(BigDecimal(2)),
+      interestRate = Some(2.22),
+      accruedPenaltyAmount = Some(555.55),
+      penaltyType = Some("LPP1"),
+      originalAmount = BigDecimal(10000),
+      clearedAmount = Some(100)
+    )
 
-      "write to Json correctly" in {
-        val paymentJson = Json.obj(
-          "chargeType" -> ReturnDebitCharge.value,
-          "taxPeriodFrom" -> startDate,
-          "taxPeriodTo" -> endDate,
-          "items" -> Json.arr(
-            Json.obj(
-              "dueDate" -> dueDate
-            )
-          ),
-          "outstandingAmount" -> 9999,
-          "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155",
-          "accruedInterestAmount" -> 2,
-          "originalAmount" -> 10000
-        )
-
-        val paymentWithPeriodModel = PaymentWithPeriod(
-          chargeType = ReturnDebitCharge,
-          periodFrom = LocalDate.parse(startDate),
-          periodTo = LocalDate.parse(endDate),
-          due = LocalDate.parse(dueDate),
-          outstandingAmount = 9999,
-          periodKey = Some("#001"),
-          Some("XD002750002155"),
-          ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = None,
-          penaltyType = None,
-          originalAmount = BigDecimal(10000)
-        )
-        paymentJson.as[Payment] shouldBe paymentWithPeriodModel
-      }
-    }
-
-    "not given a start and end date and no direct debit collection flag" should {
-
-      "read from Json correctly" in {
-        val paymentJson = Json.obj(
-          "chargeType" -> ReturnDebitCharge.value,
-          "items" -> Json.arr(
-            Json.obj(
-              "dueDate" -> dueDate
-            )
-          ),
-          "outstandingAmount" -> -9999,
-          "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155",
-          "accruedInterestAmount" -> 2,
-          "originalAmount" -> 10000
-        )
-
-        val paymentNoPeriodModel = PaymentNoPeriod(
-          chargeType = ReturnDebitCharge,
-          due = LocalDate.parse(dueDate),
-          outstandingAmount = -9999,
-          periodKey = Some("#001"),
-          Some("XD002750002155"),
-          ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = None,
-          penaltyType = None,
-          originalAmount = BigDecimal(10000)
-        )
-        paymentJson.as[Payment] shouldBe paymentNoPeriodModel
-      }
-    }
-
-    "not given only a start or an end date" should {
-
-      "read from Json correctly" in {
-        val paymentJson = Json.obj(
-          "chargeType" -> ReturnDebitCharge.value,
-          "taxPeriodFrom" -> startDate,
-          "items" -> Json.arr(
-            Json.obj(
-              "dueDate" -> dueDate
-            )
-          ),
-          "outstandingAmount" -> 9999,
-          "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155",
-          "originalAmount" -> 10000
-        )
-
-        val exception = intercept[Exception] {
-          paymentJson.as[Payment]
-        }
-        exception.getMessage shouldBe s"Partial taxPeriod was supplied: periodFrom: 'Some($startDate)', periodTo: 'None'"
-      }
-    }
-
-    "given a direct debit collection flag" should {
-
-      val paymentJson = Json.obj(
-        "chargeType" -> ReturnDebitCharge.value,
-        "taxPeriodFrom" -> startDate,
-        "taxPeriodTo" -> endDate,
-        "items" -> Json.arr(
-          Json.obj(
-            "dueDate" -> dueDate,
-            "DDcollectionInProgress" -> true
-          )
-        ),
-        "accruedInterestAmount" -> 2,
-        "outstandingAmount" -> 0,
-        "periodKey" -> "#001",
-        "chargeReference" -> "XD002750002155",
-        "originalAmount" -> 10000
-      )
-
-      val model = PaymentWithPeriod(
-        chargeType = ReturnDebitCharge,
-        periodFrom = LocalDate.parse(startDate),
-        periodTo = LocalDate.parse(endDate),
-        due = LocalDate.parse(dueDate),
-        outstandingAmount = 0,
-        periodKey = Some("#001"),
-        Some("XD002750002155"),
-        ddCollectionInProgress = true,
-        accruedInterestAmount = Some(BigDecimal(2)),
-        accruedPenaltyAmount = None,
-        penaltyType = None,
-        originalAmount = BigDecimal(10000)
-      )
-
-      "read from json correctly" in {
-        paymentJson.as[Payment] shouldBe model
-      }
-    }
-
-    "given JSON with no cleared amount fields" should {
-
-      val paymentJson = Json.obj(
-        "chargeType" -> ReturnDebitCharge.value,
-        "taxPeriodFrom" -> startDate,
-        "taxPeriodTo" -> endDate,
-        "items" -> Json.arr(
-          Json.obj(
-            "dueDate" -> dueDate,
-            "DDcollectionInProgress" -> true
-          )
-        ),
-        "outstandingAmount" -> 0,
-        "periodKey" -> "#001",
-        "chargeReference" -> "XD002750002155",
-        "originalAmount" -> 10000
-      )
-
-      val result = paymentJson.as[Payment]
-
-      "return a model" that {
-
-        "has None in the clearedAmount field" in {
-          result.clearedAmount shouldBe None
-        }
-      }
-
-    }
-
-    "given JSON with period data and original amount and cleared amount fields" should {
+    "given JSON with maximum expected fields" should {
 
       "return a model with those fields populated" in {
 
@@ -206,6 +61,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
             )
           ),
           "accruedInterestAmount" -> 2,
+          "interestRate" -> 2.22,
+          "accruedPenaltyAmount" -> "555.55",
+          "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
@@ -213,31 +71,41 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "clearedAmount" -> "100"
         )
 
-        val model = PaymentWithPeriod(
-          chargeType = ReturnDebitCharge,
-          periodFrom = LocalDate.parse(startDate),
-          periodTo = LocalDate.parse(endDate),
-          due = LocalDate.parse(dueDate),
-          outstandingAmount = 0,
-          periodKey = Some("#001"),
-          Some("XD002750002155"),
-          ddCollectionInProgress = true,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = None,
-          penaltyType = None,
-          originalAmount = BigDecimal(10000),
-          clearedAmount = Some(100)
-        )
-
         paymentJson.as[Payment] shouldBe model
       }
 
     }
 
-    "given JSON without period data and with original amount and cleared amount fields" should {
+    "given no direct debit collection flag" should {
 
-      "return a paymentNoPeriod model with the correct original amount and cleared amount fields" in {
+      "read from Json correctly, setting the DD collection flag to false" in {
+        val paymentJson = Json.obj(
+          "chargeType" -> ReturnDebitCharge.value,
+          "taxPeriodFrom" -> startDate,
+          "taxPeriodTo" -> endDate,
+          "items" -> Json.arr(
+            Json.obj(
+              "dueDate" -> dueDate
+            )
+          ),
+          "accruedInterestAmount" -> 2,
+          "interestRate" -> 2.22,
+          "accruedPenaltyAmount" -> "555.55",
+          "penaltyType" -> "LPP1",
+          "outstandingAmount" -> 0,
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155",
+          "originalAmount" -> "10000",
+          "clearedAmount" -> "100"
+        )
 
+        paymentJson.as[Payment] shouldBe model.copy(ddCollectionInProgress = false)
+      }
+    }
+
+    "not given a start and end date and no direct debit collection flag" should {
+
+      "read from Json correctly, into a PaymentNoPeriod model" in {
         val paymentJson = Json.obj(
           "chargeType" -> ReturnDebitCharge.value,
           "items" -> Json.arr(
@@ -246,29 +114,88 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
               "DDcollectionInProgress" -> true
             )
           ),
+          "accruedInterestAmount" -> 2,
+          "interestRate" -> 2.22,
+          "accruedPenaltyAmount" -> "555.55",
+          "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
           "chargeReference" -> "XD002750002155",
-          "accruedInterestAmount" -> 2,
           "originalAmount" -> "10000",
           "clearedAmount" -> "100"
         )
 
-        val model = PaymentNoPeriod(
+        val paymentNoPeriodModel = PaymentNoPeriod(
           chargeType = ReturnDebitCharge,
           due = LocalDate.parse(dueDate),
           outstandingAmount = 0,
           periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = true,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = None,
-          penaltyType = None,
+          accruedInterestAmount = Some(2),
+          interestRate = Some(2.22),
+          accruedPenaltyAmount = Some(555.55),
+          penaltyType = Some("LPP1"),
           originalAmount = BigDecimal(10000),
           clearedAmount = Some(100)
         )
 
-        paymentJson.as[Payment] shouldBe model
+        paymentJson.as[Payment] shouldBe paymentNoPeriodModel
+      }
+    }
+
+    "given only a start date or an end date" should {
+
+      "throw an IllegalArgumentException" in {
+        val paymentJson = Json.obj(
+          "chargeType" -> ReturnDebitCharge.value,
+          "taxPeriodFrom" -> startDate,
+          "items" -> Json.arr(
+            Json.obj(
+              "dueDate" -> dueDate
+            )
+          ),
+          "outstandingAmount" -> 9999,
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155",
+          "originalAmount" -> 10000
+        )
+
+        val exception = intercept[IllegalArgumentException](paymentJson.as[Payment])
+        exception.getMessage shouldBe s"Partial taxPeriod was supplied: periodFrom: 'Some($startDate)', periodTo: 'None'"
+      }
+    }
+
+    "given JSON with minimum expected fields" should {
+
+      "read from Json correctly, setting empty fields to None" in {
+        val paymentJson = Json.obj(
+          "chargeType" -> ReturnDebitCharge.value,
+          "items" -> Json.arr(
+            Json.obj(
+              "dueDate" -> dueDate
+            )
+          ),
+          "outstandingAmount" -> 0,
+          "originalAmount" -> 100
+        )
+
+        val expectedModel = PaymentNoPeriod(
+          chargeType = ReturnDebitCharge,
+          due = LocalDate.parse(dueDate),
+          outstandingAmount = 0,
+          periodKey = None,
+          chargeReference = None,
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          interestRate = None,
+          accruedPenaltyAmount = None,
+          penaltyType = None,
+          originalAmount = 100,
+          clearedAmount = None
+        )
+
+        paymentJson.as[Payment] shouldBe expectedModel
       }
     }
   }
