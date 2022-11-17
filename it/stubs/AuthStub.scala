@@ -68,7 +68,7 @@ object AuthStub extends WireMockMethods {
     )
   )
 
-  val VatDecEnrolment: JsObject = {
+  val vatDecEnrolment: JsObject = {
     Json.obj(
       "key" -> "HMCE-VATDEC-ORG",
       "identifiers" -> Json.arr(
