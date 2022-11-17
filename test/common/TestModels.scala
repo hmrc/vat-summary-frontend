@@ -38,20 +38,22 @@ object TestModels {
 
   val payments: Payments = Payments(Seq(Payment(
     ReturnDebitCharge,
-    LocalDate.parse("2019-01-01"),
-    LocalDate.parse("2019-02-02"),
+    Some(LocalDate.parse("2019-01-01")),
+    Some(LocalDate.parse("2019-02-02")),
     LocalDate.parse("2019-03-03"),
     1,
     Some("#001"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
+    interestRate = Some(2.22),
     accruedPenaltyAmount = None,
     penaltyType = None,
-    originalAmount = BigDecimal(10000)
+    originalAmount = BigDecimal(10000),
+    clearedAmount = None
   )))
 
-  val payment: PaymentWithPeriod = Payment(
+  val payment: PaymentWithPeriod = PaymentWithPeriod(
     ReturnDebitCharge,
     LocalDate.parse("2019-01-01"),
     LocalDate.parse("2019-02-02"),
@@ -61,6 +63,7 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
+    interestRate = Some(2.22),
     originalAmount = BigDecimal(10000),
     clearedAmount = Some(0),
     accruedPenaltyAmount = Some(50.55),
@@ -72,7 +75,7 @@ object TestModels {
   val unrepayableOverpayment: PaymentWithPeriod =
     payment.copy(chargeType = VatUnrepayableOverpayment, accruedPenaltyAmount = None)
 
-  val paymentNoPeriodNoDate: PaymentNoPeriod = Payment(
+  val paymentNoPeriodNoDate: PaymentNoPeriod = PaymentNoPeriod(
     OADefaultInterestCharge,
     LocalDate.parse("2019-03-03"),
     BigDecimal("10000"),
@@ -80,6 +83,7 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
+    interestRate = Some(2.22),
     accruedPenaltyAmount = None,
     penaltyType = None,
     originalAmount = BigDecimal(10000),
@@ -90,7 +94,7 @@ object TestModels {
 
   val paymentWithDifferentAgentMessage: PaymentWithPeriod = payment.copy(chargeType = BnpRegPost2010Charge)
 
-  val paymentOnAccount: PaymentNoPeriod = Payment(
+  val paymentOnAccount: PaymentNoPeriod = PaymentNoPeriod(
     PaymentOnAccount,
     LocalDate.parse("2017-01-01"),
     BigDecimal("0"),
@@ -98,9 +102,11 @@ object TestModels {
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruedInterestAmount = Some(BigDecimal(2)),
+    interestRate = Some(2.22),
     accruedPenaltyAmount = None,
     penaltyType = None,
-    originalAmount = BigDecimal(10000)
+    originalAmount = BigDecimal(10000),
+    clearedAmount = None
   )
 
   val obligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
@@ -355,7 +361,7 @@ object TestModels {
     periodFrom = LocalDate.parse("2019-01-01"),
     periodTo = LocalDate.parse("2019-02-02"),
     chargeType = VatReturnLPI.value,
-    interestRate = 5.00,
+    interestRate = 2.22,
     interestAmount = BigDecimal(2),
     isPenalty = false
   )
@@ -366,7 +372,7 @@ object TestModels {
     periodFrom = LocalDate.parse("2019-01-01"),
     periodTo = LocalDate.parse("2019-02-02"),
     chargeType = "VAT Return LPI",
-    interestRate = 5.00,
+    interestRate = 2.22,
     dueDate = LocalDate.parse("2019-03-03"),
     interestAmount = 10000,
     amountReceived = 0,

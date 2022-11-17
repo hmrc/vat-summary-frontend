@@ -490,7 +490,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
-          5.00,
+          2.22,
           LocalDate.parse("2019-03-03"),
           10000,
           0,
@@ -508,6 +508,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(chargeType = VatReturnLPI, chargeReference = None)
         controller.buildCrystallisedIntViewModel(charge) shouldBe None
       }
+
+      "interestRate is missing" in {
+        val charge = payment.copy(chargeType = VatReturnLPI, interestRate = None)
+        controller.buildCrystallisedIntViewModel(charge) shouldBe None
+      }
     }
   }
 
@@ -520,7 +525,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
-          5.00,
+          2.22,
           2,
           isPenalty = false
         ))
@@ -531,6 +536,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "accruedInterestAmount is missing" in {
         val charge = payment.copy(accruedInterestAmount = None)
+        controller.buildEstimatedIntViewModel(charge) shouldBe None
+      }
+
+      "interestRate is missing" in {
+        val charge = payment.copy(interestRate = None)
         controller.buildEstimatedIntViewModel(charge) shouldBe None
       }
     }

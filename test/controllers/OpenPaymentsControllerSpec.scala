@@ -247,35 +247,39 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
     "Calling the .getModel function" when {
 
+      val testPayment: PaymentWithPeriod = PaymentWithPeriod(
+        ReturnDebitCharge,
+        LocalDate.parse("2017-01-01"),
+        LocalDate.parse("2017-01-01"),
+        due = LocalDate.parse("2017-01-01"),
+        BigDecimal("10000"),
+        Some("ABCD"),
+        chargeReference = None,
+        ddCollectionInProgress = false,
+        accruedInterestAmount = Some(BigDecimal(2)),
+        interestRate = Some(2.22),
+        accruedPenaltyAmount = Some(BigDecimal(100.00)),
+        penaltyType = Some("LPP1"),
+        BigDecimal(10000),
+        None
+      )
+
         "due date of payments is in the past" when {
 
           "user has direct debit collections in progress" should {
 
             "return payments that are not overdue" in {
 
-              val testPayment: PaymentWithPeriod = Payment(
-                ReturnDebitCharge,
-                LocalDate.parse("2017-01-01"),
-                LocalDate.parse("2017-01-01"),
-                due = LocalDate.parse("2017-01-01"),
-                BigDecimal("10000"),
-                Some("ABCD"),
-                chargeReference = None,
-                ddCollectionInProgress = true,
-                accruedInterestAmount = Some(BigDecimal(2)),
-                accruedPenaltyAmount = Some(BigDecimal(100.00)),
-                penaltyType = Some("LPP1"),
-                BigDecimal(10000)
-              )
+              val paymentWithDD = testPayment.copy(ddCollectionInProgress = true)
 
               val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
                 Seq(OpenPaymentsModel(
-                  testPayment.chargeType,
-                  testPayment.outstandingAmount,
-                  testPayment.due,
-                  testPayment.periodFrom,
-                  testPayment.periodTo,
-                  testPayment.periodKey,
+                  paymentWithDD.chargeType,
+                  paymentWithDD.outstandingAmount,
+                  paymentWithDD.due,
+                  paymentWithDD.periodFrom,
+                  paymentWithDD.periodTo,
+                  paymentWithDD.periodKey,
                   isOverdue = false
                 )),
                 mandationStatus = "MTDfB"
@@ -283,7 +287,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
               val result: OpenPaymentsViewModel = {
                 mockDateServiceCall()
-                controller.getModel(Seq(testPayment), mandationStatus = "MTDfB")
+                controller.getModel(Seq(paymentWithDD), mandationStatus = "MTDfB")
               }
 
               result shouldBe expected
@@ -293,21 +297,6 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
           "user has no direct debit collections in progress" should {
 
             "return payments that are overdue" in {
-
-              val testPayment: PaymentWithPeriod = Payment(
-                ReturnDebitCharge,
-                LocalDate.parse("2017-01-01"),
-                LocalDate.parse("2017-01-01"),
-                due = LocalDate.parse("2017-01-01"),
-                BigDecimal("10000"),
-                Some("ABCD"),
-                chargeReference = None,
-                ddCollectionInProgress = false,
-                accruedInterestAmount = Some(BigDecimal(2)),
-                accruedPenaltyAmount = Some(100.00),
-                penaltyType = Some("LPP1"),
-                BigDecimal(10000)
-              )
 
               val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
                 Seq(OpenPaymentsModel(
@@ -336,29 +325,16 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
           "return payments that are not overdue" in {
 
-            val testPayment: PaymentWithPeriod = Payment(
-              ReturnDebitCharge,
-              LocalDate.parse("2017-01-01"),
-              LocalDate.parse("2017-01-01"),
-              due = LocalDate.parse("2020-01-01"),
-              BigDecimal("10000"),
-              Some("ABCD"),
-              chargeReference = None,
-              ddCollectionInProgress = false,
-              accruedInterestAmount = Some(BigDecimal(2)),
-              accruedPenaltyAmount = Some(BigDecimal(100.00)),
-              penaltyType = Some("LPP1"),
-              BigDecimal(10000)
-            )
+            val futurePayment = testPayment.copy(due = LocalDate.parse("2020-01-01"))
 
             val expected: OpenPaymentsViewModel = OpenPaymentsViewModel(
               Seq(OpenPaymentsModel(
-                testPayment.chargeType,
-                testPayment.outstandingAmount,
-                testPayment.due,
-                testPayment.periodFrom,
-                testPayment.periodTo,
-                testPayment.periodKey,
+                futurePayment.chargeType,
+                futurePayment.outstandingAmount,
+                futurePayment.due,
+                futurePayment.periodFrom,
+                futurePayment.periodTo,
+                futurePayment.periodKey,
                 isOverdue = false,
               )),
               mandationStatus = "MTDfB"
@@ -366,7 +342,7 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
 
             val result: OpenPaymentsViewModel = {
               mockDateServiceCall()
-              controller.getModel(Seq(testPayment), mandationStatus = "MTDfB")
+              controller.getModel(Seq(futurePayment), mandationStatus = "MTDfB")
             }
 
             result shouldBe expected

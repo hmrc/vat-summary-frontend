@@ -25,7 +25,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
 import models._
 import models.errors.{NextPaymentError, ObligationsError, _}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.payments.{Payment, PaymentNoPeriod, Payments, ReturnDebitCharge}
+import models.payments.{PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.penalties.PenaltiesSummary
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
@@ -739,7 +739,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
             "return payment that is not overdue" in {
 
-              val testPayment: PaymentNoPeriod = Payment(
+              val testPayment: PaymentNoPeriod = PaymentNoPeriod(
                 ReturnDebitCharge,
                 due = LocalDate.parse("2017-01-01"),
                 BigDecimal("10000"),
@@ -747,9 +747,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 chargeReference = Some("XD002750002155"),
                 ddCollectionInProgress = true,
                 accruedInterestAmount = Some(BigDecimal(2)),
+                interestRate = Some(2.22),
                 accruedPenaltyAmount = Some(BigDecimal(100.00)),
                 penaltyType = Some("LPP1"),
-                BigDecimal(10000)
+                BigDecimal(10000),
+                None
               )
 
               val result: VatDetailsDataModel = {
@@ -765,7 +767,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
             "return payment that is overdue" in {
 
-              val testPayment: PaymentNoPeriod = Payment(
+              val testPayment: PaymentNoPeriod = PaymentNoPeriod(
                 ReturnDebitCharge,
                 due = LocalDate.parse("2017-01-01"),
                 BigDecimal("10000"),
@@ -773,9 +775,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
                 chargeReference = Some("XD002750002155"),
                 ddCollectionInProgress = false,
                 accruedInterestAmount = Some(BigDecimal(2)),
+                interestRate = Some(2.22),
                 accruedPenaltyAmount = Some(BigDecimal(100.00)),
                 penaltyType = Some("LPP1"),
-                BigDecimal(10000)
+                BigDecimal(10000),
+                None
               )
 
               val result: VatDetailsDataModel = {
@@ -792,7 +796,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           "return payment that is not overdue" in {
 
-            val testPayment: PaymentNoPeriod = Payment(
+            val testPayment: PaymentNoPeriod = PaymentNoPeriod(
               ReturnDebitCharge,
               due = LocalDate.parse("2020-01-01"),
               BigDecimal("10000"),
@@ -800,9 +804,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
               chargeReference = Some("XD002750002155"),
               ddCollectionInProgress = false,
               accruedInterestAmount = Some(BigDecimal(2)),
+              interestRate = Some(2.22),
               accruedPenaltyAmount = Some(BigDecimal(100.00)),
               penaltyType = Some("LPP1"),
-              BigDecimal(10000)
+              BigDecimal(10000),
+              None
             )
 
             val result: VatDetailsDataModel = {

@@ -45,6 +45,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
     "the user has payments outstanding" should {
 
       "return a list of payments sorted by due date in descending order" in {
+
         val payment1 = PaymentWithPeriod(
           ReturnDebitCharge,
           LocalDate.parse("2008-01-01"),
@@ -55,52 +56,16 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = Some(2.22),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP1"),
-          BigDecimal("10000")
+          10000,
+          Some(200.00)
         )
-        val payment2 = PaymentWithPeriod(
-          ReturnDebitCharge,
-          LocalDate.parse("2008-01-01"),
-          LocalDate.parse("2009-01-01"),
-          LocalDate.parse("2008-12-01"),
-          BigDecimal("21.22"),
-          Some(""),
-          Some("XD002750002155"),
-          ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1"),
-          BigDecimal("10000")
-        )
-        val payment3 = PaymentWithPeriod(
-          ReturnDebitCharge,
-          LocalDate.parse("2008-01-01"),
-          LocalDate.parse("2009-01-01"),
-          LocalDate.parse("2009-01-01"),
-          BigDecimal("21.22"),
-          Some(""),
-          Some("XD002750002155"),
-          ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1"),
-          BigDecimal("10000")
-        )
-        val payment4 = PaymentWithPeriod(
-          ReturnDebitCharge,
-          LocalDate.parse("2008-01-01"),
-          LocalDate.parse("2009-01-01"),
-          LocalDate.parse("2008-11-30"),
-          BigDecimal("21.22"),
-          Some(""),
-          Some("XD002750002155"),
-          ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
-          penaltyType = Some("LPP1"),
-          BigDecimal("10000")
-        )
+
+        val payment2 = payment1.copy(due = LocalDate.parse("2008-12-01"))
+        val payment3 = payment1.copy(due = LocalDate.parse("2009-01-01"))
+        val payment4 = payment1.copy(due = LocalDate.parse("2008-11-30"))
 
         val payments = Payments(Seq(payment1, payment2, payment3, payment4))
         lazy val responseFromFinancialDataConnector = Right(payments)
@@ -117,7 +82,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
       }
     }
 
-    "the user has no payments outstanding" should {
+    "the user has no charges with positive outstanding amounts" should {
 
       "return an empty list of payments" in {
         val payments = Payments(Seq(PaymentWithPeriod(
@@ -130,9 +95,11 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           Some("XD002750002155"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(BigDecimal(2)),
+          interestRate = Some(2.22),
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP1"),
-          BigDecimal("10000")
+          BigDecimal("10000"),
+          None
         )))
         lazy val responseFromFinancialDataConnector = Right(payments)
 
@@ -160,9 +127,11 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           None,
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          BigDecimal("10000")
+          BigDecimal("10000"),
+          None
         )
 
         val payments = Payments(Seq(payment1))
@@ -192,9 +161,11 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
           None,
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           accruedPenaltyAmount = None,
           penaltyType = None,
-          BigDecimal("10000")
+          BigDecimal("10000"),
+          None
         )
 
         val payments = Payments(Seq(payment1))

@@ -27,7 +27,6 @@ import stubs.FinancialDataStub
 import uk.gov.hmrc.http.HeaderCarrier
 import play.api.test.Helpers._
 
-
 class FinancialDataConnectorISpec extends IntegrationBaseSpec {
 
   private trait Test {
@@ -42,7 +41,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return all outstanding payments for a given period" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubOutstandingTransactions
 
-      val expected = Right(Payments(Seq(
+      val expected: Right[Nothing, Payments] = Right(Payments(Seq(
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
           periodFrom = LocalDate.parse("2015-03-01"),
@@ -52,10 +51,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = Some("15AC"),
           ddCollectionInProgress = false,
           accruedInterestAmount = Some(2),
+          interestRate = Some(2.22),
           chargeReference = Some("XD002750002155"),
           originalAmount = 10000,
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           chargeType = ReturnDebitCharge,
@@ -66,10 +67,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = Some("16AC"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           chargeReference = Some("XD002750002156"),
           originalAmount = 10000,
           accruedPenaltyAmount = Some(3),
-          penaltyType = Some("LPP1")
+          penaltyType = Some("LPP1"),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           chargeType = VatProtectiveAssessmentCharge,
@@ -80,10 +83,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = Some("17AC"),
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           chargeReference = Some("XD002750002157"),
           originalAmount = 10000,
           accruedPenaltyAmount = Some(5),
-          penaltyType = Some("LPP2")
+          penaltyType = Some("LPP2"),
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           chargeType = VatReturn1stLPP,
@@ -94,10 +99,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = None,
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           originalAmount = 55.55,
           chargeReference = Some("XD002750002158"),
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           chargeType = VatReturn1stLPP,
@@ -108,10 +115,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = None,
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           originalAmount = 555.55,
           chargeReference = Some("X-PART-1-ONLY-X"),
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          clearedAmount = None
         ),
         PaymentWithPeriod(
           chargeType = VatPA2ndLPP,
@@ -122,10 +131,12 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = None,
           ddCollectionInProgress = false,
           accruedInterestAmount = None,
+          interestRate = None,
           originalAmount = 99.99,
           chargeReference = Some("XD002750002159"),
           accruedPenaltyAmount = None,
-          penaltyType = None
+          penaltyType = None,
+          clearedAmount = None
         )
       )))
 
@@ -138,7 +149,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return an empty list of payments" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubNoPayments
 
-      val expected = Right(Payments(Seq.empty))
+      val expected: Right[Nothing, Payments] = Right(Payments(Seq.empty))
 
       setupStubs()
       private val result = await(connector.getOpenPayments("123456789"))
@@ -152,7 +163,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidVrn
 
-      val expected = Left(BadRequestError(
+      val expected: Left[BadRequestError, Nothing] = Left(BadRequestError(
         code = "INVALID_VRN",
         errorResponse = "VRN was invalid!"
       ))
@@ -169,7 +180,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return a PaymentsHistoryModel" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubPaidTransactions
 
-      val expected = Right(Seq(
+      val expected: Right[Nothing, Seq[PaymentsHistoryModel]] = Right(Seq(
         PaymentsHistoryModel(
           clearingSAPDocument = Some("002828853334"),
           chargeType    =  ReturnDebitCharge,
@@ -203,7 +214,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return a DirectDebitStatus" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubSuccessfulDirectDebit
 
-      val expected = Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-01")))))
+      val expected: Right[Nothing, DirectDebitStatus] =
+        Right(DirectDebitStatus(directDebitMandateFound = true, Some(Seq(DDIDetails("2018-01-01")))))
 
       setupStubs()
       private val result = await(connector.getDirectDebitStatus("111111111"))
@@ -217,7 +229,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
     "return an BadRequestError" in new Test {
       override def setupStubs(): StubMapping = FinancialDataStub.stubInvalidVrnDirectDebit
 
-      val expected = Left(BadRequestError(
+      val expected: Left[BadRequestError, Nothing] = Left(BadRequestError(
         code = "INVALID_VRN",
         errorResponse = "VRN was invalid!"
       ))

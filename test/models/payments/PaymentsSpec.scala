@@ -35,9 +35,11 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
       Some("XD002750002155"),
       ddCollectionInProgress = false,
       Some(2),
+      Some(2.22),
       Some(BigDecimal(100.00)),
       Some("LPP1"),
-      BigDecimal(10000)
+      BigDecimal(10000),
+      Some(50.55)
     )
 
     val exampleInputString =
@@ -50,9 +52,11 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
         |"accruedInterestAmount": 2,
+        |"interestRate": 2.22,
         |"accruedPenaltyAmount" : 100.00,
         |"penaltyType" : "LPP1",
-        |"originalAmount" : 10000
+        |"originalAmount" : 10000,
+        |"clearedAmount" : 50.55
         |}"""
         .stripMargin.replace("\n", "")
 
@@ -77,9 +81,11 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           Some("XD002750002155"),
           ddCollectionInProgress = false,
           Some(2),
+          Some(2.22),
           Some(BigDecimal(100.00)),
           Some("LPP1"),
-          BigDecimal(10000)
+          BigDecimal(10000),
+          Some(50.55)
         ),
         PaymentWithPeriod(
           ReturnCreditCharge,
@@ -91,9 +97,11 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
           Some("XD002750002155"),
           ddCollectionInProgress = false,
           Some(2),
+          Some(2.22),
           Some(BigDecimal(100.00)),
           Some("LPP1"),
-          BigDecimal(10000)
+          BigDecimal(10000),
+          Some(60.66)
         )
       )
     )
@@ -109,9 +117,11 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"periodKey":"#001",
         |"chargeReference": "XD002750002155",
         |"accruedInterestAmount": 2,
+        |"interestRate": 2.22,
         |"accruedPenaltyAmount" : 100.00,
         |"penaltyType" : "LPP1",
-        |"originalAmount" : 10000
+        |"originalAmount" : 10000,
+        |"clearedAmount" : 50.55
         |},{
         |"chargeType":"VAT Return Credit Charge",
         |"taxPeriodFrom":"2017-02-01",
@@ -121,9 +131,11 @@ class PaymentsSpec extends AnyWordSpecLike with Matchers {
         |"periodKey":"#002",
         |"chargeReference": "XD002750002155",
         |"accruedInterestAmount": 2,
+        |"interestRate": 2.22,
         |"accruedPenaltyAmount" : 100.00,
         |"penaltyType" : "LPP1",
-        |"originalAmount" : 10000
+        |"originalAmount" : 10000,
+        |"clearedAmount" : 60.66
         |}]}"""
         .stripMargin.replace("\n", "")
 
