@@ -475,6 +475,7 @@ chargeType.refundDescription = as you requested a refund on an overpayment you m
 chargeType.refundDescription.agent = as your client requested a refund on an overpayment they made
 
 chargeType.POAInstalmentTitle = Payment on account instalment
+chargeType.POAInstalLPITitle = Interest on payment on account instalment
 
 chargeType.POAReturnDebitChargeTitle = Payment on account balance
 chargeType.POAReturnCreditChargeTitle = Payment on account repayment
@@ -522,6 +523,7 @@ chargeType.VATReturnAA2ndLPPLPITitle = Interest on annual accounting balance sec
 chargeType.VATAAReturnCharge1stLPP = Penalty for late payment – annual accounting balance
 chargeType.VATAAReturnCharge2ndLPP = Second penalty for late payment – annual accounting balance
 chargeType.VATReturn2ndLPP = Second penalty for late payment of VAT
+chargeType.VATReturnAALPITitle = Interest on annual accounting balance
 
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit

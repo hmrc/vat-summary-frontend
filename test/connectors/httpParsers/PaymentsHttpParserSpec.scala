@@ -1113,6 +1113,34 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "originalAmount" -> 10000
             ),
             Json.obj(
+              "chargeType" -> VatPOAInstalmentLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002156",
+              "accruedInterest" -> 0,
+              "originalAmount" -> 202.40
+            ),
+            Json.obj(
+              "chargeType" -> VatAAReturnChargeLPI.value,
+              "periodKey" -> "18AD",
+              "outstandingAmount" -> 202.40,
+              "items" -> Json.arr(
+                Json.obj(
+                  "dueDate" -> "2018-02-01",
+                  "amount" -> 202.40
+                )
+              ),
+              "chargeReference" -> "XD002750002157",
+              "accruedInterest" -> 0,
+              "originalAmount" -> 202.40
+            ),
+            Json.obj(
               "chargeType" -> VatAAQuarterlyInstalLPI.value,
               "periodKey" -> "18AD",
               "outstandingAmount" -> 202.40,
@@ -2168,6 +2196,30 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           accruedPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000)
+        ),
+        Payment(
+          VatPOAInstalmentLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002156"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = None,
+          originalAmount = BigDecimal(202.40)
+        ),
+        Payment(
+          VatAAReturnChargeLPI,
+          due = LocalDate.parse("2018-02-01"),
+          outstandingAmount = BigDecimal(202.40),
+          periodKey = Some("18AD"),
+          chargeReference = Some("XD002750002157"),
+          ddCollectionInProgress = false,
+          accruedInterestAmount = None,
+          accruedPenaltyAmount = None,
+          penaltyType = None,
+          originalAmount = BigDecimal(202.40)
         ),
         Payment(
           VatAAQuarterlyInstalLPI,
