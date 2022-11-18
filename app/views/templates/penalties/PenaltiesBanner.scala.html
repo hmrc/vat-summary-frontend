@@ -45,10 +45,32 @@
   </a>
 }
 
+@penaltiesChangesBannerContent = {
+
+<div class="govuk-!-margin-bottom-3">
+
+    <h3 class="govuk-notification-banner__heading">@messages("penaltiesChangesBanner.heading")</h3>
+
+    <p class="govuk-body" id="announcement-information">@messages("penaltiesChangesBanner.message.1")</p>
+    <p class="govuk-body" id="date-information">@messages("penaltiesChangesBanner.message.2")</p>
+    <p class="govuk-body" id="calculation-information">@messages("penaltiesChangesBanner.message.3")</p>
+
+    <a class="govuk-notification-banner__link" href="@appConfig.penaltiesChangesUrl" rel="noreferrer noopener" target="_blank">
+        @messages("penaltiesChangesBanner.link")
+    </a>
+
+</div>
+}
+
 @if(penaltiesSummary.hasActivePenalties) {
   @govukNotificationBanner(NotificationBanner(
     title = Text(messages("penaltiesBanner.heading")),
     content = HtmlContent(bannerContent),
+    classes = "govuk-!-margin-top-6"
+  ))
+} else {
+  @govukNotificationBanner(NotificationBanner(
+    content = HtmlContent(penaltiesChangesBannerContent),
     classes = "govuk-!-margin-top-6"
   ))
 }

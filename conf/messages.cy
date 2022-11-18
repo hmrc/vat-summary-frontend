@@ -581,6 +581,12 @@ penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gos
 penaltiesBanner.linkSingular = Cael gwybod pam mae gennych gosb
 penaltiesBanner.linkPlural = Cael gwybod pam mae gennych gosbau
 
+penaltiesChangesBanner.heading = ???
+penaltiesChangesBanner.message.1 = ???
+penaltiesChangesBanner.message.2 = ???
+penaltiesChangesBanner.message.3 = ???
+penaltiesChangesBanner.link = ???
+
 mtdNotification.heading = Newidiodd y ffordd o gyflwyno Ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
 mtdNotification.message.1 = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno Ffurflenni TAW ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022.
 mtdNotification.message.2 = Yn lle hynny, rhaid cadw cofnodion digidol a rhaid cyflwyno Ffurflenni gan ddefnyddio meddalwedd sy’n gydnaws â CThEM.

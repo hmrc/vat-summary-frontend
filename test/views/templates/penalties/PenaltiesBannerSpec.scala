@@ -29,13 +29,39 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
   "The Penalties banner" when {
 
-    "there are no active penalties" should {
+    "there are no active penalties" which {
 
-      lazy val view = injectedView(model)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "display the penalties changes banner" which {
 
-      "be hidden" in {
-        elementExtinct(".govuk-notification-banner")
+        lazy val view = injectedView(model)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct heading" in {
+          elementText("h2") shouldBe "Important"
+        }
+
+        "have the correct announcement information" in {
+          elementText("#announcement-information") shouldBe "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
+        }
+
+        "have the correct date information" in {
+          elementText("#date-information") shouldBe "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023."
+        }
+
+        "have the correct calculation information" in {
+          elementText("#calculation-information") shouldBe "We’re also changing how we calculate interest on late payments and repayment returns."
+        }
+
+        "the link" should {
+
+          "have the correct link message" in {
+            elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)"
+          }
+
+          "have the correct link location" in {
+            element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesChangesUrl
+          }
+        }
       }
     }
 
