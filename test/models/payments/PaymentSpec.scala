@@ -38,9 +38,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
       periodKey = Some("#001"),
       Some("XD002750002155"),
       ddCollectionInProgress = true,
-      accruedInterestAmount = Some(BigDecimal(2)),
+      accruingInterestAmount = Some(BigDecimal(2)),
       interestRate = Some(2.22),
-      accruedPenaltyAmount = Some(555.55),
+      accruingPenaltyAmount = Some(555.55),
       penaltyType = Some("LPP1"),
       originalAmount = BigDecimal(10000),
       clearedAmount = Some(100)
@@ -60,9 +60,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
               "DDcollectionInProgress" -> true
             )
           ),
-          "accruedInterestAmount" -> 2,
+          "accruingInterestAmount" -> 2,
           "interestRate" -> 2.22,
-          "accruedPenaltyAmount" -> "555.55",
+          "accruingPenaltyAmount" -> "555.55",
           "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
@@ -88,9 +88,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
               "dueDate" -> dueDate
             )
           ),
-          "accruedInterestAmount" -> 2,
+          "accruingInterestAmount" -> 2,
           "interestRate" -> 2.22,
-          "accruedPenaltyAmount" -> "555.55",
+          "accruingPenaltyAmount" -> "555.55",
           "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
@@ -114,9 +114,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
               "DDcollectionInProgress" -> true
             )
           ),
-          "accruedInterestAmount" -> 2,
+          "accruingInterestAmount" -> 2,
           "interestRate" -> 2.22,
-          "accruedPenaltyAmount" -> "555.55",
+          "accruingPenaltyAmount" -> "555.55",
           "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
           "periodKey" -> "#001",
@@ -132,9 +132,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#001"),
           Some("XD002750002155"),
           ddCollectionInProgress = true,
-          accruedInterestAmount = Some(2),
+          accruingInterestAmount = Some(2),
           interestRate = Some(2.22),
-          accruedPenaltyAmount = Some(555.55),
+          accruingPenaltyAmount = Some(555.55),
           penaltyType = Some("LPP1"),
           originalAmount = BigDecimal(10000),
           clearedAmount = Some(100)
@@ -187,9 +187,9 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           periodKey = None,
           chargeReference = None,
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = 100,
           clearedAmount = None

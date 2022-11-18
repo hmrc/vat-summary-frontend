@@ -219,7 +219,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     "there is a payment with the charge description and accrued interest defined" should {
 
       "return a view model with 2 charge models including an estimated interest charge and the correct total amount" in {
-        val charge = payment.copy(accruedPenaltyAmount = None)
+        val charge = payment.copy(accruingPenaltyAmount = None)
         val result = {
           mockDateServiceCall()
           controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", Seq(LPPDetailsModelMax))
@@ -254,10 +254,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     "there are multiple payments with a mix of estimated & crystallised interest, LSP and penalties" should {
 
       val crystallisedInterest = {
-        payment.copy(chargeType = VatReturnLPI, accruedInterestAmount = None, accruedPenaltyAmount = None)
+        payment.copy(chargeType = VatReturnLPI, accruingInterestAmount = None, accruingPenaltyAmount = None)
       }
       val lateSubmissionPenalty = {
-        payment.copy(chargeType = VatLateSubmissionPen, accruedInterestAmount = None, accruedPenaltyAmount = None, penaltyType = None)
+        payment.copy(chargeType = VatLateSubmissionPen, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None)
       }
       lazy val result = {
         mockDateServiceCall()
@@ -427,7 +427,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "return two charges" in {
         mockDateServiceCall()
-        val charge = payment.copy(accruedInterestAmount = None)
+        val charge = payment.copy(accruingInterestAmount = None)
         controller.buildChargePlusEstimates(charge, Seq(LPPDetailsModelMax)).size shouldBe 2
       }
     }
@@ -436,7 +436,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "return one charge" in {
         mockDateServiceCall()
-        val charge = payment.copy(accruedInterestAmount = None)
+        val charge = payment.copy(accruingInterestAmount = None)
         controller.buildChargePlusEstimates(charge, Seq()).size shouldBe 1
       }
     }
@@ -445,7 +445,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "return two charges" in {
         mockDateServiceCall()
-        val charge = payment.copy(accruedPenaltyAmount = None)
+        val charge = payment.copy(accruingPenaltyAmount = None)
         controller.buildChargePlusEstimates(charge, Seq()).size shouldBe 2
       }
     }
@@ -454,7 +454,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "return one charge" in {
         mockDateServiceCall()
-        val charge = payment.copy(accruedInterestAmount = None, accruedPenaltyAmount = None)
+        val charge = payment.copy(accruingInterestAmount = None, accruingPenaltyAmount = None)
         controller.buildChargePlusEstimates(charge, Seq()).size shouldBe 1
       }
     }
@@ -520,7 +520,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return a EstimatedInterestViewModel" when {
 
-      "accruedInterestAmount is present" in {
+      "accruingInterestAmount is present" in {
         controller.buildEstimatedIntViewModel(payment) shouldBe Some(EstimatedInterestViewModel(
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
@@ -534,8 +534,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return None" when {
 
-      "accruedInterestAmount is missing" in {
-        val charge = payment.copy(accruedInterestAmount = None)
+      "accruingInterestAmount is missing" in {
+        val charge = payment.copy(accruingInterestAmount = None)
         controller.buildEstimatedIntViewModel(charge) shouldBe None
       }
 
@@ -550,7 +550,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return a EstimatedLPP1ViewModel" when {
 
-      "accruedPenaltyAmount and all appropriate LPP1 penalty details are present" in {
+      "accruingPenaltyAmount and all appropriate LPP1 penalty details are present" in {
         controller.buildEstimatedLPPViewModel(payment, LPPDetailsModelMax) shouldBe Some(EstimatedLPP1ViewModel(
           "15",
           "30",
@@ -567,7 +567,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return a EstimatedLPP2ViewModel" when {
 
-      "accruedPenaltyAmount and all appropriate LPP2 penalty details are present" in {
+      "accruingPenaltyAmount and all appropriate LPP2 penalty details are present" in {
         val charge = payment.copy(chargeType = AACharge)
         val penalty = LPPDetailsModelMax.copy(penaltyCategory = "LPP2")
         controller.buildEstimatedLPPViewModel(charge, penalty) shouldBe Some(EstimatedLPP2ViewModel(
@@ -583,8 +583,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return None" when {
 
-      "accruedPenaltyAmount is missing" in {
-        val charge = payment.copy(accruedPenaltyAmount = None)
+      "accruingPenaltyAmount is missing" in {
+        val charge = payment.copy(accruingPenaltyAmount = None)
         controller.buildEstimatedLPPViewModel(charge, LPPDetailsModelMax) shouldBe None
       }
 

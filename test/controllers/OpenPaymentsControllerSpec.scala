@@ -256,9 +256,9 @@ class OpenPaymentsControllerSpec extends ControllerBaseSpec {
         Some("ABCD"),
         chargeReference = None,
         ddCollectionInProgress = false,
-        accruedInterestAmount = Some(BigDecimal(2)),
+        accruingInterestAmount = Some(BigDecimal(2)),
         interestRate = Some(2.22),
-        accruedPenaltyAmount = Some(BigDecimal(100.00)),
+        accruingPenaltyAmount = Some(BigDecimal(100.00)),
         penaltyType = Some("LPP1"),
         BigDecimal(10000),
         None

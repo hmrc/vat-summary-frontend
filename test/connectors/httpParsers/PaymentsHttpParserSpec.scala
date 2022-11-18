@@ -50,8 +50,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.50,
               "periodKey" -> "#001",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 3,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 3,
               "penaltyType" -> "LPP1",
               "originalAmount" -> 10000
             ),
@@ -66,7 +66,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.51,
               "periodKey" -> "#002",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -80,7 +80,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.52,
               "periodKey" -> "#003",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -94,7 +94,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.53,
               "periodKey" -> "#004",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -108,7 +108,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.25,
               "periodKey" -> "#005",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -122,7 +122,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.27,
               "periodKey" -> "#006",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -136,7 +136,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> -1000.27,
               "periodKey" -> "#006",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -150,7 +150,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.29,
               "periodKey" -> "#007",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -164,7 +164,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#007",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -178,7 +178,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#008",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -192,7 +192,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#009",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -206,7 +206,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#010",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -220,7 +220,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#011",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -234,7 +234,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#012",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -248,7 +248,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
               "outstandingAmount" -> 1000.30,
               "periodKey" -> "#018",
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -266,7 +266,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -284,7 +284,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -302,7 +302,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -320,7 +320,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -338,7 +338,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -356,7 +356,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -374,7 +374,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -392,7 +392,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -410,7 +410,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -428,7 +428,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -446,7 +446,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -464,7 +464,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -482,7 +482,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -500,7 +500,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -518,7 +518,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -534,7 +534,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -550,7 +550,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -566,7 +566,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -582,7 +582,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -596,7 +596,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -610,7 +610,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -625,7 +625,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -640,7 +640,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -655,7 +655,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -672,7 +672,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -688,7 +688,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -704,7 +704,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -720,7 +720,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -734,7 +734,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -748,7 +748,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -762,8 +762,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
 
@@ -779,8 +779,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -795,7 +795,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -809,8 +809,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -825,8 +825,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -841,7 +841,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -855,8 +855,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -871,8 +871,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -887,8 +887,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002156",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -903,8 +903,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002157",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -919,8 +919,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -935,8 +935,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -951,8 +951,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -967,8 +967,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -983,8 +983,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -999,8 +999,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1015,7 +1015,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -1029,7 +1029,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -1043,8 +1043,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1059,8 +1059,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1075,8 +1075,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1091,8 +1091,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1107,8 +1107,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1151,7 +1151,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -1165,7 +1165,7 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
+              "accruingInterestAmount" -> 2,
               "originalAmount" -> 10000
             ),
             Json.obj(
@@ -1179,8 +1179,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1195,8 +1195,8 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
                 )
               ),
               "chargeReference" -> "XD002750002155",
-              "accruedInterestAmount" -> 2,
-              "accruedPenaltyAmount" -> 100.00,
+              "accruingInterestAmount" -> 2,
+              "accruingPenaltyAmount" -> 100.00,
               "penaltyType" -> "LPP",
               "originalAmount" -> 10000
             ),
@@ -1330,9 +1330,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#001"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(3),
+          accruingPenaltyAmount = Some(3),
           penaltyType = Some("LPP1"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1346,9 +1346,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#002"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1362,9 +1362,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#003"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1378,9 +1378,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#004"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1394,9 +1394,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#005"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1410,9 +1410,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#006"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1426,9 +1426,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#006"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1442,9 +1442,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#007"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1458,9 +1458,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#007"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1474,9 +1474,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#008"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1490,9 +1490,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#009"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1506,9 +1506,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#010"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1522,9 +1522,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#011"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1538,9 +1538,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#012"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1554,9 +1554,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1570,9 +1570,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#009"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1586,9 +1586,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#010"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1602,9 +1602,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#019"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1618,9 +1618,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#011"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1634,9 +1634,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#012"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1650,9 +1650,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#013"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1666,9 +1666,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#014"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1682,9 +1682,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#015"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1698,9 +1698,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#016"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1714,9 +1714,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#017"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1730,9 +1730,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1746,9 +1746,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#020"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1762,9 +1762,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1778,9 +1778,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1794,9 +1794,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1808,9 +1808,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1822,9 +1822,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1836,9 +1836,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1850,9 +1850,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1864,9 +1864,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1878,9 +1878,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1892,9 +1892,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1906,9 +1906,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1920,9 +1920,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1934,9 +1934,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1948,9 +1948,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("#018"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1962,9 +1962,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1976,9 +1976,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -1990,9 +1990,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2004,9 +2004,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2018,9 +2018,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AB"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2032,9 +2032,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AC"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2046,9 +2046,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2060,9 +2060,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.0)),
+          accruingPenaltyAmount = Some(BigDecimal(100.0)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2074,9 +2074,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AA"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.0)),
+          accruingPenaltyAmount = Some(BigDecimal(100.0)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2088,9 +2088,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AB"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2102,9 +2102,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AC"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2116,9 +2116,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2130,9 +2130,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AC"),
           chargeReference = Some("XD002750002156"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2144,9 +2144,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002157"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2158,9 +2158,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2172,9 +2172,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2186,9 +2186,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2200,9 +2200,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2214,9 +2214,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2228,9 +2228,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2242,9 +2242,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2256,9 +2256,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2270,9 +2270,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2284,9 +2284,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2298,9 +2298,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2312,9 +2312,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2326,9 +2326,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2340,9 +2340,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002156"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(202.40),
           clearedAmount = None
@@ -2354,9 +2354,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002157"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(202.40),
           clearedAmount = None
@@ -2368,9 +2368,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2382,9 +2382,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2396,9 +2396,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2410,9 +2410,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = Some(BigDecimal(2)),
+          accruingInterestAmount = Some(BigDecimal(2)),
           interestRate = None,
-          accruedPenaltyAmount = Some(BigDecimal(100.00)),
+          accruingPenaltyAmount = Some(BigDecimal(100.00)),
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(10000),
           clearedAmount = None
@@ -2424,9 +2424,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(202.40),
           clearedAmount = None
@@ -2438,9 +2438,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(-202.40),
           clearedAmount = None
@@ -2452,9 +2452,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002155"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(-202.40),
           clearedAmount = None
@@ -2466,9 +2466,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002140"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = BigDecimal(502.40),
           clearedAmount = None
@@ -2480,9 +2480,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002141"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(502.41),
           clearedAmount = None
@@ -2494,9 +2494,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002142"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(502.42),
           clearedAmount = None
@@ -2508,9 +2508,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002143"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(502.43),
           clearedAmount = None
@@ -2522,9 +2522,9 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
           periodKey = Some("18AD"),
           chargeReference = Some("XD002750002144"),
           ddCollectionInProgress = false,
-          accruedInterestAmount = None,
+          accruingInterestAmount = None,
           interestRate = None,
-          accruedPenaltyAmount = None,
+          accruingPenaltyAmount = None,
           penaltyType = Some("LPP"),
           originalAmount = BigDecimal(502.44),
           clearedAmount = None

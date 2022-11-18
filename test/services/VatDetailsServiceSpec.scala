@@ -48,9 +48,9 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
     periodKey = Some("#003"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2)),
+    accruingInterestAmount = Some(BigDecimal(2)),
     interestRate = Some(2.22),
-    accruedPenaltyAmount = Some(BigDecimal(100.00)),
+    accruingPenaltyAmount = Some(BigDecimal(100.00)),
     penaltyType = Some("LPP1"),
     originalAmount = BigDecimal(10000),
     clearedAmount = Some(50.55)
