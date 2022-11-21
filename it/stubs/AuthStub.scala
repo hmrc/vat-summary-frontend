@@ -66,6 +66,18 @@ object AuthStub extends WireMockMethods {
     )
   )
 
+  val vatVarEnrolment: JsObject = {
+    Json.obj(
+      "key" -> "HMCE-VATVAR-ORG",
+      "identifiers" -> Json.arr(
+        Json.obj(
+          "key" -> "VATRegNo",
+          "value" -> "555555555"
+        )
+      )
+    )
+  }
+
   def authorised(response: JsObject = successfulAuthResponse("Individual", mtdVatEnrolment)): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = OK, body = response)
@@ -75,9 +87,15 @@ object AuthStub extends WireMockMethods {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = OK, body = successfulAuthResponse("Agent", agentEnrolment))
   }
+
   def unauthorisedOtherEnrolment(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = OK, body = successfulAuthResponse("Individual", otherEnrolment))
+  }
+
+  def authorisedMultipleEnrolments(): StubMapping = {
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = OK, body = successfulAuthResponse("Individual", mtdVatEnrolment, vatDecEnrolment, vatVarEnrolment))
   }
 
   def insufficientEnrolments(): StubMapping = {
