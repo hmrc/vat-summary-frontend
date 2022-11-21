@@ -85,11 +85,22 @@
         </h1>
 
         <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")</p>
+
         <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
-        <p class="govuk-body">
-            @messages(s"crystallisedInterest.calculation")
+
+        <p class="govuk-body">@messages("crystallisedInterest.calculation")
             <br>
-            @messages(s"crystallisedInterest.${interestTypeMessageKey}Calculation", model.interestRate)
+             @messages(s"crystallisedInterest.${interestTypeMessageKey}Calculation")
+        </p>
+
+        <p class="govuk-body">
+            @messages(s"crystallisedInterest.currentRate", model.interestRate)
+        </p>
+
+        <p class="govuk-body">@messages("crystallisedInterest.rateChanges")
+            <a class="govuk-link" id="prevIntRateLink" href="@appConfig.govUkPrevIntRateUrl" target="_blank" rel="noreferrer noopener">
+                @messages("crystallisedInterest.prevIntRateLink")
+            </a>
         </p>
 
         @govukSummaryList(SummaryList(
@@ -123,7 +134,7 @@
 
         <p class="govuk-body">
             <a class="govuk-link" href="@appConfig.govUkHoldingUrl" target="_blank" rel="noreferrer noopener">
-                @messages(s"crystallisedInterest.guidanceLink")
+                @messages("crystallisedInterest.guidanceLink")
             </a>
         </p>
 
