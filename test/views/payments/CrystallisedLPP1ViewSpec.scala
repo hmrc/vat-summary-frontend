@@ -162,15 +162,14 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
         }
       }
 
-      "have a link to guidance on late payment penalties" which {
+      "have a link to VAT penalties and appeals" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(7) > a") shouldBe
-            "Read the guidance about late payment penalties (opens in a new tab)"
+          elementText("#content > div > div > p:nth-child(7) > a") shouldBe "View your VAT penalties and appeals"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
+          element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
         }
       }
 
@@ -245,6 +244,17 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
 
     "not have a pay now button" in {
       elementExtinct("#content > div > div > a")
+    }
+
+    "have a link to VAT penalties and appeals" which {
+
+      "has the correct link text" in {
+        elementText("#content > div > div > p:nth-child(6) > a") shouldBe "View your client’s VAT penalties and appeals"
+      }
+
+      "has the correct href" in {
+        element("#content > div > div > p:nth-child(6) > a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+      }
     }
   }
 }

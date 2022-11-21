@@ -151,6 +151,8 @@ chargeTypeDetails.link = Yn ôl i’r hyn sydd arnoch
 chargeTypeDetails.agentLink = Ewch yn ôl at yr hyn sydd ar eich cleient
 chargeTypeDetails.insetTextReference = Mae’n rhaid i chi ddefnyddio’r cyfeirnod {0} sy’n 14 o gymeriadau wrth wneud y taliad hwn.
 chargeTypeDetails.insetTextReferenceAgent = Mae’n rhaid i’ch cleient ddefnyddio’r cyfeirnod {0} sy’n 14 o gymeriadau wrth wneud y taliad hwn.
+chargeTypeDetails.penaltiesAndAppeal = ???
+chargeTypeDetails.penaltiesAndAppealAgent = ???
 
 estimatedInterest.vatChargeInterest = ???
 estimatedInterest.penaltyChargeInterest = ???
@@ -178,8 +180,6 @@ estimatedLPP1.estimatesSubHeading = ???
 estimatedLPP1.firstBullet = ???
 estimatedLPP1.firstBulletAgent = ???
 estimatedLPP1.secondBullet = ???
-estimatedLPP1.penaltiesLink = ???
-estimatedLPP1.penaltiesLinkAgent = ???
 
 crystallisedInterest.vatChargeInterest = ???
 crystallisedInterest.penaltyChargeInterest = ???
@@ -202,7 +202,6 @@ crystallisedLPP1.dueDate = Dyddiad dyledus
 crystallisedLPP1.penaltyAmount = ???
 crystallisedLPP1.amountReceived = Swm a gafwyd
 crystallisedLPP1.leftToPay = Yn weddill i’w dalu
-crystallisedLPP1.guidanceLink = ???
 
 crystallisedLPP2.explanation = ???
 crystallisedLPP2.interestExplanation = ???
@@ -223,15 +222,11 @@ estimatedLPP2.leftToPay = ???
 estimatedLPP2.estimates = ???
 estimatedLPP2.estimatesDescription = ???
 estimatedLPP2.estimatesDescriptionAgent = ???
-estimatedLPP2.penaltiesAndAppeal = ???
-estimatedLPP2.penaltiesAndAppealAgent = ???
 
 lateSubmissionPenalty.dueDate = ???
 lateSubmissionPenalty.penaltyAmount = ???
 lateSubmissionPenalty.amountReceived = ???
 lateSubmissionPenalty.leftToPay = ???
-lateSubmissionPenalty.penaltiesAndAppeal = ???
-lateSubmissionPenalty.penaltiesAndAppealAgent = ???
 
 noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.

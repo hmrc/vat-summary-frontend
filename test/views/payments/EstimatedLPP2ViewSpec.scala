@@ -165,7 +165,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
     "have a link to VAT penalties and appeals" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(8) > a") shouldBe "View your client’s VAT penalties and appeals page"
+        elementText("#content > div > div > p:nth-child(8) > a") shouldBe "View your client’s VAT penalties and appeals"
       }
 
       "has the correct href" in {

@@ -115,6 +115,12 @@
         ))
       }
 
+        <p class="govuk-body">
+            <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
+                @if(user.isAgent) {@messages("chargeTypeDetails.penaltiesAndAppealAgent")} else {@messages("chargeTypeDetails.penaltiesAndAppeal")}
+            </a>
+        </p>
+
       <p class="govuk-body">
         <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url">
           @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}

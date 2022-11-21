@@ -132,14 +132,25 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
       }
     }
 
-    "have a link to the what you owe page" which {
+    "have a link to VAT penalties and appeals" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(7) > a") shouldBe "Return to what you owe"
+        elementText("#content > div > div > p:nth-child(7) > a") shouldBe "View your VAT penalties and appeals"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe whatYouOweLink
+        element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+      }
+    }
+
+    "have a link to the what you owe page" which {
+
+      "has the correct link text" in {
+        elementText("#content > div > div > p:nth-child(8) > a") shouldBe "Return to what you owe"
+      }
+
+      "has the correct href" in {
+        element("#content > div > div > p:nth-child(8) > a").attr("href") shouldBe whatYouOweLink
       }
     }
   }
@@ -157,11 +168,11 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(6) > a") shouldBe "Return to what your client owes"
+        elementText("#content > div > div > p:nth-child(7) > a") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(6) > a").attr("href") shouldBe whatYouOweLink
+        element("#content > div > div > p:nth-child(7) > a").attr("href") shouldBe whatYouOweLink
       }
     }
 
@@ -183,5 +194,17 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     "not have a pay now button" in {
       elementExtinct("#content > div > div > a")
     }
+
+    "have a link to VAT penalties and appeals" which {
+
+      "has the correct link text" in {
+        elementText("#content > div > div > p:nth-child(6) > a") shouldBe "View your client’s VAT penalties and appeals"
+      }
+
+      "has the correct href" in {
+        element("#content > div > div > p:nth-child(6) > a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+      }
+    }
+
   }
 }
