@@ -100,6 +100,7 @@ trait AppConfig {
   val fixEmailUrl: String
   val govUkHoldingUrl: String
   val penaltiesChangesUrl: String
+  val govUkPrevIntRateUrl: String
   val timeToLiveInSeconds: Int
 }
 
@@ -249,6 +250,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val penaltiesFrontendUrl: String = sc.getString(Keys.penaltiesFrontendHost) + sc.getString(Keys.penaltiesFrontendUrl)
   override val govUkHoldingUrl: String = sc.getString(Keys.govUkHoldingUrl)
   override val penaltiesChangesUrl: String = sc.getString(Keys.penaltiesChangesUrl)
+
+  override lazy val govUkPrevIntRateUrl: String = sc.getString(Keys.govUkPrevIntRateUrl)
 
   override lazy val timeToLiveInSeconds: Int = sc.getInt(Keys.timeToLive)
 }
