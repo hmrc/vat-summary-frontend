@@ -581,11 +581,11 @@ penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty = Amcangyfrif o swm y gos
 penaltiesBanner.linkSingular = Cael gwybod pam mae gennych gosb
 penaltiesBanner.linkPlural = Cael gwybod pam mae gennych gosbau
 
-penaltiesChangesBanner.heading = ???
-penaltiesChangesBanner.message.1 = ???
-penaltiesChangesBanner.message.2 = ???
-penaltiesChangesBanner.message.3 = ???
-penaltiesChangesBanner.link = ???
+penaltiesChangesBanner.heading = Mae cosbau a thaliadau llog a godir ar TAW yn newid
+penaltiesChangesBanner.message.1 = Ym mis Ionawr 2023, rydym yn lansio system gosb newydd i ddisodli’r Gordal Diffygdalu.
+penaltiesChangesBanner.message.2 = Mae’r newid yn effeithio ar Ffurflenni TAW a thaliadau sy’n cael eu cyflwyno’n hwyr ar gyfer cyfnodau TAW sy’n dechrau ar neu ar ôl 1 Ionawr 2023.
+penaltiesChangesBanner.message.3 = Rydym hefyd yn newid sut rydym yn cyfrifo llog ar daliadau hwyr a ffurflenni ad-dalu.
+penaltiesChangesBanner.link = Darllenwch yr arweiniad ar GOV.UK i gael rhagor o wybodaeth (yn agor tab newydd).
 
 mtdNotification.heading = Newidiodd y ffordd o gyflwyno Ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
 mtdNotification.message.1 = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno Ffurflenni TAW ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022.

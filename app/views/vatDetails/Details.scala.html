@@ -83,9 +83,7 @@
     <span class="govuk-caption-m">@entityName</span>
   }
 
-  @detailsViewModel.penaltiesSummary.map { summary =>
-    @penaltiesBanner(summary)
-  }
+  @penaltiesBanner(detailsViewModel.penaltiesSummary)
 
   @mtdNotificationBanner(detailsViewModel.mandationStatus)
 

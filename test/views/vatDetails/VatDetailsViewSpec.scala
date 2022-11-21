@@ -55,7 +55,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val apiError = "h3:nth-child(2).govuk-heading-m"
     val cancelVatSection = "#cancel-vat"
     val penaltiesSection = "#view-penalties-details"
-    val penaltiesBanner = ".govuk-notification-banner"
+    val penaltiesBanner = "#penalties-banner"
     val unverifiedMessage = "#unverified-email-notice > strong"
     val unverifiedMessageLink = unverifiedMessage + "> a"
   }
@@ -522,24 +522,22 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "display the Penalties notification banner" which {
 
-        lazy val penaltiesBanner = element(Selectors.penaltiesBanner)
-
         "has the correct heading" in {
-          penaltiesBanner.select("h2").text shouldBe "Late submission and late payment penalties"
+          elementText(".govuk-notification-banner__title") shouldBe "Late submission and late payment penalties"
         }
 
         "has content relating to the number of penalties the user has" in {
-          penaltiesBanner.select(".govuk-notification-banner__content > div").text shouldBe "Total penalty points: 3"
+          elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 3"
         }
 
         "has a link to the penalties service" which {
 
           "has the correct text" in {
-            penaltiesBanner.select("a").text shouldBe "Find out why you have penalties"
+            elementText(".govuk-notification-banner__link") shouldBe "Find out why you have penalties"
           }
 
           "has the correct link destination" in {
-            penaltiesBanner.select("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+            element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
           }
         }
       }

@@ -33,7 +33,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
       "display the penalties changes banner" which {
 
-        lazy val view = injectedView(model)
+        lazy val view = injectedView(Some(model))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct heading" in {
@@ -55,7 +55,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         "the link" should {
 
           "have the correct link message" in {
-            elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)"
+            elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)."
           }
 
           "have the correct link location" in {
@@ -71,7 +71,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is one penalty point" should {
 
-          lazy val view = injectedView(model.copy(noOfPoints = 1))
+          lazy val view = injectedView(Some(model.copy(noOfPoints = 1)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
@@ -96,7 +96,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is more than one penalty point" should {
 
-          lazy val view = injectedView(model.copy(noOfPoints = 2))
+          lazy val view = injectedView(Some(model.copy(noOfPoints = 2)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct penalty information" in {
@@ -118,8 +118,8 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is one crystalised penalty" should {
 
-          lazy val view = injectedView(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1,
-            crystalisedPenaltyAmountDue = 100.00))
+          lazy val view = injectedView(Some(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1,
+            crystalisedPenaltyAmountDue = 100.00)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
@@ -144,7 +144,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is more than one crystalised penalty" should {
 
-          lazy val view = injectedView(model.copy(noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.9))
+          lazy val view = injectedView(Some(model.copy(noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.9)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct penalty information" in {
@@ -166,7 +166,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is one estimated penalty" should {
 
-          lazy val view = injectedView(model.copy(noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 100.0))
+          lazy val view = injectedView(Some(model.copy(noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 100.0)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
@@ -191,7 +191,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "there is more than one estimated penalty" should {
 
-          lazy val view = injectedView(model.copy(noOfEstimatedPenalties = 2, estimatedPenaltyAmount = 200.99))
+          lazy val view = injectedView(Some(model.copy(noOfEstimatedPenalties = 2, estimatedPenaltyAmount = 200.99)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct penalty information" in {
@@ -210,7 +210,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
       "there are both crystalised penalties and penalty points, but no estimated penalties" should {
 
-        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00))
+        lazy val view = injectedView(Some(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
@@ -228,8 +228,8 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
       "there are both crystalised penalties and estimated penalties, but no penalty points" should {
 
-        lazy val view = injectedView(model.copy(noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
-          noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00))
+        lazy val view = injectedView(Some(model.copy(noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
+          noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
@@ -248,7 +248,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
       "there are both estimated penalties and penalty points, but no crystalised penalties" should {
 
-        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00))
+        lazy val view = injectedView(Some(model.copy(noOfPoints = 1, noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
@@ -266,8 +266,8 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
       "there are crystalised penalties, estimated penalties and active points" should {
 
-        lazy val view = injectedView(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
-          noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00))
+        lazy val view = injectedView(Some(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
+          noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
