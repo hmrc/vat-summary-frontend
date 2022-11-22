@@ -32,9 +32,9 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       periodKey = Some("#003"),
       chargeReference = None,
       ddCollectionInProgress = false,
-      accruedInterestAmount = Some(BigDecimal(2)),
+      accruingInterestAmount = Some(BigDecimal(2)),
       interestRate = Some(2.22),
-      accruedPenaltyAmount = Some(100.00),
+      accruingPenaltyAmount = Some(100.00),
       penaltyType = Some("LPP1"),
       originalAmount = BigDecimal(10000),
       clearedAmount = None
@@ -52,9 +52,9 @@ class OpenPaymentsModelSpec extends ViewBaseSpec {
       periodKey = Some("#003"),
       chargeReference = None,
       ddCollectionInProgress = false,
-      accruedInterestAmount = Some(BigDecimal(2)),
+      accruingInterestAmount = Some(BigDecimal(2)),
       interestRate = Some(2.22),
-      accruedPenaltyAmount = Some(BigDecimal(100.00)),
+      accruingPenaltyAmount = Some(BigDecimal(100.00)),
       penaltyType = Some("LPP1"),
       originalAmount = BigDecimal(10000),
       clearedAmount = None

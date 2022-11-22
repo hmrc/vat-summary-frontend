@@ -45,9 +45,9 @@ object TestModels {
     Some("#001"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2)),
+    accruingInterestAmount = Some(BigDecimal(2)),
     interestRate = Some(2.22),
-    accruedPenaltyAmount = None,
+    accruingPenaltyAmount = None,
     penaltyType = None,
     originalAmount = BigDecimal(10000),
     clearedAmount = None
@@ -62,18 +62,18 @@ object TestModels {
     Some("ABCD"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2)),
+    accruingInterestAmount = Some(BigDecimal(2)),
     interestRate = Some(2.22),
     originalAmount = BigDecimal(10000),
     clearedAmount = Some(0),
-    accruedPenaltyAmount = Some(50.55),
+    accruingPenaltyAmount = Some(50.55),
     penaltyType = Some("LPP1")
   )
 
   val paymentNoAccInterest: PaymentWithPeriod =
-    payment.copy(accruedInterestAmount = Some(0), accruedPenaltyAmount = None)
+    payment.copy(accruingInterestAmount = Some(0), accruingPenaltyAmount = None)
   val unrepayableOverpayment: PaymentWithPeriod =
-    payment.copy(chargeType = VatUnrepayableOverpayment, accruedPenaltyAmount = None)
+    payment.copy(chargeType = VatUnrepayableOverpayment, accruingPenaltyAmount = None)
 
   val paymentNoPeriodNoDate: PaymentNoPeriod = PaymentNoPeriod(
     OADefaultInterestCharge,
@@ -82,9 +82,9 @@ object TestModels {
     Some("ABCD"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2)),
+    accruingInterestAmount = Some(BigDecimal(2)),
     interestRate = Some(2.22),
-    accruedPenaltyAmount = None,
+    accruingPenaltyAmount = None,
     penaltyType = None,
     originalAmount = BigDecimal(10000),
     clearedAmount = Some(00.00)
@@ -101,9 +101,9 @@ object TestModels {
     None,
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
-    accruedInterestAmount = Some(BigDecimal(2)),
+    accruingInterestAmount = Some(BigDecimal(2)),
     interestRate = Some(2.22),
-    accruedPenaltyAmount = None,
+    accruingPenaltyAmount = None,
     penaltyType = None,
     originalAmount = BigDecimal(10000),
     clearedAmount = None

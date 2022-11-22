@@ -122,7 +122,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     ))
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
-    (payment.accruedInterestAmount, payment.interestRate) match {
+    (payment.accruingInterestAmount, payment.interestRate) match {
       case (Some(interestAmnt), Some(intRate)) =>
         Some(EstimatedInterestViewModel(
           periodFrom = payment.periodFrom,
@@ -134,7 +134,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing one or more required values:" +
-          s"${payment.accruedInterestAmount.fold("\naccrued interest amount")(_ => "")}" +
+          s"${payment.accruingInterestAmount.fold("\naccrued interest amount")(_ => "")}" +
           s"${payment.interestRate.fold("\ninterest rate")(_ => "")}")
         None
     }
@@ -183,7 +183,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
                                                       penaltyDetails: LPPDetails): Option[ChargeDetailsViewModel] =
-    (penaltyDetails, payment.accruedPenaltyAmount) match {
+    (penaltyDetails, payment.accruingPenaltyAmount) match {
       case (LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
           part1Days = daysLR,
@@ -206,7 +206,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value
         ))
       case _ =>
-        val missingData = if(payment.accruedPenaltyAmount.isDefined) {
+        val missingData = if(payment.accruingPenaltyAmount.isDefined) {
           s"LPP details for ${penaltyDetails.penaltyCategory} penalty type"
         } else {
           "accrued penalty amount"

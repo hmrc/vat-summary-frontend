@@ -33,15 +33,15 @@ sealed trait Payment extends Obligation {
   val periodKey: Option[String]
   val ddCollectionInProgress: Boolean
   val auditDetails: Map[String, String]
-  val accruedInterestAmount: Option[BigDecimal]
+  val accruingInterestAmount: Option[BigDecimal]
   val interestRate: Option[Double]
-  val accruedPenaltyAmount: Option[BigDecimal]
+  val accruingPenaltyAmount: Option[BigDecimal]
   val penaltyType: Option[String]
 
   val showEstimatedInterest: Boolean =
-    accruedInterestAmount.getOrElse(BigDecimal(0)) > 0 && interestChargeMapping.contains(chargeType)
+    accruingInterestAmount.getOrElse(BigDecimal(0)) > 0 && interestChargeMapping.contains(chargeType)
   val showEstimatedPenalty: Boolean =
-    accruedPenaltyAmount.getOrElse(BigDecimal(0)) > 0 &&
+    accruingPenaltyAmount.getOrElse(BigDecimal(0)) > 0 &&
     (penaltyChargeMappingLPP1.contains(chargeType) || penaltyChargeMappingLPP2.contains(chargeType))
 
   def isOverdue(now: LocalDate): Boolean  = due.isBefore(now) && !ddCollectionInProgress
@@ -55,9 +55,9 @@ case class PaymentWithPeriod(chargeType: ChargeType,
                              periodKey: Option[String],
                              chargeReference: Option[String],
                              ddCollectionInProgress: Boolean,
-                             accruedInterestAmount: Option[BigDecimal],
+                             accruingInterestAmount: Option[BigDecimal],
                              interestRate: Option[Double],
-                             accruedPenaltyAmount: Option[BigDecimal],
+                             accruingPenaltyAmount: Option[BigDecimal],
                              penaltyType: Option[String],
                              originalAmount: BigDecimal,
                              clearedAmount: Option[BigDecimal]) extends Payment {
@@ -76,9 +76,9 @@ case class PaymentNoPeriod(chargeType: ChargeType,
                            periodKey: Option[String],
                            chargeReference: Option[String],
                            ddCollectionInProgress: Boolean,
-                           accruedInterestAmount: Option[BigDecimal],
+                           accruingInterestAmount: Option[BigDecimal],
                            interestRate: Option[Double],
-                           accruedPenaltyAmount: Option[BigDecimal],
+                           accruingPenaltyAmount: Option[BigDecimal],
                            penaltyType: Option[String],
                            originalAmount: BigDecimal,
                            clearedAmount: Option[BigDecimal]) extends Payment {
@@ -99,19 +99,19 @@ object Payment {
             periodKey: Option[String],
             chargeReference: Option[String],
             ddCollectionInProgress: Boolean,
-            accruedInterestAmount: Option[BigDecimal],
+            accruingInterestAmount: Option[BigDecimal],
             interestRate: Option[Double],
-            accruedPenaltyAmount: Option[BigDecimal],
+            accruingPenaltyAmount: Option[BigDecimal],
             penaltyType: Option[String],
             originalAmount: BigDecimal,
             clearedAmount: Option[BigDecimal]): Payment =
     (periodFrom, periodTo) match {
       case (Some(s), Some(e)) =>
         PaymentWithPeriod(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress,
-          accruedInterestAmount, interestRate, accruedPenaltyAmount, penaltyType, originalAmount, clearedAmount)
+          accruingInterestAmount, interestRate, accruingPenaltyAmount, penaltyType, originalAmount, clearedAmount)
       case (None, None) =>
         PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress,
-          accruedInterestAmount, interestRate, accruedPenaltyAmount, penaltyType, originalAmount, clearedAmount)
+          accruingInterestAmount, interestRate, accruingPenaltyAmount, penaltyType, originalAmount, clearedAmount)
       case (s, e) =>
         throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
   }
@@ -125,9 +125,9 @@ object Payment {
     (JsPath \ "periodKey").readNullable[String] and
     (JsPath \ "chargeReference").readNullable[String] and
     (JsPath \ "items")(0).\("DDcollectionInProgress").read[Boolean].or(Reads.pure(false)) and
-    (JsPath \ "accruedInterestAmount").readNullable[BigDecimal] and
+    (JsPath \ "accruingInterestAmount").readNullable[BigDecimal] and
     (JsPath \ "interestRate").readNullable[Double] and
-    (JsPath \ "accruedPenaltyAmount").readNullable[BigDecimal] and
+    (JsPath \ "accruingPenaltyAmount").readNullable[BigDecimal] and
     (JsPath \ "penaltyType").readNullable[String] and
     (JsPath \ "originalAmount").read[BigDecimal] and
     (JsPath \ "clearedAmount").readNullable[BigDecimal]
