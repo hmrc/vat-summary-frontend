@@ -109,11 +109,11 @@
         <li>@messages("estimatedLPP1.secondBullet", model.part2Days)</li>
     </ul>
 
-    <p class="govuk-body">
-      <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
-        @if(user.isAgent) {@messages("estimatedLPP1.penaltiesLinkAgent")} else {@messages("estimatedLPP1.penaltiesLink")}
-      </a>
-    </p>
+      <p class="govuk-body">
+          <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
+              @if(user.isAgent) {@messages("chargeTypeDetails.penaltiesAndAppealAgent")} else {@messages("chargeTypeDetails.penaltiesAndAppeal")}
+          </a>
+      </p>
 
     <p class="govuk-body">
       <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url">

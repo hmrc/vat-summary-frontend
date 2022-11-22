@@ -132,8 +132,8 @@
       }
 
       <p class="govuk-body">
-        <a class="govuk-link" href="@appConfig.govUkHoldingUrl" target="_blank" rel="noreferrer noopener">
-          @messages("crystallisedLPP1.guidanceLink")
+        <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl"">
+          @if(user.isAgent) {@messages("chargeTypeDetails.penaltiesAndAppealAgent")} else {@messages("chargeTypeDetails.penaltiesAndAppeal")}
         </a>
       </p>
 

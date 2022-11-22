@@ -151,6 +151,8 @@ chargeTypeDetails.link = Return to what you owe
 chargeTypeDetails.agentLink = Return to what your client owes
 chargeTypeDetails.insetTextReference = You must use the 14-character reference number {0} when making this payment.
 chargeTypeDetails.insetTextReferenceAgent = Your client must use the 14-character reference number {0} when making this payment.
+chargeTypeDetails.penaltiesAndAppeal = View your VAT penalties and appeals
+chargeTypeDetails.penaltiesAndAppealAgent = View your client’s VAT penalties and appeals
 
 estimatedInterest.vatChargeInterest = We charge interest on any unpaid VAT.
 estimatedInterest.penaltyChargeInterest = We charge interest on any unpaid late payment penalties.
@@ -178,8 +180,6 @@ estimatedLPP1.estimatesSubHeading = Penalties will show as estimates until:
 estimatedLPP1.firstBullet = you pay the VAT bill, or
 estimatedLPP1.firstBulletAgent = your client pays the VAT bill, or
 estimatedLPP1.secondBullet = {0} days have passed since the VAT due date
-estimatedLPP1.penaltiesLink = View your VAT penalties and appeals
-estimatedLPP1.penaltiesLinkAgent = View your client’s VAT penalties and appeals page
 
 crystallisedInterest.vatChargeInterest = We charge interest on any unpaid VAT.
 crystallisedInterest.penaltyChargeInterest = We charge interest on any unpaid penalties.
@@ -202,7 +202,6 @@ crystallisedLPP1.dueDate = Due date
 crystallisedLPP1.penaltyAmount = Penalty amount
 crystallisedLPP1.amountReceived = Amount received
 crystallisedLPP1.leftToPay = Left to pay
-crystallisedLPP1.guidanceLink = Read the guidance about late payment penalties (opens in a new tab)
 
 crystallisedLPP2.explanation = This penalty applies from day {0}, if any VAT remains unpaid.
 crystallisedLPP2.interestExplanation = The total increases daily based on the amount of unpaid VAT for the period.
@@ -223,15 +222,11 @@ estimatedLPP2.leftToPay = Left to pay
 estimatedLPP2.estimates = Estimates
 estimatedLPP2.estimatesDescription = Penalties and interest will show as estimates until you pay the charge they relate to.
 estimatedLPP2.estimatesDescriptionAgent = Penalties and interest will show as estimates until your client pays the charge they relate to.
-estimatedLPP2.penaltiesAndAppeal = View your VAT penalties and appeals
-estimatedLPP2.penaltiesAndAppealAgent = View your client’s VAT penalties and appeals page
 
 lateSubmissionPenalty.dueDate = Due date
 lateSubmissionPenalty.penaltyAmount = Penalty amount
 lateSubmissionPenalty.amountReceived = Amount received
 lateSubmissionPenalty.leftToPay = Left to pay
-lateSubmissionPenalty.penaltiesAndAppeal = View your VAT penalties and appeals
-lateSubmissionPenalty.penaltiesAndAppealAgent = View your client’s VAT penalties and appeals page
 
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
