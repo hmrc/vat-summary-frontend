@@ -100,6 +100,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val penaltiesFrontendUrl: String = "/vat-through-software/test-only/penalties-stub"
   override val mtdGuidance: String = "/when-to-start-using-making-tax-digital-for-vat-if-youve-not-before"
   override val govUkHoldingUrl: String = "/gov-uk"
+  override val penaltiesChangesUrl: String = "/guidance/prepare-for-upcoming-changes-to-vat-penalties-and-vat-interest-charges"
 
   override val timeToLiveInSeconds: Int = 100
 }

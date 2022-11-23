@@ -55,7 +55,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val apiError = "h3:nth-child(2).govuk-heading-m"
     val cancelVatSection = "#cancel-vat"
     val penaltiesSection = "#view-penalties-details"
-    val penaltiesBanner = ".govuk-notification-banner"
+    val penaltiesBanner = "#penalties-banner"
     val unverifiedMessage = "#unverified-email-notice > strong"
     val unverifiedMessageLink = unverifiedMessage + "> a"
   }
@@ -522,40 +522,60 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "display the Penalties notification banner" which {
 
-        lazy val penaltiesBanner = element(Selectors.penaltiesBanner)
-
         "has the correct heading" in {
-          penaltiesBanner.select("h2").text shouldBe "Late submission and late payment penalties"
+          elementText(".govuk-notification-banner__title") shouldBe "Late submission and late payment penalties"
         }
 
         "has content relating to the number of penalties the user has" in {
-          penaltiesBanner.select(".govuk-notification-banner__content > div").text shouldBe "Total penalty points: 3"
+          elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 3"
         }
 
         "has a link to the penalties service" which {
 
           "has the correct text" in {
-            penaltiesBanner.select("a").text shouldBe "Find out why you have penalties"
+            elementText(".govuk-notification-banner__link") shouldBe "Find out why you have penalties"
           }
 
           "has the correct link destination" in {
-            penaltiesBanner.select("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+            element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
           }
         }
       }
     }
 
-    "the user has no penalties" should {
+    "the user has no penalties points" should {
 
-      lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "display the penalties changes banner" which {
 
-      "not display the penalties and appeal section" in {
-        elementExtinct(Selectors.penaltiesSection)
-      }
+        lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "not display the penalties notification banner" in {
-        elementExtinct(Selectors.penaltiesBanner)
+        "have the correct heading" in {
+          elementText(".govuk-notification-banner__title") shouldBe "Important"
+        }
+
+        "have the correct announcement information" in {
+          elementText("#announcement-information") shouldBe "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
+        }
+
+        "have the correct date information" in {
+          elementText("#date-information") shouldBe "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023."
+        }
+
+        "have the correct calculation information" in {
+          elementText("#calculation-information") shouldBe "We’re also changing how we calculate interest on late payments and repayment returns."
+        }
+
+        "the link" should {
+
+          "have the correct link message" in {
+            elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)."
+          }
+
+          "have the correct link location" in {
+            element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesChangesUrl
+          }
+        }
       }
     }
   }
