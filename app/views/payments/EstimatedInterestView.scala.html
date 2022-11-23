@@ -76,12 +76,23 @@
       </h1>
 
       <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}ChargeInterest")</p>
+
       <p class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
-      <p class="govuk-body">
-        @messages(s"estimatedInterest.calculation")
-        <br>
-        @messages(s"estimatedInterest.${interestTypeMessageKey}Calculation", model.interestRate)
+
+      <p class="govuk-body">@messages("estimatedInterest.calculation")
+          <br>
+          @messages(s"estimatedInterest.${interestTypeMessageKey}Calculation")
       </p>
+
+        <p class="govuk-body">
+            @messages(s"estimatedInterest.currentRate", model.interestRate)
+        </p>
+
+        <p class="govuk-body">@messages("estimatedInterest.rateChanges")
+            <a class="govuk-link" id="prevIntRateLink" href="@appConfig.govUkPrevIntRateUrl" target="_blank" rel="noreferrer noopener">
+                @messages("estimatedInterest.prevIntRateLink")
+            </a>
+        </p>
 
       @govukSummaryList(SummaryList(
         rows = Seq(
