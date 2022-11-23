@@ -96,14 +96,14 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       "have the correct fifth explanation paragraph" in {
         elementText("#content > div > div > p:nth-child(6)") shouldBe "If the interest rate changes during " +
           "the time interest is building up, we use the old interest rate up to the change date, then the new one " +
-          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)"
+          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)."
       }
 
       "have a link to guidance on for previous interest rates" which {
 
         "has the correct link text" in {
           elementText("#prevIntRateLink") shouldBe
-            "find previous interest rates on GOV.UK (opens in a new tab)"
+            "find previous interest rates on GOV.UK (opens in a new tab)."
         }
 
         "has the correct href" in {
@@ -194,14 +194,14 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       "have the correct fifth explanation paragraph" in {
         elementText("#content > div > div > p:nth-child(6)") shouldBe "If the interest rate changes during " +
           "the time interest is building up, we use the old interest rate up to the change date, then the new one " +
-          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)"
+          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)."
       }
 
       "have a link to guidance on for previous interest rates" which {
 
         "has the correct link text" in {
           elementText("#prevIntRateLink") shouldBe
-            "find previous interest rates on GOV.UK (opens in a new tab)"
+            "find previous interest rates on GOV.UK (opens in a new tab)."
         }
 
         "has the correct href" in {
