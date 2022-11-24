@@ -75,6 +75,7 @@
     }
     case _ => {
       @govukNotificationBanner(NotificationBanner(
+        title = Text(messages("mtdNotification.important")),
         content = HtmlContent(penaltiesChangesBannerContent),
         classes = "govuk-!-margin-top-6"
       ))
