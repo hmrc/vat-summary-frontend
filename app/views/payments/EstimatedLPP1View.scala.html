@@ -72,7 +72,7 @@
       @messages("chargeType.latePaymentPenalty")
     </h1>
     <p class="govuk-body">@messages("estimatedLPP1.penaltyAppliesForDays", model.part1Days)</p>
-    <p class="govuk-body">
+    <p class="govuk-body" id="one-part-explanation">
       @messages("estimatedLPP1.calculation")
       <br>
       @Html(messages("estimatedLPP1.penaltyCalculation", model.part1PenaltyRate, displayMoney(model.part1UnpaidVAT), model.part1Days))
