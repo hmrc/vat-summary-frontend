@@ -244,6 +244,28 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe "Penalties and appeals"
       }
     }
+
+    "the customer details call fails" should {
+
+      "not add any values to session" in {
+
+        lazy val result: Future[Result] = {
+          mockPrincipalAuth()
+          mockDateServiceCall()
+          mockReturnObligations(Right(Some(obligations)))
+          mockPaymentLiabilities(Right(Some(payments)))
+          mockCustomerInfo(Left(UnknownError))
+          mockServiceInfoCall()
+          mockAudit()
+          mockPenaltiesService(penaltySummaryResponse)
+          controller.details()(fakeRequest)
+        }
+        session(result).get(SessionKeys.migrationToETMP) shouldBe None
+        session(result).get(SessionKeys.mandationStatus) shouldBe None
+      }
+
+    }
+
   }
 
   "Calling .detailsRedirectToEmailVerification" when {

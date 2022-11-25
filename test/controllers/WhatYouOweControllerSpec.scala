@@ -485,7 +485,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "chargeReference is present" in {
         mockDateServiceCall()
-        val charge = payment.copy(chargeType = VatReturnLPI)
+        val charge = payment.copy(chargeType = VatReturnLPI, clearedAmount = None)
         controller.buildCrystallisedIntViewModel(charge) shouldBe Some(CrystallisedInterestViewModel(
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
@@ -681,9 +681,14 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return None" when {
 
-      "charge reference is missing" in {
+      "charge reference is missing for LPP1" in {
         val charge = penaltyCharge.copy(chargeReference = None)
         controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMax)) shouldBe None
+      }
+
+      "charge reference and penalty details are missing for LPP2" in {
+        val charge = penaltyLPP2Charge.copy(chargeReference = None)
+        controller.buildCrystallisedLPPViewModel(charge, None) shouldBe None
       }
 
       "penalty type is not recognised" in {
@@ -714,7 +719,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "chargeReference is present" in {
         mockDateServiceCall()
-        val charge = payment.copy(chargeType = VatLateSubmissionPen)
+        val charge = payment.copy(chargeType = VatLateSubmissionPen, clearedAmount = None)
         controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe Some(LateSubmissionPenaltyViewModel(
           "VAT Late Submission Pen",
           LocalDate.parse("2019-03-03"),
