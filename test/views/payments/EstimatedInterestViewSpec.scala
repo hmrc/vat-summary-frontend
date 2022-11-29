@@ -141,7 +141,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
       "have the correct paragraph explaining estimates" in {
         elementText("p.govuk-body:nth-of-type(6)") shouldBe "Penalties and interest will show as estimates " +
-          "if HMRC has not been given enough information to calculate the final amounts."
+          "until you pay the charge they relate to."
       }
 
       "have a link to guidance on how interest is calculated" which {
@@ -231,6 +231,10 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
     }
 
+    "have the estimate description" in {
+      elementText("#content > div > div > p:nth-child(9)") shouldBe
+        "Penalties and interest will show as estimates until your client pays the charge they relate to."
+    }
     "have a link to the What your client owes page" which {
 
       "has the correct link text" in {

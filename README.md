@@ -15,7 +15,7 @@ This service is written in [Scala](http://www.scala-lang.org/) and [Play](http:/
 
 In order to run this microservice, you must have SBT installed. You should then be able to start the application using:
                                                                
-`sbt run`
+`./run.sh`
 
 ### License
 

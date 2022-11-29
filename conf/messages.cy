@@ -169,6 +169,7 @@ estimatedInterest.amountReceived = ???
 estimatedInterest.leftToPay = ???
 estimatedInterest.estimates = ???
 estimatedInterest.estimatesExplanation = ???
+estimatedInterest.estimatesDescriptionAgent = ???
 estimatedInterest.calculationLink = ???
 
 estimatedLPP1.penaltyAppliesForDays = ???

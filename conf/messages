@@ -168,7 +168,8 @@ estimatedInterest.currentAmount = Current amount (estimate)
 estimatedInterest.amountReceived = Amount received
 estimatedInterest.leftToPay = Left to pay
 estimatedInterest.estimates = Estimates
-estimatedInterest.estimatesExplanation = Penalties and interest will show as estimates if HMRC has not been given enough information to calculate the final amounts.
+estimatedInterest.estimatesExplanation = Penalties and interest will show as estimates until you pay the charge they relate to.
+estimatedInterest.estimatesDescriptionAgent = Penalties and interest will show as estimates until your client pays the charge they relate to.
 estimatedInterest.calculationLink = Read the guidance about how interest is calculated (opens in a new tab)
 
 estimatedLPP1.penaltyAppliesForDays = The penalty applies if VAT has not been paid for {0} days.
