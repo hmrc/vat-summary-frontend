@@ -27,9 +27,11 @@ import play.api.libs.json.{Format, JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
+
 import java.time.{LocalDate, LocalDateTime}
 import common.ChargeViewModelTypes._
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+
 import scala.concurrent.Future
 
 object TestModels {
@@ -126,6 +128,23 @@ object TestModels {
     None,
     "#001"
   )))
+
+  val duplicateObligations: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
+    LocalDate.parse("2019-04-04"),
+    LocalDate.parse("2019-05-05"),
+    LocalDate.parse("2019-06-06"),
+    "O",
+    None,
+    "#001"
+  ),
+    VatReturnObligation(
+      LocalDate.parse("2019-04-04"),
+      LocalDate.parse("2019-05-05"),
+      LocalDate.parse("2019-06-06"),
+      "O",
+      None,
+      "#001")
+  ))
 
   val address: Address = Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB"))
   val entityName: String = "Cheapo Clothing"

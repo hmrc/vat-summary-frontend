@@ -133,7 +133,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
   private[controllers] def getReturnObligationDetails(obligations: Seq[VatReturnObligation]): VatDetailsDataModel =
     getObligationDetails(
-      obligations,
+      obligations.distinct,
       obligations.head.due.isBefore(dateService.now())
     )
 
