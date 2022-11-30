@@ -44,6 +44,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
   val payments: Payments = TestModels.payments
   val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
   val mockPenaltiesService: PenaltiesService = mock[PenaltiesService]
+  val duplicateObligations: VatReturnObligations = TestModels.duplicateObligations
 
   def mockReturnObligations(result: ServiceResponse[Option[VatReturnObligations]]): Any =
     (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
@@ -883,6 +884,26 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             controller.getReturnObligationDetails(obligations.obligations)
           }
           result shouldBe expected
+        }
+      }
+
+      "where duplicate obligations are present" should {
+
+        "filter them out amd set the has multiple param to false" in {
+
+          val expected: VatDetailsDataModel = VatDetailsDataModel(
+            displayData = Some("2019-06-06"),
+            hasMultiple = false,
+            isOverdue = false,
+            hasError = false
+          )
+
+          val result: VatDetailsDataModel = {
+            mockDateServiceCall()
+            controller.getReturnObligationDetails(duplicateObligations.obligations)
+          }
+          result shouldBe expected
+
         }
       }
     }
