@@ -27,41 +27,45 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
   val injectedView: PenaltiesBanner = injector.instanceOf[PenaltiesBanner]
   val model: PenaltiesSummary = PenaltiesSummary.empty
 
-  "The Penalties banner" when {
+  "The PenaltiesBanner template" when {
 
-    "there are no active penalties" which {
+    "there are no active penalties" should {
 
-      "display the penalties changes banner" which {
+      lazy val view = injectedView(Some(model))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        lazy val view = injectedView(Some(model))
-        lazy implicit val document: Document = Jsoup.parse(view.body)
+      "display the upcoming penalty changes banner" which {
 
-        "have the correct heading" in {
-          elementText("h2") shouldBe "Important"
+        "has the correct heading" in {
+          elementText("#upcoming-penalties-banner") shouldBe "Important"
         }
 
-        "have the correct announcement information" in {
+        "has the correct announcement information" in {
           elementText("#announcement-information") shouldBe "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
         }
 
-        "have the correct date information" in {
+        "has the correct date information" in {
           elementText("#date-information") shouldBe "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023."
         }
 
-        "have the correct calculation information" in {
+        "has the correct calculation information" in {
           elementText("#calculation-information") shouldBe "We’re also changing how we calculate interest on late payments and repayment returns."
         }
 
-        "the link" should {
+        "has a link" which {
 
-          "have the correct link message" in {
+          "has the correct link message" in {
             elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)."
           }
 
-          "have the correct link location" in {
+          "has the correct link location" in {
             element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesChangesUrl
           }
         }
+      }
+
+      "not display the penalties banner which details penalty points and penalties owed" in {
+        elementExtinct("#penalties-banner")
       }
     }
 
@@ -75,7 +79,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
-            elementText("h2") shouldBe "Late submission and late payment penalties"
+            elementText("#penalties-banner") shouldBe "Late submission and late payment penalties"
           }
 
           "have the correct penalty information" in {
@@ -91,6 +95,10 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
             "has the correct link destination" in {
               element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
             }
+          }
+
+          "not display the upcoming changes to penalties banner" in {
+            elementExtinct("#upcoming-penalties-banner")
           }
         }
 
@@ -110,20 +118,23 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           "has the correct link destination" in {
             element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
           }
-        }
 
+          "not display the upcoming changes to penalties banner" in {
+            elementExtinct("#upcoming-penalties-banner")
+          }
+        }
       }
 
-      "there are only crystalised penalties" when {
+      "there are only crystallised penalties" when {
 
-        "there is one crystalised penalty" should {
+        "there is one crystallised penalty" should {
 
           lazy val view = injectedView(Some(model.copy(noOfPoints = 0, noOfCrystalisedPenalties = 1,
             crystalisedPenaltyAmountDue = 100.00)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
-            elementText("h2") shouldBe "Late submission and late payment penalties"
+            elementText("#penalties-banner") shouldBe "Late submission and late payment penalties"
           }
 
           "have the correct penalty information" in {
@@ -140,9 +151,13 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
               element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
             }
           }
+
+          "not display the upcoming changes to penalties banner" in {
+            elementExtinct("#upcoming-penalties-banner")
+          }
         }
 
-        "there is more than one crystalised penalty" should {
+        "there is more than one crystallised penalty" should {
 
           lazy val view = injectedView(Some(model.copy(noOfCrystalisedPenalties = 2, crystalisedPenaltyAmountDue = 200.9)))
           lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -158,8 +173,11 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           "has the correct link destination" in {
             element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
           }
-        }
 
+          "not display the upcoming changes to penalties banner" in {
+            elementExtinct("#upcoming-penalties-banner")
+          }
+        }
       }
 
       "there are only estimated penalties" when {
@@ -170,7 +188,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
-            elementText("h2") shouldBe "Late submission and late payment penalties"
+            elementText("#penalties-banner") shouldBe "Late submission and late payment penalties"
           }
 
           "have the correct penalty information" in {
@@ -186,6 +204,10 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
             "has the correct link destination" in {
               element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
             }
+          }
+
+          "not display the upcoming changes to penalties banner" in {
+            elementExtinct("#upcoming-penalties-banner")
           }
         }
 
@@ -205,10 +227,14 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           "has the correct link destination" in {
             element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
           }
+
+          "not display the upcoming changes to penalties banner" in {
+            elementExtinct("#upcoming-penalties-banner")
+          }
         }
       }
 
-      "there are both crystalised penalties and penalty points, but no estimated penalties" should {
+      "there are both crystallised penalties and penalty points, but no estimated penalties" should {
 
         lazy val view = injectedView(Some(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -224,9 +250,13 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         "has the correct link destination" in {
           element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
         }
+
+        "not display the upcoming changes to penalties banner" in {
+          elementExtinct("#upcoming-penalties-banner")
+        }
       }
 
-      "there are both crystalised penalties and estimated penalties, but no penalty points" should {
+      "there are both crystallised penalties and estimated penalties, but no penalty points" should {
 
         lazy val view = injectedView(Some(model.copy(noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
           noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00)))
@@ -244,9 +274,13 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         "has the correct link destination" in {
           element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
         }
+
+        "not display the upcoming changes to penalties banner" in {
+          elementExtinct("#upcoming-penalties-banner")
+        }
       }
 
-      "there are both estimated penalties and penalty points, but no crystalised penalties" should {
+      "there are both estimated penalties and penalty points, but no crystallised penalties" should {
 
         lazy val view = injectedView(Some(model.copy(noOfPoints = 1, noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00)))
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -262,9 +296,13 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         "has the correct link destination" in {
           element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
         }
+
+        "not display the upcoming changes to penalties banner" in {
+          elementExtinct("#upcoming-penalties-banner")
+        }
       }
 
-      "there are crystalised penalties, estimated penalties and active points" should {
+      "there are crystallised penalties, estimated penalties and active points" should {
 
         lazy val view = injectedView(Some(model.copy(noOfPoints = 1, noOfCrystalisedPenalties = 1, crystalisedPenaltyAmountDue = 100.00,
           noOfEstimatedPenalties = 1, estimatedPenaltyAmount = 150.00)))
@@ -282,8 +320,11 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         "has the correct link destination" in {
           element("a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
         }
-      }
 
+        "not display the upcoming changes to penalties banner" in {
+          elementExtinct("#upcoming-penalties-banner")
+        }
+      }
     }
   }
 }
