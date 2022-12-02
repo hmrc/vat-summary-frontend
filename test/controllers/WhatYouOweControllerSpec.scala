@@ -413,6 +413,25 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     }
   }
 
+  "The buildPenaltyChargePlusEstimates" when {
+
+    "there is a crystallised penalty charge with accrued interest" should {
+
+      "return a crystallised penalty and estimated interest view model" in {
+        val charge = payment.copy(chargeType = VatReturn1stLPP)
+        mockDateServiceCall()
+        controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMax)) shouldBe
+           Seq(Some(crystallisedPenaltyModel), Some(estimatedInterestPenalty))
+      }
+
+      "return a crystallised penalty view model" in {
+        val charge = payment.copy(chargeType = VatReturn1stLPP, accruingInterestAmount = None)
+        mockDateServiceCall()
+        controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMax)) shouldBe Seq(Some(crystallisedPenaltyModel))
+      }
+    }
+  }
+
   "The buildChargePlusEstimates function" when {
 
     "the charge has accruing interest, accruing penalty and matching penalty details" should {
