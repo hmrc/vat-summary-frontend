@@ -493,11 +493,15 @@ chargeType.vatReturn1stLPPLPITitle = ???
 chargeType.vatReturn2ndLPPLPITitle = ???
 chargeType.VATReturn1stLPPTitle = ???
 
+chargeType.vatVATCA1stLPPTitle = ???
+chargeType.vatVATCA2ndLPPTitle = ???
 chargeType.vatCentralAssessmentLPITitle = ???
 chargeType.VATCA1stLPPLPPITitle = ???
 chargeType.VATCA2ndLPPLPPITitle = ???
 
 chargeType.VATOfficersAssessmentLPITitle = ???
+chargeType.VATOA1stLPPTitle = ???
+chargeType.VATOA2ndLPPTitle = ???
 chargeType.VATOA1stLPPLPITitle = ???
 chargeType.VATOA2ndLPPLPITitle = ???
 
