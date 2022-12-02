@@ -19,28 +19,20 @@
 @(mandationStatus: String)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @bannerContent = {
-
-    <h1 class="govuk-heading-m">@messages("mtdNotification.heading")</h1>
-
-      <div class="govuk-body">
-
-          @messages("mtdNotification.message.1") @messages("mtdNotification.message.2")
-
-          <a class="govuk-link" href="@appConfig.mtdGuidance" rel="noreferrer noopener" target="_blank">
-              @messages("mtdNotification.link")</a>.
-
-      </div>
+  <h1 class="govuk-heading-m">@messages("mtdNotification.heading")</h1>
+  <div class="govuk-body">
+    @messages("mtdNotification.message.1") @messages("mtdNotification.message.2")
+    <a class="govuk-link" href="@appConfig.mtdGuidance" rel="noreferrer noopener" target="_blank">
+      @messages("mtdNotification.link")</a>.
+  </div>
 }
 
 @if(mandationStatus == "Non MTDfB") {
 
-<div class="govuk-!-margin-top-3">
-
   @govukNotificationBanner(NotificationBanner(
     title = Text(messages("mtdNotification.important")),
-    content = HtmlContent(bannerContent)
+    content = HtmlContent(bannerContent),
+    titleId = Some("mtd-banner")
   ))
-
-</div>
 
 }

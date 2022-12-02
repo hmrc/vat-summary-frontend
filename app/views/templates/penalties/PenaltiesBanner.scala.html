@@ -22,62 +22,59 @@
 @(penaltiesSummary: Option[PenaltiesSummary])(implicit messages: Messages, appConfig: config.AppConfig)
 
 @bannerContent = {@penaltiesSummary match {
-    case Some(summary) => {
-      <div class="govuk-!-margin-bottom-3" id="penalties-banner">
-          @if(summary.noOfCrystalisedPenalties > 0) {
-            <div>@messages("penaltiesBanner.crystalisedPenalty") @displayMoney(summary.crystalisedPenaltyAmountDue)</div>
-          }
-          @if(summary.noOfEstimatedPenalties > 0 && summary.noOfCrystalisedPenalties == 0) {
-            <div>@messages("penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty") @displayMoney(summary.estimatedPenaltyAmount)</div>
-          }
-          @if(summary.noOfEstimatedPenalties > 0 && summary.noOfCrystalisedPenalties > 0) {
-            <div>@messages("penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty") @displayMoney(summary.estimatedPenaltyAmount)</div>
-          }
-          @if(summary.noOfPoints > 0) {
-            <div>@messages("penaltiesBanner.totalPoints", summary.noOfPoints)</div>
-          }
-      </div>
-      <a class="govuk-notification-banner__link" href="@appConfig.penaltiesFrontendUrl">
-        @if(summary.hasMultiplePenalties) {
-          @messages("penaltiesBanner.linkPlural")
-        } else {
-          @messages("penaltiesBanner.linkSingular")
-        }
-      </a>
-    }
-    case _ => {}
+  case Some(summary) => {
+    <div class="govuk-!-margin-bottom-3" id="penalties-banner">
+      @if(summary.noOfCrystalisedPenalties > 0) {
+        <div>@messages("penaltiesBanner.crystalisedPenalty") @displayMoney(summary.crystalisedPenaltyAmountDue)</div>
+      }
+      @if(summary.noOfEstimatedPenalties > 0 && summary.noOfCrystalisedPenalties == 0) {
+        <div>@messages("penaltiesBanner.estimatedPenaltyWithoutCrystalisedPenalty") @displayMoney(summary.estimatedPenaltyAmount)</div>
+      }
+      @if(summary.noOfEstimatedPenalties > 0 && summary.noOfCrystalisedPenalties > 0) {
+        <div>@messages("penaltiesBanner.estimatedPenaltyWithCrystalisedPenalty") @displayMoney(summary.estimatedPenaltyAmount)</div>
+      }
+      @if(summary.noOfPoints > 0) {
+        <div>@messages("penaltiesBanner.totalPoints", summary.noOfPoints)</div>
+      }
+    </div>
+    <a class="govuk-notification-banner__link" href="@appConfig.penaltiesFrontendUrl">
+      @if(summary.hasMultiplePenalties) {
+        @messages("penaltiesBanner.linkPlural")
+      } else {
+        @messages("penaltiesBanner.linkSingular")
+      }
+    </a>
+  }
+  case _ => {}
 }}
 
 @penaltiesChangesBannerContent = {
+  <h3 class="govuk-notification-banner__heading">@messages("penaltiesChangesBanner.heading")</h3>
 
-<div class="govuk-!-margin-bottom-3" id="penalties-coming-banner">
+  <p class="govuk-body" id="announcement-information">@messages("penaltiesChangesBanner.message.1")</p>
+  <p class="govuk-body" id="date-information">@messages("penaltiesChangesBanner.message.2")</p>
+  <p class="govuk-body" id="calculation-information">@messages("penaltiesChangesBanner.message.3")</p>
 
-    <h3 class="govuk-notification-banner__heading">@messages("penaltiesChangesBanner.heading")</h3>
-
-    <p class="govuk-body" id="announcement-information">@messages("penaltiesChangesBanner.message.1")</p>
-    <p class="govuk-body" id="date-information">@messages("penaltiesChangesBanner.message.2")</p>
-    <p class="govuk-body" id="calculation-information">@messages("penaltiesChangesBanner.message.3")</p>
-
-    <a class="govuk-notification-banner__link" href="@appConfig.penaltiesChangesUrl" rel="noreferrer noopener" target="_blank">
-        @messages("penaltiesChangesBanner.link")
-    </a>
-
-</div>
+  <a class="govuk-notification-banner__link" href="@appConfig.penaltiesChangesUrl" rel="noreferrer noopener" target="_blank">
+      @messages("penaltiesChangesBanner.link")
+  </a>
 }
 
 @penaltiesSummary match {
-    case Some(summary) if (summary.hasActivePenalties) => {
-      @govukNotificationBanner(NotificationBanner(
-        title = Text(messages("penaltiesBanner.heading")),
-        content = HtmlContent(bannerContent),
-        classes = "govuk-!-margin-top-6"
-      ))
-    }
-    case _ => {
-      @govukNotificationBanner(NotificationBanner(
-        title = Text(messages("mtdNotification.important")),
-        content = HtmlContent(penaltiesChangesBannerContent),
-        classes = "govuk-!-margin-top-6"
-      ))
-    }
+  case Some(summary) if (summary.hasActivePenalties) => {
+    @govukNotificationBanner(NotificationBanner(
+      title = Text(messages("penaltiesBanner.heading")),
+      content = HtmlContent(bannerContent),
+      classes = "govuk-!-margin-top-6",
+      titleId = Some("penalties-banner")
+    ))
+  }
+  case _ => {
+    @govukNotificationBanner(NotificationBanner(
+      title = Text(messages("mtdNotification.important")),
+      content = HtmlContent(penaltiesChangesBannerContent),
+      classes = "govuk-!-margin-top-6",
+      titleId = Some("upcoming-penalties-banner")
+    ))
+  }
 }
