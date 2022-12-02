@@ -493,11 +493,15 @@ chargeType.vatReturn1stLPPLPITitle = Interest on penalty
 chargeType.vatReturn2ndLPPLPITitle = Interest on second penalty
 chargeType.VATReturn1stLPPTitle = Penalty for late payment of VAT
 
+chargeType.vatVATCA1stLPPTitle = Penalty for late payment of central assessment
+chargeType.vatVATCA2ndLPPTitle = Second penalty for late payment of central assessment
 chargeType.vatCentralAssessmentLPITitle = Interest on central assessment of VAT
 chargeType.VATCA1stLPPLPPITitle = Interest on central assessment penalty
 chargeType.VATCA2ndLPPLPPITitle = Interest on central assessment second penalty
 
 chargeType.VATOfficersAssessmentLPITitle = Interest on officer’s assessment of VAT
+chargeType.VATOA1stLPPTitle = Penalty for late payment of officer’s assessment
+chargeType.VATOA2ndLPPTitle = Second penalty for late payment of officer’s assessment
 chargeType.VATOA1stLPPLPITitle = Interest on officer’s assessment penalty
 chargeType.VATOA2ndLPPLPITitle = Interest on officer’s assessment second penalty
 

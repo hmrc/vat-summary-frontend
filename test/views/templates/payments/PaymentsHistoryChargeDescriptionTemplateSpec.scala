@@ -617,6 +617,36 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT Central Assessment 1st LPP charge" should {
+
+        val model = exampleModel.copy(chargeType = VatCentralAssessment1stLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Central Assessment 2nd LPP charge" should {
+
+        val model = exampleModel.copy(chargeType = VatCentralAssessment2ndLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        }
+      }
+
       "there is a VAT CA 1st LPP LPI charge" should {
 
         val model = exampleModel.copy(chargeType = VatCA1stLPPLPI)
@@ -655,6 +685,36 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct charge title" in {
           elementText(Selectors.chargeTitle) shouldBe "Interest on officer’s assessment of VAT"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT OA 1st LPP charge" should {
+
+        val model = exampleModel.copy(chargeType = VatOfficersAssessment1stLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT OA 2nd LPP charge" should {
+
+        val model = exampleModel.copy(chargeType = VatOfficersAssessment2ndLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
         }
 
         "display the correct description" in {
