@@ -539,6 +539,34 @@ object TestModels {
     "isPenalty" -> false
   )
 
+  val crystallisedPenaltyModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
+    "30",
+    "15",
+    Some("30"),
+    2.4,
+    Some(4.2),
+    100.11,
+    Some(200.22),
+    LocalDate.parse("2019-03-03"),
+    10000,
+    0,
+    10000,
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
+    "VAT Return 1st LPP",
+    "XD002750002155",
+    isOverdue = false
+  )
+
+  val estimatedInterestPenalty: EstimatedInterestViewModel = EstimatedInterestViewModel(
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
+    "VAT Return 1st LPP LPI",
+    2.22,
+    2,
+    isPenalty = true
+  )
+
   val crystallisedLPP1Model: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
     "99",
     "10",

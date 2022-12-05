@@ -179,7 +179,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
       "have the correct second explanation paragraph" in {
         elementText("p.govuk-body:nth-of-type(2)") shouldBe
-          "The total increases daily based on the amount of unpaid penalty for the period."
+          "The total increases daily based on the unpaid amount."
       }
 
       "have the correct third explanation paragraph" in {

@@ -86,11 +86,18 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     payments collect {
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties)
-        Seq(buildCrystallisedLPPViewModel(p, matchingPenalty))
+        buildCrystallisedChargePlusEstimates(p, matchingPenalty)
       case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
       case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) => Seq(buildLateSubmissionPenaltyViewModel(p))
       case p => buildChargePlusEstimates(p, penalties)
     } flatten
+
+  private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod, matchingPenalty: Option[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
+    if (charge.showEstimatedInterest) {
+      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty), buildEstimatedIntViewModel(charge))
+    } else {
+      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty))
+    }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
                                                     penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] = {
@@ -130,7 +137,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
           interestRate = intRate,
           interestAmount = interestAmnt,
-          isPenalty = payment.chargeType.isPenaltyInterest
+          isPenalty = ChargeType.interestChargeMapping(payment.chargeType).isPenaltyInterest
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing one or more required values:" +
