@@ -18,7 +18,7 @@ package controllers
 
 import java.time.LocalDate
 
-import common.FinancialTransactionsConstants._
+import common.MandationStatus._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
@@ -460,7 +460,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "return a VatDetailsViewModel with no obligation due date, payment due date or entity name with the showSignUp flag set to true" in {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
-          None, None, None, showSignUp = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB Exempt")
+          None, None, None, isNonMTDfB = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB Exempt")
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           controller.constructViewModel(
@@ -623,7 +623,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           paymentDueDate,
           obligationData,
           None,
-          showSignUp = None,
+          isNonMTDfB = None,
           customerInfoError = true,
           currentDate = testDate,
           partyType = None,

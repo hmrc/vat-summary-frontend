@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package common
 
-@(vrn: String)(implicit messages: Messages, appConfig: config.AppConfig)
-
-<div id="mtd-signup">
-  <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
-    <a class="govuk-link" href="@{appConfig.mtdVatReSignUpUrl + vrn}">@messages("vatDetails.mtdSignup.link")</a>
-  </h3>
-  <p class="govuk-body">@messages("vatDetails.mtdSignup.info")</p>
-</div>
+object MandationStatus {
+  val mtdfb = "MTDfB"
+  val nonMTDfB = "Non MTDfB"
+  val nonDigital = "Non Digital"
+  val mtdfbExempt = "MTDfB Exempt"
+}

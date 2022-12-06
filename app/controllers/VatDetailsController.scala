@@ -19,7 +19,7 @@ package controllers
 import java.time.LocalDate
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
-import common.FinancialTransactionsConstants._
+import common.MandationStatus._
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers

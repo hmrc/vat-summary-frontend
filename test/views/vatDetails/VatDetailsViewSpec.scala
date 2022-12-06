@@ -57,7 +57,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val penaltiesSection = "#view-penalties-details"
     val penaltiesBanner = "#penalties-banner"
     val unverifiedMessage = "#unverified-email-notice > strong"
-    val unverifiedMessageLink = unverifiedMessage + "> a"
+    val unverifiedMessageLink: String = unverifiedMessage + "> a"
   }
 
   override implicit val user: User = User("123456789")
@@ -75,7 +75,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     None,
     None,
-    showSignUp = Some(true),
+    isNonMTDfB = Some(true),
     currentDate = testDate,
     partyType = Some("1"),
     mandationStatus = "MTDfB"
@@ -131,7 +131,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     None,
     paymentError = true,
     returnObligationError = true,
-    showSignUp = None,
+    isNonMTDfB = None,
     customerInfoError = true,
     currentDate = testDate,
     partyType = Some("1"),
@@ -296,21 +296,14 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy val view = details(nonMtdDetailsModel, Html("<nav>BTA Links</nav>"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "have the mtd sign up section" which {
+    "have a link to submit a VAT return" which {
 
-      lazy val mtdSignupSection = element(Selectors.mtdSignupSection)
-
-      "has the correct heading" in {
-        mtdSignupSection.select("h3").text() shouldBe "Sign up for Making Tax Digital for VAT"
+      "has the correct text" in {
+        elementText(Selectors.returnsVatLink) shouldBe "Submit VAT Return"
       }
 
-      "has a link to the vat-sign-up service" in {
-        mtdSignupSection.select("h3 a").attr("href") shouldBe s"/vat-through-software/sign-up/vat-number/${user.vrn}"
-      }
-
-      "has the correct paragraph" in {
-        mtdSignupSection.select("p").text() shouldBe "You must sign up to Making Tax Digital for VAT if you’re not exempt from " +
-          "VAT, and your taxable turnover exceeds the £85,000 threshold."
+      "has a link to the return deadlines page" in {
+        element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
       }
     }
   }

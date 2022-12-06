@@ -18,7 +18,6 @@
 @import models.viewModels._
 @import views.html.templates.formatters.money.DisplayMoney
 @import views.html.templates.payments.wyoCharges._
-@import views.html.templates.MtdNotificationBanner
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -27,7 +26,6 @@
       govukTable : GovukTable,
       govukDetails: GovukDetails,
       displayMoney: DisplayMoney,
-      mtdNotificationBanner: MtdNotificationBanner,
       standardCharge: StandardCharge,
       estimatedCharge: EstimatedCharge,
       crystallisedCharge: CrystallisedCharge)
@@ -104,8 +102,6 @@
       <h1 class="govuk-heading-xl">
         @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
       </h1>
-
-      @mtdNotificationBanner(model.mandationStatus)
 
       <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
       <p class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold govuk-!-margin-bottom-8">
