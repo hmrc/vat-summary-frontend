@@ -22,7 +22,6 @@ import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.ChargeTypeDetailsView
-import common.TestModels._
 
 class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 

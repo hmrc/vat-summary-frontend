@@ -574,7 +574,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           None,
           None,
           previousPaymentsTab = false,
-          (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
+          (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get).distinct,
           showInsolvencyContent = false,
           None
           ))
@@ -598,7 +598,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           Some(currentYear - 1),
           None,
           previousPaymentsTab = false,
-          (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get).distinct,
+          (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get).distinct,
           showInsolvencyContent = false,
           None
           ))
@@ -622,7 +622,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
           Some(currentYear - 1),
           Some(currentYear - 2),
           previousPaymentsTab = false,
-          (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThree.right.get.drop(1)).distinct,
+          (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get ++ serviceResultYearThree.toOption.get.drop(1)).distinct,
           showInsolvencyContent = false,
           None
           ))
@@ -647,7 +647,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThreeGenuineIdenticalPayments.right.get).distinct,
+            (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get ++ serviceResultYearThreeGenuineIdenticalPayments.toOption.get).distinct,
             showInsolvencyContent = false,
             None
           ))
@@ -672,7 +672,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.right.get ++ serviceResultYearTwo.right.get ++ serviceResultYearThreeWithDuplicate.right.get).distinct,
+            (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get ++ serviceResultYearThreeWithDuplicate.toOption.get).distinct,
             showInsolvencyContent = false,
             None
           ))

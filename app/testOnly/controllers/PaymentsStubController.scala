@@ -31,7 +31,7 @@ class PaymentsStubController @Inject()(implicit val appConfig: AppConfig,
                                        paymentsStub: PaymentsStub)
   extends FrontendController(mcc) with I18nSupport {
 
-  def stub(): Action[AnyContent] = Action.async { implicit request =>
+  def stub: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(paymentsStub()))
   }
 }

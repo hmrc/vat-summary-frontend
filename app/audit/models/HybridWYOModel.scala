@@ -36,7 +36,7 @@ object HybridWYOModel {
   implicit val writes: Writes[HybridWYOModel] = Writes { model =>
     Json.obj(
       "vrn" -> model.user.vrn,
-      "portalUrl" -> model.portalUrl
+      "portalUrl" -> model.portalUrl()
     )
   }
 }

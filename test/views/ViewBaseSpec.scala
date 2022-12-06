@@ -28,8 +28,7 @@ import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import org.scalatest.matchers.should.Matchers
-
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers {
 

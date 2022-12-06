@@ -54,7 +54,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  def details(): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
+  def details: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
         val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
         val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn, dateService.now())

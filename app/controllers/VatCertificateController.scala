@@ -39,7 +39,7 @@ class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
                                          ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport {
 
-  def show(): Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
+  def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user =>
       val vrn = user.vrn
       serviceInfoService.getPartial.flatMap { serviceInfoContent =>

@@ -22,7 +22,6 @@ import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
-
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
@@ -33,7 +32,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.PaymentHistory
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -53,7 +51,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
   def currentYear: Int = dateService.now().getYear
   def previousYear: Int = currentYear - 1
 
-  def paymentHistory(): Action[AnyContent] = authorisedController.financialAction { implicit request =>
+  def paymentHistory: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
         for {
           customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
