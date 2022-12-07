@@ -55,7 +55,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         "has a link" which {
 
           "has the correct link message" in {
-            elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)."
+            elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)"
           }
 
           "has the correct link location" in {

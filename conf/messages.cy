@@ -590,4 +590,4 @@ penaltiesChangesBanner.heading = Mae cosbau a thaliadau llog a godir ar TAW yn n
 penaltiesChangesBanner.message.1 = Ym mis Ionawr 2023, rydym yn lansio system gosb newydd i ddisodli’r Gordal Diffygdalu.
 penaltiesChangesBanner.message.2 = Mae’r newid yn effeithio ar Ffurflenni TAW a thaliadau sy’n cael eu cyflwyno’n hwyr ar gyfer cyfnodau TAW sy’n dechrau ar neu ar ôl 1 Ionawr 2023.
 penaltiesChangesBanner.message.3 = Rydym hefyd yn newid sut rydym yn cyfrifo llog ar daliadau hwyr a ffurflenni ad-dalu.
-penaltiesChangesBanner.link = Darllenwch yr arweiniad ar GOV.UK i gael rhagor o wybodaeth (yn agor tab newydd).
+penaltiesChangesBanner.link = Darllenwch yr arweiniad ar GOV.UK i gael rhagor o wybodaeth (yn agor tab newydd)
