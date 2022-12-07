@@ -4,6 +4,7 @@ common.newTab = (yn agor mewn tab newydd)
 common.fullStop = .
 common.notProvided = Heb ddarparu
 common.warning = Rhybudd
+common.important = Pwysig
 
 navTitle.nonAgent = Rheoli eich cyfrif TAW
 navTitle.agent = Manylion TAW eich cleient
@@ -60,8 +61,6 @@ vatDetails.vatCertificate.view = Bwrw golwg dros eich tystysgrif TAW a’i hargr
 vatDetails.vatCertificate.link = Bwrw golwg dros y dystysgrif TAW
 vatDetails.paymentsAndRepayments.link = Taliadau ac ad-daliadau
 vatDetails.paymentsAndRepayments.info = Rheoli’ch Debyd Uniongyrchol, manylion cyfrif banc ar gyfer ad-daliadau ac olrhain beth sydd ar CThEM i chi.
-vatDetails.mtdSignup.link = Cofrestru am y cynllun Troi Treth yn Ddigidol ar gyfer TAW
-vatDetails.mtdSignup.info = Mae’n rhaid i chi gofrestru ar gyfer y Cynllun Troi Treth yn Ddigidol ar gyfer TAW os nad ydych wedi’ch eithrio rhag TAW, a bod eich trosiant trethadwy dros y trothwy, sef £85,000.
 vatDetails.customerInfo.error =  Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
 vatDetails.updateVatDetails.link = Manylion eich busnes
 vatDetails.updateVatDetails.view = Newid eich manylion busnes neu ddyddiadau’ch Ffurflenni TAW.
@@ -592,9 +591,3 @@ penaltiesChangesBanner.message.1 = Ym mis Ionawr 2023, rydym yn lansio system go
 penaltiesChangesBanner.message.2 = Mae’r newid yn effeithio ar Ffurflenni TAW a thaliadau sy’n cael eu cyflwyno’n hwyr ar gyfer cyfnodau TAW sy’n dechrau ar neu ar ôl 1 Ionawr 2023.
 penaltiesChangesBanner.message.3 = Rydym hefyd yn newid sut rydym yn cyfrifo llog ar daliadau hwyr a ffurflenni ad-dalu.
 penaltiesChangesBanner.link = Darllenwch yr arweiniad ar GOV.UK i gael rhagor o wybodaeth (yn agor tab newydd).
-
-mtdNotification.heading = Newidiodd y ffordd o gyflwyno Ffurflenni TAW ar 1 Ebrill oherwydd Troi Treth yn Ddigidol
-mtdNotification.message.1 = Ni allwch ddefnyddio’r gwasanaeth hwn i gyflwyno Ffurflenni TAW ar gyfer cyfnodau cyfrifyddu sy’n dechrau ar ôl 1 Ebrill 2022.
-mtdNotification.message.2 = Yn lle hynny, rhaid cadw cofnodion digidol a rhaid cyflwyno Ffurflenni gan ddefnyddio meddalwedd sy’n gydnaws â CThEM.
-mtdNotification.link = Darganfod pryd i gofrestru a dechrau defnyddio Troi Treth yn Ddigidol ar gyfer TAW (yn agor tab newydd)
-mtdNotification.important = Pwysig

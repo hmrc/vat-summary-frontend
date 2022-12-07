@@ -17,7 +17,6 @@
 @import models.viewModels.VatDetailsViewModel
 @import views.html.templates._
 @import views.html.templates.penalties.PenaltiesBanner
-@import views.html.templates.MtdNotificationBanner
 @import views.html.templates.penalties.PenaltiesTileSection
 @import play.twirl.api.HtmlFormat
 
@@ -28,13 +27,11 @@
       updateVatDetailsSection: UpdateVatDetailsSection,
       paymentsAndRepaymentsSection: PaymentsAndRepaymentsSection,
       vatCertificateSection: VatCertificateSection,
-      mtdSignupSection: MtdSignupSection,
       deregSection: DeregSection,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukWarningText: GovukWarningText,
       penaltiesTileSection: PenaltiesTileSection,
-      penaltiesBanner: PenaltiesBanner,
-      mtdNotificationBanner: MtdNotificationBanner)
+      penaltiesBanner: PenaltiesBanner)
 
 @(detailsViewModel: VatDetailsViewModel,
   serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
@@ -85,25 +82,23 @@
 
   @penaltiesBanner(detailsViewModel.penaltiesSummary)
 
-  @mtdNotificationBanner(detailsViewModel.mandationStatus)
-
   @unverifiedUserEmailContent
 
   <div class="flex-container govuk-grid-row govuk-!-margin-top-6">
-      @nextPaymentSection(
+    @nextPaymentSection(
       detailsViewModel.paymentsData,
       detailsViewModel.hasMultiplePayments,
       detailsViewModel.paymentError,
       detailsViewModel.isHybridUser,
       detailsViewModel.paymentOverdue
-      )
+    )
 
-      @nextReturnSection(
+    @nextReturnSection(
       detailsViewModel.obligationData,
       detailsViewModel.hasMultipleReturnObligations,
       detailsViewModel.returnObligationOverdue,
       detailsViewModel.returnObligationError,
-      detailsViewModel.showSignUp
+      detailsViewModel.isNonMTDfB
     )
 
     @historySection(detailsViewModel.isHybridUser)
@@ -136,14 +131,6 @@
         </h3>
       </div>
     } else {
-      <div class="govuk-grid-column-one-third">
-        @detailsViewModel.showSignUp match {
-          case Some(true) => {
-            @mtdSignupSection(user.vrn)
-          }
-          case _ => {}
-        }
-      </div>
       <div class="govuk-grid-column-one-third">
         @deregSection(detailsViewModel)
       </div>

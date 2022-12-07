@@ -4,6 +4,7 @@ common.newTab = (opens in a new tab)
 common.fullStop = .
 common.notProvided = Not provided
 common.warning = Warning
+common.important = Important
 
 navTitle.nonAgent = Manage your VAT account
 navTitle.agent = Your client’s VAT details
@@ -60,8 +61,6 @@ vatDetails.vatCertificate.view = View and print your VAT certificate.
 vatDetails.vatCertificate.link = View VAT certificate
 vatDetails.paymentsAndRepayments.link = Payments and repayments
 vatDetails.paymentsAndRepayments.info = Manage your Direct Debit, repayment bank account details and track what HMRC owe you.
-vatDetails.mtdSignup.link = Sign up for Making Tax Digital for VAT
-vatDetails.mtdSignup.info = You must sign up to Making Tax Digital for VAT if you’re not exempt from VAT, and your taxable turnover exceeds the £85,000 threshold.
 vatDetails.customerInfo.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.updateVatDetails.link = Your business details
 vatDetails.updateVatDetails.view = Change your business details or VAT Return dates.
@@ -592,9 +591,3 @@ penaltiesChangesBanner.message.1 = From January 2023, we’re launching a new pe
 penaltiesChangesBanner.message.2 = The change affects late returns and late payments for VAT periods starting on or after 1 January 2023.
 penaltiesChangesBanner.message.3 = We’re also changing how we calculate interest on late payments and repayment returns.
 penaltiesChangesBanner.link = Read the guidance on GOV.UK to find out more (opens in a new tab).
-
-mtdNotification.heading = The way to submit VAT returns  changed on 1 April due to Making Tax Digital
-mtdNotification.message.1 = You cannot use this service to submit returns for accounting periods starting after 1 April 2022.
-mtdNotification.message.2 = Instead, digital records must be kept and returns must be submitted using HMRC compatible software.
-mtdNotification.link = Find out when to sign up and start using Making Tax Digital for VAT (opens in a new tab)
-mtdNotification.important = Important
