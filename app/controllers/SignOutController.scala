@@ -40,7 +40,7 @@ class SignOutController @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
       HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     if(authorised) {
-      enrolmentsAuthService.authorised.retrieve(Retrievals.affinityGroup) {
+      enrolmentsAuthService.authorised().retrieve(Retrievals.affinityGroup) {
         case Some(AffinityGroup.Agent) => Future.successful("VATCA")
         case _ => Future.successful("VATC")
       }.map(contactFormIdentifier => Redirect(appConfig.signOutUrl(contactFormIdentifier))).recover {

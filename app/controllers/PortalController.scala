@@ -33,12 +33,12 @@ class PortalController @Inject()(authorisedController: AuthorisedController,
                                  val mcc: MessagesControllerComponents,
                                  implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport  {
 
-  def hybridWYO(): Action[AnyContent] = authorisedController.authorisedAction { implicit request => user =>
+  def hybridWYO: Action[AnyContent] = authorisedController.authorisedAction { implicit request => user =>
     auditingService.extendedAudit(HybridWYOModel(user), routes.VatDetailsController.details.url)
     Future.successful(Redirect(appConfig.portalMakePaymentUrl(user.vrn)))
   }
 
-  def hybridPH(): Action[AnyContent] = authorisedController.authorisedAction { implicit request => user =>
+  def hybridPH: Action[AnyContent] = authorisedController.authorisedAction { implicit request => user =>
     auditingService.extendedAudit(HybridPHModel(user), routes.VatDetailsController.details.url)
     Future.successful(Redirect(appConfig.portalPaymentHistoryUrl(user.vrn)))
   }

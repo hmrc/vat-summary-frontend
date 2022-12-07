@@ -54,7 +54,7 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
     implicit request =>
 
       enrolmentsAuthService
-        .authorised
+        .authorised()
         .retrieve(Retrievals.allEnrolments and Retrievals.affinityGroup) {
           case _ ~ Some(AffinityGroup.Agent) =>
             if(allowAgentAccess) {

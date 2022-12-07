@@ -36,7 +36,7 @@ object HybridPHModel {
   implicit val writes: Writes[HybridPHModel] = Writes { model =>
     Json.obj(
       "vrn" -> model.user.vrn,
-      "portalUrl" -> model.portalUrl
+      "portalUrl" -> model.portalUrl()
     )
   }
 }

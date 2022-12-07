@@ -132,7 +132,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .returns(Future.successful(accountDetailsResponse))
 
   def mockDateServiceCall(): Any =
-    (mockDateService.now: () => LocalDate)
+    (() => mockDateService.now())
     .stubs()
     .returns(LocalDate.parse("2018-05-01"))
 
