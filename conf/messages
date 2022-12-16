@@ -84,27 +84,10 @@ payment.noPayment = No payments due right now
 payment.nextPayment = Next payment due
 payment.nextPayments = Payments due
 payment.check = Check what you owe
-payment.afterSubmitted = After you have submitted a return, it can take 24 hours for what you owe to show here.
 payment.stillMake = You can still
 payment.stillMakeLink = make a payment (opens in a new tab)
-payment.evenIfNotShown = even if a payment is not shown
 
 pastHistory.history = History
-
-openPayments.title = What you owe
-openPayments.agentTitle = What your client owes
-openPayments.makePayment = Pay now
-openPayments.dueBy = due by
-openPayments.viewReturnLink = View return
-openPayments.processingTime = Payments can take up to 5 days to process.
-openPayments.incorrect = If what you owe is incorrect, check if you can
-openPayments.incorrectAgent = If the amount owed is incorrect, check if you can
-openPayments.correctErrors = correct errors on your VAT Return (opens in a new tab)
-openPayments.correctErrorsAgent = correct errors on your client’s VAT return (opens in a new tab)
-openPayments.whatOweHelp.heading = What I owe is incorrect or missing
-openPayments.whatOweHelp.headingAgent = The amount owed is incorrect or missing
-openPayments.vatReturn = for the period {0}
-openPayments.errorCorrectionReturnContext = that you corrected for the period {0}
 
 whatYouOwe.title = What you owe
 whatYouOwe.agentTitle = What your client owes
@@ -138,6 +121,9 @@ whatYouOwe.details.agent.paymentHelpTwo = If your client cannot pay what they ow
 whatYouOwe.details.agent.paymentHelpThree = set up a payment plan (opens in a new tab)
 whatYouOwe.details.agent.paymentHelpFour = to pay in monthly instalments.
 whatYouOwe.estimate = estimate
+whatYouOwe.errorCorrectionReturnContext = that you corrected for the period {0}
+whatYouOwe.dueBy = due by
+whatYouOwe.viewReturnLink = View return
 
 chargeTypeDetails.viewThis = View this
 chargeTypeDetails.vatReturn = VAT Return

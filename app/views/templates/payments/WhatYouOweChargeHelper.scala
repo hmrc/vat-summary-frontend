@@ -46,7 +46,7 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, userIsAgent: 
 
   val title: String = messages(paymentMessageHelper().title)
 
-  val payLinkText: String = messages("openPayments.makePayment")
+  val payLinkText: String = messages("whatYouOwe.makePayment")
 
   val viewReturnEnabled: Boolean = payment.chargeType match {
     case ReturnDebitCharge | ErrorCorrectionDebitCharge |
@@ -57,9 +57,9 @@ class WhatYouOweChargeHelper @Inject()(payment: OpenPaymentsModel, userIsAgent: 
   val viewReturnContext: String = payment match {
     case payment: OpenPaymentsModelWithPeriod => payment.chargeType match {
       case ReturnDebitCharge | AAReturnDebitCharge | PaymentOnAccountReturnDebitCharge =>
-        messages("openPayments.vatReturn", displayDateRange(payment.periodFrom, payment.periodTo)).trim
+        messages("chargeType.forThePeriod", displayDateRange(payment.periodFrom, payment.periodTo)).trim
       case ErrorCorrectionDebitCharge =>
-        messages("openPayments.errorCorrectionReturnContext", displayDateRange(payment.periodFrom, payment.periodTo)).trim
+        messages("whatYouOwe.errorCorrectionReturnContext", displayDateRange(payment.periodFrom, payment.periodTo)).trim
       case _ => ""
     }
     case _ => ""

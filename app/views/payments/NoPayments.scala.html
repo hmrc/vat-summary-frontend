@@ -44,7 +44,7 @@
 }
 
 @mainTemplate(
-  title = if(user.isAgent) messages("openPayments.agentTitle") else messages("openPayments.title"),
+  title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
@@ -57,7 +57,7 @@
           @clientName.map { name =>
           <span class="govuk-caption-xl">@name</span>
           }
-          @if(user.isAgent) {@messages("openPayments.agentTitle")} else {@messages("openPayments.title")}
+          @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
       </h1>
 
       <div class="govuk-form-group" id="noPaymentsDetail">

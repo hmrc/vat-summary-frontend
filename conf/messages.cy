@@ -84,27 +84,10 @@ payment.noPayment = Nid oes taliadau’n ddyledus nawr
 payment.nextPayment = Taliad nesaf yn ddyledus
 payment.nextPayments = Taliadau sy’n ddyledus
 payment.check = Gwirio’r hyn sydd arnoch
-payment.afterSubmitted = Ar ôl i chi gyflwyno Ffurflen TAW, gall gymryd 24 awr i’r hyn sydd arnoch gael ei ddangos yma.
 payment.stillMake = Mae’n dal yn bosibl i chi
 payment.stillMakeLink = dalu (yn agor mewn tab newydd)
-payment.evenIfNotShown = hyd yn oed os na ddangosir taliad
 
 pastHistory.history = Hanes
-
-openPayments.title = Yr hyn sydd arnoch
-openPayments.agentTitle = Yr hyn sydd ar eich cleient
-openPayments.makePayment = Talu nawr
-openPayments.dueBy = dyledus erbyn
-openPayments.viewReturnLink = Bwrw golwg dros y Ffurflen TAW
-openPayments.processingTime = Gall taliadau gymryd hyd at 5 diwrnod i’w prosesu.
-openPayments.incorrect = Os yw’r hyn sydd arnoch yn anghywir, dylech wirio a allwch
-openPayments.incorrectAgent = Os yw’r swm sy’n ddyledus yn anghywir, gwiriwch a oes modd i chi
-openPayments.correctErrors = gywiro gwallau ar eich Ffurflen TAW (yn agor mewn tab newydd)
-openPayments.correctErrorsAgent = gywiro gwallau ar Ffurflen TAW eich cleient (yn agor tab newydd)
-openPayments.whatOweHelp.heading = Mae’r hyn sydd arnaf yn anghywir neu ar goll
-openPayments.whatOweHelp.headingAgent = Mae’r swm sy’n ddyledus yn anghywir neu ar goll
-openPayments.vatReturn = ar gyfer y cyfnod {0}
-openPayments.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
 
 whatYouOwe.title = Yr hyn sydd arnoch
 whatYouOwe.agentTitle = Yr hyn sydd ar eich cleient
@@ -138,6 +121,9 @@ whatYouOwe.details.agent.paymentHelpTwo = Os na all eich cleient dalu’r hyn sy
 whatYouOwe.details.agent.paymentHelpThree = trefnu cynllun talu (yn agor tab newydd)
 whatYouOwe.details.agent.paymentHelpFour = er mwyn talu fesul rhandaliad misol.
 whatYouOwe.estimate = ???
+whatYouOwe.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
+whatYouOwe.dueBy = dyledus erbyn
+whatYouOwe.viewReturnLink = Bwrw golwg dros y Ffurflen TAW
 
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon

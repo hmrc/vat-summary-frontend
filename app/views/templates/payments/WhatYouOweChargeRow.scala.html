@@ -36,7 +36,7 @@
             <br><span class="govuk-!-font-weight-regular">@description</span> }
         </p>
         <div data-due="@(payment.due.toString)" class="govuk-hint">
-          @messages("openPayments.dueBy") @displayDate(payment.due,useShortDayFormat = true)
+          @messages("whatYouOwe.dueBy") @displayDate(payment.due,useShortDayFormat = true)
           @if(payment.isOverdue) {
             @govukTag(Tag(
               content = Text(messages("common.overdue")),
@@ -62,7 +62,7 @@
           <p class="govuk-body">
             <a class="govuk-link what-you-owe-links" href="@appConfig.vatReturnUrl(payment.periodKey.get)">
               <span class="govuk-visually-hidden">@chargeDetails.viewReturnContext</span>
-              <span>@messages("openPayments.viewReturnLink")</span>
+              <span>@messages("whatYouOwe.viewReturnLink")</span>
             </a>
           </p>
         }
