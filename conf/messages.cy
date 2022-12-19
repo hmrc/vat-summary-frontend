@@ -121,9 +121,6 @@ whatYouOwe.details.agent.paymentHelpTwo = Os na all eich cleient dalu’r hyn sy
 whatYouOwe.details.agent.paymentHelpThree = trefnu cynllun talu (yn agor tab newydd)
 whatYouOwe.details.agent.paymentHelpFour = er mwyn talu fesul rhandaliad misol.
 whatYouOwe.estimate = ???
-whatYouOwe.errorCorrectionReturnContext = y gwnaethoch gywiro ar gyfer y cyfnod {0}
-whatYouOwe.dueBy = dyledus erbyn
-whatYouOwe.viewReturnLink = Bwrw golwg dros y Ffurflen TAW
 
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon

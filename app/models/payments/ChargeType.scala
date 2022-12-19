@@ -602,6 +602,4 @@ object ChargeType extends LoggerUtil {
 
   implicit val reads: Reads[ChargeType] = __.read[String].map(apply)
 
-  implicit val writes: Writes[ChargeType] = Writes { charge => JsString(charge.value) }
-
 }

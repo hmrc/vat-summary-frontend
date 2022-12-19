@@ -92,12 +92,13 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p => buildChargePlusEstimates(p, penalties)
     } flatten
 
-  private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod, matchingPenalty: Option[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
-    if (charge.showEstimatedInterest) {
-      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty), buildEstimatedIntViewModel(charge))
-    } else {
-      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty))
-    }
+  private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod, matchingPenalty: Option[LPPDetails])
+    : Seq[Option[ChargeDetailsViewModel]] =
+      if (charge.showEstimatedInterest) {
+        Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty), buildEstimatedIntViewModel(charge))
+      } else {
+        Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty))
+      }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
                                                     penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] = {
