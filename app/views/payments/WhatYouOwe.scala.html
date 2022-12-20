@@ -90,7 +90,7 @@
   individualRows ++ totalRow
 }
 
-@mainTemplate(title = if(user.isAgent) messages("openPayments.agentTitle") else messages("openPayments.title"),
+@mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
               appConfig = appConfig,
               serviceInfoContent = serviceInfoContent,
               user = Some(user),

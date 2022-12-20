@@ -33,8 +33,6 @@ object PaymentsHistoryModel {
 
   val allocatedCharge : String = "allocated to charge"
 
-  implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
-
   implicit val reads: Reads[Seq[PaymentsHistoryModel]] = json => {
 
     val transactions: Seq[JsValue] = (json \ FinancialTransactionsConstants.financialTransactions).as[Seq[JsValue]]

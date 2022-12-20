@@ -28,8 +28,6 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
   val reads: Reads[Seq[PaymentsHistoryModel]] = PaymentsHistoryModel.reads
 
-  implicit val writes: Writes[PaymentsHistoryModel] = Json.writes[PaymentsHistoryModel]
-
   "reads" when {
 
     "one item per period is returned" should {
