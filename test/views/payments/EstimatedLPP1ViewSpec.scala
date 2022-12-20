@@ -81,7 +81,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
     "have the correct first explanation paragraph" in {
       elementText("#content > div > div > p:nth-child(2)") shouldBe
-        s"The penalty applies if VAT has not been paid for ${estimatedLPP1Model.part1Days} days."
+        s"This penalty applies if VAT has not been paid for ${estimatedLPP1Model.part1Days} days."
     }
 
     "have the correct calculation explanation" in {

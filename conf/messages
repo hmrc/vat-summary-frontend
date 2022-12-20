@@ -171,7 +171,7 @@ estimatedInterest.estimatesExplanation = Penalties and interest will show as est
 estimatedInterest.estimatesDescriptionAgent = Penalties and interest will show as estimates until your client pays the charge they relate to.
 estimatedInterest.calculationLink = Read the guidance about how interest is calculated (opens in a new tab)
 
-estimatedLPP1.penaltyAppliesForDays = The penalty applies if VAT has not been paid for {0} days.
+estimatedLPP1.penaltyAppliesForDays = This penalty applies if VAT has not been paid for {0} days.
 estimatedLPP1.calculation = The calculation we use is:
 estimatedLPP1.penaltyCalculation = {0}% of {1} (the unpaid VAT {2} days after the due date)
 estimatedLPP1.penaltyAmount = Penalty amount (estimate)
