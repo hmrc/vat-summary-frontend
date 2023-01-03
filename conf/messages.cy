@@ -464,54 +464,54 @@ chargeType.POAInstalLPITitle = ???
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
 
-chargeType.VatReturnPOALPITitle = ???
-chargeType.VatPOAReturn1stLPPTitle = ???
-chargeType.VatPOAReturn2ndLPPTitle = ???
-chargeType.VatReturnPOA1stLPPLPITitle = ???
-chargeType.VatReturnPOA2ndLPPLPITitle = ???
+chargeType.VatReturnPOALPITitle = Llog ar daliad ar gyfrif
+chargeType.VatPOAReturn1stLPPTitle = Cosb am dalu’n hwyr – taliad ar gyfrif
+chargeType.VatPOAReturn2ndLPPTitle = Ail gosb am dalu’n hwyr – taliad ar gyfrif
+chargeType.VatReturnPOA1stLPPLPITitle = Llog ar gosb taliad ar gyfrif
+chargeType.VatReturnPOA2ndLPPLPITitle = Llog ar ail gosb taliad ar gyfrif
 
-chargeType.vatReturnLPITitle = ???
-chargeType.vatReturn1stLPPLPITitle = ???
-chargeType.vatReturn2ndLPPLPITitle = ???
-chargeType.VATReturn1stLPPTitle = ???
+chargeType.vatReturnLPITitle = Llog ar TAW
+chargeType.vatReturn1stLPPLPITitle = Llog ar gosb
+chargeType.vatReturn2ndLPPLPITitle = Llog ar yr ail gosb
+chargeType.VATReturn1stLPPTitle = Cosb am dalu TAW yn hwyr
 
-chargeType.vatVATCA1stLPPTitle = ???
-chargeType.vatVATCA2ndLPPTitle = ???
-chargeType.vatCentralAssessmentLPITitle = ???
-chargeType.VATCA1stLPPLPPITitle = ???
-chargeType.VATCA2ndLPPLPPITitle = ???
+chargeType.vatVATCA1stLPPTitle = Cosb am dalu asesiad canolog yn hwy
+chargeType.vatVATCA2ndLPPTitle = Ail gosb am dalu asesiad canolog yn hwyr
+chargeType.vatCentralAssessmentLPITitle = Llog ar asesiad canolog o TAW
+chargeType.VATCA1stLPPLPPITitle = Llog ar gosb asesiad canolog
+chargeType.VATCA2ndLPPLPPITitle = Llog ar yr ail gosb asesiad canolog
 
-chargeType.VATOfficersAssessmentLPITitle = ???
-chargeType.VATOA1stLPPTitle = ???
-chargeType.VATOA2ndLPPTitle = ???
-chargeType.VATOA1stLPPLPITitle = ???
-chargeType.VATOA2ndLPPLPITitle = ???
+chargeType.VATOfficersAssessmentLPITitle = Llog ar asesiad swyddog o TAW
+chargeType.VATOA1stLPPTitle = Cosb am dalu asesiad swyddog yn hwyr
+chargeType.VATOA2ndLPPTitle = Ail gosb am dalu asesiad swyddog yn hwyr
+chargeType.VATOA1stLPPLPITitle = Llog ar gosb asesiad swyddog
+chargeType.VATOA2ndLPPLPITitle = Llog ar ail gosb asesiad swyddog
 
-chargeType.VATPA1stLPPLPITitle = ???
-chargeType.VATPA2ndLPPLPITitle = ???
-chargeType.VATPA1stLPPTitle = ???
-chargeType.VATPA2ndLPPTitle = ???
+chargeType.VATPA1stLPPLPITitle = Llog ar gosb asesiad i ddiogelu
+chargeType.VATPA2ndLPPLPITitle = Llog ar ail gosb asesiad i ddiogelu
+chargeType.VATPA1stLPPTitle = Cosb am dalu asesiad amddiffynnol yn hwyr
+chargeType.VATPA2ndLPPTitle = Ail gosb am dalu asesiad amddiffynnol yn hwyr
 
-chargeType.VATAdditionalAssessmentLPITitle = ???
-chargeType.VATAA1stLPPTitle = ???
-chargeType.VATAA2ndLPPTitle = ???
-chargeType.VATAA1stLPPLPITitle = ???
-chargeType.VATAA2ndLPPLPITitle = ???
+chargeType.VATAdditionalAssessmentLPITitle = Llog ar asesiad ychwanegol
+chargeType.VATAA1stLPPTitle = Llog ar gosb asesiad ychwanegol
+chargeType.VATAA2ndLPPTitle = Llog ar ail gosb asesiad ychwanegol
+chargeType.VATAA1stLPPLPITitle = Cosb am dalu asesiad ychwanegol yn hwyr
+chargeType.VATAA2ndLPPLPITitle = Ail gosb am dalu asesiad ychwanegol yn hwyr
 
 chargeType.VATLateSubPenTitle = ???
 
 chargeType.VATLSPIntTitle = ???
 
-chargeType.VATManualLPPLPITitle = ???
+chargeType.VATManualLPPLPITitle = Cosb am dalu’n hwyr
 
 chargeType.VATAAQuarterlyInstalLPI = ???
 chargeType.VATAAMonthlyInstalLPI = ???
-chargeType.VATReturnAA1stLPPLPITitle = ???
-chargeType.VATReturnAA2ndLPPLPITitle = ???
-chargeType.VATAAReturnCharge1stLPP = ???
-chargeType.VATAAReturnCharge2ndLPP = ???
-chargeType.VATReturn2ndLPP = ???
-chargeType.VATReturnAALPITitle = ???
+chargeType.VATReturnAA1stLPPLPITitle = Llog ar gosb balans cyfrifyddu blynyddol
+chargeType.VATReturnAA2ndLPPLPITitle = Llog ar ail gosb balans cyfrifyddu blynyddol
+chargeType.VATAAReturnCharge1stLPP = Cosb am daliad hwyr – balans cyfrifo blynyddol
+chargeType.VATAAReturnCharge2ndLPP = Ail gosb am daliad hwyr – balans cyfrifo blynyddol
+chargeType.VATReturn2ndLPP = Ail gosb am dalu TAW yn hwyr
+chargeType.VATReturnAALPITitle = Llog ar y balans cyfrifyddu blynyddol
 
 chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd
