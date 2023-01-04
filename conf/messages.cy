@@ -299,8 +299,8 @@ chargeType.for = ar gyfer {0}
 chargeType.forPeriod = ar gyfer y cyfnod {0}
 chargeType.forThePeriod = ar gyfer y cyfnod {0}
 
-chargeType.latePaymentPenalty = ???
-chargeType.secondLatePaymentPenalty = ???
+chargeType.latePaymentPenalty = Cosb am dalu’n hwyr
+chargeType.secondLatePaymentPenalty = sb am dalu’n hwyr
 
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
@@ -423,11 +423,11 @@ chargeType.vatPADefaultInterestDescription = a godir ar yr asesiad i ddiogelu
 chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Llog diffygdalu ar gywiro gwall
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = a godir ar y swm a aseswyd
 
-chargeType.vatErrorCorrectionLPITitle = ???
+chargeType.vatErrorCorrectionLPITitle = Llog ar gywiriad gwall
 chargeType.vatErrorCorrection1stLPPTitle = ???
 chargeType.vatErrorCorrection2ndLPPTitle = ???
 chargeType.vatErrorCorrection1stLPPLPITitle = ???
-chargeType.vatErrorCorrection2ndLPPLPITitle = ???
+chargeType.vatErrorCorrection2ndLPPLPITitle = Llog ar ail gosb cywiriad gwall
 
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
 chargeType.vatPaFurtherInterestDescription = sy’n ddyledus ar yr asesiad i ddiogelu oherwydd na thalwyd hyn mewn pryd
@@ -448,7 +448,7 @@ chargeType.vatCreditReturnOffsetChargeDescription = ad-daliad rhannol ar gyfer y
 
 chargeType.vatProtectiveAssessmentChargeTitle = Asesiad i ddiogelu o ran TAW
 
-chargeType.vatPALPITitle = ???
+chargeType.vatPALPITitle = Llog ar asesiad i ddiogelu
 
 chargeType.unallocatedPaymentTitle = Taliad heb ei ddyranu
 chargeType.unallocatedPaymentDescription = gwnaethoch ordaliad y gellir ei ad-dalu i chi, neu y gellir ei gadw ar gyfrif
