@@ -300,7 +300,7 @@ chargeType.forPeriod = ar gyfer y cyfnod {0}
 chargeType.forThePeriod = ar gyfer y cyfnod {0}
 
 chargeType.latePaymentPenalty = Cosb am dalu’n hwyr
-chargeType.secondLatePaymentPenalty = sb am dalu’n hwyr
+chargeType.secondLatePaymentPenalty = Ail gosb am dalu’n hwyr
 
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
@@ -424,9 +424,9 @@ chargeType.vatErrorCorrectionNoticeDefaultInterestTitle = Llog diffygdalu ar gyw
 chargeType.vatErrorCorrectionNoticeDefaultInterestDescription = a godir ar y swm a aseswyd
 
 chargeType.vatErrorCorrectionLPITitle = Llog ar gywiriad gwall
-chargeType.vatErrorCorrection1stLPPTitle = ???
-chargeType.vatErrorCorrection2ndLPPTitle = ???
-chargeType.vatErrorCorrection1stLPPLPITitle = ???
+chargeType.vatErrorCorrection1stLPPTitle = Cosb am dalu cywiriad gwall yn hwyr
+chargeType.vatErrorCorrection2ndLPPTitle = Ail gosb am dalu cywiriad gwall yn hwyr
+chargeType.vatErrorCorrection1stLPPLPITitle = Llog ar gosb cywiriad gwall
 chargeType.vatErrorCorrection2ndLPPLPITitle = Llog ar ail gosb cywiriad gwall
 
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
