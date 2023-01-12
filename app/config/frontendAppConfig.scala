@@ -98,7 +98,7 @@ trait AppConfig {
   val penaltiesUrl: String => String
   val penaltiesFrontendUrl: String
   val fixEmailUrl: String
-  val govUkHoldingUrl: String
+  val latePaymentGuidanceUrl: String
   val penaltiesChangesUrl: String
   val govUkPrevIntRateUrl: String
   val timeToLiveInSeconds: Int
@@ -248,7 +248,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val penaltiesUrl: String => String = vrn => sc.getString(Keys.penaltiesHost) + sc.getString(Keys.penaltiesUrl) + vrn
 
   override lazy val penaltiesFrontendUrl: String = sc.getString(Keys.penaltiesFrontendHost) + sc.getString(Keys.penaltiesFrontendUrl)
-  override val govUkHoldingUrl: String = sc.getString(Keys.govUkHoldingUrl)
+  override val latePaymentGuidanceUrl: String = sc.getString(Keys.latePaymentGuidanceUrl)
   override val penaltiesChangesUrl: String = sc.getString(Keys.penaltiesChangesUrl)
 
   override lazy val govUkPrevIntRateUrl: String = sc.getString(Keys.govUkPrevIntRateUrl)

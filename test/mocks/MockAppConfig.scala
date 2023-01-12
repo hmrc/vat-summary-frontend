@@ -99,8 +99,8 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val penaltiesUrl: String => String = (vrn: String) => s"/vat/penalties/summary/$vrn"
   override val penaltiesFrontendUrl: String = "/vat-through-software/test-only/penalties-stub"
   override val mtdGuidance: String = "/when-to-start-using-making-tax-digital-for-vat-if-youve-not-before"
-  override val govUkHoldingUrl: String = "/gov-uk"
-  override val penaltiesChangesUrl: String = "https://www.gov.uk/government/collections/vat-penalties-and-interest"
+  override val latePaymentGuidanceUrl: String = "/guidance/late-payment-interest-if-you-do-not-pay-vat-or-penalties-on-time"
+  override val penaltiesChangesUrl: String = "/guidance/prepare-for-upcoming-changes-to-vat-penalties-and-vat-interest-charges"
   override val govUkPrevIntRateUrl: String = "/rates-and-allowances-hmrc-interest-rates-for-late-and-early-payments/rates-and-allowances-hmrc-interest-rates"
 
   override val timeToLiveInSeconds: Int = 100
