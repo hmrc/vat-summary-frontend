@@ -19,11 +19,11 @@
 @import models.viewModels.PaymentsHistoryModel
 @import views.html.templates.formatters.links.OpenInNewTab
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
-@import views.html.templates.formatters.money.DisplayMoney
+@import utils.Money
 @import models.viewModels.PaymentsHistoryViewModel
 
 @this(govukTabs : GovukTabs,
-govukTable : GovukTable, paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription, displayMoney: DisplayMoney)
+govukTable : GovukTable, paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription)
 
 @(model: PaymentsHistoryViewModel, year: Int)(implicit messages: Messages,
 appConfig: AppConfig,
@@ -46,11 +46,11 @@ user: User)
                         TableRow(content = Text(displayDate(date, useShortDayFormat = true, showYear = false))),
                         TableRow(content = HtmlContent(paymentsHistoryChargeDescription(transaction))),
                         TableRow(
-                            content = HtmlContent(displayMoney(if(transaction.amount > 0) transaction.amount else 0)),
+                            content = HtmlContent(Money.pounds(if(transaction.amount > 0) transaction.amount else 0)),
                             format = Some("numeric")
                         ),
                         TableRow(
-                            content = HtmlContent(displayMoney(if(transaction.amount < 0) transaction.amount.abs else 0)),
+                            content = HtmlContent(Money.pounds(if(transaction.amount < 0) transaction.amount.abs else 0)),
                             format = Some("numeric")
                         )
                     )

@@ -54,8 +54,8 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
 
         response.status shouldBe Status.OK
         document.title shouldBe "Payment history - Manage your VAT account - GOV.UK"
-        document.select(hmrcPaidYouSelector).text() shouldBe "£600"
-        document.select(youPaidHmrcSelector).text() shouldBe "£0"
+        document.select(hmrcPaidYouSelector).text() shouldBe "£600.00"
+        document.select(youPaidHmrcSelector).text() shouldBe "£0.00"
       }
     }
 

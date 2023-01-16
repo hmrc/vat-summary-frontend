@@ -31,20 +31,20 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
   val paymentsHistoryTabsContent: PaymentsHistoryTabsContent = injector.instanceOf[PaymentsHistoryTabsContent]
 
   val currentYear: Int = 2018
-  val examplePaymentAmount: Int = 100
-  val exampleRepaymentAmount: Int = -200
+  val examplePaymentAmount: BigDecimal = 100.00
+  val exampleRepaymentAmount: BigDecimal = -200.00
 
   val paymentTransaction: PaymentsHistoryModel = PaymentsHistoryModel(
     clearingSAPDocument = Some("002828853334"),
     chargeType = ReturnDebitCharge,
     taxPeriodFrom = Some(LocalDate.parse(s"2018-01-01")),
     taxPeriodTo = Some(LocalDate.parse(s"2018-02-01")),
-    amount = examplePaymentAmount,
+    amount = examplePaymentAmount.setScale(2),
     clearedDate = Some(LocalDate.parse(s"2018-03-01"))
   )
 
   val repaymentTransaction: PaymentsHistoryModel =
-    paymentTransaction.copy(chargeType = ReturnCreditCharge, amount = exampleRepaymentAmount)
+    paymentTransaction.copy(chargeType = ReturnCreditCharge, amount = exampleRepaymentAmount.setScale(2))
 
   val paymentHistoryViewModel: PaymentsHistoryViewModel = PaymentsHistoryViewModel(
     currentYear,
@@ -79,10 +79,10 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |        ${paymentsHistoryChargeDescription(if(repayment) repaymentTransaction else paymentTransaction)}
       |      </td>
       |      <td class="govuk-table__cell govuk-table__cell--numeric">
-      |        £${if(repayment) "0" else examplePaymentAmount}
+      |        £${if(repayment) "0" else examplePaymentAmount.setScale(2)}
       |      </td>
       |      <td class="govuk-table__cell govuk-table__cell--numeric">
-      |        £${if(repayment) exampleRepaymentAmount.abs else "0"}
+      |        £${if(repayment) exampleRepaymentAmount.abs.setScale(2) else "0.00"}
       |      </td>
       |    </tr>
       |  </tbody>

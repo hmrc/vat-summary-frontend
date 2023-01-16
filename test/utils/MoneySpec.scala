@@ -24,33 +24,18 @@ class MoneyPoundsSpec extends AnyWordSpecLike with Matchers  {
   "quantity" should {
 
     "return the formatted value with 2 decimal places" in {
-      MoneyPounds(0.99, 2).quantity shouldBe "0.99"
+      MoneyPounds(0.99).quantity shouldBe "0.99"
       MoneyPounds(99).quantity         shouldBe "99.00"
     }
 
-    "return the formatted value with no decimal places" in {
-      MoneyPounds(999.99999, 0).quantity shouldBe "999"
-      MoneyPounds(999, 0).quantity       shouldBe "999"
-    }
-
-    "return the formatted value (with grouping separators) and no decimal places" in {
-      MoneyPounds(9999999.99999, 0).quantity shouldBe "9,999,999"
-      MoneyPounds(9999, 0).quantity          shouldBe "9,999"
-    }
-
     "return the formatted value (with grouping separators) and 2 decimal places" in {
-      MoneyPounds(9999999.99999, 2).quantity shouldBe "9,999,999.99"
-      MoneyPounds(9999, 2).quantity          shouldBe "9,999.00"
+      MoneyPounds(9999999.99999).quantity shouldBe "9,999,999.99"
+      MoneyPounds(9999).quantity          shouldBe "9,999.00"
     }
 
     "return the formatted value (with grouping separators) and 2 decimal places rounding up" in {
-      MoneyPounds(999999.99999, 2, true).quantity shouldBe "1,000,000.00"
+      MoneyPounds(999999.99999, true).quantity shouldBe "1,000,000.00"
     }
-
-    "return the formatted value (with grouping separators) and no decimal places rounding up" in {
-      MoneyPounds(0.00, 0, true).quantity shouldBe "0"
-    }
-
   }
 
   "Money" should {

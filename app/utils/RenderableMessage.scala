@@ -18,14 +18,14 @@ package utils
 
 import play.twirl.api.Html
 
-case class MoneyPounds(value: BigDecimal, decimalPlaces: Int = 2, roundUp: Boolean = false) {
+case class MoneyPounds(value: BigDecimal, roundUp: Boolean = false) {
 
   def isNegative: Boolean = value < 0
 
   def quantity: String =
-    s"%,.${decimalPlaces}f".format(
+    s"%,.${2}f".format(
       value
-        .setScale(decimalPlaces, if (roundUp) BigDecimal.RoundingMode.CEILING else BigDecimal.RoundingMode.FLOOR)
+        .setScale(2, if (roundUp) BigDecimal.RoundingMode.CEILING else BigDecimal.RoundingMode.FLOOR)
         .abs
     )
 }
@@ -39,6 +39,6 @@ case class RenderableMoneyMessage(moneyPounds: MoneyPounds) extends {
 }
 
 object Money {
-  def pounds(value: BigDecimal, decimalPlaces: Int = 0): Html =
-    RenderableMoneyMessage(MoneyPounds(value, decimalPlaces)).render
+  def pounds(value: BigDecimal): Html =
+    RenderableMoneyMessage(MoneyPounds(value)).render
 }

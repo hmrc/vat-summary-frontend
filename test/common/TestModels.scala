@@ -365,8 +365,8 @@ object TestModels {
 
   val whatYouOweChargeModel: StandardChargeViewModel = StandardChargeViewModel(
     chargeType = "VAT Return Debit Charge",
-    outstandingAmount = 10000,
-    originalAmount = 10000,
+    outstandingAmount = 10000.00,
+    originalAmount = 10000.00,
     clearedAmount = 00.00,
     dueDate = LocalDate.parse("2019-03-03"),
     periodKey = Some("ABCD"),
@@ -393,9 +393,9 @@ object TestModels {
     chargeType = "VAT Return LPI",
     interestRate = 2.22,
     dueDate = LocalDate.parse("2019-03-03"),
-    interestAmount = 10000,
-    amountReceived = 0,
-    leftToPay = 10000,
+    interestAmount = 10000.00,
+    amountReceived = 0.00,
+    leftToPay = 10000.00,
     isOverdue = false,
     chargeReference = "XD002750002155",
     isPenalty = false
@@ -409,7 +409,7 @@ object TestModels {
     dueDate = LocalDate.parse("2019-03-03"),
     interestAmount = 1000.00,
     amountReceived = 00.00,
-    leftToPay = 10000,
+    leftToPay = 10000.00,
     isOverdue = false,
     chargeReference = "XD002750002155",
     isPenalty = true
@@ -418,9 +418,9 @@ object TestModels {
   val lateSubmissionPenaltyCharge: LateSubmissionPenaltyViewModel = LateSubmissionPenaltyViewModel(
     chargeType = "VAT Late Submission Pen",
     dueDate =  LocalDate.parse("2019-03-03"),
-    penaltyAmount = 10000,
-    amountReceived = 0,
-    leftToPay = 10000,
+    penaltyAmount = 10000.00,
+    amountReceived = 0.00,
+    leftToPay = 10000.00,
     isOverdue = false,
     chargeReference = "XD002750002155",
     periodFrom = LocalDate.parse("2019-01-01"),
@@ -428,14 +428,14 @@ object TestModels {
   )
 
   val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
-    10000,
+    10000.00,
     Seq(whatYouOweChargeModel),
     mandationStatus = "MTDfB",
     containsOverduePayments = false
   )
 
   val whatYouOweViewModelWithEstimatedInterest: WhatYouOweViewModel = whatYouOweViewModel.copy(
-    totalAmount = 10002,
+    totalAmount = 10002.00,
     charges = Seq(whatYouOweChargeModel, whatYouOweChargeModelEstimatedInterest)
   )
 
@@ -548,9 +548,9 @@ object TestModels {
     100.11,
     Some(200.22),
     LocalDate.parse("2019-03-03"),
-    10000,
-    0,
-    10000,
+    10000.00,
+    0.00,
+    10000.00,
     LocalDate.parse("2019-01-01"),
     LocalDate.parse("2019-02-02"),
     "VAT Return 1st LPP",
@@ -629,7 +629,7 @@ object TestModels {
     4.0,
     LocalDate.parse("2020-01-01"),
     130.13,
-    0,
+    0.00,
     130.13,
     LocalDate.parse("2020-03-03"),
     LocalDate.parse("2020-04-04"),
@@ -643,7 +643,7 @@ object TestModels {
     "penaltyRate" -> 4.0,
     "dueDate" -> "2020-01-01",
     "penaltyAmount" -> 130.13,
-    "amountReceived" -> 0,
+    "amountReceived" -> 0.00,
     "leftToPay" -> 130.13,
     "periodFrom" -> "2020-03-03",
     "periodTo" -> "2020-04-04",
@@ -685,7 +685,7 @@ object TestModels {
     "VAT Late Submission Pen",
     LocalDate.parse("2020-10-01"),
     100.55,
-    0,
+    0.00,
     100.55,
     isOverdue = false,
     "CHARGEREF",
@@ -697,7 +697,7 @@ object TestModels {
     "chargeType" -> "VAT Late Submission Pen",
     "dueDate" -> "2020-10-01",
     "penaltyAmount" -> 100.55,
-    "amountReceived" -> 0,
+    "amountReceived" -> 0.00,
     "leftToPay" -> 100.55,
     "isOverdue" -> false,
     "chargeReference" -> "CHARGEREF",
@@ -746,7 +746,7 @@ object TestModels {
 
   val whatYouOweChargeNoPeriodTo: StandardChargeViewModel = whatYouOweCharge.copy(periodTo = None)
 
-  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = 0)
+  val whatYouOweChargeNoClearedAmount: StandardChargeViewModel = whatYouOweCharge.copy(clearedAmount = 0.00)
 
   val whatYouOweChargeNoViewReturn: StandardChargeViewModel = whatYouOweCharge.copy(chargeType = "VAT Repayment Supplement Rec")
 
