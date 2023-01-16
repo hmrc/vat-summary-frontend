@@ -25,12 +25,12 @@ class MoneyPoundsSpec extends AnyWordSpecLike with Matchers  {
 
     "return the formatted value with 2 decimal places" in {
       MoneyPounds(0.99).quantity shouldBe "0.99"
-      MoneyPounds(99).quantity         shouldBe "99.00"
+      MoneyPounds(99).quantity shouldBe "99.00"
     }
 
     "return the formatted value (with grouping separators) and 2 decimal places" in {
       MoneyPounds(9999999.99999).quantity shouldBe "9,999,999.99"
-      MoneyPounds(9999).quantity          shouldBe "9,999.00"
+      MoneyPounds(9999).quantity shouldBe "9,999.00"
     }
 
     "return the formatted value (with grouping separators) and 2 decimal places rounding up" in {
