@@ -51,7 +51,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val paymentDateTableHeading = "tr th:nth-of-type(1) div"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
     val descriptionTableChargeType = "tr:nth-child(1) > td > span:nth-child(1)"
-    val descriptionTableContent = "td.govuk-table__cell:nth-child(2) p.govuk-hint-replacement"
+    val descriptionTableContent = "td.govuk-table__cell:nth-child(2) p.vatvc-grey-paragraph-text"
     val amountPaidTableContent = "tr td:nth-of-type(3)"
     val amountRepaidTableContent = "tr td:nth-of-type(4)"
     val insolvencyBanner = "div.govuk-form-group"
