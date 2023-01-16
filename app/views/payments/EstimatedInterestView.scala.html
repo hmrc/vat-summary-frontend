@@ -116,7 +116,7 @@
         @if(user.isAgent) {@messages("estimatedInterest.estimatesDescriptionAgent")} else @{messages("estimatedInterest.estimatesExplanation")}
       </p>
       <p class="govuk-body">
-        <a class="govuk-link" href="#" target="_blank" rel="noreferrer noopener">
+        <a class="govuk-link" href="@appConfig.latePaymentGuidanceUrl" target="_blank" rel="noreferrer noopener">
           @messages(s"estimatedInterest.calculationLink")
         </a>
       </p>

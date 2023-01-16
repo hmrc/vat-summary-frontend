@@ -175,7 +175,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe mockConfig.govUkHoldingUrl
+          element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
         }
       }
 

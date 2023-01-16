@@ -152,7 +152,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element("p.govuk-body:nth-of-type(7) > a").attr("href") shouldBe "#"
+          element("p.govuk-body:nth-of-type(7) > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
         }
       }
 
