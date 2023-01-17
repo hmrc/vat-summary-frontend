@@ -36,6 +36,10 @@ class MoneyPoundsSpec extends AnyWordSpecLike with Matchers  {
     "return the formatted value (with grouping separators) and 2 decimal places rounding up" in {
       MoneyPounds(999999.99999, true).quantity shouldBe "1,000,000.00"
     }
+
+    "return two decimal places even when less than two decimal places are passed in" in {
+      MoneyPounds(99.9).quantity shouldBe "99.90"
+    }
   }
 
   "Money" should {
@@ -47,7 +51,6 @@ class MoneyPoundsSpec extends AnyWordSpecLike with Matchers  {
     "be prefixed by a minus if the number is negative" in {
       RenderableMoneyMessage(MoneyPounds(-10.50)).render.toString() should include("&minus;&pound;10.50")
     }
-
   }
 
 }

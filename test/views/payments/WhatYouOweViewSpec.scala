@@ -20,7 +20,6 @@ import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInteres
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
-import utils.Money
 import views.ViewBaseSpec
 import views.html.payments.WhatYouOwe
 
