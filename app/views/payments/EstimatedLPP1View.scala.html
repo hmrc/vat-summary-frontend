@@ -16,10 +16,9 @@
 
 @import models.viewModels.EstimatedLPP1ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
-@import views.html.templates.formatters.money.DisplayMoney
+@import utils.Money
 
 @this(mainTemplate: MainTemplate,
-      displayMoney: DisplayMoney,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink,
@@ -75,22 +74,22 @@
     <p class="govuk-body" id="one-part-explanation">
       @messages("estimatedLPP1.calculation")
       <br>
-      @Html(messages("estimatedLPP1.penaltyCalculation", model.part1PenaltyRate, displayMoney(model.part1UnpaidVAT), model.part1Days))
+      @Html(messages("estimatedLPP1.penaltyCalculation", model.part1PenaltyRate, Money.pounds(model.part1UnpaidVAT), model.part1Days))
     </p>
 
     @govukSummaryList(SummaryList(
       rows = Seq(
         SummaryListRow(
           key = Key(content = Text(messages("estimatedLPP1.penaltyAmount"))),
-          value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+          value = Value(content = HtmlContent(Money.pounds(model.penaltyAmount)))
         ),
         SummaryListRow(
           key = Key(content = Text(messages("estimatedLPP1.amountReceived"))),
-          value = Value(content = HtmlContent(displayMoney(0)))
+          value = Value(content = HtmlContent(Money.pounds(0)))
         ),
         SummaryListRow(
           key = Key(content = Text(messages("estimatedLPP1.leftToPay"))),
-          value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+          value = Value(content = HtmlContent(Money.pounds(model.penaltyAmount)))
         )
       )
     ))

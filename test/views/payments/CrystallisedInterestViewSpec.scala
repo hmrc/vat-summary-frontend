@@ -144,7 +144,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the amount received" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£0"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£0.00"
       }
 
       "have the correct heading for the fourth row" in {

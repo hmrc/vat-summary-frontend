@@ -16,10 +16,9 @@
 
 @import models.viewModels.CrystallisedInterestViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
-@import views.html.templates.formatters.money.DisplayMoney
+@import utils.Money
 
 @this(mainTemplate: MainTemplate,
-      displayMoney: DisplayMoney,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink,
@@ -111,15 +110,15 @@
             ),
             SummaryListRow(
               key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
-              value = Value(content = HtmlContent(displayMoney(model.interestAmount)))
+              value = Value(content = HtmlContent(Money.pounds(model.interestAmount)))
             ),
             SummaryListRow(
               key = Key(content = Text(messages("crystallisedInterest.amountReceived"))),
-              value = Value(content =HtmlContent(displayMoney(model.amountReceived)))
+              value = Value(content =HtmlContent(Money.pounds(model.amountReceived)))
             ),
             SummaryListRow(
               key = Key(content = Text(messages("crystallisedInterest.leftToPay"))),
-              value = Value(content =HtmlContent(displayMoney(model.leftToPay)))
+              value = Value(content =HtmlContent(Money.pounds(model.leftToPay)))
            )
         )
         ))

@@ -108,7 +108,7 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     }
 
     "display the amount received" in {
-      elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${crystallisedLPP2Model.amountReceived}"
+      elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${crystallisedLPP2Model.amountReceived.setScale(2)}"
     }
 
     "have the correct heading for the fourth row" in {

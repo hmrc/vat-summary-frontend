@@ -124,7 +124,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the amount received" in {
-        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe "£0"
+        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe "£0.00"
       }
 
       "have the correct heading for the third row" in {

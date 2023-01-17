@@ -147,7 +147,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           }
 
           "has the correct amount" in {
-            elementText(tableBodyCell(2, 2)) shouldBe "£" + chargeModel2.outstandingAmount.toInt
+            elementText(tableBodyCell(2, 2)) shouldBe "£" + chargeModel2.outstandingAmount.setScale(2)
           }
         }
 
@@ -170,7 +170,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
               ).url
           }
           "has the correct amount" in {
-            elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedInterestCharge.leftToPay.toInt
+            elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedInterestCharge.leftToPay.setScale(2)
           }
         }
 

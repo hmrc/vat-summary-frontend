@@ -172,11 +172,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct payment amount in the third column" in {
-          elementText(Selectors.amountPaidTableContent) shouldBe "£100"
+          elementText(Selectors.amountPaidTableContent) shouldBe "£100.00"
         }
 
         "has the correct repayment amount in the fourth column" in {
-          elementText(Selectors.amountRepaidTableContent) shouldBe "£0"
+          elementText(Selectors.amountRepaidTableContent) shouldBe "£0.00"
         }
       }
 
@@ -313,11 +313,11 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct payment amount in the third column" in {
-          elementText(Selectors.amountPaidTableContent) shouldBe "£100"
+          elementText(Selectors.amountPaidTableContent) shouldBe "£100.00"
         }
 
         "has the correct repayment amount in the fourth column" in {
-          elementText(Selectors.amountRepaidTableContent) shouldBe "£0"
+          elementText(Selectors.amountRepaidTableContent) shouldBe "£0.00"
         }
       }
 

@@ -138,7 +138,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           }
 
           "have the correct penalty information" in {
-            elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100"
+            elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100.00"
           }
 
           "have a link to the penalties service" which {
@@ -192,7 +192,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           }
 
           "have the correct penalty information" in {
-            elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £100"
+            elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £100.00"
           }
 
           "have a link to the penalties service" which {
@@ -240,7 +240,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
-          elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100 Total penalty points: 1"
+          elementText(".govuk-notification-banner__content > div") shouldBe "Penalty amount to pay: £100.00 Total penalty points: 1"
         }
 
         "have the correct link text" in {
@@ -264,7 +264,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "have the correct penalty information" in {
           elementText(".govuk-notification-banner__content > div") shouldBe
-            "Penalty amount to pay: £100 Estimated further penalty amount: £150"
+            "Penalty amount to pay: £100.00 Estimated further penalty amount: £150.00"
         }
 
         "have the correct link text" in {
@@ -286,7 +286,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct penalty information" in {
-          elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £150 Total penalty points: 1"
+          elementText(".govuk-notification-banner__content > div") shouldBe "Estimated penalty amount: £150.00 Total penalty points: 1"
         }
 
         "have the correct link text" in {
@@ -310,7 +310,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
 
         "have the correct penalty information" in {
           elementText(".govuk-notification-banner__content > div") shouldBe
-            "Penalty amount to pay: £100 Estimated further penalty amount: £150 Total penalty points: 1"
+            "Penalty amount to pay: £100.00 Estimated further penalty amount: £150.00 Total penalty points: 1"
         }
 
         "have the correct link text" in {

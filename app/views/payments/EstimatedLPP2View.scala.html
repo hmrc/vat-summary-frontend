@@ -16,10 +16,9 @@
 
 @import models.viewModels.EstimatedLPP2ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
-@import views.html.templates.formatters.money.DisplayMoney
+@import utils.Money
 
 @this(mainTemplate: MainTemplate,
-      displayMoney: DisplayMoney,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink)
@@ -84,15 +83,15 @@
         rows = Seq(
           SummaryListRow(
             key = Key(content = Text(messages("estimatedLPP2.penaltyAmount"))),
-            value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+            value = Value(content = HtmlContent(Money.pounds(model.penaltyAmount)))
           ),
           SummaryListRow(
             key = Key(content = Text(messages("estimatedLPP2.amountReceived"))),
-            value = Value(content = HtmlContent(displayMoney(0)))
+            value = Value(content = HtmlContent(Money.pounds(0)))
           ),
           SummaryListRow(
             key = Key(content = Text(messages("estimatedLPP2.leftToPay"))),
-            value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+            value = Value(content = HtmlContent(Money.pounds(model.penaltyAmount)))
           )
         )
       ))

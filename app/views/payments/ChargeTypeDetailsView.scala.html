@@ -16,11 +16,10 @@
 
 @import models.viewModels.StandardChargeViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
-@import views.html.templates.formatters.money.DisplayMoney
+@import utils.Money
 @import models.payments._
 
 @this(mainTemplate: MainTemplate,
-      displayMoney: DisplayMoney,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukButton: GovukButton,
@@ -73,15 +72,15 @@
 }
 
 @chargeDueHtml = {
-    @displayMoney(model.originalAmount)
+    @Money.pounds(model.originalAmount)
 }
 
 @clearedAmountHtml = {
-    @displayMoney(model.clearedAmount)
+    @Money.pounds(model.clearedAmount)
 }
 
 @outstandingAmountHtml = {
-    @displayMoney(model.outstandingAmount)
+    @Money.pounds(model.outstandingAmount)
 }
 
 @mainTemplate(

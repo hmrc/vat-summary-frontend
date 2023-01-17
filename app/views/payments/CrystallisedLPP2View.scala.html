@@ -16,10 +16,9 @@
 
 @import models.viewModels.CrystallisedLPP2ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
-@import views.html.templates.formatters.money.DisplayMoney
+@import utils.Money
 
 @this(mainTemplate: MainTemplate,
-      displayMoney: DisplayMoney,
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink,
@@ -95,15 +94,15 @@
           ),
           SummaryListRow(
             key = Key(content = Text(messages("crystallisedLPP2.penaltyAmount"))),
-            value = Value(content = HtmlContent(displayMoney(model.penaltyAmount)))
+            value = Value(content = HtmlContent(Money.pounds(model.penaltyAmount)))
           ),
           SummaryListRow(
             key = Key(content = Text(messages("crystallisedLPP2.amountReceived"))),
-            value = Value(content = HtmlContent(displayMoney(model.amountReceived)))
+            value = Value(content = HtmlContent(Money.pounds(model.amountReceived)))
           ),
           SummaryListRow(
             key = Key(content = Text(messages("crystallisedLPP2.leftToPay"))),
-            value = Value(content = HtmlContent(displayMoney(model.leftToPay)))
+            value = Value(content = HtmlContent(Money.pounds(model.leftToPay)))
           )
         )
       ))
