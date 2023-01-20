@@ -43,8 +43,8 @@
 
 <br>
 
-<span class="vatvc-grey-paragraph-text govuk-!-margin-0">
-  <span class="what-you-owe-due-date">@messages("whatYouOwe.due") @displayDate(charge.dueDate)</span>
+<span class="govuk-!-margin-0">
+  <span class="vatvc-grey-paragraph-text what-you-owe-due-date">@messages("whatYouOwe.due") @displayDate(charge.dueDate)</span>
   @if(charge.viewReturnEnabled && charge.periodKey.isDefined) {
     <a class="view-return-link govuk-link govuk-!-padding-left-1" href="@viewReturnHref">
       <span class="what-you-owe-view-return">@messages("whatYouOwe.viewReturn")</span>
