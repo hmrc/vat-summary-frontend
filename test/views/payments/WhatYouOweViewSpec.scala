@@ -16,7 +16,7 @@
 
 package views.payments
 
-import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInterestCharge, whatYouOweViewModel, whatYouOweViewModel2Charge}
+import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInterestCharge, whatYouOweViewModel2Charge}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
@@ -220,64 +220,71 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "have a section for guidance if the user cannot pay today" which {
 
         "has the correct heading" in {
-          elementText("#cannot-pay-heading") shouldBe "If you cannot pay today"
+          elementText("#cannot-pay-heading") shouldBe "Payment help"
         }
 
-        "has the correct paragraph text" in {
-          elementText("p.govuk-body:nth-of-type(5)") shouldBe "If you cannot pay what you owe, you might be able to " +
-            "set up a payment plan (opens in a new tab) to pay in monthly instalments."
+        "has the correct first paragraph text" in {
+          elementText("#cannot-pay-paragraph") shouldBe "If you cannot pay today, you might be able to " +
+            "set up a payment plan (opens in a new tab) to pay in instalments."
         }
 
         "has the correct link text" in {
-          elementText("p.govuk-body:nth-of-type(5) > a") shouldBe "set up a payment plan (opens in a new tab)"
+          elementText("#cannot-pay-paragraph > a") shouldBe "set up a payment plan (opens in a new tab)"
         }
 
         "has the correct link location" in {
-          element("p.govuk-body:nth-of-type(5) > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
+          element("#cannot-pay-paragraph > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
+        }
+        "has the correct second paragraph text" in {
+          elementText("#cannot-pay-p2") shouldBe "If you’ve already set up a plan," +
+            " you do not need to pay any charges today that:"
+        }
+        "has correct bullet point text" in {
+          elementText("#cannot-pay-bullet") shouldBe "show as estimates on this page are included in your existing payment plan"
         }
       }
 
       "have a section for guidance if what the user owes is missing" which {
 
         "has the correct heading" in {
-          elementText("h2:nth-of-type(2)") shouldBe "What you owe is incorrect or missing"
+          elementText("#what-you-owe-incorrect") shouldBe "What you owe is incorrect or missing"
         }
 
         "has the correct first paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(6)") shouldBe "If what you owe is incorrect, check if you can " +
+            elementText("#incorrect-p1") shouldBe "If what you owe is incorrect, check if you can " +
               "correct errors on your VAT Return (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(6) > a") shouldBe "correct errors on your VAT Return (opens in a new tab)"
+            elementText("#incorrect-p1 > a") shouldBe "correct errors on your VAT Return (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(6) > a").attr("href") shouldBe mockConfig.govUKCorrections
+            element("#incorrect-p1 > a").attr("href") shouldBe mockConfig.govUKCorrections
           }
         }
 
         "has the correct second paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(7)") shouldBe "After you have submitted a return, it can take " +
+            elementText("#incorrect-p2") shouldBe "After you have submitted a return, it can take " +
               "24 hours for what you owe to show here. You can still make a payment (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(7) > a") shouldBe "make a payment (opens in a new tab)"
+            elementText("#incorrect-p2 > a") shouldBe "make a payment (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(7) > a").attr("href") shouldBe mockConfig.unauthenticatedPaymentsUrl
+            element("#incorrect-p2 > a").attr("href") shouldBe mockConfig.unauthenticatedPaymentsUrl
           }
         }
       }
     }
 
-    "there is at least one overdue payment and the overdueTimeToPayDescriptionEnabled feature switch is off" should {
+    "the overdueTimeToPayDescriptionEnabled feature switch is off" should {
 
       lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -287,32 +294,6 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         mockConfig.features.overdueTimeToPayDescriptionEnabled(false)
         elementExtinct("#cannot-pay-heading")
         elementExtinct("#cannot-pay-paragraph")
-      }
-    }
-
-    "there are no overdue payments" should {
-
-      "not have a section for guidance if the user cannot pay today" when {
-
-        "the feature switch is on" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel, Html(""))
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
-          elementExtinct("#cannot-pay-heading")
-          elementExtinct("#cannot-pay-paragraph")
-        }
-
-        "the feature switch is off" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel, Html(""))
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(false)
-          elementExtinct("#cannot-pay-heading")
-          elementExtinct("#cannot-pay-paragraph")
-        }
       }
     }
   }
@@ -379,17 +360,24 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           elementText(".govuk-details__summary-text") shouldBe "Payment help"
         }
 
-        "has the correct paragraph text" in {
-          elementText(".govuk-details__text") shouldBe "If your client cannot pay what they owe, they might be able to " +
-            "set up a payment plan (opens in a new tab) to pay in monthly instalments."
+        "has the correct first paragraph text" in {
+          elementText("#payment-help-agent-p1") shouldBe "If your client cannot pay today, they might be able to " +
+            "set up a payment plan (opens in a new tab) to pay in instalments."
         }
 
         "has the correct link text" in {
-          elementText(".govuk-details__text > p > a") shouldBe "set up a payment plan (opens in a new tab)"
+          elementText("#payment-help-agent-p1 > a") shouldBe "set up a payment plan (opens in a new tab)"
         }
 
         "has the correct link location" in {
-          element(".govuk-details__text > p > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
+          element("#payment-help-agent-p1 > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
+        }
+        "has the correct second paragraph text" in {
+          elementText("#payment-help-agent-p2") shouldBe "If they’ve already set up a plan," +
+            " they do not need to pay any charges today that:"
+        }
+        "has correct bullet point text" in {
+          elementText("#agent-help-bullet") shouldBe "show as estimates on this page are included in their existing payment plan"
         }
       }
 
@@ -434,32 +422,6 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         elementExtinct(".govuk-details__summary-text")
         elementExtinct(".govuk-details__text")
-      }
-    }
-
-    "there are no overdue payments" should {
-
-      "not have a payment help section" when {
-
-        "the feature switch is on" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel, Html(""))(request, messages, mockConfig, agentUser)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
-          elementExtinct(".govuk-details__summary-text")
-          elementExtinct(".govuk-details__text")
-        }
-
-        "the feature switch is off" in {
-
-          lazy val view = whatYouOweView(whatYouOweViewModel, Html(""))(request, messages, mockConfig, agentUser)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
-
-          mockConfig.features.overdueTimeToPayDescriptionEnabled(false)
-          elementExtinct(".govuk-details__summary-text")
-          elementExtinct(".govuk-details__text")
-        }
       }
     }
   }

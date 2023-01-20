@@ -55,12 +55,17 @@
 }
 
 @paymentHelp = {
-  <p class="govuk-body">
+  <p id="payment-help-agent-p1" class="govuk-body">
     @messages("whatYouOwe.details.agent.paymentHelpTwo")
     <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
       @messages("whatYouOwe.details.agent.paymentHelpThree")</a>
     @messages("whatYouOwe.details.agent.paymentHelpFour")
   </p>
+  <p id="payment-help-agent-p2" class="govuk-body">@messages("whatYouOwe.details.agent.paymentHelpFive")</p>
+    <ul id="agent-help-bullet" class="govuk-list govuk-list--bullet">
+      <li>@messages("whatYouOwe.ifYouCannotPaySix")</li>
+      <li>@messages("whatYouOwe.details.agent.paymentHelpSeven")</li>
+    </ul>
 }
 
 @paymentHtml(chargeModel: ChargeDetailsViewModel) = @{
@@ -125,7 +130,7 @@
 
       <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
 
-      @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() && model.containsOverduePayments) {
+      @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() ) {
         @govukDetails(Details(
           summary = Text(messages("whatYouOwe.details.agent.paymentHelpOne")),
           content = HtmlContent(paymentHelp)
@@ -147,20 +152,25 @@
         </p>
         <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectFour")</p>
       } else {
-        @if(appConfig.features.overdueTimeToPayDescriptionEnabled() && model.containsOverduePayments) {
+        @if(appConfig.features.overdueTimeToPayDescriptionEnabled() ) {
           <h2 id="cannot-pay-heading" class="govuk-heading-s">@messages("whatYouOwe.ifYouCannotPayOne")</h2>
-          <p id=id="cannot-pay-paragraph" class="govuk-body">@messages("whatYouOwe.ifYouCannotPayTwo")
+          <p id="cannot-pay-paragraph" class="govuk-body">@messages("whatYouOwe.ifYouCannotPayTwo")
             <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
               @messages("whatYouOwe.ifYouCannotPayThree")</a>
             @messages("whatYouOwe.ifYouCannotPayFour")
           </p>
+         <p id="cannot-pay-p2" class="govuk-body">@messages("whatYouOwe.ifYouCannotPayFive")</p>
+          <ul id="cannot-pay-bullet" class="govuk-list govuk-list--bullet">
+            <li>@messages("whatYouOwe.ifYouCannotPaySix")</li>
+            <li>@messages("whatYouOwe.ifYouCannotPaySeven")</li>
+          </ul>
         }
-        <h2 class="govuk-heading-s">@messages("whatYouOwe.isIncorrectOne")</h2>
-        <p class ="govuk-body">@messages("whatYouOwe.isIncorrectTwo")
+        <h2 id="what-you-owe-incorrect" class="govuk-heading-s">@messages("whatYouOwe.isIncorrectOne")</h2>
+        <p id="incorrect-p1" class ="govuk-body">@messages("whatYouOwe.isIncorrectTwo")
           <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKCorrections">
             @messages("whatYouOwe.isIncorrectThree")</a>.
         </p>
-        <p class ="govuk-body">@messages("whatYouOwe.isIncorrectFour")
+        <p id="incorrect-p2" class ="govuk-body">@messages("whatYouOwe.isIncorrectFour")
           <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
             @messages("whatYouOwe.isIncorrectFive")</a>.
         </p>
