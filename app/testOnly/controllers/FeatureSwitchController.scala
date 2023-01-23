@@ -55,7 +55,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
     appConfig.features.penaltiesAndInterestWYOEnabled(model.penaltiesAndInterestWYOEnabled)
-    appConfig.features.chargeReferenceInsetEnabled(model.overdueTimeToPayDescriptionEnabled)
+    appConfig.features.chargeReferenceInsetEnabled(model.chargeReferenceInsetEnabled)
     appConfig.features.overdueTimeToPayDescriptionEnabled(model.overdueTimeToPayDescriptionEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
