@@ -60,7 +60,7 @@ vatDetails.manageYourVat = Rheoli’ch TAW
 vatDetails.vatCertificate.view = Bwrw golwg dros eich tystysgrif TAW a’i hargraffu.
 vatDetails.vatCertificate.link = Bwrw golwg dros y dystysgrif TAW
 vatDetails.paymentsAndRepayments.link = Taliadau ac ad-daliadau
-vatDetails.paymentsAndRepayments.info = Rheoli’ch Debyd Uniongyrchol, manylion cyfrif banc ar gyfer ad-daliadau ac olrhain beth sydd ar CThEM i chi.
+vatDetails.paymentsAndRepayments.info = Rheoli’ch Debyd Uniongyrchol, manylion cyfrif banc ar gyfer ad-daliadau ac olrhain beth sydd ar CThEF i chi.
 vatDetails.customerInfo.error =  Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
 vatDetails.updateVatDetails.link = Manylion eich busnes
 vatDetails.updateVatDetails.view = Newid eich manylion busnes neu ddyddiadau’ch Ffurflenni TAW.
@@ -250,15 +250,15 @@ paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich tal
 paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
 paymentsHistory.backToTop = Nôl i’r brig
 paymentsHistory.insolvencyNotice = Ni allwch fwrw golwg dros daliadau a wnaed cyn dyddiad yr ansolfedd.
-paymentsHistory.whatYouOwe = Cael gwybod a oes arnoch unrhyw beth i CThEM
-paymentsHistory.whatYouOweAgent = Cael gwybod a oes ar eich cleient unrhyw beth i CThEM
+paymentsHistory.whatYouOwe = Cael gwybod a oes arnoch unrhyw beth i CThEF
+paymentsHistory.whatYouOweAgent = Cael gwybod a oes ar eich cleient unrhyw beth i CThEF
 paymentsHistory.date = Dyddiad
 paymentsHistory.description = Disgrifiad o’r taliad
-paymentsHistory.youPaid = Rydych chi wedi talu CThEM
-paymentsHistory.paidYou = Gwnaeth CThEM eich talu
-paymentsHistory.youPaidAgent = Talodd eich cleient CThEM
-paymentsHistory.paidYouAgent = Talodd CThEM eich cleient
-paymentsHistory.agentsHandoffMessage = Os na allwch weld holl hanes eich cleient, mae’n bosibl y gallwch weld rhagor o’r hanes drwy’ch cyfrif gwasanaethau ar-lein CThEM ar gyfer asiantau.  Bydd angen i chi fewngofnodi ar wahân.
+paymentsHistory.youPaid = Rydych chi wedi talu CThEF
+paymentsHistory.paidYou = Gwnaeth CThEF eich talu
+paymentsHistory.youPaidAgent = Talodd eich cleient CThEF
+paymentsHistory.paidYouAgent = Talodd CThEF eich cleient
+paymentsHistory.agentsHandoffMessage = Os na allwch weld holl hanes eich cleient, mae’n bosibl y gallwch weld rhagor o’r hanes drwy’ch cyfrif gwasanaethau ar-lein CThEF ar gyfer asiantau.  Bydd angen i chi fewngofnodi ar wahân.
 
 #VAT certificate
 vatCertificate.title = Eich tystysgrif TAW
@@ -312,16 +312,16 @@ chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 
 chargeType.repaymentSupplementRecTitle = Adennill atodiad ad-dalu
-chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd gan CThEM
+chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd gan CThEF
 
 chargeType.indirectRevRecoveryTitle = Adennill taliadau
-chargeType.indirectRevRecoveryDescription = er mwyn adennill taliad a wnaed ar gam gan CThEM
+chargeType.indirectRevRecoveryDescription = er mwyn adennill taliad a wnaed ar gam gan CThEF
 
 chargeType.defaultInterestTitle = Llog diffygdalu
 chargeType.furtherInterestTitle = Llog pellach
 chargeType.defaultAndFurtherInterestDescription = yn seiliedig ar ein hasesiad o’r dreth ar gyfer y cyfnod {0}
 
-chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEM
+chargeType.vatReturnCreditChargeTitle = Ad-daliad gan CThEF
 chargeType.vatReturnCreditChargeDescription = ar gyfer y Ffurflen TAW ar gyfer {0}
 
 chargeType.vatReturnDebitChargeTitle = TAW
@@ -334,9 +334,9 @@ chargeType.vatDefaultSurchargeTitle = Gordal
 chargeType.vatDefaultSurchargeDescription = ar gyfer talu’r dreth sy’n codi o’r Ffurflen TAW ar gyfer {0} yn hwyr
 
 chargeType.vatErrorCorrectionDebitChargeTitle = Cywiriad gwall TAW
-chargeType.vatErrorCorrectionCreditChargeTitle =  Ad-daliad gan CThEM ar gyfer cywiro gwall
+chargeType.vatErrorCorrectionCreditChargeTitle =  Ad-daliad gan CThEF ar gyfer cywiro gwall
 
-chargeType.vatRepaymentSupplementTitle = Iawndal gan CThEM am ad-dalu’n hwyr
+chargeType.vatRepaymentSupplementTitle = Iawndal gan CThEF am ad-dalu’n hwyr
 chargeType.vatRepaymentSupplementDescription = gwnaethom gymryd gormod o amser i ad-dalu’r dreth yn codi o’r Ffurflen TAW ar gyfer {0}
 
 chargeType.OADefaultInterestTitle = Llog ar asesiad y swyddog TAW
@@ -375,7 +375,7 @@ chargeType.VatAnnualAccountReturnDebitChargeTitle = Balans cyfrifyddu blynyddol
 chargeType.VatAnnualAccountReturnCreditChargeTitle = Ad-daliad cyfrifyddu blynyddol
 
 chargeType.VatStatutoryInterestTitle = Llog statudol
-chargeType.VatStatutoryInterestDescription = llog a delir oherwydd gwall gan CThEM
+chargeType.VatStatutoryInterestDescription = llog a delir oherwydd gwall gan CThEF
 
 chargeType.vatSecurityDepositRequestTitle = Blaendal sicrwydd gofynnol
 chargeType.vatSecurityDepositRequestDescription = oherwydd nad ydych wedi talu TAW yn eich busnes presennol neu mewn busnes blaenorol
@@ -460,7 +460,7 @@ chargeType.unallocatedPaymentTitle = Taliad heb ei ddyranu
 chargeType.unallocatedPaymentDescription = gwnaethoch ordaliad y gellir ei ad-dalu i chi, neu y gellir ei gadw ar gyfrif
 chargeType.unallocatedPaymentDescription.agent = gwnaeth eich cleient ordaliad y gellir ei ad-dalu iddo, neu y gellir ei gadw ar gyfrif
 
-chargeType.refundTitle = Ad-daliad oddi wrth CThEM
+chargeType.refundTitle = Ad-daliad oddi wrth CThEF
 chargeType.refundDescription = gan i chi ofyn am ad-daliad o ordaliad a wnaethoch
 chargeType.refundDescription.agent = oherwydd i’ch cleient ofyn am ad-daliad o ordaliad a wnaeth
 
