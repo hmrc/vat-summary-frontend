@@ -23,6 +23,7 @@ import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import stubs.CustomerInfoStub.customerInfoJson
+import stubs.PenaltyDetailsStub.penaltyDetailsJsonMin
 import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, PenaltyDetailsStub, ServiceInfoStub}
 
 class WhatYouOwePageSpec extends IntegrationBaseSpec {
@@ -39,22 +40,44 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
 
   "Calling the What You Owe route as an authenticated user" when {
 
-    "the user has outstanding charges" should {
+    "the user has outstanding charges" when {
 
-      "load the page, rendering appropriate content such as the total amount due and the table of charges" in {
-        val request = {
-          FinancialDataStub.stubOutstandingTransactions
-          PenaltyDetailsStub.stubPenaltyDetails()
-          setupRequest()
+      "the user has LPP charges and corresponding LPP details" should {
+
+        "load the page, rendering appropriate content such as the total amount due and the table of charges" in {
+          val request = {
+            FinancialDataStub.stubOutstandingTransactions
+            PenaltyDetailsStub.stubPenaltyDetails()
+            setupRequest()
+          }
+
+          val response: WSResponse = await(request.get())
+          val document: Document = Jsoup.parse(response.body)
+
+          response.status shouldBe Status.OK
+          document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
+          document.select(totalAmountSelector).text() shouldBe "£30,721.09"
+          document.select(chargeRowsSelector).size() shouldBe 9
         }
+      }
 
-        val response: WSResponse = await(request.get())
-        val document: Document = Jsoup.parse(response.body)
+      "the user has no LPP charges or LPP details" should {
 
-        response.status shouldBe Status.OK
-        document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
-        document.select(totalAmountSelector).text() shouldBe "£30,721.09"
-        document.select(chargeRowsSelector).size() shouldBe 9
+        "load the page, rendering appropriate content such as the total amount due and the table of charges" in {
+          val request = {
+            FinancialDataStub.stubSingleCharge
+            PenaltyDetailsStub.stubPenaltyDetails(Status.OK, penaltyDetailsJsonMin)
+            setupRequest()
+          }
+
+          val response: WSResponse = await(request.get())
+          val document: Document = Jsoup.parse(response.body)
+
+          response.status shouldBe Status.OK
+          document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
+          document.select(totalAmountSelector).text() shouldBe "£10,000.00"
+          document.select(chargeRowsSelector).size() shouldBe 1
+        }
       }
     }
 

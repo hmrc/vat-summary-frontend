@@ -42,13 +42,25 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
       }
     }
 
-    "the http response status is 404 NOT_FOUND no LPP data is returned" should {
+    "the http response status is 200 OK, with no penalties" should {
 
-      val httpResponse = HttpResponse(Status.NOT_FOUND, "")
-      val expected = Right(PenaltyDetails(List()))
+      val jsonResponse = penaltyDetailsJsonMin
+      val httpResponse = HttpResponse(Status.OK, jsonResponse.toString())
+      val expected = Right(penaltyDetailsModelMin)
       val result = PenaltyDetailsReads.read("", "", httpResponse)
 
-      "return an empty Penalty Details object with an empty sequence" in {
+      "return a PenaltyDetails instance" in {
+        result shouldEqual expected
+      }
+    }
+
+    "the http response status is 404 NOT_FOUND" should {
+
+      val httpResponse = HttpResponse(Status.NOT_FOUND, "")
+      val expected = Right(PenaltyDetails(Seq(), breathingSpace = false))
+      val result = PenaltyDetailsReads.read("", "", httpResponse)
+
+      "return an empty Penalty Details object with an empty sequence and breathing space defaulted to false" in {
         result shouldEqual expected
       }
     }
@@ -57,7 +69,7 @@ class PenaltyDetailsHttpParserSpec extends AnyWordSpecLike with Matchers{
 
       val body: JsObject = Json.obj(
         "code" -> "Conflict",
-        "message" -> "CONFLCIT"
+        "message" -> "CONFLICT"
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, body.toString())

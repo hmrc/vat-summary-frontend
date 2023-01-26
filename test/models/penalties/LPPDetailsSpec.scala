@@ -20,9 +20,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import common.TestModels._
 
-
-class LPPDetailsSpec extends AnyWordSpec with Matchers{
-
+class LPPDetailsSpec extends AnyWordSpec with Matchers {
 
   "LPP details" should {
 
@@ -31,12 +29,10 @@ class LPPDetailsSpec extends AnyWordSpec with Matchers{
       "optional fields are present" in {
         LPPDetailsJsonMax.as[LPPDetails] shouldBe LPPDetailsModelMax
       }
-      "optional are not present" in {
+
+      "optional fields are not present" in {
         LPPDetailsJsonMin.as[LPPDetails] shouldBe LPPDetailsModelMin
       }
     }
   }
-
-
-
 }

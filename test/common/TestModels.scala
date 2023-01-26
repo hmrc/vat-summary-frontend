@@ -783,7 +783,8 @@ object TestModels {
   )
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(LPPDetailsModelMax)
+    LPPDetails = Seq(LPPDetailsModelMax),
+    breathingSpace = false
   )
 
   val LPPDetailsModelMin: LPPDetails = LPPDetails(
@@ -801,7 +802,8 @@ object TestModels {
   )
 
   val penaltyDetailsModelMin: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(LPPDetailsModelMin)
+    LPPDetails = Seq(),
+    breathingSpace = false
   )
 
   val LPPDetailsJsonMax: JsObject = Json.obj(
@@ -826,11 +828,13 @@ object TestModels {
   )
 
   val penaltyDetailsJsonMax : JsObject = Json.obj(
-    "LPPDetails" -> Json.arr(LPPDetailsJsonMax)
+    "LPPDetails" -> Json.arr(LPPDetailsJsonMax),
+    "breathingSpace" -> false
   )
 
   val penaltyDetailsJsonMin : JsObject = Json.obj(
-    "LPPDetails" -> Json.arr(LPPDetailsJsonMin)
+    "LPPDetails" -> Json.arr(),
+    "breathingSpace" -> false
   )
 
   implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat

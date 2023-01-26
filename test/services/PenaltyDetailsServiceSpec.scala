@@ -34,7 +34,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers with GuiceOneAppPerSuite {
 
-  val mockPenaltyDetailsConnector = mock[PenaltyDetailsConnector]
+  val mockPenaltyDetailsConnector: PenaltyDetailsConnector = mock[PenaltyDetailsConnector]
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
@@ -60,9 +60,7 @@ class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Ma
 
     "return an empty Penalty details model" in {
       mockAppConfig.features.penaltiesAndInterestWYOEnabled(false)
-      await(service.getPenaltyDetails("123")) shouldBe Right(PenaltyDetails(Seq.empty))
+      await(service.getPenaltyDetails("123")) shouldBe Right(PenaltyDetails(Seq.empty, breathingSpace = false))
     }
-
   }
-
 }
