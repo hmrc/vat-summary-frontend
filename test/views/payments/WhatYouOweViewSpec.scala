@@ -32,7 +32,10 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
     "there is at least one overdue payment and the overdueTimeToPayDescriptionEnabled feature switch is on" should {
 
-      lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+      lazy val view = {
+        mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+      }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {

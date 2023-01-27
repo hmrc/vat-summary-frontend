@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-package models.errors
+package models
 
-sealed trait ServiceError
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.Json
 
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
-case object DirectDebitStatusError extends ServiceError
-case object TimeToPayRedirectError extends ServiceError
+class TTPRequestModelSpec extends AnyWordSpec with Matchers {
+
+  "TTPRequestModel" should {
+
+    "write to JSON" in {
+      val model = TTPRequestModel("/return-url", "/back-url")
+      val expectedJson = Json.obj("returnUrl" -> "/return-url", "backUrl" -> "/back-url")
+
+      Json.toJson(model) shouldBe expectedJson
+    }
+  }
+}

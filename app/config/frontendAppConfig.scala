@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
   val appName: String
+  val host: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val authUrl: String
@@ -197,14 +198,13 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
 
-  private val host: String = sc.getString(Keys.host)
+  override lazy val host: String = sc.getString(Keys.host)
 
   override def feedbackUrl(redirect: String): String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
     s"&backUrl=${SafeRedirectUrl(host + redirect).encodedUrl}"
 
   // Agent Client Lookup
-  private lazy val platformHost = sc.getString(Keys.host)
-  private lazy val agentClientLookupRedirectUrl: String => String = uri => SafeRedirectUrl(platformHost + uri).encodedUrl
+  private lazy val agentClientLookupRedirectUrl: String => String = uri => SafeRedirectUrl(host + uri).encodedUrl
   private lazy val agentClientLookupHost = sc.getString(Keys.vatAgentClientLookupFrontendHost)
   override lazy val agentClientLookupStartUrl: String => String = uri =>
     agentClientLookupHost +
