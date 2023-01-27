@@ -765,7 +765,8 @@ object TestModels {
     Some(4.2),
     Some("31"),
     Some(5.5),
-    penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ")
+    penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ"),
+    timeToPay = false
   )
 
   val LPPLPP2DetailsModelMax: LPPDetails = LPPDetails(
@@ -779,7 +780,8 @@ object TestModels {
     Some(4.2),
     Some("31"),
     Some(5.5),
-    penaltyChargeReference = Some("ABCDEFGHIJKL")
+    penaltyChargeReference = Some("ABCDEFGHIJKL"),
+    timeToPay = false
   )
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
@@ -797,7 +799,8 @@ object TestModels {
     None,
     None,
     None,
-    None
+    None,
+    timeToPay = false
   )
 
   val penaltyDetailsModelMin: PenaltyDetails = PenaltyDetails(
@@ -815,14 +818,16 @@ object TestModels {
     "LPP1HRPercentage" -> 4.2,
     "LPP2Days" -> "31",
     "LPP2Percentage" -> 5.5,
-    "penaltyChargeReference" -> "BCDEFGHIJKLMNOPQ"
+    "penaltyChargeReference" -> "BCDEFGHIJKLMNOPQ",
+    "timeToPay" -> false
   )
 
   val penaltyDetailsResponse: HttpGetResult[PenaltyDetails] = Right(penaltyDetailsModelMax)
 
   val LPPDetailsJsonMin: JsObject = Json.obj(
     "principalChargeReference" -> "ABCDEFGHIJKLMNOP",
-    "penaltyCategory" -> "LPP1"
+    "penaltyCategory" -> "LPP1",
+    "timeToPay" -> false
   )
 
   val penaltyDetailsJsonMax : JsObject = Json.obj(

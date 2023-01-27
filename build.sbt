@@ -46,7 +46,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "7.12.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "5.4.0-play-28",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "6.2.0-play-28",
   "com.typesafe.play" %% "play-json-joda"             % "2.9.3",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"         % "0.74.0",
 )
@@ -81,7 +81,6 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(coverageSettings: _*)
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
     Test / Keys.fork := true,
