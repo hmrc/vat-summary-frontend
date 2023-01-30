@@ -9,6 +9,8 @@ GET        /vat-certificate                                                     
 GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:vatPeriodEnding/:chargeType/:dueDate/:chargeReference        controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, vatPeriodEnding: String, chargeType: String, dueDate: String, chargeReference: String)
 GET        /make-payment/:amountInPence/:chargeType/:dueDate/:chargeReference                                                        controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String, chargeReference: String)
 
+GET        /time-to-pay                                                                            controllers.TimeToPayController.redirect
+
 #Portal hand-off Routes
 GET        /portal-what-you-owe                                                                    controllers.PortalController.hybridWYO
 GET        /portal-payment-history                                                                 controllers.PortalController.hybridPH

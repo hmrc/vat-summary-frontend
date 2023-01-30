@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package models.errors
+package connectors
 
-sealed trait ServiceError
+import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import models.TTPRequestModel
 
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
-case object DirectDebitStatusError extends ServiceError
-case object TimeToPayRedirectError extends ServiceError
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
+
+@Singleton
+class TimeToPayConnector @Inject()() {
+
+  // TODO to be replaced in other task
+  def callApi(requestModel: TTPRequestModel): Future[HttpPostResult[String]] = ???
+}

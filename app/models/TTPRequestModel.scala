@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package models.errors
+package models
 
-sealed trait ServiceError
+import play.api.libs.json.{Json, OWrites}
 
-case object PaymentSetupError extends ServiceError
-case object VatLiabilitiesError extends ServiceError
-case object PaymentsError extends ServiceError
-case object ObligationsError extends ServiceError
-case object NextPaymentError extends ServiceError
-case object CustomerInformationError extends ServiceError
-case object DirectDebitStatusError extends ServiceError
-case object TimeToPayRedirectError extends ServiceError
+case class TTPRequestModel(returnUrl: String, backUrl: String)
+
+object TTPRequestModel {
+  implicit val writes: OWrites[TTPRequestModel] = Json.writes[TTPRequestModel]
+}
