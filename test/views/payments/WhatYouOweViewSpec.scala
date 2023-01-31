@@ -228,11 +228,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has the correct first paragraph text" in {
           elementText("#cannot-pay-paragraph") shouldBe "If you cannot pay today, you might be able to " +
-            "set up a payment plan (opens in a new tab) to pay in instalments."
+            "set up a payment plan to pay in instalments."
         }
 
         "has the correct link text" in {
-          elementText("#cannot-pay-paragraph > a") shouldBe "set up a payment plan (opens in a new tab)"
+          elementText("#cannot-pay-paragraph > a") shouldBe "set up a payment plan"
         }
 
         "has the correct link location" in {
