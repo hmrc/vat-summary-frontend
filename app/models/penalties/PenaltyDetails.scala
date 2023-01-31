@@ -18,10 +18,11 @@ package models.penalties
 
 import play.api.libs.json.{Reads, Json}
 
-case class PenaltyDetails(LPPDetails : Seq[LPPDetails])
+case class PenaltyDetails(LPPDetails : Seq[LPPDetails],
+                          breathingSpace: Boolean)
 
 object PenaltyDetails {
 
-  implicit val format: Reads[PenaltyDetails] = Json.reads[PenaltyDetails]
+  implicit val reads: Reads[PenaltyDetails] = Json.reads[PenaltyDetails]
 
 }

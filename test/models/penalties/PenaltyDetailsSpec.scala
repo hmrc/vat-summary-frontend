@@ -30,8 +30,9 @@ class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
         penaltyDetailsJsonMax.as[PenaltyDetails] shouldBe penaltyDetailsModelMax
       }
 
+      "there are no penalties in the array" in {
+        penaltyDetailsJsonMin.as[PenaltyDetails] shouldBe penaltyDetailsModelMin
+      }
     }
-
-    }
-
+  }
 }
