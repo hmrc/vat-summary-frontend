@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models.essttp
+package models
 
 import play.api.libs.json.{Format, Json}
 
@@ -25,3 +25,4 @@ object TTPResponseModel {
   implicit val format:Format[TTPResponseModel] = Json.format[TTPResponseModel]
 
 }
+

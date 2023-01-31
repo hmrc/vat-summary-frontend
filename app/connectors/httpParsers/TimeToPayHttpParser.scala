@@ -18,13 +18,12 @@ package connectors.httpParsers
 
 import play.api.http.Status._
 import connectors.httpParsers.ResponseHttpParsers._
+import models.TTPResponseModel
 import models.errors.UnexpectedStatusError
-import models.essttp.TTPResponseModel
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import utils.LoggerUtil
 
 object TimeToPayHttpParser extends ResponseHttpParsers with LoggerUtil {
-
   implicit object TimeToPayReads extends HttpReads[HttpPostResult[TTPResponseModel]] {
 
     override def read(method: String, url: String, response: HttpResponse): HttpPostResult[TTPResponseModel] = {

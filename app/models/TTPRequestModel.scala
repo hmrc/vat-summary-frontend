@@ -18,6 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OWrites}
 
+
 case class TTPRequestModel(returnUrl: String, backUrl: String)
 
 object TTPRequestModel {

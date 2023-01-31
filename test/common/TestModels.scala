@@ -27,12 +27,9 @@ import play.api.libs.json.{Format, JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
-
 import java.time.{LocalDate, LocalDateTime}
 import common.ChargeViewModelTypes._
-import models.essttp.TTPResponseModel
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-
 import scala.concurrent.Future
 
 object TestModels {
@@ -863,7 +860,9 @@ object TestModels {
     "data" -> standardChargeModelMaxJson,
     "creationTimestamp" -> time
   )
-
   val timeToPayResponseModel : TTPResponseModel = TTPResponseModel("592d4a09cdc8e04b00021459","www.TestWebsite.co.uk")
+
+  val timeToPayResponseJson = Json.obj("journeyId" -> "592d4a09cdc8e04b00021459",
+    "nextUrl" -> "www.TestWebsite.co.uk")
 
 }
