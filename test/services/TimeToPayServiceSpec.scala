@@ -21,8 +21,7 @@ import connectors.TimeToPayConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import controllers.ControllerBaseSpec
 import models.errors.{TimeToPayRedirectError, UnknownError}
-import models.TTPRequestModel
-import models.essttp.TTPResponseModel
+import models.{TTPRequestModel, TTPResponseModel}
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -33,7 +32,6 @@ class TimeToPayServiceSpec extends ControllerBaseSpec {
   val hc: HeaderCarrier = HeaderCarrier()
   val mockTTPConnector: TimeToPayConnector = mock[TimeToPayConnector]
 
-  // TODO update return type of this mock; the connector will return a response model not a String
   def mockTTPConnectorCall(response: HttpPostResult[TTPResponseModel]): Any =
     (mockTTPConnector.setupJourney(_: TTPRequestModel)(_: HeaderCarrier, _: ExecutionContext)).expects(*,*,*).returns(Future.successful(response))
 
