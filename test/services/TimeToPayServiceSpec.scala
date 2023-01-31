@@ -16,22 +16,26 @@
 
 package services
 
+import common.TestModels.timeToPayResponseModel
 import connectors.TimeToPayConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import controllers.ControllerBaseSpec
 import models.errors.{TimeToPayRedirectError, UnknownError}
 import models.TTPRequestModel
+import models.essttp.TTPResponseModel
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class TimeToPayServiceSpec extends ControllerBaseSpec {
 
+  val hc: HeaderCarrier = HeaderCarrier()
   val mockTTPConnector: TimeToPayConnector = mock[TimeToPayConnector]
 
   // TODO update return type of this mock; the connector will return a response model not a String
-  def mockTTPConnectorCall(response: HttpPostResult[String]): Any =
-    (mockTTPConnector.callApi(_: TTPRequestModel)).expects(*).returns(Future.successful(response))
+  def mockTTPConnectorCall(response: HttpPostResult[TTPResponseModel]): Any =
+    (mockTTPConnector.setupJourney(_: TTPRequestModel)(_: HeaderCarrier, _: ExecutionContext)).expects(*,*,*).returns(Future.successful(response))
 
   val service = new TimeToPayService(mockTTPConnector)
 
@@ -39,17 +43,17 @@ class TimeToPayServiceSpec extends ControllerBaseSpec {
 
     "return a URL when the call is successful" in {
       val result = {
-        mockTTPConnectorCall(Right("/example-url"))
-        service.retrieveRedirectUrl
+        mockTTPConnectorCall(Right(timeToPayResponseModel))
+        service.retrieveRedirectUrl(hc, ec, mockAppConfig)
       }
 
-      await(result) shouldBe Right("/example-url")
+      await(result) shouldBe Right("www.TestWebsite.co.uk")
     }
 
     "return an error model when the call is unsuccessful" in {
       val result = {
         mockTTPConnectorCall(Left(UnknownError))
-        service.retrieveRedirectUrl
+        service.retrieveRedirectUrl(hc, ec, mockAppConfig)
       }
 
       await(result) shouldBe Left(TimeToPayRedirectError)

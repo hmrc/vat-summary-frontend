@@ -23,6 +23,7 @@ import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.TimeToPayService
+import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,8 +32,8 @@ class TimeToPayControllerSpec extends ControllerBaseSpec {
   val mockTTPService: TimeToPayService = mock[TimeToPayService]
 
   def mockTTPServiceCall(serviceResponse: ServiceResponse[String]): Any =
-    (mockTTPService.retrieveRedirectUrl(_: ExecutionContext, _: AppConfig))
-      .expects(*,*).returns(Future.successful(serviceResponse))
+    (mockTTPService.retrieveRedirectUrl(_: HeaderCarrier, _: ExecutionContext, _: AppConfig))
+      .expects(*,*,*).returns(Future.successful(serviceResponse))
 
   val controller = new TimeToPayController(authorisedController, mcc, mockTTPService, mockServiceErrorHandler)
 

@@ -30,6 +30,7 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enr
 
 import java.time.{LocalDate, LocalDateTime}
 import common.ChargeViewModelTypes._
+import models.essttp.TTPResponseModel
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
 
 import scala.concurrent.Future
@@ -862,5 +863,7 @@ object TestModels {
     "data" -> standardChargeModelMaxJson,
     "creationTimestamp" -> time
   )
+
+  val timeToPayResponseModel : TTPResponseModel = TTPResponseModel("592d4a09cdc8e04b00021459","www.TestWebsite.co.uk")
 
 }
