@@ -68,7 +68,9 @@ object PenaltyDetailsStub extends WireMockMethods {
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
     LPPDetails = Seq(
       estimatedLPP1DetailsModel, estimatedLPP2DetailsModel, crystallisedLPP1DetailsModel,
-      crystallisedLPP1Part1OnlyModel, crystallisedLPP2DetailsModel)
+      crystallisedLPP1Part1OnlyModel, crystallisedLPP2DetailsModel
+    ),
+    breathingSpace = false
   )
 
   val estimatedLPP1PenDetails: JsObject = Json.obj(
@@ -139,7 +141,13 @@ object PenaltyDetailsStub extends WireMockMethods {
     "LPPDetails" -> Json.arr(
       estimatedLPP1PenDetails, estimatedLPP2PenDetails, crystallisedLPP1Details,
       crystallisedLPP1Part1OnlyDetails, crystallisedLPP2Details
-    )
+    ),
+    "breathingSpace" -> false
+  )
+
+  val penaltyDetailsJsonMin: JsObject = Json.obj(
+    "LPPDetails" -> Json.arr(),
+    "breathingSpace" -> false
   )
 
   val errorJson: JsObject = Json.obj(

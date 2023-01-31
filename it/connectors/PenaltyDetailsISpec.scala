@@ -19,13 +19,14 @@ package connectors
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
 import models.errors.UnexpectedStatusError
+import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.HeaderCarrier
 import stubs.PenaltyDetailsStub
 import stubs.PenaltyDetailsStub._
 import play.api.http.Status._
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
-class PenaltyDetailsISpec extends IntegrationBaseSpec{
+class PenaltyDetailsISpec extends IntegrationBaseSpec {
 
   val idValue = "999999999"
 
@@ -40,7 +41,7 @@ class PenaltyDetailsISpec extends IntegrationBaseSpec{
     "return a users penaltyDetails information" in new Test {
       override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails()
 
-      val expected = Right(penaltyDetailsModelMax)
+      val expected: Right[Nothing, PenaltyDetails] = Right(penaltyDetailsModelMax)
 
       setupStubs()
       private val result = await(connector.getPenaltyDetails(idValue))
@@ -52,13 +53,12 @@ class PenaltyDetailsISpec extends IntegrationBaseSpec{
       override def setupStubs(): StubMapping = PenaltyDetailsStub.stubPenaltyDetails(INTERNAL_SERVER_ERROR, errorJson)
 
       val message: String = """{"code":"500","message":"INTERNAL_SERVER_ERROR"}"""
-      val expected = Left(UnexpectedStatusError(INTERNAL_SERVER_ERROR.toString,message))
+      val expected: Left[UnexpectedStatusError, Nothing] = Left(UnexpectedStatusError(INTERNAL_SERVER_ERROR.toString,message))
 
       setupStubs()
       private val result = await(connector.getPenaltyDetails(idValue))
 
       result shouldEqual expected
     }
-
   }
 }

@@ -25,3 +25,4 @@ case object ObligationsError extends ServiceError
 case object NextPaymentError extends ServiceError
 case object CustomerInformationError extends ServiceError
 case object DirectDebitStatusError extends ServiceError
+case object TimeToPayRedirectError extends ServiceError

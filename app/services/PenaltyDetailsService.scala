@@ -32,8 +32,6 @@ class PenaltyDetailsService @Inject()(connector: PenaltyDetailsConnector) {
     if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
       connector.getPenaltyDetails(idValue)
     } else {
-      Future(Right(PenaltyDetails(Seq.empty)))
+      Future(Right(PenaltyDetails(Seq.empty, breathingSpace = false)))
     }
-
-
 }

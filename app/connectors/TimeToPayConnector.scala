@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package models.penalties
+package connectors
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import common.TestModels._
+import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import models.TTPRequestModel
 
-class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
 
-  "Penalty details" should {
+@Singleton
+class TimeToPayConnector @Inject()() {
 
-    "parse from json" when {
-
-      "all fields are present" in {
-        penaltyDetailsJsonMax.as[PenaltyDetails] shouldBe penaltyDetailsModelMax
-      }
-
-      "there are no penalties in the array" in {
-        penaltyDetailsJsonMin.as[PenaltyDetails] shouldBe penaltyDetailsModelMin
-      }
-    }
-  }
+  // TODO to be replaced in other task
+  def callApi(requestModel: TTPRequestModel): Future[HttpPostResult[String]] = ???
 }

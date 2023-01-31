@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,27 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models.penalties
+@this(mainTemplate: MainTemplate)
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import common.TestModels._
+@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
+@mainTemplate(title = "Time to pay stub page", appConfig = appConfig) {
 
-  "Penalty details" should {
+  <h1 class="govuk-heading-l">Time to pay stub page</h1>
 
-    "parse from json" when {
+  <p class="govuk-body">This page stubs out the redirect to the ESSTTP frontend service</p>
 
-      "all fields are present" in {
-        penaltyDetailsJsonMax.as[PenaltyDetails] shouldBe penaltyDetailsModelMax
-      }
+  <p class="govuk-body">
+    <a class="govuk-link" href="/vat-through-software/what-you-owe">Return to What You Owe</a>
+  </p>
 
-      "there are no penalties in the array" in {
-        penaltyDetailsJsonMin.as[PenaltyDetails] shouldBe penaltyDetailsModelMin
-      }
-    }
-  }
 }

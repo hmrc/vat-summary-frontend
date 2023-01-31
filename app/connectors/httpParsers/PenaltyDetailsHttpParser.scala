@@ -29,7 +29,7 @@ object PenaltyDetailsHttpParser extends ResponseHttpParsers with LoggerUtil{
     override def read(method: String, url: String, response: HttpResponse): HttpGetResult[PenaltyDetails] = {
       response.status match {
         case OK => Right(response.json.as[PenaltyDetails])
-        case NOT_FOUND => Right(PenaltyDetails(Seq.empty))
+        case NOT_FOUND => Right(PenaltyDetails(Seq.empty, breathingSpace = false))
         case _ =>
           logger.warn(s"[PenaltyDetailsReads][read] unexpected ${response.status} returned from financial transactions" +
           s"Status code:'${response.status}', Body: '${response.body}")
@@ -37,5 +37,4 @@ object PenaltyDetailsHttpParser extends ResponseHttpParsers with LoggerUtil{
       }
     }
   }
-
 }

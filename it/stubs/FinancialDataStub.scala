@@ -27,31 +27,25 @@ object FinancialDataStub extends WireMockMethods {
   private val financialDataUri = "/financial-transactions/vat/([0-9]+)"
   private val financialDataDirectDebitUri = "/financial-transactions/has-direct-debit/([0-9]+)"
 
-  def stubOutstandingTransactions: StubMapping = {
+  private def stubOutstandingApiCall(status: Int, body: JsValue) =
     when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
-      .thenReturn(status = OK, body = outstandingTransactions)
-  }
+      .thenReturn(status, body)
+
+  def stubOutstandingTransactions: StubMapping = stubOutstandingApiCall(OK, outstandingTransactions)
+
+  def stubSingleCharge: StubMapping = stubOutstandingApiCall(OK, oneCharge)
+
+  def stubNoPayments: StubMapping = stubOutstandingApiCall(OK, noPayments)
+
+  def stubInvalidVrn: StubMapping = stubOutstandingApiCall(BAD_REQUEST, invalidVrn)
+
+  def stubApiError: StubMapping = stubOutstandingApiCall(INTERNAL_SERVER_ERROR, Json.obj())
 
   def stubPaidTransactions: StubMapping = {
     when(method = GET, uri = financialDataUri, queryParams = Map(
       "dateFrom" -> "2018-01-01",
       "dateTo" -> "2018-12-31"))
       .thenReturn(status = OK, body = paidTransactions)
-  }
-
-  def stubNoPayments: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
-      .thenReturn(status = OK, body = Json.toJson(noPayments))
-  }
-
-  def stubInvalidVrn: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
-      .thenReturn(BAD_REQUEST, body = invalidVrn)
-  }
-
-  def stubApiError: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map("onlyOpenItems" -> "true"))
-      .thenReturn(INTERNAL_SERVER_ERROR, body = Json.toJson(""))
   }
 
   def stubSuccessfulDirectDebit: StubMapping = {
@@ -237,6 +231,33 @@ object FinancialDataStub extends WireMockMethods {
       |          {
       |            "dueDate" : "2019-03-03",
       |            "amount" : 99.99
+      |          }
+      |        ]
+      |      }
+      |    ]
+      |  }""".stripMargin
+  )
+
+  private val oneCharge = Json.parse(
+    s"""{
+      |    "idType" : "VRN",
+      |    "idNumber" : 555555555,
+      |    "regimeType" : "VATC",
+      |    "processingDate" : "2017-03-07T09:30:00.000Z",
+      |    "financialTransactions" : [
+      |      {
+      |        "chargeType" : "$ReturnDebitCharge",
+      |        "mainType" : "VAT Return Charge",
+      |        "periodKey" : "15AC",
+      |        "taxPeriodFrom" : "2015-03-01",
+      |        "taxPeriodTo" : "2015-03-31",
+      |        "chargeReference" : "XD002750002155",
+      |        "originalAmount" : 10000,
+      |        "outstandingAmount" : 10000,
+      |        "items" : [
+      |          {
+      |            "dueDate" : "2019-01-15",
+      |            "amount" : 10000
       |          }
       |        ]
       |      }

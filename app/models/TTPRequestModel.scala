@@ -14,25 +14,12 @@
  * limitations under the License.
  */
 
-package models.penalties
+package models
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import common.TestModels._
+import play.api.libs.json.{Json, OWrites}
 
-class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
+case class TTPRequestModel(returnUrl: String, backUrl: String)
 
-  "Penalty details" should {
-
-    "parse from json" when {
-
-      "all fields are present" in {
-        penaltyDetailsJsonMax.as[PenaltyDetails] shouldBe penaltyDetailsModelMax
-      }
-
-      "there are no penalties in the array" in {
-        penaltyDetailsJsonMin.as[PenaltyDetails] shouldBe penaltyDetailsModelMin
-      }
-    }
-  }
+object TTPRequestModel {
+  implicit val writes: OWrites[TTPRequestModel] = Json.writes[TTPRequestModel]
 }

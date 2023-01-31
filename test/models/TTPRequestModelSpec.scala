@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package models.penalties
+package models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import common.TestModels._
+import play.api.libs.json.Json
 
-class PenaltyDetailsSpec extends AnyWordSpec with Matchers{
+class TTPRequestModelSpec extends AnyWordSpec with Matchers {
 
-  "Penalty details" should {
+  "TTPRequestModel" should {
 
-    "parse from json" when {
+    "write to JSON" in {
+      val model = TTPRequestModel("/return-url", "/back-url")
+      val expectedJson = Json.obj("returnUrl" -> "/return-url", "backUrl" -> "/back-url")
 
-      "all fields are present" in {
-        penaltyDetailsJsonMax.as[PenaltyDetails] shouldBe penaltyDetailsModelMax
-      }
-
-      "there are no penalties in the array" in {
-        penaltyDetailsJsonMin.as[PenaltyDetails] shouldBe penaltyDetailsModelMin
-      }
+      Json.toJson(model) shouldBe expectedJson
     }
   }
 }
