@@ -128,4 +128,6 @@ object ConfigKeys {
   val penaltiesFrontendUrl: String = "penalties-frontend.endpointUrl"
 
   val timeToLive: String = "mongodb.timeToLiveInSeconds"
+
+  val essttpServiceBase: String = "essttp-backend"
 }

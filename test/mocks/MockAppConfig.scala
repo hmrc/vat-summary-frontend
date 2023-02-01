@@ -105,4 +105,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val govUkPrevIntRateUrl: String = "/rates-and-allowances-hmrc-interest-rates-for-late-and-early-payments/rates-and-allowances-hmrc-interest-rates"
 
   override val timeToLiveInSeconds: Int = 100
+
+  override val essttpService: String = "/essttp"
 }

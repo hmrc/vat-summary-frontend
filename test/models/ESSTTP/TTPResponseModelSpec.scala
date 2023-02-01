@@ -14,35 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package models.ESSTTP
 
+import common.TestModels.{timeToPayResponseJson, timeToPayResponseModel}
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.libs.json.Json
+import org.scalatest.wordspec.AnyWordSpec
 
-class TTPResponseModelSpec extends AnyWordSpecLike with Matchers{
+class TTPResponseModelSpec extends AnyWordSpec with Matchers {
 
+  "TTPResponseModel" should {
 
-  val timeToPayResponseModel : TTPResponseModel = TTPResponseModel("592d4a09cdc8e04b00021459","www.TestWebsite.co.uk")
-
-  val timeToPayResponseJson = Json.obj("journeyId" -> "592d4a09cdc8e04b00021459",
-                                           "nextUrl" -> "www.TestWebsite.co.uk")
-
-  "TimeToPayResponse" should {
-
-    "parse from json" in {
-
+    "read from json" in {
       timeToPayResponseJson.as[TTPResponseModel] shouldBe timeToPayResponseModel
-
     }
-
-    "parse to json" in {
-
-      Json.toJson(timeToPayResponseModel) shouldBe timeToPayResponseJson
-
-    }
-
   }
-
-
 }

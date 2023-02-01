@@ -18,8 +18,9 @@ package services
 
 import config.AppConfig
 import connectors.TimeToPayConnector
+import models.ESSTTP.TTPRequestModel
 import models.errors.TimeToPayRedirectError
-import models.{ServiceResponse, TTPRequestModel}
+import models.ServiceResponse
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -28,7 +29,9 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class TimeToPayService @Inject()(ttpConnector: TimeToPayConnector) {
 
-  def retrieveRedirectUrl(implicit hc: HeaderCarrier, ec: ExecutionContext, appConfig: AppConfig): Future[ServiceResponse[String]] = {
+  def retrieveRedirectUrl(implicit hc: HeaderCarrier,
+                          ec: ExecutionContext,
+                          appConfig: AppConfig): Future[ServiceResponse[String]] = {
     val wyoRoute = appConfig.host + controllers.routes.WhatYouOweController.show.url
     val requestModel = TTPRequestModel(wyoRoute, wyoRoute)
 

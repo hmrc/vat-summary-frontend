@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package models
+package models.ESSTTP
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec

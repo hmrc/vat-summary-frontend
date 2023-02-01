@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.ESSTTP
 
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json.{Json, Reads}
 
+case class TTPResponseModel(journeyId: String, nextUrl: String)
 
-case class TTPRequestModel(returnUrl: String, backUrl: String)
-
-object TTPRequestModel {
-  implicit val writes: OWrites[TTPRequestModel] = Json.writes[TTPRequestModel]
+object TTPResponseModel {
+  implicit val reads: Reads[TTPResponseModel] = Json.reads[TTPResponseModel]
 }

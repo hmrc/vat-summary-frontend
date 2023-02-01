@@ -18,57 +18,34 @@ package connectors.httpParsers
 
 import common.TestModels._
 import connectors.httpParsers.TimeToPayHttpParser.TimeToPayReads
-import models.errors.{BadRequestError, UnexpectedStatusError}
+import models.errors.UnexpectedStatusError
 import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.http.Status
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpResponse
 
-class TimeToPayHttpParserSpec extends AnyWordSpecLike with Matchers{
+class TimeToPayHttpParserSpec extends AnyWordSpec with Matchers {
 
   "TimeToPayReads" when {
 
-    "the http response status is 200 OK" should {
+    "the HTTP response status is 201 (CREATED)" should {
 
       val jsonResponse = timeToPayResponseJson
-      val httpResponse = HttpResponse(Status.OK,jsonResponse.toString())
+      val httpResponse = HttpResponse(Status.CREATED, jsonResponse.toString())
       val expected = Right(timeToPayResponseModel)
       val result = TimeToPayReads.read("","",httpResponse)
 
-      "return a time to pay instance" in {
+      "return a TTPResponseModel" in {
         result shouldEqual expected
       }
-
     }
 
-    "the http response status is 400 BAD_REQUEST" should {
-
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        Json.obj(
-          "code" -> "400",
-          "message" -> "'taxType' This field is mandatory"
-        ).toString()
-      )
-
-      val expected = Left(BadRequestError(
-        code = "400",
-        errorResponse = "'taxType' This field is mandatory"
-      ))
-
-      val result = TimeToPayReads.read("","", httpResponse)
-
-      "return a BadRequestError" in {
-        result shouldEqual expected
-      }
-
-    }
-
-    "the HTTP response status isn't handled" should {
+    "the HTTP response status is something unexpected" should {
 
       val body = Json.obj(
         "code" -> "Conflict",
-        "message" -> "CONFLCIT"
+        "message" -> "CONFLICT"
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
@@ -79,8 +56,5 @@ class TimeToPayHttpParserSpec extends AnyWordSpecLike with Matchers{
         result shouldBe expected
       }
     }
-
   }
-
-
 }

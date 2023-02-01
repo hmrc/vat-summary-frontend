@@ -18,27 +18,21 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
-import models._
+import connectors.httpParsers.TimeToPayHttpParser.TimeToPayReads
+import models.ESSTTP.{TTPRequestModel, TTPResponseModel}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import utils.LoggerUtil
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TimeToPayConnector @Inject()(http: HttpClient,
-                                   appConfig: AppConfig) extends LoggerUtil{
+                                   appConfig: AppConfig) {
 
-  private[connectors] def timeToPayURI: String =
-    "/essttp-backend/vat/vat-service/journey/start"
+  private[connectors] lazy val timeToPayURI: String =
+    appConfig.essttpService + "/essttp-backend/vat/vat-service/journey/start"
 
-  def setupJourney(request: TTPRequestModel)(implicit hc: HeaderCarrier, ec: ExecutionContext) : Future[HttpPostResult[TTPResponseModel]] = {
-
-    import connectors.httpParsers.TimeToPayHttpParser.TimeToPayReads
-    val url = timeToPayURI
-
-    http.POST(url, request)
-
-  }
-
+  def setupJourney(requestModel: TTPRequestModel)
+                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[TTPResponseModel]] =
+    http.POST(timeToPayURI, requestModel)
 }

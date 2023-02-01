@@ -18,22 +18,25 @@ package connectors.httpParsers
 
 import play.api.http.Status._
 import connectors.httpParsers.ResponseHttpParsers._
-import models.TTPResponseModel
+import models.ESSTTP.TTPResponseModel
 import models.errors.UnexpectedStatusError
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import utils.LoggerUtil
 
 object TimeToPayHttpParser extends ResponseHttpParsers with LoggerUtil {
+
   implicit object TimeToPayReads extends HttpReads[HttpPostResult[TTPResponseModel]] {
 
     override def read(method: String, url: String, response: HttpResponse): HttpPostResult[TTPResponseModel] = {
 
       response.status match {
-        case OK => Right(response.json.as[TTPResponseModel])
-        case BAD_REQUEST => handleBadRequest(response.json)
-        case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
+        case CREATED =>
+          logger.debug(s"[TimeToPayHttpParser][read] - Response body: ${response.body}")
+          Right(response.json.as[TTPResponseModel])
+        case _ =>
+          logger.warn(s"[TimeToPayHttpParser][read] - Unexpected error received: ${response.body}")
+          Left(UnexpectedStatusError(response.status.toString, response.body))
       }
-
     }
   }
 }

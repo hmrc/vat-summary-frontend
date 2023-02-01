@@ -63,6 +63,8 @@ trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFuture
     "microservice.services.direct-debit.port" -> mockPort,
     "microservice.services.business-tax-account.host" -> mockHost,
     "microservice.services.business-tax-account.port" -> mockPort,
+    "microservice.services.essttp-backend.host" -> mockHost,
+    "microservice.services.essttp-backend.port" -> mockPort,
     "penalties.host" -> s"http://$mockHost:$mockPort"
   )
 

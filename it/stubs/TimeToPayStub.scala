@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package stubs
 
-import play.api.libs.json.{Format, Json}
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import helpers.WireMockMethods
+import play.api.libs.json.JsValue
 
-case class TTPResponseModel(journeyId: String, nextUrl: String)
+object TimeToPayStub extends WireMockMethods {
 
-object TTPResponseModel {
+  private val timeToPayUrl: String = "/essttp-backend/vat/vat-service/journey/start"
 
-  implicit val format:Format[TTPResponseModel] = Json.format[TTPResponseModel]
-
+  def stubESSTTPBackend(status: Int, response: JsValue): StubMapping =
+    when(method = POST, uri = timeToPayUrl).thenReturn(status = status, body = response)
 }
-
