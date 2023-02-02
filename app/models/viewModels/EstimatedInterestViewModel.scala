@@ -25,7 +25,6 @@ import java.time.LocalDate
 case class EstimatedInterestViewModel(periodFrom: LocalDate,
                                       periodTo: LocalDate,
                                       chargeType: String,
-                                      interestRate: BigDecimal,
                                       interestAmount: BigDecimal,
                                       isPenalty: Boolean) extends EstimatedViewModel {
 
@@ -41,6 +40,5 @@ case class EstimatedInterestViewModel(periodFrom: LocalDate,
 }
 
 object EstimatedInterestViewModel {
-
   implicit val format: OFormat[EstimatedInterestViewModel] = Json.format[EstimatedInterestViewModel]
 }

@@ -130,20 +130,17 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     ))
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
-    (payment.accruingInterestAmount, payment.interestRate) match {
-      case (Some(interestAmnt), Some(intRate)) =>
+    payment.accruingInterestAmount match {
+      case Some(interestAmnt) =>
         Some(EstimatedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
-          interestRate = intRate,
           interestAmount = interestAmnt,
           isPenalty = ChargeType.interestChargeMapping(payment.chargeType).isPenaltyInterest
         ))
       case _ =>
-        logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing one or more required values:" +
-          s"${payment.accruingInterestAmount.fold("\naccrued interest amount")(_ => "")}" +
-          s"${payment.interestRate.fold("\ninterest rate")(_ => "")}")
+        logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
         None
     }
 
