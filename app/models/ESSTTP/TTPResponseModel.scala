@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package models.ESSTTP
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, Reads}
 
-class TTPRequestModelSpec extends AnyWordSpec with Matchers {
+case class TTPResponseModel(journeyId: String, nextUrl: String)
 
-  "TTPRequestModel" should {
-
-    "write to JSON" in {
-      val model = TTPRequestModel("/return-url", "/back-url")
-      val expectedJson = Json.obj("returnUrl" -> "/return-url", "backUrl" -> "/back-url")
-
-      Json.toJson(model) shouldBe expectedJson
-    }
-  }
+object TTPResponseModel {
+  implicit val reads: Reads[TTPResponseModel] = Json.reads[TTPResponseModel]
 }

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package models.ESSTTP
 
-import play.api.libs.json.{Json, OWrites}
+import common.TestModels.{timeToPayResponseJson, timeToPayResponseModel}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-case class TTPRequestModel(returnUrl: String, backUrl: String)
+class TTPResponseModelSpec extends AnyWordSpec with Matchers {
 
-object TTPRequestModel {
-  implicit val writes: OWrites[TTPRequestModel] = Json.writes[TTPRequestModel]
+  "TTPResponseModel" should {
+
+    "read from json" in {
+      timeToPayResponseJson.as[TTPResponseModel] shouldBe timeToPayResponseModel
+    }
+  }
 }

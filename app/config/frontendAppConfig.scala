@@ -103,6 +103,7 @@ trait AppConfig {
   val penaltiesChangesUrl: String
   val govUkPrevIntRateUrl: String
   val timeToLiveInSeconds: Int
+  val essttpService: String
 }
 
 @Singleton
@@ -254,4 +255,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val govUkPrevIntRateUrl: String = sc.getString(Keys.govUkPrevIntRateUrl)
 
   override lazy val timeToLiveInSeconds: Int = sc.getInt(Keys.timeToLive)
+
+  override lazy val essttpService: String = sc.baseUrl(Keys.essttpServiceBase)
 }

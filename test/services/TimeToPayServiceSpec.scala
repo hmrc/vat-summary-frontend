@@ -16,22 +16,25 @@
 
 package services
 
+import common.TestModels.timeToPayResponseModel
 import connectors.TimeToPayConnector
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
 import controllers.ControllerBaseSpec
+import models.ESSTTP.{TTPRequestModel, TTPResponseModel}
 import models.errors.{TimeToPayRedirectError, UnknownError}
-import models.TTPRequestModel
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class TimeToPayServiceSpec extends ControllerBaseSpec {
 
+  implicit val hc: HeaderCarrier = HeaderCarrier()
   val mockTTPConnector: TimeToPayConnector = mock[TimeToPayConnector]
 
-  // TODO update return type of this mock; the connector will return a response model not a String
-  def mockTTPConnectorCall(response: HttpPostResult[String]): Any =
-    (mockTTPConnector.callApi(_: TTPRequestModel)).expects(*).returns(Future.successful(response))
+  def mockTTPConnectorCall(response: HttpPostResult[TTPResponseModel]): Any =
+    (mockTTPConnector.setupJourney(_: TTPRequestModel)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*,*,*).returns(Future.successful(response))
 
   val service = new TimeToPayService(mockTTPConnector)
 
@@ -39,11 +42,11 @@ class TimeToPayServiceSpec extends ControllerBaseSpec {
 
     "return a URL when the call is successful" in {
       val result = {
-        mockTTPConnectorCall(Right("/example-url"))
+        mockTTPConnectorCall(Right(timeToPayResponseModel))
         service.retrieveRedirectUrl
       }
 
-      await(result) shouldBe Right("/example-url")
+      await(result) shouldBe Right(timeToPayResponseModel.nextUrl)
     }
 
     "return an error model when the call is unsuccessful" in {

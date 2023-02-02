@@ -16,15 +16,23 @@
 
 package connectors
 
+import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
-import models.TTPRequestModel
+import connectors.httpParsers.TimeToPayHttpParser.TimeToPayReads
+import models.ESSTTP.{TTPRequestModel, TTPResponseModel}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TimeToPayConnector @Inject()() {
+class TimeToPayConnector @Inject()(http: HttpClient,
+                                   appConfig: AppConfig) {
 
-  // TODO to be replaced in other task
-  def callApi(requestModel: TTPRequestModel): Future[HttpPostResult[String]] = ???
+  private[connectors] lazy val timeToPayURI: String =
+    appConfig.essttpService + "/essttp-backend/vat/vat-service/journey/start"
+
+  def setupJourney(requestModel: TTPRequestModel)
+                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[TTPResponseModel]] =
+    http.POST(timeToPayURI, requestModel)
 }
