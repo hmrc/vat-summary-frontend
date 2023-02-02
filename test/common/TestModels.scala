@@ -381,7 +381,6 @@ object TestModels {
     periodFrom = LocalDate.parse("2019-01-01"),
     periodTo = LocalDate.parse("2019-02-02"),
     chargeType = VatReturnLPI.value,
-    interestRate = 2.22,
     interestAmount = BigDecimal(2),
     isPenalty = false
   )
@@ -526,7 +525,6 @@ object TestModels {
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
     "VAT Central Assessment LPI",
-    2.6,
     300.33,
     isPenalty = false
   )
@@ -535,7 +533,6 @@ object TestModels {
     "periodFrom" -> "2018-01-01",
     "periodTo" -> "2018-02-02",
     "chargeType" -> "VAT Central Assessment LPI",
-    "interestRate" -> 2.6,
     "interestAmount" -> 300.33,
     "isPenalty" -> false
   )
@@ -563,7 +560,6 @@ object TestModels {
     LocalDate.parse("2019-01-01"),
     LocalDate.parse("2019-02-02"),
     "VAT Return 1st LPP LPI",
-    2.22,
     2,
     isPenalty = true
   )

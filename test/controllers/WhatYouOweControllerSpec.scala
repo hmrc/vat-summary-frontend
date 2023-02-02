@@ -544,7 +544,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
-          2.22,
           2,
           isPenalty = false
         ))
@@ -555,11 +554,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "accruingInterestAmount is missing" in {
         val charge = payment.copy(accruingInterestAmount = None)
-        controller.buildEstimatedIntViewModel(charge) shouldBe None
-      }
-
-      "interestRate is missing" in {
-        val charge = payment.copy(interestRate = None)
         controller.buildEstimatedIntViewModel(charge) shouldBe None
       }
     }

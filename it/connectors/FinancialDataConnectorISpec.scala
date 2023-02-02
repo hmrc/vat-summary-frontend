@@ -51,7 +51,7 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
           periodKey = Some("15AC"),
           ddCollectionInProgress = false,
           accruingInterestAmount = Some(2),
-          interestRate = Some(2.22),
+          interestRate = None,
           chargeReference = Some("XD002750002155"),
           originalAmount = 10000,
           accruingPenaltyAmount = None,
