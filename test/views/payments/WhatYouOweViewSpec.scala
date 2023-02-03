@@ -236,7 +236,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct link location" in {
-          element("#cannot-pay-paragraph > a").attr("href") shouldBe mockConfig.govUKDifficultiesPayingUrl
+          element("#cannot-pay-paragraph > a").attr("href") shouldBe "/vat-through-software/time-to-pay"
         }
         "has the correct second paragraph text" in {
           elementText("#cannot-pay-p2") shouldBe "If you’ve already set up a plan," +

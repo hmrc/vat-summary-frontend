@@ -18,7 +18,7 @@ package stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsObject, JsValue, Json}
 
 object TimeToPayStub extends WireMockMethods {
 
@@ -26,4 +26,9 @@ object TimeToPayStub extends WireMockMethods {
 
   def stubESSTTPBackend(status: Int, response: JsValue): StubMapping =
     when(method = POST, uri = timeToPayUrl).thenReturn(status = status, body = response)
+
+  val timeToPayResponseJson: JsObject = Json.obj(
+    "journeyId" -> "592d4a09cdc8e04b00021459",
+    "nextUrl" -> "/time-to-pay"
+  )
 }
