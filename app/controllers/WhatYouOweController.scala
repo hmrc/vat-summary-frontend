@@ -189,7 +189,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
                                                       penaltyDetails: LPPDetails): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
-      case (LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _), Some(penaltyAmnt)) =>
+      case (LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _, _), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
           part1Days = daysLR,
           part2Days = daysHR,
@@ -201,7 +201,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value
         ))
-      case (LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _), Some(penaltyAmnt)) =>
+      case (LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _), Some(penaltyAmnt)) =>
         Some(EstimatedLPP2ViewModel(
           day = daysLPP2,
           penaltyRate = rateLPP2,
@@ -223,7 +223,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
                                                          penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.chargeReference) match {
-      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _)),
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _, _)),
             Some(chargeRef)) =>
         val numOfDays = (calcAmountHR, daysHR) match {
           case (Some(_), Some(days)) => days
@@ -247,7 +247,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeReference = chargeRef,
           isOverdue = payment.isOverdue(dateService.now())
         ))
-      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _)),
+      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _)),
       Some(chargeRef)) =>
         Some(CrystallisedLPP2ViewModel(
           numberOfDays = daysLPP2,

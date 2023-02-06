@@ -28,7 +28,8 @@ case class LPPDetails(principalChargeReference: String,
                       LPP1HRPercentage: Option[Double],
                       LPP2Days: Option[String],
                       LPP2Percentage: Option[Double],
-                      penaltyChargeReference: Option[String])
+                      penaltyChargeReference: Option[String],
+                      timeToPay: Boolean)
 
 object LPPDetails {
 
