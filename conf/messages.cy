@@ -139,11 +139,11 @@ chargeTypeDetails.link = Yn ôl i’r hyn sydd arnoch
 chargeTypeDetails.agentLink = Ewch yn ôl at yr hyn sydd ar eich cleient
 chargeTypeDetails.insetTextReference = Mae’n rhaid i chi ddefnyddio’r cyfeirnod {0} sy’n 14 o gymeriadau wrth wneud y taliad hwn.
 chargeTypeDetails.insetTextReferenceAgent = Mae’n rhaid i’ch cleient ddefnyddio’r cyfeirnod {0} sy’n 14 o gymeriadau wrth wneud y taliad hwn.
-chargeTypeDetails.penaltiesAndAppeal = ???
-chargeTypeDetails.penaltiesAndAppealAgent = ???
+chargeTypeDetails.penaltiesAndAppeal = Bwrw golwg dros eich cosbau ac apeliadau TAW
+chargeTypeDetails.penaltiesAndAppealAgent = Bwrw golwg dros gosbau ac apeliadau TAW eich cleient
 
 estimatedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
-estimatedInterest.penaltyChargeInterest = ???
+estimatedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
 estimatedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
 estimatedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail y swm sydd heb ei dalu.
 estimatedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
@@ -155,8 +155,8 @@ estimatedInterest.currentAmount = Y swm presennol (amcangyfrif)
 estimatedInterest.amountReceived = Swm a gafwyd
 estimatedInterest.leftToPay = Yn weddill i’w dalu
 estimatedInterest.estimates = Amcangyfrifon
-estimatedInterest.estimatesExplanation = ???
-estimatedInterest.estimatesDescriptionAgent = ???
+estimatedInterest.estimatesExplanation = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y byddwch yn talu’r tâl cysylltiedig.
+estimatedInterest.estimatesDescriptionAgent = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y bydd eich cleient yn talu’r tâl cysylltiedig.
 estimatedInterest.calculationLink = Darllenwch yr arweiniad am sut mae llog yn cael ei gyfrifo (yn agor tab newydd)
 
 estimatedLPP1.penaltyAppliesForDays = Mae’r gosb hon yn berthnasol os na thalwyd TAW am {0} diwrnod.
@@ -165,20 +165,20 @@ estimatedLPP1.penaltyCalculation = {0}% o {1} (y TAW sydd heb ei thalu {2} diwrn
 estimatedLPP1.penaltyAmount = Swm y gosb (amcangyfrif)
 estimatedLPP1.amountReceived = Swm a gafwyd
 estimatedLPP1.leftToPay = Yn weddill i’w dalu
-estimatedLPP1.warning = ???
+estimatedLPP1.warning = Bydd y gosb yn cynyddu {0}% ymhellach o’r TAW sydd heb ei thalu, os bydd TAW yn aros heb ei thalu {1} o ddiwrnodau ar ôl y dyddiad dyledus.
 estimatedLPP1.estimatesHeading = Amcangyfrifon
-estimatedLPP1.estimatesSubHeading = ???
-estimatedLPP1.firstBullet = ???
-estimatedLPP1.firstBulletAgent = ???
-estimatedLPP1.secondBullet = ???
+estimatedLPP1.estimatesSubHeading = Bydd cosbau’n dangos fel amcangyfrifon hyd nes y canlynol:
+estimatedLPP1.firstBullet = rydych yn talu’r bil TAW, neu
+estimatedLPP1.firstBulletAgent = mae’ch cleient yn talu’r bil TAW, neu
+estimatedLPP1.secondBullet = mae {0} o ddiwrnodau wedi mynd heibio ers dyddiad dyledus y TAW
 
 crystallisedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
-crystallisedInterest.penaltyChargeInterest = ???
+crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu
 crystallisedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
 crystallisedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail y swm sydd heb ei dalu.
 crystallisedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 crystallisedInterest.vatCalculation = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
-crystallisedInterest.currentRate = ???
+crystallisedInterest.currentRate = Y gyfradd llog bresennol yw {0}%.
 crystallisedInterest.rateChanges = Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny. Gallwch
 crystallisedInterest.prevIntRateLink = ddod o hyd i gyfraddau llog blaenorol ar GOV.UK (yn agor tab newydd).
 crystallisedInterest.penaltyCalculation = (Cyfradd llog × swm y gosb sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
@@ -214,8 +214,8 @@ estimatedLPP2.penaltyAmount = Swm y gosb
 estimatedLPP2.amountReceived = Swm a gafwyd
 estimatedLPP2.leftToPay = Yn weddill i’w dalu
 estimatedLPP2.estimates = Amcangyfrifon
-estimatedLPP2.estimatesDescription = ???
-estimatedLPP2.estimatesDescriptionAgent = ???
+estimatedLPP2.estimatesDescription = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y byddwch yn talu’r tâl cysylltiedig.
+estimatedLPP2.estimatesDescriptionAgent = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y bydd eich cleient yn talu’r tâl cysylltiedig.
 
 lateSubmissionPenalty.dueDate = Dyddiad dyledus
 lateSubmissionPenalty.penaltyAmount = Swm y gosb
@@ -464,7 +464,7 @@ chargeType.refundDescription = gan i chi ofyn am ad-daliad o ordaliad a wnaethoc
 chargeType.refundDescription.agent = oherwydd i’ch cleient ofyn am ad-daliad o ordaliad a wnaeth
 
 chargeType.POAInstalmentTitle = Rhandaliad taliad ar gyfrif
-chargeType.POAInstalLPITitle = ???
+chargeType.POAInstalLPITitle = Llog ar randaliad taliad ar gyfrif
 
 chargeType.POAReturnDebitChargeTitle = Balans taliad ar gyfrif
 chargeType.POAReturnCreditChargeTitle = Ad-daliad taliad ar gyfrif
@@ -503,14 +503,14 @@ chargeType.VATAA2ndLPPTitle = Llog ar ail gosb asesiad ychwanegol
 chargeType.VATAA1stLPPLPITitle = Cosb am dalu asesiad ychwanegol yn hwyr
 chargeType.VATAA2ndLPPLPITitle = Ail gosb am dalu asesiad ychwanegol yn hwyr
 
-chargeType.VATLateSubPenTitle = ???
+chargeType.VATLateSubPenTitle = Cosb am gyflwyno’n hwyr
 
-chargeType.VATLSPIntTitle = ???
+chargeType.VATLSPIntTitle = Llog ar gosb am gyflwyno’n hwyr
 
 chargeType.VATManualLPPLPITitle = Cosb am dalu’n hwyr
 
-chargeType.VATAAQuarterlyInstalLPI = ???
-chargeType.VATAAMonthlyInstalLPI = ???
+chargeType.VATAAQuarterlyInstalLPI = Llog ar randaliad chwarterol drwy’r cynllun cyfrifyddu blynyddol
+chargeType.VATAAMonthlyInstalLPI = Llog ar randaliad misol drwy’r cynllun cyfrifyddu blynyddol
 chargeType.VATReturnAA1stLPPLPITitle = Llog ar gosb balans cyfrifyddu blynyddol
 chargeType.VATReturnAA2ndLPPLPITitle = Llog ar ail gosb balans cyfrifyddu blynyddol
 chargeType.VATAAReturnCharge1stLPP = Cosb am daliad hwyr – balans cyfrifo blynyddol
