@@ -16,6 +16,7 @@
 
 package pages
 
+import config.AppConfig
 import helpers.IntegrationBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -24,9 +25,12 @@ import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import stubs.CustomerInfoStub.customerInfoJson
 import stubs.PenaltyDetailsStub.penaltyDetailsJsonMin
-import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, PenaltyDetailsStub, ServiceInfoStub}
+import stubs.TimeToPayStub.timeToPayResponseJson
+import stubs.{AuthStub, CustomerInfoStub, FinancialDataStub, PenaltyDetailsStub, ServiceInfoStub, TimeToPayStub}
 
 class WhatYouOwePageSpec extends IntegrationBaseSpec {
+
+  val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   def setupRequest(): WSRequest = {
     AuthStub.authorised()
@@ -113,6 +117,24 @@ class WhatYouOwePageSpec extends IntegrationBaseSpec {
 
         response.status shouldBe Status.SEE_OTHER
         response.header("Location").get shouldBe "/vat-through-software/vat-overview"
+      }
+    }
+
+    "the user has the required request response and clicks on the TTP link" should {
+
+      "redirect to /time-to-pay" in {
+
+        val request = {
+          appConfig.features.overdueTimeToPayDescriptionEnabled(true)
+          AuthStub.authorised()
+          TimeToPayStub.stubESSTTPBackend(Status.CREATED, timeToPayResponseJson)
+          buildRequest("/time-to-pay")
+        }
+
+        val response: WSResponse = await(request.get())
+
+        response.status shouldBe Status.SEE_OTHER
+        response.header("Location").get shouldBe "/time-to-pay"
       }
     }
   }
