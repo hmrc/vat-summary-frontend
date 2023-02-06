@@ -171,6 +171,10 @@ estimatedLPP1.estimatesSubHeading = Bydd cosbau’n dangos fel amcangyfrifon hyd
 estimatedLPP1.firstBullet = rydych yn talu’r bil TAW, neu
 estimatedLPP1.firstBulletAgent = mae’ch cleient yn talu’r bil TAW, neu
 estimatedLPP1.secondBullet = mae {0} o ddiwrnodau wedi mynd heibio ers dyddiad dyledus y TAW
+estimatedLPP1.timeToPay = Rydych wedi gofyn i CThEF a allwch drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’ch bod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
+estimatedLPP1.timeToPayEstimates = Bydd cosbau’n dangos fel amcangyfrifon hyd nes y byddwch yn gwneud yr holl daliadau sy’n ddyledus o dan delerau’r cynllun talu.
+estimatedLPP1.timeToPayAgent = Mae’ch cleient wedi gofyn i CThEF a all drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’i fod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
+estimatedLPP1.timeToPayEstimatesAgent = Bydd cosbau’n dangos fel amcangyfrifon hyd nes y bydd eich cleient yn gwneud yr holl daliadau sy’n ddyledus o dan delerau’r cynllun talu.
 
 crystallisedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
 crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu
