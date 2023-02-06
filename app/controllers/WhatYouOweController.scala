@@ -101,19 +101,19 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
-                                                    penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] = {
-    val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties)
-    (charge, matchingPenalty) match {
-      case (p: PaymentWithPeriod, Some(penalty)) if p.showEstimatedInterest && p.showEstimatedPenalty =>
-        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, penalty))
-      case (p: PaymentWithPeriod, Some(penalty)) if p.showEstimatedPenalty =>
-        Seq(buildStandardChargeViewModel(p), buildEstimatedLPPViewModel(p, penalty))
-      case (p: PaymentWithPeriod, _) if p.showEstimatedInterest =>
+                                                    penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
+    charge match {
+      case p: PaymentWithPeriod if p.showEstimatedInterest && p.showEstimatedPenalty =>
+        val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties)
+        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty))
+      case p: PaymentWithPeriod if p.showEstimatedPenalty =>
+        val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties)
+        Seq(buildStandardChargeViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty))
+      case p: PaymentWithPeriod if p.showEstimatedInterest =>
         Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p))
       case _ =>
         Seq(buildStandardChargeViewModel(charge))
     }
-  }
 
   private[controllers] def buildStandardChargeViewModel(payment: Payment): Option[StandardChargeViewModel] =
     Some(StandardChargeViewModel(
@@ -187,9 +187,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
-                                                      penaltyDetails: LPPDetails): Option[ChargeDetailsViewModel] =
+                                                      penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
-      case (LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _, _), Some(penaltyAmnt)) =>
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _, _)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
           part1Days = daysLR,
           part2Days = daysHR,
@@ -201,7 +201,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value
         ))
-      case (LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _), Some(penaltyAmnt)) =>
+      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP2ViewModel(
           day = daysLPP2,
           penaltyRate = rateLPP2,
@@ -211,12 +211,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value
         ))
       case _ =>
-        val missingData = if(payment.accruingPenaltyAmount.isDefined) {
-          s"LPP details for ${penaltyDetails.penaltyCategory} penalty type"
-        } else {
-          "accrued penalty amount"
+        val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
+          case (Some(pen), Some(_)) => s"Missing particular LPP details for ${pen.penaltyCategory} penalty type"
+          case (None, Some(_)) => "No matching penalty was found"
+          case _ => "Accruing penalty amount was not found"
         }
-        logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - Missing $missingData")
+        logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - $loggerMessage")
         None
     }
 
