@@ -211,7 +211,8 @@ crystallisedLPP2.amountReceived = Amount received
 crystallisedLPP2.leftToPay = Left to pay
 
 estimatedLPP2.explanation = This penalty applies from day {0}, if any VAT remains unpaid.
-estimatedLPP2.interestExplanation = The total increases daily based on the amount of unpaid VAT for the period.
+estimatedLPP2.interestExplanation = The total builds up daily until you pay your VAT or set up a payment plan.
+estimatedLPP2.interestExplanation.agent = The total builds up daily until your client pays their VAT or sets up a payment plan.
 estimatedLPP2.calculation = The calculation we use for each day is:
 estimatedLPP2.calculationExplanation = (Penalty rate of {0}% × unpaid VAT) ÷ days in a year
 estimatedLPP2.penaltyAmount = Penalty amount (estimate)
@@ -219,7 +220,11 @@ estimatedLPP2.amountReceived = Amount received
 estimatedLPP2.leftToPay = Left to pay
 estimatedLPP2.estimates = Estimates
 estimatedLPP2.estimatesDescription = Penalties and interest will show as estimates until you pay the charge they relate to.
-estimatedLPP2.estimatesDescriptionAgent = Penalties and interest will show as estimates until your client pays the charge they relate to.
+estimatedLPP2.estimatesDescription.agent = Penalties and interest will show as estimates until your client pays the charge they relate to.
+estimatedLPP2.estimatesDescriptionTTP = Penalties will show as estimates until you make all payments due under the payment plan.
+estimatedLPP2.estimatesDescriptionTTP.agent = Penalties will show as estimates until your client makes all payments due under the payment plan.
+estimatedLPP2.ttpInset = You’ve asked HMRC if you can set up a payment plan. If a payment plan has been agreed, and you keep up with all payments, this penalty will not increase further.
+estimatedLPP2.ttpInset.agent = Your client has asked HMRC if they can set up a payment plan. If a payment plan has been agreed, and they keep up with all payments, this penalty will not increase further.
 
 lateSubmissionPenalty.dueDate = Due date
 lateSubmissionPenalty.penaltyAmount = Penalty amount

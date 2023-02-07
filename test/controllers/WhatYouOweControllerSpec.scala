@@ -581,7 +581,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           50.55,
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
-          "VAT AA 2nd LPP"
+          "VAT AA 2nd LPP",
+          timeToPay = false
         ))
       }
     }

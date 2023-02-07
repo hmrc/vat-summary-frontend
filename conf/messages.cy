@@ -211,7 +211,8 @@ crystallisedLPP2.amountReceived = Swm a gafwyd
 crystallisedLPP2.leftToPay = Yn weddill i’w dalu
 
 estimatedLPP2.explanation = Mae’r gosb hon yn berthnasol o ddiwrnod {0} ymlaen, os oes TAW sydd heb ei thalu o hyd.
-estimatedLPP2.interestExplanation = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
+estimatedLPP2.interestExplanation = Mae’r cyfanswm yn cynyddu’n ddyddiol hyd nes y byddwch yn talu’ch TAW neu’n trefnu cynllun talu.
+estimatedLPP2.interestExplanation.agent = Mae’r cyfanswm yn cynyddu’n ddyddiol hyd nes bod eich cleient yn talu ei TAW neu’n trefnu cynllun talu.
 estimatedLPP2.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 estimatedLPP2.calculationExplanation = (Cyfradd gosb o {0}% × TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
 estimatedLPP2.penaltyAmount = Swm y gosb
@@ -219,7 +220,11 @@ estimatedLPP2.amountReceived = Swm a gafwyd
 estimatedLPP2.leftToPay = Yn weddill i’w dalu
 estimatedLPP2.estimates = Amcangyfrifon
 estimatedLPP2.estimatesDescription = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y byddwch yn talu’r tâl cysylltiedig.
-estimatedLPP2.estimatesDescriptionAgent = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y bydd eich cleient yn talu’r tâl cysylltiedig.
+estimatedLPP2.estimatesDescription.agent = Bydd cosbau a llog yn ymddangos fel amcangyfrifon hyd nes y bydd eich cleient yn talu’r tâl cysylltiedig.
+estimatedLPP2.estimatesDescriptionTTP = Bydd cosbau’n dangos fel amcangyfrifon hyd nes y byddwch yn gwneud yr holl daliadau sy’n ddyledus o dan delerau’r cynllun talu.
+estimatedLPP2.estimatesDescriptionTTP.agent = Bydd cosbau’n dangos fel amcangyfrifon hyd nes y bydd eich cleient yn gwneud yr holl daliadau sy’n ddyledus o dan delerau’r cynllun talu.
+estimatedLPP2.ttpInset = Rydych wedi gofyn i CThEF a allwch drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’ch bod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
+estimatedLPP2.ttpInset.agent = Mae’ch cleient wedi gofyn i CThEF a all drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’i fod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
 
 lateSubmissionPenalty.dueDate = Dyddiad dyledus
 lateSubmissionPenalty.penaltyAmount = Swm y gosb

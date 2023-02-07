@@ -202,14 +202,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value,
           timeToPayPlan = timeToPay
         ))
-      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _)), Some(penaltyAmnt)) =>
+      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP2ViewModel(
           day = daysLPP2,
           penaltyRate = rateLPP2,
           penaltyAmount = penaltyAmnt,
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
-          chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value
+          chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value,
+          timeToPay = timeToPay
         ))
       case _ =>
         val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
