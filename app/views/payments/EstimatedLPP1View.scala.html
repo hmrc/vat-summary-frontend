@@ -22,7 +22,8 @@
       govukBreadcrumbs: GovukBreadcrumbs,
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink,
-      govukWarningText : GovukWarningText)
+      govukWarningText : GovukWarningText,
+      govukInsetText : GovukInsetText)
 
 @(model: EstimatedLPP1ViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
@@ -52,6 +53,10 @@
     href = controllers.routes.WhatYouOweController.show.url
   ))
 }
+
+@insetContent = {
+    @if(user.isAgent) {@messages("estimatedLPP1.timeToPayAgent")} else {@messages("estimatedLPP1.timeToPay")}
+    }
 
 @mainTemplate(
   title = messages("chargeType.latePaymentPenalty"),
@@ -94,12 +99,21 @@
       )
     ))
 
-    @govukWarningText(WarningText(
-      iconFallbackText = messages("common.warning"),
-      content = Text(messages("estimatedLPP1.warning", model.part2PenaltyRate, model.part2Days))
-    ))
+      @if(model.timeToPayPlan) {
+        @govukInsetText(InsetText(
+            content = HtmlContent(insetContent)
+        ))
+      } else {
+        @govukWarningText(WarningText(
+          iconFallbackText = messages("common.warning"),
+          content = Text(messages("estimatedLPP1.warning", model.part2PenaltyRate, model.part2Days))
+        ))
+      }
 
     <h2 id="estimates-subheading" class="govuk-heading-s">@messages("estimatedLPP1.estimatesHeading")</h2>
+      @if(model.timeToPayPlan) {
+        <p class="govuk-body">@if(user.isAgent) {@messages("estimatedLPP1.timeToPayEstimatesAgent")} else {@messages("estimatedLPP1.timeToPayEstimates")}</p>
+      } else {
     <p class="govuk-body">@messages("estimatedLPP1.estimatesSubHeading")</p>
     <ul class="govuk-list govuk-list--bullet">
         <li>
@@ -107,6 +121,7 @@
         </li>
         <li>@messages("estimatedLPP1.secondBullet", model.part2Days)</li>
     </ul>
+      }
 
       <p class="govuk-body">
           <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">

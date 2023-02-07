@@ -189,7 +189,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
                                                       penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
-      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _, _)), Some(penaltyAmnt)) =>
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
           part1Days = daysLR,
           part2Days = daysHR,
@@ -199,7 +199,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           penaltyAmount = penaltyAmnt,
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
-          chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value
+          chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value,
+          timeToPayPlan = timeToPay
         ))
       case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP2ViewModel(

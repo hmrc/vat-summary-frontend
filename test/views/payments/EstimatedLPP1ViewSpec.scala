@@ -120,6 +120,10 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
         s"${estimatedLPP1Model.part2Days} days after the due date."
     }
 
+    "not render inset text" in {
+      elementExtinct(".govuk-inset-text")
+    }
+
     "have an estimates subheading" in {
       elementText("#content h2") shouldBe "Estimates"
     }
@@ -163,6 +167,30 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     }
   }
 
+  "Rendering the Estimated LPP1 breakdown page for a principal user who has a time to pay plan set up" when {
+
+    lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, user)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "not render warning text" in {
+      elementExtinct(".govuk-warning-text__text")
+    }
+
+    "have the correct inset text" in {
+      elementText(".govuk-inset-text") shouldBe "You’ve asked HMRC if you can set up a payment plan. " +
+        "If a payment plan has been agreed, and you keep up with all payments, this penalty will not increase further."
+    }
+
+    "have an estimates subheading" in {
+      elementText("#content h2") shouldBe "Estimates"
+    }
+
+    "have a time to pay plan description" in {
+      elementText("#content > div > div > p:nth-child(7)") shouldBe "Penalties will show as estimates until you make all payments due under the payment plan."
+    }
+
+  }
+
   "Rendering the Estimated LPP1 breakdown page for an agent" should {
 
     lazy val view = injectedView(estimatedLPP1Model, Html(""))(request, messages, mockConfig, agentUser)
@@ -170,6 +198,16 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
     "have the correct document title" in {
       document.title shouldBe "Late payment penalty - Your client’s VAT details - GOV.UK"
+    }
+
+    "have the correct warning text" in {
+      elementText(".govuk-warning-text__text") shouldBe "Warning The penalty will increase by a further " +
+        s"${estimatedLPP1Model.part2PenaltyRate}% of the unpaid VAT, if VAT remains unpaid " +
+        s"${estimatedLPP1Model.part2Days} days after the due date."
+    }
+
+    "not render inset text" in {
+      elementExtinct(".govuk-inset-text")
     }
 
     "have the estimate description" which {
@@ -225,4 +263,28 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
       }
     }
   }
+
+  "Rendering the Estimated LPP1 breakdown page for an agent who's client has a time to pay plan set up" should {
+
+    lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, agentUser)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "not render warning text" in {
+      elementExtinct(".govuk-warning-text__text")
+    }
+
+    "have the correct inset text" in {
+      elementText(".govuk-inset-text") shouldBe "Your client has asked HMRC if they can set up a payment plan. " +
+        "If a payment plan has been agreed, and they keep up with all payments, this penalty will not increase further."
+    }
+
+    "have an estimates subheading" in {
+      elementText("#content h2") shouldBe "Estimates"
+    }
+
+    "have a time to pay plan description" in {
+      elementText("#content > div > div > p:nth-child(7)") shouldBe "Penalties will show as estimates until your client makes all payments due under the payment plan."
+    }
+  }
+
 }

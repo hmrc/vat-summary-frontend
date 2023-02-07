@@ -17,8 +17,8 @@
 package models.viewModels
 
 import play.api.libs.json.{Json, OFormat}
-import java.time.LocalDate
 
+import java.time.LocalDate
 import play.api.i18n.Messages
 import views.templates.payments.PaymentMessageHelper
 
@@ -30,7 +30,8 @@ case class EstimatedLPP1ViewModel(part1Days: String,
                                   penaltyAmount: BigDecimal,
                                   periodFrom: LocalDate,
                                   periodTo: LocalDate,
-                                  chargeType: String) extends EstimatedViewModel {
+                                  chargeType: String,
+                                  timeToPayPlan: Boolean) extends EstimatedViewModel {
 
   override val outstandingAmount: BigDecimal = penaltyAmount
 
