@@ -27,7 +27,7 @@ class LPPDetailsSpec extends AnyWordSpec with Matchers {
     "parse from JSON" when {
 
       "optional fields are present" in {
-        LPPDetailsJsonMax.as[LPPDetails] shouldBe LPPDetailsModelMax
+        LPPDetailsJsonMax.as[LPPDetails] shouldBe LPPDetailsModelMaxWithLPP1HRPercentage
       }
 
       "optional fields are not present" in {
