@@ -178,7 +178,7 @@ estimatedLPP1.timeToPayAgent = Mae’ch cleient wedi gofyn i CThEF a all drefnu 
 estimatedLPP1.timeToPayEstimatesAgent = Bydd cosbau’n dangos fel amcangyfrifon hyd nes y bydd eich cleient yn gwneud yr holl daliadau sy’n ddyledus o dan delerau’r cynllun talu.
 
 crystallisedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
-crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu
+crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
 crystallisedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
 crystallisedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail y swm sydd heb ei dalu.
 crystallisedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
