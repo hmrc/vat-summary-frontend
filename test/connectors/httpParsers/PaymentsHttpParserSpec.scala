@@ -62,7 +62,6 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
       chargeReference = Some("XD002750002155"),
       ddCollectionInProgress = false,
       accruingInterestAmount = Some(BigDecimal(2)),
-      interestRate = None,
       accruingPenaltyAmount = Some(3),
       penaltyType = Some("LPP1"),
       originalAmount = BigDecimal(10000),
