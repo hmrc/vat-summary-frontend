@@ -746,7 +746,7 @@ object TestModels {
 
   val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
 
-  val LPPDetailsModelMax: LPPDetails = LPPDetails(
+  val LPPDetailsModelMaxWithLPP1HRPercentage: LPPDetails = LPPDetails(
     principalChargeReference = "XD002750002155",
     penaltyCategory = "LPP1",
     Some(100.11),
@@ -755,6 +755,21 @@ object TestModels {
     Some(200.22),
     Some("30"),
     Some(4.2),
+    Some("31"),
+    Some(5.5),
+    penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ"),
+    timeToPay = false
+  )
+
+  val LPPDetailsModelMaxWithoutLPP1HRPercentage: LPPDetails = LPPDetails(
+    principalChargeReference = "XD002750002155",
+    penaltyCategory = "LPP1",
+    Some(100.11),
+    Some("15"),
+    Some(2.4),
+    Some(200.22),
+    Some("30"),
+    None,
     Some("31"),
     Some(5.5),
     penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ"),
@@ -777,7 +792,7 @@ object TestModels {
   )
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
-    LPPDetails = Seq(LPPDetailsModelMax),
+    LPPDetails = Seq(LPPDetailsModelMaxWithLPP1HRPercentage),
     breathingSpace = false
   )
 

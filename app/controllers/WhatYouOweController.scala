@@ -186,12 +186,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
                                                       penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
-      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), Some(rateHR), _, _, _, timeToPay)), Some(penaltyAmnt)) =>
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), _, _, _, _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
           part1Days = daysLR,
           part2Days = daysHR,
           part1PenaltyRate = rateLR,
-          part2PenaltyRate = rateHR,
+          part2PenaltyRate = penaltyDetails match {
+            case Some(LPPDetails(_, "LPP1", _, _, _, _, _, Some(rateHR), _, _, _, _)) => rateHR
+            case _ => rateLR
+          },
           part1UnpaidVAT = calcAmountLR,
           penaltyAmount = penaltyAmnt,
           periodFrom = payment.periodFrom,
