@@ -39,7 +39,6 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
       Some("XD002750002155"),
       ddCollectionInProgress = true,
       accruingInterestAmount = Some(BigDecimal(2)),
-      interestRate = Some(2.22),
       accruingPenaltyAmount = Some(555.55),
       penaltyType = Some("LPP1"),
       originalAmount = BigDecimal(10000),
@@ -61,7 +60,6 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
             )
           ),
           "accruingInterestAmount" -> 2,
-          "interestRate" -> 2.22,
           "accruingPenaltyAmount" -> "555.55",
           "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
@@ -89,7 +87,6 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
             )
           ),
           "accruingInterestAmount" -> 2,
-          "interestRate" -> 2.22,
           "accruingPenaltyAmount" -> "555.55",
           "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
@@ -115,7 +112,6 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
             )
           ),
           "accruingInterestAmount" -> 2,
-          "interestRate" -> 2.22,
           "accruingPenaltyAmount" -> "555.55",
           "penaltyType" -> "LPP1",
           "outstandingAmount" -> 0,
@@ -133,7 +129,6 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           Some("XD002750002155"),
           ddCollectionInProgress = true,
           accruingInterestAmount = Some(2),
-          interestRate = Some(2.22),
           accruingPenaltyAmount = Some(555.55),
           penaltyType = Some("LPP1"),
           originalAmount = BigDecimal(10000),
@@ -188,7 +183,6 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           chargeReference = None,
           ddCollectionInProgress = false,
           accruingInterestAmount = None,
-          interestRate = None,
           accruingPenaltyAmount = None,
           penaltyType = None,
           originalAmount = 100,

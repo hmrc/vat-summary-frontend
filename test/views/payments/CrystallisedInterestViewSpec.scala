@@ -34,7 +34,6 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     LocalDate.parse("2022-10-01"),
     LocalDate.parse("2022-12-31"),
     "VAT OA Default Interest",
-    2.6,
     LocalDate.parse("2023-03-30"),
     7.71,
     0.00,
@@ -66,56 +65,52 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       "render breadcrumbs which" should {
 
         "have the text 'Business tax account'" in {
-          elementText("body > div > div.govuk-breadcrumbs > ol > li:nth-child(1) > a") shouldBe "Business tax account"
+          elementText(".govuk-breadcrumbs li:nth-child(1) > a") shouldBe "Business tax account"
         }
         "link to bta" in {
-          element("body > div > div.govuk-breadcrumbs > ol > li:nth-child(1) > a").attr("href") shouldBe "bta-url"
+          element(".govuk-breadcrumbs li:nth-child(1) > a").attr("href") shouldBe "bta-url"
         }
         "have the text 'Your VAT account'" in {
-          elementText("body > div > div.govuk-breadcrumbs > ol > li:nth-child(2) > a") shouldBe "Your VAT account"
+          elementText(".govuk-breadcrumbs li:nth-child(2) > a") shouldBe "Your VAT account"
         }
         "link to VAT overview page" in {
-          element("body > div > div.govuk-breadcrumbs > ol > li:nth-child(2) > a").attr("href") shouldBe
+          element(".govuk-breadcrumbs li:nth-child(2) > a").attr("href") shouldBe
             controllers.routes.VatDetailsController.details.url
         }
         "have the text 'What You Owe'" in {
-          elementText("body > div > div.govuk-breadcrumbs > ol > li:nth-child(3) > a") shouldBe "What you owe"
+          elementText(".govuk-breadcrumbs li:nth-child(3) > a") shouldBe "What you owe"
         }
         "link to the what you owe page" in {
-          element("body > div > div.govuk-breadcrumbs > ol > li:nth-child(3) > a").attr("href") shouldBe
+          element(".govuk-breadcrumbs li:nth-child(3) > a").attr("href") shouldBe
             whatYouOweLink
         }
       }
 
       "have the correct first explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(2)") shouldBe "We charge late payment interest on any unpaid VAT."
+        elementText("#charge-interest") shouldBe "We charge late payment interest on any unpaid VAT."
       }
 
       "have the correct second explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(3)") shouldBe
+        elementText("#increase-daily") shouldBe
           "The total increases daily based on the amount of unpaid VAT for the period."
       }
 
       "have the correct third explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(4)") shouldBe "The calculation we use for each day is: " +
+        elementText("#calculation") shouldBe "The calculation we use for each day is: " +
           "(Interest rate × VAT amount unpaid) ÷ days in a year"
       }
 
       "have the correct fourth explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(5)") shouldBe s"The current interest rate is ${viewModel.interestRate}%."
+        elementText("#rates") shouldBe "You can find interest rates on " +
+          "GOV.UK (opens in a new tab). If the interest rate changes during the time interest is building up, we use " +
+          "the old interest rate up to the change date, then the new one after that."
       }
 
-      "have the correct fifth explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(6)") shouldBe "If the interest rate changes during " +
-          "the time interest is building up, we use the old interest rate up to the change date, then the new one " +
-          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)."
-      }
-
-      "have a link to guidance on for previous interest rates" which {
+      "have a link to guidance for interest rates" which {
 
         "has the correct link text" in {
           elementText("#prevIntRateLink") shouldBe
-            "find previous interest rates on GOV.UK (opens in a new tab)."
+            "find interest rates on GOV.UK (opens in a new tab)"
         }
 
         "has the correct href" in {
@@ -158,11 +153,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       "have a pay now button" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > a") shouldBe "Pay now"
+          elementText("#pay-button") shouldBe "Pay now"
         }
 
         "has the correct href" in {
-          element("#content > div > div > a").attr("href") shouldBe
+          element("#pay-button").attr("href") shouldBe
             "/vat-through-software/make-payment/771/12/2022/2022-12-31/VAT%20OA%20Default%20Interest/2023-03-30/chargeRef"
         }
       }
@@ -170,23 +165,23 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       "have a link to guidance on how interest is calculated" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(9) > a") shouldBe
+          elementText("#guidance-link") shouldBe
             "Read the guidance about how interest is calculated (opens in a new tab)"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
+          element("#guidance-link > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
         }
       }
 
       "have a link to the what you owe page" which {
 
         "has the correct link text" in {
-          elementText("#content > div > div > p:nth-child(10) > a") shouldBe "Return to what you owe"
+          elementText("#wyo-link") shouldBe "Return to what you owe"
         }
 
         "has the correct href" in {
-          element("#content > div > div > p:nth-child(10) > a").attr("href") shouldBe whatYouOweLink
+          element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
         }
       }
     }
@@ -197,26 +192,24 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(2)") shouldBe "We charge late payment interest on any unpaid penalties."
+        elementText("#charge-interest") shouldBe
+          "We charge late payment interest on any unpaid penalties."
       }
 
       "have the correct second explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(3)") shouldBe "The total increases daily based on the unpaid amount."
+        elementText("#increase-daily") shouldBe
+          "The total increases daily based on the unpaid amount."
       }
 
       "have the correct third explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(4)") shouldBe "The calculation we use for each day is: " +
+        elementText("#calculation") shouldBe "The calculation we use for each day is: " +
           "(Interest rate × penalty amount unpaid) ÷ days in a year"
       }
 
       "have the correct fourth explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(5)") shouldBe s"The current interest rate is ${viewModel.interestRate}%."
-      }
-
-      "have the correct fifth explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(6)") shouldBe "If the interest rate changes during " +
-          "the time interest is building up, we use the old interest rate up to the change date, then the new one " +
-          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)."
+        elementText("#rates") shouldBe "You can find interest rates on" +
+          " GOV.UK (opens in a new tab). If the interest rate changes during the time interest is building up, we use " +
+          "the old interest rate up to the change date, then the new one after that."
       }
     }
   }
@@ -229,11 +222,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(9) > a") shouldBe "Return to what your client owes"
+        elementText("#wyo-link") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe whatYouOweLink
+        element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
       }
     }
 
@@ -253,7 +246,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     }
 
     "not have a pay now button" in {
-      elementExtinct("#content > div > div > a")
+      elementExtinct("#pay-button")
     }
   }
 }

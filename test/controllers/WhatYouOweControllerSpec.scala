@@ -500,7 +500,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
-          2.22,
           LocalDate.parse("2019-03-03"),
           10000,
           0,
@@ -519,10 +518,6 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         controller.buildCrystallisedIntViewModel(charge) shouldBe None
       }
 
-      "interestRate is missing" in {
-        val charge = payment.copy(chargeType = VatReturnLPI, interestRate = None)
-        controller.buildCrystallisedIntViewModel(charge) shouldBe None
-      }
     }
   }
 

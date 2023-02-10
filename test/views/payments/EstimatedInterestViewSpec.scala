@@ -76,30 +76,30 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct first explanation paragraph" in {
-        elementText("p.govuk-body:nth-of-type(1)") shouldBe "We charge late payment interest on any unpaid VAT."
+        elementText("#charge-interest") shouldBe "We charge late payment interest on any unpaid VAT."
       }
 
       "have the correct second explanation paragraph" in {
-        elementText("p.govuk-body:nth-of-type(2)") shouldBe
+        elementText("#increase-daily") shouldBe
           "The total increases daily based on the amount of unpaid VAT for the period."
       }
 
       "have the correct third explanation paragraph" in {
-        elementText("p.govuk-body:nth-of-type(3)") shouldBe "The calculation we use for each day is: " +
+        elementText("#calculation") shouldBe "The calculation we use for each day is: " +
           "(Interest rate × VAT amount unpaid) ÷ days in a year"
       }
 
       "have the correct fourth explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(5)") shouldBe "If the interest rate changes during " +
-          "the time interest is building up, we use the old interest rate up to the change date, then the new one " +
-          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)."
+        elementText("#rates") shouldBe "You can find interest rates on " +
+          "GOV.UK (opens in a new tab). If the interest rate changes during the time interest is building up, we use the " +
+          "old interest rate up to the change date, then the new one after that."
       }
 
-      "have a link to guidance on for previous interest rates" which {
+      "have a link to guidance for interest rates" which {
 
         "has the correct link text" in {
           elementText("#prevIntRateLink") shouldBe
-            "find previous interest rates on GOV.UK (opens in a new tab)"
+            "find interest rates on GOV.UK (opens in a new tab)"
         }
 
         "has the correct href" in {
@@ -136,30 +136,30 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct paragraph explaining estimates" in {
-        elementText("p.govuk-body:nth-of-type(5)") shouldBe "Penalties and interest will show as estimates " +
+        elementText("#estimates") shouldBe "Penalties and interest will show as estimates " +
           "until you pay the charge they relate to."
       }
 
       "have a link to guidance on how interest is calculated" which {
 
         "has the correct link text" in {
-          elementText("p.govuk-body:nth-of-type(6) > a") shouldBe
+          elementText("#guidance-link") shouldBe
             "Read the guidance about how interest is calculated (opens in a new tab)"
         }
 
         "has the correct href" in {
-          element("p.govuk-body:nth-of-type(6) > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
+          element("#guidance-link > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
         }
       }
 
       "have a link to the what you owe page" which {
 
         "has the correct link text" in {
-          elementText("p.govuk-body:nth-of-type(7) > a") shouldBe "Return to what you owe"
+          elementText("#wyo-link") shouldBe "Return to what you owe"
         }
 
         "has the correct href" in {
-          element("p.govuk-body:nth-of-type(7) > a").attr("href") shouldBe whatYouOweLink
+          element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
         }
       }
     }
@@ -170,30 +170,30 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
-        elementText("p.govuk-body:nth-of-type(1)") shouldBe "We charge late payment interest on any unpaid penalties."
+        elementText("#charge-interest") shouldBe "We charge late payment interest on any unpaid penalties."
       }
 
       "have the correct second explanation paragraph" in {
-        elementText("p.govuk-body:nth-of-type(2)") shouldBe
+        elementText("#increase-daily") shouldBe
           "The total increases daily based on the unpaid amount."
       }
 
       "have the correct third explanation paragraph" in {
-        elementText("p.govuk-body:nth-of-type(3)") shouldBe "The calculation we use for each day is: " +
+        elementText("#calculation") shouldBe "The calculation we use for each day is: " +
           "(Interest rate × penalty amount unpaid) ÷ days in a year"
       }
 
       "have the correct fourth explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(5)") shouldBe "If the interest rate changes during " +
-          "the time interest is building up, we use the old interest rate up to the change date, then the new one " +
-          "after that. You can find previous interest rates on GOV.UK (opens in a new tab)."
+        elementText("#rates") shouldBe "You can find interest rates on GOV.UK (opens in a new tab). " +
+          "If the interest rate changes during the time interest is building up, we use the old interest rate up to " +
+          "the change date, then the new one after that."
       }
 
-      "have a link to guidance on for previous interest rates" which {
+      "have a link to guidance for interest rates" which {
 
         "has the correct link text" in {
           elementText("#prevIntRateLink") shouldBe
-            "find previous interest rates on GOV.UK (opens in a new tab)"
+            "find interest rates on GOV.UK (opens in a new tab)"
         }
 
         "has the correct href" in {
@@ -212,7 +212,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       elementExtinct(".govuk-breadcrumbs")
     }
 
-    "have a backLink" which {
+    "have a back link" which {
 
       "has the text Back" in {
         elementText(".govuk-back-link") shouldBe "Back"
@@ -224,17 +224,18 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
     }
 
     "have the estimate description" in {
-      elementText("#content > div > div > p:nth-child(8)") shouldBe
+      elementText("#estimates") shouldBe
         "Penalties and interest will show as estimates until your client pays the charge they relate to."
     }
+
     "have a link to the What your client owes page" which {
 
       "has the correct link text" in {
-        elementText("p.govuk-body:nth-of-type(7) > a") shouldBe "Return to what your client owes"
+        elementText("#wyo-link > a") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("p.govuk-body:nth-of-type(7) > a").attr("href") shouldBe whatYouOweLink
+        element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
       }
     }
   }

@@ -35,7 +35,6 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruingInterestAmount = Some(BigDecimal(2)),
-    interestRate = Some(2.22),
     accruingPenaltyAmount = None,
     penaltyType = None,
     originalAmount = BigDecimal(10000),

@@ -32,18 +32,21 @@
   @govukBreadcrumbs(Breadcrumbs(
     items = Seq(
       BreadcrumbsItem(
+        attributes = Map("id" -> "breadcrumbs1"),
         content = Text(messages("breadcrumbs.bta")),
         href = Some(appConfig.btaHomeUrl)
-     ),
-     BreadcrumbsItem(
-       content = Text(messages("vatDetails.title")),
-       href = Some(controllers.routes.VatDetailsController.details.url)
-     ),
-     BreadcrumbsItem(
-       content = Text(messages("whatYouOwe.title")),
-       href = Some(controllers.routes.WhatYouOweController.show.url)
-     )
-   )
+      ),
+      BreadcrumbsItem(
+        attributes = Map("id" -> "breadcrumbs2"),
+        content = Text(messages("vatDetails.title")),
+        href = Some(controllers.routes.VatDetailsController.details.url)
+      ),
+      BreadcrumbsItem(
+        attributes = Map("id" -> "breadcrumbs3"),
+        content = Text(messages("whatYouOwe.title")),
+        href = Some(controllers.routes.WhatYouOweController.show.url)
+      )
+    )
   ))
 }
 
@@ -73,76 +76,76 @@
   navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
 ) {
 
-<div class="govuk-grid-row">
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
 
-        <h1 class="govuk-heading-xl" id="crystallised-interest-heading">
-          <span class="govuk-caption-xl">
-            @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
-          </span>
-            @messages(model.title)
-        </h1>
+      <h1 class="govuk-heading-xl" id="crystallised-interest-heading">
+        <span class="govuk-caption-xl">
+          @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+        </span>
+        @messages(model.title)
+      </h1>
 
-        <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")</p>
+      <p id="charge-interest" class="govuk-body">
+        @messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")
+      </p>
 
-        <p class="govuk-body">@messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
+      <p id="increase-daily" class="govuk-body">
+        @messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")
+      </p>
 
-        <p class="govuk-body">@messages("crystallisedInterest.calculation")
-            <br>
-             @messages(s"crystallisedInterest.${interestTypeMessageKey}Calculation")
-        </p>
+      <p id="calculation" class="govuk-body">@messages("crystallisedInterest.calculation")
+        <br>
+        @messages(s"crystallisedInterest.${interestTypeMessageKey}Calculation")
+      </p>
 
-        <p class="govuk-body">
-            @messages(s"crystallisedInterest.currentRate", model.interestRate)
-        </p>
+      <p id="rates" class="govuk-body">@messages("crystallisedInterest.youCan")
+        <a class="govuk-link" id="prevIntRateLink" href="@appConfig.govUkPrevIntRateUrl" target="_blank" rel="noreferrer noopener">
+          @messages("crystallisedInterest.prevIntRateLink")</a>.
+        @messages("crystallisedInterest.rateChanges")
+      </p>
 
-        <p class="govuk-body">@messages("crystallisedInterest.rateChanges")
-            <a class="govuk-link" id="prevIntRateLink" href="@appConfig.govUkPrevIntRateUrl" target="_blank" rel="noreferrer noopener">
-                @messages("crystallisedInterest.prevIntRateLink")
-            </a>
-        </p>
-
-        @govukSummaryList(SummaryList(
-          rows = Seq(
-            SummaryListRow(
-              key = Key(content = Text(messages("crystallisedInterest.dueDate"))),
-              value = Value(content = HtmlContent(dueDateHtml))
-            ),
-            SummaryListRow(
-              key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
-              value = Value(content = HtmlContent(Money.pounds(model.interestAmount)))
-            ),
-            SummaryListRow(
-              key = Key(content = Text(messages("crystallisedInterest.amountReceived"))),
-              value = Value(content =HtmlContent(Money.pounds(model.amountReceived)))
-            ),
-            SummaryListRow(
-              key = Key(content = Text(messages("crystallisedInterest.leftToPay"))),
-              value = Value(content =HtmlContent(Money.pounds(model.leftToPay)))
-           )
+      @govukSummaryList(SummaryList(
+        rows = Seq(
+          SummaryListRow(
+            key = Key(content = Text(messages("crystallisedInterest.dueDate"))),
+            value = Value(content = HtmlContent(dueDateHtml))
+          ),
+          SummaryListRow(
+            key = Key(content = Text(messages("crystallisedInterest.interestAmount"))),
+            value = Value(content = HtmlContent(Money.pounds(model.interestAmount)))
+          ),
+          SummaryListRow(
+            key = Key(content = Text(messages("crystallisedInterest.amountReceived"))),
+            value = Value(content = HtmlContent(Money.pounds(model.amountReceived)))
+          ),
+          SummaryListRow(
+            key = Key(content = Text(messages("crystallisedInterest.leftToPay"))),
+            value = Value(content = HtmlContent(Money.pounds(model.leftToPay)))
+         )
         )
+      ))
+
+      @if(!user.isAgent) {
+        @govukButton(Button(
+          attributes = Map("id" -> "pay-button"),
+          content = Text(messages("chargeTypeDetails.button")),
+          href = Some(model.makePaymentRedirect)
         ))
+      }
 
-        @if(!user.isAgent) {
-            @govukButton(Button(
-                content = Text(messages("chargeTypeDetails.button")),
-                href = Some(model.makePaymentRedirect)
-            ))
-        }
+      <p id="guidance-link" class="govuk-body">
+        <a class="govuk-link" href="@appConfig.latePaymentGuidanceUrl" target="_blank" rel="noreferrer noopener">
+          @messages("crystallisedInterest.guidanceLink")
+        </a>
+      </p>
 
-
-        <p class="govuk-body">
-            <a class="govuk-link" href="@appConfig.latePaymentGuidanceUrl" target="_blank" rel="noreferrer noopener">
-                @messages("crystallisedInterest.guidanceLink")
-            </a>
-        </p>
-
-        <p class="govuk-body">
-            <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url">
-                @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
-            </a>
-        </p>
+      <p id="wyo-link" class="govuk-body">
+        <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url">
+          @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+        </a>
+      </p>
 
     </div>
-</div>
+  </div>
 }
