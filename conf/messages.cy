@@ -173,7 +173,7 @@ estimatedLPP1.firstBulletAgent = mae’ch cleient yn talu’r bil TAW, neu
 estimatedLPP1.secondBullet = mae {0} o ddiwrnodau wedi mynd heibio ers dyddiad dyledus y TAW
 
 crystallisedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
-crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu
+crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
 crystallisedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
 crystallisedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail y swm sydd heb ei dalu.
 crystallisedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
