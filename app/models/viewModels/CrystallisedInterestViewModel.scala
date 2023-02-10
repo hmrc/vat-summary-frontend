@@ -25,7 +25,6 @@ import java.time.LocalDate
 case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          periodTo: LocalDate,
                                          chargeType: String,
-                                         interestRate: BigDecimal,
                                          dueDate: LocalDate,
                                          interestAmount: BigDecimal,
                                          amountReceived: BigDecimal,

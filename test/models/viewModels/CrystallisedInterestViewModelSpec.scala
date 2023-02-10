@@ -29,7 +29,6 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
     "VAT Default Interest",
-    2.6,
     LocalDate.parse("2018-03-03"),
     300.33,
     200.22,

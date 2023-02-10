@@ -145,13 +145,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
-    (payment.chargeReference, payment.interestRate) match {
-      case (Some(chargeRef), Some(intRate)) =>
+    payment.chargeReference match {
+      case Some(chargeRef) =>
         Some(CrystallisedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = payment.chargeType.value,
-          interestRate = intRate,
           dueDate = payment.due,
           interestAmount = payment.originalAmount,
           amountReceived = payment.clearedAmount.getOrElse(0),
@@ -161,9 +160,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isPenalty = payment.chargeType.isPenaltyInterest
         ))
       case _ =>
-        logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing one or more required values:" +
-          s"${payment.chargeReference.fold("\ncharge reference")(_ => "")}" +
-          s"${payment.interestRate.fold("\ninterest rate")(_ => "")}")
+        logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")
         None
     }
 
