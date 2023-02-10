@@ -101,16 +101,16 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct fourth explanation paragraph" in {
-        elementText("#rates") shouldBe "You can find previous interest rates on " +
+        elementText("#rates") shouldBe "You can find interest rates on " +
           "GOV.UK (opens in a new tab). If the interest rate changes during the time interest is building up, we use " +
           "the old interest rate up to the change date, then the new one after that."
       }
 
-      "have a link to guidance on for previous interest rates" which {
+      "have a link to guidance for interest rates" which {
 
         "has the correct link text" in {
           elementText("#prevIntRateLink") shouldBe
-            "find previous interest rates on GOV.UK (opens in a new tab)"
+            "find interest rates on GOV.UK (opens in a new tab)"
         }
 
         "has the correct href" in {
@@ -207,7 +207,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct fourth explanation paragraph" in {
-        elementText("#rates") shouldBe "You can find previous interest rates on" +
+        elementText("#rates") shouldBe "You can find interest rates on" +
           " GOV.UK (opens in a new tab). If the interest rate changes during the time interest is building up, we use " +
           "the old interest rate up to the change date, then the new one after that."
       }
