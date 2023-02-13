@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
 import models.payments.{ChargeType, Payment, PaymentWithPeriod, VatLateSubmissionPen}
-import models.penalties.LPPDetails
+import models.penalties.{LPPDetails, PenaltyDetails}
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
 import play.api.i18n.I18nSupport
@@ -60,7 +60,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
               (payments, penaltyDetails) match {
                 case (Right(Some(payments)), Right(penalties)) =>
-                  constructViewModel(payments.financialTransactions, mandationStatus, penalties.LPPDetails) match {
+                  constructViewModel(payments.financialTransactions, mandationStatus, penalties) match {
                     case Some(model) =>
                       WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
                         Ok(view(model, serviceInfoContent))
@@ -276,14 +276,19 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   def constructViewModel(payments: Seq[Payment],
                          mandationStatus: String,
-                         penalties: Seq[LPPDetails]): Option[WhatYouOweViewModel] = {
+                         penalties: PenaltyDetails): Option[WhatYouOweViewModel] = {
 
-    val chargeModels = categoriseCharges(payments, penalties).flatten
+    val chargeModels = categoriseCharges(payments, penalties.LPPDetails).flatten
     val totalAmount = chargeModels.map(_.outstandingAmount).sum
     val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest) + payments.count(_.showEstimatedPenalty)
 
     if(totalPaymentCount == chargeModels.length) {
-      Some(WhatYouOweViewModel(totalAmount, chargeModels, mandationStatus, payments.exists(_.isOverdue(dateService.now()))))
+      Some(WhatYouOweViewModel(
+        totalAmount,
+        chargeModels,
+        mandationStatus,
+        payments.exists(_.isOverdue(dateService.now())),
+        penalties.breathingSpace))
     } else {
       None
     }

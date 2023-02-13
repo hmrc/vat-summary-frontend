@@ -25,6 +25,7 @@
       govukButton : GovukButton,
       govukTable : GovukTable,
       govukDetails: GovukDetails,
+      govukInset: GovukInsetText,
       standardCharge: StandardCharge,
       estimatedCharge: EstimatedCharge,
       crystallisedCharge: CrystallisedCharge)
@@ -93,7 +94,14 @@
   ))
   individualRows ++ totalRow
 }
-
+@breathingSpaceInset = {
+    @if(model.breathingSpace) {
+      @govukInset(InsetText(
+        id=Some("breathing-space-inset"),
+        content= Text(messages("whatYouOwe.breathingSpace"))
+      ))
+  }
+}
 @mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
               appConfig = appConfig,
               serviceInfoContent = serviceInfoContent,
@@ -111,6 +119,8 @@
       <p class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold govuk-!-margin-bottom-8">
         @Money.pounds(model.totalAmount)
       </p>
+
+      @breathingSpaceInset
 
       @govukTable(Table(
         rows = chargeRows,
