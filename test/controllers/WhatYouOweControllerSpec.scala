@@ -224,12 +224,9 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(accruingPenaltyAmount = None)
         val result = {
           mockDateServiceCall()
-<<<<<<< Updated upstream
-          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
-=======
+
           controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", PenaltyDetails(
-            Seq(LPPDetailsModelMax), breathingSpace = false))
->>>>>>> Stashed changes
+            Seq(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false))
         }
         result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
       }
@@ -241,12 +238,11 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-<<<<<<< Updated upstream
-          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
-=======
+
+
           controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", PenaltyDetails(
-            Seq(LPPDetailsModelMax), breathingSpace = false))
->>>>>>> Stashed changes
+            Seq(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false))
+
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(whatYouOweChargeModel)))
       }
@@ -257,12 +253,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-<<<<<<< Updated upstream
-          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
-=======
+
           controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", PenaltyDetails(
-            Seq(LPPDetailsModelMax), breathingSpace = false))
->>>>>>> Stashed changes
+            Seq(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false))
+
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(wyoChargeUnrepayableOverpayment)))
       }
@@ -281,13 +275,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         controller.constructViewModel(
           Seq(payment, crystallisedInterest, lateSubmissionPenalty),
           mandationStatus = "MTDfB",
-<<<<<<< Updated upstream
-          Seq(LPPDetailsModelMaxWithLPP1HRPercentage)
-=======
-          PenaltyDetails(
-            Seq(LPPDetailsModelMax), breathingSpace = false
-          )
->>>>>>> Stashed changes
+          penaltyDetailsModelMax
         )
       }
 
@@ -304,13 +292,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Seq(payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)),
             mandationStatus = "MTDfB",
-<<<<<<< Updated upstream
-            Seq(LPPDetailsModelMaxWithLPP1HRPercentage)
-=======
-            PenaltyDetails(
-              Seq(LPPDetailsModelMax), breathingSpace = false
-            )
->>>>>>> Stashed changes
+            penaltyDetailsModelMax
           )
         }
         result shouldBe None
@@ -323,12 +305,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val result = {
           mockDateServiceCall()
           controller.constructViewModel(
-<<<<<<< Updated upstream
-            Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage)
-=======
-            Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", PenaltyDetails(
-              Seq(LPPDetailsModelMax), breathingSpace = false)
->>>>>>> Stashed changes
+            Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", penaltyDetailsModelMax
           )
         }
         result shouldBe Some(viewModelNoChargeDescription)
