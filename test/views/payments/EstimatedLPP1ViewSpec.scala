@@ -158,35 +158,83 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(10) > a") shouldBe "Return to what you owe"
+        elementText("#wyo-link") shouldBe "Return to what you owe"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(10) > a").attr("href") shouldBe whatYouOweLink
+        element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
       }
     }
   }
 
-  "Rendering the Estimated LPP1 breakdown page for a principal user who has a time to pay plan set up" when {
+  "TTP/breathing space content" when {
 
-    lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, user)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "the user has a time to pay arrangement and no breathing space" should {
 
-    "not render warning text" in {
-      elementExtinct(".govuk-warning-text__text")
+      lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not render warning text" in {
+        elementExtinct(".govuk-warning-text__text")
+      }
+
+      "have the correct inset text" in {
+        elementText("#ttp-inset") shouldBe "You’ve asked HMRC if you can set up a payment plan. " +
+          "If a payment plan has been agreed, and you keep up with all payments, this penalty will not increase further."
+      }
+
+      "have an estimates subheading" in {
+        elementText("#estimates-subheading") shouldBe "Estimates"
+      }
+
+      "have a time to pay plan description" in {
+        elementText("#ttp-only-p1") shouldBe "Penalties will show as estimates until you make all payments due under the payment plan."
+      }
     }
 
-    "have the correct inset text" in {
-      elementText(".govuk-inset-text") shouldBe "You’ve asked HMRC if you can set up a payment plan. " +
-        "If a payment plan has been agreed, and you keep up with all payments, this penalty will not increase further."
+    "the user has time to pay and breathing space arrangements" should {
+
+      lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true, breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not show the warning text" in {
+        elementExtinct(".govuk-warning-text__text")
+      }
+
+      "show the TTP inset text" in {
+        document.select("#ttp-inset").size shouldBe 1
+      }
+
+      "have the correct first sentence" in {
+        elementText("#bs-ttp-p1") shouldBe "Penalties will show as estimates until:"
+      }
+
+      "have the correct first bullet point" in {
+        elementText("#bs-ttp-bullet1") shouldBe "you make all payments due under the payment plan, and"
+      }
+
+      "have the correct second bullet point" in {
+        elementText("#bs-ttp-bullet2") shouldBe "Breathing Space ends"
+      }
+
     }
 
-    "have an estimates subheading" in {
-      elementText("#content h2") shouldBe "Estimates"
-    }
+    "the user has breathing space and no time to pay arrangement" should {
 
-    "have a time to pay plan description" in {
-      elementText("#content > div > div > p:nth-child(7)") shouldBe "Penalties will show as estimates until you make all payments due under the payment plan."
+      lazy val view = injectedView(estimatedLPP1Model.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not show the warning text" in {
+        elementExtinct(".govuk-warning-text__text")
+      }
+
+      "not show the TTP inset text" in {
+        elementExtinct("#ttp-inset")
+      }
+
+      "show the correct estimates section content" in {
+        elementText("#bs-only-p1") shouldBe "Penalties will show as estimates until your Breathing Space ends."
+      }
     }
 
   }
@@ -213,15 +261,15 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     "have the estimate description" which {
 
       "has the correct introduction text" in {
-        elementText("#content > div > div > p:nth-child(7)") shouldBe "Penalties will show as estimates until:"
+        elementText("#estimate-p1") shouldBe "Penalties will show as estimates until:"
       }
 
       "has the correct first bullet sentence" in {
-        elementText("#content ul > li:nth-child(1)") shouldBe "your client pays the VAT bill, or"
+        elementText("#estimates-bullet1") shouldBe "your client pays the VAT bill, or"
       }
 
       "has the correct second bullet sentence" in {
-        elementText("#content ul > li:nth-child(2)") shouldBe
+        elementText("#estimates-bullet2") shouldBe
           s"${estimatedLPP1Model.part2Days} days have passed since the VAT due date"
       }
     }
@@ -229,22 +277,22 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     "have a link to VAT penalties and appeals" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(9) > a") shouldBe "View your client’s VAT penalties and appeals"
+        elementText("#penalties-appeal-link") shouldBe "View your client’s VAT penalties and appeals"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(9) > a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
+        element("#penalties-appeal-link > a").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
       }
     }
 
     "have a link to the what you owe page" which {
 
       "has the correct link text" in {
-        elementText("#content > div > div > p:nth-child(10) > a") shouldBe "Return to what your client owes"
+        elementText("#wyo-link") shouldBe "Return to what your client owes"
       }
 
       "has the correct href" in {
-        element("#content > div > div > p:nth-child(10) > a").attr("href") shouldBe whatYouOweLink
+        element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
       }
     }
 
@@ -264,7 +312,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the Estimated LPP1 breakdown page for an agent who's client has a time to pay plan set up" should {
+  "Rendering the Estimated LPP1 breakdown page for an agent whose client has a time to pay plan set up" should {
 
     lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -274,16 +322,17 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     }
 
     "have the correct inset text" in {
-      elementText(".govuk-inset-text") shouldBe "Your client has asked HMRC if they can set up a payment plan. " +
+      elementText("#ttp-inset") shouldBe "Your client has asked HMRC if they can set up a payment plan. " +
         "If a payment plan has been agreed, and they keep up with all payments, this penalty will not increase further."
     }
 
     "have an estimates subheading" in {
-      elementText("#content h2") shouldBe "Estimates"
+      elementText("#estimates-subheading") shouldBe "Estimates"
     }
 
     "have a time to pay plan description" in {
-      elementText("#content > div > div > p:nth-child(7)") shouldBe "Penalties will show as estimates until your client makes all payments due under the payment plan."
+      elementText("#ttp-only-p1") shouldBe
+        "Penalties will show as estimates until your client makes all payments due under the payment plan."
     }
   }
 

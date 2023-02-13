@@ -82,10 +82,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
   }
 
-  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
+  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: PenaltyDetails): Seq[Option[ChargeDetailsViewModel]] =
     payments collect {
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
-        val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties)
+        val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties.LPPDetails)
         buildCrystallisedChargePlusEstimates(p, matchingPenalty)
       case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
       case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) => Seq(buildLateSubmissionPenaltyViewModel(p))
@@ -101,14 +101,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
-                                                    penalties: Seq[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
+                                                    penalties: PenaltyDetails): Seq[Option[ChargeDetailsViewModel]] =
     charge match {
       case p: PaymentWithPeriod if p.showEstimatedInterest && p.showEstimatedPenalty =>
-        val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties)
-        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty))
+        val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties.LPPDetails)
+        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty, penalties.breathingSpace))
       case p: PaymentWithPeriod if p.showEstimatedPenalty =>
-        val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties)
-        Seq(buildStandardChargeViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty))
+        val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties.LPPDetails)
+        Seq(buildStandardChargeViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty, penalties.breathingSpace))
       case p: PaymentWithPeriod if p.showEstimatedInterest =>
         Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p))
       case _ =>
@@ -184,7 +184,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
-                                                      penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
+                                                      penaltyDetails: Option[LPPDetails],
+                                                      breathingSpace: Boolean): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), _, _, _, _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
@@ -200,7 +201,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value,
-          timeToPayPlan = timeToPay
+          timeToPayPlan = timeToPay,
+          breathingSpace = breathingSpace
         ))
       case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP2ViewModel(
@@ -278,7 +280,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                          mandationStatus: String,
                          penalties: PenaltyDetails): Option[WhatYouOweViewModel] = {
 
-    val chargeModels = categoriseCharges(payments, penalties.LPPDetails).flatten
+    val chargeModels = categoriseCharges(payments, penalties).flatten
     val totalAmount = chargeModels.map(_.outstandingAmount).sum
     val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest) + payments.count(_.showEstimatedPenalty)
 

@@ -31,7 +31,8 @@ case class EstimatedLPP1ViewModel(part1Days: String,
                                   periodFrom: LocalDate,
                                   periodTo: LocalDate,
                                   chargeType: String,
-                                  timeToPayPlan: Boolean) extends EstimatedViewModel {
+                                  timeToPayPlan: Boolean,
+                                  breathingSpace: Boolean) extends EstimatedViewModel {
 
   override val outstandingAmount: BigDecimal = penaltyAmount
 
