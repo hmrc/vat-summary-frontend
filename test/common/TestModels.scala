@@ -671,7 +671,7 @@ object TestModels {
   )
 
   val estimatedLPP2Model: EstimatedLPP2ViewModel = EstimatedLPP2ViewModel(
-    "31", 4.4, 4.22, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT AA 2nd LPP", timeToPay = false
+    "31", 4.4, 4.22, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT AA 2nd LPP", timeToPay = false, breathingSpace = false
   )
   val estimatedLPP2ModelTTP: EstimatedLPP2ViewModel = estimatedLPP2Model.copy(timeToPay = true)
 
@@ -682,7 +682,8 @@ object TestModels {
     "periodFrom" -> "2020-01-01",
     "periodTo" -> "2020-02-02",
     "chargeType" -> "VAT AA 2nd LPP",
-    "timeToPay" -> false
+    "timeToPay" -> false,
+    "breathingSpace" -> false
   )
 
   val lateSubmissionPenaltyModel: LateSubmissionPenaltyViewModel = LateSubmissionPenaltyViewModel(
