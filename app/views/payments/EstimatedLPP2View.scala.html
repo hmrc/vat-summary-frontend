@@ -124,11 +124,11 @@
         @if(model.breathingSpace) {
           <ul class="govuk-list govuk-list--bullet">
             @if(model.timeToPay) {
-            <li>@messages(s"estimatedLPP2.estimatesDescriptionBSAndTTP.p1$agentMessage")</li>
+            <li id="bs-ttp-bullet1">@messages(s"estimatedLPP2.estimatesDescriptionBSAndTTP.p1$agentMessage")</li>
             } else {
-            <li>@messages(s"estimatedLPP2.estimatesDescriptionBS.p1$agentMessage")</li>
+            <li id="bs-only-bullet1">@messages(s"estimatedLPP2.estimatesDescriptionBS.p1$agentMessage")</li>
             }
-            <li>@messages("estimatedLPP2.estimatesDescriptionBS.p2")</li>
+            <li id="bs-bullet2">@messages("estimatedLPP2.estimatesDescriptionBS.p2")</li>
           </ul>
         }
 
