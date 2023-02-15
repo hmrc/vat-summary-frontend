@@ -54,9 +54,7 @@
   ))
 }
 
-@insetContent = {
-    @if(user.isAgent) {@messages("estimatedLPP1.timeToPayAgent")} else {@messages("estimatedLPP1.timeToPay")}
-    }
+@agentMessage = @{ if(user.isAgent) { ".agent" } else { "" } }
 
 @mainTemplate(
   title = messages("chargeType.latePaymentPenalty"),
@@ -99,37 +97,54 @@
       )
     ))
 
-      @if(model.timeToPayPlan) {
+    @(model.timeToPayPlan, model.breathingSpace) match {
+      case (true, _) => {
         @govukInsetText(InsetText(
-            content = HtmlContent(insetContent)
+          id = Some("ttp-inset"),
+          content = HtmlContent(messages(s"estimatedLPP1.timeToPay$agentMessage"))
         ))
-      } else {
+      }
+      case (false, true) => {}
+      case _ => {
         @govukWarningText(WarningText(
           iconFallbackText = messages("common.warning"),
           content = Text(messages("estimatedLPP1.warning", model.part2PenaltyRate, model.part2Days))
         ))
       }
+    }
 
     <h2 id="estimates-subheading" class="govuk-heading-s">@messages("estimatedLPP1.estimatesHeading")</h2>
-      @if(model.timeToPayPlan) {
-        <p class="govuk-body">@if(user.isAgent) {@messages("estimatedLPP1.timeToPayEstimatesAgent")} else {@messages("estimatedLPP1.timeToPayEstimates")}</p>
-      } else {
-    <p class="govuk-body">@messages("estimatedLPP1.estimatesSubHeading")</p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>
-          @if(user.isAgent) {@messages("estimatedLPP1.firstBulletAgent")} else {@messages("estimatedLPP1.firstBullet")}
-        </li>
-        <li>@messages("estimatedLPP1.secondBullet", model.part2Days)</li>
-    </ul>
+
+    @(model.timeToPayPlan, model.breathingSpace) match {
+      case (true, true) => {
+        <p id="bs-ttp-p1" class="govuk-body">@messages("estimatedLPP1.breathingSpaceAndTTPEstimateP1")</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li id="bs-ttp-bullet1"> @messages(s"estimatedLPP1.breathingSpaceAndTTPBulletOne$agentMessage")</li>
+          <li id="bs-ttp-bullet2">@messages(s"estimatedLPP1.breathingSpaceAndTTPBulletTwo")</li>
+        </ul>
       }
+      case (false, true) => {
+        <p id="bs-only-p1" class="govuk-body">@messages(s"estimatedLPP1.breathingSpaceEstimates$agentMessage")</p>
+      }
+      case (true, false) => {
+        <p id="ttp-only-p1" class="govuk-body">@messages(s"estimatedLPP1.timeToPayEstimates$agentMessage")</p>
+      }
+      case _ => {
+        <p id="estimate-p1" class="govuk-body">@messages("estimatedLPP1.estimatesSubHeading")</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li id="estimates-bullet1">@messages(s"estimatedLPP1.firstBullet$agentMessage")</li>
+          <li id="estimates-bullet2">@messages("estimatedLPP1.secondBullet", model.part2Days)</li>
+        </ul>
+      }
+    }
 
-      <p class="govuk-body">
-          <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
-              @if(user.isAgent) {@messages("chargeTypeDetails.penaltiesAndAppealAgent")} else {@messages("chargeTypeDetails.penaltiesAndAppeal")}
-          </a>
-      </p>
+    <p id="penalties-appeal-link" class="govuk-body">
+      <a class="govuk-link" href="@appConfig.penaltiesFrontendUrl">
+        @if(user.isAgent) {@messages("chargeTypeDetails.penaltiesAndAppealAgent")} else {@messages("chargeTypeDetails.penaltiesAndAppeal")}
+      </a>
+    </p>
 
-    <p class="govuk-body">
+    <p id="wyo-link" class="govuk-body">
       <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url">
         @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
       </a>
