@@ -16,7 +16,7 @@
 
 package views.payments
 
-import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInterestCharge, whatYouOweViewModel2Charge}
+import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInterestCharge, whatYouOweViewModel2Charge, whatYouOweViewModelBreathingSpace}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
@@ -72,6 +72,10 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       "have the correct total amount" in {
         elementText("p.govuk-body:nth-of-type(2)") shouldBe "£" + whatYouOweViewModel2Charge.totalAmount
+      }
+
+      "not show the breathing space inset text" in {
+        elementExtinct("#breathing-space-inset")
       }
 
       "have a charges table" which {
@@ -297,6 +301,16 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         mockConfig.features.overdueTimeToPayDescriptionEnabled(false)
         elementExtinct("#cannot-pay-heading")
         elementExtinct("#cannot-pay-paragraph")
+      }
+    }
+
+    "the user is in BreathingSpace" should {
+
+      lazy val view = whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      "have the breathing space inset text" in {
+        elementText("#breathing-space-inset") shouldBe "Interest and penalties do not " +
+          "build up during Breathing Space."
       }
     }
   }

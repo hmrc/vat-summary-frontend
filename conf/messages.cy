@@ -93,6 +93,7 @@ whatYouOwe.title = Yr hyn sydd arnoch
 whatYouOwe.agentTitle = Yr hyn sydd ar eich cleient
 whatYouOwe.totalAmountToPay = Y cyfanswm i’w dalu
 whatYouOwe.total = Cyfanswm
+whatYouOwe.breathingSpace = Nid yw llog a chosbau yn cronni yn ystod trefniant amser i gael eich gwynt atoch.
 whatYouOwe.due = Yn ddyledus
 whatYouOwe.viewReturn = Bwrw golwg dros y Ffurflen TAW
 whatYouOwe.headCell.paymentType = Math o daliad

@@ -19,4 +19,5 @@ package models.viewModels
 case class WhatYouOweViewModel(totalAmount: BigDecimal,
                                charges: Seq[ChargeDetailsViewModel],
                                mandationStatus: String,
-                               containsOverduePayments: Boolean)
+                               containsOverduePayments: Boolean,
+                               breathingSpace: Boolean)

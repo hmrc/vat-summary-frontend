@@ -93,6 +93,7 @@ whatYouOwe.title = What you owe
 whatYouOwe.agentTitle = What your client owes
 whatYouOwe.totalAmountToPay = Total amount to pay
 whatYouOwe.total = Total
+whatYouOwe.breathingSpace = Interest and penalties do not build up during Breathing Space.
 whatYouOwe.due = due
 whatYouOwe.viewReturn = View VAT Return
 whatYouOwe.headCell.paymentType = Payment type

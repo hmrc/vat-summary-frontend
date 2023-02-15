@@ -425,7 +425,8 @@ object TestModels {
     10000.00,
     Seq(whatYouOweChargeModel),
     mandationStatus = "MTDfB",
-    containsOverduePayments = false
+    containsOverduePayments = false,
+    breathingSpace = false
   )
 
   val whatYouOweViewModelWithEstimatedInterest: WhatYouOweViewModel = whatYouOweViewModel.copy(
@@ -701,9 +702,13 @@ object TestModels {
     567.11,
     Seq(chargeModel1, chargeModel2, overdueCrystallisedInterestCharge),
     mandationStatus = "",
-    containsOverduePayments = true
+    containsOverduePayments = true,
+    breathingSpace = false
   )
 
+  val whatYouOweViewModelBreathingSpace: WhatYouOweViewModel = whatYouOweViewModel.copy(
+    breathingSpace = true
+  )
   val whatYouOweCharge: StandardChargeViewModel = StandardChargeViewModel(
     chargeType = "VAT Return Debit Charge",
     outstandingAmount = BigDecimal(1111.11),
@@ -727,7 +732,8 @@ object TestModels {
       lateSubmissionPenaltyCharge
     ),
     mandationStatus = "MTDfB",
-    containsOverduePayments = false
+    containsOverduePayments = false,
+    breathingSpace = false
   )
 
   val whatYouOweChargeOverdue: StandardChargeViewModel = whatYouOweCharge.copy(isOverdue = true)

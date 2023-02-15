@@ -27,6 +27,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
+
 import java.time.LocalDate
 
 class WhatYouOweControllerSpec extends ControllerBaseSpec {
@@ -222,7 +223,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(accruingPenaltyAmount = None)
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+
+          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)
         }
         result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
       }
@@ -234,7 +236,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+
+
+          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", penaltyDetailsModelMax)
+
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(whatYouOweChargeModel)))
       }
@@ -245,7 +250,9 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+
+          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", penaltyDetailsModelMax)
+
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(wyoChargeUnrepayableOverpayment)))
       }
@@ -264,7 +271,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         controller.constructViewModel(
           Seq(payment, crystallisedInterest, lateSubmissionPenalty),
           mandationStatus = "MTDfB",
-          Seq(LPPDetailsModelMaxWithLPP1HRPercentage)
+          penaltyDetailsModelMax
         )
       }
 
@@ -281,7 +288,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Seq(payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)),
             mandationStatus = "MTDfB",
-            Seq(LPPDetailsModelMaxWithLPP1HRPercentage)
+            penaltyDetailsModelMax
           )
         }
         result shouldBe None
@@ -294,7 +301,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val result = {
           mockDateServiceCall()
           controller.constructViewModel(
-            Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", Seq(LPPDetailsModelMaxWithLPP1HRPercentage)
+            Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", penaltyDetailsModelMax
           )
         }
         result shouldBe Some(viewModelNoChargeDescription)
