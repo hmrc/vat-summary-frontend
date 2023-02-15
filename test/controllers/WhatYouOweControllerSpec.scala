@@ -20,7 +20,6 @@ import common.TestModels._
 import models.User
 import models.errors.PaymentsError
 import models.payments._
-import models.penalties.PenaltyDetails
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -225,8 +224,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val result = {
           mockDateServiceCall()
 
-          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", PenaltyDetails(
-            Seq(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false))
+          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)
         }
         result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
       }
@@ -240,8 +238,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
 
 
-          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", PenaltyDetails(
-            Seq(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false))
+          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", penaltyDetailsModelMax)
 
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(whatYouOweChargeModel)))
@@ -254,8 +251,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val result = {
           mockDateServiceCall()
 
-          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", PenaltyDetails(
-            Seq(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false))
+          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", penaltyDetailsModelMax)
 
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(wyoChargeUnrepayableOverpayment)))

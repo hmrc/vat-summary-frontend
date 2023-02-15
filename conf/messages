@@ -178,13 +178,6 @@ estimatedLPP1.timeToPayEstimates = Penalties will show as estimates until you ma
 estimatedLPP1.timeToPayAgent = Your client has asked HMRC if they can set up a payment plan. If a payment plan has been agreed, and they keep up with all payments, this penalty will not increase further.
 estimatedLPP1.timeToPayEstimatesAgent = Penalties will show as estimates until your client makes all payments due under the payment plan.
 
-
-estimatedLPP1.timeToPay = You’ve asked HMRC if you can set up a payment plan. If a payment plan has been agreed, and you keep up with all payments, this penalty will not increase further.
-estimatedLPP1.timeToPayEstimates = Penalties will show as estimates until you make all payments due under the payment plan.
-estimatedLPP1.timeToPayAgent = Your client has asked HMRC if they can set up a payment plan. If a payment plan has been agreed, and they keep up with all payments, this penalty will not increase further.
-estimatedLPP1.timeToPayEstimatesAgent = Penalties will show as estimates until your client makes all payments due under the payment plan.
-
-
 crystallisedInterest.vatChargeInterest = We charge late payment interest on any unpaid VAT.
 crystallisedInterest.penaltyChargeInterest = We charge late payment interest on any unpaid penalties.
 crystallisedInterest.vatIncreaseDaily = The total increases daily based on the amount of unpaid VAT for the period.
