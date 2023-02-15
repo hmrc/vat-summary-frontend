@@ -28,7 +28,8 @@ case class EstimatedLPP2ViewModel(day: String,
                                   periodFrom: LocalDate,
                                   periodTo: LocalDate,
                                   chargeType: String,
-                                  timeToPay: Boolean) extends EstimatedViewModel {
+                                  timeToPay: Boolean,
+                                  breathingSpace: Boolean) extends EstimatedViewModel {
 
   override val outstandingAmount: BigDecimal = penaltyAmount
   override def description(isAgent: Boolean)(implicit messages: Messages): String = PaymentMessageHelper.getCorrectDescription(

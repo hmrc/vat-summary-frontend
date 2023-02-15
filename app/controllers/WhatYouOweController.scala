@@ -212,7 +212,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value,
-          timeToPay = timeToPay
+          timeToPay = timeToPay,
+          breathingSpace = breathingSpace
         ))
       case _ =>
         val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
