@@ -77,7 +77,11 @@
       </h1>
 
       <p id="explanation-p1" class="govuk-body">@messages("estimatedLPP2.explanation", model.day)</p>
-      <p id="explanation-p2" class="govuk-body">@messages(s"estimatedLPP2.interestExplanation$agentMessage")</p>
+      @if(model.breathingSpace) {
+        <p id="explanation-p2-breathing-space" class="govuk-body">@messages(s"estimatedLPP2.interestExplanationBreathingSpace$agentMessage")</p>
+      } else {
+        <p id="explanation-p2" class="govuk-body">@messages(s"estimatedLPP2.interestExplanation$agentMessage")</p>
+      }
 
       <p id="explanation-p3" class="govuk-body">
         @messages("estimatedInterest.calculation")
@@ -111,12 +115,22 @@
 
       <h2 id="estimates-subheading" class="govuk-heading-s">@messages("estimatedLPP2.estimates")</h2>
         <p id="estimates" class="govuk-body">
-          @if(model.timeToPay) @{
-            messages(s"estimatedLPP2.estimatesDescriptionTTP$agentMessage")
-          } else @{
-            messages(s"estimatedLPP2.estimatesDescription$agentMessage")
+          @(model.timeToPay, model.breathingSpace) match {
+          case (false, false) => {@messages(s"estimatedLPP2.estimatesDescription$agentMessage")}
+          case (true, false) => {@messages(s"estimatedLPP2.estimatesDescriptionTTP$agentMessage")}
+          case (_, true) => {@messages("estimatedLPP2.estimatesDescriptionBS")}
           }
         </p>
+        @if(model.breathingSpace) {
+          <ul class="govuk-list govuk-list--bullet">
+            @if(model.timeToPay) {
+            <li id="bs-ttp-bullet1">@messages(s"estimatedLPP2.estimatesDescriptionBSAndTTP.p1$agentMessage")</li>
+            } else {
+            <li id="bs-only-bullet1">@messages(s"estimatedLPP2.estimatesDescriptionBS.p1$agentMessage")</li>
+            }
+            <li id="bs-bullet2">@messages("estimatedLPP2.estimatesDescriptionBS.p2")</li>
+          </ul>
+        }
 
       <p class="govuk-body">
         <a id="pen-appeals-link" class="govuk-link" href="@appConfig.penaltiesFrontendUrl">

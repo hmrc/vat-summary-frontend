@@ -604,7 +604,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT AA 2nd LPP",
-          timeToPay = false
+          timeToPay = false,
+          breathingSpace = false
         ))
       }
     }

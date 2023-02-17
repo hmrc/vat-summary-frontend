@@ -38,6 +38,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
     val backLink = ".govuk-back-link"
     val explanation1 = "#explanation-p1"
     val explanation2 = "#explanation-p2"
+    val explanation2BreathingSpace = "#explanation-p2-breathing-space"
     val explanation3 = "#explanation-p3"
     val summaryListRowKey: Int => String = row => s".govuk-summary-list__row:nth-child($row) > dt"
     val summaryListRowValue: Int => String = row => s".govuk-summary-list__row:nth-child($row) > dd"
@@ -50,7 +51,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
   "Rendering the Estimated LPP2 Page for a principal user" when {
 
-    "the user has no time to pay arrangement" should {
+    "the user has no time to pay arrangement and no breathing space" should {
 
       lazy val view = injectedView(estimatedLPP2Model, Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -166,10 +167,25 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the user has a time to pay arrangement" should {
+    "the user has a time to pay arrangement and no breathing space" should {
 
       lazy val view = injectedView(estimatedLPP2ModelTTP, Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first explanation paragraph" in {
+        elementText(Selectors.explanation1) shouldBe
+          "This penalty applies from day 31, if any VAT remains unpaid."
+      }
+
+      "have the correct calculation explanation statement" in {
+        elementText(Selectors.explanation2) shouldBe
+          "The total builds up daily until you pay your VAT or set up a payment plan."
+      }
+
+      "have the correct calculation explanation" in {
+        elementText(Selectors.explanation3) shouldBe
+          "The calculation we use for each day is: (Penalty rate of 4.4% × unpaid VAT) ÷ days in a year"
+      }
 
       "have inset text with the correct content" in {
         elementText(Selectors.ttpInset) shouldBe "You’ve asked HMRC if you can set up a payment plan. If a payment plan " +
@@ -182,11 +198,93 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       }
     }
 
+    "the user has no time to pay arrangement but breathing space" should {
+
+      lazy val view = injectedView(estimatedLPP2Model.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first explanation paragraph" in {
+        elementText(Selectors.explanation1) shouldBe
+          "This penalty applies from day 31, if any VAT remains unpaid."
+      }
+
+      "have the correct calculation explanation statement" in {
+        elementText(Selectors.explanation2BreathingSpace) shouldBe
+          "The total builds up daily until you pay your VAT or set up a payment plan. " +
+            "However, when we calculate your penalty we do not count the days you are in Breathing Space."
+      }
+
+      "have the correct calculation explanation" in {
+        elementText(Selectors.explanation3) shouldBe
+          "The calculation we use for each day is: (Penalty rate of 4.4% × unpaid VAT) ÷ days in a year"
+      }
+
+      "not have inset text" in {
+        elementExtinct(Selectors.ttpInset)
+      }
+
+      "have the correct estimates paragraph content" which {
+
+        "has the correct first sentence" in {
+          elementText("#estimates") shouldBe "Penalties and interest will show as estimates until:"
+        }
+
+        "has the correct first bullet point" in {
+          elementText("#bs-only-bullet1") shouldBe "you pay the charge they relate to, and"
+        }
+
+        "has the correct second bullet point" in {
+          elementText("#bs-bullet2") shouldBe "Breathing Space ends"
+        }
+      }
+    }
+
+    "the user has a time to pay arrangement and breathing space" should {
+
+      lazy val view = injectedView(estimatedLPP2ModelTTP.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first explanation paragraph" in {
+        elementText(Selectors.explanation1) shouldBe
+          "This penalty applies from day 31, if any VAT remains unpaid."
+      }
+
+      "have the correct calculation explanation statement" in {
+        elementText(Selectors.explanation2BreathingSpace) shouldBe
+          "The total builds up daily until you pay your VAT or set up a payment plan. " +
+            "However, when we calculate your penalty we do not count the days you are in Breathing Space."
+      }
+
+      "have the correct calculation explanation" in {
+        elementText(Selectors.explanation3) shouldBe
+          "The calculation we use for each day is: (Penalty rate of 4.4% × unpaid VAT) ÷ days in a year"
+      }
+
+      "have inset text with the correct content" in {
+        elementText(Selectors.ttpInset) shouldBe "You’ve asked HMRC if you can set up a payment plan. If a payment plan " +
+          "has been agreed, and you keep up with all payments, this penalty will not increase further."
+      }
+
+      "have the correct estimates paragraph content" which {
+
+        "has the correct first sentence" in {
+          elementText("#estimates") shouldBe "Penalties and interest will show as estimates until:"
+        }
+
+        "has the correct first bullet point" in {
+          elementText("#bs-ttp-bullet1") shouldBe "you make all payments due under the payment plan, and"
+        }
+
+        "has the correct second bullet point" in {
+          elementText("#bs-bullet2") shouldBe "Breathing Space ends"
+        }
+      }
+    }
   }
 
   "Rendering the Estimated LPP2 Page for an agent" when {
 
-    "the agent has no time to pay arrangement" should {
+    "their client has no time to pay arrangement and no breathing space" should {
 
       lazy val view = injectedView(estimatedLPP2Model, Html(""))(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -243,7 +341,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the agent has a time to pay arrangement" should {
+    "their client has a time to pay arrangement but no breathing space" should {
 
       lazy val view = injectedView(estimatedLPP2ModelTTP, Html(""))(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -256,6 +354,104 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       "have the correct estimates paragraph content" in {
         elementText(Selectors.estimatesDescription) shouldBe "Penalties will show as estimates until your client makes all payments " +
           "due under the payment plan."
+      }
+
+      "have the correct first explanation paragraph" in {
+        elementText(Selectors.explanation1) shouldBe
+          "This penalty applies from day 31, if any VAT remains unpaid."
+      }
+
+      "have the correct calculation explanation statement" in {
+        elementText(Selectors.explanation2) shouldBe
+          "The total builds up daily until your client pays their VAT or sets up a payment plan."
+      }
+
+      "have the correct calculation explanation" in {
+        elementText(Selectors.explanation3) shouldBe
+          "The calculation we use for each day is: (Penalty rate of 4.4% × unpaid VAT) ÷ days in a year"
+      }
+    }
+
+    "their client has no time to pay arrangement but breathing space" should {
+
+      lazy val view = injectedView(estimatedLPP2Model.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first explanation paragraph" in {
+        elementText(Selectors.explanation1) shouldBe
+          "This penalty applies from day 31, if any VAT remains unpaid."
+      }
+
+      "have the correct calculation explanation statement" in {
+        elementText(Selectors.explanation2BreathingSpace) shouldBe
+          "The total builds up daily until your client pays their VAT or sets up a payment plan. " +
+            "However, when we calculate their penalty we do not count the days they are in Breathing Space."
+      }
+
+      "have the correct calculation explanation" in {
+        elementText(Selectors.explanation3) shouldBe
+          "The calculation we use for each day is: (Penalty rate of 4.4% × unpaid VAT) ÷ days in a year"
+      }
+
+      "not have inset text" in {
+        elementExtinct(Selectors.ttpInset)
+      }
+
+      "have the correct estimates paragraph content" which {
+
+        "has the correct first sentence" in {
+          elementText("#estimates") shouldBe "Penalties and interest will show as estimates until:"
+        }
+
+        "has the correct first bullet point" in {
+          elementText("#bs-only-bullet1") shouldBe "your client pays the charge they relate to, and"
+        }
+
+        "has the correct second bullet point" in {
+          elementText("#bs-bullet2") shouldBe "Breathing Space ends"
+        }
+      }
+    }
+
+    "their client has a time to pay arrangement and breathing space" should {
+
+      lazy val view = injectedView(estimatedLPP2ModelTTP.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct first explanation paragraph" in {
+        elementText(Selectors.explanation1) shouldBe
+          "This penalty applies from day 31, if any VAT remains unpaid."
+      }
+
+      "have the correct calculation explanation statement" in {
+        elementText(Selectors.explanation2BreathingSpace) shouldBe
+          "The total builds up daily until your client pays their VAT or sets up a payment plan. " +
+            "However, when we calculate their penalty we do not count the days they are in Breathing Space."
+      }
+
+      "have the correct calculation explanation" in {
+        elementText(Selectors.explanation3) shouldBe
+          "The calculation we use for each day is: (Penalty rate of 4.4% × unpaid VAT) ÷ days in a year"
+      }
+
+      "have inset text with the correct content" in {
+        elementText(Selectors.ttpInset) shouldBe "Your client has asked HMRC if they can set up a payment plan. If a payment plan " +
+          "has been agreed, and they keep up with all payments, this penalty will not increase further."
+      }
+
+      "have the correct estimates paragraph content" which {
+
+        "has the correct first sentence" in {
+          elementText("#estimates") shouldBe "Penalties and interest will show as estimates until:"
+        }
+
+        "has the correct first bullet point" in {
+          elementText("#bs-ttp-bullet1") shouldBe "your client makes all payments due under the payment plan, and"
+        }
+
+        "has the correct second bullet point" in {
+          elementText("#bs-bullet2") shouldBe "Breathing Space ends"
+        }
       }
     }
   }
