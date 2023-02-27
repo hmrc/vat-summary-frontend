@@ -25,11 +25,16 @@ class PaymentsConnectorSpec extends ControllerBaseSpec {
 
     val connector = new PaymentsConnector(mock[HttpClient], mockAppConfig)
 
-    "generate the correct endpoint URL" in {
+    "generate the correct endpoint URL for a VAT return debit charge" in {
 
       connector.vatUrl("vat-return-debit-charge") shouldEqual
         "/pay-api/view-and-change/vat/vat-return-debit-charge/journey/start"
+    }
 
+    "generate the correct endpoint URL for all the other charges" in {
+
+      connector.vatUrl("vat-further-interest") shouldEqual
+        "/pay-api/view-and-change/vat/other/journey/start"
     }
   }
 }

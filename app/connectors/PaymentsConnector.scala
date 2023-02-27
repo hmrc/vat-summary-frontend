@@ -18,8 +18,9 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+
 import javax.inject.{Inject, Singleton}
-import models.payments.PaymentDetailsModel
+import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import utils.LoggerUtil
@@ -30,8 +31,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class PaymentsConnector @Inject()(http: HttpClient,
                                   appConfig: AppConfig) extends LoggerUtil{
 
-  private[connectors] def vatUrl(chargeType: String): String =
-    appConfig.paymentsServiceUrl + appConfig.payViewAndChange + chargeType + "/journey/start"
+  private[connectors] def vatUrl(chargeType: String): String = {
+
+    if (chargeType.equals(ReturnDebitCharge.toPathElement)) {
+      appConfig.paymentsServiceUrl + appConfig.payViewAndChange + "vat-return-debit-charge/journey/start"
+    } else {
+      appConfig.paymentsServiceUrl + appConfig.payViewAndChange + "other/journey/start"
+    }
+  }
 
   def setupJourney(data: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[String]] = {
 
