@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import helpers.IntegrationBaseSpec
 import models.errors.PenaltiesFeatureSwitchError
 import models.penalties.PenaltiesSummary
@@ -61,7 +61,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
           hasAnyPenaltyData = true
         )
 
-        val result: HttpGetResult[PenaltiesSummary] = await(connector.getPenaltiesDataForVRN("123"))
+        val result: HttpResult[PenaltiesSummary] = await(connector.getPenaltiesDataForVRN("123"))
         result shouldBe Right(expectedContent)
       }
 
@@ -84,7 +84,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
           hasAnyPenaltyData = false
         )
 
-        val result: HttpGetResult[PenaltiesSummary] = await(connector.getPenaltiesDataForVRN("1FOO2"))
+        val result: HttpResult[PenaltiesSummary] = await(connector.getPenaltiesDataForVRN("1FOO2"))
         result shouldBe Right(expectedContent)
       }
     }
@@ -92,7 +92,7 @@ class PenaltiesConnectorISpec extends IntegrationBaseSpec {
     "when the feature switch is disabled" should {
       "return the custom penalties feature switch error" in new Test {
         appConfig.features.penaltiesServiceEnabled(false)
-        val result: HttpGetResult[PenaltiesSummary] = await(connector.getPenaltiesDataForVRN("123"))
+        val result: HttpResult[PenaltiesSummary] = await(connector.getPenaltiesDataForVRN("123"))
         result shouldBe Left(PenaltiesFeatureSwitchError)
       }
     }

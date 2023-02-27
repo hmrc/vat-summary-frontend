@@ -19,7 +19,7 @@ package services
 import com.google.inject.Inject
 import config.AppConfig
 import connectors.PenaltyDetailsConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -28,7 +28,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class PenaltyDetailsService @Inject()(connector: PenaltyDetailsConnector) {
 
   def getPenaltyDetails(idValue: String)(implicit hc: HeaderCarrier, ec: ExecutionContext, appConfig: AppConfig):
-    Future[HttpGetResult[PenaltyDetails]] =
+    Future[HttpResult[PenaltyDetails]] =
     if (appConfig.features.penaltiesAndInterestWYOEnabled()) {
       connector.getPenaltyDetails(idValue)
     } else {

@@ -23,7 +23,7 @@ import common.MandationStatus._
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
@@ -116,7 +116,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       }
   }
 
-  private[controllers] def redirectForMissingTrader(customerInfo: ResponseHttpParsers.HttpGetResult[CustomerInformation]) = {
+  private[controllers] def redirectForMissingTrader(customerInfo: ResponseHttpParsers.HttpResult[CustomerInformation]) = {
     customerInfo.fold(
       _ => false,
       details => details.isMissingTrader && !details.hasPendingPpobChanges
@@ -151,7 +151,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               payments: ServiceResponse[Option[Payments]],
-                                              accountDetails: HttpGetResult[CustomerInformation],
+                                              accountDetails: HttpResult[CustomerInformation],
                                               penaltyInformation: Option[PenaltiesSummary]): VatDetailsViewModel = {
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations)
@@ -189,7 +189,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     )
   }
 
-  private[controllers] def retrieveEmailVerifiedIfExist(accountDetails: HttpGetResult[CustomerInformation]): Boolean = {
+  private[controllers] def retrieveEmailVerifiedIfExist(accountDetails: HttpResult[CustomerInformation]): Boolean = {
     accountDetails match {
       case Right(details) =>
         details.emailAddress match {
@@ -202,20 +202,20 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     }
   }
 
-  private[controllers] def retrieveIsOfStatus(customerInfo: HttpGetResult[CustomerInformation],
+  private[controllers] def retrieveIsOfStatus(customerInfo: HttpResult[CustomerInformation],
                                               expectedType: Seq[String]): Option[Boolean] =
     customerInfo.fold(
       _ => None,
       result => Some(expectedType.contains(result.mandationStatus))
     )
 
-  private def retrieveHybridStatus(accountDetails: HttpGetResult[CustomerInformation]): Boolean =
+  private def retrieveHybridStatus(accountDetails: HttpResult[CustomerInformation]): Boolean =
     accountDetails match {
       case Right(model) => model.isHybridUser
       case Left(_) => false
     }
 
-  private def retrieveDisplayedName(accountDetails: HttpGetResult[CustomerInformation]): Option[String] =
+  private def retrieveDisplayedName(accountDetails: HttpResult[CustomerInformation]): Option[String] =
     accountDetails match {
       case Right(model) =>
         if (model.details.entityName.isEmpty) {
@@ -225,13 +225,13 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       case Left(_) => None
     }
 
-  private def retrieveDeregDate(accountDetails: HttpGetResult[CustomerInformation]): Option[LocalDate] =
+  private def retrieveDeregDate(accountDetails: HttpResult[CustomerInformation]): Option[LocalDate] =
     accountDetails match {
       case Right(model) => model.deregistration.flatMap(_.effectDateOfCancellation)
       case Left(_) => None
     }
 
-  private def retrievePartyType(accountDetails: HttpGetResult[CustomerInformation]): Option[String] =
+  private def retrievePartyType(accountDetails: HttpResult[CustomerInformation]): Option[String] =
     accountDetails match {
       case Right(model) => model.partyType
       case Left(_) => None

@@ -21,7 +21,7 @@ import audit.models.{AuditModel, ExtendedAuditModel}
 import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, penaltyDetailsResponse, successfulAuthResult}
 import config.{AppConfig, ServiceErrorHandler}
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import mocks.MockAppConfig
 import models.{CustomerInformation, ServiceResponse, User, WYODatabaseModel}
@@ -126,7 +126,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .expects(*, *, *)
       .returns(Future.successful(result))
 
-  def mockCustomerInfo(accountDetailsResponse: HttpGetResult[CustomerInformation]): Any =
+  def mockCustomerInfo(accountDetailsResponse: HttpResult[CustomerInformation]): Any =
     (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
       .returns(Future.successful(accountDetailsResponse))

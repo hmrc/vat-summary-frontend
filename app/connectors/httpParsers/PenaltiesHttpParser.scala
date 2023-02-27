@@ -16,7 +16,7 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.penalties.PenaltiesSummary
 import play.api.http.Status._
@@ -25,8 +25,8 @@ import utils.LoggerUtil
 
 object PenaltiesHttpParser extends ResponseHttpParsers with LoggerUtil {
 
-  implicit object PenaltiesReads extends HttpReads[HttpGetResult[PenaltiesSummary]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[PenaltiesSummary] = {
+  implicit object PenaltiesReads extends HttpReads[HttpResult[PenaltiesSummary]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[PenaltiesSummary] = {
       response.status match {
         case OK => Right(response.json.as[PenaltiesSummary])
         case NOT_FOUND | NO_CONTENT =>

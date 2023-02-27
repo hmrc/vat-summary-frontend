@@ -18,7 +18,7 @@ package controllers
 
 import java.time.LocalDate
 import common.TestModels._
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors.{UnknownError, VatLiabilitiesError}
 import models.payments.ReturnDebitCharge
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
@@ -38,7 +38,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
   val exampleAmount: Int = 100
   val emptyResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(Seq())
   val currentYear: Int = 2018
-  val accountDetailsResponseNoMigratedDate: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
+  val accountDetailsResponseNoMigratedDate: HttpResult[CustomerInformation] = Right(customerInformationMin)
 
   val controller = new PaymentHistoryController(
     mockPaymentsService,

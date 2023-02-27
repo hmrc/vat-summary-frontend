@@ -18,7 +18,7 @@ package services
 
 import common.TestModels.customerInformationMax
 import connectors.VatSubscriptionConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors.{BadRequestError, CustomerInformationError}
 import models.{CustomerInformation, ServiceResponse}
 import org.scalamock.scalatest.MockFactory
@@ -32,26 +32,26 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class AccountDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers {
 
-  val customerInfoResult: HttpGetResult[CustomerInformation] = Right(customerInformationMax)
+  val customerInfoResult: HttpResult[CustomerInformation] = Right(customerInformationMax)
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
-  def setup(customerInfoResult: HttpGetResult[CustomerInformation]): Any = {
+  def setup(customerInfoResult: HttpResult[CustomerInformation]): Any = {
     (mockVatSubscriptionConnector.getCustomerInfo(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
       .returns(Future.successful(customerInfoResult))
   }
 
-  def accountDetailsService(customerInfoResult: HttpGetResult[CustomerInformation] = customerInfoResult): AccountDetailsService = {
-    setup(customerInfoResult: HttpGetResult[CustomerInformation])
+  def accountDetailsService(customerInfoResult: HttpResult[CustomerInformation] = customerInfoResult): AccountDetailsService = {
+    setup(customerInfoResult: HttpResult[CustomerInformation])
     new AccountDetailsService(mockVatSubscriptionConnector)
   }
 
   "Calling .getAccountDetails" should {
 
     "retrieve the customer details" in {
-      val details: HttpGetResult[CustomerInformation] = await(accountDetailsService().getAccountDetails("123456789"))
+      val details: HttpResult[CustomerInformation] = await(accountDetailsService().getAccountDetails("123456789"))
       details shouldBe customerInfoResult
     }
   }
@@ -69,7 +69,7 @@ class AccountDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Ma
     "the connector returns an error" should {
 
       "return None" in {
-        lazy val customerInfoResult: HttpGetResult[CustomerInformation] = Left(BadRequestError("", ""))
+        lazy val customerInfoResult: HttpResult[CustomerInformation] = Left(BadRequestError("", ""))
         val result: ServiceResponse[Option[String]] = await(accountDetailsService(customerInfoResult).getEntityName("999999999"))
         result shouldBe Left(CustomerInformationError)
       }

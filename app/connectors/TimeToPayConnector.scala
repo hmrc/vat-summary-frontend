@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import connectors.httpParsers.TimeToPayHttpParser.TimeToPayReads
 import models.ESSTTP.{TTPRequestModel, TTPResponseModel}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
@@ -33,6 +33,6 @@ class TimeToPayConnector @Inject()(http: HttpClient,
     appConfig.essttpService + "/essttp-backend/vat/vat-service/journey/start"
 
   def setupJourney(requestModel: TTPRequestModel)
-                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[TTPResponseModel]] =
+                  (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[TTPResponseModel]] =
     http.POST(timeToPayURI, requestModel)
 }

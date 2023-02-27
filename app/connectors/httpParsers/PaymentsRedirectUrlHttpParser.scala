@@ -16,7 +16,7 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors.UnexpectedStatusError
 import play.api.http.Status.CREATED
 import play.api.libs.json.JsValue
@@ -26,8 +26,8 @@ object PaymentsRedirectUrlHttpParser extends ResponseHttpParsers {
 
   private def extractRedirectUrl(json: JsValue): String = (json \ "nextUrl").as[String]
 
-  implicit object PaymentsRedirectUrlReads extends HttpReads[HttpPostResult[String]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpPostResult[String] = {
+  implicit object PaymentsRedirectUrlReads extends HttpReads[HttpResult[String]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[String] = {
       response.status match {
         case CREATED => Right(extractRedirectUrl(response.json))
         case status => Left(UnexpectedStatusError(status.toString, response.body))

@@ -16,7 +16,7 @@
 
 package services
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.penalties.PenaltiesSummary
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.should.Matchers
@@ -39,7 +39,7 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
 
   val mockPenaltiesConnector: PenaltiesConnector = mock[PenaltiesConnector]
 
-  def setup(penaltiesSummary: HttpGetResult[PenaltiesSummary]): Any =
+  def setup(penaltiesSummary: HttpResult[PenaltiesSummary]): Any =
     (mockPenaltiesConnector.getPenaltiesDataForVRN(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*,*,*)
       .returns(Future.successful(penaltiesSummary))
@@ -50,7 +50,7 @@ class PenaltiesServiceSpec extends AnyWordSpecLike with MockFactory with Matcher
 
   "Calling getPenaltiesDataForVRN" should {
     "retrieve the penalties summary for the vrn" in {
-      val summary: HttpGetResult[PenaltiesSummary] = await{
+      val summary: HttpResult[PenaltiesSummary] = await{
         setup(penaltySummaryResponse)
         penaltiesService().getPenaltiesInformation("123")
       }

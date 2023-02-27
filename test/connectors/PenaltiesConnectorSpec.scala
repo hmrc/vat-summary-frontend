@@ -16,7 +16,7 @@
 
 package connectors
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import controllers.ControllerBaseSpec
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
@@ -32,9 +32,9 @@ class PenaltiesConnectorSpec extends ControllerBaseSpec {
   val connector: PenaltiesConnector = new PenaltiesConnector(httpClient)(mockAppConfig)
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  def mockPenaltiesCall(result: Future[HttpGetResult[PenaltiesSummary]]): Any =
-    (httpClient.GET[HttpGetResult[PenaltiesSummary]](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
-      (_: HttpReads[HttpGetResult[PenaltiesSummary]], _: HeaderCarrier, _: ExecutionContext))
+  def mockPenaltiesCall(result: Future[HttpResult[PenaltiesSummary]]): Any =
+    (httpClient.GET[HttpResult[PenaltiesSummary]](_: String, _: Seq[(String, String)], _: Seq[(String, String)])
+      (_: HttpReads[HttpResult[PenaltiesSummary]], _: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *, *, *, *)
       .returns(result)
 

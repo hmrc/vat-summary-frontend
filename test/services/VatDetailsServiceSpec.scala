@@ -17,7 +17,7 @@
 package services
 
 import java.time.LocalDate
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import connectors.{FinancialDataConnector, VatObligationsConnector, VatSubscriptionConnector}
 import controllers.ControllerBaseSpec
 import models.ServiceResponse
@@ -67,13 +67,13 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
   val mockFinancialDataConnector: FinancialDataConnector = mock[FinancialDataConnector]
   val mockSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
-  def callObligationsConnector(obligationResult: HttpGetResult[VatReturnObligations] = Right(obligations)): Any = {
+  def callObligationsConnector(obligationResult: HttpResult[VatReturnObligations] = Right(obligations)): Any = {
     (mockObligationsConnector.getVatReturnObligations(_: String, _: Obligation.Status.Value, _: Option[LocalDate], _: Option[LocalDate])
     (_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *, *, *)
       .returns(Future.successful(obligationResult))
   }
-    def callFinancialDataConnector(paymentsResult: HttpGetResult[Payments] = Right(Payments(payments))): Any = {
+    def callFinancialDataConnector(paymentsResult: HttpResult[Payments] = Right(Payments(payments))): Any = {
       (mockFinancialDataConnector.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
         .returns(Future.successful(paymentsResult))

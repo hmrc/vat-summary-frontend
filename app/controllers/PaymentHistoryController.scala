@@ -21,7 +21,7 @@ import audit.AuditingService
 import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
@@ -99,19 +99,19 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
         }
   }
 
-  private[controllers] def getMigratedToETMPDate(customerInfo: HttpGetResult[CustomerInformation]): Option[LocalDate] =
+  private[controllers] def getMigratedToETMPDate(customerInfo: HttpResult[CustomerInformation]): Option[LocalDate] =
     customerInfo match {
       case Right(information) => information.extractDate.map(LocalDate.parse)
       case Left(_) => None
     }
 
-  private[controllers] def getHybridToFullMigrationDate(customerInfo: HttpGetResult[CustomerInformation]): Option[LocalDate] =
+  private[controllers] def getHybridToFullMigrationDate(customerInfo: HttpResult[CustomerInformation]): Option[LocalDate] =
     customerInfo match {
       case Right(information) => information.hybridToFullMigrationDate.map(LocalDate.parse)
       case Left(_) => None
     }
 
-  private[controllers] def showInsolventContent(customerInfo: HttpGetResult[CustomerInformation]): Boolean =
+  private[controllers] def showInsolventContent(customerInfo: HttpResult[CustomerInformation]): Boolean =
     customerInfo match {
       case Right(information) if information.details.isInsolvent =>
         !information.details.exemptInsolvencyTypes.contains(information.details.insolvencyType.getOrElse(""))
