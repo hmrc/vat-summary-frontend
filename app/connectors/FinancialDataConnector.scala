@@ -19,7 +19,7 @@ package connectors
 import java.time.LocalDate
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.DirectDebitStatus
 import javax.inject.{Inject, Singleton}
 import models.payments.Payments
@@ -39,7 +39,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
   private[connectors] def directDebitUrl(vrn: String): String = s"${appConfig.financialDataBaseUrl}/financial-transactions" +
     s"/has-direct-debit/$vrn"
 
-  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Payments]] = {
+  def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Payments]] = {
 
     import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
 
@@ -55,7 +55,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
   }
 
   def getVatLiabilities(vrn: String, from: LocalDate, to: LocalDate)
-                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[Seq[PaymentsHistoryModel]]] = {
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Seq[PaymentsHistoryModel]]] = {
 
     import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
 
@@ -74,7 +74,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
   }
 
   def getDirectDebitStatus(vrn: String)
-                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[DirectDebitStatus]] = {
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[DirectDebitStatus]] = {
 
     import connectors.httpParsers.DirectDebitStatusHttpParser.DirectDebitStatusReads
 

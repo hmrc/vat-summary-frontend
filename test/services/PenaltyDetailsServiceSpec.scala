@@ -19,7 +19,7 @@ package services
 import common.TestModels.penaltyDetailsResponse
 import config.AppConfig
 import connectors.PenaltyDetailsConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import mocks.MockAppConfig
 import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.HeaderCarrier
@@ -38,7 +38,7 @@ class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Ma
   implicit val hc: HeaderCarrier = HeaderCarrier()
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
-  def setup(penaltyDetails: HttpGetResult[PenaltyDetails]): Any =
+  def setup(penaltyDetails: HttpResult[PenaltyDetails]): Any =
     (mockPenaltyDetailsConnector.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*,*,*)
       .returns(Future.successful(penaltyDetails))

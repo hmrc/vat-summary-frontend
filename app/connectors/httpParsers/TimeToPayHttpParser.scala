@@ -25,9 +25,9 @@ import utils.LoggerUtil
 
 object TimeToPayHttpParser extends ResponseHttpParsers with LoggerUtil {
 
-  implicit object TimeToPayReads extends HttpReads[HttpPostResult[TTPResponseModel]] {
+  implicit object TimeToPayReads extends HttpReads[HttpResult[TTPResponseModel]] {
 
-    override def read(method: String, url: String, response: HttpResponse): HttpPostResult[TTPResponseModel] = {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[TTPResponseModel] = {
 
       response.status match {
         case CREATED =>

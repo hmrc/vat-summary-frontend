@@ -16,7 +16,7 @@
 
 package common
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
@@ -357,8 +357,8 @@ object TestModels {
     hasAnyPenaltyData = true
   )
 
-  val penaltySummaryResponse: HttpGetResult[PenaltiesSummary] = Right(penaltiesSummaryModel)
-  val penaltySummaryNoResponse: HttpGetResult[PenaltiesSummary] = Left(PenaltiesFeatureSwitchError)
+  val penaltySummaryResponse: HttpResult[PenaltiesSummary] = Right(penaltiesSummaryModel)
+  val penaltySummaryNoResponse: HttpResult[PenaltiesSummary] = Left(PenaltiesFeatureSwitchError)
 
   val whatYouOweChargeModel: StandardChargeViewModel = StandardChargeViewModel(
     chargeType = "VAT Return Debit Charge",
@@ -849,7 +849,7 @@ object TestModels {
     "timeToPay" -> false
   )
 
-  val penaltyDetailsResponse: HttpGetResult[PenaltyDetails] = Right(penaltyDetailsModelMax)
+  val penaltyDetailsResponse: HttpResult[PenaltyDetails] = Right(penaltyDetailsModelMax)
 
   val LPPDetailsJsonMin: JsObject = Json.obj(
     "principalChargeReference" -> "ABCDEFGHIJKLMNOP",

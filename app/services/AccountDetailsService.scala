@@ -17,7 +17,7 @@
 package services
 
 import connectors.VatSubscriptionConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.{Inject, Singleton}
 import models.errors.CustomerInformationError
 import models.{CustomerInformation, ServiceResponse}
@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AccountDetailsService @Inject()(connector: VatSubscriptionConnector) {
 
   def getAccountDetails(vrn: String)
-                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[CustomerInformation]] =
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[CustomerInformation]] =
     connector.getCustomerInfo(vrn)
 
 

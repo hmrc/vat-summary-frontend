@@ -19,7 +19,7 @@ package connectors.httpParsers
 import java.time.LocalDate
 
 import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors._
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
@@ -549,7 +549,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
     )
   ))
 
-  val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
+  val result: HttpResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 
   "return a Payments instance" in {
     result shouldBe expected
@@ -561,7 +561,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
 
     val expected: Either[Nothing, Seq[Nothing]] = Right(Seq.empty)
 
-    val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
+    val result: HttpResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 
     "return an empty Payments object" in {
       result shouldBe expected
@@ -582,7 +582,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
       errorResponse = "Fail!"
     ))
 
-    val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
+    val result: HttpResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 
     "return a BadRequestError" in {
       result shouldBe expected
@@ -644,7 +644,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
 
     val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
     val expected: Either[ServerSideError, Nothing] = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
-    val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
+    val result: HttpResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 
     "return a ServerSideError" in {
       result shouldBe expected
@@ -660,7 +660,7 @@ class PaymentsHistoryHttpParserSpec extends AnyWordSpecLike with Matchers  {
 
     val httpResponse: AnyRef with HttpResponse = HttpResponse(Status.CONFLICT, body.toString())
     val expected: Either[UnexpectedStatusError, Nothing] = Left(UnexpectedStatusError("409", httpResponse.body))
-    val result: HttpGetResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
+    val result: HttpResult[Seq[PaymentsHistoryModel]] = PaymentsHistoryReads.read("", "", httpResponse)
 
     "return an UnexpectedStatusError" in {
       result shouldBe expected

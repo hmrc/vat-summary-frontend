@@ -18,7 +18,7 @@ package services
 
 import common.TestModels.timeToPayResponseModel
 import connectors.TimeToPayConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import controllers.ControllerBaseSpec
 import models.ESSTTP.{TTPRequestModel, TTPResponseModel}
 import models.errors.{TimeToPayRedirectError, UnknownError}
@@ -32,7 +32,7 @@ class TimeToPayServiceSpec extends ControllerBaseSpec {
   implicit val hc: HeaderCarrier = HeaderCarrier()
   val mockTTPConnector: TimeToPayConnector = mock[TimeToPayConnector]
 
-  def mockTTPConnectorCall(response: HttpPostResult[TTPResponseModel]): Any =
+  def mockTTPConnectorCall(response: HttpResult[TTPResponseModel]): Any =
     (mockTTPConnector.setupJourney(_: TTPRequestModel)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*,*,*).returns(Future.successful(response))
 

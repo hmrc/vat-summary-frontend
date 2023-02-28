@@ -16,7 +16,7 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.obligations.VatReturnObligations
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
@@ -24,8 +24,8 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object VatReturnObligationsHttpParser extends ResponseHttpParsers {
 
-  implicit object VatReturnsReads extends HttpReads[HttpGetResult[VatReturnObligations]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[VatReturnObligations] = {
+  implicit object VatReturnsReads extends HttpReads[HttpResult[VatReturnObligations]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[VatReturnObligations] = {
       response.status match {
         case OK => Right(response.json.as[VatReturnObligations])
         case NOT_FOUND => Right(VatReturnObligations(Seq.empty))

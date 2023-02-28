@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpPostResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 
 import javax.inject.{Inject, Singleton}
 import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
@@ -40,7 +40,7 @@ class PaymentsConnector @Inject()(http: HttpClient,
     }
   }
 
-  def setupJourney(data: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[String]] = {
+  def setupJourney(data: PaymentDetailsModel)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[String]] = {
 
     import connectors.httpParsers.PaymentsRedirectUrlHttpParser.PaymentsRedirectUrlReads
 

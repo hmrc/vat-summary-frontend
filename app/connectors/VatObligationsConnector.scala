@@ -19,7 +19,7 @@ package connectors
 import java.time.LocalDate
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.{Inject, Singleton}
 import models.obligations.Obligation.Status
 import models.obligations.VatReturnObligations
@@ -43,7 +43,7 @@ class VatObligationsConnector @Inject()(http: HttpClient,
                               status: Status.Value,
                               from: Option[LocalDate] = None,
                               to: Option[LocalDate] = None)(implicit hc: HeaderCarrier,
-                              ec: ExecutionContext): Future[HttpGetResult[VatReturnObligations]] = {
+                              ec: ExecutionContext): Future[HttpResult[VatReturnObligations]] = {
 
     import connectors.httpParsers.VatReturnObligationsHttpParser.VatReturnsReads
 
@@ -58,7 +58,7 @@ class VatObligationsConnector @Inject()(http: HttpClient,
         case (Some(f), Some(t)) => Seq("from" -> f.toString, "to" -> t.toString, "status" -> status.toString)
         case _ => Seq("status" -> status.toString)
       }
-    )(implicitly[HttpReads[HttpGetResult[VatReturnObligations]]],
+    )(implicitly[HttpReads[HttpResult[VatReturnObligations]]],
       headerCarrier,
       implicitly[ExecutionContext]
     )

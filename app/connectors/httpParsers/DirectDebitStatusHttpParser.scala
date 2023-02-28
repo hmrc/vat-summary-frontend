@@ -16,7 +16,7 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.DirectDebitStatus
 import models.errors.{ServerSideError, UnexpectedStatusError}
 import play.api.http.Status.{BAD_REQUEST, OK}
@@ -24,8 +24,8 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object DirectDebitStatusHttpParser extends ResponseHttpParsers {
 
-  implicit object DirectDebitStatusReads extends HttpReads[HttpGetResult[DirectDebitStatus]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[DirectDebitStatus] = {
+  implicit object DirectDebitStatusReads extends HttpReads[HttpResult[DirectDebitStatus]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[DirectDebitStatus] = {
       response.status match {
         case OK => Right(response.json.as[DirectDebitStatus])
         case BAD_REQUEST => handleBadRequest(response.json)

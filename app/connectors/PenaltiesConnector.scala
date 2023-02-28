@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import connectors.httpParsers.PenaltiesHttpParser.PenaltiesReads
@@ -30,7 +30,7 @@ class PenaltiesConnector @Inject()(http: HttpClient)
                                   (implicit appConfig: AppConfig){
 
   def getPenaltiesDataForVRN(vrn: String)
-                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[PenaltiesSummary]] =
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] =
     if (appConfig.features.penaltiesServiceEnabled()){
       http.GET(appConfig.penaltiesUrl(vrn))
     } else {

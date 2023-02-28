@@ -17,7 +17,7 @@
 package services
 
 import java.time.LocalDate
-import connectors.httpParsers.ResponseHttpParsers.{HttpGetResult, HttpPostResult}
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import connectors.{FinancialDataConnector, PaymentsConnector}
 import models.errors._
 import models.payments._
@@ -221,7 +221,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
       "return a redirect url" in {
         val redirectUrl: String = "http://www.google.com"
-        lazy val connectorResponse: HttpPostResult[String] = Right(redirectUrl)
+        lazy val connectorResponse: HttpResult[String] = Right(redirectUrl)
         (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(connectorResponse))
@@ -235,7 +235,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
     "setting up the payments journey is unsuccessful" should {
 
       "return an error" in {
-        lazy val connectorResponse: HttpPostResult[String] = Left(UnknownError)
+        lazy val connectorResponse: HttpResult[String] = Left(UnknownError)
         (mockPaymentsConnector.setupJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *)
           .returns(Future.successful(connectorResponse))
@@ -289,11 +289,11 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
         clearedDate = Some(LocalDate.parse("2018-01-31"))
       )
 
-      val paymentSeq: HttpGetResult[Seq[PaymentsHistoryModel]] =
+      val paymentSeq: HttpResult[Seq[PaymentsHistoryModel]] =
         Right(Seq(paymentModel1, paymentModel2, paymentModel3, paymentModel4))
       val sortedPayments: ServiceResponse[Seq[PaymentsHistoryModel]] =
         Right(Seq(paymentModel3, paymentModel2, paymentModel4, paymentModel1))
-      lazy val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = paymentSeq
+      lazy val connectorResponse: HttpResult[Seq[PaymentsHistoryModel]] = paymentSeq
 
       val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
         (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
@@ -306,7 +306,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
     }
 
     "return a http error" in {
-      lazy val connectorResponse: HttpGetResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
+      lazy val connectorResponse: HttpResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
       val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
         (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *)

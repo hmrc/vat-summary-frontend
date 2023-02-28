@@ -21,7 +21,7 @@ import java.time.LocalDate
 import common.MandationStatus._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models._
 import models.errors.{NextPaymentError, ObligationsError, _}
 import models.obligations.{VatReturnObligation, VatReturnObligations}
@@ -56,7 +56,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       .stubs(*, *, *)
       .returns(Future.successful(result))
 
-  def mockPenaltiesService(result: HttpGetResult[PenaltiesSummary]): Any =
+  def mockPenaltiesService(result: HttpResult[PenaltiesSummary]): Any =
     (mockPenaltiesService.getPenaltiesInformation(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *)
       .returns(Future.successful(result))
@@ -916,8 +916,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
 
       "the mandation status in the CustomerInformation matches one of the expected statuses" in {
-        val mandationStatusToCompareMtdfb: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
-        val mandationStatusToCompareExempt: HttpGetResult[CustomerInformation] = Right(customerInformationMTDfBExempt)
+        val mandationStatusToCompareMtdfb: HttpResult[CustomerInformation] = Right(customerInformationMin)
+        val mandationStatusToCompareExempt: HttpResult[CustomerInformation] = Right(customerInformationMTDfBExempt)
 
         controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
         controller.retrieveIsOfStatus(mandationStatusToCompareExempt, Seq(mtdfb, mtdfbExempt)) shouldBe Some(true)
@@ -933,12 +933,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
 
       "the mandation status does not match any of the expected statuses" in {
-        val mandationStatusToCompareMtdfb: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
+        val mandationStatusToCompareMtdfb: HttpResult[CustomerInformation] = Right(customerInformationMin)
         controller.retrieveIsOfStatus(mandationStatusToCompareMtdfb, Seq("randomStatus", "someStatus")) shouldBe Some(false)
       }
 
       "the expected mandation statuses list is empty" in {
-        val mandationStatusToCompare: HttpGetResult[CustomerInformation] = Right(customerInformationMin)
+        val mandationStatusToCompare: HttpResult[CustomerInformation] = Right(customerInformationMin)
         controller.retrieveIsOfStatus(mandationStatusToCompare, Seq.empty[String]) shouldBe Some(false)
       }
 
@@ -947,7 +947,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     "return None" when {
 
       "an error is present" in {
-        val errorForTest: HttpGetResult[CustomerInformation] = Left(UnknownError)
+        val errorForTest: HttpResult[CustomerInformation] = Left(UnknownError)
         controller.retrieveIsOfStatus(errorForTest, Seq.empty[String]) shouldBe None
       }
     }

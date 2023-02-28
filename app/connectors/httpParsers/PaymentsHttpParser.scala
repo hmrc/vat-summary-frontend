@@ -16,7 +16,7 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.errors.{ServerSideError, UnexpectedStatusError}
 import models.payments._
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
@@ -24,8 +24,8 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object PaymentsHttpParser extends ResponseHttpParsers {
 
-  implicit object PaymentsReads extends HttpReads[HttpGetResult[Payments]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[Payments] = {
+  implicit object PaymentsReads extends HttpReads[HttpResult[Payments]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[Payments] = {
       response.status match {
         case OK => Right(response.json.as[Payments])
         case NOT_FOUND => Right(Payments(Seq.empty))

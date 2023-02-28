@@ -17,7 +17,7 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.Inject
 import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
@@ -31,7 +31,7 @@ class PenaltyDetailsConnector @Inject()(http: HttpClient,
     s"${appConfig.financialDataBaseUrl}/financial-transactions/penalty/VAT/$idValue"
 
   def getPenaltyDetails(idValue: String)
-                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[PenaltyDetails]] = {
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltyDetails]] = {
 
     import connectors.httpParsers.PenaltyDetailsHttpParser.PenaltyDetailsReads
 

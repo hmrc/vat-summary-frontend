@@ -17,7 +17,7 @@
 package services
 
 import connectors.PenaltiesConnector
-import connectors.httpParsers.ResponseHttpParsers.HttpGetResult
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.HeaderCarrier
 import javax.inject.Inject
@@ -27,6 +27,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class PenaltiesService @Inject()(penaltiesConnector: PenaltiesConnector){
 
   def getPenaltiesInformation(vrn: String)
-                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[PenaltiesSummary]] =
+                             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] =
     penaltiesConnector.getPenaltiesDataForVRN(vrn)
 }
