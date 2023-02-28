@@ -16,11 +16,11 @@
 
 package models.viewModels
 
-import java.time.LocalDate
-
 import common.FinancialTransactionsConstants
-import models.payments.{PaymentOnAccount, _}
+import models.payments._
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 case class PaymentsHistoryModel(clearingSAPDocument: Option[String],
                                 chargeType: ChargeType,
@@ -55,14 +55,13 @@ object PaymentsHistoryModel {
                                            subItem: TransactionSubItem,
                                            transaction: JsValue): Option[PaymentsHistoryModel] =
     (chargeType.value, subItem.amount) match {
-      case (PaymentOnAccount.value, _) if subItem.clearingReason.map(_.toLowerCase).contains(allocatedCharge) => None
-      case (PaymentOnAccount.value, _) if subItem.clearingReason.isEmpty =>
+      case (PaymentOnAccount.value, Some(subItemAmount)) if subItem.clearingReason.isEmpty =>
         Some(PaymentsHistoryModel(
           clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = UnallocatedPayment,
           taxPeriodFrom = None,
           taxPeriodTo = None,
-          amount = (transaction \ FinancialTransactionsConstants.outstandingAmount).as[BigDecimal],
+          amount = subItemAmount,
           clearedDate = subItem.dueDate
         ))
       case (PaymentOnAccount.value, Some(subItemAmount)) =>

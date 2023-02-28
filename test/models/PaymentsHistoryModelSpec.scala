@@ -16,13 +16,13 @@
 
 package models
 
-import java.time.LocalDate
-
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
+import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json._
-import org.scalatest.matchers.should.Matchers
+
+import java.time.LocalDate
 
 class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
@@ -795,57 +795,6 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
     s"charge type is $PaymentOnAccount" when {
 
-      "clearing reason is empty" should {
-
-        val testJson: JsValue = Json.parse(
-          s"""{
-             |    "idType" : "VRN",
-             |    "idNumber" : "555555555",
-             |    "regimeType" : "VATC",
-             |    "processingDate" : "2018-03-07T09:30:00.000Z",
-             |    "financialTransactions" : [
-             |      {
-             |        "chargeType" : "$PaymentOnAccount",
-             |        "mainType" : "Payment on account",
-             |        "businessPartner" : "0",
-             |        "contractAccountCategory" : "99",
-             |        "contractAccount" : "X",
-             |        "contractObjectType" : "ABCD",
-             |        "contractObject" : "0",
-             |        "sapDocumentNumber" : "0",
-             |        "sapDocumentNumberItem" : "0",
-             |        "mainTransaction" : "1234",
-             |        "subTransaction" : "5678",
-             |        "originalAmount" : 5050,
-             |        "outstandingAmount" : 5050,
-             |        "items" : [
-             |          {
-             |            "clearingSAPDocument" : "002828853334",
-             |            "subItem" : "000",
-             |            "dueDate" : "2018-12-04",
-             |            "amount" : 5050
-             |          }
-             |        ]
-             |      }
-             |    ]
-             |  }""".stripMargin
-        )
-
-        val expectedSeq: Seq[PaymentsHistoryModel] = Seq(
-          PaymentsHistoryModel(
-            clearingSAPDocument = Some("002828853334"),
-            UnallocatedPayment,
-            None,
-            None,
-            5050,
-            Some(LocalDate.of(2018, 12, 4)))
-        )
-
-        s"return $UnallocatedPayment as the charge type" in {
-          Json.fromJson(testJson)(reads) shouldBe JsSuccess(expectedSeq)
-        }
-      }
-
       "clearing reason is filled" should {
 
         val testJson: JsValue = Json.parse(
@@ -899,49 +848,6 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
         s"return $Refund as the charge type " in {
           Json.fromJson(testJson)(reads) shouldBe JsSuccess(expectedSeq)
-        }
-      }
-      "Clearing reason is filled with Allocated to Charge" should {
-        val testJson: JsValue = Json.parse(
-          s"""{
-             |    "idType" : "VRN",
-             |    "idNumber" : "555555555",
-             |    "regimeType" : "VATC",
-             |    "processingDate" : "2018-03-07T09:30:00.000Z",
-             |    "financialTransactions" : [
-             |      {
-             |        "chargeType" : "$PaymentOnAccount",
-             |        "mainType" : "Payment on account",
-             |        "businessPartner" : "0",
-             |        "contractAccountCategory" : "99",
-             |        "contractAccount" : "X",
-             |        "contractObjectType" : "ABCD",
-             |        "contractObject" : "0",
-             |        "sapDocumentNumber" : "0",
-             |        "sapDocumentNumberItem" : "0",
-             |        "mainTransaction" : "1234",
-             |        "subTransaction" : "5678",
-             |        "originalAmount" : -5050,
-             |        "items" : [
-             |          {
-             |            "clearingSAPDocument" : "002828853334",
-             |            "subItem": "000",
-             |            "paymentReference": "654378944",
-             |            "amount": -5050,
-             |            "paymentMethod": "BANK GIRO RECEIPTS",
-             |            "paymentLot": "RP11",
-             |            "paymentLotItem": "000001",
-             |            "dueDate": "2018-12-04",
-             |            "clearingDate": "2017-12-04",
-             |            "clearingReason": "Allocated to Charge"
-             |          }
-             |        ]
-             |      }
-             |    ]
-             |  }""".stripMargin
-        )
-        "return an empty seq" in {
-         Json.fromJson(testJson)(reads) shouldBe JsSuccess(Seq())
         }
       }
     }
@@ -1004,7 +910,6 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
             | }
           """.stripMargin
         )
-
         val result = PaymentsHistoryModel.generatePaymentModel(chargeType, subItem, transaction).get
 
         "return a Refund" in {
@@ -1061,8 +966,8 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
           result.clearingSAPDocument shouldBe subItem.clearingSAPDocument
         }
 
-        "use the outstanding amount as the amount" in {
-          result.amount shouldBe 1000
+        "return the correct amount" in {
+          result.amount shouldBe subItem.amount.get
         }
 
         "use the due date of the sub item as cleared date" in {
