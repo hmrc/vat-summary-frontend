@@ -102,7 +102,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
               elementText(tableBodyCell(1, 1) + "> a") + " " +
               elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
               elementText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe
-              s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)} due 1 March 2018 View VAT Return"
+              s"overdue ${chargeModel1.title} ${chargeModel1.description(isAgent = false)} due 1\u00a0March\u00a02018 View VAT Return"
           }
 
           "has a link to the breakdown page" in {
@@ -136,7 +136,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
           "has the correct charge description text for a charge that does not allow a user to view a VAT return" in {
             elementText(tableBodyCell(2, 1)) shouldBe
-              s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)} due 1 December 2018"
+              s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)} due 1\u00a0December\u00a02018"
           }
 
           "has a link to the breakdown page" in {
