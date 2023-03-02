@@ -94,7 +94,7 @@ class DisplayDateRangeHelperSpec extends ViewBaseSpec {
       val formattedDate = displayDateRange(startDate, endDate, alwaysUseYear = true)
 
       "render the correct text" in {
-        formattedDate shouldBe "1\u00a0January 2017 to 1\u00a0April\u00a02017"
+        formattedDate shouldBe "1\u00a0January\u00a02017 to 1\u00a0April\u00a02017"
       }
     }
 
@@ -104,7 +104,7 @@ class DisplayDateRangeHelperSpec extends ViewBaseSpec {
       val formattedDate = displayDateRange(startDate, endDate, useShortDayFormat = true, alwaysUseYear = true)
 
       "render the correct text" in {
-        formattedDate shouldBe "1\u00a0Jan 2017 to 1\u00a0Apr\u00a02017"
+        formattedDate shouldBe "1\u00a0Jan\u00a02017 to 1\u00a0Apr\u00a02017"
       }
     }
 
@@ -114,7 +114,7 @@ class DisplayDateRangeHelperSpec extends ViewBaseSpec {
       val formattedDate = displayDateRange(startDate, endDate)
 
       "render the correct text" in {
-        formattedDate shouldBe "1\u00a0January 2017 to 1\u00a0April\u00a02018"
+        formattedDate shouldBe "1\u00a0January\u00a02017 to 1\u00a0April\u00a02018"
       }
     }
 
@@ -124,7 +124,7 @@ class DisplayDateRangeHelperSpec extends ViewBaseSpec {
       val formattedDate = displayDateRange(startDate, endDate, useShortDayFormat = true)
 
       "render the correct text" in {
-        formattedDate shouldBe "1\u00a0Jan 2017 to 1\u00a0Apr\u00a02018"
+        formattedDate shouldBe "1\u00a0Jan\u00a02017 to 1\u00a0Apr\u00a02018"
       }
     }
   }

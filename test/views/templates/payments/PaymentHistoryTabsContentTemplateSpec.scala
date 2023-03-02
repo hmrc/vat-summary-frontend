@@ -74,7 +74,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |  </thead>
       |  <tbody class="govuk-table__body">
       |    <tr class="govuk-table__row">
-      |      <td class="govuk-table__cell">1 Mar</td>
+      |      <td class="govuk-table__cell">1&nbsp;Mar</td>
       |      <td class="govuk-table__cell">
       |        ${paymentsHistoryChargeDescription(if(repayment) repaymentTransaction else paymentTransaction)}
       |      </td>
