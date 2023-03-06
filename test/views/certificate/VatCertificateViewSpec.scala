@@ -180,12 +180,12 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
         "contains the registration date" in {
           elementText(Selectors.regDateTitle) shouldBe "Registration date"
-          elementText(Selectors.regDate) shouldBe "1 January 2017"
+          elementText(Selectors.regDate) shouldBe "1\u00a0January\u00a02017"
         }
 
         "contains the certificate date" in {
           elementText(Selectors.certDateTitle) shouldBe "Certificate date"
-          elementText(Selectors.certDate) shouldBe "1 January 2018"
+          elementText(Selectors.certDate) shouldBe "1\u00a0January\u00a02018"
         }
 
       }

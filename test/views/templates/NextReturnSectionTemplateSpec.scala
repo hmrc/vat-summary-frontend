@@ -48,7 +48,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the due of the return" in {
-        elementText(Selectors.nextReturnDate) shouldBe "30 April 2019"
+        elementText(Selectors.nextReturnDate) shouldBe "30\u00a0April\u00a02019"
       }
 
       "display the 'View return deadlines' link" in {
@@ -70,7 +70,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the due of the return" in {
-        elementText(Selectors.nextReturnDate) shouldBe "30 April 2019"
+        elementText(Selectors.nextReturnDate) shouldBe "30\u00a0April\u00a02019"
       }
 
       "display the 'View return deadlines' link" in {

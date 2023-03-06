@@ -344,7 +344,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "render the next return section" in {
-      elementText(Selectors.nextReturn) shouldBe "31 December 2018"
+      elementText(Selectors.nextReturn) shouldBe "31\u00a0December\u00a02018"
     }
 
     "render the next payment section heading" in {
@@ -352,7 +352,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "render the next payment section" in {
-      elementText(Selectors.nextPayment) shouldBe "31 December 2018"
+      elementText(Selectors.nextPayment) shouldBe "31\u00a0December\u00a02018"
     }
 
     "render the next payment section vat returns link" in {

@@ -58,7 +58,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -73,7 +73,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the 12 Jan to 23 Mar 2018 return"
+          elementText(Selectors.description) shouldBe "for the 12\u00a0Jan to 23\u00a0Mar\u00a02018 return"
         }
       }
 
@@ -88,7 +88,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -103,7 +103,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -118,7 +118,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -133,7 +133,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for late payment of the 12 Jan to 23 Mar 2018 return"
+          elementText(Selectors.description) shouldBe "for late payment of the 12\u00a0Jan to 23\u00a0Mar\u00a02018 return"
         }
       }
 
@@ -148,7 +148,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for late payment of the 12 Jan to 23 Mar 2018 return"
+          elementText(Selectors.description) shouldBe "for late payment of the 12\u00a0Jan to 23\u00a0Mar\u00a02018 return"
         }
       }
 
@@ -163,7 +163,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -178,7 +178,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -223,7 +223,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -239,7 +239,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-            " for the period 12 Jan to 23 Mar 2018"
+            " for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -255,7 +255,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-            " for the period 12 Jan to 23 Mar 2018"
+            " for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -286,7 +286,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe
-            "because you submitted an inaccurate document for the period 12 Jan to 23 Mar 2018"
+            "because you submitted an inaccurate document for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -332,7 +332,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "because you have submitted inaccurate information for" +
-            " the period 12 Jan to 23 Mar 2018"
+            " the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -362,7 +362,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "partial repayment for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "partial repayment for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -433,7 +433,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -448,7 +448,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -463,7 +463,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -478,7 +478,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -493,7 +493,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -508,7 +508,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -523,7 +523,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -553,7 +553,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -568,7 +568,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -583,7 +583,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -598,7 +598,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -613,7 +613,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -628,7 +628,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -643,7 +643,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -658,7 +658,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -673,7 +673,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -688,7 +688,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -703,7 +703,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -718,7 +718,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -733,7 +733,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -748,7 +748,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -763,7 +763,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -778,7 +778,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -793,7 +793,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -808,7 +808,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -823,7 +823,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -838,7 +838,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -853,7 +853,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
       "there is a VAT PA 2nd LPP charge" should {
@@ -867,7 +867,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -882,7 +882,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -897,7 +897,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -912,7 +912,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
       "there is a VAT Return AA 2nd LPP LPI" should {
@@ -926,7 +926,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -940,7 +940,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -954,7 +954,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -998,7 +998,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
       "there is a VAT AA Monthly Instal LPI" should {
@@ -1012,7 +1012,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
       "there is a VAT AA Return Charge 1st LPP" should {
@@ -1026,7 +1026,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
       "there is a VAT AA Return Charge 2nd LPP" should {
@@ -1040,7 +1040,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
       "there is a VAT Return 2nd LPP" should {
@@ -1053,7 +1053,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1068,7 +1068,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1083,7 +1083,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1098,7 +1098,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1113,7 +1113,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1128,7 +1128,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1142,7 +1142,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1156,7 +1156,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1170,7 +1170,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1184,7 +1184,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
 
@@ -1198,7 +1198,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the correct description" in {
-          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
     }
@@ -1216,7 +1216,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1231,7 +1231,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for the 12\u00a0Jan to 23\u00a0Mar\u00a02018 return"
       }
     }
 
@@ -1246,7 +1246,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1261,7 +1261,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1276,7 +1276,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1291,7 +1291,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for late payment of the 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for late payment of the 12\u00a0Jan to 23\u00a0Mar\u00a02018 return"
       }
     }
 
@@ -1306,7 +1306,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for late payment of the 12 Jan to 23 Mar 2018 return"
+        elementText(Selectors.description) shouldBe "for late payment of the 12\u00a0Jan to 23\u00a0Mar\u00a02018 return"
       }
     }
 
@@ -1321,7 +1321,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1336,7 +1336,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1381,7 +1381,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1397,7 +1397,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-          " for the period 12 Jan to 23 Mar 2018"
+          " for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1413,7 +1413,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "charged on additional tax assessed" +
-          " for the period 12 Jan to 23 Mar 2018"
+          " for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1444,7 +1444,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe
-          "because your client submitted an inaccurate document for the period 12 Jan to 23 Mar 2018"
+          "because your client submitted an inaccurate document for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1490,7 +1490,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "because your client submitted inaccurate information for" +
-          " the period 12 Jan to 23 Mar 2018"
+          " the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1520,7 +1520,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "partial repayment for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "partial repayment for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1592,7 +1592,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1607,7 +1607,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1622,7 +1622,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1637,7 +1637,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1652,7 +1652,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1667,7 +1667,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1682,7 +1682,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for the period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1712,7 +1712,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1727,7 +1727,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1742,7 +1742,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1757,7 +1757,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1772,7 +1772,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1787,7 +1787,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1802,7 +1802,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1817,7 +1817,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1832,7 +1832,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1847,7 +1847,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1862,7 +1862,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1877,7 +1877,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1892,7 +1892,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1907,7 +1907,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1922,7 +1922,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1937,7 +1937,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1952,7 +1952,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1967,7 +1967,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1982,7 +1982,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -1997,7 +1997,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2012,7 +2012,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
     "there is a VAT Return AA 2nd LPP LPI" should {
@@ -2026,7 +2026,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2040,7 +2040,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2054,7 +2054,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2097,7 +2097,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
     "there is a VAT AA Monthly Instal LPI" should {
@@ -2111,7 +2111,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
     "there is a VAT AA Return Charge 1st LPP" should {
@@ -2125,7 +2125,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
     "there is a VAT AA Return Charge 2nd LPP" should {
@@ -2139,7 +2139,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
     "there is a VAT Return 2nd LPP" should {
@@ -2152,7 +2152,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2167,7 +2167,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2182,7 +2182,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2197,7 +2197,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2212,7 +2212,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2227,7 +2227,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2241,7 +2241,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2255,7 +2255,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2269,7 +2269,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2283,7 +2283,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
 
@@ -2297,7 +2297,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the correct description" in {
-        elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
   }
