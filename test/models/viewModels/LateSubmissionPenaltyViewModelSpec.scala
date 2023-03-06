@@ -29,11 +29,11 @@ class LateSubmissionPenaltyViewModelSpec extends ViewBaseSpec with AnyWordSpecLi
     "render the description message" when {
 
       "the user is an agent" in {
-        lateSubmissionPenaltyModel.description(isAgent = true) shouldBe "for period 5 May to 6 Jun 2020"
+        lateSubmissionPenaltyModel.description(isAgent = true) shouldBe "for period 5\u00a0May to 6\u00a0Jun\u00a02020"
       }
 
       "the user is not an agent" in {
-        lateSubmissionPenaltyModel.description(isAgent = false) shouldBe "for period 5 May to 6 Jun 2020"
+        lateSubmissionPenaltyModel.description(isAgent = false) shouldBe "for period 5\u00a0May to 6\u00a0Jun\u00a02020"
       }
     }
   }

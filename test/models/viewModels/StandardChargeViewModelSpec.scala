@@ -101,7 +101,7 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
 
         "return the correct description message" in {
           model.description(isAgent = true) shouldBe
-            "because your client submitted inaccurate information for the period 1 Jan to 31 Mar 2021"
+            "because your client submitted inaccurate information for the period 1\u00a0Jan to 31\u00a0Mar\u00a02021"
         }
       }
 
@@ -109,7 +109,7 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
 
         "return the correct message" in {
           model.description(isAgent = false) shouldBe
-            "because you have submitted inaccurate information for the period 1 Jan to 31 Mar 2021"
+            "because you have submitted inaccurate information for the period 1\u00a0Jan to 31\u00a0Mar\u00a02021"
         }
       }
 

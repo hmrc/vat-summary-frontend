@@ -36,7 +36,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe s"${chargeModel1.title} ${chargeModel1.description(isAgent = false)}"
+        elementText("a") shouldBe "VAT for period 1 Jan to 1 Feb 2018"
       }
 
       "have a link to the breakdown page" in {
@@ -75,7 +75,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe s"${chargeModel2.title} ${chargeModel2.description(isAgent = false)}"
+        elementText("a") shouldBe "Penalty for not filing correctly because you did not use the correct digital channel for the period 1 Jan to 1 Feb 2018"
       }
 
       "have a link to the breakdown page" in {

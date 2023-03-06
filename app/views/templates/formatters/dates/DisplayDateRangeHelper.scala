@@ -40,7 +40,7 @@ object DisplayDateRangeHelper {
       }) + (if (showYear) " uuuu" else "")
     }
     val formatter = DateTimeFormatter.ofPattern(format).withResolverStyle(ResolverStyle.STRICT)
-    date.format(formatter)
+    date.format(formatter).replace(" ","\u00a0")
   }
 
 }
