@@ -50,9 +50,9 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
     currentYear,
     None,
     None,
-    false,
+    previousPaymentsTab = false,
     Seq(paymentTransaction),
-    false,
+    showInsolvencyContent = false,
     None
   )
 
@@ -78,12 +78,8 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |      <td class="govuk-table__cell">
       |        ${paymentsHistoryChargeDescription(if(repayment) repaymentTransaction else paymentTransaction)}
       |      </td>
-      |      <td class="govuk-table__cell govuk-table__cell--numeric">
-      |        £${if(repayment) "0.00" else examplePaymentAmount.setScale(2)}
-      |      </td>
-      |      <td class="govuk-table__cell govuk-table__cell--numeric">
-      |        £${if(repayment) exampleRepaymentAmount.abs.setScale(2) else "0.00"}
-      |      </td>
+      |      <td class="govuk-table__cell govuk-table__cell--numeric">£${if(repayment) "0.00" else examplePaymentAmount.setScale(2)}</td>
+      |      <td class="govuk-table__cell govuk-table__cell--numeric">£${if(repayment) exampleRepaymentAmount.abs.setScale(2) else "0.00"}</td>
       |    </tr>
       |  </tbody>
       |</table>
