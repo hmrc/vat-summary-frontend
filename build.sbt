@@ -45,14 +45,14 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "7.13.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "6.3.0-play-28",
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "7.14.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "6.7.0-play-28",
   "com.typesafe.play" %% "play-json-joda"             % "2.9.3",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"         % "0.74.0",
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % "7.13.0"  % scope,
+  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % "7.14.0"  % scope,
   "org.scalatestplus"  %% "mockito-3-4"                 % "3.2.9.0" % scope,
   "org.scalamock"      %% "scalamock"                   % "5.2.0"   % scope,
   "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-28"     % "0.74.0"  % scope
