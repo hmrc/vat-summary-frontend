@@ -40,11 +40,11 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1 January 2018 to 2 February 2018 Interest on central assessment of VAT"
+        elementText("h1") shouldBe "1\u00a0January\u00a02018 to 2\u00a0February\u00a02018 Interest on central assessment of VAT"
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "1 January 2018 to 2 February 2018"
+        elementText(".govuk-caption-xl") shouldBe "1\u00a0January\u00a02018 to 2\u00a0February\u00a02018"
       }
 
       "render breadcrumbs which" should {

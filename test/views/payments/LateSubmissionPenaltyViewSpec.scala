@@ -41,11 +41,11 @@ class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementText("h1") shouldBe "5 May 2020 to 6 June 2020 Late submission penalty"
+      elementText("h1") shouldBe "5\u00a0May\u00a02020 to 6\u00a0June\u00a02020 Late submission penalty"
     }
 
     "have a period caption" in {
-      elementText(".govuk-caption-xl") shouldBe "5 May 2020 to 6 June 2020"
+      elementText(".govuk-caption-xl") shouldBe "5\u00a0May\u00a02020 to 6\u00a0June\u00a02020"
     }
 
     "not render backlink" in {
@@ -86,7 +86,7 @@ class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
     }
 
     "display when the penalty is due by" in {
-      elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1 October 2020"
+      elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1\u00a0October\u00a02020"
     }
 
     "have the correct heading for the second row" in {

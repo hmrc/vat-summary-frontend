@@ -74,7 +74,7 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
       |  </thead>
       |  <tbody class="govuk-table__body">
       |    <tr class="govuk-table__row">
-      |      <td class="govuk-table__cell">1&nbsp;Mar</td>
+      |      <td class="govuk-table__cell">1\u00a0Mar</td>
       |      <td class="govuk-table__cell">
       |        ${paymentsHistoryChargeDescription(if(repayment) repaymentTransaction else paymentTransaction)}
       |      </td>
@@ -172,10 +172,10 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
           val document = Jsoup.parse(result.body)
 
-          document.select("tr.govuk-table__row:nth-child(1) > td:nth-child(1)").text() shouldBe "1 Nov"
-          document.select("tr.govuk-table__row:nth-child(2) > td:nth-child(1)").text() shouldBe "1 Jul"
-          document.select("tr.govuk-table__row:nth-child(3) > td:nth-child(1)").text() shouldBe "1 Apr"
-          document.select("tr.govuk-table__row:nth-child(4) > td:nth-child(1)").text() shouldBe "1 Feb"
+          document.select("tr.govuk-table__row:nth-child(1) > td:nth-child(1)").text() shouldBe "1\u00a0Nov"
+          document.select("tr.govuk-table__row:nth-child(2) > td:nth-child(1)").text() shouldBe "1\u00a0Jul"
+          document.select("tr.govuk-table__row:nth-child(3) > td:nth-child(1)").text() shouldBe "1\u00a0Apr"
+          document.select("tr.govuk-table__row:nth-child(4) > td:nth-child(1)").text() shouldBe "1\u00a0Feb"
         }
       }
   }

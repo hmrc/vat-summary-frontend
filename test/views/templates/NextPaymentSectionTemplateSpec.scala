@@ -54,7 +54,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the due date of the payment" in {
-          elementText(Selectors.nextPaymentDate) shouldBe "8 March 2017"
+          elementText(Selectors.nextPaymentDate) shouldBe "8\u00a0March\u00a02017"
         }
 
         "display the 'View payment details' button" in {

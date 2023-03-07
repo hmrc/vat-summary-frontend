@@ -70,11 +70,11 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "have the correct page heading" in {
-            elementText(Selectors.pageHeading) shouldBe "1 January 2021 to 31 March 2021 VAT"
+            elementText(Selectors.pageHeading) shouldBe "1\u00a0January\u00a02021 to 31\u00a0March\u00a02021 VAT"
           }
 
           "have a period caption" in {
-            elementText(Selectors.caption) shouldBe "1 January 2021 to 31 March 2021"
+            elementText(Selectors.caption) shouldBe "1\u00a0January\u00a02021 to 31\u00a0March\u00a02021"
           }
 
           "render breadcrumbs which" should {
@@ -109,7 +109,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "display the correct due date for the charge" in {
-            elementText(Selectors.dueDateValue) shouldBe "8 April 2021"
+            elementText(Selectors.dueDateValue) shouldBe "8\u00a0April\u00a02021"
           }
 
           "have the correct first column in the second line" in {
@@ -168,7 +168,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display the overdue label" in {
-            elementText(Selectors.dueDateValue) shouldBe "8 April 2021 overdue"
+            elementText(Selectors.dueDateValue) shouldBe "8\u00a0April\u00a02021 overdue"
           }
         }
       }
