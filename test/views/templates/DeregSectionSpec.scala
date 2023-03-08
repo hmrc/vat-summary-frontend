@@ -116,8 +116,8 @@ class DeregSectionSpec  extends ViewBaseSpec {
             elementText("h3") shouldBe DeregPartialMessages.historicDeregTitle
           }
 
-          s"have correct content of ${DeregPartialMessages.historicDeregContent("2 February 2017")}" in {
-            elementText("p") shouldBe DeregPartialMessages.historicDeregContent("2 February 2017")
+          s"have correct content of ${DeregPartialMessages.historicDeregContent("2\u00a0February\u00a02017")}" in {
+            elementText("p") shouldBe DeregPartialMessages.historicDeregContent("2\u00a0February\u00a02017")
           }
 
           s"have a link to ${mockConfig.govUkVatRegistrationUrl}" in {
@@ -137,8 +137,8 @@ class DeregSectionSpec  extends ViewBaseSpec {
             elementText("h3") shouldBe DeregPartialMessages.futureDeregTitle
           }
 
-          s"have correct content of ${DeregPartialMessages.futureDeregContent("2 February 2020")}" in {
-            elementText("p") shouldBe DeregPartialMessages.futureDeregContent("2 February 2020")
+          s"have correct content of ${DeregPartialMessages.futureDeregContent("2\u00a0February\u00a02020")}" in {
+            elementText("p") shouldBe DeregPartialMessages.futureDeregContent("2\u00a0February\u00a02020")
           }
 
           s"link with text of ${DeregPartialMessages.futureDeregLink}" in {

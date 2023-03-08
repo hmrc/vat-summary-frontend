@@ -61,11 +61,11 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "3 March 2020 to 4 April 2020 Late payment penalty"
+        elementText("h1") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Late payment penalty"
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "3 March 2020 to 4 April 2020"
+        elementText(".govuk-caption-xl") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020"
       }
 
       "render breadcrumbs which" should {
@@ -123,7 +123,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "display when the penalty is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1 January 2020"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1\u00a0January\u00a02020"
       }
 
       "have the correct heading for the second row" in {

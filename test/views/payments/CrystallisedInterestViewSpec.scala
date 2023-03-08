@@ -55,11 +55,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1 October 2022 to 31 December 2022 VAT officer’s assessment interest"
+        elementText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 VAT officer’s assessment interest"
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "1 October 2022 to 31 December 2022"
+        elementText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
       }
 
       "render breadcrumbs which" should {
@@ -123,7 +123,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display when the interest is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"30 March 2023 overdue"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
       }
 
       "have the correct heading for the second row" in {
