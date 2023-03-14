@@ -26,7 +26,6 @@
 govukTable : GovukTable, paymentsHistoryChargeDescription: PaymentsHistoryChargeDescription)
 
 @(model: PaymentsHistoryViewModel, year: Int)(implicit messages: Messages,
-appConfig: AppConfig,
 user: User)
 
 @if(model.transactions.exists(_.clearedDate.getOrElse("").toString.contains(year.toString))) {
