@@ -51,7 +51,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "have a link to BTA home" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -66,7 +66,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "have a link to BTA Manage Account" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -82,7 +82,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "have a link to BTA Messages" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -102,7 +102,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "have a link to BTA Help and contact" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -117,7 +117,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "display multiple links" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,navLinksMessage,navLinksHelpAndContact))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -136,7 +136,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "render a Messages link without a notification alert" which {
 
-      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,noAltertlink,navLinksHelpAndContact))(messages)
+      val view: Html = navLinksView(Seq(navLinksHome,navLinksAccount,noAltertlink,navLinksHelpAndContact))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -151,7 +151,7 @@ class NavLinksTemplateSpec extends ViewBaseSpec {
 
     "not display when required" which {
 
-      val view: Html = navLinksView(Seq(navLinksHideMenu))(messages)
+      val view: Html = navLinksView(Seq(navLinksHideMenu))
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
