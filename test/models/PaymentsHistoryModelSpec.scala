@@ -828,7 +828,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
              |            "paymentLotItem": "000001",
              |            "dueDate": "2018-12-04",
              |            "clearingDate": "2017-12-04",
-             |            "clearingReason": "Some clearing reason"
+             |            "clearingReason": "Outgoing Payment"
              |          }
              |        ]
              |      }
@@ -899,10 +899,10 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       val chargeType = PaymentOnAccount
 
-      "clearing reason is defined" should {
+      "clearing reason is Outgoing Payment" should {
 
-        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(9000),
-          Some(LocalDate.of(2018, 1, 1)), Some("some clearing reason"))
+        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(-9000),
+          Some(LocalDate.of(2018, 1, 1)), Some("Outgoing Payment"))
         val transaction: JsValue = Json.parse(
           """ {
             |   "taxPeriodFrom" : "2018-08-01",
@@ -939,7 +939,7 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
 
       "clearing reason is not defined" should {
 
-        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(9), None, None,
+        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(-9), None, None,
           Some(LocalDate.of(2018, 1, 1)))
         val transaction: JsValue = Json.parse(
           """ {
@@ -967,11 +967,22 @@ class PaymentsHistoryModelSpec extends AnyWordSpecLike with Matchers {
         }
 
         "return the correct amount" in {
-          result.amount shouldBe subItem.amount.get
+          result.amount shouldBe 9
         }
 
         "use the due date of the sub item as cleared date" in {
           result.clearedDate shouldBe subItem.dueDate
+        }
+      }
+
+      "clearing reason is defined but is not Outgoing Payment" should {
+        val subItem = TransactionSubItem(clearingSAPDocument = Some("002828853334"), Some(9000),
+          Some(LocalDate.of(2018, 1, 1)), Some("some other reason"))
+
+        val result = PaymentsHistoryModel.generatePaymentModel(chargeType, subItem, Json.parse("""{}"""))
+
+        "return no model" in {
+          result shouldBe None
         }
       }
     }

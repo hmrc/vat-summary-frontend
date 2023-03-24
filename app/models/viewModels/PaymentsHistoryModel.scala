@@ -54,17 +54,17 @@ object PaymentsHistoryModel {
   private[models] def generatePaymentModel(chargeType: ChargeType,
                                            subItem: TransactionSubItem,
                                            transaction: JsValue): Option[PaymentsHistoryModel] =
-    (chargeType.value, subItem.amount) match {
-      case (PaymentOnAccount.value, Some(subItemAmount)) if subItem.clearingReason.isEmpty =>
+    (chargeType.value, subItem.amount, subItem.clearingReason) match {
+      case (PaymentOnAccount.value, Some(subItemAmount), None) =>
         Some(PaymentsHistoryModel(
           clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = UnallocatedPayment,
           taxPeriodFrom = None,
           taxPeriodTo = None,
-          amount = subItemAmount,
+          amount = subItemAmount.unary_-,
           clearedDate = subItem.dueDate
         ))
-      case (PaymentOnAccount.value, Some(subItemAmount)) =>
+      case (PaymentOnAccount.value, Some(subItemAmount), Some("Outgoing Payment")) =>
         Some(PaymentsHistoryModel(
           clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = Refund,
@@ -73,7 +73,9 @@ object PaymentsHistoryModel {
           amount = subItemAmount,
           clearedDate = subItem.clearingDate
         ))
-      case (_, Some(subItemAmount)) =>
+      case (PaymentOnAccount.value, _, _) =>
+        None
+      case (_, Some(subItemAmount), _) =>
         Some(PaymentsHistoryModel(
           clearingSAPDocument = subItem.clearingSAPDocument,
           chargeType = chargeType,
@@ -82,7 +84,7 @@ object PaymentsHistoryModel {
           amount = subItemAmount,
           clearedDate = subItem.clearingDate
         ))
-      case (_, None) =>
+      case (_, None, _) =>
         None
     }
 
