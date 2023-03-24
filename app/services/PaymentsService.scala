@@ -46,10 +46,14 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
       case Left(_) => Left(PaymentsError)
     }
 
-  def getPaymentsHistory(vrn: String, searchYear: Int)
+  def getPaymentsHistory(vrn: String, currentDate: LocalDate, migrationDate: Option[LocalDate])
                         (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Seq[PaymentsHistoryModel]]] = {
-    val from: LocalDate = LocalDate.parse(s"$searchYear-01-01")
-    val to: LocalDate = LocalDate.parse(s"$searchYear-12-31")
+
+    val from: LocalDate = migrationDate match {
+      case Some(migDate) if migDate.isAfter(currentDate.minusYears(2)) => migDate
+      case _ => currentDate.minusYears(2)
+    }
+    val to: LocalDate = currentDate
 
     financialDataConnector.getVatLiabilities(vrn, from, to).map {
       case Right(liabilities) => Right(liabilities.sortBy(_.clearedDate.toString).reverse)

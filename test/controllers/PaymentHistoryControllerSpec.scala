@@ -52,148 +52,22 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     mockAuditService
   )
 
-  val serviceResultYearOne: ServiceResponse[Seq[PaymentsHistoryModel]] =
-    Right(Seq(
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-03-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853335"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2018-03-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-05-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853336"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-05-01"))
-      )
-    ))
-  val serviceResultYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]] =
-    Right(Seq(
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853337"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2017-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2017-02-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2017-03-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853338"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
-        taxPeriodTo = Some(LocalDate.parse("2017-04-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2017-05-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853339"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2017-03-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-04-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-05-01"))
-      )
-    ))
-  val serviceResultYearThree: ServiceResponse[Seq[PaymentsHistoryModel]] = {
-    Right(Seq(
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853340"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-02-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-03-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853341"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853342"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-09-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-10-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-11-01"))
-      )
-    ))
-  }
-  val serviceResultYearThreeGenuineIdenticalPayments: ServiceResponse[Seq[PaymentsHistoryModel]] = {
-    Right(Seq(
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853340"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853341"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853342"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      )
-    ))
-  }
-  val serviceResultYearThreeWithDuplicate: ServiceResponse[Seq[PaymentsHistoryModel]] = {
-    Right(Seq(
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853340"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853340"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      ),
-      PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853340"),
-        chargeType = ReturnDebitCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2016-07-01")),
-        taxPeriodTo = Some(LocalDate.parse("2016-08-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2016-09-01"))
-      )
-    ))
-  }
+  val paymentHistoryModel: PaymentsHistoryModel = PaymentsHistoryModel(
+    clearingSAPDocument = Some("002828853334"),
+    chargeType = ReturnDebitCharge,
+    taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+    taxPeriodTo = Some(LocalDate.parse("2018-02-01")),
+    amount = exampleAmount,
+    clearedDate = Some(LocalDate.parse("2018-03-01"))
+  )
+  
+  val payments: Seq[PaymentsHistoryModel] = Seq(paymentHistoryModel)
+
+  val serviceResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(payments)
 
   def mockPaymentHistory(paymentHistoryResponse: ServiceResponse[Seq[PaymentsHistoryModel]]): Any =
-    (mockPaymentsService.getPaymentsHistory(_: String, _: Int)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*, *, *, *).noMoreThanOnce()
+    (mockPaymentsService.getPaymentsHistory(_: String, _: LocalDate, _: Option[LocalDate])(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *, *, *).noMoreThanOnce()
       .returns(Future.successful(paymentHistoryResponse))
 
   "Calling the paymentHistory action" when {
@@ -205,8 +79,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockDateServiceCall()
         mockServiceInfoCall()
         mockAudit()
-        mockPaymentHistory(serviceResultYearOne)
-        mockPaymentHistory(serviceResultYearTwo)
+        mockPaymentHistory(serviceResult)
         mockCustomerInfo(Right(customerInformationMax))
         controller.paymentHistory()(fakeRequestWithSession)
       }
@@ -231,7 +104,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockDateServiceCall()
         mockServiceInfoCall()
         mockAudit()
-        mockPaymentHistory(serviceResultYearOne)
+        mockPaymentHistory(serviceResult)
         mockCustomerInfo(Right(customerMigrated2018))
         controller.paymentHistory()(fakeRequestWithSession)
       }
@@ -281,8 +154,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockDateServiceCall()
         mockServiceInfoCall()
         mockAudit()
-        mockPaymentHistory(serviceResultYearOne)
-        mockPaymentHistory(serviceResultYearTwo)
+        mockPaymentHistory(serviceResult)
         mockCustomerInfo(Right(customerInformationMax))
         controller.paymentHistory()(agentFinancialRequest)
       }
@@ -359,9 +231,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         mockDateServiceCall()
         mockServiceInfoCall()
         mockAudit()
-        mockPaymentHistory(serviceResultYearOne)
-        mockPaymentHistory(serviceResultYearTwo)
-        mockPaymentHistory(serviceResultYearThree)
+        mockPaymentHistory(serviceResult)
         mockCustomerInfo(accountDetailsResponseNoMigratedDate)
         mockCustomerInfo(accountDetailsResponseNoMigratedDate)
         controller.paymentHistory()(fakeRequest)
@@ -488,41 +358,6 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  "Calling .getValidYears" when {
-
-    "the migration year is equal to the current year" should {
-
-      "return a sequence of just the current year" in {
-        mockDateServiceCall()
-        controller.getValidYears(Some(LocalDate.parse("2018-01-01"))) shouldBe Seq(currentYear)
-      }
-    }
-
-    "the migration year is the previous year" should {
-
-      "return a sequence of the current year and previous year" in {
-        mockDateServiceCall()
-        controller.getValidYears(Some(LocalDate.parse("2017-12-12"))) shouldBe Seq(currentYear, currentYear - 1)
-      }
-    }
-
-    "the migration year is two years ago" should {
-
-      "return a sequence of the current year and the two years prior" in {
-        mockDateServiceCall()
-        controller.getValidYears(Some(LocalDate.parse("2016-12-12"))) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
-      }
-    }
-
-    "the migration year could not be retrieved" should {
-
-      "return a sequence of the current year and previous year" in {
-        mockDateServiceCall()
-        controller.getValidYears(None) shouldBe Seq(currentYear, currentYear - 1, currentYear - 2)
-      }
-    }
-  }
-
   "Calling .isLast24Months" should {
 
     "return true" when {
@@ -555,28 +390,26 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
   "Calling .generateViewModel" when {
 
-    "both service call parameters are successful" when {
+    "the payments service call was successful" when {
 
       "the customer was migrated in the current year" should {
 
         "return a PaymentsHistoryViewModel with the correct information" in {
           mockDateServiceCall()
           controller.generateViewModel(
-          serviceResultYearOne,
-          serviceResultYearTwo,
-          emptyResult,
-          showPreviousPaymentsTab = false,
-          Some(LocalDate.parse("2018-01-01")),
-          showInsolvencyContent = false,
-          None
+            serviceResult,
+            showPreviousPaymentsTab = false,
+            Some(LocalDate.parse("2018-01-01")),
+            showInsolvencyContent = false,
+            None
           ) shouldBe Some(PaymentsHistoryViewModel(
-          currentYear,
-          None,
-          None,
-          previousPaymentsTab = false,
-          (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get).distinct,
-          showInsolvencyContent = false,
-          None
+            currentYear,
+            None,
+            None,
+            previousPaymentsTab = false,
+            payments,
+            showInsolvencyContent = false,
+            None
           ))
         }
       }
@@ -586,21 +419,19 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         "return a PaymentsHistoryViewModel with the correct information" in {
           mockDateServiceCall()
           controller.generateViewModel(
-          serviceResultYearOne,
-          serviceResultYearTwo,
-          emptyResult,
-          showPreviousPaymentsTab = false,
-          Some(LocalDate.parse("2017-01-01")),
-          showInsolvencyContent = false,
-          None
+            serviceResult,
+            showPreviousPaymentsTab = false,
+            Some(LocalDate.parse("2017-01-01")),
+            showInsolvencyContent = false,
+            None
           ) shouldBe Some(PaymentsHistoryViewModel(
-          currentYear,
-          Some(currentYear - 1),
-          None,
-          previousPaymentsTab = false,
-          (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get).distinct,
-          showInsolvencyContent = false,
-          None
+            currentYear,
+            Some(currentYear - 1),
+            None,
+            previousPaymentsTab = false,
+            payments,
+            showInsolvencyContent = false,
+            None
           ))
         }
       }
@@ -610,34 +441,36 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
         "return a PaymentsHistoryViewModel with the correct information" in {
           mockDateServiceCall()
           controller.generateViewModel(
-          serviceResultYearOne,
-          serviceResultYearTwo,
-          serviceResultYearThree,
-          showPreviousPaymentsTab = false,
-          Some(LocalDate.parse("2016-12-12")),
-          showInsolvencyContent = false,
-          None
+            serviceResult,
+            showPreviousPaymentsTab = false,
+            Some(LocalDate.parse("2016-12-12")),
+            showInsolvencyContent = false,
+            None
           ) shouldBe Some(PaymentsHistoryViewModel(
-          currentYear,
-          Some(currentYear - 1),
-          Some(currentYear - 2),
-          previousPaymentsTab = false,
-          (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get ++ serviceResultYearThree.toOption.get.drop(1)).distinct,
-          showInsolvencyContent = false,
-          None
+            currentYear,
+            Some(currentYear - 1),
+            Some(currentYear - 2),
+            previousPaymentsTab = false,
+            payments,
+            showInsolvencyContent = false,
+            None
           ))
         }
       }
 
-      "the user has several payments of the same amount, on the same date against the same charge with different clearingSAPDocument values" should {
+      "the user has two payments of the same amount, on the same date against the same charge with different clearingSAPDocument values" should {
 
         "return a PaymentsHistoryViewModel with both payments" in {
 
+          val twoPayments: Seq[PaymentsHistoryModel] = Seq(
+            paymentHistoryModel,
+            paymentHistoryModel.copy(clearingSAPDocument = Some("02828853335"))
+          )
+          val serviceResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(twoPayments)
+
           mockDateServiceCall()
           controller.generateViewModel(
-            serviceResultYearOne,
-            serviceResultYearTwo,
-            serviceResultYearThreeGenuineIdenticalPayments,
+            serviceResult,
             showPreviousPaymentsTab = false,
             Some(LocalDate.parse("2016-12-12")),
             showInsolvencyContent = false,
@@ -647,22 +480,23 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get ++ serviceResultYearThreeGenuineIdenticalPayments.toOption.get).distinct,
+            twoPayments,
             showInsolvencyContent = false,
             None
           ))
         }
       }
 
-      "the user has several payments of the same amount, on the same date against the same charge with identical clearingSAPDocument values" should {
+      "the user has two payments of the same amount, on the same date against the same charge with identical clearingSAPDocument values" should {
 
         "return a PaymentsHistoryViewModel with the duplicate filtered out" in {
 
+          val duplicatePayments: Seq[PaymentsHistoryModel] = Seq(paymentHistoryModel, paymentHistoryModel)
+          val serviceResult: ServiceResponse[Seq[PaymentsHistoryModel]] = Right(duplicatePayments)
+
           mockDateServiceCall()
           controller.generateViewModel(
-            serviceResultYearOne,
-            serviceResultYearTwo,
-            serviceResultYearThreeWithDuplicate,
+            serviceResult,
             showPreviousPaymentsTab = false,
             Some(LocalDate.parse("2016-12-12")),
             showInsolvencyContent = false,
@@ -672,7 +506,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
             Some(currentYear - 1),
             Some(currentYear - 2),
             previousPaymentsTab = false,
-            (serviceResultYearOne.toOption.get ++ serviceResultYearTwo.toOption.get ++ serviceResultYearThreeWithDuplicate.toOption.get).distinct,
+            payments,
             showInsolvencyContent = false,
             None
           ))
@@ -680,18 +514,18 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "either of the service call parameters fail" should {
+    "the payments service call failed" should {
 
       "return None" in {
-        val serviceResultYearOne = Left(VatLiabilitiesError)
+
+        val serviceResult = Left(VatLiabilitiesError)
+
         controller.generateViewModel(
-        serviceResultYearOne,
-        serviceResultYearTwo,
-        serviceResultYearThree,
-        showPreviousPaymentsTab = false,
-        None,
-        showInsolvencyContent = false,
-        None
+          serviceResult,
+          showPreviousPaymentsTab = false,
+          None,
+          showInsolvencyContent = false,
+          None
         ) shouldBe None
       }
     }

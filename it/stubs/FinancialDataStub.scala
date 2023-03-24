@@ -41,10 +41,8 @@ object FinancialDataStub extends WireMockMethods {
 
   def stubApiError: StubMapping = stubOutstandingApiCall(INTERNAL_SERVER_ERROR, Json.obj())
 
-  def stubPaidTransactions: StubMapping = {
-    when(method = GET, uri = financialDataUri, queryParams = Map(
-      "dateFrom" -> "2018-01-01",
-      "dateTo" -> "2018-12-31"))
+  def stubPaidTransactions(dateFrom: String, dateTo: String): StubMapping = {
+    when(method = GET, uri = financialDataUri, queryParams = Map("dateFrom" -> dateFrom, "dateTo" -> dateTo))
       .thenReturn(status = OK, body = paidTransactions)
   }
 

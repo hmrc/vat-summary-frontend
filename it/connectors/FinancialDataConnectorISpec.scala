@@ -172,7 +172,11 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
   "calling getVatLiabilities" should {
 
     "return a PaymentsHistoryModel" in new Test {
-      override def setupStubs(): StubMapping = FinancialDataStub.stubPaidTransactions
+
+      val migrationDate = "2018-01-01"
+      val currentDate = "2018-05-01"
+
+      override def setupStubs(): StubMapping = FinancialDataStub.stubPaidTransactions(migrationDate, currentDate)
 
       val expected: Right[Nothing, Seq[PaymentsHistoryModel]] = Right(Seq(
         PaymentsHistoryModel(
@@ -196,8 +200,8 @@ class FinancialDataConnectorISpec extends IntegrationBaseSpec {
       setupStubs()
       private val result = await(connector.getVatLiabilities(
         "5555555555",
-        LocalDate.parse("2018-01-01"),
-        LocalDate.parse("2018-12-31")
+        LocalDate.parse(migrationDate),
+        LocalDate.parse(currentDate)
       ))
 
       result shouldEqual expected

@@ -39,6 +39,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
   val mockPaymentsConnector: PaymentsConnector = mock[PaymentsConnector]
   lazy val paymentsService: PaymentsService = new PaymentsService(mockFinancialDataConnector, mockPaymentsConnector)
   implicit val hc: HeaderCarrier = HeaderCarrier()
+  val exampleAmount = 1000L
 
   "Calling the .getOpenPayments function" when {
 
@@ -247,71 +248,122 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
     }
   }
 
-  "Calling the .getPaymentsHistory method" when {
+  "The .getPaymentsHistory method" should {
 
-    val exampleAmount = 1000L
-    implicit val hc: HeaderCarrier = HeaderCarrier()
+    val paymentModel1 = PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853334"),
+      chargeType = ReturnCreditCharge,
+      taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+      taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+      amount = exampleAmount,
+      clearedDate = Some(LocalDate.parse("2018-01-30"))
+    )
+    val paymentModel2 = PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853335"),
+      chargeType = ReturnCreditCharge,
+      taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+      taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+      amount = exampleAmount,
+      clearedDate = Some(LocalDate.parse("2018-02-28"))
+    )
+    val paymentModel3 = PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853336"),
+      chargeType = ReturnCreditCharge,
+      taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+      taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+      amount = exampleAmount,
+      clearedDate = Some(LocalDate.parse("2018-03-01"))
+    )
+    val paymentModel4 = PaymentsHistoryModel(
+      clearingSAPDocument = Some("002828853337"),
+      chargeType = ReturnCreditCharge,
+      taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
+      taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
+      amount = exampleAmount,
+      clearedDate = Some(LocalDate.parse("2018-01-31"))
+    )
 
-    val taxPeriodYear: Int = 2018
+    val currentDate = LocalDate.parse("2018-05-01")
 
     "return a seq of payment history models sorted by clearing date in descending order" in {
 
-      val paymentModel1 = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853334"),
-        chargeType = ReturnCreditCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-01-30"))
-      )
-      val paymentModel2 = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853335"),
-        chargeType = ReturnCreditCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-02-28"))
-      )
-      val paymentModel3 = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853336"),
-        chargeType = ReturnCreditCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-03-01"))
-      )
-      val paymentModel4 = PaymentsHistoryModel(
-        clearingSAPDocument = Some("002828853337"),
-        chargeType = ReturnCreditCharge,
-        taxPeriodFrom = Some(LocalDate.parse("2018-01-01")),
-        taxPeriodTo = Some(LocalDate.parse("2018-01-01")),
-        amount = exampleAmount,
-        clearedDate = Some(LocalDate.parse("2018-01-31"))
-      )
-
-      val paymentSeq: HttpResult[Seq[PaymentsHistoryModel]] =
+      val unsortedPayments: HttpResult[Seq[PaymentsHistoryModel]] =
         Right(Seq(paymentModel1, paymentModel2, paymentModel3, paymentModel4))
       val sortedPayments: ServiceResponse[Seq[PaymentsHistoryModel]] =
         Right(Seq(paymentModel3, paymentModel2, paymentModel4, paymentModel1))
-      lazy val connectorResponse: HttpResult[Seq[PaymentsHistoryModel]] = paymentSeq
 
       val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
-        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)
+                                                     (_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *)
-          .returns(Future.successful(connectorResponse))
-        await(paymentsService.getPaymentsHistory("999999999", taxPeriodYear))
+          .returns(Future.successful(unsortedPayments))
+
+        await(paymentsService.getPaymentsHistory(
+          "999999999", currentDate, Some(LocalDate.parse("2018-01-01")))
+        )
       }
 
       result shouldBe sortedPayments
     }
 
-    "return a http error" in {
-      lazy val connectorResponse: HttpResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
+    "call the API with the migration date as the 'from' date" when {
+
+      "the migration date is within the last 2 years" in {
+
+        val migrationDate = LocalDate.parse("2018-01-01")
+        val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
+          (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)
+                                                       (_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, migrationDate, currentDate, *, *)
+            .returns(Future.successful(Right(Seq(paymentModel1))))
+
+          await(paymentsService.getPaymentsHistory("999999999", currentDate, Some(migrationDate)))
+        }
+
+        result shouldBe Right(Seq(paymentModel1))
+      }
+    }
+
+    "call the API with the date 2 years ago as the 'from' date" when {
+
+      "the migration date is older than 2 years" in {
+
+        val migrationDate = LocalDate.parse("2015-01-01")
+        val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
+          (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)
+                                                       (_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, currentDate.minusYears(2), currentDate, *, *)
+            .returns(Future.successful(Right(Seq(paymentModel1))))
+
+          await(paymentsService.getPaymentsHistory("999999999", currentDate, Some(migrationDate)))
+        }
+
+        result shouldBe Right(Seq(paymentModel1))
+      }
+
+      "the migration date is not provided" in {
+
+        val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
+          (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)
+                                                       (_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, currentDate.minusYears(2), currentDate, *, *)
+            .returns(Future.successful(Right(Seq(paymentModel1))))
+
+          await(paymentsService.getPaymentsHistory("999999999", currentDate, None))
+        }
+
+        result shouldBe Right(Seq(paymentModel1))
+      }
+    }
+
+    "return an error when the connector returns an error" in {
+      lazy val errorResponse: HttpResult[Seq[PaymentsHistoryModel]] = Left(BadRequestError("400", ""))
       val result: ServiceResponse[Seq[PaymentsHistoryModel]] = {
-        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
+        (mockFinancialDataConnector.getVatLiabilities(_: String, _: LocalDate, _: LocalDate)
+                                                     (_: HeaderCarrier, _: ExecutionContext))
           .expects(*, *, *, *, *)
-          .returns(Future.successful(connectorResponse))
-        await(paymentsService.getPaymentsHistory("999999999", taxPeriodYear))
+          .returns(Future.successful(errorResponse))
+        await(paymentsService.getPaymentsHistory("999999999", LocalDate.parse("2008-01-01"), None))
       }
 
       result shouldBe Left(VatLiabilitiesError)
