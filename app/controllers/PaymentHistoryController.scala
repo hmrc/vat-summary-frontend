@@ -32,7 +32,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.PaymentHistory
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
@@ -53,50 +53,32 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
 
   def paymentHistory: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
-        for {
-          customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
-          migrationDate = getMigratedToETMPDate(customerInfo)
-          hybridToFullMigrationDate = getHybridToFullMigrationDate(customerInfo)
-          showInsolvencyContent = showInsolventContent(customerInfo)
-          serviceInfoContent <- serviceInfoService.getPartial
-          validYears = getValidYears(migrationDate)
-          migratedWithin15Months = customerMigratedWithin15M(migrationDate)
-          paymentsServiceYearOne <-
-              paymentsService.getPaymentsHistory(user.vrn, validYears.head)
-          paymentsServiceYearTwo <-
-            if (validYears.contains(previousYear)) {
-              paymentsService.getPaymentsHistory(user.vrn, validYears.drop(1).head)
-            }
-            else {
-              Future.successful(Right(Seq.empty))
-            }
-          paymentsServiceYearThree <-
-            if (validYears.contains(currentYear - 2)) {
-              paymentsService.getPaymentsHistory(user.vrn, validYears.drop(2).head)
-            }
-            else {
-              Future.successful(Right(Seq.empty))
-            }
-        } yield {
-          val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-          val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
-          generateViewModel(
-            paymentsServiceYearOne,
-            paymentsServiceYearTwo,
-            paymentsServiceYearThree,
-            showPreviousPaymentsTab,
-            migrationDate,
-            showInsolvencyContent,
-            clientName
-          ) match {
-            case Some(model) =>
-              auditEvent(user.vrn, model.transactions)
-              Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate)))
-            case None =>
-              logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
-              serviceErrorHandler.showInternalServerError
-          }
+      for {
+        customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
+        migrationDate = getMigratedToETMPDate(customerInfo)
+        hybridToFullMigrationDate = getHybridToFullMigrationDate(customerInfo)
+        showInsolvencyContent = showInsolventContent(customerInfo)
+        serviceInfoContent <- serviceInfoService.getPartial
+        migratedWithin15Months = customerMigratedWithin15M(migrationDate)
+        payments <- paymentsService.getPaymentsHistory(user.vrn, dateService.now(), migrationDate)
+      } yield {
+        val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+        val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
+        generateViewModel(
+          payments,
+          showPreviousPaymentsTab,
+          migrationDate,
+          showInsolvencyContent,
+          clientName
+        ) match {
+          case Some(model) =>
+            auditEvent(user.vrn, model.transactions)
+            Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate)))
+          case None =>
+            logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
+            serviceErrorHandler.showInternalServerError
         }
+      }
   }
 
   private[controllers] def getMigratedToETMPDate(customerInfo: HttpResult[CustomerInformation]): Option[LocalDate] =
@@ -127,29 +109,19 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
       case None => false
     }
 
-  private[controllers] def getValidYears(migrationDate: Option[LocalDate]): Seq[Int] =
-    migrationDate match {
-      case Some(date) if date.getYear == currentYear => Seq(currentYear)
-      case Some(date) if date.getYear == previousYear => Seq(currentYear, previousYear)
-      case _ => Seq(currentYear, previousYear, currentYear - 2)
-    }
-
-  private[controllers] def generateViewModel(paymentsServiceYearOne: ServiceResponse[Seq[PaymentsHistoryModel]],
-                                             paymentsServiceYearTwo: ServiceResponse[Seq[PaymentsHistoryModel]],
-                                             paymentsServiceYearThree: ServiceResponse[Seq[PaymentsHistoryModel]],
+  private[controllers] def generateViewModel(paymentsServiceResponse: ServiceResponse[Seq[PaymentsHistoryModel]],
                                              showPreviousPaymentsTab: Boolean,
-                                             customerMigratedToETMPDate: Option[LocalDate],
+                                             migrationDate: Option[LocalDate],
                                              showInsolvencyContent: Boolean,
                                              clientName: Option[String]): Option[PaymentsHistoryViewModel] =
-    (paymentsServiceYearOne, paymentsServiceYearTwo, paymentsServiceYearThree) match {
-      case (Right(yearOneTrans), Right(yearTwoTrans), Right(yearThreeTrans)) =>
-        val migratedThisYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == currentYear)
-        val migratedPreviousYear: Boolean = customerMigratedToETMPDate.fold(false)(_.getYear == previousYear)
+    paymentsServiceResponse match {
+      case Right(trans) =>
+        val migratedThisYear: Boolean = migrationDate.fold(false)(_.getYear == currentYear)
+        val migratedPreviousYear: Boolean = migrationDate.fold(false)(_.getYear == previousYear)
         val tabOne: Int = currentYear
         val tabTwo: Option[Int] = if(migratedThisYear) None else Some(previousYear)
         val tabThree: Option[Int] = if(migratedPreviousYear || migratedThisYear) None else Some(previousYear - 1)
-        val transactions =
-          (yearOneTrans ++ yearTwoTrans ++ yearThreeTrans).distinct.filter(model => isLast24Months(model.clearedDate))
+        val transactions = trans.distinct.filter(model => isLast24Months(model.clearedDate))
         Some(PaymentsHistoryViewModel(
           tabOne,
           tabTwo,

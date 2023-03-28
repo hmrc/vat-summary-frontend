@@ -17,6 +17,7 @@
 package pages
 
 import helpers.IntegrationBaseSpec
+import models.CustomerInformation
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
@@ -33,19 +34,24 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
     val youPaidHmrcSelector = "#past-payments-2018 > table > tbody > tr:nth-child(1) > td:nth-child(3)"
     val noPaymentsInset = "#past-payments-2017 > p"
 
-    def setupRequest(isPartialMigration: Boolean = false): WSRequest = {
+    def setupRequest(): WSRequest = {
       AuthStub.authorised()
-      CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = isPartialMigration, hasVerifiedEmail = true))
       ServiceInfoStub.stubServiceInfoPartial
       buildRequest("/payment-history")
     }
+
+    val customerInfo = customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true)
+    val migrationDate = customerInfo.as[CustomerInformation].extractDate.get
+
+    val currentDate = "2018-05-01"
 
     "the user has payments" should {
 
       "load the page and render the appropriate content" in {
 
         val request = {
-          FinancialDataStub.stubPaidTransactions
+          FinancialDataStub.stubPaidTransactions(migrationDate, currentDate)
+          CustomerInfoStub.stubCustomerInfo(customerInfo)
           setupRequest()
         }
 
@@ -65,6 +71,7 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
 
         val request = {
           FinancialDataStub.stubNoPayments
+          CustomerInfoStub.stubCustomerInfo(customerInfo)
           setupRequest()
         }
 
@@ -82,9 +89,9 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
       "load the page and render the appropriate content" in {
 
         val request = {
-          FinancialDataStub.stubPaidTransactions
+          FinancialDataStub.stubPaidTransactions(migrationDate, currentDate)
           AuthStub.authorisedMultipleEnrolments()
-          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true))
+          CustomerInfoStub.stubCustomerInfo(customerInfo)
           ServiceInfoStub.stubServiceInfoPartial
           buildRequest("/payment-history")
         }
@@ -104,8 +111,8 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
       "be redirected away" in {
 
         val request = {
-          FinancialDataStub.stubPaidTransactions
-          setupRequest(isPartialMigration = true)
+          CustomerInfoStub.stubCustomerInfo(customerInfoJson(isPartialMigration = true, hasVerifiedEmail = true))
+          setupRequest()
         }
 
         val response: WSResponse = await(request.get())

@@ -59,9 +59,11 @@ class FinancialDataConnector @Inject()(http: HttpClient,
 
     import connectors.httpParsers.PaymentsHistoryHttpParser.PaymentsHistoryReads
 
+    logger.debug(s"[FinancialDataConnector][getVatLiabilities] - Calling financial API from $from to $to.")
+
     http.GET(paymentsUrl(vrn), Seq(
-      "dateFrom" -> s"${from.getYear}-01-01",
-      "dateTo" -> s"${to.getYear}-12-31"
+      "dateFrom" -> from.toString,
+      "dateTo" -> to.toString
     ))
       .map {
         case payments@Right(_) =>
