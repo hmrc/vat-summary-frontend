@@ -28,8 +28,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.Json
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import repositories.WYOSessionRepository
+import java.time.Instant
 
-import java.time.LocalDateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 class WYOSessionServiceSpec extends AnyWordSpecLike with Matchers with MockitoSugar with GuiceOneAppPerSuite {
@@ -67,7 +67,7 @@ class WYOSessionServiceSpec extends AnyWordSpecLike with Matchers with MockitoSu
   "The retrieveViewModel function" should {
 
     "return the result from the database's read operation" in {
-      val databaseModel = WYODatabaseModel("abc", "StandardChargeViewModel", Json.obj(), LocalDateTime.now())
+      val databaseModel = WYODatabaseModel("abc", "StandardChargeViewModel", Json.obj(), Instant.now())
       mockRepoRead(Some(databaseModel))
       await(service.retrieveViewModel("abc")) shouldBe Some(databaseModel)
     }

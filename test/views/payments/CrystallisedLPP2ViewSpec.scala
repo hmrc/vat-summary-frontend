@@ -128,7 +128,7 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
 
       "has the correct href" in {
         element("#content > div > div > a").attr("href") shouldBe
-          "/vat-through-software/make-payment/13013/4/2020/2020-04-04/VAT%20AA%202nd%20LPP/2020-01-01/CHARGEREF"
+          "/make-payment/13013/4/2020/2020-04-04/VAT%20AA%202nd%20LPP/2020-01-01/CHARGEREF"
       }
     }
 

@@ -39,7 +39,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some("/vat-through-software/vat-overview")
+        redirectLocation(result) shouldBe Some("/vat-overview")
       }
 
     }
@@ -57,7 +57,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some("/vat-through-software/vat-overview")
+        redirectLocation(result) shouldBe Some("/vat-overview")
       }
 
     }

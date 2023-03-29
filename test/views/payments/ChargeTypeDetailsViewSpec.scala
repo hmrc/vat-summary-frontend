@@ -144,7 +144,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
             "has the correct href location" in {
               element(Selectors.button).attr("href") shouldBe
-                "/vat-through-software/make-payment/111111/3/2021/2021-03-31/VAT%20Return%20Debit%20Charge/2021-04-08/noCR"
+                "/make-payment/111111/3/2021/2021-03-31/VAT%20Return%20Debit%20Charge/2021-04-08/noCR"
             }
           }
 

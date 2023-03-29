@@ -158,7 +158,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
         "has the correct href" in {
           element("#pay-button").attr("href") shouldBe
-            "/vat-through-software/make-payment/771/12/2022/2022-12-31/VAT%20OA%20Default%20Interest/2023-03-30/chargeRef"
+            "/make-payment/771/12/2022/2022-12-31/VAT%20OA%20Default%20Interest/2023-03-30/chargeRef"
         }
       }
 

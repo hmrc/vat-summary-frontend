@@ -169,7 +169,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display a link to the portal" in {
-        element(Selectors.portalLink).attr("href") shouldBe "/vat-through-software/portal-what-you-owe"
+        element(Selectors.portalLink).attr("href") shouldBe "/portal-what-you-owe"
       }
 
       "have the correct link text" in {

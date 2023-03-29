@@ -26,8 +26,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
+import java.time.Instant
 
-import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext
 
 class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite with
@@ -37,7 +37,7 @@ class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceO
   implicit lazy val ec: ExecutionContext = app.injector.instanceOf[ExecutionContext]
   override lazy val repository = new WYOSessionRepository(mockAppConfig, mongoComponent)
 
-  val time: LocalDateTime = LocalDateTime.parse("2022-01-01T09:00:00.000")
+  val time: Instant = Instant.parse("2022-01-01T09:00:00.00Z")
   val exampleJson: JsObject = Json.obj("chargeType" -> "VAT Return Debit Charge", "periodKey" -> "18AA")
   val exampleModel: WYODatabaseModel = WYODatabaseModel("abc", "StandardChargeViewModel", exampleJson, time)
 
@@ -45,7 +45,7 @@ class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceO
 
     "have a TTL index on the creationTimestamp field, with an expiry time set by AppConfig" in {
       val indexes = {
-        await(repository.ensureIndexes)
+        await(repository.ensureIndexes())
         await(repository.collection.listIndexes().toFuture())
       }
       val ttlIndex = indexes.find(_.get("name").contains(BsonString("expiry")))
@@ -69,7 +69,7 @@ class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceO
 
       "replace the existing document in the database" in {
         await(repository.write(exampleModel))
-        await(repository.write(exampleModel.copy(creationTimestamp = time.plusMinutes(1)))) shouldBe true
+        await(repository.write(exampleModel.copy(creationTimestamp = time.plusSeconds(60)))) shouldBe true
         await(repository.collection.countDocuments().toFuture()) shouldBe 1
       }
     }
