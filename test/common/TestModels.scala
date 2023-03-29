@@ -27,8 +27,8 @@ import play.api.libs.json.{Format, JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
+import java.time.{Instant, LocalDate, LocalDateTime}
 
-import java.time.{LocalDate, LocalDateTime}
 import common.ChargeViewModelTypes._
 import models.ESSTTP.TTPResponseModel
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
@@ -867,7 +867,7 @@ object TestModels {
     "breathingSpace" -> false
   )
 
-  implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
+  implicit val dateFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
   val time: LocalDateTime = LocalDateTime.parse("2022-07-15T14:42:50.125")
 
   def wyoDBModel(modelType: String, json: JsValue): WYODatabaseModel = WYODatabaseModel(

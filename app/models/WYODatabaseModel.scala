@@ -18,7 +18,8 @@ package models
 
 import play.api.libs.json.{Format, JsValue, Json}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-import java.time.{LocalDateTime, ZoneOffset}
+import java.time.{Instant, LocalDateTime, ZoneOffset}
+
 
 case class WYODatabaseModel(_id: String,
                             modelType: String,
@@ -27,6 +28,6 @@ case class WYODatabaseModel(_id: String,
                            )
 
 object WYODatabaseModel {
-  implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
+  implicit val dateFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
   implicit val format: Format[WYODatabaseModel] = Json.format[WYODatabaseModel]
 }
