@@ -18,15 +18,15 @@ package models
 
 import play.api.libs.json.{Format, JsValue, Json}
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
-import java.time.{LocalDateTime, ZoneOffset}
+import java.time.Instant
 
 case class WYODatabaseModel(_id: String,
                             modelType: String,
                             data: JsValue,
-                            creationTimestamp: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
+                            creationTimestamp: Instant = java.time.Instant.now()
                            )
 
 object WYODatabaseModel {
-  implicit val dateFormat: Format[LocalDateTime] = MongoJavatimeFormats.localDateTimeFormat
+  implicit val dateFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
   implicit val format: Format[WYODatabaseModel] = Json.format[WYODatabaseModel]
 }

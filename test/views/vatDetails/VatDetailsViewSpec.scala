@@ -217,7 +217,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         }
 
         "have a link to the portal via the PortalController" in {
-          element(Selectors.historyPastPayments).attr("href") shouldBe "/vat-through-software/portal-payment-history"
+          element(Selectors.historyPastPayments).attr("href") shouldBe "/portal-payment-history"
         }
 
       }
