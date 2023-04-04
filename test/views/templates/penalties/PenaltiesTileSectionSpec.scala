@@ -30,7 +30,7 @@ class PenaltiesTileSectionSpec extends ViewBaseSpec {
 
 
     "have the correct title" in {
-      elementText("#penalties-heading") shouldBe "Penalties and appeals"
+      elementText("#penalties-heading") shouldBe "Penalties for late VAT Returns and payments"
     }
 
     "have the correct link to the penalties-frontend service" in {
