@@ -60,7 +60,7 @@ vatDetails.manageYourVat = Rheoli’ch TAW
 vatDetails.vatCertificate.view = Bwrw golwg dros eich tystysgrif TAW a’i hargraffu.
 vatDetails.vatCertificate.link = Bwrw golwg dros y dystysgrif TAW
 vatDetails.paymentsAndRepayments.link = Taliadau ac ad-daliadau
-vatDetails.paymentsAndRepayments.info = Rheoli’ch Debyd Uniongyrchol, manylion cyfrif banc ar gyfer ad-daliadau ac olrhain beth sydd ar CThEF i chi.
+vatDetails.paymentsAndRepayments.info = Rheoli’ch Debyd Uniongyrchol, manylion cyfrif banc ar gyfer ad-daliadau, ac olrhain beth sydd ar CThEF i chi
 vatDetails.customerInfo.error =  Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth. Rhowch gynnig arall arni yn nes ymlaen.
 vatDetails.updateVatDetails.link = Manylion eich busnes
 vatDetails.updateVatDetails.view = Newid eich manylion busnes neu ddyddiadau’ch Ffurflenni TAW.
@@ -71,7 +71,7 @@ vatDetails.error = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth. Rho
 vatDetails.returnsDue = Mae gennych {0} o Ffurflenni TAW sy’n ddyledus
 vatDetails.paymentsDue = Mae gennych {0} o daliadau’n ddyledus
 vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
-vatDetails.viewPenalties.link = Cosbau ac apeliadau
+vatDetails.viewPenalties.link = Cosbau yn sgil Ffurflenni TAW a thaliadau hwyr
 vatDetails.viewPenalties.info = Bwrw golwg dros eich cosbau, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
 
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd

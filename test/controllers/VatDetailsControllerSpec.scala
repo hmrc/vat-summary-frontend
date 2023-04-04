@@ -242,7 +242,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
 
       "render the page with a penalties tile" in {
-        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe "Penalties and appeals"
+        messages(Jsoup.parse(contentAsString(result)).select("#penalties-heading").text) shouldBe "Penalties for late VAT Returns and payments"
       }
     }
 

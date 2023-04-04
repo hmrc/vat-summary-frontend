@@ -238,7 +238,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
       "has the correct paragraph" in {
         paymentsAndRepaymentsSection.select("p").text() shouldBe "Manage your Direct Debit, repayment bank account " +
-          "details and track what HMRC owe you."
+          "details and track what HMRC owes you."
       }
     }
 
@@ -499,12 +499,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       lazy val view = details(detailsModel.copy(penaltiesSummary = Some(penaltiesSummaryModel)), Html("<nav>BTA Links</nav>"))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "display the Penalties and appeals tile" which {
+      "display the Penalties for late VAT Returns and payments tile" which {
 
         lazy val penaltiesSection = element(Selectors.penaltiesSection)
 
         "has the correct heading" in {
-          penaltiesSection.select("h3").text shouldBe "Penalties and appeals"
+          penaltiesSection.select("h3").text shouldBe "Penalties for late VAT Returns and payments"
         }
 
         "has the correct paragraph" in {

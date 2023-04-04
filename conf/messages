@@ -60,7 +60,7 @@ vatDetails.manageYourVat = Manage your VAT
 vatDetails.vatCertificate.view = View and print your VAT certificate.
 vatDetails.vatCertificate.link = View VAT certificate
 vatDetails.paymentsAndRepayments.link = Payments and repayments
-vatDetails.paymentsAndRepayments.info = Manage your Direct Debit, repayment bank account details and track what HMRC owe you.
+vatDetails.paymentsAndRepayments.info = Manage your Direct Debit, repayment bank account details and track what HMRC owes you.
 vatDetails.customerInfo.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.updateVatDetails.link = Your business details
 vatDetails.updateVatDetails.view = Change your business details or VAT Return dates.
@@ -71,7 +71,7 @@ vatDetails.error = Sorry, there is a problem with the service. Try again later.
 vatDetails.returnsDue = You have {0} returns due
 vatDetails.paymentsDue = You have {0} payments due
 vatDetails.checkWhatYouOwe = Check what you owe and make a payment
-vatDetails.viewPenalties.link = Penalties and appeals
+vatDetails.viewPenalties.link = Penalties for late VAT Returns and payments
 vatDetails.viewPenalties.info = View your penalties, make an appeal against a penalty and see the status of any current appeals.
 
 returnObligation.noReturn = No returns due right now

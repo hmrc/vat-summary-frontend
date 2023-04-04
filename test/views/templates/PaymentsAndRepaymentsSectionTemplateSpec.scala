@@ -48,7 +48,7 @@ class PaymentsAndRepaymentsSectionTemplateSpec extends ViewBaseSpec {
 
     "have the correct paragraph" in {
       elementText(Selectors.paymentsAndRepaymentsParagraph) shouldBe "Manage your Direct Debit, repayment bank " +
-        "account details and track what HMRC owe you."
+        "account details and track what HMRC owes you."
     }
 
   }
