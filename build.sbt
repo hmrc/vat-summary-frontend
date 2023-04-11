@@ -16,12 +16,10 @@
 
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
-lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 scalacOptions ++= Seq("-Wconf:cat=unused-imports&site=.*views.html.*:s")
 
@@ -82,7 +80,6 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(PlayKeys.playDefaultPort := 9152)
   .settings(majorVersion := 0)
   .settings(coverageSettings: _*)
-  .settings(playSettings: _*)
   .settings(scalaSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(

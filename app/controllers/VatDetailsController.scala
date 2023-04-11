@@ -57,7 +57,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
   def details: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
         val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
-        val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn, dateService.now())
+        val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn)
         lazy val paymentObligationsCall = vatDetailsService.getPaymentObligations(user.vrn)
         for {
           customerInfo <- accountDetailsCall
@@ -255,20 +255,9 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                        returnObligations: ServiceResponse[Option[VatReturnObligations]],
                                        paymentObligations: ServiceResponse[Option[Payments]])
                                       (implicit hc: HeaderCarrier): Unit = {
-
-    val returnObs: Option[VatReturnObligations] = returnObligations match {
-      case Right(returns) => returns
-      case _ => None
-    }
-
-    val paymentObs: Option[Payments] = paymentObligations match {
-      case Right(payments) => payments
-      case _ => None
-    }
-
     auditingService.audit(
-      ViewNextOutstandingVatPaymentAuditModel(user, paymentObs), routes.VatDetailsController.details.url)
+      ViewNextOutstandingVatPaymentAuditModel(user, paymentObligations), routes.VatDetailsController.details.url)
     auditingService.audit(
-      ViewNextOpenVatObligationAuditModel(user, returnObs), routes.VatDetailsController.details.url)
+      ViewNextOpenVatObligationAuditModel(user, returnObligations), routes.VatDetailsController.details.url)
   }
 }

@@ -16,7 +16,6 @@
 
 package services
 
-import java.time.LocalDate
 import config.AppConfig
 import connectors.{FinancialDataConnector, VatObligationsConnector}
 import javax.inject.{Inject, Singleton}
@@ -33,7 +32,7 @@ class VatDetailsService @Inject()(vatObligationsConnector: VatObligationsConnect
                                   financialDataConnector: FinancialDataConnector,
                                   implicit val appConfig: AppConfig) {
 
-  def getReturnObligations(vrn: String, date: LocalDate)
+  def getReturnObligations(vrn: String)
                           (implicit hc: HeaderCarrier,
                            ec: ExecutionContext): Future[ServiceResponse[Option[VatReturnObligations]]] =
 

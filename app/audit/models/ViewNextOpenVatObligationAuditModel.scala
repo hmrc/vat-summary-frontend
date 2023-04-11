@@ -16,23 +16,24 @@
 
 package audit.models
 
-import models.User
+import models.{ServiceResponse, User}
 import models.obligations.VatReturnObligations
 
 case class ViewNextOpenVatObligationAuditModel(user: User,
-                                               obligations: Option[VatReturnObligations]) extends AuditModel {
+                                               obligations: ServiceResponse[Option[VatReturnObligations]]) extends AuditModel {
 
   private val openObligation: Map[String, String] = obligations match {
-    case Some(obs) if obs.obligations.size > 1 => Map(
+    case Right(Some(obs)) if obs.obligations.size > 1 => Map(
       "numberOfObligations" -> obs.obligations.size.toString
     )
-    case Some(obs) => Map(
+    case Right(Some(obs)) => Map(
       "obligationOpen" -> "yes",
       "obligationDueBy" -> obs.obligations.head.due.toString,
       "obligationPeriodFrom" -> obs.obligations.head.periodFrom.toString,
       "obligationPeriodTo" -> obs.obligations.head.periodTo.toString
     )
-    case _ => Map("obligationOpen" -> "no")
+    case Right(None) => Map("obligationOpen" -> "no")
+    case Left(_) => Map("obligationsTileError" -> "true")
   }
 
   override val auditType: String = "OverviewPageView"

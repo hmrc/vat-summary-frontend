@@ -47,8 +47,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
   val duplicateObligations: VatReturnObligations = TestModels.duplicateObligations
 
   def mockReturnObligations(result: ServiceResponse[Option[VatReturnObligations]]): Any =
-    (mockVatDetailsService.getReturnObligations(_: String, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
-      .stubs(*, *, *, *)
+    (mockVatDetailsService.getReturnObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
       .returns(Future.successful(result))
 
   def mockPaymentLiabilities(result: ServiceResponse[Option[Payments]]): Any =
