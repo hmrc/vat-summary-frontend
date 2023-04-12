@@ -94,8 +94,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the most recent outstanding obligation" in {
         callObligationsConnector(obligationResult = Right(obligations))
-        val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(vatDetailsService.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligations]] = await(vatDetailsService.getReturnObligations("1111"))
         result shouldBe Right(Some(obligations))
       }
     }
@@ -104,8 +103,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return nothing" in {
         callObligationsConnector(obligationResult = Right(VatReturnObligations(Seq.empty)))
-        val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(vatDetailsService.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligations]] = await(vatDetailsService.getReturnObligations("1111"))
         result shouldBe Right(None)
       }
     }
@@ -114,8 +112,7 @@ class VatDetailsServiceSpec extends ControllerBaseSpec {
 
       "return the error" in {
         callObligationsConnector(obligationResult = Left(BadRequestError("TEST_FAIL", "this is a test")))
-        val result: ServiceResponse[Option[VatReturnObligations]] =
-          await(vatDetailsService.getReturnObligations("1111", LocalDate.parse("2018-01-01")))
+        val result: ServiceResponse[Option[VatReturnObligations]] = await(vatDetailsService.getReturnObligations("1111"))
         result shouldBe Left(ObligationsError)
       }
     }

@@ -16,19 +16,19 @@
 
 package audit.models
 
-import models.User
+import models.{ServiceResponse, User}
 import models.payments.Payments
 
 case class ViewNextOutstandingVatPaymentAuditModel(user: User,
-                                                   payments: Option[Payments]) extends AuditModel {
+                                                   payments: ServiceResponse[Option[Payments]]) extends AuditModel {
 
   private val paymentDetails: Map[String, String] = payments match {
-
-    case Some(data) if data.financialTransactions.size > 1 => Map(
+    case Right(Some(data)) if data.financialTransactions.size > 1 => Map(
       "numberOfPayments" -> data.financialTransactions.size.toString
     )
-    case Some(data) => data.financialTransactions.head.auditDetails
-    case _ => Map("paymentOutstanding" -> "no")
+    case Right(Some(data)) => data.financialTransactions.head.auditDetails
+    case Right(None) => Map("paymentOutstanding" -> "no")
+    case Left(_) => Map("paymentsTileError" -> "true")
   }
 
   override val auditType: String = "OverviewPageView"

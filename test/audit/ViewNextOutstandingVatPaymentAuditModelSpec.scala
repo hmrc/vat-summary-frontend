@@ -17,8 +17,9 @@
 package audit
 
 import java.time.LocalDate
-import _root_.models.User
+import _root_.models.errors.NextPaymentError
 import _root_.models.payments.{Payment, Payments, ReturnDebitCharge}
+import _root_.models.User
 import audit.models.ViewNextOutstandingVatPaymentAuditModel
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.matchers.should.Matchers
@@ -50,7 +51,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
     "be constructed correctly when there is one outstanding payment" in {
       val testData = ViewNextOutstandingVatPaymentAuditModel(
         user,
-        payments = Some(onePayment))
+        payments = Right(Some(onePayment)))
 
       val expected: Map[String, String] = Map(
         "vrn" -> "999999999",
@@ -67,7 +68,7 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
 
       val testData = ViewNextOutstandingVatPaymentAuditModel(
         user,
-        Some(twoPayments)
+        Right(Some(twoPayments))
       )
 
       val expected: Map[String, String] = Map(
@@ -81,12 +82,26 @@ class ViewNextOutstandingVatPaymentAuditModelSpec extends AnyWordSpecLike with M
     "be constructed correctly when there are no outstanding payments" in {
       val testData = ViewNextOutstandingVatPaymentAuditModel(
         user,
-        None
+        Right(None)
       )
 
       val expected: Map[String, String] = Map(
         "vrn" -> "999999999",
         "paymentOutstanding" -> "no"
+      )
+
+      testData.detail shouldBe expected
+    }
+
+    "be constructed correctly when there was an error receiving financial data" in {
+      val testData = ViewNextOutstandingVatPaymentAuditModel(
+        user,
+        Left(NextPaymentError)
+      )
+
+      val expected: Map[String, String] = Map(
+        "vrn" -> "999999999",
+        "paymentsTileError" -> "true"
       )
 
       testData.detail shouldBe expected

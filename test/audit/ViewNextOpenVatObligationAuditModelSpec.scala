@@ -17,16 +17,16 @@
 package audit
 
 import java.time.LocalDate
-
-import _root_.models.User
+import _root_.models.errors.ObligationsError
 import _root_.models.obligations.{VatReturnObligation, VatReturnObligations}
+import _root_.models.User
 import audit.models.ViewNextOpenVatObligationAuditModel
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class ViewNextOpenVatObligationAuditModelSpec extends AnyWordSpecLike with Matchers {
 
-  val obligationOne = VatReturnObligation(
+  val obligationOne: VatReturnObligation = VatReturnObligation(
     LocalDate.parse("2018-01-01"),
     LocalDate.parse("2018-02-02"),
     LocalDate.parse("2018-03-03"),
@@ -35,14 +35,14 @@ class ViewNextOpenVatObligationAuditModelSpec extends AnyWordSpecLike with Match
     "18AA"
   )
 
-  val user = User("999999999")
+  val user: User = User("999999999")
 
   "ViewNextOpenVatObligationAuditModel" should {
 
     "be constructed correctly when there is one open obligation" in {
       val testData = ViewNextOpenVatObligationAuditModel(
         user,
-        obligations = Some(VatReturnObligations(Seq(obligationOne)))
+        obligations = Right(Some(VatReturnObligations(Seq(obligationOne))))
       )
 
       val expected: Map[String, String] = Map(
@@ -71,7 +71,7 @@ class ViewNextOpenVatObligationAuditModelSpec extends AnyWordSpecLike with Match
 
       val testData = ViewNextOpenVatObligationAuditModel(
         user,
-        multipleObligations
+        Right(multipleObligations)
       )
 
       val expected: Map[String, String] = Map(
@@ -85,12 +85,26 @@ class ViewNextOpenVatObligationAuditModelSpec extends AnyWordSpecLike with Match
     "be constructed correctly when there are no open obligations" in {
       val testData = ViewNextOpenVatObligationAuditModel(
         user,
-        None
+        Right(None)
       )
 
       val expected: Map[String, String] = Map(
         "vrn" -> "999999999",
         "obligationOpen" -> "no"
+      )
+
+      testData.detail shouldBe expected
+    }
+
+    "be constructed correctly when there was an error retrieving obligations" in {
+      val testData = ViewNextOpenVatObligationAuditModel(
+        user,
+        Left(ObligationsError)
+      )
+
+      val expected: Map[String, String] = Map(
+        "vrn" -> "999999999",
+        "obligationsTileError" -> "true"
       )
 
       testData.detail shouldBe expected
