@@ -16,19 +16,19 @@
 
 package audit.models
 
+import config.AppConfig
 import models.User
-import models.payments.PaymentDetailsModel
 
-case class PayFullChargeAuditModel(user: User,
-                                   payment: PaymentDetailsModel) extends AuditModel {
+case class PayFullChargeAuditModel(user: User)(implicit appConfig: AppConfig) extends AuditModel {
 
   override val auditType: String = "PaymentsHandOffFullPayment"
   override val transactionName: String = "pay-full-vat-return-charge"
 
   override val detail: Map[String, String] = Map(
     "vrn" -> user.vrn,
-    "taxType" -> payment.taxType,
-    "taxReference" -> payment.taxReference,
-    "backUrl" -> payment.backUrl
+    "taxType" -> "vat",
+    "taxReference" -> user.vrn,
+    "backUrl" -> appConfig.paymentsBackUrl,
+    "returnUrl" -> appConfig.paymentsReturnUrl
   )
 }

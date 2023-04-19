@@ -17,8 +17,9 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.PayVatReturnChargeAuditModel
+import audit.models.{PayFullChargeAuditModel, PayVatReturnChargeAuditModel}
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments._
@@ -125,4 +126,13 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
         InternalServerError(paymentsError())
     }
   }
+
+  def makeFullPaymentHandoff: Action[AnyContent] =
+    authorisedController.authorisedAction { implicit request => user => {
+
+        auditingService.audit(PayFullChargeAuditModel(user))
+            Future.successful(Redirect(appConfig.unauthenticatedPaymentsUrl))
+
+      }
+    }
 }
