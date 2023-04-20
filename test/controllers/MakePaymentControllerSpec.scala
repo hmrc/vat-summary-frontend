@@ -389,7 +389,6 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
     "the user is an Agent" should {
       lazy val result = {
         mockAgentAuth()
-        mockAudit()
         controller.makeFullPaymentHandoff()(fakeRequest)
       }
 

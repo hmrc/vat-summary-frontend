@@ -221,7 +221,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct link" in {
-          element(".govuk-button").attr("href") shouldBe mockConfig.paymentsServiceUrl + mockConfig.payViewAndChange
+          element(".govuk-button").attr("href") shouldBe "/make-payment/vat/all"
         }
       }
 
