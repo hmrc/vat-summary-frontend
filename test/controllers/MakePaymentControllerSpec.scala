@@ -328,4 +328,76 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
       }
     }
   }
+
+  "Calling the makeFullPaymentHandoff action" when {
+
+    "the user is logged in" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        mockAudit()
+        controller.makeFullPaymentHandoff()(fakeRequestWithSession)
+      }
+
+      "return status 303(SEE OTHER)" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+      "return the correct redirect location" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.unauthenticatedPaymentsUrl)
+      }
+    }
+
+    "the user is not logged in" should {
+
+      lazy val result = {
+        mockMissingBearerToken()
+        controller.makeFullPaymentHandoff()(request)
+      }
+
+      "return status 303(SEE OTHER)" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+      "return the correct redirect location which should be sign in" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the user is not authenticated" should {
+
+      lazy val result = {
+        mockInsufficientEnrolments()
+        controller.makeFullPaymentHandoff()(request)
+      }
+
+      "return status 403(Forbidden" in {
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      lazy val result = {
+        mockPrincipalAuth()
+        controller.makeFullPaymentHandoff()(insolventRequest)
+      }
+
+      "return status 403(Forbiddden)" in {
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is an Agent" should {
+      lazy val result = {
+        mockAgentAuth()
+        controller.makeFullPaymentHandoff()(fakeRequest)
+      }
+
+      "return status 303(SEE OTHER)" in {
+        status(result) shouldBe Status.SEE_OTHER
+      }
+      "return the correct redirect location which is the agent client lookup hub" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
+      }
+    }
+  }
 }

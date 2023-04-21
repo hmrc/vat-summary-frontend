@@ -150,7 +150,7 @@
       @if(!user.isAgent) {
         @govukButton(Button(
           content = Text(messages("whatYouOwe.makePayment")),
-          href = Some(appConfig.unauthenticatedPaymentsUrl)
+          href = Some(controllers.routes.MakePaymentController.makeFullPaymentHandoff.url)
         ))
       }
 
