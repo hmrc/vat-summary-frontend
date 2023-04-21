@@ -27,9 +27,6 @@ class MainTemplateSpec extends ViewBaseSpec {
 
   object Selectors {
     val pageTitle = ".hmrc-header__service-name"
-    val phaseTag = ".govuk-phase-banner__content__tag"
-    val phaseText = ".govuk-phase-banner__text"
-    val phaseLink = ".beta-banner-feedback"
   }
 
   "The MainTemplate" when {
@@ -45,17 +42,6 @@ class MainTemplateSpec extends ViewBaseSpec {
 
       "have the correct service URL" in {
         element(".hmrc-header__service-name").attr("href") shouldBe controllers.routes.VatDetailsController.details.url
-      }
-
-      "have a phase banner" which {
-
-        "has a BETA tag" in {
-          elementText(Selectors.phaseTag) shouldBe "beta"
-        }
-
-        "has the correct text" in {
-          elementText(Selectors.phaseText) shouldBe "This is a new service – your feedback will help us to improve it."
-        }
       }
     }
 
