@@ -217,7 +217,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
         }
 
         "have a link to the portal via the PortalController" in {
-          element(Selectors.historyPastPayments).attr("href") shouldBe "/portal-payment-history"
+          element(Selectors.historyPastPayments).attr("href") shouldBe controllers.routes.PortalController.hybridPH.url
         }
 
       }
@@ -232,8 +232,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "has a link to the vat-repayment-tracker service" in {
-        paymentsAndRepaymentsSection.select("h3 a").attr("href") shouldBe s"/vat-repayment-tracker" +
-          s"/manage-or-track-vrt"
+        paymentsAndRepaymentsSection.select("h3 a").attr("href") shouldBe mockConfig.paymentsAndRepaymentsUrl
       }
 
       "has the correct paragraph" in {

@@ -22,9 +22,9 @@ import config.AppConfig
 import config.features.Features
 import play.api.i18n.Lang
 import play.api.mvc.Call
-import play.api.{Configuration, Mode}
+import play.api.Configuration
 
-class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
+class MockAppConfig(val runModeConfiguration: Configuration) extends AppConfig {
   override val host: String = "http://localhost:1234"
   override def feedbackUrl(redirect: String): String = ""
   override val reportAProblemPartialUrl: String = ""
@@ -63,9 +63,9 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val timeoutPeriod: Int = 1800
   override val timeoutCountdown: Int = 20
   override val selfLookup: String = ""
-  override val portalMakePaymentUrl: String => String = (vrn: String) => "/whatYouOwePortal"
-  override val portalPaymentHistoryUrl: String => String = (vrn: String) => "/paymentHistoryPortal"
-  override val portalNonHybridPreviousPaymentsUrl: String => String = (vrn: String) => "/previousPaymentsPortal"
+  override val portalMakePaymentUrl: String => String = _ => "/whatYouOwePortal"
+  override val portalPaymentHistoryUrl: String => String = _ => "/paymentHistoryPortal"
+  override val portalNonHybridPreviousPaymentsUrl: String => String = _ => "/previousPaymentsPortal"
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchToLanguage(lang)
   override def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),

@@ -127,8 +127,9 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
 
 
       "has the correct href" in {
-        element("#content > div > div > a").attr("href") shouldBe
-          "/make-payment/13013/4/2020/2020-04-04/VAT%20AA%202nd%20LPP/2020-01-01/CHARGEREF"
+        element("#content > div > div > a").attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(
+          13013, 4, 2020, "2020-04-04", "VAT AA 2nd LPP", "2020-01-01", "CHARGEREF"
+        ).url
       }
     }
 
