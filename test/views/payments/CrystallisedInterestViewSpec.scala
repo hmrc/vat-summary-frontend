@@ -157,8 +157,9 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         }
 
         "has the correct href" in {
-          element("#pay-button").attr("href") shouldBe
-            "/make-payment/771/12/2022/2022-12-31/VAT%20OA%20Default%20Interest/2023-03-30/chargeRef"
+          element("#pay-button").attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(
+            771, 12, 2022, "2022-12-31", "VAT OA Default Interest", "2023-03-30", "chargeRef"
+          ).url
         }
       }
 

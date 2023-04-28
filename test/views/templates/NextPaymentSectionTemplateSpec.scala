@@ -27,8 +27,6 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
   "The nextPaymentSection template" when {
 
-
-
     object Selectors {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"
       val nextPaymentDate = "p:nth-of-type(1)"
@@ -169,7 +167,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display a link to the portal" in {
-        element(Selectors.portalLink).attr("href") shouldBe "/portal-what-you-owe"
+        element(Selectors.portalLink).attr("href") shouldBe controllers.routes.PortalController.hybridWYO.url
       }
 
       "have the correct link text" in {

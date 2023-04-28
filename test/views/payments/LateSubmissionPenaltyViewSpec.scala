@@ -121,8 +121,9 @@ class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
 
 
       "has the correct href" in {
-        element("#content > div > div > a").attr("href") shouldBe
-          "/make-payment/10055/6/2020/2020-06-06/VAT%20Late%20Submission%20Pen/2020-10-01/CHARGEREF"
+        element("#content > div > div > a").attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(
+          10055, 6, 2020, "2020-06-06", "VAT Late Submission Pen", "2020-10-01", "CHARGEREF"
+        ).url
       }
     }
 

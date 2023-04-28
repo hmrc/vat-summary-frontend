@@ -19,7 +19,6 @@ import uk.gov.hmrc.DefaultBuildSettings._
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
-lazy val plugins: Seq[Plugins] = Seq.empty
 
 scalacOptions ++= Seq("-Wconf:cat=unused-imports&site=.*views.html.*:s")
 
@@ -47,14 +46,13 @@ val mongoVersion = "1.1.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "7.14.0",
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "6.7.0-play-28",
-  "com.typesafe.play" %% "play-json-joda"             % "2.9.3",
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "7.15.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "7.4.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"         % mongoVersion,
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % "7.14.0"      % scope,
+  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % "7.15.0"      % scope,
   "org.scalatestplus"  %% "mockito-3-4"                 % "3.2.9.0"     % scope,
   "org.scalamock"      %% "scalamock"                   % "5.2.0"       % scope,
   "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-28"     % mongoVersion  % scope
@@ -75,7 +73,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 }
 
 lazy val microservice: Project = Project(appName, file("."))
-  .enablePlugins(Seq(play.sbt.PlayScala, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9152)
   .settings(majorVersion := 0)

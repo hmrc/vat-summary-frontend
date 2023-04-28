@@ -71,7 +71,7 @@ class HistorySectionTemplateSpec extends ViewBaseSpec {
       "have a link to the portal via the PortalController" which {
 
         "has the correct href" in {
-          element(Selectors.viewPastPayments).attr("href") shouldBe "/portal-payment-history"
+          element(Selectors.viewPastPayments).attr("href") shouldBe controllers.routes.PortalController.hybridPH.url
         }
 
         "opens in a new tab" in {

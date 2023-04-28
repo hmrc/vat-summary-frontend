@@ -50,7 +50,8 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     }
 
     "have the correct instructions to sign in" in {
-      elementText(Selectors.signInCorrectCredentials) shouldBe "If you have already signed up, you need to sign in with the correct Government Gateway details."
+      elementText(Selectors.signInCorrectCredentials) shouldBe
+        "If you have already signed up, you need to sign in with the correct Government Gateway details."
     }
 
     "have the correct sign out text" in {
@@ -58,7 +59,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     }
 
     "have the correct sign out link" in {
-      element(Selectors.signOutLink).attr("href") shouldBe "/sign-out?authorised=false"
+      element(Selectors.signOutLink).attr("href") shouldBe controllers.routes.SignOutController.signOut(false).url
     }
 
   }

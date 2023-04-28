@@ -33,8 +33,8 @@ class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
       val vatCertificateParagraph = "#vat-certificate p"
     }
 
-    def view: HtmlFormat.Appendable = vatCertificateSection()
-    implicit def document: Document = Jsoup.parse(view.body)
+    val view: HtmlFormat.Appendable = vatCertificateSection()
+    implicit val document: Document = Jsoup.parse(view.body)
 
     "the vat certificate feature" should {
 
@@ -43,7 +43,7 @@ class VatCertificateSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct link" in {
-        elementAttributes(Selectors.vatCertificateHeading).get("href") shouldBe Some("/vat-certificate")
+        element(Selectors.vatCertificateHeading).attr("href") shouldBe controllers.routes.VatCertificateController.show.url
       }
 
       "have the correct paragraph" in {

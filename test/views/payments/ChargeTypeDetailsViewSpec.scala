@@ -43,7 +43,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     val clearedAmountValue = ".govuk-summary-list__row:nth-of-type(3) > .govuk-summary-list__value"
     val outstandingAmountKey = ".govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__key"
     val outstandingAmountValue = ".govuk-summary-list__row:nth-of-type(4) > .govuk-summary-list__value"
-    val button = ".govuk-button"
+    val button = "#content .govuk-button"
     val whatYouOweLink = "#whatYouOweLink"
     val viewReturn = "#view-return"
     val viewReturnLink = "#view-return > a"
@@ -143,8 +143,9 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
             }
 
             "has the correct href location" in {
-              element(Selectors.button).attr("href") shouldBe
-                "/make-payment/111111/3/2021/2021-03-31/VAT%20Return%20Debit%20Charge/2021-04-08/noCR"
+              element(Selectors.button).attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(
+                111111, 3, 2021, "2021-03-31", "VAT Return Debit Charge", "2021-04-08", "noCR"
+              ).url
             }
           }
 

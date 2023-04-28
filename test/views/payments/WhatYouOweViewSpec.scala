@@ -217,11 +217,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       "have a pay now button" which {
 
         "has the correct text" in {
-          elementText(".govuk-button") shouldBe "Pay now"
+          elementText("#content .govuk-button") shouldBe "Pay now"
         }
 
         "has the correct link" in {
-          element(".govuk-button").attr("href") shouldBe "/make-payment/vat/all"
+          element("#content .govuk-button").attr("href") shouldBe controllers.routes.MakePaymentController.makeFullPaymentHandoff.url
         }
       }
 
@@ -241,7 +241,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct link location" in {
-          element("#cannot-pay-paragraph > a").attr("href") shouldBe "/time-to-pay"
+          element("#cannot-pay-paragraph > a").attr("href") shouldBe controllers.routes.TimeToPayController.redirect.url
         }
         "has the correct second paragraph text" in {
           elementText("#cannot-pay-p2") shouldBe "If you’ve already set up a plan," +
@@ -363,7 +363,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       }
 
       "not have a pay now button" in {
-        elementExtinct(".govuk-button")
+        elementExtinct("#content .govuk-button")
       }
 
       "have a payment help section" which {

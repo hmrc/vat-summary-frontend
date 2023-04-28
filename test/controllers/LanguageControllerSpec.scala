@@ -39,9 +39,8 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some("/vat-overview")
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
       }
-
     }
 
     "providing the parameter 'cymraeg" should {
@@ -57,9 +56,8 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some("/vat-overview")
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
       }
-
     }
 
     "providing an unsupported language parameter" should {
@@ -73,6 +71,10 @@ class LanguageControllerSpec extends ControllerBaseSpec {
 
       "keep the current language" in {
         cookies(result).get(messagesApi.langCookieName).get.value shouldBe "en"
+      }
+
+      "have the correct redirect location" in {
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
       }
     }
   }
