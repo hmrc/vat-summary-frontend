@@ -48,19 +48,10 @@ class PenaltyDetailsServiceSpec extends AnyWordSpecLike with MockFactory with Ma
     new PenaltyDetailsService(mockPenaltyDetailsConnector)
   }
 
-  "Calling PenaltyDetailsService.getPenaltyDetails when the feature switch is enabled" should {
+  "Calling PenaltyDetailsService.getPenaltyDetails" should {
 
     "return the PenaltyDetails that the connector returns" in {
-      mockAppConfig.features.penaltiesAndInterestWYOEnabled(true)
       await(service.getPenaltyDetails("123")) shouldBe penaltyDetailsResponse
-    }
-  }
-
-  "Calling PenaltyDetailsService.getPenaltyDetails when the feature switch is disabled" should {
-
-    "return an empty Penalty details model" in {
-      mockAppConfig.features.penaltiesAndInterestWYOEnabled(false)
-      await(service.getPenaltyDetails("123")) shouldBe Right(PenaltyDetails(Seq.empty, breathingSpace = false))
     }
   }
 }

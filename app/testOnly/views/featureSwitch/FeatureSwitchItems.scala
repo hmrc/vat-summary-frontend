@@ -36,11 +36,7 @@ class FeatureSwitchItems @Inject() () {
 
   def items(form: Form[FeatureSwitchModel]): Seq[CheckboxItem] = {
     Seq(
-      formCheckBoxItem(form, ConfigKeys.userResearchBannerFeature, "User research banner"),
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
-      formCheckBoxItem(form, ConfigKeys.penaltiesServiceEnabledFeature, "Enable penalties service features"),
-      formCheckBoxItem(form, ConfigKeys.penaltiesAndInterestWYOFeature, "Enable penalties and interest WYO"),
-      formCheckBoxItem(form, ConfigKeys.chargeReferenceInsetFeature, "Charge reference inset text on default surcharge breakdown"),
       formCheckBoxItem(form, ConfigKeys.overdueTimeToPayDescriptionFeature, "Time to Pay description on WYO page")
     )
   }

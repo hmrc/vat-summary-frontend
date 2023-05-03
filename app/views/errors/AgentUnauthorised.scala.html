@@ -30,6 +30,7 @@
   </p>
   @govukButton(Button(
     content = Text(messages("base.signOut")),
-    href = Some(controllers.routes.SignOutController.signOut(authorised = false).url)
+    href = Some(controllers.routes.SignOutController.signOut(authorised = false).url),
+    attributes = Map("id" ->"sign-out")
   ))
 }
