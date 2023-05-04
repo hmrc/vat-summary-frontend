@@ -149,8 +149,8 @@
                 )
             ))
 
-            @(model.chargeType == DebitDefaultSurcharge.value, appConfig.features.chargeReferenceInsetEnabled(), model.chargeReference) match {
-                case (true, true, Some(_)) => {
+            @(model.chargeType == DebitDefaultSurcharge.value, model.chargeReference) match {
+                case (true, Some(_)) => {
                     @govukInsetText(InsetText(
                         content = HtmlContent(insetMessage)
                     ))

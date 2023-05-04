@@ -53,7 +53,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     val tradeClassification = "dd.trade-classification"
     val ppobRowTitle = "dt.ppob"
     val ppob = "dd.ppob"
-    val printButton = ".govuk-button"
+    val printButton = "#print-button"
     val fullNameSelector = "dd.full-name"
     val backLink = ".govuk-back-link"
   }

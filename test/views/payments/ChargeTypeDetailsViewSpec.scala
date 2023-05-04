@@ -52,13 +52,9 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the Charge Type Details page for a principal user" when {
 
-    "the chargeReferenceInsetEnabled feature switch is off" when {
+    "the user has a cleared amount and a period for the charge" when {
 
-      mockConfig.features.chargeReferenceInsetEnabled(false)
-
-      "the user has a cleared amount and a period for the charge" when {
-
-        "the charge isn't overdue" should {
+      "the charge isn't overdue" should {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, user)
@@ -161,7 +157,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
         }
 
-        "the charge is overdue" should {
+      "the charge is overdue" should {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweChargeOverdue, Html(""))(request, messages, mockConfig, user)
@@ -172,9 +168,9 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
             elementText(Selectors.dueDateValue) shouldBe "8\u00a0April\u00a02021 overdue"
           }
         }
-      }
+    }
 
-      "the user has a cleared amount and no period for the charge" should {
+    "the user has a cleared amount and no period for the charge" should {
 
         lazy val view = {
           chargeTypeDetailsView(whatYouOweChargeNoPeriod, Html(""))(request, messages, mockConfig, user)
@@ -186,7 +182,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
-      "the user only has the periodFrom field but not the periodTo field" should {
+    "the user only has the periodFrom field but not the periodTo field" should {
 
         lazy val view = {
           chargeTypeDetailsView(whatYouOweChargeNoPeriodTo, Html(""))(request, messages, mockConfig, user)
@@ -198,7 +194,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
-      "the user only has the periodTo field but not the periodFrom field" should {
+    "the user only has the periodTo field but not the periodFrom field" should {
 
         lazy val view = {
           chargeTypeDetailsView(whatYouOweChargeNoPeriodFrom, Html(""))(request, messages, mockConfig, user)
@@ -210,7 +206,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
-      "the charge allows the user to view a VAT return" should {
+    "the charge allows the user to view a VAT return" should {
 
         lazy val view = {
           chargeTypeDetailsView(chargeModel1, Html(""))(request, messages, mockConfig, user)
@@ -229,7 +225,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
-      "the charge does not allow the user to view a VAT return" should {
+    "the charge does not allow the user to view a VAT return" should {
 
         lazy val view = {
           chargeTypeDetailsView(whatYouOweChargeNoViewReturn, Html(""))(request, messages, mockConfig, user)
@@ -242,25 +238,9 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
       }
 
-      "charge is a Default Surcharge" should {
+    "the charge is a Default Surcharge" when {
 
-        lazy val view = {
-          chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge", chargeReference = Some("XD002750002155")),
-            Html(""))(request, messages, mockConfig, user)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "not display the inset text" in {
-          elementExtinct(Selectors.insetText)
-        }
-      }
-    }
-
-    "the chargeReferenceInsetEnabled feature switch is on" when {
-
-      "the charge is a Default Surcharge" when {
-
-        "the charge has a charge reference" should {
+      "the charge has a charge reference" should {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge", chargeReference = Some("XD002750002155")),
@@ -269,12 +249,11 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display the inset text" in {
-            mockConfig.features.chargeReferenceInsetEnabled(true)
             elementText(Selectors.insetText) shouldBe "You must use the 14-character reference number XD002750002155 when making this payment."
           }
         }
 
-        "the charge does not have a charge reference" should {
+      "the charge does not have a charge reference" should {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge"),
@@ -283,21 +262,15 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "not display the inset text" in {
-            mockConfig.features.chargeReferenceInsetEnabled(true)
             elementExtinct(Selectors.insetText)
           }
         }
-      }
     }
   }
 
   "Rendering the Charge Type Details page for an agent" when {
 
-    "the chargeReferenceInsetEnabled feature switch is off" when {
-
-      mockConfig.features.chargeReferenceInsetEnabled(false)
-
-      "the charge is any charge type" should {
+    "the charge is any charge type" should {
 
         lazy val view = {
           chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, agentUser)
@@ -335,24 +308,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
-      "charge is a Default Surcharge" should {
-
-        lazy val view = {
-          chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge", chargeReference = Some("XD002750002155")),
-            Html(""))(request, messages, mockConfig, agentUser)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "not display the inset text" in {
-          mockConfig.features.chargeReferenceInsetEnabled(false)
-          elementExtinct(Selectors.insetText)
-        }
-      }
-    }
-
-    "the chargeReferenceInsetEnabled feature switch is on" when {
-
-      "the charge is a Default Surcharge" should {
+    "the charge is a Default Surcharge" should {
 
         "the charge has a charge reference" should {
 
@@ -363,7 +319,6 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display the inset text" in {
-            mockConfig.features.chargeReferenceInsetEnabled(true)
             elementText(Selectors.insetText) shouldBe "Your client must use the 14-character reference number XD002750002155 when making this payment."
           }
         }
@@ -377,11 +332,10 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "not display the inset text" in {
-            mockConfig.features.chargeReferenceInsetEnabled(true)
             elementExtinct(Selectors.insetText)
           }
         }
       }
-    }
+
   }
 }

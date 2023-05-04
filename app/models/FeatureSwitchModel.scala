@@ -16,9 +16,6 @@
 
 package models
 
-case class FeatureSwitchModel(userResearchBannerEnabled: Boolean,
-                              staticDateEnabled: Boolean,
-                              penaltiesServiceEnabled: Boolean,
-                              penaltiesAndInterestWYOEnabled: Boolean,
-                              chargeReferenceInsetEnabled: Boolean,
+case class FeatureSwitchModel(staticDateEnabled: Boolean,
+
                               overdueTimeToPayDescriptionEnabled: Boolean)

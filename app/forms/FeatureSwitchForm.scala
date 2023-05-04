@@ -24,11 +24,7 @@ import play.api.data.Forms._
 object FeatureSwitchForm {
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
-      ConfigKeys.userResearchBannerFeature -> boolean,
       ConfigKeys.staticDateEnabledFeature -> boolean,
-      ConfigKeys.penaltiesServiceEnabledFeature -> boolean,
-      ConfigKeys.penaltiesAndInterestWYOFeature -> boolean,
-      ConfigKeys.chargeReferenceInsetFeature -> boolean,
       ConfigKeys.overdueTimeToPayDescriptionFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )

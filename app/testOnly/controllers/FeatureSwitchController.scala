@@ -33,11 +33,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
-        userResearchBannerEnabled = appConfig.features.userResearchBanner(),
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        penaltiesServiceEnabled = appConfig.features.penaltiesServiceEnabled(),
-        penaltiesAndInterestWYOEnabled = appConfig.features.penaltiesAndInterestWYOEnabled(),
-        chargeReferenceInsetEnabled = appConfig.features.chargeReferenceInsetEnabled(),
         overdueTimeToPayDescriptionEnabled = appConfig.features.overdueTimeToPayDescriptionEnabled()
       )
     )))
@@ -51,11 +47,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
   }
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
-    appConfig.features.userResearchBanner(model.userResearchBannerEnabled)
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
-    appConfig.features.penaltiesServiceEnabled(model.penaltiesServiceEnabled)
-    appConfig.features.penaltiesAndInterestWYOEnabled(model.penaltiesAndInterestWYOEnabled)
-    appConfig.features.chargeReferenceInsetEnabled(model.chargeReferenceInsetEnabled)
     appConfig.features.overdueTimeToPayDescriptionEnabled(model.overdueTimeToPayDescriptionEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }

@@ -30,7 +30,7 @@ class AgentUnauthorisedViewSpec extends ViewBaseSpec {
       val pageHeading = "#content h1"
       val instructions = "p.govuk-body"
       val instructionsLink = "p.govuk-body > a"
-      val button = ".govuk-button"
+      val button = "#sign-out"
     }
 
     lazy val view = agentUnauthorisedView()(request, messages, mockConfig)

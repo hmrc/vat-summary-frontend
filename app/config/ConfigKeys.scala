@@ -25,11 +25,8 @@ object ConfigKeys {
   val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
-  val userResearchBannerFeature: String = "features.userResearchBanner.enabled"
   val staticDateEnabledFeature: String = "features.staticDate.enabled"
   val staticDateValue: String = "date-service.staticDate.value"
-  val penaltiesAndInterestWYOFeature: String = "features.penaltiesAndInterestWYO.enabled"
-  val chargeReferenceInsetFeature: String = "features.chargeReferenceInset.enabled"
   val overdueTimeToPayDescriptionFeature: String = "features.overdueTimeToPayDescription.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
@@ -120,8 +117,6 @@ object ConfigKeys {
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 
   val environmentHost: String = "environment-base.host"
-
-  val penaltiesServiceEnabledFeature: String = "features.penaltiesService.enabled"
   val penaltiesHost: String = "penalties.host"
   val penaltiesUrl: String = "penalties.url"
   val penaltiesFrontendHost: String = "penalties-frontend.host"

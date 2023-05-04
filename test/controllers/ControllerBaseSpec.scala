@@ -147,8 +147,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .returns(Future.successful(model))
 
   def mockPenaltyDetailsServiceCall(): Any =
-    (mockPenaltyDetailsService.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext, _: AppConfig))
-      .stubs(*, *, *, *)
+    (mockPenaltyDetailsService.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
       .returns(Future.successful(penaltyDetailsResponse))
 
   def mockAuth(isAgent: Boolean, authResult: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {

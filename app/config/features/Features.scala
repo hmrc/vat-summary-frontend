@@ -23,10 +23,6 @@ import play.api.Configuration
 @Singleton
 class Features @Inject()(implicit config: Configuration) {
 
-  val userResearchBanner = new Feature(ConfigKeys.userResearchBannerFeature)
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
-  val penaltiesServiceEnabled = new Feature(ConfigKeys.penaltiesServiceEnabledFeature)
-  val penaltiesAndInterestWYOEnabled = new Feature(ConfigKeys.penaltiesAndInterestWYOFeature)
-  val chargeReferenceInsetEnabled = new Feature(ConfigKeys.chargeReferenceInsetFeature)
   val overdueTimeToPayDescriptionEnabled = new Feature(ConfigKeys.overdueTimeToPayDescriptionFeature)
 }

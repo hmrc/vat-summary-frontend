@@ -200,6 +200,7 @@
 
   @govukButton(Button(
     content = Text(messages("vatCertificate.print")),
-    attributes = Map("onclick" -> "javascript:window.print()")
+    attributes = Map("onclick" -> "javascript:window.print()",
+                     "id" -> "print-button")
   ))
 }
