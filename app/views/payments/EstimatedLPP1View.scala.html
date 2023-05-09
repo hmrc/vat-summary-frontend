@@ -107,7 +107,7 @@
       case (false, true) => {}
       case _ => {
         @govukWarningText(WarningText(
-          iconFallbackText = messages("common.warning"),
+          iconFallbackText = Some(messages("common.warning")),
           content = Text(messages("estimatedLPP1.warning", model.part2PenaltyRate, model.part2Days))
         ))
       }
