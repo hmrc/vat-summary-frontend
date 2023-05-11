@@ -225,6 +225,9 @@ case object VatMigratedLiability extends ChargeType {
 case object VatMigratedCredit extends ChargeType {
   override val value: String = "VAT Migrated Credit"
 }
+case object VatDeferralPenalty extends ChargeType {
+  override val value: String = "VAT Deferral Penalty"
+}
 case object VatReturn1stLPP extends ChargeType {
   override val value: String = "VAT Return 1st LPP"
 }
@@ -419,6 +422,7 @@ object ChargeType extends LoggerUtil {
     Refund,
     VatMigratedLiability,
     VatMigratedCredit,
+    VatDeferralPenalty,
     VatReturn1stLPP,
     VatReturnLPI,
     VatReturn1stLPPLPI,

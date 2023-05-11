@@ -1581,6 +1581,21 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "there is a VAT Deferral Penalty charge" should {
+
+      val model = exampleModel.copy(chargeType = VatDeferralPenalty)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for unpaid deferred VAT"
+      }
+    }
+
     "there is a VAT POA Instalment charge" should {
 
       val model = exampleModel.copy(chargeType = PaymentOnAccountInstalments)

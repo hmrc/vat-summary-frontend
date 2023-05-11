@@ -547,6 +547,9 @@ chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit
 
+chargeType.vatDeferralPenaltyTitle = Penalty
+chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
