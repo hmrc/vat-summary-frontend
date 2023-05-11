@@ -36,6 +36,11 @@ trait ChargeDetailsViewModel {
 trait CrystallisedViewModel extends ChargeDetailsViewModel {
   val isOverdue: Boolean
   val dueDate: LocalDate
+  val periodFrom: LocalDate
+  val periodTo: LocalDate
 }
 
-trait EstimatedViewModel extends ChargeDetailsViewModel
+trait EstimatedViewModel extends ChargeDetailsViewModel {
+  val periodFrom: LocalDate
+  val periodTo: LocalDate
+}

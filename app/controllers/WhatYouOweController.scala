@@ -16,6 +16,8 @@
 
 package controllers
 
+import audit.AuditingService
+import audit.models.WhatYouOweAuditModel
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
@@ -44,7 +46,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      noPayments: NoPayments,
                                      accountDetailsService: AccountDetailsService,
                                      penaltyDetailsService: PenaltyDetailsService,
-                                     WYOSessionService: WYOSessionService)
+                                     WYOSessionService: WYOSessionService,
+                                     auditService: AuditingService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -62,6 +65,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                 case (Right(Some(payments)), Right(penalties)) =>
                   constructViewModel(payments.financialTransactions, mandationStatus, penalties) match {
                     case Some(model) =>
+                      auditService.extendedAudit(
+                        WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
+                        routes.WhatYouOweController.show.url
+                      )
                       WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
                         Ok(view(model, serviceInfoContent))
                       }
