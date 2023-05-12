@@ -42,7 +42,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   )
 }
 
-val mongoVersion = "1.1.0"
+val mongoVersion = "1.2.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
