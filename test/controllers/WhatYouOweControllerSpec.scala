@@ -49,7 +49,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     noPayments,
     mockAccountDetailsService,
     mockPenaltyDetailsService,
-    mockWYOSessionService
+    mockWYOSessionService,
+    mockAuditService
   )
 
   "The WhatYouOweController .show method" when {
@@ -67,6 +68,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
           mockWYOSessionServiceCall()
+          mockAudit()
           controller.show(fakeRequest)
         }
 
@@ -90,6 +92,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockAudit()
           controller.show(fakeRequest)
         }
 
@@ -163,6 +166,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         mockDateServiceCall()
         mockPenaltyDetailsServiceCall()
         mockWYOSessionServiceCall()
+        mockAudit()
         controller.show(agentFinancialRequest)
       }
 
