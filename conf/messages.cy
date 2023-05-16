@@ -547,6 +547,9 @@ chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd
 chargeType.migratedCreditDescription = credyd TAW amrywiol
 
+chargeType.vatDeferralPenaltyTitle = Cosb
+chargeType.vatDeferralPenaltyDescription = am TAW ohiriedig sydd heb ei thalu
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

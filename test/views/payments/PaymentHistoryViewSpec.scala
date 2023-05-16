@@ -26,7 +26,7 @@ import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.PaymentHistory
-import common.MessageLookup.paymentHistoryMessages._
+import common.MessageLookup.PaymentHistoryMessages.insetText
 
 class PaymentHistoryViewSpec extends ViewBaseSpec {
 

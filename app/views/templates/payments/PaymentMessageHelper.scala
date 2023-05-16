@@ -446,6 +446,13 @@ object PaymentMessageHelper {
     Some("chargeType.migratedCreditDescription")
   )
 
+  object VatDeferralPenaltyCharge extends PaymentMessageHelper(
+    VatDeferralPenalty.value,
+    "chargeType.vatDeferralPenaltyTitle",
+    Some("chargeType.vatDeferralPenaltyDescription"),
+    Some("chargeType.vatDeferralPenaltyDescription")
+  )
+
   object VATPOAInstalmentCharge extends PaymentMessageHelper(
     PaymentOnAccountInstalments.value,
     "chargeType.POAInstalmentTitle",
@@ -815,6 +822,7 @@ object PaymentMessageHelper {
     RefundsCharge,
     VatMigratedLiabilityCharge,
     VatMigratedCreditCharge,
+    VatDeferralPenaltyCharge,
     VATPOAInstalmentCharge,
     VATPOAReturnDebitCharge,
     VATPOAReturnCreditCharge,
