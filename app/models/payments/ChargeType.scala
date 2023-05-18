@@ -45,11 +45,17 @@ case object VatRepaymentSupplementRecovery extends ChargeType {
 case object VatIndirectTaxRevenueRecovery extends ChargeType {
   override val value: String = "VAT Indirect Tax Revenue Rec"
 }
-case object VatDefaultInterest extends ChargeType {
-  override val value: String = "VAT Default Interest"
+case object VatDefaultInterestDebit extends ChargeType {
+  override val value: String = "VAT Default Interest Debit"
 }
-case object VatFurtherInterest extends ChargeType {
-  override val value: String = "VAT Further Interest"
+case object VatDefaultInterestCredit extends ChargeType {
+  override val value: String = "VAT Default Interest Credit"
+}
+case object VatFurtherInterestDebit extends ChargeType {
+  override val value: String = "VAT Further Interest Debit"
+}
+case object VatFurtherInterestCredit extends ChargeType {
+  override val value: String = "VAT Further Interest Credit"
 }
 case object ReturnDebitCharge extends ChargeType {
   override val value: String = "VAT Return Debit Charge"
@@ -358,8 +364,10 @@ case object VatPOAInstalmentLPI extends ChargeType {
 object ChargeType extends LoggerUtil {
 
   val allChargeTypes: Set[ChargeType] = Set(
-    VatDefaultInterest,
-    VatFurtherInterest,
+    VatDefaultInterestDebit,
+    VatDefaultInterestCredit,
+    VatFurtherInterestDebit,
+    VatFurtherInterestCredit,
     VatUnrepayableOverpayment,
     VatRepaymentSupplementRecovery,
     VatIndirectTaxRevenueRecovery,

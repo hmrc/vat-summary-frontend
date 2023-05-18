@@ -47,15 +47,29 @@ object PaymentMessageHelper {
     Some("chargeType.indirectRevRecoveryDescription")
   )
 
-  object DefaultInterest extends PaymentMessageHelper(
-    VatDefaultInterest.value,
+  object DefaultInterestDebit extends PaymentMessageHelper(
+    VatDefaultInterestDebit.value,
     "chargeType.defaultInterestTitle",
     Some("chargeType.defaultAndFurtherInterestDescription"),
     Some("chargeType.defaultAndFurtherInterestDescription")
   )
 
-  object FurtherInterest extends PaymentMessageHelper(
-    VatFurtherInterest.value,
+  object DefaultInterestCredit extends PaymentMessageHelper(
+    VatDefaultInterestCredit.value,
+    "chargeType.defaultInterestTitle",
+    Some("chargeType.defaultAndFurtherInterestDescription"),
+    Some("chargeType.defaultAndFurtherInterestDescription")
+  )
+
+  object FurtherInterestDebit extends PaymentMessageHelper(
+    VatFurtherInterestDebit.value,
+    "chargeType.furtherInterestTitle",
+    Some("chargeType.defaultAndFurtherInterestDescription"),
+    Some("chargeType.defaultAndFurtherInterestDescription")
+  )
+
+  object FurtherInterestCredit extends PaymentMessageHelper(
+    VatFurtherInterestCredit.value,
     "chargeType.furtherInterestTitle",
     Some("chargeType.defaultAndFurtherInterestDescription"),
     Some("chargeType.defaultAndFurtherInterestDescription")
@@ -765,8 +779,10 @@ object PaymentMessageHelper {
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
     IndirectTaxRevenueRecovery,
-    DefaultInterest,
-    FurtherInterest,
+    DefaultInterestDebit,
+    DefaultInterestCredit,
+    FurtherInterestDebit,
+    FurtherInterestCredit,
     VatReturnDebitCharge,
     VatReturnCreditCharge,
     VatOfficerAssessmentCreditCharge,

@@ -59,7 +59,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
   "The charge type .toPathElement method" should {
 
     "correctly hyphenate and lowercase a string" in {
-      ChargeType.apply("VAT Further Interest").toPathElement shouldBe "vat-further-interest"
+      ChargeType.apply("VAT Further Interest Debit").toPathElement shouldBe "vat-further-interest-debit"
     }
   }
 
