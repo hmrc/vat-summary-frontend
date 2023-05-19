@@ -35,7 +35,7 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   val testMonth: Int = 2
   val testYear: Int = 2018
   val testChargeType: String = "VAT Return Debit Charge"
-  val testNonReturnChargeType: String = "VAT Default Interest"
+  val testNonReturnChargeType: String = "VAT Default Interest Debit"
   val testDueDate: String = "2018-08-08"
   val testChargeReference: String = "XD002750002155"
   val testNoChargeReference: String = "noCR"
