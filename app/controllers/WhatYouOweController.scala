@@ -76,10 +76,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                       logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
                       Future.successful(InternalServerError(paymentsError()))
                   }
-                case (Right(_), _) =>
+                case (Right(None), Right(_)) =>
                   val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
                   Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus)))
-                case (Left(_), _) | (_, Left(_)) =>
+                case _ =>
                   logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
                   Future.successful(InternalServerError(paymentsError()))
               }
