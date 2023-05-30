@@ -37,8 +37,10 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, Insuffic
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
+
 import java.time.LocalDate
 import models.payments.Payments
+import models.penalties.PenaltyDetails
 import models.viewModels.ChargeDetailsViewModel
 import org.scalatest.enablers.Existence
 import org.scalatest.matchers.should.Matchers
@@ -146,10 +148,10 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .stubs(*)
       .returns(Future.successful(model))
 
-  def mockPenaltyDetailsServiceCall(): Any =
+  def mockPenaltyDetailsServiceCall(penaltyDetails: HttpResult[PenaltyDetails] = penaltyDetailsResponse): Any =
     (mockPenaltyDetailsService.getPenaltyDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *)
-      .returns(Future.successful(penaltyDetailsResponse))
+      .returns(Future.successful(penaltyDetails))
 
   def mockAuth(isAgent: Boolean, authResult: Future[~[Enrolments, Option[AffinityGroup]]]): Any = {
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[~[Enrolments, Option[AffinityGroup]]])

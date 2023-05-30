@@ -18,7 +18,7 @@ package controllers
 
 import common.TestModels._
 import models.User
-import models.errors.PaymentsError
+import models.errors.{PaymentsError, UnexpectedStatusError}
 import models.payments._
 import models.viewModels._
 import org.jsoup.Jsoup
@@ -117,6 +117,29 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          controller.show(fakeRequest)
+        }
+
+        "return ISE (500)" in {
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
+
+        "return the payments error view" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.select("h1").first().text() shouldBe "Sorry, there is a problem with the service"
+        }
+      }
+
+      "the penalties call is unsuccessful" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockDateServiceCall()
+          mockPenaltyDetailsServiceCall(Left(UnexpectedStatusError("500", "oops")))
           controller.show(fakeRequest)
         }
 
