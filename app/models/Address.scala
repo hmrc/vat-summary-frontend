@@ -16,6 +16,7 @@
 
 package models
 
+import play.api.Logging
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -25,14 +26,17 @@ case class Address(line1: String,
                    line4: Option[String],
                    postCode: Option[String])
 
-object Address {
-  implicit val addressWrites: Writes[Address] = Json.writes[Address]
+object Address extends Logging {
+  implicit val addressWrites: Writes[Address] = Json.writes
 
   implicit val addressReads: Reads[Address] = (
-    (JsPath \ "address" \ "line1").read[String] and
-    (JsPath \ "address" \ "line2").readNullable[String] and
-    (JsPath \ "address" \ "line3").readNullable[String] and
-    (JsPath \ "address" \ "line4").readNullable[String] and
-    (JsPath \ "address" \ "postCode").readNullable[String]
-  )(Address.apply _)
+    (__ \ "address" \ "line1").readWithDefault {
+        logger.info("[Address] Address line 1 empty")
+        ""
+    } ~
+      (__ \ "address" \ "line2").readNullable[String] ~
+      (__ \ "address" \ "line3").readNullable[String] ~
+      (__ \ "address" \ "line4").readNullable[String] ~
+      (__ \ "address" \ "postCode").readNullable[String]
+    )(Address.apply _)
 }
