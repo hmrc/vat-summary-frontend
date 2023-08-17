@@ -16,8 +16,28 @@
 
 package models.viewModels
 
+import utils.LocalDateHelper
+
+import java.time.LocalDate
+
 case class WhatYouOweViewModel(totalAmount: BigDecimal,
                                charges: Seq[ChargeDetailsViewModel],
                                mandationStatus: String,
                                containsOverduePayments: Boolean,
-                               breathingSpace: Boolean)
+                               breathingSpace: Boolean) extends LocalDateHelper {
+
+  val earliestDueDate: Option[LocalDate] = {
+    val dueDates: Seq[LocalDate] = charges.collect {
+      case model: ChargeDetailsViewModelWithDueDate => model.dueDate
+    }
+    
+    if(dueDates.nonEmpty) {
+      implicit val localDateOrdering: Ordering[LocalDate] = _ compareTo _
+      Some(dueDates.minBy(x => x))
+    } else {
+      None
+    }
+  }
+
+  val earliestDueDateFormatted: Option[String] = earliestDueDate.map(_.paymentDetailsFormat)
+}

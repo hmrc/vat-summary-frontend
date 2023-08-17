@@ -17,20 +17,19 @@
 package controllers
 
 import audit.AuditingService
-import audit.models.{PayFullChargeAuditModel, PayVatReturnChargeAuditModel}
+import audit.models.{PayFullChargeAuditModel, PayGenericChargeAuditModel, PayVatReturnChargeAuditModel}
 import config.AppConfig
-
-import javax.inject.{Inject, Singleton}
 import models.User
 import models.payments._
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.PaymentsService
+import services.{DateService, PaymentsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -38,10 +37,12 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
                                       authorisedController: AuthorisedController,
                                       auditingService: AuditingService,
                                       mcc: MessagesControllerComponents,
-                                      paymentsError: PaymentsError)
-                                     (implicit ec: ExecutionContext,
-                                      appConfig: AppConfig)
+                                      paymentsError: PaymentsError
+                                     )(implicit ec: ExecutionContext,
+                                       appConfig: AppConfig,
+                                       dateService: DateService)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+
 
   def makePayment(amountInPence: Long,
                   taxPeriodMonth: Int,
@@ -52,7 +53,6 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
                   chargeReference: String): Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>
       implicit user =>
-
         val paymentDetails = PaymentDetailsModelWithPeriod(
           taxType = "vat",
           taxReference = user.vrn,
@@ -71,7 +71,7 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
               None
             }
         )
-
+        infoLog(s"[MakePaymentController][makePayment] user has clicked to make a payment. dueDate: $dueDate")
         makePaymentHandoff(paymentDetails)
     }
 
@@ -86,7 +86,7 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
                           chargeReference: String): Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>
       implicit user =>
-        if(!isReturn(ChargeType.apply(chargeType)) && !(chargeReference == "noCR")) {
+        if (!isReturn(ChargeType.apply(chargeType)) && !(chargeReference == "noCR")) {
           val paymentDetails = PaymentDetailsModelNoPeriod(
             taxType = "vat",
             taxReference = user.vrn,
@@ -97,15 +97,16 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
             dueDate = dueDate,
             chargeReference = Some(chargeReference)
           )
+          infoLog(s"[MakePaymentController][makePaymentNoPeriod] user has clicked to make a payment with no period. dueDate: $dueDate")
 
           makePaymentHandoff(paymentDetails)
 
-        } else if(chargeReference == "noCR") {
-          logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs a charge " +
+        } else if (chargeReference == "noCR") {
+          warnLog("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs a charge " +
             "reference, but this payment does not have one")
           Future.successful(InternalServerError(paymentsError()))
         } else {
-          logger.warn("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs to have " +
+          warnLog("[MakePaymentController][makePaymentNoPeriod] A VAT return payment needs to have " +
             "period information")
           Future.successful(InternalServerError(paymentsError()))
         }
@@ -116,23 +117,45 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
                                                                       hc: HeaderCarrier): Future[Result] = {
     paymentsService.setupPaymentsJourney(paymentDetails).map {
       case Right(url) =>
+        infoLog(s"[MakePaymentController][makePaymentHandoff] handing user off to make a payment, dueDate ${paymentDetails.dueDate}. Redirecting to $url")
         auditingService.audit(
           PayVatReturnChargeAuditModel(user, paymentDetails, url),
           request.uri
         )
         Redirect(url)
       case Left(error) =>
-        logger.warn("[MakePaymentController][makePayment] error: " + error.toString)
+        warnLog("[MakePaymentController][makePayment] error: " + error.toString)
         InternalServerError(paymentsError())
     }
   }
 
-  def makeFullPaymentHandoff: Action[AnyContent] =
-    authorisedController.authorisedAction { implicit request => user => {
+  def makeGenericPayment(earliestDueDate: Option[String], linkId: String): Action[AnyContent] = authorisedController.authorisedAction {
+    implicit request =>
+      implicit user => {
+        val paymentDetails = PaymentDetailsModelGeneric(earliestDueDate)
+        paymentsService.setupPaymentsJourney(paymentDetails).map {
+          case Right(url) =>
+            infoLog(s"[MakePaymentController][makeGenericPayment] user clicked make a payment " +
+              s"link/button: $linkId, dueDate: $earliestDueDate. Redirecting to $url")
+            auditingService.audit(
+              PayGenericChargeAuditModel(paymentDetails, url, linkId),
+              request.uri
+            )
+            Redirect(url)
+          case Left(error) =>
+            errorLog("[MakePaymentController][makeGenericPayment] error: " + error.toString)
+            InternalServerError(paymentsError())
+        }
+      }
+  }
 
+  //This is no longer used and can be deleted once DL-11220 has been shown to be stable in production
+  def makeFullPaymentHandoff: Action[AnyContent] =
+    authorisedController.authorisedAction { implicit request =>
+      user => {
         auditingService.audit(PayFullChargeAuditModel(user),
           controllers.routes.MakePaymentController.makeFullPaymentHandoff.url)
-            Future.successful(Redirect(appConfig.unauthenticatedPaymentsUrl))
+        Future.successful(Redirect(appConfig.unauthenticatedPaymentsUrl))
 
 
       }
