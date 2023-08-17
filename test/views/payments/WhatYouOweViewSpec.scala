@@ -221,7 +221,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct link" in {
-          element("#content .govuk-button").attr("href") shouldBe controllers.routes.MakePaymentController.makeFullPaymentHandoff.url
+          element("#content .govuk-button").attr("href") shouldBe
+            controllers.routes.MakePaymentController.makeGenericPayment(
+              earliestDueDate = whatYouOweViewModel2Charge.earliestDueDate().map(_.toString),
+              linkId = "what-you-owe-pay-now-button"
+            ).url
         }
       }
 
@@ -286,7 +290,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           }
 
           "has the correct link location" in {
-            element("#incorrect-p2 > a").attr("href") shouldBe mockConfig.unauthenticatedPaymentsUrl
+            element("#incorrect-p2 > a").attr("href") shouldBe
+              controllers.routes.MakePaymentController.makeGenericPayment(
+                earliestDueDate = whatYouOweViewModel2Charge.earliestDueDate().map(_.toString),
+                linkId = "what-you-owe-make-payment-link"
+              ).url
           }
         }
       }

@@ -16,14 +16,16 @@
 
 package controllers
 
-import models.ServiceResponse
+import audit.models.PayGenericChargeAuditModel
 import models.errors.PaymentSetupError
-import models.payments.PaymentDetailsModel
+import models.payments.{PaymentDetailsModel, PaymentDetailsModelGeneric}
+import models.{ServiceResponse, User}
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.DateService
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.PaymentsError
 
@@ -42,12 +44,16 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
   val testVatPeriodEnding: String = "2018-08-08"
   val redirectUrl = "google.com"
   val expectedRedirectLocation: Option[String] = Some(redirectUrl)
-  val serviceResponse = Right(redirectUrl)
+  val serviceResponse: Right[Nothing, String] = Right(redirectUrl)
+  implicit val dateService: DateService = app.injector.instanceOf[DateService]
+  val testLinkId = "test-link-id"
+  implicit val testUser: User = User(vrn = testVrn)
+  implicit val hc: HeaderCarrier = HeaderCarrier()
 
-  def mockPaymentInfo(serviceResponse: ServiceResponse[String]) : Any = {
+  def mockPaymentInfo(serviceResponse: ServiceResponse[String]): Any = {
     (mockPaymentsService.setupPaymentsJourney(_: PaymentDetailsModel)(_: HeaderCarrier, _: ExecutionContext))
-    .expects(*, *, *)
-    .returns(Future.successful(serviceResponse))
+      .expects(*, *, *)
+      .returns(Future.successful(serviceResponse))
   }
 
   lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequestToPOSTWithSession(
@@ -396,6 +402,152 @@ class MakePaymentControllerSpec extends ControllerBaseSpec {
         status(result) shouldBe Status.SEE_OTHER
       }
       "return the correct redirect location which is the agent client lookup hub" in {
+        redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
+      }
+    }
+  }
+
+
+  "makeGenericPayment" when {
+
+    "user is logged in" when {
+
+      "earliest due date is provided" when {
+
+        "setupPaymentsJourney is successful" must {
+
+          "redirect user onwards and trigger audit event" in {
+
+            mockPrincipalAuth()
+            mockPaymentInfo(serviceResponse)
+
+            val testPaymentDetails = PaymentDetailsModelGeneric(Some(testDueDate))
+
+            mockAudit(PayGenericChargeAuditModel(testPaymentDetails, redirectUrl, testLinkId))
+
+
+            val result = controller.makeGenericPayment(
+              earliestDueDate = Some(testDueDate),
+              linkId = testLinkId
+            )(fakeRequestWithSession)
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(redirectUrl)
+          }
+        }
+
+        "setupPaymentsJourney is not successful" must {
+
+          "return ISE" in {
+
+            mockPrincipalAuth()
+            mockPaymentInfo(Left(PaymentSetupError))
+
+            val result = controller.makeGenericPayment(
+              earliestDueDate = Some(testDueDate),
+              linkId = testLinkId
+            )(fakeRequestWithSession)
+
+            status(result) shouldBe INTERNAL_SERVER_ERROR
+            Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Manage your VAT account - GOV.UK"
+          }
+        }
+      }
+
+      "earliest due date is not provided" when {
+
+        "setupPaymentsJourney is successful" must {
+
+          "redirect user onwards and trigger audit event" in {
+
+            mockPrincipalAuth()
+            mockPaymentInfo(serviceResponse)
+
+            val testPaymentDetails = PaymentDetailsModelGeneric(None)
+
+            mockAudit(PayGenericChargeAuditModel(testPaymentDetails, redirectUrl, testLinkId))
+
+            val result = controller.makeGenericPayment(
+              earliestDueDate = None,
+              linkId = testLinkId
+            )(fakeRequestWithSession)
+
+            status(result) shouldBe SEE_OTHER
+            redirectLocation(result) shouldBe Some(redirectUrl)
+          }
+        }
+
+        "setupPaymentsJourney is not successful" must {
+
+          "return ISE" in {
+
+            mockPrincipalAuth()
+            mockPaymentInfo(Left(PaymentSetupError))
+
+            val result = controller.makeGenericPayment(
+              earliestDueDate = None,
+              linkId = testLinkId
+            )(fakeRequestWithSession)
+
+            status(result) shouldBe INTERNAL_SERVER_ERROR
+            Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - Manage your VAT account - GOV.UK"
+          }
+        }
+      }
+    }
+
+    "the user is not logged in" should {
+
+      "redirect to the GG sign in" in {
+
+        mockMissingBearerToken()
+        val result = controller.makeGenericPayment(
+          earliestDueDate = Some(testDueDate),
+          linkId = testLinkId
+        )(request)
+
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(mockAppConfig.signInUrl)
+      }
+    }
+
+    "the user is not authenticated" should {
+
+      "return 403" in {
+
+        mockInsufficientEnrolments()
+        val result = controller.makeGenericPayment(
+          earliestDueDate = Some(testDueDate),
+          linkId = testLinkId
+        )(request)
+
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403" in {
+
+        mockPrincipalAuth()
+        val result = controller.makeGenericPayment(
+          earliestDueDate = Some(testDueDate),
+          linkId = testLinkId
+        )(insolventRequest)
+
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is an Agent" should {
+
+      "redirect to agent client lookup hub" in {
+        lazy val result = {
+          mockAgentAuth()
+          controller.makeFullPaymentHandoff()(fakeRequest)
+        }
+
+        status(result) shouldBe Status.SEE_OTHER
         redirectLocation(result) shouldBe Some(mockAppConfig.agentClientLookupHubUrl)
       }
     }

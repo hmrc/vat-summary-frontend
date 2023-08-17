@@ -16,8 +16,11 @@
 
 package models.payments
 
+import config.AppConfig
 import helpers.JsonObjectSugar
+import models.User
 import play.api.libs.json._
+import services.DateService
 
 sealed trait PaymentDetailsModel {
   val taxType: String
@@ -45,16 +48,16 @@ object PaymentDetailsModel {
             dueDate: String,
             chargeReference: Option[String]): PaymentDetailsModel =
     PaymentDetailsModelWithPeriod(taxType,
-    taxReference,
-    amountInPence,
-    taxPeriodMonth,
-    taxPeriodYear,
-    vatPeriodEnding,
-    returnUrl,
-    backUrl,
-    chargeType,
-    dueDate,
-    chargeReference
+      taxReference,
+      amountInPence,
+      taxPeriodMonth,
+      taxPeriodYear,
+      vatPeriodEnding,
+      returnUrl,
+      backUrl,
+      chargeType,
+      dueDate,
+      chargeReference
     )
 
   def apply(taxType: String,
@@ -78,6 +81,7 @@ object PaymentDetailsModel {
   implicit val writes: Writes[PaymentDetailsModel] = Writes {
     case model: PaymentDetailsModelWithPeriod => PaymentDetailsModelWithPeriod.writes.writes(model)
     case model: PaymentDetailsModelNoPeriod => PaymentDetailsModelNoPeriod.writes.writes(model)
+    case model: PaymentDetailsModelGeneric => PaymentDetailsModelGeneric.writes.writes(model)
   }
 }
 
@@ -153,6 +157,42 @@ object PaymentDetailsModelNoPeriod extends JsonObjectSugar {
       "returnUrl" -> paymentDetail.returnUrl,
       "backUrl" -> paymentDetail.backUrl,
       "chargeReference" -> paymentDetail.chargeReference
+    )
+  }
+}
+
+case class PaymentDetailsModelGeneric(earliestDueDate: Option[String])
+                                     (implicit user: User, appConfig: AppConfig, dateService: DateService) extends PaymentDetailsModel {
+
+  override val taxType: String = "vat"
+  override val taxReference: String = user.vrn
+  override val amountInPence: Long = 0
+  override val returnUrl: String = appConfig.paymentsReturnUrl
+  override val backUrl: String = appConfig.paymentsBackUrl
+  override val chargeType: ChargeType = ChargeType.apply(PaymentOnAccount.toString)
+  override val dueDate: String = earliestDueDate.fold(dateService.now().toString)(identity)
+
+  val auditDetail: Map[String, String] = Map(
+    "taxType" -> taxType,
+    "taxReference" -> taxReference,
+    "amountInPence" -> amountInPence.toString,
+    "returnUrl" -> returnUrl,
+    "backUrl" -> backUrl,
+    "chargeType" -> chargeType.value,
+    "dueDate" -> dueDate
+  )
+}
+
+object PaymentDetailsModelGeneric extends JsonObjectSugar {
+
+  implicit val writes: Writes[PaymentDetailsModelGeneric] = Writes { paymentDetail =>
+    jsonObjNoNulls(
+      "vrn" -> paymentDetail.taxReference,
+      "amountInPence" -> paymentDetail.amountInPence.toString,
+      "returnUrl" -> paymentDetail.returnUrl,
+      "backUrl" -> paymentDetail.backUrl,
+      "chargeType" -> paymentDetail.chargeType.value,
+      "dueDate" -> paymentDetail.dueDate
     )
   }
 }

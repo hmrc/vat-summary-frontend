@@ -9,6 +9,7 @@ GET        /vat-certificate                                                     
 GET        /make-payment/:amountInPence/:taxPeriodMonth/:taxPeriodYear/:vatPeriodEnding/:chargeType/:dueDate/:chargeReference        controllers.MakePaymentController.makePayment(amountInPence: Long, taxPeriodMonth: Int, taxPeriodYear: Int, vatPeriodEnding: String, chargeType: String, dueDate: String, chargeReference: String)
 GET        /make-payment/:amountInPence/:chargeType/:dueDate/:chargeReference                                                        controllers.MakePaymentController.makePaymentNoPeriod(amountInPence: Long, chargeType: String, dueDate: String, chargeReference: String)
 GET        /make-payment/vat/all                                                                                                     controllers.MakePaymentController.makeFullPaymentHandoff
+GET        /make-payment/vat/generic                                                                                                 controllers.MakePaymentController.makeGenericPayment(earliestDueDate: Option[String], linkId: String)
 
 GET        /time-to-pay                                                                            controllers.TimeToPayController.redirect
 
