@@ -26,7 +26,7 @@ import models.penalties.{LPPDetails, PenaltyDetails}
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
@@ -89,7 +89,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
   }
 
-  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: PenaltyDetails): Seq[Option[ChargeDetailsViewModel]] =
+  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: PenaltyDetails)
+                                            (implicit request: Request[_]): Seq[Option[ChargeDetailsViewModel]] =
     payments collect {
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties.LPPDetails)
@@ -108,7 +109,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
-                                                    penalties: PenaltyDetails): Seq[Option[ChargeDetailsViewModel]] =
+                                                    penalties: PenaltyDetails)(implicit request: Request[_]): Seq[Option[ChargeDetailsViewModel]] =
     charge match {
       case p: PaymentWithPeriod if p.showEstimatedInterest && p.showEstimatedPenalty =>
         val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties.LPPDetails)
@@ -286,7 +287,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   def constructViewModel(payments: Seq[Payment],
                          mandationStatus: String,
-                         penalties: PenaltyDetails): Option[WhatYouOweViewModel] = {
+                         penalties: PenaltyDetails)(implicit request: Request[_]): Option[WhatYouOweViewModel] = {
 
     val chargeModels = categoriseCharges(payments, penalties).flatten
     val totalAmount = chargeModels.map(_.outstandingAmount).sum
@@ -300,6 +301,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         payments.exists(_.isOverdue(dateService.now())),
         penalties.breathingSpace))
     } else {
+      warnLog(s"[WhatYouOweController][constructViewModel] " +
+        s"totalPaymentCount - $totalPaymentCount does not equal chargeModels.length - ${chargeModels.length}" +
+        s"\n no. of payments - ${payments.length}" +
+        s"\n estimated interest count - ${payments.count(_.showEstimatedInterest)}" +
+        s"\n estimated penalty count - ${payments.count(_.showEstimatedPenalty)}" +
+        s"\n estimated interest and estimated penalty - ${payments.count(p => p.showEstimatedInterest && p.showEstimatedPenalty)}" +
+        s"\n no. of charge references - ${payments.count(_.chargeReference.isDefined)}" +
+        s"\n no. of penalties - ${penalties.LPPDetails.length}" +
+        s"\n no. of penalty charge ref - ${penalties.LPPDetails.count(_.penaltyChargeReference.isDefined)}")
       None
     }
   }
@@ -307,11 +317,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   def findPenaltyCharge(chargeReference: Option[String],
                         penaltyType: Option[String],
                         isEstimate: Boolean,
-                        penalties: Seq[LPPDetails]): Option[LPPDetails] =
+                        penalties: Seq[LPPDetails])(implicit request: Request[_]): Option[LPPDetails] =
     penalties.find(pen => {
       if (isEstimate) {
         pen.principalChargeReference == chargeReference.getOrElse("") && penaltyType.getOrElse("") == pen.penaltyCategory
       } else {
+        if (pen.penaltyChargeReference.isEmpty && chargeReference.isEmpty) {
+          infoLog("[WhatYouOweController][findPenaltyCharge] both penaltyChargeReference and chargeReference are None")
+        }
         pen.penaltyChargeReference == chargeReference
       }
     })
