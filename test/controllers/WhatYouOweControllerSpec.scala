@@ -250,7 +250,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(accruingPenaltyAmount = None)
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)
+          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
       }
@@ -262,7 +262,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", penaltyDetailsModelMax)
+          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(whatYouOweChargeModel)))
       }
@@ -273,7 +273,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", penaltyDetailsModelMax)
+          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(wyoChargeUnrepayableOverpayment)))
       }
@@ -293,7 +293,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           Seq(payment, crystallisedInterest, lateSubmissionPenalty),
           mandationStatus = "MTDfB",
           penaltyDetailsModelMax
-        )
+        )(fakeRequest)
       }
 
       "return the expected view models and total amount" in {
@@ -310,7 +310,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
             Seq(payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)),
             mandationStatus = "MTDfB",
             penaltyDetailsModelMax
-          )
+          )(fakeRequest)
         }
         result shouldBe None
       }
@@ -323,7 +323,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(
             Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", penaltyDetailsModelMax
-          )
+          )(fakeRequest)
         }
         result shouldBe Some(viewModelNoChargeDescription)
       }
@@ -341,7 +341,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "there is a penalty with a matching principal charge reference and penalty type" should {
 
         "return that penalty" in {
-          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))
+          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))(fakeRequest)
           res shouldBe Some(LPPDetailsModelMin)
         }
       }
@@ -349,7 +349,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "the principal charge reference does not match" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(Some("FLJDHGKDJFH"), penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))
+          val res = controller.findPenaltyCharge(Some("FLJDHGKDJFH"), penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))(fakeRequest)
           res shouldBe None
         }
       }
@@ -357,7 +357,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "the penalty charge reference matches" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(Some("BCDEFGHIJKLMNOPQ"), penaltyType, isEstimate = true, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+          val res = controller.findPenaltyCharge(Some("BCDEFGHIJKLMNOPQ"), penaltyType, isEstimate = true, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))(fakeRequest)
           res shouldBe None
         }
       }
@@ -365,7 +365,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "the penalty type does not match" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(chargeReference, Some("LPP2"), isEstimate = true, Seq(LPPDetailsModelMin))
+          val res = controller.findPenaltyCharge(chargeReference, Some("LPP2"), isEstimate = true, Seq(LPPDetailsModelMin))(fakeRequest)
           res shouldBe None
         }
       }
@@ -373,7 +373,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "a charge reference is not provided" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(None, penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))
+          val res = controller.findPenaltyCharge(None, penaltyType, isEstimate = true, Seq(LPPDetailsModelMin))(fakeRequest)
           res shouldBe None
         }
       }
@@ -381,7 +381,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "a penalty type is not provided" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = true, Seq(LPPDetailsModelMin))
+          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = true, Seq(LPPDetailsModelMin))(fakeRequest)
           res shouldBe None
         }
       }
@@ -389,7 +389,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "an empty list of penalties is provided" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = true, Seq())
+          val res = controller.findPenaltyCharge(chargeReference, penaltyType, isEstimate = true, Seq())(fakeRequest)
           res shouldBe None
         }
       }
@@ -402,7 +402,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "there is a penalty with a matching penalty charge reference and penalty type" should {
 
         "return that penalty" in {
-          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))(fakeRequest)
           res shouldBe Some(LPPDetailsModelMaxWithLPP1HRPercentage)
         }
       }
@@ -410,7 +410,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "the penalty charge reference does not match" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(Some("FLJDHGKDJFH"), None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+          val res = controller.findPenaltyCharge(Some("FLJDHGKDJFH"), None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))(fakeRequest)
           res shouldBe None
         }
       }
@@ -418,7 +418,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "the principal charge reference matches" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(Some("XD002750002155"), None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+          val res = controller.findPenaltyCharge(Some("XD002750002155"), None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))(fakeRequest)
           res shouldBe None
         }
       }
@@ -426,7 +426,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "a charge reference is not provided" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(None, None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))
+          val res = controller.findPenaltyCharge(None, None, isEstimate = false, Seq(LPPDetailsModelMaxWithLPP1HRPercentage))(fakeRequest)
           res shouldBe None
         }
       }
@@ -434,7 +434,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "an empty list of penalties is provided" should {
 
         "return None" in {
-          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = false, Seq())
+          val res = controller.findPenaltyCharge(chargeReference, None, isEstimate = false, Seq())(fakeRequest)
           res shouldBe None
         }
       }
@@ -467,7 +467,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "return three charges" in {
         mockDateServiceCall()
-        controller.buildChargePlusEstimates(payment, penaltyDetailsModelMax).size shouldBe 3
+        controller.buildChargePlusEstimates(payment, penaltyDetailsModelMax)(fakeRequest).size shouldBe 3
       }
     }
 
@@ -476,7 +476,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return two charges" in {
         mockDateServiceCall()
         val charge = payment.copy(accruingInterestAmount = None)
-        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMax).size shouldBe 2
+        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMax)(fakeRequest).size shouldBe 2
       }
     }
 
@@ -485,7 +485,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return two charges" in {
         mockDateServiceCall()
         val charge = payment.copy(accruingPenaltyAmount = None)
-        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin).size shouldBe 2
+        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin)(fakeRequest).size shouldBe 2
       }
     }
 
@@ -494,7 +494,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return one charge" in {
         mockDateServiceCall()
         val charge = payment.copy(accruingInterestAmount = None, accruingPenaltyAmount = None)
-        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin).size shouldBe 1
+        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin)(fakeRequest).size shouldBe 1
       }
     }
   }

@@ -17,8 +17,33 @@
 package utils
 
 import org.slf4j.{Logger, LoggerFactory}
-import play.api.LoggerLike
+import play.api.mvc.Request
+import play.api.{LoggerLike, MarkerContext}
+import uk.gov.hmrc.http.{HeaderNames, SessionKeys}
 
 trait LoggerUtil extends LoggerLike {
-  override val logger: Logger = LoggerFactory.getLogger("application")
-}
+  lazy val trueClientIp: Request[_] => Option[String] =
+    request => request.headers.get(HeaderNames.trueClientIp).map(trueClientIp => s"trueClientIp: $trueClientIp ")
+
+  lazy val sessionId: Request[_] => Option[String] =
+    request => request.session.get(SessionKeys.sessionId).map(sessionId => s"sessionId: $sessionId ")
+
+  lazy val identifiers: Request[_] => String =
+    request => Seq(trueClientIp(request), sessionId(request)).flatten.foldLeft("")(_ + _)
+
+  lazy val logger: Logger = LoggerFactory.getLogger("application")
+
+  def infoLog(message: => String)(implicit mc: MarkerContext, request: Request[_]): Unit =
+    this.info(s"$message (${identifiers(request)})")
+
+  def warnLog(message: => String)(implicit mc: MarkerContext, request: Request[_]): Unit =
+    this.warn(s"$message (${identifiers(request)})")
+
+  def warnLog(message: => String, throwable: Throwable)(implicit mc: MarkerContext, request: Request[_]): Unit =
+    this.warn(s"$message (${identifiers(request)})", throwable)
+
+  def errorLog(message: => String)(implicit mc: MarkerContext, request: Request[_]): Unit =
+    this.error(s"$message (${identifiers(request)})")
+
+  def errorLog(message: => String, throwable: Throwable)(implicit mc: MarkerContext, request: Request[_]): Unit =
+    this.error(s"$message (${identifiers(request)})", throwable)}
