@@ -16,29 +16,11 @@
 
 package models.payments
 
-import common.GuiceBox
-import config.AppConfig
-import models.User
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json._
-import services.DateService
+import org.scalatest.matchers.should.Matchers
 
-class PaymentDetailsModelSpec extends GuiceBox {
-
-  implicit val appConfig: AppConfig = inject[AppConfig]
-  implicit val dateService: DateService = inject[DateService]
-
-  val testTaxType = "vat"
-  val testVrn = "123456789"
-  val testGenericAmountInPence = "0"
-  val testReturnUrl: String = appConfig.paymentsReturnUrl
-  val testBackUrl: String = appConfig.paymentsBackUrl
-  val testGenericChargeType = "Payment on account"
-  val testDueDate = "2023-09-01"
-
-  implicit val testUser: User = User(vrn = testVrn)
-
-  val testPaymentDetailsModelGeneric: PaymentDetailsModelGeneric = PaymentDetailsModelGeneric(Some(testDueDate))
-  val testPaymentDetailsModelGenericNoDate: PaymentDetailsModelGeneric = PaymentDetailsModelGeneric(None)
+class PaymentDetailsModelSpec extends AnyWordSpecLike with Matchers  {
 
   "PaymentDetailsModel.apply" when {
     "not given a chargeReference" when {
@@ -73,7 +55,7 @@ class PaymentDetailsModelSpec extends GuiceBox {
 
           val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
 
-          actualJson mustBe expectedJson
+          actualJson shouldBe expectedJson
         }
       }
 
@@ -104,7 +86,7 @@ class PaymentDetailsModelSpec extends GuiceBox {
 
           val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
 
-          actualJson mustBe expectedJson
+          actualJson shouldBe expectedJson
         }
       }
     }
@@ -137,78 +119,7 @@ class PaymentDetailsModelSpec extends GuiceBox {
 
         val actualJson = Json.toJson(payment)(PaymentDetailsModel.writes)
 
-        actualJson mustBe expectedJson
-      }
-    }
-  }
-
-  "PaymentDetailsModelGeneric" when {
-
-    "earliestDueDate is provided" must {
-
-      "result in json including the provided earliestDueDate" in {
-
-        val expectedResult = Json.obj(
-          "vrn" -> testVrn,
-          "amountInPence" -> testGenericAmountInPence,
-          "returnUrl" -> testReturnUrl,
-          "backUrl" -> testBackUrl,
-          "chargeType" -> testGenericChargeType,
-          "dueDate" -> testDueDate
-        )
-        val actualResult = Json.toJson(testPaymentDetailsModelGeneric)
-
-        expectedResult mustBe actualResult
-      }
-
-      "result in audit model including the provided earliestDueDate" in {
-
-        val expectedResult = Map(
-          "taxType" -> testTaxType,
-          "taxReference" -> testVrn,
-          "amountInPence" -> testGenericAmountInPence,
-          "returnUrl" -> testReturnUrl,
-          "backUrl" -> testBackUrl,
-          "chargeType" -> testGenericChargeType,
-          "dueDate" -> testDueDate
-        )
-        val actualResult = testPaymentDetailsModelGeneric.auditDetail
-
-        expectedResult mustBe actualResult
-      }
-    }
-
-    "earliestDueDate is not provided" must {
-
-      "result in json due date is today's date" in {
-
-        val expectedResult = Json.obj(
-          "vrn" -> testVrn,
-          "amountInPence" -> testGenericAmountInPence,
-          "returnUrl" -> testReturnUrl,
-          "backUrl" -> testBackUrl,
-          "chargeType" -> testGenericChargeType,
-          "dueDate" -> dateService.now().toString
-        )
-        val actualResult = Json.toJson(testPaymentDetailsModelGenericNoDate)
-
-        expectedResult mustBe actualResult
-      }
-
-      "result in audit model due date is today's date" in {
-
-        val expectedResult = Map(
-          "taxType" -> testTaxType,
-          "taxReference" -> testVrn,
-          "amountInPence" -> testGenericAmountInPence,
-          "returnUrl" -> testReturnUrl,
-          "backUrl" -> testBackUrl,
-          "chargeType" -> testGenericChargeType,
-          "dueDate" -> dateService.now().toString
-        )
-        val actualResult = testPaymentDetailsModelGenericNoDate.auditDetail
-
-        expectedResult mustBe actualResult
+        actualJson shouldBe expectedJson
       }
     }
   }

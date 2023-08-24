@@ -146,17 +146,11 @@
           content = HtmlContent(paymentHelp)
         ))
       }
+
       @if(!user.isAgent) {
         @govukButton(Button(
           content = Text(messages("whatYouOwe.makePayment")),
-          id = Some("what-you-owe-pay-now-button"),
-
-
-          href = Some(controllers.routes.MakePaymentController.makeGenericPayment(
-              earliestDueDate = model.earliestDueDate().map(_.toString),
-              linkId = "what-you-owe-pay-now-button"
-            ).url
-          )
+          href = Some(controllers.routes.MakePaymentController.makeFullPaymentHandoff.url)
         ))
       }
 
@@ -187,9 +181,7 @@
             @messages("whatYouOwe.isIncorrectThree")</a>.
         </p>
         <p id="incorrect-p2" class ="govuk-body">@messages("whatYouOwe.isIncorrectFour")
-          <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-make-payment-link"
-            href="@controllers.routes.MakePaymentController.makeGenericPayment(earliestDueDate=model.earliestDueDate().map(_.toString),linkId="what-you-owe-make-payment-link").url">
-
+          <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
             @messages("whatYouOwe.isIncorrectFive")</a>.
         </p>
       }

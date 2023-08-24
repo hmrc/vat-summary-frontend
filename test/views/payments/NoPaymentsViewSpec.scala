@@ -76,8 +76,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     }
 
     "have the correct href" in {
-      element(Selectors.paymentLink).attr("href") shouldBe
-        controllers.routes.MakePaymentController.makeGenericPayment(None, "no-payments-make-payment-link").url
+      element(Selectors.paymentLink).attr("href") shouldBe "unauthenticated-payments-url"
     }
 
     "render breadcrumbs which" should {
