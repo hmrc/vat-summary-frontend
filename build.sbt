@@ -15,7 +15,7 @@
  */
 
 import sbt.Tests.{Group, SubProcess}
-import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
