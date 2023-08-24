@@ -58,8 +58,6 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   lazy val mockServiceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
   val mcc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
 
-  val testVrn = "123456789"
-
   implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
@@ -181,15 +179,6 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .returns({})
     (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .stubs(*, *, *, *)
-      .returns({})
-  }
-
-  def mockAudit[T <: AuditModel](auditModel: T): Any = {
-    (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-      .stubs(*, *, *, *)
-      .returns({})
-    (mockAuditService.audit(_: AuditModel, _: String)(_: HeaderCarrier, _: ExecutionContext))
-      .stubs(auditModel, *, *, *)
       .returns({})
   }
 
