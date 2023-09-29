@@ -65,10 +65,11 @@
             @if(user.isAgent) {@messages("noPayments.oweNothingAgent")} else {@messages("noPayments.oweNothing")}
         </h2>
         <p class="govuk-body">
-            @if(user.isAgent) {@messages("noPayments.twentyFourHoursAgent")} else {@messages("noPayments.twentyFourHours")}
-              @if(!user.isAgent) {
-                @messages("payment.stillMake")
-                <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.unauthenticatedPaymentsUrl">
+          @if(user.isAgent) {@messages("noPayments.twentyFourHoursAgent")} else {@messages("noPayments.twentyFourHours")}
+            @if(!user.isAgent) {
+              @messages("payment.stillMake")
+              <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="no-payments-make-payment-link"
+                href="@controllers.routes.MakePaymentController.makeGenericPayment(earliestDueDate=None,linkId="no-payments-make-payment-link").url">
                 @messages("payment.stillMakeLink")</a>@messages("common.fullStop")
               }
         </p>

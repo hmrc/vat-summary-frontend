@@ -33,9 +33,12 @@ trait ChargeDetailsViewModel {
     MessageDigest.getInstance("MD5").digest((this.toString + vrn).getBytes("UTF-8")).map("%02x".format(_)).mkString
 }
 
-trait CrystallisedViewModel extends ChargeDetailsViewModel {
-  val isOverdue: Boolean
+trait ChargeDetailsViewModelWithDueDate extends ChargeDetailsViewModel {
   val dueDate: LocalDate
+}
+
+trait CrystallisedViewModel extends ChargeDetailsViewModelWithDueDate {
+  val isOverdue: Boolean
   val periodFrom: LocalDate
   val periodTo: LocalDate
 }
