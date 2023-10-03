@@ -189,7 +189,7 @@ object PaymentDetailsModelGeneric extends JsonObjectSugar {
   implicit val writes: Writes[PaymentDetailsModelGeneric] = Writes { paymentDetail =>
     jsonObjNoNulls(
       "vrn" -> paymentDetail.taxReference,
-      "amountInPence" -> paymentDetail.amountInPence.toString,
+      "amountInPence" -> paymentDetail.amountInPence,
       "returnUrl" -> paymentDetail.returnUrl,
       "backUrl" -> paymentDetail.backUrl,
       "chargeType" -> paymentDetail.chargeType.value,

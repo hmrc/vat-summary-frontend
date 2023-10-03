@@ -29,7 +29,7 @@ class PaymentDetailsModelSpec extends GuiceBox {
 
   val testTaxType = "vat"
   val testVrn = "123456789"
-  val testGenericAmountInPence = "0"
+  val testGenericAmountInPence = 0L
   val testReturnUrl: String = appConfig.paymentsReturnUrl
   val testBackUrl: String = appConfig.paymentsBackUrl
   val testGenericChargeType = "Payment on account"
@@ -166,7 +166,7 @@ class PaymentDetailsModelSpec extends GuiceBox {
         val expectedResult = Map(
           "taxType" -> testTaxType,
           "taxReference" -> testVrn,
-          "amountInPence" -> testGenericAmountInPence,
+          "amountInPence" -> testGenericAmountInPence.toString,
           "returnUrl" -> testReturnUrl,
           "backUrl" -> testBackUrl,
           "chargeType" -> testGenericChargeType,
@@ -200,7 +200,7 @@ class PaymentDetailsModelSpec extends GuiceBox {
         val expectedResult = Map(
           "taxType" -> testTaxType,
           "taxReference" -> testVrn,
-          "amountInPence" -> testGenericAmountInPence,
+          "amountInPence" -> testGenericAmountInPence.toString,
           "returnUrl" -> testReturnUrl,
           "backUrl" -> testBackUrl,
           "chargeType" -> testGenericChargeType,
