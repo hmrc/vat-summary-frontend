@@ -242,6 +242,12 @@ estimatedLPP2.estimatesDescriptionBS.p2 = Breathing Space ends
 estimatedLPP2.ttpInset = You’ve asked HMRC if you can set up a payment plan. If a payment plan has been agreed, and you keep up with all payments, this penalty will not increase further.
 estimatedLPP2.ttpInset.agent = Your client has asked HMRC if they can set up a payment plan. If a payment plan has been agreed, and they keep up with all payments, this penalty will not increase further.
 
+chargeBreakdown.interestDropDown.label = How the interest amount was calculated
+chargeBreakdown.interestDropDown.p1a = The calculation we use for each day is:
+chargeBreakdown.interestDropDown.p1b = (Interest rate × VAT amount unpaid) ÷ days in a year
+chargeBreakdown.interestDropDown.p2 = You can {0}. If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that.
+chargeBreakdown.interestDropDown.link = find interest rates on GOV.UK
+
 lateSubmissionPenalty.dueDate = Due date
 lateSubmissionPenalty.penaltyAmount = Penalty amount
 lateSubmissionPenalty.amountReceived = Amount received

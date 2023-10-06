@@ -242,6 +242,12 @@ estimatedLPP2.estimatesDescriptionBS.p2 = mae’r trefniant amser i gael eich gw
 estimatedLPP2.ttpInset = Rydych wedi gofyn i CThEF a allwch drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’ch bod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
 estimatedLPP2.ttpInset.agent = Mae’ch cleient wedi gofyn i CThEF a all drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’i fod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
 
+chargeBreakdown.interestDropDown.label = How the interest amount was calculated
+chargeBreakdown.interestDropDown.p1a = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
+chargeBreakdown.interestDropDown.p1b = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
+chargeBreakdown.interestDropDown.p2 = Gallwch {0}. Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny.
+chargeBreakdown.interestDropDown.link = ddod o hyd i gyfraddau llog ar GOV.UK
+
 lateSubmissionPenalty.dueDate = Dyddiad dyledus
 lateSubmissionPenalty.penaltyAmount = Swm y gosb
 lateSubmissionPenalty.amountReceived = Swm a gafwyd

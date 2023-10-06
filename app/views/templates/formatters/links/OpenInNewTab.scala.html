@@ -16,6 +16,6 @@
 
 @this()
 
-@(link: String, linkText: String)(implicit messages: Messages)
+@(link: String, linkText: String, id: Option[String] = None)(implicit messages: Messages)
 
-<a class="govuk-link" rel="noreferrer noopener" href="@link" target="_blank">@linkText @messages("common.newTab")</a>
+<a class="govuk-link" rel="noreferrer noopener" href="@link" target="_blank" @id.map(i => s"id=$i")>@linkText @messages("common.newTab")</a>
