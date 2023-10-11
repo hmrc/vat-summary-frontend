@@ -372,8 +372,17 @@ case object VatPOAInstalmentLPI extends ChargeType {
   override val value: String = "VAT POA Instalment LPI"
 }
 
+case object VatOverpayments1stLPP extends ChargeType {
+  override val value: String = "VAT Overpayments 1st LPP"
+}
+
+case object VatOverpayments1stLPPLPI extends ChargeType {
+  override val value: String = "VAT Overpayments 1st LPP LPI"
+}
+
 object ChargeType extends LoggerUtil {
 
+  // TODO*** TEST TEST TEST
   val allChargeTypes: Set[ChargeType] = Set(
     VatDefaultInterestDebit,
     VatDefaultInterestCredit,
@@ -485,9 +494,11 @@ object ChargeType extends LoggerUtil {
     VatPOAInstalmentLPI,
     VATOverpaymentforTax,
     VatOverpayments1stLPP,
-    VatOverpayments2ndLPP
+    VatOverpayments2ndLPP,
+    VatOverpayments1stLPPLPI
   )
 
+  // TODO*** TEST TEST TEST
   val interestChargeTypes: Set[ChargeType] = Set(
     VatReturnLPI,
     VatReturn1stLPPLPI,
@@ -517,9 +528,11 @@ object ChargeType extends LoggerUtil {
     VatPOAInstalmentLPI,
     VatReturnPOALPI,
     VatReturnPOA1stLPPLPI,
-    VatReturnPOA2ndLPPLPI
+    VatReturnPOA2ndLPPLPI,
+    VatOverpayments1stLPPLPI
   )
 
+  // TODO*** TEST TEST TEST
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
@@ -538,7 +551,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection1stLPPLPI,
     VatErrorCorrection2ndLPPLPI,
     VatReturnPOA1stLPPLPI,
-    VatReturnPOA2ndLPPLPI
+    VatReturnPOA2ndLPPLPI,
+    VatOverpayments1stLPPLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -595,7 +609,8 @@ object ChargeType extends LoggerUtil {
     VatCentralAssessment1stLPP -> VatCA1stLPPLPI,
     VatCentralAssessment2ndLPP -> VatCA2ndLPPLPI,
     VatOfficersAssessment1stLPP -> VatOA1stLPPLPI,
-    VatOfficersAssessment2ndLPP -> VatOA2ndLPPLPI
+    VatOfficersAssessment2ndLPP -> VatOA2ndLPPLPI,
+    VatOverpayments1stLPP -> VatOverpayments1stLPPLPI // TODO*** MAKE SURE IT LINES UP WITH DL-11861
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(

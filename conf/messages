@@ -573,6 +573,8 @@ chargeType.migratedCreditDescription = miscellaneous VAT credit
 chargeType.vatDeferralPenaltyTitle = Penalty
 chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT
 
+chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account

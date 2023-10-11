@@ -54,6 +54,15 @@ trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeA
     document.select(cssSelector).first()
   }
 
+  def elementExistsOnce(cssSelector: String)(implicit document: Document): Assertion = {
+    val elements = document.select(cssSelector)
+
+    elements.size match {
+      case 1 => succeed
+      case 0 => fail(s"Element with selector '$cssSelector' was not found!")
+      case x => fail(s"Element with selector '$cssSelector' was found $x times!")
+    }
+  }
   def elementExtinct(cssSelector: String)(implicit document: Document): Assertion = {
     val elements = document.select(cssSelector)
 

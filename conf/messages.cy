@@ -573,6 +573,8 @@ chargeType.migratedCreditDescription = credyd TAW amrywiol
 chargeType.vatDeferralPenaltyTitle = Cosb
 chargeType.vatDeferralPenaltyDescription = am TAW ohiriedig sydd heb ei thalu
 
+chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

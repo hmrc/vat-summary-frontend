@@ -23,7 +23,8 @@
       govukSummaryList: GovukSummaryList,
       govukBackLink: GovukBackLink,
       govukButton: GovukButton,
-      govukTag: GovukTag)
+      govukTag: GovukTag,
+      howInterestIsCalculated: templates.HowInterestIsCalculated)
 
 @(model: CrystallisedInterestViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
@@ -94,16 +95,7 @@
         @messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")
       </p>
 
-      <p id="calculation" class="govuk-body">@messages("crystallisedInterest.calculation")
-        <br>
-        @messages(s"crystallisedInterest.${interestTypeMessageKey}Calculation")
-      </p>
-
-      <p id="rates" class="govuk-body">@messages("crystallisedInterest.youCan")
-        <a class="govuk-link" id="prevIntRateLink" href="@appConfig.govUkPrevIntRateUrl" target="_blank" rel="noreferrer noopener">
-          @messages("crystallisedInterest.prevIntRateLink")</a>.
-        @messages("crystallisedInterest.rateChanges")
-      </p>
+      @howInterestIsCalculated()
 
       @govukSummaryList(SummaryList(
         rows = Seq(

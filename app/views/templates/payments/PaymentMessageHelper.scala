@@ -24,6 +24,7 @@ import views.templates.formatters.dates.DisplayDateRangeHelper.displayDateRange
 sealed case class PaymentMessageHelper(name: String, title: String, principalUserDescription: Option[String], agentDescription: Option[String])
 
 //scalastyle:off
+//noinspection ScalaWeakerAccess
 object PaymentMessageHelper {
 
   object OverpaymentforTax extends PaymentMessageHelper(
@@ -796,6 +797,16 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  // TODO*** TEST TEST TEST
+  // TODO*** WELSH
+  object Overpayments1stLPPLPI extends PaymentMessageHelper(
+    name = VatOverpayments1stLPPLPI.value,
+    title = "chargeType.Overpayments1stLPPLPI",
+    principalUserDescription = Some("chargeType.forPeriod"),
+    agentDescription = Some("chargeType.forPeriod")
+  )
+
+  // TODO*** TEST TEST TEST
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,
@@ -906,7 +917,8 @@ object PaymentMessageHelper {
     VATOA1stLPP,
     VATOA2ndLPP,
     Overpayments2ndLPP,
-    Overpayments1stLPP
+    Overpayments1stLPP,
+    Overpayments1stLPPLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

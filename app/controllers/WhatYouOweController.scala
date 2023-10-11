@@ -69,7 +69,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                         WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
                         routes.WhatYouOweController.show.url
                       )
-                      WYOSessionService.storeChargeModels(model.charges,user.vrn).map { _ =>
+                      WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
                         Ok(view(model, serviceInfoContent))
                       }
                     case None =>
@@ -103,13 +103,13 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         buildChargePlusEstimates(p, penalties)
     } flatten
 
-  private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod, matchingPenalty: Option[LPPDetails])
-    : Seq[Option[ChargeDetailsViewModel]] =
-      if (charge.showEstimatedInterest) {
-        Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty), buildEstimatedIntViewModel(charge))
-      } else {
-        Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty))
-      }
+  private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod,
+                                                                matchingPenalty: Option[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
+    if (charge.showEstimatedInterest) {
+      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty), buildEstimatedIntViewModel(charge))
+    } else {
+      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty))
+    }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
                                                     penalties: PenaltyDetails)(implicit request: Request[_]): Seq[Option[ChargeDetailsViewModel]] =
@@ -240,7 +240,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                                          penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.chargeReference) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _, _)),
-            Some(chargeRef)) =>
+      Some(chargeRef)) =>
         val numOfDays = (calcAmountHR, daysHR) match {
           case (Some(_), Some(days)) => days
           case _ => daysLR
@@ -283,7 +283,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           s"Missing LPP details for ${penDetails.penaltyCategory} penalty type")
         None
       case _ =>
-        val missingData = if(payment.chargeReference.isDefined) "matching penalty" else "charge reference"
+        val missingData = if (payment.chargeReference.isDefined) "matching penalty" else "charge reference"
         logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing $missingData")
         None
     }
@@ -296,7 +296,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     val totalAmount = chargeModels.map(_.outstandingAmount).sum
     val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest) + payments.count(_.showEstimatedPenalty)
 
-    if(totalPaymentCount == chargeModels.length) {
+    if (totalPaymentCount == chargeModels.length) {
       Some(WhatYouOweViewModel(
         totalAmount,
         chargeModels,

@@ -84,6 +84,11 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
           "The total increases daily based on the amount of unpaid VAT for the period."
       }
 
+      "must contain the HowInterestIsCalculated dropdown" in {
+
+        elementExistsOnce("#how-interest-calculated-dropdown")
+      }
+
       "have the correct third explanation paragraph" in {
         elementText("#calculation") shouldBe "The calculation we use for each day is: " +
           "(Interest rate × VAT amount unpaid) ÷ days in a year"
