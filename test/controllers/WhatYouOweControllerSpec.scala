@@ -279,6 +279,18 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "there is a payment correction charge because HMRC paid more VAT than owed" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(overpaymentforTax), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(vatOverpaymentTax)))
+      }
+    }
+
+
     "there are multiple payments with a mix of estimated & crystallised interest, LSP and penalties" should {
 
       val crystallisedInterest = {

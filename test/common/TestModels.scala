@@ -76,6 +76,9 @@ object TestModels {
   val unrepayableOverpayment: PaymentWithPeriod =
     payment.copy(chargeType = VatUnrepayableOverpayment, accruingPenaltyAmount = None)
 
+  val overpaymentforTax: PaymentWithPeriod =
+    payment.copy(chargeType = VATOverpaymentforTax, accruingPenaltyAmount = None)
+
   val paymentNoPeriodNoDate: PaymentNoPeriod = PaymentNoPeriod(
     OADefaultInterestCharge,
     LocalDate.parse("2019-03-03"),
@@ -382,6 +385,8 @@ object TestModels {
   )
 
   val wyoChargeUnrepayableOverpayment: StandardChargeViewModel = whatYouOweChargeModel.copy(chargeType = "VAT Unrepayable Overpayment")
+
+  val vatOverpaymentTax: StandardChargeViewModel = whatYouOweChargeModel.copy(chargeType = "VAT Overpayment for Tax")
 
   val whatYouOweChargeModelInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     periodFrom = LocalDate.parse("2019-01-01"),
