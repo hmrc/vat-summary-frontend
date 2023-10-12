@@ -50,6 +50,17 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     val insetText = ".govuk-inset-text"
   }
 
+  object VATOverpaymentSelectors {
+    val pageHeading = "h1"
+    val firstParagraph = "#content > div > div > p:nth-child(2)"
+    val secondParagraph = "#content > div > div > p:nth-child(3)"
+    val bulletList = "ul.govuk-list--bullet"
+    val firstBullet = s"$bulletList > li:nth-of-type(1)"
+    val secondBullet = s"$bulletList > li:nth-of-type(2)"
+    val thirdBullet = s"$bulletList > li:nth-of-type(3)"
+  }
+
+
   "Rendering the Charge Type Details page for a principal user" when {
 
     "the user has a cleared amount and a period for the charge" when {
@@ -337,5 +348,36 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         }
       }
 
+    "the charge type VATOverpaymentforTax" should {
+      "correctly show content for agent user" in {
+        lazy val view = {
+          chargeTypeDetailsView(vatOverpaymentTax,
+            Html(""))(request, messages, mockConfig, agentUser)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        document.title() shouldBe "VAT correction - Your client’s VAT details - GOV.UK"
+        elementText(VATOverpaymentSelectors.firstParagraph) shouldBe "Your client needs to pay this because HMRC paid them more VAT than we owed them."
+        elementText(VATOverpaymentSelectors.secondParagraph) shouldBe "This could be because of:"
+        elementText(VATOverpaymentSelectors.firstBullet) shouldBe "an error correction"
+        elementText(VATOverpaymentSelectors.secondBullet) shouldBe "an officer's assessment"
+        elementText(VATOverpaymentSelectors.thirdBullet) shouldBe "a reallocation of funds across your client's account"
+      }
+
+      "correctly show content for user" in {
+        lazy val view = {
+          chargeTypeDetailsView(vatOverpaymentTax,
+            Html(""))(request, messages, mockConfig, user)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        document.title() shouldBe "VAT correction - Manage your VAT account - GOV.UK"
+        elementText(VATOverpaymentSelectors.firstParagraph) shouldBe "You need to pay this because HMRC paid you more VAT than we owed you."
+        elementText(VATOverpaymentSelectors.secondParagraph) shouldBe "This could be because of:"
+        elementText(VATOverpaymentSelectors.firstBullet) shouldBe "an error correction"
+        elementText(VATOverpaymentSelectors.secondBullet) shouldBe "an officer's assessment"
+        elementText(VATOverpaymentSelectors.thirdBullet) shouldBe "a reallocation of funds across your account"
+      }
+    }
   }
 }

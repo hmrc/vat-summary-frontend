@@ -332,6 +332,17 @@ chargeType.forThePeriod = ar gyfer y cyfnod {0}
 chargeType.latePaymentPenalty = Cosb am dalu’n hwyr
 chargeType.secondLatePaymentPenalty = Ail gosb am dalu’n hwyr
 
+chargeType.vATOverpaymentforTaxTitle = Cywiriad TAW
+chargeType.vATOverpaymentforTaxTitleDescription = due XX Month YYYY
+chargeType.vatOverpayments.youNeedToPay = Mae angen i chi dalu hwn oherwydd i CThEF dalu mwy o TAW i chi nag oedd arnom i chi.
+chargeType.vatOverpayments.thisIsBecauseOf = Gallai hyn fod oherwydd:
+chargeType.vatOverpayments.anError = cywiriad gwall
+chargeType.vatOverpayments.anOfficer = asesiad gan swyddog
+chargeType.vatOverpayments.aReallocation = ailddyraniad o arian ar draws eich cyfrif
+
+chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
+chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client's account
+
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 

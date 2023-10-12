@@ -26,6 +26,13 @@ sealed case class PaymentMessageHelper(name: String, title: String, principalUse
 //scalastyle:off
 object PaymentMessageHelper {
 
+  object OverpaymentforTax extends PaymentMessageHelper(
+    VATOverpaymentforTax.value,
+    "chargeType.vATOverpaymentforTaxTitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object UnrepayableOverpayment extends PaymentMessageHelper(
     VatUnrepayableOverpayment.value,
     "chargeType.vatUnrepayableOverpaymentTitle",
@@ -776,6 +783,7 @@ object PaymentMessageHelper {
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(
+    OverpaymentforTax,
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
     IndirectTaxRevenueRecovery,

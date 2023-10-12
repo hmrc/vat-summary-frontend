@@ -36,6 +36,10 @@ sealed trait ChargeType {
   def isPenalty: Boolean = penaltyChargeTypes.contains(this)
 }
 
+case object VATOverpaymentforTax extends ChargeType {
+  override val value: String = "VAT Overpayment for Tax"
+}
+
 case object VatUnrepayableOverpayment extends ChargeType {
   override val value: String = "VAT Unrepayable Overpayment"
 }
@@ -471,7 +475,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection2ndLPP,
     VatErrorCorrection1stLPPLPI,
     VatErrorCorrection2ndLPPLPI,
-    VatPOAInstalmentLPI
+    VatPOAInstalmentLPI,
+    VATOverpaymentforTax
   )
 
   val interestChargeTypes: Set[ChargeType] = Set(

@@ -104,6 +104,32 @@
                 @model.title
             </h1>
 
+            @if(model.chargeType == VATOverpaymentforTax.value) {
+
+            <p class="govuk-body">
+                @if(!user.isAgent){
+                @messages("chargeType.vatOverpayments.youNeedToPay")
+                } else {
+                @messages("chargeType.vatOverpayments.agent.youNeedToPay")
+                }
+            </p>
+            <p class="govuk-body">@messages("chargeType.vatOverpayments.thisIsBecauseOf")</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                    @messages("chargeType.vatOverpayments.anError")
+                </li>
+                <li>@messages("chargeType.vatOverpayments.anOfficer")</li>
+                <li>
+                    @if(!user.isAgent){
+                    @messages("chargeType.vatOverpayments.aReallocation")
+                    } else {
+                    @messages("chargeType.vatOverpayments.agent.aReallocation")
+                    }
+                </li>
+            </ul>
+            }
+
             @if(model.viewReturnEnabled && model.periodKey.isDefined) {
                 <p class="govuk-body" id="view-return">
                     @messages("chargeTypeDetails.viewThis")

@@ -332,6 +332,16 @@ chargeType.forThePeriod = for the period {0}
 chargeType.latePaymentPenalty = Late payment penalty
 chargeType.secondLatePaymentPenalty = Second late payment penalty
 
+chargeType.vATOverpaymentforTaxTitle = VAT correction
+chargeType.vatOverpayments.youNeedToPay = You need to pay this because HMRC paid you more VAT than we owed you.
+chargeType.vatOverpayments.thisIsBecauseOf = This could be because of:
+chargeType.vatOverpayments.anError = an error correction
+chargeType.vatOverpayments.anOfficer = an officer''s assessment
+chargeType.vatOverpayments.aReallocation = a reallocation of funds across your account
+
+chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
+chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
+
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
 
