@@ -21,7 +21,6 @@ import connectors.httpParsers.ResponseHttpParsers.HttpResult
 
 import javax.inject.{Inject, Singleton}
 import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
-import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
 import utils.LoggerUtil

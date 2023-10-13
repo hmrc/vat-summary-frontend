@@ -1,0 +1,166 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.viewModels.VatOverpaymentForRPIViewModel
+@import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import utils.Money
+@import models.payments._
+
+@this(mainTemplate: MainTemplate,
+      govukBreadcrumbs: GovukBreadcrumbs,
+      govukSummaryList: GovukSummaryList,
+      govukButton: GovukButton,
+      govukTag: GovukTag,
+      govukBackLink: GovukBackLink)
+
+@(model: VatOverpaymentForRPIViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title")),
+                href = Some(controllers.routes.VatDetailsController.details.url)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("whatYouOwe.title")),
+                href = Some(controllers.routes.WhatYouOweController.show.url)
+            )
+        )
+    ))
+}
+
+@backLink = {
+    @govukBackLink(BackLink(
+        content = Text(messages("base.back")),
+        href = controllers.routes.WhatYouOweController.show.url
+    ))
+}
+
+@agentSuffix = @{
+    if(user.isAgent) ".agent" else ""
+}
+
+@dueDateHtml = {
+    @displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
+                                                        content = Text(messages("common.overdue")),
+                                                        classes = "govuk-tag--red"
+                                                      ))
+    }
+}
+
+@correctionChargeHtml = {
+    @Money.pounds(model.correctionCharge)
+}
+
+@amountReceivedHtml = {
+    @Money.pounds(model.amountReceived)
+}
+
+@leftToPayHtml = {
+    @Money.pounds(model.leftToPay)
+}
+
+@mainTemplate(
+    title = model.title,
+    appConfig = appConfig,
+    serviceInfoContent = serviceInfoContent,
+    user = Some(user),
+    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <h1 class="govuk-heading-xl" id="repayment-interest-correction-heading">
+
+                <span class="govuk-caption-xl">
+                    @displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true)
+                </span>
+                @model.title
+            </h1>
+
+            <p id="repayment-interest" class="govuk-body">
+                @messages(s"repaymentInterestCorrection.p1$agentSuffix")
+            </p>
+
+            <p id="amount-changed" class="govuk-body">
+                @messages(s"repaymentInterestCorrection.p2$agentSuffix")
+            </p>
+
+            <p id="reduced-amount" class="govuk-body">
+                @messages(s"repaymentInterestCorrection.p3$agentSuffix")
+            </p>
+
+            @govukSummaryList(SummaryList(
+                rows = Seq(
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("repaymentInterestCorrection.dueDate"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(dueDateHtml)
+                        )
+                    ),
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("repaymentInterestCorrection.correctionCharge"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(correctionChargeHtml)
+                        )
+                    ),
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("repaymentInterestCorrection.amountReceived"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(amountReceivedHtml)
+                        )
+                    ),
+                    SummaryListRow(
+                        key = Key(
+                            content = Text(messages("repaymentInterestCorrection.leftToPay"))
+                        ),
+                        value = Value(
+                            content = HtmlContent(leftToPayHtml)
+                        )
+                    )
+                )
+            ))
+
+            @if(!user.isAgent) {
+                @govukButton(Button(
+                    content = Text(messages("chargeTypeDetails.button")),
+                    href    = Some(model.makePaymentRedirect)
+                ))
+            }
+
+            <p class="govuk-body">
+                <a class="govuk-link" href="@controllers.routes.WhatYouOweController.show.url" id="whatYouOweLink">
+                    @if(user.isAgent) {@messages("chargeTypeDetails.agentLink")} else {@messages("chargeTypeDetails.link")}
+                </a>
+            </p>
+
+        </div>
+    </div>
+
+}

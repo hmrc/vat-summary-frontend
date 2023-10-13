@@ -254,6 +254,17 @@ lateSubmissionPenalty.penaltyAmount = Penalty amount
 lateSubmissionPenalty.amountReceived = Amount received
 lateSubmissionPenalty.leftToPay = Left to pay
 
+repaymentInterestCorrection.p1 = You need to pay this because HMRC paid you too much repayment interest.
+repaymentInterestCorrection.p1.agent = Your client needs to pay this because HMRC paid them too much repayment interest.
+repaymentInterestCorrection.p2 = This happened because your VAT amount changed after we paid you the repayment interest.
+repaymentInterestCorrection.p2.agent = This happened because your client’s VAT amount changed after we paid them the repayment interest.
+repaymentInterestCorrection.p3 = The change reduced the amount of repayment interest we owed you.
+repaymentInterestCorrection.p3.agent = The change reduced the amount of repayment interest we owed your client.
+repaymentInterestCorrection.dueDate = Due date
+repaymentInterestCorrection.correctionCharge = Correction charge
+repaymentInterestCorrection.amountReceived = Amount received
+repaymentInterestCorrection.leftToPay = Left to pay
+
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
@@ -335,6 +346,7 @@ deregPartial.vatGroup.content = To disband VAT group, you need to cancel the reg
 chargeType.for = for {0}
 chargeType.forPeriod = for period {0}
 chargeType.forThePeriod = for the period {0}
+chargeType.from = from {0}
 
 chargeType.latePaymentPenalty = Late payment penalty
 chargeType.secondLatePaymentPenalty = Second late payment penalty
@@ -570,6 +582,8 @@ chargeType.VATReturnAALPITitle = Interest on annual accounting balance
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit
+
+chargeType.VATOverpaymentForRPITitle = Repayment interest correction
 
 chargeType.vatDeferralPenaltyTitle = Penalty
 chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT

@@ -376,6 +376,10 @@ case object VatOverpayments1stLPPLPI extends ChargeType {
   override val value: String = "VAT Overpayments 1st LPP LPI"
 }
 
+case object VatOverpaymentForRPI extends ChargeType {
+  override val value: String = "VAT Overpayment for RPI"
+}
+
 object ChargeType extends LoggerUtil {
 
   val allChargeTypes: Set[ChargeType] = Set(
@@ -490,7 +494,8 @@ object ChargeType extends LoggerUtil {
     VATOverpaymentforTax,
     VatOverpayments1stLPP,
     VatOverpayments2ndLPP,
-    VatOverpayments1stLPPLPI
+    VatOverpayments1stLPPLPI,
+    VatOverpaymentForRPI
   )
 
   val interestChargeTypes: Set[ChargeType] = Set(
@@ -639,5 +644,4 @@ object ChargeType extends LoggerUtil {
   def unapply(arg: ChargeType): String = arg.value
 
   implicit val reads: Reads[ChargeType] = __.read[String].map(apply)
-
 }
