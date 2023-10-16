@@ -16,6 +16,7 @@
 
 package models.payments
 
+import models.payments
 import models.payments.ChargeType.{interestChargeTypes, penaltyChargeTypes, penaltyInterestChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -36,8 +37,13 @@ sealed trait ChargeType {
   def isPenalty: Boolean = penaltyChargeTypes.contains(this)
 }
 
+
 case object VATOverpaymentforTax extends ChargeType {
   override val value: String = "VAT Overpayment for Tax"
+}
+
+case object VatOverpayments2ndLPP extends ChargeType {
+  override val value: String = "VAT Overpayments 2nd LPP"
 }
 
 case object VatUnrepayableOverpayment extends ChargeType {
@@ -476,7 +482,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection1stLPPLPI,
     VatErrorCorrection2ndLPPLPI,
     VatPOAInstalmentLPI,
-    VATOverpaymentforTax
+    VATOverpaymentforTax,
+    VatOverpayments2ndLPP
   )
 
   val interestChargeTypes: Set[ChargeType] = Set(
@@ -551,7 +558,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection2ndLPP,
     VatPOAReturn2ndLPP,
     VatCentralAssessment2ndLPP,
-    VatOfficersAssessment2ndLPP
+    VatOfficersAssessment2ndLPP,
+    VatOverpayments2ndLPP
   )
 
   val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
@@ -606,7 +614,8 @@ object ChargeType extends LoggerUtil {
     ErrorCorrectionDebitCharge -> VatErrorCorrection2ndLPP,
     PaymentOnAccountReturnDebitCharge -> VatPOAReturn2ndLPP,
     CentralAssessmentCharge -> VatCentralAssessment2ndLPP,
-    OADebitCharge -> VatOfficersAssessment2ndLPP
+    OADebitCharge -> VatOfficersAssessment2ndLPP,
+    VATOverpaymentforTax -> VatOverpayments2ndLPP
   )
 
   def apply: String => ChargeType = input => {

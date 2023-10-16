@@ -345,6 +345,9 @@ chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across 
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
 
+chargeType.vatOverpayments2ndLPPTitle = Second penalty for late payment of VAT correction
+chargeType.vatOverpayments2ndLPPDescription = Second penalty for late payment of VAT correction
+
 chargeType.repaymentSupplementRecTitle = Repayment supplement recovery
 chargeType.repaymentSupplementRecDescription = to recover the amount overpaid by HMRC
 

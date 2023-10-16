@@ -542,6 +542,21 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a Vat Overpayments 2nd LPP Charge" should {
+
+        val model = exampleModel.copy(chargeType = VatOverpayments2ndLPP)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Second late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+        }
+      }
+
       "there is a VAT return 1st LPP Charge" should {
 
         val model = exampleModel.copy(chargeType = VatReturn1stLPP)

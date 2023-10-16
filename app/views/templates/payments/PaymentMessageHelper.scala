@@ -26,6 +26,13 @@ sealed case class PaymentMessageHelper(name: String, title: String, principalUse
 //scalastyle:off
 object PaymentMessageHelper {
 
+  object Overpayments2ndLPP extends PaymentMessageHelper(
+    VatOverpayments2ndLPP.value,
+    "chargeType.vatOverpayments2ndLPPTitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object OverpaymentforTax extends PaymentMessageHelper(
     VATOverpaymentforTax.value,
     "chargeType.vATOverpaymentforTaxTitle",
@@ -783,7 +790,6 @@ object PaymentMessageHelper {
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(
-    OverpaymentforTax,
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
     IndirectTaxRevenueRecovery,
@@ -890,7 +896,9 @@ object PaymentMessageHelper {
     VATCA1stLPP,
     VATCA2ndLPP,
     VATOA1stLPP,
-    VATOA2ndLPP
+    VATOA2ndLPP,
+    OverpaymentforTax,
+    Overpayments2ndLPP
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
