@@ -342,8 +342,15 @@ chargeType.vatOverpayments.aReallocation = a reallocation of funds across your a
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
 chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
 
+chargeType.vatOP1stLPP.Title = Penalty for late payment of VAT correction
+chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} to {1} has not been paid for {2} days.
+
+chargeType.vatOverpayments2ndLPPTitle = Second penalty for late payment of VAT correction
+chargeType.vatOverpayments2ndLPPDescription = Second penalty for late payment of VAT correction
+
 chargeType.vatUnrepayableOverpaymentTitle = Overpayment
 chargeType.vatUnrepayableOverpaymentDescription = cannot be repaid after 4 years
+chargeType.vatUnrepayableOverpayment.explanation = This penalty starts to apply if a VAT correction charge is unpaid for {0} days.
 
 chargeType.repaymentSupplementRecTitle = Repayment supplement recovery
 chargeType.repaymentSupplementRecDescription = to recover the amount overpaid by HMRC

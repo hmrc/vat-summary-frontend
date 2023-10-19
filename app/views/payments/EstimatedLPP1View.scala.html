@@ -17,6 +17,7 @@
 @import models.viewModels.EstimatedLPP1ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
+@import models.payments.VatOverpayments1stLPP
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -73,7 +74,14 @@
       </span>
       @messages("chargeType.latePaymentPenalty")
     </h1>
-    <p class="govuk-body">@messages("estimatedLPP1.penaltyAppliesForDays", model.part1Days)</p>
+
+
+    @if(model.chargeType == VatOverpayments1stLPP.value) {
+      <p class="govuk-body">@messages("chargeType.vatOP1stLPP.1", displayDate(model.periodFrom), displayDate(model.periodTo), model.part1Days)</p>
+    } else {
+      <p class="govuk-body">@messages("estimatedLPP1.penaltyAppliesForDays", model.part1Days)</p>
+    }
+
     <p class="govuk-body" id="one-part-explanation">
       @messages("estimatedLPP1.calculation")
       <br>

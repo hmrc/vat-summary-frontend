@@ -343,6 +343,12 @@ chargeType.vatOverpayments.aReallocation = ailddyraniad o arian ar draws eich cy
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
 chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client's account
 
+chargeType.vatOP1stLPP.Title = Late payment penalty
+chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for 1 February 2023 to 30 April 2023 has not been paid for 30 days.
+chargeType.vatOP1stLPP.2Parts = It is made up of 2 parts:
+chargeType.vatOP1stLPP.Part1 = 2% of £1,500.00 (the unpaid VAT 15 days after the due date)
+chargeType.vatOP1stLPP.Part2 = 2% of £1,500.00 (the unpaid VAT 30 days after the due date)
+
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd
 

@@ -95,9 +95,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties.LPPDetails)
         buildCrystallisedChargePlusEstimates(p, matchingPenalty)
-      case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
-      case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) => Seq(buildLateSubmissionPenaltyViewModel(p))
-      case p => buildChargePlusEstimates(p, penalties)
+      case p: PaymentWithPeriod if p.chargeType.isInterest =>
+        Seq(buildCrystallisedIntViewModel(p))
+      case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) =>
+        Seq(buildLateSubmissionPenaltyViewModel(p))
+      case p =>
+        buildChargePlusEstimates(p, penalties)
     } flatten
 
   private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod, matchingPenalty: Option[LPPDetails])

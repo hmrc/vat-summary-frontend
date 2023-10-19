@@ -16,6 +16,7 @@
 
 package views.payments
 
+import models.payments.VatOverpayments1stLPP
 import models.viewModels.CrystallisedLPP1ViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -30,7 +31,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
   val injectedView: CrystallisedLPP1View = injector.instanceOf[CrystallisedLPP1View]
   val whatYouOweLink: String = controllers.routes.WhatYouOweController.show.url
 
-  val viewModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
+  def viewModel(chargeValue: String = "VAT Return 1st LPP"): CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
     "99",
     "10",
     Some("20"),
@@ -44,16 +45,25 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
     400.44,
     LocalDate.parse("2020-03-03"),
     LocalDate.parse("2020-04-04"),
-    "VAT Return 1st LPP",
+    chargeValue,
     "CHARGEREF",
     isOverdue = false
   )
 
   "Rendering the Crystallised LPP1 Page for a principal user" when {
 
-    "there are two penalty parts" should {
+    "there are two penalty parts with Charge Ref \"VAT Overpayments 1st LPP\"" should {
+      lazy val view2 = injectedView(viewModel(VatOverpayments1stLPP.value), Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document2: Document = Jsoup.parse(view2.body)
+      "have the correct first explanation paragraph" in {
+        elementText("#content > div > div > p:nth-child(2)") shouldBe
+          "This penalty applies if the VAT correction charge for 3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 has not been paid for 99 days."
+      }
+    }
+    "there are two penalty parts with Charge Ref \"VAT Return 1st LPP\"" should {
 
-      lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, user)
+
+      lazy val view = injectedView(viewModel(), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -108,13 +118,13 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       "have a bullet list" which {
 
         "has the first penalty part calculation as the first bullet point" in {
-          elementText("#content ul > li:nth-child(1)") shouldBe s"${viewModel.part1PenaltyRate}% of " +
-            s"£${viewModel.part1UnpaidVAT} (the unpaid VAT ${viewModel.part1Days} days after the due date)"
+          elementText("#content ul > li:nth-child(1)") shouldBe s"${viewModel().part1PenaltyRate}% of " +
+            s"£${viewModel().part1UnpaidVAT} (the unpaid VAT ${viewModel().part1Days} days after the due date)"
         }
 
         "has the second penalty part calculation as the second bullet point" in {
-          elementText("#content ul > li:nth-child(2)") shouldBe s"${viewModel.part2PenaltyRate.get}% of " +
-            s"£${viewModel.part2UnpaidVAT.get} (the unpaid VAT ${viewModel.part2Days.get} days after the due date)"
+          elementText("#content ul > li:nth-child(2)") shouldBe s"${viewModel().part2PenaltyRate.get}% of " +
+            s"£${viewModel().part2UnpaidVAT.get} (the unpaid VAT ${viewModel().part2Days.get} days after the due date)"
         }
       }
 
@@ -131,7 +141,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "display the original amount of the penalty charge" in {
-        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${viewModel.penaltyAmount}"
+        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${viewModel().penaltyAmount}"
       }
 
       "have the correct heading for the third row" in {
@@ -139,7 +149,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "display the amount received" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${viewModel.amountReceived}"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${viewModel().amountReceived}"
       }
 
       "have the correct heading for the fourth row" in {
@@ -147,7 +157,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "display the outstanding amount" in {
-        elementText(".govuk-summary-list__row:nth-child(4) > dd") shouldBe s"£${viewModel.leftToPay}"
+        elementText(".govuk-summary-list__row:nth-child(4) > dd") shouldBe s"£${viewModel().leftToPay}"
       }
 
       "have a pay now button" which {
@@ -189,13 +199,13 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
     "there is one penalty part" should {
 
       lazy val view =
-        injectedView(viewModel.copy(part2Days = None, part2UnpaidVAT = None), Html(""))(request, messages, mockConfig, user)
+        injectedView(viewModel().copy(part2Days = None, part2UnpaidVAT = None), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct calculation explanation paragraph" in {
         elementText("#one-part-explanation") shouldBe
-          s"The calculation we use is: ${viewModel.part1PenaltyRate}% of £${viewModel.part1UnpaidVAT} " +
-          s"(the unpaid VAT ${viewModel.part1Days} days after the due date)"
+          s"The calculation we use is: ${viewModel().part1PenaltyRate}% of £${viewModel().part1UnpaidVAT} " +
+          s"(the unpaid VAT ${viewModel().part1Days} days after the due date)"
       }
 
       "not have a paragraph for the 2 parts calculation" in {
@@ -210,7 +220,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
 
   "Rendering the Crystallised LPP1 Page for an agent" should {
 
-    lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(viewModel(), Html(""))(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

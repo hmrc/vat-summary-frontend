@@ -290,25 +290,48 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "there is a LPP1 Charge for a late vat overpayment" should {
 
-    "there are multiple payments with a mix of estimated & crystallised interest, LSP and penalties" should {
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(overpaymentforTaxLPP1), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1Model)))
+      }
+    }
 
-      val crystallisedInterest = {
-        payment.copy(chargeType = VatReturnLPI, accruingInterestAmount = None, accruingPenaltyAmount = None)
+    "there is a LPP2 Charge for a late vat overpayment" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(overpaymentforTaxLPP2), mandationStatus = "MTDfB", penaltyDetailsLPP2ModelMax)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP2Model)))
       }
-      val lateSubmissionPenalty = {
-        payment.copy(chargeType = VatLateSubmissionPen, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None)
-      }
-      lazy val result = {
-        mockDateServiceCall()
-        controller.constructViewModel(
-          Seq(payment, crystallisedInterest, lateSubmissionPenalty),
-          mandationStatus = "MTDfB",
-          penaltyDetailsModelMax
-        )(fakeRequest)
-      }
+    }
+
+    "there are multiple payments with a mix of estimated & crystallised interest, LPP1 and LPP2" should {
 
       "return the expected view models and total amount" in {
+
+        val crystallisedInterest = {
+          payment.copy(chargeType = VatReturnLPI, accruingInterestAmount = None, accruingPenaltyAmount = None)
+        }
+        val lateSubmissionPenalty = {
+          payment.copy(chargeType = VatLateSubmissionPen, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None)
+        }
+        lazy val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            Seq(payment, crystallisedInterest, lateSubmissionPenalty),
+            mandationStatus = "MTDfB",
+            penaltyDetailsModelMax
+          )(fakeRequest)
+        }
+
+
         result shouldBe Some(whatYouOweViewModelMultipleTypes)
       }
     }
