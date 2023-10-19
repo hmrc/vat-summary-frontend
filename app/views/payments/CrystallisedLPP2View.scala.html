@@ -17,6 +17,7 @@
 @import models.viewModels.CrystallisedLPP2ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
+@import models.payments.VatOverpayments2ndLPP
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -79,7 +80,12 @@
         @messages("chargeType.secondLatePaymentPenalty")
       </h1>
 
-      <p class="govuk-body">@messages("crystallisedLPP2.explanation", model.numberOfDays)</p>
+      @if(model.chargeType == VatOverpayments2ndLPP.value) {
+        <p id="explanation-p1" class="govuk-body">@messages("chargeType.vatUnrepayableOverpayment.explanation", model.numberOfDays)</p>
+      } else {
+        <p class="govuk-body">@messages("crystallisedLPP2.explanation", model.numberOfDays)</p>
+      }
+
       <p class="govuk-body">@messages("crystallisedLPP2.interestExplanation")</p>
 
       <p class="govuk-body">@messages("crystallisedLPP2.calculation") <br>

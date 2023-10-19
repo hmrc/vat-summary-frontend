@@ -581,6 +581,9 @@ object TestModels {
     isOverdue = false
   )
 
+  val crystallisedVatOPLPP1Model: CrystallisedLPP1ViewModel =
+    crystallisedPenaltyModel.copy(chargeType = VatOverpayments1stLPP.value, chargeReference = "BCDEFGHIJKLMNOPQ")
+
   val crystallisedLPP1JsonMax: JsObject = Json.obj(
     "numberOfDays" -> "99",
     "part1Days" -> "10",
@@ -602,6 +605,9 @@ object TestModels {
 
   val crystallisedLPP1ModelMin: CrystallisedLPP1ViewModel =
     crystallisedLPP1Model.copy(part2Days = None, part2PenaltyRate = None, part2UnpaidVAT = None)
+
+  val overpaymentforTaxLPP1: PaymentWithPeriod =
+    payment.copy(chargeType = VatOverpayments1stLPP, accruingPenaltyAmount = None, chargeReference = Some("BCDEFGHIJKLMNOPQ"))
 
   val crystallisedLPP1JsonMin: JsObject = Json.obj(
     "numberOfDays" -> "99",
@@ -632,6 +638,26 @@ object TestModels {
     "CHARGEREF",
     isOverdue = false
   )
+
+  val crystallisedLPP2ModelMax: CrystallisedLPP2ViewModel = CrystallisedLPP2ViewModel(
+    "31",
+    5.5,
+    LocalDate.parse("2019-03-03"),
+    10000,
+    0,
+    10000,
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
+    "VAT AA 2nd LPP",
+    "CHARGEREF",
+    isOverdue = false
+  )
+
+  val overpaymentforTaxLPP2: PaymentWithPeriod =
+    payment.copy(chargeType = VatOverpayments2ndLPP, accruingPenaltyAmount = None, chargeReference = Some("ABCDEFGHIJKL"), penaltyType = Some("LPP2"))
+
+  val crystallisedVatOPLPP2Model: CrystallisedLPP2ViewModel =
+    crystallisedLPP2ModelMax.copy(chargeType = VatOverpayments2ndLPP.value, chargeReference = "ABCDEFGHIJKL")
 
   val crystallisedLPP2Json: JsObject = Json.obj(
     "numberOfDays" -> "31",
@@ -816,6 +842,11 @@ object TestModels {
 
   val penaltyDetailsModelMax: PenaltyDetails = PenaltyDetails(
     LPPDetails = Seq(LPPDetailsModelMaxWithLPP1HRPercentage),
+    breathingSpace = false
+  )
+
+  val penaltyDetailsLPP2ModelMax: PenaltyDetails = PenaltyDetails(
+    LPPDetails = Seq(LPPLPP2DetailsModelMax),
     breathingSpace = false
   )
 

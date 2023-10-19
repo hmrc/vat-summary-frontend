@@ -16,6 +16,7 @@
 
 @import models.viewModels.EstimatedLPP2ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import models.payments.VatOverpayments2ndLPP
 @import utils.Money
 
 @this(mainTemplate: MainTemplate,
@@ -76,7 +77,12 @@
         @messages("chargeType.secondLatePaymentPenalty")
       </h1>
 
-      <p id="explanation-p1" class="govuk-body">@messages("estimatedLPP2.explanation", model.day)</p>
+      @if(model.chargeType == VatOverpayments2ndLPP.value) {
+        <p id="explanation-p1" class="govuk-body">@messages("chargeType.vatUnrepayableOverpayment.explanation", model.day)</p>
+      } else {
+        <p id="explanation-p1" class="govuk-body">@messages("estimatedLPP2.explanation", model.day)</p>
+      }
+
       @if(model.breathingSpace) {
         <p id="explanation-p2-breathing-space" class="govuk-body">@messages(s"estimatedLPP2.interestExplanationBreathingSpace$agentMessage")</p>
       } else {

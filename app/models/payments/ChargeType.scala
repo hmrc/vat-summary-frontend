@@ -36,6 +36,10 @@ sealed trait ChargeType {
   def isPenalty: Boolean = penaltyChargeTypes.contains(this)
 }
 
+case object VatOverpayments2ndLPP extends ChargeType {
+  override val value: String = "VAT Overpayments 2nd LPP"
+}
+
 case object VATOverpaymentforTax extends ChargeType {
   override val value: String = "VAT Overpayment for Tax"
 }
@@ -361,6 +365,9 @@ case object VatErrorCorrection1stLPPLPI extends ChargeType {
 case object VatErrorCorrection2ndLPPLPI extends ChargeType {
   override val value: String = "VAT Error Correct 2nd LPP LPI"
 }
+case object VatOverpayments1stLPP extends ChargeType {
+  override val value: String = "VAT Overpayments 1st LPP"
+}
 case object VatPOAInstalmentLPI extends ChargeType {
   override val value: String = "VAT POA Instalment LPI"
 }
@@ -476,7 +483,9 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection1stLPPLPI,
     VatErrorCorrection2ndLPPLPI,
     VatPOAInstalmentLPI,
-    VATOverpaymentforTax
+    VATOverpaymentforTax,
+    VatOverpayments1stLPP,
+    VatOverpayments2ndLPP
   )
 
   val interestChargeTypes: Set[ChargeType] = Set(
@@ -540,7 +549,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection1stLPP,
     VatPOAReturn1stLPP,
     VatCentralAssessment1stLPP,
-    VatOfficersAssessment1stLPP
+    VatOfficersAssessment1stLPP,
+    VatOverpayments1stLPP
   )
 
   val LPP2ChargeTypes: Set[ChargeType] = Set(
@@ -551,7 +561,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection2ndLPP,
     VatPOAReturn2ndLPP,
     VatCentralAssessment2ndLPP,
-    VatOfficersAssessment2ndLPP
+    VatOfficersAssessment2ndLPP,
+    VatOverpayments2ndLPP
   )
 
   val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
@@ -595,7 +606,8 @@ object ChargeType extends LoggerUtil {
     ErrorCorrectionDebitCharge -> VatErrorCorrection1stLPP,
     PaymentOnAccountReturnDebitCharge -> VatPOAReturn1stLPP,
     CentralAssessmentCharge -> VatCentralAssessment1stLPP,
-    OADebitCharge -> VatOfficersAssessment1stLPP
+    OADebitCharge -> VatOfficersAssessment1stLPP,
+    VATOverpaymentforTax -> VatOverpayments1stLPP
   )
 
   val penaltyChargeMappingLPP2: Map[ChargeType, ChargeType] = Map(
@@ -606,7 +618,8 @@ object ChargeType extends LoggerUtil {
     ErrorCorrectionDebitCharge -> VatErrorCorrection2ndLPP,
     PaymentOnAccountReturnDebitCharge -> VatPOAReturn2ndLPP,
     CentralAssessmentCharge -> VatCentralAssessment2ndLPP,
-    OADebitCharge -> VatOfficersAssessment2ndLPP
+    OADebitCharge -> VatOfficersAssessment2ndLPP,
+    VATOverpaymentforTax -> VatOverpayments2ndLPP
   )
 
   def apply: String => ChargeType = input => {

@@ -17,6 +17,7 @@
 @import models.viewModels.CrystallisedLPP1ViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
+@import models.payments.VatOverpayments1stLPP
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -79,8 +80,11 @@
         @messages("chargeType.latePaymentPenalty")
       </h1>
 
+      @if(model.chargeType == VatOverpayments1stLPP.value) {
+      <p class="govuk-body">@messages("chargeType.vatOP1stLPP.1", displayDate(model.periodFrom), displayDate(model.periodTo), model.numberOfDays)</p>
+      } else {
       <p class="govuk-body">@messages("crystallisedLPP1.explanation", model.numberOfDays)</p>
-
+      }
       @(model.part2Days, model.part2UnpaidVAT, model.part2PenaltyRate) match {
         case (Some(part2Days), Some(part2UnpaidVAT), Some(part2PenaltyRate)) => {
           <p class="govuk-body" id="two-parts-explanation">@messages("crystallisedLPP1.twoParts")</p>
