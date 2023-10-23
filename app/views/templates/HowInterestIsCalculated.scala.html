@@ -34,9 +34,11 @@
     @messages("chargeBreakdown.interestDropDown.p1b")
   </p>
 
-  <p id="how-interest-calculated-p2" class="govuk-body">@Html(
+  <p id="how-interest-calculated-p2" class="govuk-body">@messages("chargeBreakdown.interestDropDown.p2")</p>
+
+  <p id="how-interest-calculated-p3" class="govuk-body">@Html(
       messages(
-        "chargeBreakdown.interestDropDown.p2",
+        "chargeBreakdown.interestDropDown.p3",
         link(appConfig.govUkPrevIntRateUrl, messages("chargeBreakdown.interestDropDown.link"), Some("how-interest-calculated-link"))
       )
   )</p>

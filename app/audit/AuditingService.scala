@@ -33,8 +33,7 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
 
   def audit(auditModel: AuditModel, path: String = "-")(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val dataEvent = toDataEvent(appConfig.appName, auditModel, path)
-    // TODO*** UNCOMMENT
-//    logger.debug(s"Splunk Audit Event:\n\n$dataEvent")
+    logger.debug(s"Splunk Audit Event:\n\n$dataEvent")
     handleAuditResult(auditConnector.sendEvent(dataEvent))
   }
 
@@ -50,8 +49,7 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
   def extendedAudit(auditModel: ExtendedAuditModel, path: String = "-")
                    (implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val extendedDataEvent = toExtendedDataEvent(appConfig.appName, auditModel, path)
-    // TODO*** uncomment
-//    logger.debug(s"Splunk Audit Event:\n\n$extendedDataEvent")
+    logger.debug(s"Splunk Audit Event:\n\n$extendedDataEvent")
     handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
   }
 
@@ -67,8 +65,7 @@ class AuditingService @Inject()(appConfig: AppConfig, auditConnector: AuditConne
   private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext): Unit = auditResult.map {
     //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
     case Success =>
-      // TODO*** uncomment
-//      logger.debug("Splunk Audit Successful")
+      logger.debug("Splunk Audit Successful")
     case Failure(err, _) =>
       logger.debug(s"Splunk Audit Error, message: $err")
     case Disabled =>

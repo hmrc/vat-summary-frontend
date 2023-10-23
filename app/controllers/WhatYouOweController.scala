@@ -140,6 +140,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       periodTo = periodTo(payment)
     ))
 
+
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
     payment.accruingInterestAmount match {
       case Some(interestAmnt) =>

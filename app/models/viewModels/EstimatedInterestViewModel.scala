@@ -28,17 +28,6 @@ case class EstimatedInterestViewModel(periodFrom: LocalDate,
                                       interestAmount: BigDecimal,
                                       isPenalty: Boolean) extends EstimatedViewModel {
 
-  // TODO*** STUB DATA VIEW ETC AFTER PARENT CHARGE TYPE IS COMPLETE 
-
-  if (chargeType == "VAT Overpayments 1st LPP LPI") {
-    println(Console.YELLOW)
-    println("***********************************************")
-    println("EstimatedInterestViewModel")
-    println(s"${}")
-    println("***********************************************")
-    println(Console.RESET)
-  }
-
   override val outstandingAmount: BigDecimal = interestAmount
 
   override def description(isAgent: Boolean)(implicit messages: Messages): String = PaymentMessageHelper.getCorrectDescription(

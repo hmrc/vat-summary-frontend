@@ -797,8 +797,6 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
-  // TODO*** TEST TEST TEST
-  // TODO*** WELSH
   object Overpayments1stLPPLPI extends PaymentMessageHelper(
     name = VatOverpayments1stLPPLPI.value,
     title = "chargeType.Overpayments1stLPPLPI",
@@ -806,7 +804,6 @@ object PaymentMessageHelper {
     agentDescription = Some("chargeType.forPeriod")
   )
 
-  // TODO*** TEST TEST TEST
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,

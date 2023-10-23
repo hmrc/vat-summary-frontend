@@ -33,14 +33,7 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          chargeReference: String,
                                          isPenalty: Boolean) extends CrystallisedViewModel {
 
-  if (chargeType == "VAT Overpayments 1st LPP LPI") {
-    println(Console.CYAN)
-    println("***********************************************")
-    println("CrystallisedInterestViewModel")
-    println(s"${}")
-    println("***********************************************")
-    println(Console.RESET)
-  }
+
 
   override val outstandingAmount: BigDecimal = leftToPay
 

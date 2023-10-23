@@ -29,18 +29,22 @@ class HowInterestIsCalculatedSpec extends ViewBaseSpec {
     val dropDownLink = "#how-interest-calculated-dropdown > summary > span"
     val p1 = "#how-interest-calculated-p1"
     val p2 = "#how-interest-calculated-p2"
+    val p3 = "#how-interest-calculated-p3"
     val link = "#how-interest-calculated-link"
   }
 
   val dropdownLinkText = "How the interest amount was calculated"
   val p1 = "The calculation we use for each day is: (Interest rate × VAT amount unpaid) ÷ days in a year"
-  val p2: String => String = link => s"You can $link. If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that."
+  val p2 = "The amount might be adjusted to take account of any repayment interest owed by HMRC during the same time."
+  val p3: String => String = link => s"You can $link. " +
+    s"If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that."
   val link = "find interest rates on GOV.UK (opens in a new tab)"
 
   val expectedContent: Seq[(String, String)] = Seq(
     Selectors.dropDownLink -> dropdownLinkText,
     Selectors.p1 -> p1,
-    Selectors.p2 -> p2(link)
+    Selectors.p2 -> p2,
+    Selectors.p3 -> p3(link)
   )
 
   val linkUrl: String = mockConfig.govUkPrevIntRateUrl
