@@ -84,27 +84,9 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
           "The total increases daily based on the amount of unpaid VAT for the period."
       }
 
-      "have the correct third explanation paragraph" in {
-        elementText("#calculation") shouldBe "The calculation we use for each day is: " +
-          "(Interest rate × VAT amount unpaid) ÷ days in a year"
-      }
+      "must contain the HowInterestIsCalculated dropdown" in {
 
-      "have the correct fourth explanation paragraph" in {
-        elementText("#rates") shouldBe "You can find interest rates on " +
-          "GOV.UK (opens in a new tab). If the interest rate changes during the time interest is building up, we use the " +
-          "old interest rate up to the change date, then the new one after that."
-      }
-
-      "have a link to guidance for interest rates" which {
-
-        "has the correct link text" in {
-          elementText("#prevIntRateLink") shouldBe
-            "find interest rates on GOV.UK (opens in a new tab)"
-        }
-
-        "has the correct href" in {
-          element("#prevIntRateLink").attr("href") shouldBe mockConfig.govUkPrevIntRateUrl
-        }
+        elementExistsOnce("#how-interest-calculated-dropdown")
       }
 
       "have the correct heading for the first row" in {
@@ -178,27 +160,9 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
           "The total increases daily based on the unpaid amount."
       }
 
-      "have the correct third explanation paragraph" in {
-        elementText("#calculation") shouldBe "The calculation we use for each day is: " +
-          "(Interest rate × penalty amount unpaid) ÷ days in a year"
-      }
+      "must contain the HowInterestIsCalculated dropdown" in {
 
-      "have the correct fourth explanation paragraph" in {
-        elementText("#rates") shouldBe "You can find interest rates on GOV.UK (opens in a new tab). " +
-          "If the interest rate changes during the time interest is building up, we use the old interest rate up to " +
-          "the change date, then the new one after that."
-      }
-
-      "have a link to guidance for interest rates" which {
-
-        "has the correct link text" in {
-          elementText("#prevIntRateLink") shouldBe
-            "find interest rates on GOV.UK (opens in a new tab)"
-        }
-
-        "has the correct href" in {
-          element("#prevIntRateLink").attr("href") shouldBe mockConfig.govUkPrevIntRateUrl
-        }
+        elementExistsOnce("#how-interest-calculated-dropdown")
       }
     }
   }

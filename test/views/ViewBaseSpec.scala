@@ -28,9 +28,12 @@ import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import org.scalatest.matchers.should.Matchers
+import play.twirl.api.Html
+import utils.LoggerUtil
+
 import scala.jdk.CollectionConverters._
 
-trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers {
+trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers with LoggerUtil{
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
@@ -40,6 +43,7 @@ trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeA
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: MessagesImpl = MessagesImpl(Lang("en-GB"), messagesApi)
 
+  def asDocument(html: Html): Document = Jsoup.parse(html.toString())
   def element(cssSelector: String)(implicit document: Document): Element = {
     val elements = document.select(cssSelector)
 
@@ -50,6 +54,15 @@ trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeA
     document.select(cssSelector).first()
   }
 
+  def elementExistsOnce(cssSelector: String)(implicit document: Document): Assertion = {
+    val elements = document.select(cssSelector)
+
+    elements.size match {
+      case 1 => succeed
+      case 0 => fail(s"Element with selector '$cssSelector' was not found!")
+      case x => fail(s"Element with selector '$cssSelector' was found $x times!")
+    }
+  }
   def elementExtinct(cssSelector: String)(implicit document: Document): Assertion = {
     val elements = document.select(cssSelector)
 
@@ -70,4 +83,33 @@ trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeA
   }
 
   def formatHtml(markup: String): String = Jsoup.parseBodyFragment(s"\n$markup\n").toString.trim
+
+  def pageWithExpectedMessages(checks: Seq[(String, String)])(implicit document: Document): Unit = checks.foreach {
+    case (cssSelector, message) =>
+
+      s"element with cssSelector '$cssSelector'" must {
+
+        s"have message '$message'" in {
+          val elem = document.select(cssSelector)
+          elem.first.text() shouldBe message
+        }
+      }
+  }
+
+  def pageWithLink(selector: String, msg: String, url: String)(implicit document: Document): Unit = {
+    s"has a link to $msg ($url)" which {
+
+      "has the correct text" in {
+
+        val actualMsg = document.select(selector).text
+
+        logger.debug(s"[pageWithLink] \n expectedMsg: $msg \n actualMsg: $actualMsg")
+        actualMsg shouldBe  msg
+      }
+
+      "has the correct destination" in {
+        document.select(selector).attr("href") shouldBe url
+      }
+    }
+  }
 }

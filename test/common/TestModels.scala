@@ -56,19 +56,19 @@ object TestModels {
   )))
 
   val payment: PaymentWithPeriod = PaymentWithPeriod(
-    ReturnDebitCharge,
-    LocalDate.parse("2019-01-01"),
-    LocalDate.parse("2019-02-02"),
-    LocalDate.parse("2019-03-03"),
-    10000,
-    Some("ABCD"),
+    chargeType = ReturnDebitCharge,
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    due = LocalDate.parse("2019-03-03"),
+    outstandingAmount = 10000,
+    periodKey = Some("ABCD"),
     chargeReference = Some("XD002750002155"),
     ddCollectionInProgress = false,
     accruingInterestAmount = Some(BigDecimal(2)),
-    originalAmount = BigDecimal(10000),
-    clearedAmount = Some(0),
     accruingPenaltyAmount = Some(50.55),
-    penaltyType = Some("LPP1")
+    penaltyType = Some("LPP1"),
+    originalAmount = BigDecimal(10000),
+    clearedAmount = Some(0)
   )
 
   val paymentNoAccInterest: PaymentWithPeriod =
@@ -536,29 +536,29 @@ object TestModels {
   )
 
   val crystallisedPenaltyModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
-    "30",
-    "15",
-    Some("30"),
-    2.4,
-    Some(4.2),
-    100.11,
-    Some(200.22),
-    LocalDate.parse("2019-03-03"),
-    10000.00,
-    0.00,
-    10000.00,
-    LocalDate.parse("2019-01-01"),
-    LocalDate.parse("2019-02-02"),
-    "VAT Return 1st LPP",
-    "XD002750002155",
+    numberOfDays = "30",
+    part1Days = "15",
+    part2Days = Some("30"),
+    part1PenaltyRate = 2.4,
+    part2PenaltyRate = Some(4.2),
+    part1UnpaidVAT = 100.11,
+    part2UnpaidVAT = Some(200.22),
+    dueDate = LocalDate.parse("2019-03-03"),
+    penaltyAmount = 10000.00,
+    amountReceived = 0.00,
+    leftToPay = 10000.00,
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    chargeType = "VAT Return 1st LPP",
+    chargeReference = "XD002750002155",
     isOverdue = false
   )
 
   val estimatedInterestPenalty: EstimatedInterestViewModel = EstimatedInterestViewModel(
-    LocalDate.parse("2019-01-01"),
-    LocalDate.parse("2019-02-02"),
-    "VAT Return 1st LPP LPI",
-    2,
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    chargeType = "VAT Return 1st LPP LPI",
+    interestAmount = 2,
     isPenalty = true
   )
 
@@ -582,7 +582,29 @@ object TestModels {
   )
 
   val crystallisedVatOPLPP1Model: CrystallisedLPP1ViewModel =
-    crystallisedPenaltyModel.copy(chargeType = VatOverpayments1stLPP.value, chargeReference = "BCDEFGHIJKLMNOPQ")
+    crystallisedPenaltyModel.copy(
+      chargeType = VatOverpayments1stLPP.value,
+      chargeReference = "BCDEFGHIJKLMNOPQ"
+    )
+
+  val estimatedVatOPLPP1LPI: EstimatedInterestViewModel =
+    EstimatedInterestViewModel(
+      periodFrom = crystallisedPenaltyModel.periodFrom,
+      periodTo = crystallisedPenaltyModel.periodTo,
+      chargeType = VatOverpayments1stLPPLPI.value,
+      interestAmount = BigDecimal(2),
+      isPenalty = true
+    )
+
+  val crystallisedVatOPLPP1LPIModel: CrystallisedInterestViewModel =
+    penaltyInterestCharge.copy(
+      periodFrom = crystallisedPenaltyModel.periodFrom,
+      periodTo = crystallisedPenaltyModel.periodTo,
+      chargeType = VatOverpayments1stLPPLPI.value,
+      interestAmount = BigDecimal(10000),
+      chargeReference = "BCDEFGHIJKLMNOPQ",
+      isPenalty = true
+    )
 
   val crystallisedLPP1JsonMax: JsObject = Json.obj(
     "numberOfDays" -> "99",
@@ -607,7 +629,24 @@ object TestModels {
     crystallisedLPP1Model.copy(part2Days = None, part2PenaltyRate = None, part2UnpaidVAT = None)
 
   val overpaymentforTaxLPP1: PaymentWithPeriod =
-    payment.copy(chargeType = VatOverpayments1stLPP, accruingPenaltyAmount = None, chargeReference = Some("BCDEFGHIJKLMNOPQ"))
+    payment.copy(chargeType = VatOverpayments1stLPP,
+      chargeReference = Some("BCDEFGHIJKLMNOPQ"),
+      accruingInterestAmount = None,
+      accruingPenaltyAmount = None
+    )
+
+  val overpaymentForTaxLPP1LPI: PaymentWithPeriod =
+    payment.copy(
+      chargeType = VatOverpayments1stLPPLPI,
+      chargeReference = Some("BCDEFGHIJKLMNOPQ")
+    )
+
+  val overpaymentForTaxLPP1EstLPI: PaymentWithPeriod =
+    payment.copy(
+      chargeType = VatOverpayments1stLPP,
+      chargeReference = Some("BCDEFGHIJKLMNOPQ"),
+      accruingPenaltyAmount = None
+    )
 
   val crystallisedLPP1JsonMin: JsObject = Json.obj(
     "numberOfDays" -> "99",
@@ -798,14 +837,14 @@ object TestModels {
   val LPPDetailsModelMaxWithLPP1HRPercentage: LPPDetails = LPPDetails(
     principalChargeReference = "XD002750002155",
     penaltyCategory = "LPP1",
-    Some(100.11),
-    Some("15"),
-    Some(2.4),
-    Some(200.22),
-    Some("30"),
-    Some(4.2),
-    Some("31"),
-    Some(5.5),
+    LPP1LRCalculationAmount = Some(100.11),
+    LPP1LRDays = Some("15"),
+    LPP1LRPercentage = Some(2.4),
+    LPP1HRCalculationAmount = Some(200.22),
+    LPP1HRDays = Some("30"),
+    LPP1HRPercentage = Some(4.2),
+    LPP2Days = Some("31"),
+    LPP2Percentage = Some(5.5),
     penaltyChargeReference = Some("BCDEFGHIJKLMNOPQ"),
     timeToPay = false
   )
