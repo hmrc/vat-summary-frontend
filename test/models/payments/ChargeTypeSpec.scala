@@ -43,7 +43,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         val exception = intercept[IllegalArgumentException] {
           ChargeType.apply("Bad Charge Type")
         }
-        exception.getMessage shouldBe "Invalid Charge Type"
+        exception.getMessage shouldBe "Invalid Charge Type: Bad Charge Type"
       }
     }
   }

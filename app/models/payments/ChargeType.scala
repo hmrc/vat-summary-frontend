@@ -44,14 +44,21 @@ case object VATOverpaymentforTax extends ChargeType {
   override val value: String = "VAT Overpayment for Tax"
 }
 
+case object VatOverpaymentForTaxRPI extends ChargeType {
+  override val value: String = "VAT Overpayment for Tax RPI"
+}
+case object VatOverpayments1stLPPRPI extends ChargeType {
+  override val value: String = "VAT Overpayments 1st LPP RPI"
+}
+case object VatOverpayments2ndLPPRPI extends ChargeType {
+  override val value: String = "VAT Overpayments 2nd LPP RPI"
+}
 case object VATOverpaymentforTaxLPI extends ChargeType {
   override val value: String = "VAT Overpayment for Tax LPI"
 }
-
 case object VatOverpayments2ndLPPLPI extends ChargeType {
   override val value: String = "VAT Overpayments 2nd LPP LPI"
 }
-
 case object VatUnrepayableOverpayment extends ChargeType {
   override val value: String = "VAT Unrepayable Overpayment"
 }
@@ -503,6 +510,9 @@ object ChargeType extends LoggerUtil {
     VatOverpayments1stLPP,
     VatOverpayments2ndLPP,
     VatOverpaymentForRPI,
+    VatOverpaymentForTaxRPI,
+    VatOverpayments1stLPPRPI,
+    VatOverpayments2ndLPPRPI,
     VATOverpaymentforTaxLPI,
     VatOverpayments1stLPPLPI,
     VatOverpayments2ndLPPLPI
@@ -653,7 +663,7 @@ object ChargeType extends LoggerUtil {
   def apply: String => ChargeType = input => {
     allChargeTypes.find { chargeType =>
       chargeType.value.toUpperCase.equals(input.trim.toUpperCase)
-    }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type"))
+    }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type: " + input))
   }
 
   def unapply(arg: ChargeType): String = arg.value
