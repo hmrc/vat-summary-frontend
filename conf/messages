@@ -354,11 +354,11 @@ chargeType.vATOverpaymentforTaxTitle = VAT correction
 chargeType.vatOverpayments.youNeedToPay = You need to pay this because HMRC paid you more VAT than we owed you.
 chargeType.vatOverpayments.thisIsBecauseOf = This could be because of:
 chargeType.vatOverpayments.anError = an error correction
-chargeType.vatOverpayments.anOfficer = an officer''s assessment
+chargeType.vatOverpayments.anOfficer = an officer’s assessment
 chargeType.vatOverpayments.aReallocation = a reallocation of funds across your account
 
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
-chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
+chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client’s account
 
 chargeType.vatOP1stLPP.Title = Penalty for late payment of VAT correction
 chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} to {1} has not been paid for {2} days.
