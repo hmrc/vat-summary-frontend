@@ -807,8 +807,8 @@ object PaymentMessageHelper {
   object VATOverpaymentForRPI extends PaymentMessageHelper(
     VatOverpaymentForRPI.value,
     "chargeType.VATOverpaymentForRPITitle",
-    Some("chargeType.from"),
-    Some("chargeType.from")
+    Some("chargeType.for"),
+    Some("chargeType.for")
   )
 
   val values: Seq[PaymentMessageHelper] = Seq(

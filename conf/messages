@@ -346,7 +346,6 @@ deregPartial.vatGroup.content = To disband VAT group, you need to cancel the reg
 chargeType.for = for {0}
 chargeType.forPeriod = for period {0}
 chargeType.forThePeriod = for the period {0}
-chargeType.from = from {0}
 
 chargeType.latePaymentPenalty = Late payment penalty
 chargeType.secondLatePaymentPenalty = Second late payment penalty

@@ -29,11 +29,11 @@ class VatOverpaymentForRPIViewModelSpec extends ViewBaseSpec with AnyWordSpecLik
     "render the description message" when {
 
       "the user is an agent" in {
-        vatOverpaymentForRPI.description(isAgent = true) shouldBe "from 7\u00a0Apr to 10\u00a0Apr\u00a02018"
+        vatOverpaymentForRPI.description(isAgent = true) shouldBe "for 7\u00a0Apr to 10\u00a0Apr\u00a02018"
       }
 
       "the user is not an agent" in {
-        vatOverpaymentForRPI.description(isAgent = false) shouldBe "from 7\u00a0Apr to 10\u00a0Apr\u00a02018"
+        vatOverpaymentForRPI.description(isAgent = false) shouldBe "for 7\u00a0Apr to 10\u00a0Apr\u00a02018"
       }
     }
   }
