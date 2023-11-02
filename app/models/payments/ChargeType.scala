@@ -44,6 +44,10 @@ case object VATOverpaymentforTax extends ChargeType {
   override val value: String = "VAT Overpayment for Tax"
 }
 
+case object VATOverpaymentforTaxLPI extends ChargeType {
+  override val value: String = "VAT Overpayment for Tax LPI"
+}
+
 case object VatUnrepayableOverpayment extends ChargeType {
   override val value: String = "VAT Unrepayable Overpayment"
 }
@@ -494,8 +498,9 @@ object ChargeType extends LoggerUtil {
     VATOverpaymentforTax,
     VatOverpayments1stLPP,
     VatOverpayments2ndLPP,
-    VatOverpayments1stLPPLPI,
-    VatOverpaymentForRPI
+    VatOverpaymentForRPI,
+    VATOverpaymentforTaxLPI,
+    VatOverpayments1stLPPLPI
   )
 
   val interestChargeTypes: Set[ChargeType] = Set(
@@ -528,7 +533,8 @@ object ChargeType extends LoggerUtil {
     VatReturnPOALPI,
     VatReturnPOA1stLPPLPI,
     VatReturnPOA2ndLPPLPI,
-    VatOverpayments1stLPPLPI
+    VatOverpayments1stLPPLPI,
+    VATOverpaymentforTaxLPI
   )
 
   val penaltyInterestChargeTypes: Set[ChargeType] = Set(
@@ -608,7 +614,8 @@ object ChargeType extends LoggerUtil {
     VatCentralAssessment2ndLPP -> VatCA2ndLPPLPI,
     VatOfficersAssessment1stLPP -> VatOA1stLPPLPI,
     VatOfficersAssessment2ndLPP -> VatOA2ndLPPLPI,
-    VatOverpayments1stLPP -> VatOverpayments1stLPPLPI
+    VatOverpayments1stLPP -> VatOverpayments1stLPPLPI,
+    VATOverpaymentforTax -> VATOverpaymentforTaxLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(

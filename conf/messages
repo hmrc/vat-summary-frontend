@@ -357,6 +357,12 @@ chargeType.vatOverpayments.anError = an error correction
 chargeType.vatOverpayments.anOfficer = an officer’s assessment
 chargeType.vatOverpayments.aReallocation = a reallocation of funds across your account
 
+chargeType.overpaymentforTaxLPITitle = Repayment interest correction
+
+chargeType.overpaymentforTaxLPI.description.p1 = You need to pay this because HMRC paid you too much repayment interest.
+chargeType.overpaymentforTaxLPI.description.p2 = This happened because your VAT amount changed after we paid you the repayment interest.
+chargeType.overpaymentforTaxLPI.description.p3 = The change reduced the amount of repayment interest we owed you.
+
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
 chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client’s account
 

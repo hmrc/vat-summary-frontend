@@ -34,6 +34,13 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object OverpaymentforTaxLPI extends PaymentMessageHelper(
+    VATOverpaymentforTaxLPI.value,
+    "chargeType.overpaymentforTaxLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object Overpayments1stLPP extends PaymentMessageHelper(
     VatOverpayments1stLPP.value,
     "chargeType.vatOP1stLPP.Title",
@@ -923,7 +930,8 @@ object PaymentMessageHelper {
     Overpayments2ndLPP,
     Overpayments1stLPP,
     Overpayments1stLPPLPI,
-    VATOverpaymentForRPI
+    VATOverpaymentForRPI,
+    OverpaymentforTaxLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

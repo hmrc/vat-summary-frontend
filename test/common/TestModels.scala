@@ -20,13 +20,14 @@ import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models._
 import models.errors.PenaltiesFeatureSwitchError
 import models.obligations.{VatReturnObligation, VatReturnObligations}
-import models.payments._
+import models.payments.{VATOverpaymentforTaxLPI, _}
 import models.penalties.{LPPDetails, PenaltiesSummary, PenaltyDetails}
 import models.viewModels._
 import play.api.libs.json.{Format, JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, EnrolmentIdentifier, Enrolments}
+
 import java.time.{Instant, LocalDate}
 
 import common.ChargeViewModelTypes._
@@ -93,7 +94,7 @@ object TestModels {
     payment.copy(chargeType = VatUnrepayableOverpayment, accruingPenaltyAmount = None)
 
   val overpaymentforTax: PaymentWithPeriod =
-    payment.copy(chargeType = VATOverpaymentforTax, accruingPenaltyAmount = None)
+    payment.copy(chargeType = VATOverpaymentforTax, accruingPenaltyAmount = None, penaltyType = None)
 
   val paymentNoPeriodNoDate: PaymentNoPeriod = PaymentNoPeriod(
     OADefaultInterestCharge,
@@ -400,9 +401,16 @@ object TestModels {
     isPenalty = false
   )
 
-  val wyoChargeUnrepayableOverpayment: StandardChargeViewModel = whatYouOweChargeModel.copy(chargeType = "VAT Unrepayable Overpayment")
+  val vatOverpaymentTax: StandardChargeViewModel = whatYouOweChargeModel.copy(
+    chargeType = "VAT Overpayment for Tax", isOverdue = false,
+    outstandingAmount = 10000,
+    originalAmount = 10000,
+    clearedAmount = 0
+  )
 
-  val vatOverpaymentTax: StandardChargeViewModel = whatYouOweChargeModel.copy(chargeType = "VAT Overpayment for Tax")
+  val vatOverpaymentTaxLPIEstimatedModel: EstimatedInterestViewModel = whatYouOweChargeModelEstimatedInterest.copy(chargeType = "VAT Overpayment for Tax LPI")
+
+  val wyoChargeUnrepayableOverpayment: StandardChargeViewModel = whatYouOweChargeModel.copy(chargeType = "VAT Unrepayable Overpayment")
 
   val whatYouOweChargeModelInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     periodFrom = LocalDate.parse("2019-01-01"),
@@ -646,6 +654,27 @@ object TestModels {
       isPenalty = true
     )
 
+  val estimatedVATOverpaymentforTaxLPI: EstimatedInterestViewModel =
+    EstimatedInterestViewModel(
+      periodFrom = crystallisedPenaltyModel.periodFrom,
+      periodTo = crystallisedPenaltyModel.periodTo,
+      chargeType = VATOverpaymentforTaxLPI.value,
+      interestAmount = BigDecimal(2),
+      isPenalty = true
+    )
+
+  val crystallisedVATOverpaymentforTaxLPI: CrystallisedInterestViewModel =
+    penaltyInterestCharge.copy(
+      periodFrom = crystallisedPenaltyModel.periodFrom,
+      periodTo = crystallisedPenaltyModel.periodTo,
+      chargeType = VATOverpaymentforTaxLPI.value,
+      interestAmount = 10000,
+      amountReceived = 0,
+      leftToPay = 10000,
+      chargeReference = "BCDEFGHIJKLMNOPQ",
+      isPenalty = false
+    )
+
   val crystallisedLPP1JsonMax: JsObject = Json.obj(
     "numberOfDays" -> "99",
     "part1Days" -> "10",
@@ -684,6 +713,13 @@ object TestModels {
   val overpaymentForTaxLPP1EstLPI: PaymentWithPeriod =
     payment.copy(
       chargeType = VatOverpayments1stLPP,
+      chargeReference = Some("BCDEFGHIJKLMNOPQ"),
+      accruingPenaltyAmount = None
+    )
+
+  val vATOverpaymentforTaxLPI: PaymentWithPeriod =
+    payment.copy(
+      chargeType = VATOverpaymentforTaxLPI,
       chargeReference = Some("BCDEFGHIJKLMNOPQ"),
       accruingPenaltyAmount = None
     )
