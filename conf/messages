@@ -254,6 +254,17 @@ lateSubmissionPenalty.penaltyAmount = Penalty amount
 lateSubmissionPenalty.amountReceived = Amount received
 lateSubmissionPenalty.leftToPay = Left to pay
 
+repaymentInterestCorrection.p1 = You need to pay this because HMRC paid you too much repayment interest.
+repaymentInterestCorrection.p1.agent = Your client needs to pay this because HMRC paid them too much repayment interest.
+repaymentInterestCorrection.p2 = This happened because your VAT amount changed after we paid you the repayment interest.
+repaymentInterestCorrection.p2.agent = This happened because your client’s VAT amount changed after we paid them the repayment interest.
+repaymentInterestCorrection.p3 = The change reduced the amount of repayment interest we owed you.
+repaymentInterestCorrection.p3.agent = The change reduced the amount of repayment interest we owed your client.
+repaymentInterestCorrection.dueDate = Due date
+repaymentInterestCorrection.correctionCharge = Correction charge
+repaymentInterestCorrection.amountReceived = Amount received
+repaymentInterestCorrection.leftToPay = Left to pay
+
 noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
@@ -343,11 +354,11 @@ chargeType.vATOverpaymentforTaxTitle = VAT correction
 chargeType.vatOverpayments.youNeedToPay = You need to pay this because HMRC paid you more VAT than we owed you.
 chargeType.vatOverpayments.thisIsBecauseOf = This could be because of:
 chargeType.vatOverpayments.anError = an error correction
-chargeType.vatOverpayments.anOfficer = an officer''s assessment
+chargeType.vatOverpayments.anOfficer = an officer’s assessment
 chargeType.vatOverpayments.aReallocation = a reallocation of funds across your account
 
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
-chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
+chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client’s account
 
 chargeType.vatOP1stLPP.Title = Penalty for late payment of VAT correction
 chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} to {1} has not been paid for {2} days.
@@ -570,6 +581,8 @@ chargeType.VATReturnAALPITitle = Interest on annual accounting balance
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit
+
+chargeType.VATOverpaymentForRPITitle = Repayment interest correction
 
 chargeType.vatDeferralPenaltyTitle = Penalty
 chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT

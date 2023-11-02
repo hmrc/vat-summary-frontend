@@ -21,7 +21,7 @@ import audit.models.WhatYouOweAuditModel
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
-import models.payments.{ChargeType, Payment, PaymentWithPeriod, VatLateSubmissionPen}
+import models.payments.{ChargeType, Payment, PaymentWithPeriod, VatLateSubmissionPen, VatOverpaymentForRPI}
 import models.penalties.{LPPDetails, PenaltyDetails}
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
@@ -95,12 +95,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties.LPPDetails)
         buildCrystallisedChargePlusEstimates(p, matchingPenalty)
-      case p: PaymentWithPeriod if p.chargeType.isInterest =>
-        Seq(buildCrystallisedIntViewModel(p))
-      case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) =>
-        Seq(buildLateSubmissionPenaltyViewModel(p))
-      case p =>
-        buildChargePlusEstimates(p, penalties)
+      case p: PaymentWithPeriod if p.chargeType.isInterest => Seq(buildCrystallisedIntViewModel(p))
+      case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) => Seq(buildLateSubmissionPenaltyViewModel(p))
+      case p: PaymentWithPeriod if p.chargeType.eq(VatOverpaymentForRPI) => Seq(buildVatOverpaymentForRPIViewModel(p))
+      case p => buildChargePlusEstimates(p, penalties)
     } flatten
 
   private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod,
@@ -140,6 +138,18 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       periodTo = periodTo(payment)
     ))
 
+  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod): Option[VatOverpaymentForRPIViewModel] =
+    Some(VatOverpaymentForRPIViewModel(
+      periodFrom = payment.periodFrom,
+      periodTo = payment.periodTo,
+      chargeType = payment.chargeType.value,
+      dueDate = payment.due,
+      correctionCharge = payment.originalAmount,
+      amountReceived = payment.clearedAmount.getOrElse(0),
+      leftToPay = payment.outstandingAmount,
+      isOverdue = payment.isOverdue(dateService.now()),
+      chargeReference = payment.chargeReference
+    ))
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
     payment.accruingInterestAmount match {

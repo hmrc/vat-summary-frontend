@@ -40,6 +40,7 @@ class WYOSessionService @Inject()(repository: WYOSessionRepository) {
         case m: CrystallisedInterestViewModel => Json.toJson(m)
         case m: CrystallisedLPP1ViewModel => Json.toJson(m)
         case m: CrystallisedLPP2ViewModel => Json.toJson(m)
+        case m: VatOverpaymentForRPIViewModel => Json.toJson(m)
         case m: LateSubmissionPenaltyViewModel => Json.toJson(m)
       }
       val databaseModel = WYODatabaseModel(model.generateHash(vrn), model.getClass.getSimpleName, json)
