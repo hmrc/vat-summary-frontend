@@ -27,9 +27,10 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
 
   val controller = new ChargeBreakdownController(
     authorisedController, mcc, mockServiceInfoService, mockWYOSessionService,
-    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[EstimatedInterestView],
-    injector.instanceOf[EstimatedLPP1View], injector.instanceOf[EstimatedLPP2View],
-    injector.instanceOf[LateSubmissionPenaltyView], injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
+    injector.instanceOf[ChargeTypeDetailsView], injector.instanceOf[RepaymentInterestCorrectionView],
+    injector.instanceOf[EstimatedInterestView], injector.instanceOf[EstimatedLPP1View],
+    injector.instanceOf[EstimatedLPP2View], injector.instanceOf[LateSubmissionPenaltyView],
+    injector.instanceOf[PaymentsError], injector.instanceOf[NotFound],
     injector.instanceOf[CrystallisedInterestView], injector.instanceOf[CrystallisedLPP1View],
     injector.instanceOf[CrystallisedLPP2View]
   )
@@ -56,6 +57,25 @@ class ChargeBreakdownControllerSpec extends ControllerBaseSpec {
         "load the correct page" in {
           val document: Document = Jsoup.parse(contentAsString(result))
           document.select("#standard-charge-heading") should exist
+        }
+      }
+
+      "the retrieved model is a VatOverpaymentForRPIViewModel" should {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockWYOSessionServiceCall(Some(wyoOverpaymentForRPIViewModel))
+          controller.showBreakdown(id)(fakeRequestWithSession)
+        }
+
+        "return 200" in {
+          status(result) shouldBe OK
+        }
+
+        "load the correct page" in {
+          val document: Document = Jsoup.parse(contentAsString(result))
+          document.select("#repayment-interest-correction-heading") should exist
         }
       }
 

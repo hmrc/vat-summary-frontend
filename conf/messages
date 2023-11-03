@@ -249,6 +249,17 @@ chargeBreakdown.interestDropDown.p2 = The amount might be adjusted to take accou
 chargeBreakdown.interestDropDown.p3 = You can {0}. If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that.
 chargeBreakdown.interestDropDown.link = find interest rates on GOV.UK
 
+repaymentInterestCorrection.p1 = You need to pay this because HMRC paid you too much repayment interest.
+repaymentInterestCorrection.p1.agent = Your client needs to pay this because HMRC paid them too much repayment interest.
+repaymentInterestCorrection.p2 = This happened because your VAT amount changed after we paid you the repayment interest.
+repaymentInterestCorrection.p2.agent = This happened because your client’s VAT amount changed after we paid them the repayment interest.
+repaymentInterestCorrection.p3 = The change reduced the amount of repayment interest we owed you.
+repaymentInterestCorrection.p3.agent = The change reduced the amount of repayment interest we owed your client.
+repaymentInterestCorrection.dueDate = Due date
+repaymentInterestCorrection.correctionCharge = Correction charge
+repaymentInterestCorrection.amountReceived = Amount received
+repaymentInterestCorrection.leftToPay = Left to pay
+
 lateSubmissionPenalty.dueDate = Due date
 lateSubmissionPenalty.penaltyAmount = Penalty amount
 lateSubmissionPenalty.amountReceived = Amount received
@@ -575,6 +586,8 @@ chargeType.vatDeferralPenaltyTitle = Penalty
 chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT
 
 chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
+
+chargeType.VATOverpaymentForRPITitle = Repayment interest correction
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

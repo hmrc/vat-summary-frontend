@@ -578,8 +578,27 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           Some(LocalDate.parse("2019-01-01")),
           Some(LocalDate.parse("2019-02-02"))
         ))
-      }
     }
+  }
+
+  "The buildVatOverpaymentForRPIViewModel function" should {
+
+    "return a VatOverpaymentForRPIViewModel" in {
+      mockDateServiceCall()
+      controller.buildVatOverpaymentForRPIViewModel(overpaymentForRPI) shouldBe
+        Some(VatOverpaymentForRPIViewModel(
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Overpayment for RPI",
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          isOverdue = false,
+          Some("XD002750002155")
+        ))
+    }
+  }
 
   "The buildCrystallisedIntViewModel function" should {
 

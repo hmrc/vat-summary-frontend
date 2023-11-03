@@ -71,6 +71,22 @@ object TestModels {
     clearedAmount = Some(0)
   )
 
+  val overpaymentForRPI: PaymentWithPeriod = PaymentWithPeriod(
+    VatOverpaymentForRPI,
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
+    LocalDate.parse("2019-03-03"),
+    10000,
+    None,
+    chargeReference = Some("XD002750002155"),
+    ddCollectionInProgress = false,
+    accruingInterestAmount = None,
+    originalAmount = BigDecimal(10000),
+    clearedAmount = Some(0),
+    accruingPenaltyAmount = None,
+    penaltyType = None
+  )
+
   val paymentNoAccInterest: PaymentWithPeriod =
     payment.copy(accruingInterestAmount = Some(0), accruingPenaltyAmount = None)
   val unrepayableOverpayment: PaymentWithPeriod =
@@ -490,6 +506,30 @@ object TestModels {
       outstandingAmount = 456.00,
       dueDate = LocalDate.parse("2018-12-01")
     )
+
+  val vatOverpaymentForRPIJson: JsObject = Json.obj(
+    "periodFrom" -> "2018-04-07",
+    "periodTo" -> "2018-04-10",
+    "chargeType" -> "VAT Overpayment for RPI",
+    "dueDate" -> "2018-04-15",
+    "correctionCharge" -> 200.00,
+    "amountReceived" -> 40.00,
+    "leftToPay" -> 160.00,
+    "isOverdue" -> false,
+    "chargeReference" -> "ABCD"
+  )
+
+  val vatOverpaymentForRPI: VatOverpaymentForRPIViewModel = VatOverpaymentForRPIViewModel(
+    periodFrom = LocalDate.parse("2018-04-07"),
+    periodTo = LocalDate.parse("2018-04-10"),
+    chargeType = "VAT Overpayment for RPI",
+    dueDate = LocalDate.parse("2018-04-15"),
+    correctionCharge = 200.00,
+    amountReceived = 40.00,
+    leftToPay = 160.00,
+    isOverdue = false,
+    chargeReference = Some("ABCD")
+  )
 
   val overdueCrystallisedInterestCharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
     periodFrom = LocalDate.parse("2021-01-01"),
@@ -953,6 +993,7 @@ object TestModels {
   )
 
   val wyoStandardDBModel: WYODatabaseModel = wyoDBModel(standard, standardChargeModelMaxJson)
+  val wyoOverpaymentForRPIViewModel: WYODatabaseModel = wyoDBModel(repaymentInterestCorrection, vatOverpaymentForRPIJson)
   val wyoEstimatedIntDBModel: WYODatabaseModel = wyoDBModel(estimatedInterest, estimatedInterestJson)
   val wyoEstimatedLPP1DBModel: WYODatabaseModel = wyoDBModel(estimatedLPP1, estimatedLPP1Json)
   val wyoEstimatedLPP2DBModel: WYODatabaseModel = wyoDBModel(estimatedLPP2, estimatedLPP2Json)
