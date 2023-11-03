@@ -47,7 +47,7 @@ class WYOSessionServiceSpec extends AnyWordSpecLike with Matchers with MockitoSu
       mockRepoWrite(true)
       val charges =
         Seq(chargeModel1, estimatedInterestModel, estimatedLPP1Model, estimatedLPP2Model, crystallisedInterestCharge,
-          crystallisedLPP1Model, crystallisedLPP2Model, lateSubmissionPenaltyModel)
+          crystallisedLPP1Model, crystallisedLPP2Model, lateSubmissionPenaltyModel, vatOverpaymentForRPI)
       val result = service.storeChargeModels(charges, "999999999")
 
       await(result) shouldBe Seq.fill(charges.length)(true)

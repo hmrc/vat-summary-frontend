@@ -35,6 +35,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
                                           serviceInfoService: ServiceInfoService,
                                           wyoSessionService: WYOSessionService,
                                           chargeBreakdownView: ChargeTypeDetailsView,
+                                          repaymentInterestCorrectionView: RepaymentInterestCorrectionView,
                                           estimatedInterestView: EstimatedInterestView,
                                           estimatedLPP1View: EstimatedLPP1View,
                                           estimatedLPP2View: EstimatedLPP2View,
@@ -63,6 +64,7 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
               case types.crystallisedLPP2 => Ok(crystallisedLPP2View(m.data.as[CrystallisedLPP2ViewModel], navLinks))
               case types.estimatedLPP1 => Ok(estimatedLPP1View(m.data.as[EstimatedLPP1ViewModel], navLinks))
               case types.estimatedLPP2 => Ok(estimatedLPP2View(m.data.as[EstimatedLPP2ViewModel], navLinks))
+              case types.repaymentInterestCorrection => Ok(repaymentInterestCorrectionView(m.data.as[VatOverpaymentForRPIViewModel], navLinks))
               case types.lsp => Ok(lateSubmissionPenaltyView(m.data.as[LateSubmissionPenaltyViewModel], navLinks))
               case _ =>
                 logger.warn("[ChargeBreakdownController][showBreakdown] Retrieved model type was unknown")
