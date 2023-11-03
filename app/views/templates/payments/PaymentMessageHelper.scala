@@ -804,13 +804,6 @@ object PaymentMessageHelper {
     agentDescription = Some("chargeType.forPeriod")
   )
 
-  object VATOverpaymentForRPI extends PaymentMessageHelper(
-    VatOverpaymentForRPI.value,
-    "chargeType.VATOverpaymentForRPITitle",
-    Some("chargeType.for"),
-    Some("chargeType.for")
-  )
-
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,
@@ -922,8 +915,7 @@ object PaymentMessageHelper {
     VATOA2ndLPP,
     Overpayments2ndLPP,
     Overpayments1stLPP,
-    Overpayments1stLPPLPI,
-    VATOverpaymentForRPI
+    Overpayments1stLPPLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

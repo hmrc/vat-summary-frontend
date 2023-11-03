@@ -360,8 +360,8 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         elementText(VATOverpaymentSelectors.firstParagraph) shouldBe "Your client needs to pay this because HMRC paid them more VAT than we owed them."
         elementText(VATOverpaymentSelectors.secondParagraph) shouldBe "This could be because of:"
         elementText(VATOverpaymentSelectors.firstBullet) shouldBe "an error correction"
-        elementText(VATOverpaymentSelectors.secondBullet) shouldBe "an officer’s assessment"
-        elementText(VATOverpaymentSelectors.thirdBullet) shouldBe "a reallocation of funds across your client’s account"
+        elementText(VATOverpaymentSelectors.secondBullet) shouldBe "an officer's assessment"
+        elementText(VATOverpaymentSelectors.thirdBullet) shouldBe "a reallocation of funds across your client's account"
       }
 
       "correctly show content for user" in {
@@ -375,7 +375,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
         elementText(VATOverpaymentSelectors.firstParagraph) shouldBe "You need to pay this because HMRC paid you more VAT than we owed you."
         elementText(VATOverpaymentSelectors.secondParagraph) shouldBe "This could be because of:"
         elementText(VATOverpaymentSelectors.firstBullet) shouldBe "an error correction"
-        elementText(VATOverpaymentSelectors.secondBullet) shouldBe "an officer’s assessment"
+        elementText(VATOverpaymentSelectors.secondBullet) shouldBe "an officer's assessment"
         elementText(VATOverpaymentSelectors.thirdBullet) shouldBe "a reallocation of funds across your account"
       }
     }
