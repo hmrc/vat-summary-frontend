@@ -286,7 +286,13 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(Seq(overpaymentforTax), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
-        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(vatOverpaymentTax)))
+        result shouldBe Some(whatYouOweViewModel.copy(
+          totalAmount = BigDecimal(10002),
+          charges = Seq(
+            vatOverpaymentTax,
+            vatOverpaymentTaxLPIEstimatedModel
+          )
+        ))
       }
     }
 
@@ -335,6 +341,20 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
             penalties = penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1LPIModel)))
+      }
+    }
+
+    "there is a crystallised Vat Overpayment LPI Charge for a late vat overpayment" should {
+
+      "return the correct view model with 1 crystalised charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(Seq(vATOverpaymentforTaxLPI), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(
+          charges = Seq(crystallisedVATOverpaymentforTaxLPI),
+          totalAmount = BigDecimal(10000),
+        ))
       }
     }
 

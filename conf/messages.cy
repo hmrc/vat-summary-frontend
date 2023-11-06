@@ -347,6 +347,12 @@ chargeType.vatOverpayments.anError = cywiriad gwall
 chargeType.vatOverpayments.anOfficer = asesiad gan swyddog
 chargeType.vatOverpayments.aReallocation = ailddyraniad o arian ar draws eich cyfrif
 
+chargeType.overpaymentforTaxLPITitle = Cywiriad o log ar ad-daliadau
+
+chargeType.overpaymentforTaxLPI.description.p1 = Mae angen i chi dalu hwn oherwydd bod CThEF wedi talu gormod o log ar ad-daliadau i chi.
+chargeType.overpaymentforTaxLPI.description.p2 = Bu hyn ddigwydd oherwydd newidiodd swm eich TAW ar ôl i ni dalu''r ad-daliad i chi.
+chargeType.overpaymentforTaxLPI.description.p3 = Bu''r newid ostwng swm y llog ar ad-daliadau oedd arnom i chi.
+
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
 chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client's account
 

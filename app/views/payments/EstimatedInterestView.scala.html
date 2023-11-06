@@ -17,6 +17,7 @@
 @import models.viewModels.EstimatedInterestViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
+@import models.payments.VATOverpaymentforTaxLPI
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -75,9 +76,12 @@
           @model.title
       </h1>
 
-      <p id="charge-interest" class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}ChargeInterest")</p>
-
-      <p id="increase-daily" class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
+        @if(model.chargeType == VATOverpaymentforTaxLPI.value) {
+            <p class="govuk-body">@messages("estimatedInterest.vatOverpaymentInterest.description", displayDate(model.periodFrom))</p>
+        } else {
+            <p id="charge-interest" class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}ChargeInterest")</p>
+            <p id="increase-daily" class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
+        }
 
       @howInterestIsCalculated()
 
