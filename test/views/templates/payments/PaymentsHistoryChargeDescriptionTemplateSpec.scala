@@ -527,6 +527,45 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT Overpayment for Tax RPI Charge" should {
+
+        val model = exampleModel.copy(chargeType = VatOverpaymentForTaxRPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Repayment interest on VAT"
+        }
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        }
+      }
+      "there is a VAT Overpayment for Tax RPI Charge1" should {
+
+        val model = exampleModel.copy(chargeType = VatOverpayments1stLPPRPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Repayment interest on penalty"
+        }
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        }
+      }
+      "there is a VAT Overpayment for Tax RPI Charge2" should {
+
+        val model = exampleModel.copy(chargeType = VatOverpayments2ndLPPRPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Repayment interest on second penalty"
+        }
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        }
+      }
       "there is a VAT Unrepayable Overpayment Charge" should {
 
         val model = exampleModel.copy(chargeType = VatUnrepayableOverpayment)

@@ -76,6 +76,27 @@ object PaymentMessageHelper {
     Some("chargeType.indirectRevRecoveryDescription")
   )
 
+  object OverpaymentForTaxRPI extends PaymentMessageHelper(
+    VatOverpaymentForTaxRPI.value,
+    "chargeType.overpaymentForTaxRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object Overpayments1stLPPRPI extends PaymentMessageHelper(
+    VatOverpayments1stLPPRPI.value,
+    "chargeType.overpayments1stLPPRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object Overpayments2ndLPPRPI extends PaymentMessageHelper(
+    VatOverpayments2ndLPPRPI.value,
+    "chargeType.overpayments2ndLPPRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   object DefaultInterestDebit extends PaymentMessageHelper(
     VatDefaultInterestDebit.value,
     "chargeType.defaultInterestTitle",
@@ -828,6 +849,9 @@ object PaymentMessageHelper {
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
     IndirectTaxRevenueRecovery,
+    OverpaymentForTaxRPI,
+    Overpayments1stLPPRPI,
+    Overpayments2ndLPPRPI,
     DefaultInterestDebit,
     DefaultInterestCredit,
     FurtherInterestDebit,
