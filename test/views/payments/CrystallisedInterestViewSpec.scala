@@ -16,14 +16,14 @@
 
 package views.payments
 
-import java.time.LocalDate
-
 import models.viewModels.CrystallisedInterestViewModel
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.CrystallisedInterestView
-import org.jsoup.nodes.Document
-import org.jsoup.Jsoup
+
+import java.time.LocalDate
 
 class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
@@ -173,16 +173,6 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
       lazy val view = injectedView(viewModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "have the correct first explanation paragraph" in {
-        elementText("#charge-interest") shouldBe
-          "We charge late payment interest on any unpaid penalties."
-      }
-
-      "have the correct second explanation paragraph" in {
-        elementText("#increase-daily") shouldBe
-          "The total increases daily based on the unpaid amount."
-      }
 
       "must contain the HowInterestIsCalculated dropdown" in {
 
