@@ -34,6 +34,13 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object OverpaymentforTaxLPI extends PaymentMessageHelper(
+    VATOverpaymentforTaxLPI.value,
+    "chargeType.overpaymentforTaxLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object Overpayments1stLPP extends PaymentMessageHelper(
     VatOverpayments1stLPP.value,
     "chargeType.vatOP1stLPP.Title",
@@ -929,6 +936,7 @@ object PaymentMessageHelper {
     Overpayments1stLPP,
     Overpayments1stLPPLPI,
     VATOverpaymentForRPI,
+    OverpaymentforTaxLPI,
     Overpayments2ndLPPLPI
   )
 

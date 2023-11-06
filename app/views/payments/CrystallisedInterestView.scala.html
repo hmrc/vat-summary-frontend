@@ -16,6 +16,7 @@
 
 @import models.viewModels.CrystallisedInterestViewModel
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
+@import models.payments._
 @import utils.Money
 
 @this(mainTemplate: MainTemplate,
@@ -87,13 +88,16 @@
         @messages(model.title)
       </h1>
 
-      <p id="charge-interest" class="govuk-body">
-        @messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")
-      </p>
-
-      <p id="increase-daily" class="govuk-body">
-        @messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")
-      </p>
+        @if(model.chargeType == VATOverpaymentforTaxLPI.value) {
+        <p class="govuk-body">@messages("estimatedInterest.vatOverpaymentInterest.description", displayDate(model.periodFrom))</p>
+      } else {
+          <p id="charge-interest" class="govuk-body">
+            @messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")
+          </p>
+          <p id="increase-daily"  class="govuk-body">
+            @messages(s"crystallisedInterest.${interestTypeMessageKey}IncreaseDaily")
+          </p>
+      }
 
       @howInterestIsCalculated()
 

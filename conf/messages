@@ -145,6 +145,7 @@ chargeTypeDetails.penaltiesAndAppealAgent = View your client’s VAT penalties a
 
 estimatedInterest.vatChargeInterest = We charge late payment interest on any unpaid VAT.
 estimatedInterest.penaltyChargeInterest = We charge late payment interest on any unpaid penalty.
+estimatedInterest.vatOverpaymentInterest.description = This interest started to build up daily from {0} – this is the date HMRC paid you more VAT than we owed you.
 estimatedInterest.vatIncreaseDaily = The total increases daily based on the amount of unpaid VAT for the period.
 estimatedInterest.penaltyIncreaseDaily = The total increases daily based on the amount of unpaid penalty for the period.
 estimatedInterest.calculation = The calculation we use for each day is:
@@ -356,6 +357,8 @@ chargeType.vatOverpayments.thisIsBecauseOf = This could be because of:
 chargeType.vatOverpayments.anError = an error correction
 chargeType.vatOverpayments.anOfficer = an officer''s assessment
 chargeType.vatOverpayments.aReallocation = a reallocation of funds across your account
+
+chargeType.overpaymentforTaxLPITitle = Repayment interest correction
 
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
 chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
