@@ -688,6 +688,21 @@ object TestModels {
       accruingPenaltyAmount = None
     )
 
+  val overpaymentForTaxLPP2LPI: PaymentWithPeriod =
+    payment.copy(
+      chargeType = VatOverpayments2ndLPPLPI,
+      chargeReference = Some("BCDEFGHIJKLMNOPQ"),
+      penaltyType = Some("LPP2")
+    )
+
+  val overpaymentForTaxLPP2EstLPI: PaymentWithPeriod =
+    payment.copy(
+      chargeType = VatOverpayments2ndLPP,
+      chargeReference = Some("ABCDEFGHIJKL"),
+      accruingPenaltyAmount = None,
+      penaltyType = Some("LPP2")
+    )
+
   val crystallisedLPP1JsonMin: JsObject = Json.obj(
     "numberOfDays" -> "99",
     "part1Days" -> "10",
@@ -733,10 +748,38 @@ object TestModels {
   )
 
   val overpaymentforTaxLPP2: PaymentWithPeriod =
-    payment.copy(chargeType = VatOverpayments2ndLPP, accruingPenaltyAmount = None, chargeReference = Some("ABCDEFGHIJKL"), penaltyType = Some("LPP2"))
+    payment.copy(
+      chargeType = VatOverpayments2ndLPP,
+      accruingInterestAmount = None,
+      accruingPenaltyAmount = None,
+      chargeReference = Some("ABCDEFGHIJKL"),
+      penaltyType = Some("LPP2")
+    )
 
   val crystallisedVatOPLPP2Model: CrystallisedLPP2ViewModel =
-    crystallisedLPP2ModelMax.copy(chargeType = VatOverpayments2ndLPP.value, chargeReference = "ABCDEFGHIJKL")
+    crystallisedLPP2ModelMax.copy(
+      chargeType = VatOverpayments2ndLPP.value,
+      chargeReference = "ABCDEFGHIJKL"
+    )
+
+  val estimatedVatOPLPP2LPI: EstimatedInterestViewModel =
+    EstimatedInterestViewModel(
+      periodFrom = crystallisedPenaltyModel.periodFrom,
+      periodTo = crystallisedPenaltyModel.periodTo,
+      chargeType = VatOverpayments2ndLPPLPI.value,
+      interestAmount = BigDecimal(2),
+      isPenalty = true
+    )
+
+  val crystallisedVatOPLPP2LPIModel: CrystallisedInterestViewModel =
+    penaltyInterestCharge.copy(
+      periodFrom = crystallisedPenaltyModel.periodFrom,
+      periodTo = crystallisedPenaltyModel.periodTo,
+      chargeType = VatOverpayments2ndLPPLPI.value,
+      interestAmount = BigDecimal(10000),
+      chargeReference = "BCDEFGHIJKLMNOPQ",
+      isPenalty = true
+    )
 
   val crystallisedLPP2Json: JsObject = Json.obj(
     "numberOfDays" -> "31",
@@ -907,14 +950,14 @@ object TestModels {
   val LPPLPP2DetailsModelMax: LPPDetails = LPPDetails(
     principalChargeReference = "XD002750002156",
     penaltyCategory = "LPP2",
-    Some(100.11),
-    Some("15"),
-    Some(2.4),
-    Some(200.22),
-    Some("30"),
-    Some(4.2),
-    Some("31"),
-    Some(5.5),
+    LPP1LRCalculationAmount = Some(100.11),
+    LPP1LRDays = Some("15"),
+    LPP1LRPercentage = Some(2.4),
+    LPP1HRCalculationAmount = Some(200.22),
+    LPP1HRDays = Some("30"),
+    LPP1HRPercentage = Some(4.2),
+    LPP2Days = Some("31"),
+    LPP2Percentage = Some(5.5),
     penaltyChargeReference = Some("ABCDEFGHIJKL"),
     timeToPay = false
   )

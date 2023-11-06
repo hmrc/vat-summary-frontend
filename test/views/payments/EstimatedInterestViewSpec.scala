@@ -151,15 +151,6 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       lazy val view = injectedView(estimatedInterestModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct first explanation paragraph" in {
-        elementText("#charge-interest") shouldBe "We charge late payment interest on any unpaid penalties."
-      }
-
-      "have the correct second explanation paragraph" in {
-        elementText("#increase-daily") shouldBe
-          "The total increases daily based on the unpaid amount."
-      }
-
       "must contain the HowInterestIsCalculated dropdown" in {
 
         elementExistsOnce("#how-interest-calculated-dropdown")

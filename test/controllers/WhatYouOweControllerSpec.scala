@@ -295,7 +295,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(overpaymentforTaxLPP1), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(
+            payments = Seq(overpaymentforTaxLPP1),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1Model)))
       }
@@ -306,7 +309,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(overpaymentForTaxLPP1EstLPI), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(
+            payments = Seq(overpaymentForTaxLPP1EstLPI),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           totalAmount = BigDecimal(10002),
@@ -323,7 +329,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(overpaymentForTaxLPP1LPI), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(
+            payments = Seq(overpaymentForTaxLPP1LPI),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1LPIModel)))
       }
@@ -334,9 +343,46 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(overpaymentforTaxLPP2), mandationStatus = "MTDfB", penaltyDetailsLPP2ModelMax)(fakeRequest)
+          controller.constructViewModel(
+            payments = Seq(overpaymentforTaxLPP2),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP2Model)))
+      }
+    }
+
+    "there is a LPP2 Charge for a late vat overpayment with accruing interest" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            payments = Seq(overpaymentForTaxLPP2EstLPI),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(
+          totalAmount = BigDecimal(10002),
+          charges = Seq(
+            crystallisedVatOPLPP2Model,
+            estimatedVatOPLPP2LPI
+          )
+        ))
+      }
+    }
+
+    "there is a crystallised LPP2 LPI Charge for a late vat overpayment" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            payments = Seq(overpaymentForTaxLPP2LPI),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP2LPIModel)))
       }
     }
 

@@ -796,10 +796,15 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod"),
     Some("chargeType.forPeriod")
   )
-
   object Overpayments1stLPPLPI extends PaymentMessageHelper(
     name = VatOverpayments1stLPPLPI.value,
     title = "chargeType.Overpayments1stLPPLPI",
+    principalUserDescription = Some("chargeType.forPeriod"),
+    agentDescription = Some("chargeType.forPeriod")
+  )
+  object Overpayments2ndLPPLPI extends PaymentMessageHelper(
+    name = VatOverpayments2ndLPPLPI.value,
+    title = "chargeType.Overpayments2ndLPPLPI",
     principalUserDescription = Some("chargeType.forPeriod"),
     agentDescription = Some("chargeType.forPeriod")
   )
@@ -923,7 +928,8 @@ object PaymentMessageHelper {
     Overpayments2ndLPP,
     Overpayments1stLPP,
     Overpayments1stLPPLPI,
-    VATOverpaymentForRPI
+    VATOverpaymentForRPI,
+    Overpayments2ndLPPLPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

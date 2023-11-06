@@ -146,7 +146,7 @@ chargeTypeDetails.penaltiesAndAppealAgent = Bwrw golwg dros gosbau ac apeliadau 
 estimatedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
 estimatedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
 estimatedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
-estimatedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail y swm sydd heb ei dalu.
+estimatedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y gosb sydd heb ei thalu ar gyfer y cyfnod.
 estimatedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 estimatedInterest.vatCalculation = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
 estimatedInterest.rateChanges = Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny.
@@ -187,7 +187,7 @@ estimatedLPP1.breathingSpaceAndTTPBulletTwo = mae’r trefniant amser i gael eic
 crystallisedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
 crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
 crystallisedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
-crystallisedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail y swm sydd heb ei dalu.
+crystallisedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y gosb sydd heb ei thalu ar gyfer y cyfnod.
 crystallisedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 crystallisedInterest.vatCalculation = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
 crystallisedInterest.rateChanges = Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny.
@@ -242,10 +242,10 @@ estimatedLPP2.estimatesDescriptionBS.p2 = mae’r trefniant amser i gael eich gw
 estimatedLPP2.ttpInset = Rydych wedi gofyn i CThEF a allwch drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’ch bod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
 estimatedLPP2.ttpInset.agent = Mae’ch cleient wedi gofyn i CThEF a all drefnu cynllun talu. Os cytunwyd ar gynllun talu, a’i fod yn gwneud pob taliad mewn pryd, ni fydd y gosb hon yn cynyddu ymhellach.
 
-chargeBreakdown.interestDropDown.label = How the interest amount was calculated
+chargeBreakdown.interestDropDown.label = Sut y cafodd swm y llog ei gyfrifo
 chargeBreakdown.interestDropDown.p1a = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 chargeBreakdown.interestDropDown.p1b = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
-chargeBreakdown.interestDropDown.p2 = The amount might be adjusted to take account of any repayment interest owed by HMRC during the same time.
+chargeBreakdown.interestDropDown.p2 = Efallai y caiff y swm ei addasu er mwyn rhoi cyfrif am unrhyw log ar ad-daliadau sy’n ddyledus gan CThEF yn ystod yr un cyfnod.
 chargeBreakdown.interestDropDown.p3 = Gallwch {0}. Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny.
 chargeBreakdown.interestDropDown.link = ddod o hyd i gyfraddau llog ar GOV.UK
 
@@ -575,6 +575,7 @@ chargeType.vatDeferralPenaltyTitle = Cosb
 chargeType.vatDeferralPenaltyDescription = am TAW ohiriedig sydd heb ei thalu
 
 chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
+chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
