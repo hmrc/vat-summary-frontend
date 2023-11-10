@@ -381,7 +381,7 @@ chargeType.repaymentSupplementRecDescription = er mwyn adennill y swm a ordalwyd
 chargeType.indirectRevRecoveryTitle = Adennill taliadau
 chargeType.indirectRevRecoveryDescription = er mwyn adennill taliad a wnaed ar gam gan CThEF
 
-chargeType.overpaymentForTaxRPITitle = Ad-daliad Llog ar TAW
+chargeType.overpaymentForTaxRPITitle = Llog ar gywiriad TAW
 chargeType.overpayments1stLPPRPITitle = Ad-daliad Llog ar gosb
 chargeType.overpayments2ndLPPRPITitle = Ad-daliad Llog ar ail gosb
 

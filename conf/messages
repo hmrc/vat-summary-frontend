@@ -379,7 +379,7 @@ chargeType.repaymentSupplementRecDescription = to recover the amount overpaid by
 chargeType.indirectRevRecoveryTitle = Payment recovery
 chargeType.indirectRevRecoveryDescription = to recover a payment made in error by HMRC
 
-chargeType.overpaymentForTaxRPITitle = Repayment interest on VAT
+chargeType.overpaymentForTaxRPITitle = Interest on VAT correction
 chargeType.overpayments1stLPPRPITitle = Repayment interest on penalty
 chargeType.overpayments2ndLPPRPITitle = Repayment interest on second penalty
 
