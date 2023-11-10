@@ -145,6 +145,7 @@ chargeTypeDetails.penaltiesAndAppealAgent = Bwrw golwg dros gosbau ac apeliadau 
 
 estimatedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
 estimatedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
+estimatedInterest.vatOverpaymentInterest.description = Gwnaeth y llog ddechrau cronni’n ddyddiol o {0} – dyma’r dyddiad y gwnaeth CThEF dalu mwy o TAW i chi na’r hyn a oedd yn ddyledus i chi.
 estimatedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
 estimatedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y gosb sydd heb ei thalu ar gyfer y cyfnod.
 estimatedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
@@ -357,7 +358,7 @@ chargeType.vatOverpayments.anError = cywiriad gwall
 chargeType.vatOverpayments.anOfficer = asesiad gan swyddog
 chargeType.vatOverpayments.aReallocation = ailddyraniad o arian ar draws eich cyfrif
 
-chargeType.overpaymentforTaxLPITitle = Cywiriad o log ar ad-daliadau
+chargeType.overpaymentforTaxLPITitle = Llog ar gywiriad TAW
 
 chargeType.VATOverpaymentForRPITitle = Cywiriad o log ar ad-daliadau
 
@@ -370,6 +371,9 @@ chargeType.vatOverpayments.agent.aReallocation = ailddyraniad o arian ar draws c
 
 chargeType.vatOP1stLPP.Title = Cosb am dalu cywiriad TAW yn hwyr
 chargeType.vatOP1stLPP.1 = Mae''r gosb hon yn gymwys os nad yw’r tâl am gywiriad TAW {0} wedi cael ei dalu am {1} diwrnod.
+
+chargeType.vatOverpayments2ndLPPTitle = Ail gosb am dalu cywiriad TAW yn hwyr
+chargeType.vatOverpayments2ndLPPDescription = Ail gosb am dalu cywiriad TAW yn hwyr
 
 chargeType.vatUnrepayableOverpaymentTitle = Gordaliad
 chargeType.vatUnrepayableOverpaymentDescription = ni ellir ad-dalu hyn ar ôl 4 blynedd

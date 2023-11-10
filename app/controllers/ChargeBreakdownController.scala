@@ -50,7 +50,8 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
   FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def showBreakdown(id: String): Action[AnyContent] = authorisedController.financialAction {
-    implicit request => implicit user =>
+    implicit request =>
+      implicit user =>
         for {
           navLinks <- serviceInfoService.getPartial
           model <- wyoSessionService.retrieveViewModel(id)
@@ -58,7 +59,8 @@ class ChargeBreakdownController @Inject()(authorisedController: AuthorisedContro
           model match {
             case Some(m) => m.modelType match {
               case types.standard => Ok(chargeBreakdownView(m.data.as[StandardChargeViewModel], navLinks))
-              case types.estimatedInterest => Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
+              case types.estimatedInterest =>
+                Ok(estimatedInterestView(m.data.as[EstimatedInterestViewModel], navLinks))
               case types.crystallisedInterest => Ok(crystallisedInterestView(m.data.as[CrystallisedInterestViewModel], navLinks))
               case types.crystallisedLPP1 => Ok(crystallisedLPP1View(m.data.as[CrystallisedLPP1ViewModel], navLinks))
               case types.crystallisedLPP2 => Ok(crystallisedLPP2View(m.data.as[CrystallisedLPP2ViewModel], navLinks))
