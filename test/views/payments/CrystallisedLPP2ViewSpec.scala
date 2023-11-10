@@ -74,11 +74,11 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
 
     "have the correct first explanation paragraph" in {
       elementText("#content > div > div > p:nth-child(2)") shouldBe
-        "This penalty applies from day 31, if any VAT remains unpaid."
+        "This penalty starts to apply if a VAT correction charge is unpaid for 31 days."
     }
 
     "have the correct calculation explanation statement" in {
-      elementText("#content > div > div > p:nth-child(3)") shouldBe "The total increases daily based on the amount of unpaid VAT for the period."
+      elementText("#content > div > div > p:nth-child(3)") shouldBe "The total builds up daily until you pay your VAT or set up a payment plan."
     }
 
     "have the correct calculation explanation" in {

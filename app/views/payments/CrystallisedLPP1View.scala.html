@@ -81,7 +81,7 @@
       </h1>
 
       @if(model.chargeType == VatOverpayments1stLPP.value) {
-      <p class="govuk-body">@messages("chargeType.vatOP1stLPP.1", displayDate(model.periodFrom), displayDate(model.periodTo), model.numberOfDays)</p>
+      <p class="govuk-body">@messages("chargeType.vatOP1stLPP.1", displayDateRange(model.periodFrom, model.periodTo, alwaysUseYear = true), model.numberOfDays)</p>
       } else {
       <p class="govuk-body">@messages("crystallisedLPP1.explanation", model.numberOfDays)</p>
       }
