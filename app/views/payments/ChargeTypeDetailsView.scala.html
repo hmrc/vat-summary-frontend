@@ -105,7 +105,6 @@
             </h1>
 
             @if(model.chargeType == VATOverpaymentforTax.value) {
-
             <p class="govuk-body">
                 @if(!user.isAgent){
                 @messages("chargeType.vatOverpayments.youNeedToPay")

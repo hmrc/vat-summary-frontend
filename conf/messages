@@ -210,8 +210,8 @@ crystallisedLPP1.penaltyAmount = Penalty amount
 crystallisedLPP1.amountReceived = Amount received
 crystallisedLPP1.leftToPay = Left to pay
 
-crystallisedLPP2.explanation = This penalty applies from day {0}, if any VAT remains unpaid.
-crystallisedLPP2.interestExplanation = The total increases daily based on the amount of unpaid VAT for the period.
+crystallisedLPP2.explanation = This penalty starts to apply if a VAT correction charge is unpaid for {0} days.
+crystallisedLPP2.interestExplanation = The total builds up daily until you pay your VAT or set up a payment plan.
 crystallisedLPP2.calculation = The calculation we use for each day is:
 crystallisedLPP2.calculationExplanation = (Penalty rate of {0}% × unpaid VAT) ÷ days in a year
 crystallisedLPP2.dueDate = Due date
@@ -253,7 +253,7 @@ chargeBreakdown.interestDropDown.link = find interest rates on GOV.UK
 repaymentInterestCorrection.p1 = You need to pay this because HMRC paid you too much repayment interest.
 repaymentInterestCorrection.p1.agent = Your client needs to pay this because HMRC paid them too much repayment interest.
 repaymentInterestCorrection.p2 = This happened because your VAT amount changed after we paid you the repayment interest.
-repaymentInterestCorrection.p2.agent = This happened because your client’s VAT amount changed after we paid them the repayment interest.
+repaymentInterestCorrection.p2.agent = This happened because your client''s VAT amount changed after we paid them the repayment interest.
 repaymentInterestCorrection.p3 = The change reduced the amount of repayment interest we owed you.
 repaymentInterestCorrection.p3.agent = The change reduced the amount of repayment interest we owed your client.
 repaymentInterestCorrection.dueDate = Due date
@@ -364,7 +364,7 @@ chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this be
 chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
 
 chargeType.vatOP1stLPP.Title = Penalty for late payment of VAT correction
-chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} to {1} has not been paid for {2} days.
+chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} has not been paid for {1} days.
 
 chargeType.vatOverpayments2ndLPPTitle = Second penalty for late payment of VAT correction
 chargeType.vatOverpayments2ndLPPDescription = Second penalty for late payment of VAT correction
