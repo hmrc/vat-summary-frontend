@@ -16,6 +16,7 @@
 
 package views.payments
 
+import models.payments.VATOverpaymentforTaxLPI
 import models.viewModels.CrystallisedInterestViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -141,6 +142,129 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         "has the correct href" in {
           element("#pay-button").attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(
             771, 12, 2022, "2022-12-31", "VAT OA Default Interest", "2023-03-30", "chargeRef"
+          ).url
+        }
+      }
+
+      "have a link to guidance on how interest is calculated" which {
+
+        "has the correct link text" in {
+          elementText("#guidance-link") shouldBe
+            "Read the guidance about how interest is calculated (opens in a new tab)"
+        }
+
+        "has the correct href" in {
+          element("#guidance-link > a").attr("href") shouldBe mockConfig.latePaymentGuidanceUrl
+        }
+      }
+
+      "have a link to the what you owe page" which {
+
+        "has the correct link text" in {
+          elementText("#wyo-link") shouldBe "Return to what you owe"
+        }
+
+        "has the correct href" in {
+          element("#wyo-link > a").attr("href") shouldBe whatYouOweLink
+        }
+      }
+    }
+
+    "the interest is for a VATOverpaymentforTaxLPI charge" should {
+
+      lazy val view = injectedView(viewModel.copy(
+        chargeType = VATOverpaymentforTaxLPI.value
+      ),
+        serviceInfoContent = Html(""))(request, messages, mockConfig, user)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe "Interest on VAT correction - Manage your VAT account - GOV.UK"
+      }
+
+      "have the correct page heading" in {
+        elementText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 Interest on VAT correction"
+      }
+
+      "have a period caption" in {
+        elementText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
+      }
+
+      "render breadcrumbs which" should {
+
+        "have the text 'Business tax account'" in {
+          elementText(".govuk-breadcrumbs li:nth-child(1) > a") shouldBe "Business tax account"
+        }
+        "link to bta" in {
+          element(".govuk-breadcrumbs li:nth-child(1) > a").attr("href") shouldBe "bta-url"
+        }
+        "have the text 'Your VAT account'" in {
+          elementText(".govuk-breadcrumbs li:nth-child(2) > a") shouldBe "Your VAT account"
+        }
+        "link to VAT overview page" in {
+          element(".govuk-breadcrumbs li:nth-child(2) > a").attr("href") shouldBe
+            controllers.routes.VatDetailsController.details.url
+        }
+        "have the text 'What You Owe'" in {
+          elementText(".govuk-breadcrumbs li:nth-child(3) > a") shouldBe "What you owe"
+        }
+        "link to the what you owe page" in {
+          element(".govuk-breadcrumbs li:nth-child(3) > a").attr("href") shouldBe
+            whatYouOweLink
+        }
+      }
+
+      "have the charge explanation paragraph" in {
+        elementText("#overpayment-interest-description") shouldBe
+          "This interest started to build up daily from 1\u00a0October\u00a02022 – this is the date HMRC paid you more VAT than we owed you."
+      }
+
+      "must contain the HowInterestIsCalculated dropdown" in {
+
+        elementExistsOnce("#how-interest-calculated-dropdown")
+      }
+
+      "have the correct heading for the first row" in {
+        elementText(".govuk-summary-list__row:nth-child(1) > dt") shouldBe "Due date"
+      }
+
+      "display when the interest is due by" in {
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
+      }
+
+      "have the correct heading for the second row" in {
+        elementText(".govuk-summary-list__row:nth-child(2) > dt") shouldBe "Interest amount"
+      }
+
+      "display the current amount of interest accumulated" in {
+        elementText(".govuk-summary-list__row:nth-child(2) > dd") shouldBe s"£${viewModel.interestAmount}"
+      }
+
+      "have the correct heading for the third row" in {
+        elementText(".govuk-summary-list__row:nth-child(3) > dt") shouldBe "Amount received"
+      }
+
+      "display the amount received" in {
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£0.00"
+      }
+
+      "have the correct heading for the fourth row" in {
+        elementText(".govuk-summary-list__row:nth-child(4) > dt") shouldBe "Left to pay"
+      }
+
+      "display the outstanding amount" in {
+        elementText(".govuk-summary-list__row:nth-child(4) > dd") shouldBe s"£${viewModel.leftToPay}"
+      }
+
+      "have a pay now button" which {
+
+        "has the correct link text" in {
+          elementText("#pay-button") shouldBe "Pay now"
+        }
+
+        "has the correct href" in {
+          element("#pay-button").attr("href") shouldBe controllers.routes.MakePaymentController.makePayment(
+            771, 12, 2022, "2022-12-31", VATOverpaymentforTaxLPI.value, "2023-03-30", "chargeRef"
           ).url
         }
       }
