@@ -42,17 +42,18 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   )
 }
 
-val mongoVersion = "1.2.0"
+val mongoVersion = "1.5.0"
+val bootstrapPlayVersion = "8.1.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % "7.15.0",
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
   "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "7.7.0-play-28",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"         % mongoVersion,
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % "7.15.0"      % scope,
+  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % bootstrapPlayVersion      % scope,
   "org.scalatestplus"  %% "mockito-3-4"                 % "3.2.9.0"     % scope,
   "org.scalamock"      %% "scalamock"                   % "5.2.0"       % scope,
   "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-28"     % mongoVersion  % scope
@@ -85,6 +86,7 @@ lazy val microservice: Project = Project(appName, file("."))
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
     scalaVersion := "2.13.8",
     libraryDependencies ++= appDependencies,
+    scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=.*routes.*:s"),
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
     routesImport := Seq.empty
