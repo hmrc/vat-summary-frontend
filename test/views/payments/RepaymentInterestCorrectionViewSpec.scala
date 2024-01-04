@@ -162,7 +162,7 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
     }
 
     "have the correct second paragraph" in {
-      elementText("#amount-changed") shouldBe "This happened because your client's VAT amount changed after we paid them the repayment interest."
+      elementText("#amount-changed") shouldBe "This happened because your client’s VAT amount changed after we paid them the repayment interest."
     }
 
     "have the correct third paragraph" in {

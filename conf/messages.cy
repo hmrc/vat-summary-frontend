@@ -202,17 +202,17 @@ crystallisedInterest.leftToPay = Yn weddill i’w dalu
 crystallisedInterest.guidanceLink = Darllenwch yr arweiniad am sut mae llog yn cael ei gyfrifo (yn agor tab newydd)
 
 crystallisedLPP1.explanation = Mae’r gosb hon yn berthnasol os na thalwyd TAW am {0} diwrnod.
-crystallisedLPP1.onePart = Rydym yn defnyddio''r cyfrifiad canlynol:
-crystallisedLPP1.twoParts = Mae''n cynnwys dwy ran:
+crystallisedLPP1.onePart = Rydym yn defnyddio’r cyfrifiad canlynol:
+crystallisedLPP1.twoParts = Mae’n cynnwys dwy ran:
 crystallisedLPP1.calculation = {0}% o {1} (y TAW sydd heb ei thalu {2} diwrnod ar ôl y dyddiad dyledus)
 crystallisedLPP1.dueDate = Dyddiad dyledus
 crystallisedLPP1.penaltyAmount = Swm y gosb
 crystallisedLPP1.amountReceived = Swm a gafwyd
 crystallisedLPP1.leftToPay = Yn weddill i’w dalu
 
-crystallisedLPP2.explanation = Mae''r gosb hon yn dechrau fod yn gymwys os oes tâl am gywiriad TAW heb ei dalu am {0} diwrnod.
-crystallisedLPP2.interestExplanation = Mae''r cyfanswm yn cynyddu''n ddyddiol hyd nes y byddwch yn talu’ch TAW neu''n trefnu cynllun talu.
-crystallisedLPP2.calculation = Rydym yn defnyddio''r cyfrifiad canlynol ar gyfer pob diwrnod:
+crystallisedLPP2.explanation = Mae’r gosb hon yn dechrau fod yn gymwys os oes tâl am gywiriad TAW heb ei dalu am {0} diwrnod.
+crystallisedLPP2.interestExplanation = Mae’r cyfanswm yn cynyddu’n ddyddiol hyd nes y byddwch yn talu’ch TAW neu’n trefnu cynllun talu.
+crystallisedLPP2.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 crystallisedLPP2.calculationExplanation = (Cyfradd gosb o {0}% × TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
 crystallisedLPP2.dueDate = Dyddiad dyledus
 crystallisedLPP2.penaltyAmount = Swm y gosb
@@ -259,7 +259,7 @@ repaymentInterestCorrection.p3.agent = Bu’r newid ostwng swm y llog ar ad-dali
 repaymentInterestCorrection.dueDate = Dyddiad dyledus
 repaymentInterestCorrection.correctionCharge = Tâl am gywiriad
 repaymentInterestCorrection.amountReceived = Swm a gafwyd
-repaymentInterestCorrection.leftToPay = Yn weddill i''w dalu
+repaymentInterestCorrection.leftToPay = Yn weddill i’w dalu
 
 lateSubmissionPenalty.dueDate = Dyddiad dyledus
 lateSubmissionPenalty.penaltyAmount = Swm y gosb
@@ -348,8 +348,8 @@ chargeType.for = ar gyfer {0}
 chargeType.forPeriod = ar gyfer y cyfnod {0}
 chargeType.forThePeriod = ar gyfer y cyfnod {0}
 
-chargeType.latePaymentPenalty = Cosb am dalu''n hwyr
-chargeType.secondLatePaymentPenalty = Ail gosb am dalu''n hwyr
+chargeType.latePaymentPenalty = Cosb am dalu’n hwyr
+chargeType.secondLatePaymentPenalty = Ail gosb am dalu’n hwyr
 
 chargeType.vATOverpaymentforTaxTitle = Cywiriad TAW
 chargeType.vatOverpayments.youNeedToPay = Mae angen i chi dalu hwn oherwydd i CThEF dalu mwy o TAW i chi nag oedd arnom i chi.
@@ -363,14 +363,14 @@ chargeType.overpaymentforTaxLPITitle = Llog ar gywiriad TAW
 chargeType.VATOverpaymentForRPITitle = Cywiriad o log ar ad-daliadau
 
 chargeType.overpaymentforTaxLPI.description.p1 = Mae angen i chi dalu hwn oherwydd bod CThEF wedi talu gormod o log ar ad-daliadau i chi.
-chargeType.overpaymentforTaxLPI.description.p2 = Bu hyn ddigwydd oherwydd newidiodd swm eich TAW ar ôl i ni dalu''r ad-daliad i chi.
-chargeType.overpaymentforTaxLPI.description.p3 = Bu''r newid ostwng swm y llog ar ad-daliadau oedd arnom i chi.
+chargeType.overpaymentforTaxLPI.description.p2 = Bu hyn ddigwydd oherwydd newidiodd swm eich TAW ar ôl i ni dalu’r ad-daliad i chi.
+chargeType.overpaymentforTaxLPI.description.p3 = Bu’r newid ostwng swm y llog ar ad-daliadau oedd arnom i chi.
 
-chargeType.vatOverpayments.agent.youNeedToPay = Mae angen i''ch cleient dalu hwn oherwydd i CThEF dalu mwy o TAW nag oedd arnom.
+chargeType.vatOverpayments.agent.youNeedToPay = Mae angen i’ch cleient dalu hwn oherwydd i CThEF dalu mwy o TAW nag oedd arnom.
 chargeType.vatOverpayments.agent.aReallocation = ailddyraniad o arian ar draws cyfrif eich cleient
 
 chargeType.vatOP1stLPP.Title = Cosb am dalu cywiriad TAW yn hwyr
-chargeType.vatOP1stLPP.1 = Mae''r gosb hon yn gymwys os nad yw’r tâl am gywiriad TAW {0} wedi cael ei dalu am {1} diwrnod.
+chargeType.vatOP1stLPP.1 = Mae’r gosb hon yn gymwys os nad yw’r tâl am gywiriad TAW {0} wedi cael ei dalu am {1} diwrnod.
 
 chargeType.vatOverpayments2ndLPPTitle = Ail gosb am dalu cywiriad TAW yn hwyr
 chargeType.vatOverpayments2ndLPPDescription = Ail gosb am dalu cywiriad TAW yn hwyr
