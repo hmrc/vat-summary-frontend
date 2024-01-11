@@ -27,11 +27,11 @@ class WhatYouOweViewModelSpec extends SpecBase {
   val testCharges: Seq[ChargeDetailsViewModel with Serializable] = Seq(
     TestModels.chargeModel1.copy(dueDate = testDueDate.plusDays(3)),
     TestModels.chargeModel2.copy(dueDate = testDueDate.plusDays(1)),
-    TestModels.overdueCrystallisedInterestCharge.copy(dueDate = testDueDate),
+    TestModels.overdueCrystallisedLPICharge.copy(dueDate = testDueDate),
     TestModels.whatYouOweChargeModel.copy(dueDate = testDueDate.plusDays(2)),
-    TestModels.whatYouOweChargeModelEstimatedInterest,
+    TestModels.whatYouOweChargeModelEstimatedLPI,
     TestModels.estimatedLPP1Model,
-    TestModels.whatYouOweChargeModelInterestCharge.copy(dueDate = testDueDate.plusDays(1)),
+    TestModels.whatYouOweChargeModelLPICharge.copy(dueDate = testDueDate.plusDays(1)),
     TestModels.lateSubmissionPenaltyCharge.copy(dueDate = testDueDate.plusYears(1))
   )
 
@@ -81,7 +81,7 @@ class WhatYouOweViewModelSpec extends SpecBase {
 
           val testCharges = Seq(
             TestModels.whatYouOweChargeModel.copy(dueDate = testDueDate),
-            TestModels.whatYouOweChargeModelEstimatedInterest,
+            TestModels.whatYouOweChargeModelEstimatedLPI,
             TestModels.estimatedLPP1Model,
           )
 
@@ -97,7 +97,7 @@ class WhatYouOweViewModelSpec extends SpecBase {
         "return none" in {
 
           val testCharges = Seq(
-            TestModels.whatYouOweChargeModelEstimatedInterest,
+            TestModels.whatYouOweChargeModelEstimatedLPI,
             TestModels.estimatedLPP1Model,
           )
 
@@ -131,7 +131,7 @@ class WhatYouOweViewModelSpec extends SpecBase {
         "return none" in {
 
           val testCharges = Seq(
-            TestModels.whatYouOweChargeModelEstimatedInterest
+            TestModels.whatYouOweChargeModelEstimatedLPI
           )
 
           val expectedResult = None

@@ -163,7 +163,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
           interestAmount = interestAmnt,
-          isPenalty = ChargeType.interestChargeMapping(payment.chargeType).isPenaltyInterest
+          isPenalty = ChargeType.interestChargeMapping(payment.chargeType).isPenaltyInterest,
+          isNonPenaltyReformPenaltyLPI = ChargeType.interestChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
@@ -183,7 +184,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           leftToPay = payment.outstandingAmount,
           isOverdue = payment.isOverdue(dateService.now()),
           chargeReference = chargeRef,
-          isPenalty = payment.chargeType.isPenaltyInterest
+          isPenalty = payment.chargeType.isPenaltyInterest,
+          isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")

@@ -16,7 +16,7 @@
 
 package models.viewModels
 
-import common.TestModels.{estimatedInterestJson, estimatedInterestModel}
+import common.TestModels.{estimatedLPIJson, estimatedLPIModel}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
@@ -26,11 +26,11 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
   "The EstimatedInterestViewModel" should {
 
     "read from JSON" in {
-      estimatedInterestJson.as[EstimatedInterestViewModel] shouldBe estimatedInterestModel
+      estimatedLPIJson.as[EstimatedInterestViewModel] shouldBe estimatedLPIModel
     }
 
     "write to JSON" in {
-      Json.toJson(estimatedInterestModel) shouldBe estimatedInterestJson
+      Json.toJson(estimatedLPIModel) shouldBe estimatedLPIJson
     }
   }
 }

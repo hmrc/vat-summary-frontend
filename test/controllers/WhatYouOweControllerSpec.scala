@@ -252,7 +252,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
-        result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
+        result shouldBe Some(whatYouOweViewModelWithEstimatedLPI)
       }
 
     }
@@ -578,7 +578,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(chargeType = VatReturn1stLPP)
         mockDateServiceCall()
         controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage)) shouldBe
-           Seq(Some(crystallisedPenaltyModel), Some(estimatedInterestPenalty))
+           Seq(Some(crystallisedPenaltyModel), Some(estimatedLPIPenalty))
       }
 
       "return a crystallised penalty view model" in {
@@ -683,7 +683,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           10000,
           isOverdue = false,
           "XD002750002155",
-          isPenalty = false
+          isPenalty = false,
+          isNonPenaltyReformPenaltyLPI = false
         ))
       }
     }
@@ -708,7 +709,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
           2,
-          isPenalty = false
+          isPenalty = false,
+          isNonPenaltyReformPenaltyLPI = false
         ))
       }
     }

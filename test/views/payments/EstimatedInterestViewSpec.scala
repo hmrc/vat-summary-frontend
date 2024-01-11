@@ -16,7 +16,7 @@
 
 package views.payments
 
-import common.TestModels.estimatedInterestModel
+import common.TestModels.estimatedLPIModel
 import models.payments.VATOverpaymentforTaxLPI
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -33,7 +33,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is not for a penalty charge" should {
 
-      lazy val view = injectedView(estimatedInterestModel, Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPIModel, Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -95,7 +95,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the current amount of interest accumulated" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedInterestModel.interestAmount}"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedLPIModel.interestAmount}"
       }
 
       "have the correct heading for the second row" in {
@@ -111,7 +111,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the outstanding amount" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedInterestModel.interestAmount}"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedLPIModel.interestAmount}"
       }
 
       "have the correct subheading" in {
@@ -150,7 +150,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
     "the interest is for a VATOverpaymentforTaxLPI charge" should {
 
       lazy val view = injectedView(
-        model = estimatedInterestModel.copy(
+        model = estimatedLPIModel.copy(
           chargeType = VATOverpaymentforTaxLPI.value
         ),
         serviceInfoContent = Html("")
@@ -212,7 +212,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the current amount of interest accumulated" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedInterestModel.interestAmount}"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe s"£${estimatedLPIModel.interestAmount}"
       }
 
       "have the correct heading for the second row" in {
@@ -228,7 +228,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display the outstanding amount" in {
-        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedInterestModel.interestAmount}"
+        elementText(".govuk-summary-list__row:nth-child(3) > dd") shouldBe s"£${estimatedLPIModel.interestAmount}"
       }
 
       "have the correct subheading" in {
@@ -266,7 +266,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is for a penalty charge" should {
 
-      lazy val view = injectedView(estimatedInterestModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPIModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "must contain the HowInterestIsCalculated dropdown" in {
@@ -278,7 +278,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
   "Rendering the Interest Charge Details page for an agent" should {
 
-    lazy val view = injectedView(estimatedInterestModel, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(estimatedLPIModel, Html(""))(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render breadcrumbs" in {
