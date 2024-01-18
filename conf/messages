@@ -598,6 +598,8 @@ chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
 
 chargeType.VATOverpaymentForRPITitle = Repayment interest correction
 
+chargeType.VATReturnForRPITitle = Repayment interest on payment on account repayment
+
 chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
 
 unauthorised.agent.title = You can’t use this service yet

@@ -17,13 +17,13 @@
 package views.templates.payments
 
 import java.time.LocalDate
-
 import models.payments._
 import models.viewModels.PaymentsHistoryModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.html.templates.payments.PaymentsHistoryChargeDescription
+import views.templates.payments.PaymentMessageHelper.VatReturnForRPI
 
 class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
@@ -580,6 +580,20 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "for 12 Jan to 23 Mar 2018"
+        }
+      }
+
+      "there is a VAT Return RPI Charge" should {
+
+        val model = exampleModel.copy(chargeType = VatReturnRPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Repayment interest on payment on account repayment"
+        }
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12 Jan to 23 Mar 2018"
         }
       }
       "there is a VAT Unrepayable Overpayment Charge" should {
