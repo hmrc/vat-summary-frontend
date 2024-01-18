@@ -18,7 +18,7 @@ package models.payments
 
 import java.time.LocalDate
 import models.obligations.Obligation
-import models.payments.ChargeType.{interestChargeMapping, penaltyChargeMappingLPP1, penaltyChargeMappingLPP2}
+import models.payments.ChargeType.{LPIChargeMapping, penaltyChargeMappingLPP1, penaltyChargeMappingLPP2}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.Reads._
 import play.api.libs.json._
@@ -38,7 +38,7 @@ sealed trait Payment extends Obligation {
   val penaltyType: Option[String]
 
   val showEstimatedInterest: Boolean =
-    accruingInterestAmount.getOrElse(BigDecimal(0)) > 0 && interestChargeMapping.contains(chargeType)
+    accruingInterestAmount.getOrElse(BigDecimal(0)) > 0 && LPIChargeMapping.contains(chargeType)
   val showEstimatedPenalty: Boolean =
     accruingPenaltyAmount.getOrElse(BigDecimal(0)) > 0 &&
     (penaltyChargeMappingLPP1.contains(chargeType) || penaltyChargeMappingLPP2.contains(chargeType))
