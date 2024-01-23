@@ -156,6 +156,9 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.interestChargeMapping(VatCentralAssessment2ndLPP) shouldBe VatCA2ndLPPLPI
         ChargeType.interestChargeMapping(VatOfficersAssessment1stLPP) shouldBe VatOA1stLPPLPI
         ChargeType.interestChargeMapping(VatOfficersAssessment2ndLPP) shouldBe VatOA2ndLPPLPI
+        ChargeType.interestChargeMapping(VATOverpaymentforTax) shouldBe VATOverpaymentforTaxLPI
+        ChargeType.interestChargeMapping(VatOverpayments1stLPP) shouldBe VatOverpayments1stLPPLPI
+        ChargeType.interestChargeMapping(VatOverpayments2ndLPP) shouldBe VatOverpayments2ndLPPLPI
         ChargeType.interestChargeMapping(InaccuraciesAssessmentsPenCharge) shouldBe VatInaccuracyAssessPenLPI
       }
     }
@@ -164,6 +167,56 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
 
       "throw an exception" in {
         intercept[NoSuchElementException](ChargeType.interestChargeMapping(ReturnCreditCharge))
+      }
+    }
+  }
+
+  "The penaltyChargeMappingLPP1" when {
+
+    "provided with a supported charge type" should {
+
+      "return the corresponding LPP1 charge" in {
+        ChargeType.penaltyChargeMappingLPP1(ReturnDebitCharge) shouldBe VatReturn1stLPP
+        ChargeType.penaltyChargeMappingLPP1(VatProtectiveAssessmentCharge) shouldBe VatPA1stLPP
+        ChargeType.penaltyChargeMappingLPP1(AACharge) shouldBe VatAA1stLPP
+        ChargeType.penaltyChargeMappingLPP1(AAReturnDebitCharge) shouldBe VatAAReturnCharge1stLPP
+        ChargeType.penaltyChargeMappingLPP1(ErrorCorrectionDebitCharge) shouldBe VatErrorCorrection1stLPP
+        ChargeType.penaltyChargeMappingLPP1(PaymentOnAccountReturnDebitCharge) shouldBe VatPOAReturn1stLPP
+        ChargeType.penaltyChargeMappingLPP1(CentralAssessmentCharge) shouldBe VatCentralAssessment1stLPP
+        ChargeType.penaltyChargeMappingLPP1(OADebitCharge) shouldBe VatOfficersAssessment1stLPP
+        ChargeType.penaltyChargeMappingLPP1(VATOverpaymentforTax) shouldBe VatOverpayments1stLPP
+      }
+    }
+
+    "provided with an unsupported charge type" should {
+
+      "throw an exception" in {
+        intercept[NoSuchElementException](ChargeType.penaltyChargeMappingLPP1(ReturnCreditCharge))
+      }
+    }
+  }
+
+  "The penaltyChargeMappingLPP2" when {
+
+    "provided with a supported charge type" should {
+
+      "return the corresponding LPP2 charge" in {
+        ChargeType.penaltyChargeMappingLPP2(VatProtectiveAssessmentCharge) shouldBe VatPA2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(AACharge) shouldBe VatAA2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(AAReturnDebitCharge) shouldBe VatAAReturnCharge2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(ReturnDebitCharge) shouldBe VatReturn2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(ErrorCorrectionDebitCharge) shouldBe VatErrorCorrection2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(PaymentOnAccountReturnDebitCharge) shouldBe VatPOAReturn2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(CentralAssessmentCharge) shouldBe VatCentralAssessment2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(OADebitCharge) shouldBe VatOfficersAssessment2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(VATOverpaymentforTax) shouldBe VatOverpayments2ndLPP
+      }
+    }
+
+    "provided with an unsupported charge type" should {
+
+      "throw an exception" in {
+        intercept[NoSuchElementException](ChargeType.penaltyChargeMappingLPP1(ReturnCreditCharge))
       }
     }
   }
