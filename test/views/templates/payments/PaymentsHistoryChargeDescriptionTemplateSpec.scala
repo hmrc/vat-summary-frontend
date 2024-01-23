@@ -290,6 +290,22 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a Vat Inaccuracy Assessments Pen LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatInaccuracyAssessPenLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on inaccuracies penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe
+            "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+        }
+      }
+
       "there is a Vat Mp Pre 2009 Charge" should {
 
         val model = exampleModel.copy(chargeType = MpPre2009Charge)

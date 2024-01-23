@@ -96,6 +96,9 @@ object TestModels {
   val overpaymentforTax: PaymentWithPeriod =
     payment.copy(chargeType = VATOverpaymentforTax, accruingPenaltyAmount = None, penaltyType = None)
 
+  val vatInaccAssessPen: PaymentWithPeriod =
+    payment.copy(chargeType = InaccuraciesAssessmentsPenCharge, accruingPenaltyAmount = None, penaltyType = None)
+
   val paymentNoPeriodNoDate: PaymentNoPeriod = PaymentNoPeriod(
     OADefaultInterestCharge,
     LocalDate.parse("2019-03-03"),
@@ -403,7 +406,16 @@ object TestModels {
   )
 
   val vatOverpaymentTax: StandardChargeViewModel = whatYouOweChargeModel.copy(
-    chargeType = "VAT Overpayment for Tax", isOverdue = false,
+    chargeType = "VAT Overpayment for Tax",
+    isOverdue = false,
+    outstandingAmount = 10000,
+    originalAmount = 10000,
+    clearedAmount = 0
+  )
+
+  val vatInaccAssessPenViewModel: StandardChargeViewModel = whatYouOweChargeModel.copy(
+    chargeType = InaccuraciesAssessmentsPenCharge.value,
+    isOverdue = false,
     outstandingAmount = 10000,
     originalAmount = 10000,
     clearedAmount = 0
@@ -669,7 +681,7 @@ object TestModels {
       periodTo = crystallisedPenaltyModel.periodTo,
       chargeType = VATOverpaymentforTaxLPI.value,
       interestAmount = BigDecimal(2),
-      isPenalty = true,
+      isPenalty = false,
       isNonPenaltyReformPenaltyLPI = false
     )
 
@@ -682,7 +694,21 @@ object TestModels {
       amountReceived = 0,
       leftToPay = 10000,
       chargeReference = "BCDEFGHIJKLMNOPQ",
-      isPenalty = false
+      isPenalty = false,
+      isNonPenaltyReformPenaltyLPI = false
+    )
+
+  val estimatedVATInaccAssessPenLPIModel: EstimatedInterestViewModel =
+    estimatedVATOverpaymentforTaxLPI.copy(
+      chargeType = VatInaccuracyAssessPenLPI.value,
+      interestAmount = BigDecimal(2),
+      isNonPenaltyReformPenaltyLPI = true
+    )
+
+  val crystallisedVATInaccAssessPenLPIModel: CrystallisedInterestViewModel =
+    crystallisedVATOverpaymentforTaxLPI.copy(
+      chargeType = VatInaccuracyAssessPenLPI.value,
+      isNonPenaltyReformPenaltyLPI = true
     )
 
   val crystallisedLPP1JsonMax: JsObject = Json.obj(
@@ -727,11 +753,23 @@ object TestModels {
       accruingPenaltyAmount = None
     )
 
-  val vATOverpaymentforTaxLPI: PaymentWithPeriod =
+  val overpaymentforTaxLPI: PaymentWithPeriod =
     payment.copy(
       chargeType = VATOverpaymentforTaxLPI,
       chargeReference = Some("BCDEFGHIJKLMNOPQ"),
       accruingPenaltyAmount = None
+    )
+
+  val vatInaccAssessPenLPI: PaymentWithPeriod =
+    payment.copy(
+      chargeType = VatInaccuracyAssessPenLPI,
+      outstandingAmount = 10000,
+      chargeReference = Some("BCDEFGHIJKLMNOPQ"),
+      accruingInterestAmount = None,
+      accruingPenaltyAmount = None,
+      penaltyType = None,
+      originalAmount = BigDecimal(10000),
+      clearedAmount = Some(0)
     )
 
   val overpaymentForTaxLPP2LPI: PaymentWithPeriod =

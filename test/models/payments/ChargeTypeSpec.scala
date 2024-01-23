@@ -85,6 +85,12 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         charge.isInterest shouldBe true
       }
     }
+
+    allChargeTypes.diff(interestChargeTypes).foreach { charge =>
+      s"return false for $charge" in {
+        charge.isInterest shouldBe false
+      }
+    }
   }
 
   "isPenalty" should {
@@ -98,6 +104,21 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
     allChargeTypes.diff(penaltyChargeTypes).foreach { charge =>
       s"return false for $charge" in {
         charge.isPenalty shouldBe false
+      }
+    }
+  }
+
+  "isNonPenaltyReformPenaltyLPI" should {
+
+    nonPenaltyReformPenaltyLPIChargeTypes.foreach { charge =>
+      s"return true for $charge" in {
+        charge.isNonPenaltyReformPenaltyLPI shouldBe true
+      }
+    }
+
+    allChargeTypes.diff(nonPenaltyReformPenaltyLPIChargeTypes).foreach { charge =>
+      s"return false for $charge" in {
+        charge.isNonPenaltyReformPenaltyLPI shouldBe false
       }
     }
   }
@@ -135,6 +156,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.interestChargeMapping(VatCentralAssessment2ndLPP) shouldBe VatCA2ndLPPLPI
         ChargeType.interestChargeMapping(VatOfficersAssessment1stLPP) shouldBe VatOA1stLPPLPI
         ChargeType.interestChargeMapping(VatOfficersAssessment2ndLPP) shouldBe VatOA2ndLPPLPI
+        ChargeType.interestChargeMapping(InaccuraciesAssessmentsPenCharge) shouldBe VatInaccuracyAssessPenLPI
       }
     }
 
