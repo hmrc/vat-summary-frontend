@@ -398,7 +398,7 @@ case object VatOverpaymentForRPI extends ChargeType {
 }
 
 case object VatInaccuracyAssessPenLPI extends ChargeType {
-  override val value: String = "VAT Inaccuracy Assessments pen LPI"
+  override val value: String = "VAT Inaccuracy Assessments Pen LPI"
 }
 
 object ChargeType extends LoggerUtil {
