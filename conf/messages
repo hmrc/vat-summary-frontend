@@ -544,6 +544,8 @@ chargeType.VatPOAReturn2ndLPPTitle = Second penalty for late payment – payment
 chargeType.VatReturnPOA1stLPPLPITitle = Interest on payment on account penalty
 chargeType.VatReturnPOA2ndLPPLPITitle = Interest on payment on account second penalty
 
+chargeType.VatReturnPOARPITitle = Repayment interest on payment on account balance
+
 chargeType.vatReturnLPITitle = Interest on VAT
 chargeType.vatReturn1stLPPLPITitle = Interest on penalty
 chargeType.vatReturn2ndLPPLPITitle = Interest on second penalty

@@ -552,6 +552,8 @@ chargeType.VatPOAReturn2ndLPPTitle = Ail gosb am dalu’n hwyr – taliad ar gyf
 chargeType.VatReturnPOA1stLPPLPITitle = Llog ar gosb taliad ar gyfrif
 chargeType.VatReturnPOA2ndLPPLPITitle = Llog ar ail gosb taliad ar gyfrif
 
+chargeType.VatReturnPOARPITitle = Llog ar ad-daliadau ar falans taliad ar gyfrif
+
 chargeType.vatReturnLPITitle = Llog ar TAW
 chargeType.vatReturn1stLPPLPITitle = Llog ar gosb
 chargeType.vatReturn2ndLPPLPITitle = Llog ar yr ail gosb
