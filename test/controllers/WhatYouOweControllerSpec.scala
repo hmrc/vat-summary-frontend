@@ -252,7 +252,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
-        result shouldBe Some(whatYouOweViewModelWithEstimatedInterest)
+        result shouldBe Some(whatYouOweViewModelWithEstimatedLPI)
       }
 
     }
@@ -349,7 +349,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 crystalised charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(vATOverpaymentforTaxLPI), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(Seq(overpaymentforTaxLPI), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           charges = Seq(crystallisedVATOverpaymentforTaxLPI),
@@ -403,6 +403,42 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
             penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP2LPIModel)))
+      }
+    }
+
+    "there is a non penalty reform penalty with accruing interest" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            payments = Seq(vatInaccAssessPen),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsModelMin)(fakeRequest)
+        }
+        result shouldBe Some(whatYouOweViewModel.copy(
+          totalAmount = BigDecimal(10002),
+          charges = Seq(
+            vatInaccAssessPenViewModel,
+            estimatedVATInaccAssessPenLPIModel
+          )
+        ))
+      }
+    }
+
+    "there is a crystallised non penalty reform penalty LPI Charge" should {
+
+      "return the correct view model with 1 charge model" in {
+        val result = {
+          mockDateServiceCall()
+          controller.constructViewModel(
+            payments = Seq(vatInaccAssessPenLPI),
+            mandationStatus = "MTDfB",
+            penalties = penaltyDetailsModelMin)(fakeRequest)
+        }
+        result shouldBe Some(
+          whatYouOweViewModel.copy(totalAmount = BigDecimal(10000),
+          charges = Seq(crystallisedVATInaccAssessPenLPIModel)))
       }
     }
 
@@ -578,7 +614,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(chargeType = VatReturn1stLPP)
         mockDateServiceCall()
         controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage)) shouldBe
-           Seq(Some(crystallisedPenaltyModel), Some(estimatedInterestPenalty))
+           Seq(Some(crystallisedPenaltyModel), Some(estimatedLPIPenalty))
       }
 
       "return a crystallised penalty view model" in {
@@ -592,7 +628,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
   "The buildChargePlusEstimates function" when {
 
-    "the charge has accruing interest and accruing penalty" should {
+    "the charge has accruing interest and accruing LPP" should {
 
       "return three charges" in {
         mockDateServiceCall()
@@ -600,7 +636,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the charge has accruing penalty" should {
+    "the charge has accruing LPP" should {
 
       "return two charges" in {
         mockDateServiceCall()
@@ -683,7 +719,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           10000,
           isOverdue = false,
           "XD002750002155",
-          isPenalty = false
+          isPenalty = false,
+          isNonPenaltyReformPenaltyLPI = false
         ))
       }
     }
@@ -708,7 +745,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
           2,
-          isPenalty = false
+          isPenalty = false,
+          isNonPenaltyReformPenaltyLPI = false
         ))
       }
     }

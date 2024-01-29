@@ -591,6 +591,8 @@ chargeType.VATAAReturnCharge2ndLPP = Ail gosb am daliad hwyr – balans cyfrifo 
 chargeType.VATReturn2ndLPP = Ail gosb am dalu TAW yn hwyr
 chargeType.VATReturnAALPITitle = Llog ar y balans cyfrifyddu blynyddol
 
+chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb anghywirdeb
+
 chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd
 chargeType.migratedCreditDescription = credyd TAW amrywiol

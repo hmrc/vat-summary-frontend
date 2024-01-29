@@ -16,7 +16,7 @@
 
 package views.payments
 
-import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedInterestCharge, whatYouOweViewModel2Charge, whatYouOweViewModelBreathingSpace}
+import common.TestModels.{chargeModel1, chargeModel2, overdueCrystallisedLPICharge, whatYouOweViewModel2Charge, whatYouOweViewModelBreathingSpace}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
@@ -174,11 +174,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
             element(tableBodyCell(3, 1) + "> a").attr("href") shouldBe
               controllers.routes.ChargeBreakdownController.showBreakdown(
-                overdueCrystallisedInterestCharge.generateHash(user.vrn)
+                overdueCrystallisedLPICharge.generateHash(user.vrn)
               ).url
           }
           "has the correct amount" in {
-            elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedInterestCharge.leftToPay.setScale(2)
+            elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedLPICharge.leftToPay.setScale(2)
           }
         }
 

@@ -585,6 +585,8 @@ chargeType.VATAAReturnCharge2ndLPP = Second penalty for late payment – annual 
 chargeType.VATReturn2ndLPP = Second penalty for late payment of VAT
 chargeType.VATReturnAALPITitle = Interest on annual accounting balance
 
+chargeType.VATInaccuracyAssessPenLPITitle = Interest on inaccuracies penalty
+
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit

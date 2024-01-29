@@ -17,7 +17,7 @@
 package audit
 
 import audit.models.WhatYouOweAuditModel
-import common.TestModels.{crystallisedPenaltyModel, estimatedInterestModel, standardChargeModelMin, whatYouOweChargeModel}
+import common.TestModels.{crystallisedPenaltyModel, estimatedLPIModel, standardChargeModelMin, whatYouOweChargeModel}
 import _root_.models.viewModels.ChargeDetailsViewModel
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -76,15 +76,15 @@ class WhatYouOweAuditModelSpec extends AnyWordSpecLike with Matchers {
       }
 
       "the charge model is an EstimatedViewModel" in {
-        val model = exampleModel.copy(charges = Seq(estimatedInterestModel))
+        val model = exampleModel.copy(charges = Seq(estimatedLPIModel))
         val expectedDetail = Json.obj(
           "vrn" -> model.vrn,
           "isAgent" -> false,
           "outstandingPayments" -> Json.arr(Json.obj(
-            "paymentType" -> estimatedInterestModel.chargeType,
-            "amount" -> estimatedInterestModel.outstandingAmount,
-            "periodStartDate" -> estimatedInterestModel.periodFrom,
-            "periodEndDate" -> estimatedInterestModel.periodTo,
+            "paymentType" -> estimatedLPIModel.chargeType,
+            "amount" -> estimatedLPIModel.outstandingAmount,
+            "periodStartDate" -> estimatedLPIModel.periodFrom,
+            "periodEndDate" -> estimatedLPIModel.periodTo,
             "overdue" -> false
           ))
         )
