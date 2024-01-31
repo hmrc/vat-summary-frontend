@@ -95,7 +95,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties.LPPDetails)
         buildCrystallisedChargePlusEstimates(p, matchingPenalty)
-      case p: PaymentWithPeriod if p.chargeType.isInterest =>
+      case p: PaymentWithPeriod if p.chargeType.isLPICharge =>
         Seq(buildCrystallisedIntViewModel(p))
       case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) =>
         Seq(buildLateSubmissionPenaltyViewModel(p))
@@ -161,9 +161,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         Some(EstimatedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
-          chargeType = ChargeType.interestChargeMapping(payment.chargeType).value,
+          chargeType = ChargeType.LPIChargeMapping(payment.chargeType).value,
           interestAmount = interestAmnt,
-          isPenalty = ChargeType.interestChargeMapping(payment.chargeType).isPenaltyInterest
+          isPenalty = ChargeType.LPIChargeMapping(payment.chargeType).isPenaltyInterest,
+          isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
@@ -183,7 +184,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           leftToPay = payment.outstandingAmount,
           isOverdue = payment.isOverdue(dateService.now()),
           chargeReference = chargeRef,
-          isPenalty = payment.chargeType.isPenaltyInterest
+          isPenalty = payment.chargeType.isPenaltyInterest,
+          isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")

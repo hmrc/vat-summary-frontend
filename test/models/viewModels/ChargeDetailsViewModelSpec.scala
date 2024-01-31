@@ -33,8 +33,8 @@ class ChargeDetailsViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with 
 
       "the view model types differ" in {
         val hash1 = whatYouOweCharge.generateHash("999999999")
-        val hash2 = crystallisedInterestCharge.generateHash("999999999")
-        val hash3 = estimatedInterestModel.generateHash("999999999")
+        val hash2 = crystallisedLPICharge.generateHash("999999999")
+        val hash3 = estimatedLPIModel.generateHash("999999999")
 
         Seq(hash1, hash2, hash3).distinct.length shouldBe 3
       }
@@ -62,10 +62,10 @@ class ChargeDetailsViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with 
     "return the correct title" in {
 
       whatYouOweCharge.title shouldBe "VAT"
-      crystallisedInterestCharge.title shouldBe "Interest on central assessment of VAT"
+      crystallisedLPICharge.title shouldBe "Interest on central assessment of VAT"
       crystallisedLPP1Model.title shouldBe "Penalty for late payment of VAT"
       crystallisedLPP2Model.title shouldBe "Second penalty for late payment of additional assessment"
-      estimatedInterestModel.title shouldBe "Interest on central assessment of VAT"
+      estimatedLPIModel.title shouldBe "Interest on central assessment of VAT"
       estimatedLPP1Model.title shouldBe "Penalty for late payment of VAT"
       estimatedLPP2Model.title shouldBe "Second penalty for late payment of additional assessment"
       lateSubmissionPenaltyModel.title shouldBe "Late submission penalty"

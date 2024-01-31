@@ -65,24 +65,30 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
 
   "notInterest" should {
 
-    interestChargeTypes.foreach { charge =>
+    LPIChargeTypes.foreach { charge =>
       s"return false for $charge" in {
-        charge.notInterest shouldBe false
+        charge.notLPICharge shouldBe false
       }
     }
 
-    allChargeTypes.diff(interestChargeTypes).foreach { charge =>
+    allChargeTypes.diff(LPIChargeTypes).foreach { charge =>
       s"return true for $charge" in {
-        charge.notInterest shouldBe true
+        charge.notLPICharge shouldBe true
       }
     }
   }
 
   "isInterest" should {
 
-    interestChargeTypes.foreach { charge =>
+    LPIChargeTypes.foreach { charge =>
       s"return true for $charge" in {
-        charge.isInterest shouldBe true
+        charge.isLPICharge shouldBe true
+      }
+    }
+
+    allChargeTypes.diff(LPIChargeTypes).foreach { charge =>
+      s"return false for $charge" in {
+        charge.isLPICharge shouldBe false
       }
     }
   }
@@ -102,46 +108,115 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
     }
   }
 
+  "isNonPenaltyReformPenaltyLPI" should {
+
+    nonPenaltyReformPenaltyLPIChargeTypes.foreach { charge =>
+      s"return true for $charge" in {
+        charge.isNonPenaltyReformPenaltyLPI shouldBe true
+      }
+    }
+
+    allChargeTypes.diff(nonPenaltyReformPenaltyLPIChargeTypes).foreach { charge =>
+      s"return false for $charge" in {
+        charge.isNonPenaltyReformPenaltyLPI shouldBe false
+      }
+    }
+  }
+
   "The interestChargeMapping collection" when {
 
     "provided with a supported charge type" should {
 
       "return the corresponding interest charge" in {
-        ChargeType.interestChargeMapping(ReturnDebitCharge) shouldBe VatReturnLPI
-        ChargeType.interestChargeMapping(VatReturn1stLPP) shouldBe VatReturn1stLPPLPI
-        ChargeType.interestChargeMapping(CentralAssessmentCharge) shouldBe VatCentralAssessmentLPI
-        ChargeType.interestChargeMapping(OADebitCharge) shouldBe VatOfficersAssessmentLPI
-        ChargeType.interestChargeMapping(VatPA1stLPP) shouldBe VatPA1stLPPLPI
-        ChargeType.interestChargeMapping(VatPA2ndLPP) shouldBe VatPA2ndLPPLPI
-        ChargeType.interestChargeMapping(VatProtectiveAssessmentCharge) shouldBe VatPALPICharge
-        ChargeType.interestChargeMapping(AACharge) shouldBe VatAdditionalAssessmentLPI
-        ChargeType.interestChargeMapping(VatAA1stLPP) shouldBe VatAA1stLPPLPI
-        ChargeType.interestChargeMapping(VatAA2ndLPP) shouldBe VatAA2ndLPPLPI
-        ChargeType.interestChargeMapping(VatLateSubmissionPen) shouldBe VatLspInterest
-        ChargeType.interestChargeMapping(VatAAReturnCharge1stLPP) shouldBe VatReturnAA1stLPPLPI
-        ChargeType.interestChargeMapping(VatAAReturnCharge2ndLPP) shouldBe VatReturnAA2ndLPPLPI
-        ChargeType.interestChargeMapping(VatManualLPP) shouldBe VatManualLPPLPI
-        ChargeType.interestChargeMapping(AAQuarterlyInstalments) shouldBe VatAAQuarterlyInstalLPI
-        ChargeType.interestChargeMapping(AAMonthlyInstalment) shouldBe VatAAMonthlyInstalLPI
-        ChargeType.interestChargeMapping(VatReturn2ndLPP) shouldBe VatReturn2ndLPPLPI
-        ChargeType.interestChargeMapping(VatErrorCorrection1stLPP) shouldBe VatErrorCorrection1stLPPLPI
-        ChargeType.interestChargeMapping(VatErrorCorrection2ndLPP) shouldBe VatErrorCorrection2ndLPPLPI
-        ChargeType.interestChargeMapping(AAReturnDebitCharge) shouldBe VatAAReturnChargeLPI
-        ChargeType.interestChargeMapping(PaymentOnAccountInstalments) shouldBe VatPOAInstalmentLPI
-        ChargeType.interestChargeMapping(PaymentOnAccountReturnDebitCharge) shouldBe VatReturnPOALPI
-        ChargeType.interestChargeMapping(VatPOAReturn1stLPP) shouldBe VatReturnPOA1stLPPLPI
-        ChargeType.interestChargeMapping(VatPOAReturn2ndLPP) shouldBe VatReturnPOA2ndLPPLPI
-        ChargeType.interestChargeMapping(VatCentralAssessment1stLPP) shouldBe VatCA1stLPPLPI
-        ChargeType.interestChargeMapping(VatCentralAssessment2ndLPP) shouldBe VatCA2ndLPPLPI
-        ChargeType.interestChargeMapping(VatOfficersAssessment1stLPP) shouldBe VatOA1stLPPLPI
-        ChargeType.interestChargeMapping(VatOfficersAssessment2ndLPP) shouldBe VatOA2ndLPPLPI
+        ChargeType.LPIChargeMapping(ReturnDebitCharge) shouldBe VatReturnLPI
+        ChargeType.LPIChargeMapping(VatReturn1stLPP) shouldBe VatReturn1stLPPLPI
+        ChargeType.LPIChargeMapping(CentralAssessmentCharge) shouldBe VatCentralAssessmentLPI
+        ChargeType.LPIChargeMapping(OADebitCharge) shouldBe VatOfficersAssessmentLPI
+        ChargeType.LPIChargeMapping(VatPA1stLPP) shouldBe VatPA1stLPPLPI
+        ChargeType.LPIChargeMapping(VatPA2ndLPP) shouldBe VatPA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatProtectiveAssessmentCharge) shouldBe VatPALPICharge
+        ChargeType.LPIChargeMapping(AACharge) shouldBe VatAdditionalAssessmentLPI
+        ChargeType.LPIChargeMapping(VatAA1stLPP) shouldBe VatAA1stLPPLPI
+        ChargeType.LPIChargeMapping(VatAA2ndLPP) shouldBe VatAA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatLateSubmissionPen) shouldBe VatLspInterest
+        ChargeType.LPIChargeMapping(VatAAReturnCharge1stLPP) shouldBe VatReturnAA1stLPPLPI
+        ChargeType.LPIChargeMapping(VatAAReturnCharge2ndLPP) shouldBe VatReturnAA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatManualLPP) shouldBe VatManualLPPLPI
+        ChargeType.LPIChargeMapping(AAQuarterlyInstalments) shouldBe VatAAQuarterlyInstalLPI
+        ChargeType.LPIChargeMapping(AAMonthlyInstalment) shouldBe VatAAMonthlyInstalLPI
+        ChargeType.LPIChargeMapping(VatReturn2ndLPP) shouldBe VatReturn2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatErrorCorrection1stLPP) shouldBe VatErrorCorrection1stLPPLPI
+        ChargeType.LPIChargeMapping(VatErrorCorrection2ndLPP) shouldBe VatErrorCorrection2ndLPPLPI
+        ChargeType.LPIChargeMapping(AAReturnDebitCharge) shouldBe VatAAReturnChargeLPI
+        ChargeType.LPIChargeMapping(PaymentOnAccountInstalments) shouldBe VatPOAInstalmentLPI
+        ChargeType.LPIChargeMapping(PaymentOnAccountReturnDebitCharge) shouldBe VatReturnPOALPI
+        ChargeType.LPIChargeMapping(VatPOAReturn1stLPP) shouldBe VatReturnPOA1stLPPLPI
+        ChargeType.LPIChargeMapping(VatPOAReturn2ndLPP) shouldBe VatReturnPOA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatCentralAssessment1stLPP) shouldBe VatCA1stLPPLPI
+        ChargeType.LPIChargeMapping(VatCentralAssessment2ndLPP) shouldBe VatCA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatOfficersAssessment1stLPP) shouldBe VatOA1stLPPLPI
+        ChargeType.LPIChargeMapping(VatOfficersAssessment2ndLPP) shouldBe VatOA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VATOverpaymentforTax) shouldBe VATOverpaymentforTaxLPI
+        ChargeType.LPIChargeMapping(VatOverpayments1stLPP) shouldBe VatOverpayments1stLPPLPI
+        ChargeType.LPIChargeMapping(VatOverpayments2ndLPP) shouldBe VatOverpayments2ndLPPLPI
+        ChargeType.LPIChargeMapping(InaccuraciesAssessmentsPenCharge) shouldBe VatInaccuracyAssessPenLPI
       }
     }
 
     "provided with an unsupported charge type" should {
 
       "throw an exception" in {
-        intercept[NoSuchElementException](ChargeType.interestChargeMapping(ReturnCreditCharge))
+        intercept[NoSuchElementException](ChargeType.LPIChargeMapping(ReturnCreditCharge))
+      }
+    }
+  }
+
+  "The penaltyChargeMappingLPP1" when {
+
+    "provided with a supported charge type" should {
+
+      "return the corresponding LPP1 charge" in {
+        ChargeType.penaltyChargeMappingLPP1(ReturnDebitCharge) shouldBe VatReturn1stLPP
+        ChargeType.penaltyChargeMappingLPP1(VatProtectiveAssessmentCharge) shouldBe VatPA1stLPP
+        ChargeType.penaltyChargeMappingLPP1(AACharge) shouldBe VatAA1stLPP
+        ChargeType.penaltyChargeMappingLPP1(AAReturnDebitCharge) shouldBe VatAAReturnCharge1stLPP
+        ChargeType.penaltyChargeMappingLPP1(ErrorCorrectionDebitCharge) shouldBe VatErrorCorrection1stLPP
+        ChargeType.penaltyChargeMappingLPP1(PaymentOnAccountReturnDebitCharge) shouldBe VatPOAReturn1stLPP
+        ChargeType.penaltyChargeMappingLPP1(CentralAssessmentCharge) shouldBe VatCentralAssessment1stLPP
+        ChargeType.penaltyChargeMappingLPP1(OADebitCharge) shouldBe VatOfficersAssessment1stLPP
+        ChargeType.penaltyChargeMappingLPP1(VATOverpaymentforTax) shouldBe VatOverpayments1stLPP
+      }
+    }
+
+    "provided with an unsupported charge type" should {
+
+      "throw an exception" in {
+        intercept[NoSuchElementException](ChargeType.penaltyChargeMappingLPP1(ReturnCreditCharge))
+      }
+    }
+  }
+
+  "The penaltyChargeMappingLPP2" when {
+
+    "provided with a supported charge type" should {
+
+      "return the corresponding LPP2 charge" in {
+        ChargeType.penaltyChargeMappingLPP2(VatProtectiveAssessmentCharge) shouldBe VatPA2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(AACharge) shouldBe VatAA2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(AAReturnDebitCharge) shouldBe VatAAReturnCharge2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(ReturnDebitCharge) shouldBe VatReturn2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(ErrorCorrectionDebitCharge) shouldBe VatErrorCorrection2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(PaymentOnAccountReturnDebitCharge) shouldBe VatPOAReturn2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(CentralAssessmentCharge) shouldBe VatCentralAssessment2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(OADebitCharge) shouldBe VatOfficersAssessment2ndLPP
+        ChargeType.penaltyChargeMappingLPP2(VATOverpaymentforTax) shouldBe VatOverpayments2ndLPP
+      }
+    }
+
+    "provided with an unsupported charge type" should {
+
+      "throw an exception" in {
+        intercept[NoSuchElementException](ChargeType.penaltyChargeMappingLPP1(ReturnCreditCharge))
       }
     }
   }

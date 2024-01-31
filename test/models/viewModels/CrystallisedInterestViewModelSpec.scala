@@ -16,7 +16,7 @@
 
 package models.viewModels
 
-import common.TestModels.{crystallisedInterestCharge, crystallisedInterestJson}
+import common.TestModels.{crystallisedLPICharge, crystallisedLPIJson}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
@@ -35,7 +35,8 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
     100.11,
     isOverdue = false,
     "XXXXXX1234567890",
-    isPenalty = false
+    isPenalty = false,
+    isNonPenaltyReformPenaltyLPI = false
   )
 
   "The makePaymentRedirect value" should {
@@ -54,11 +55,11 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
   "The CrystallisedInterestViewModel" should {
 
     "read from JSON" in {
-      crystallisedInterestJson.as[CrystallisedInterestViewModel] shouldBe crystallisedInterestCharge
+      crystallisedLPIJson.as[CrystallisedInterestViewModel] shouldBe crystallisedLPICharge
     }
 
     "write to JSON" in {
-      Json.toJson(crystallisedInterestCharge) shouldBe crystallisedInterestJson
+      Json.toJson(crystallisedLPICharge) shouldBe crystallisedLPIJson
     }
   }
 }

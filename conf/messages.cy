@@ -362,6 +362,8 @@ chargeType.overpaymentforTaxLPITitle = Llog ar gywiriad TAW
 
 chargeType.VATOverpaymentForRPITitle = Cywiriad o log ar ad-daliadau
 
+chargeType.VATReturnForRPITitle = Llog ar ad-daliadau ar ad-daliad ar daliad ar gyfrif
+
 chargeType.overpaymentforTaxLPI.description.p1 = Mae angen i chi dalu hwn oherwydd bod CThEF wedi talu gormod o log ar ad-daliadau i chi.
 chargeType.overpaymentforTaxLPI.description.p2 = Bu hyn ddigwydd oherwydd newidiodd swm eich TAW ar ôl i ni dalu’r ad-daliad i chi.
 chargeType.overpaymentforTaxLPI.description.p3 = Bu’r newid ostwng swm y llog ar ad-daliadau oedd arnom i chi.
@@ -591,6 +593,8 @@ chargeType.VATAAReturnCharge2ndLPP = Ail gosb am daliad hwyr – balans cyfrifo 
 chargeType.VATReturn2ndLPP = Ail gosb am dalu TAW yn hwyr
 chargeType.VATReturnAALPITitle = Llog ar y balans cyfrifyddu blynyddol
 chargeType.VATReturnAARPITitle = Llog ar ad-daliadau ar falans cyfrifyddu blynyddol
+
+chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb anghywirdeb
 
 chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd

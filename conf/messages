@@ -586,6 +586,8 @@ chargeType.VATReturn2ndLPP = Second penalty for late payment of VAT
 chargeType.VATReturnAALPITitle = Interest on annual accounting balance
 chargeType.VATReturnAARPITitle = Repayment interest on annual accounting repayment
 
+chargeType.VATInaccuracyAssessPenLPITitle = Interest on inaccuracies penalty
+
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit
@@ -596,6 +598,8 @@ chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT
 chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
 
 chargeType.VATOverpaymentForRPITitle = Repayment interest correction
+
+chargeType.VATReturnForRPITitle = Repayment interest on payment on account repayment
 
 chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
 

@@ -16,7 +16,7 @@
 
 package views.templates.payments.wyoCharges
 
-import common.TestModels.estimatedInterestModel
+import common.TestModels.estimatedLPIModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -28,7 +28,7 @@ class EstimatedInterestChargeViewSpec extends ViewBaseSpec {
 
   "The estimated interest charge template" should {
 
-    lazy val view = injectedView(estimatedInterestModel)
+    lazy val view = injectedView(estimatedLPIModel)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct charge description text" in {
@@ -46,7 +46,7 @@ class EstimatedInterestChargeViewSpec extends ViewBaseSpec {
     "have a link with the correct href" in {
       element("a").attr("href") shouldBe
         controllers.routes.ChargeBreakdownController.showBreakdown(
-          estimatedInterestModel.generateHash(user.vrn)
+          estimatedLPIModel.generateHash(user.vrn)
         ).url
     }
   }

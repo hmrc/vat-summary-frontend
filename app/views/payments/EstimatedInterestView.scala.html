@@ -55,7 +55,7 @@
 }
 
 @interestTypeMessageKey = @{
-  if(model.isPenalty) "penalty" else "vat"
+    if(model.isPenalty || model.isNonPenaltyReformPenaltyLPI) "penalty" else "vat"
 }
 
 @mainTemplate(
