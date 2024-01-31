@@ -362,6 +362,8 @@ chargeType.overpaymentforTaxLPITitle = Llog ar gywiriad TAW
 
 chargeType.VATOverpaymentForRPITitle = Cywiriad o log ar ad-daliadau
 
+chargeType.VATReturnForRPITitle = Llog ar ad-daliadau ar ad-daliad ar daliad ar gyfrif
+
 chargeType.overpaymentforTaxLPI.description.p1 = Mae angen i chi dalu hwn oherwydd bod CThEF wedi talu gormod o log ar ad-daliadau i chi.
 chargeType.overpaymentforTaxLPI.description.p2 = Bu hyn ddigwydd oherwydd newidiodd swm eich TAW ar ôl i ni dalu’r ad-daliad i chi.
 chargeType.overpaymentforTaxLPI.description.p3 = Bu’r newid ostwng swm y llog ar ad-daliadau oedd arnom i chi.
