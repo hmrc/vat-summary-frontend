@@ -453,6 +453,8 @@ chargeType.vatEcNoticeFurtherInterestDescription = charged on assessed amount
 chargeType.civilEvasionPenaltyTitle = VAT civil evasion penalty
 chargeType.civilEvasionPenaltyDescription = because we have identified irregularities involving dishonesty
 
+chargeType.vatCivilEvasionPenaltyLPITitle = Interest on VAT civil evasion penalty
+
 chargeType.vatInaccuraciesInECSalesTitle = Inaccuracies penalty
 chargeType.vatInaccuraciesInECSalesDescription = because you have provided inaccurate information in your EC sales list
 chargeType.vatInaccuraciesInECSalesDescription.agent = because your client has provided inaccurate information in their EC sales list

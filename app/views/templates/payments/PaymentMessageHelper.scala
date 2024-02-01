@@ -335,6 +335,13 @@ object PaymentMessageHelper {
     Some("chargeType.civilEvasionPenaltyDescription")
   )
 
+  object VATCivilEvasionPenaltyLPI extends PaymentMessageHelper(
+    VatCivilEvasionPenaltyLPI.value,
+    "chargeType.vatCivilEvasionPenaltyLPITitle",
+    None,
+    None
+  )
+
   object VatInaccuraciesInECSales extends PaymentMessageHelper(
     VatInaccuraciesInECSalesCharge.value,
     "chargeType.vatInaccuraciesInECSalesTitle",
@@ -925,6 +932,7 @@ object PaymentMessageHelper {
     VatAAReturnCreditCharge,
     VatAAReturnDebitCharge,
     CivilEvasionPenalty,
+    VATCivilEvasionPenaltyLPI,
     VatInaccuraciesInECSales,
     VatFailureToSubmitECSales,
     FtnEachPartner,
