@@ -592,6 +592,7 @@ chargeType.VATAAReturnCharge1stLPP = Cosb am daliad hwyr – balans cyfrifo blyn
 chargeType.VATAAReturnCharge2ndLPP = Ail gosb am daliad hwyr – balans cyfrifo blynyddol
 chargeType.VATReturn2ndLPP = Ail gosb am dalu TAW yn hwyr
 chargeType.VATReturnAALPITitle = Llog ar y balans cyfrifyddu blynyddol
+chargeType.VATReturnAARPITitle = Llog ar ad-daliadau ar falans cyfrifyddu blynyddol
 
 chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb anghywirdeb
 
