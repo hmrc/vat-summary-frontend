@@ -397,7 +397,7 @@ case object VatOverpaymentForRPI extends ChargeType {
   override val value: String = "VAT Overpayment for RPI"
 }
 
-// Parent charge: Main transaction 4702, Sub transaction 1174, 1177
+// Parent charges: Main transaction 4702, Sub transaction 1174 and Main transaction 4702, Sub transaction 1177
 case object VatAAReturnChargeRPI extends ChargeType {
   override val value: String = "VAT Return AA RPI"
 }
