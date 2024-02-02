@@ -865,6 +865,13 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object VATErrorCorrectionRPI extends PaymentMessageHelper(
+    VatErrorCorrectionRPI.value,
+    "chargeType.vatErrorCorrectionRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,
@@ -922,6 +929,7 @@ object PaymentMessageHelper {
     VATErrorCorrection2ndLPP,
     VATErrorCorrection1stLPPLPI,
     VATErrorCorrection2ndLPPLPI,
+    VATErrorCorrectionRPI,
     VatPaFurtherInterest,
     VatCarterPenaltyCharge,
     VatFailureToNotifyRCSL,
