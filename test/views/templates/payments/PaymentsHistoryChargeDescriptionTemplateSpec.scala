@@ -2428,5 +2428,19 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
+
+    "there is a VAT Error Correction RPI" should {
+      val model = exampleModel.copy(chargeType = VatErrorCorrectionRPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Repayment interest on error correction repayment"
+      }
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+      }
+    }
+
   }
 }
