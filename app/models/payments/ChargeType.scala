@@ -244,6 +244,10 @@ case object VatReturnPOA1stLPPLPI extends ChargeType {
 case object VatReturnPOA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT Return POA 2nd LPP LPI"
 }
+// Parent charges: Main transaction 4701, Sub transaction 1174 and Main transaction 4701, Sub transaction 1177
+case object VatReturnPOARPI extends ChargeType {
+  override val value: String = "VAT Return POA RPI"
+}
 case object UnallocatedPayment extends ChargeType {
   override val value: String = "Unallocated payment"
 }
@@ -481,6 +485,7 @@ object ChargeType extends LoggerUtil {
     VatPOAReturn2ndLPP,
     VatReturnPOA1stLPPLPI,
     VatReturnPOA2ndLPPLPI,
+    VatReturnPOARPI,
     UnallocatedPayment,
     Refund,
     VatMigratedLiability,
