@@ -155,6 +155,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.LPIChargeMapping(VatPOAReturn2ndLPP) shouldBe VatReturnPOA2ndLPPLPI
         ChargeType.LPIChargeMapping(VatCentralAssessment1stLPP) shouldBe VatCA1stLPPLPI
         ChargeType.LPIChargeMapping(VatCentralAssessment2ndLPP) shouldBe VatCA2ndLPPLPI
+        ChargeType.LPIChargeMapping(VatOAInaccuraciesFrom2009) shouldBe VatOAInaccuraciesFrom2009LPI
         ChargeType.LPIChargeMapping(VatOfficersAssessment1stLPP) shouldBe VatOA1stLPPLPI
         ChargeType.LPIChargeMapping(VatOfficersAssessment2ndLPP) shouldBe VatOA2ndLPPLPI
         ChargeType.LPIChargeMapping(VATOverpaymentforTax) shouldBe VATOverpaymentforTaxLPI
