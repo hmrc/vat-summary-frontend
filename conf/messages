@@ -594,6 +594,7 @@ chargeType.VATInaccuracyAssessPenLPITitle = Interest on inaccuracies penalty
 
 chargeType.VATOfficersAssessmentRPITitle = Repayment interest on officer’s assessment of VAT
 
+
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
 chargeType.migratedCreditDescription = miscellaneous VAT credit
