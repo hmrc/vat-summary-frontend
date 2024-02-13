@@ -1009,7 +1009,7 @@ object PaymentMessageHelper {
     VATAAReturnRPI,
     VatReturnForRPI,
     VATInaccuracyAssessPenLPI,
-    VATOfficersAssessmentRPI,
+    VATOfficersAssessmentRPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
