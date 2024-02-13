@@ -296,7 +296,7 @@ case object VatOfficersAssessmentLPI extends ChargeType {
 
 // Parent charges: Main transaction 4730, Sub transaction 1177 and Main transaction 4730, Sub transaction 1174
 case object VatOfficersAssessmentRPI extends ChargeType {
-  override val value: String = "VAT Officer's Assessment RPI"
+  override val value: String = "VAT Officer’s Assessment RPI"
 }
 case object VatOfficersAssessment1stLPP extends ChargeType {
   override val value: String = "VAT OA 1st LPP"
