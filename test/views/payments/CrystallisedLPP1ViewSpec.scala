@@ -55,6 +55,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
     "there are two penalty parts with Charge Ref \"VAT Overpayments 1st LPP\"" should {
       lazy val view2 = injectedView(viewModel(VatOverpayments1stLPP.value), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document2: Document = Jsoup.parse(view2.body)
+
       "have the correct first explanation paragraph" in {
         elementText("#content > div > div > p:nth-child(2)") shouldBe
           "This penalty applies if the VAT correction charge for 3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 has not been paid for 99 days."

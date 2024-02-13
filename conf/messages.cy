@@ -402,6 +402,8 @@ chargeType.vatReturnDebitChargeTitle = TAW
 
 chargeType.officerAssessmentChargeTitle = Asesiad swyddog o TAW
 
+chargeType.VATOfficersAssessmentRPITitle = Llog ar ad-daliadau ar asesiad swyddog o TAW
+
 chargeType.vatCentralAssessmentTitle = Asesiad canolog o TAW
 
 chargeType.vatDefaultSurchargeTitle = Gordal
