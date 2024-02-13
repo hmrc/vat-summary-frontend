@@ -210,8 +210,8 @@ crystallisedLPP1.penaltyAmount = Penalty amount
 crystallisedLPP1.amountReceived = Amount received
 crystallisedLPP1.leftToPay = Left to pay
 
-crystallisedLPP2.explanation = This penalty applies from day {0}, if any VAT remains unpaid.
-crystallisedLPP2.interestExplanation = The total increases daily based on the amount of unpaid VAT for the period.
+crystallisedLPP2.explanation = This penalty starts to apply if a VAT correction charge is unpaid for {0} days.
+crystallisedLPP2.interestExplanation = The total builds up daily until you pay your VAT or set up a payment plan.
 crystallisedLPP2.calculation = The calculation we use for each day is:
 crystallisedLPP2.calculationExplanation = (Penalty rate of {0}% × unpaid VAT) ÷ days in a year
 crystallisedLPP2.dueDate = Due date
@@ -355,16 +355,16 @@ chargeType.vATOverpaymentforTaxTitle = VAT correction
 chargeType.vatOverpayments.youNeedToPay = You need to pay this because HMRC paid you more VAT than we owed you.
 chargeType.vatOverpayments.thisIsBecauseOf = This could be because of:
 chargeType.vatOverpayments.anError = an error correction
-chargeType.vatOverpayments.anOfficer = an officer''s assessment
+chargeType.vatOverpayments.anOfficer = an officer’s assessment
 chargeType.vatOverpayments.aReallocation = a reallocation of funds across your account
 
-chargeType.overpaymentforTaxLPITitle = Repayment interest correction
+chargeType.overpaymentforTaxLPITitle = Interest on VAT correction
 
 chargeType.vatOverpayments.agent.youNeedToPay = Your client needs to pay this because HMRC paid them more VAT than we owed them.
-chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client''s account
+chargeType.vatOverpayments.agent.aReallocation = a reallocation of funds across your client’s account
 
 chargeType.vatOP1stLPP.Title = Penalty for late payment of VAT correction
-chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} to {1} has not been paid for {2} days.
+chargeType.vatOP1stLPP.1 = This penalty applies if the VAT correction charge for {0} has not been paid for {1} days.
 
 chargeType.vatOverpayments2ndLPPTitle = Second penalty for late payment of VAT correction
 chargeType.vatOverpayments2ndLPPDescription = Second penalty for late payment of VAT correction
@@ -378,6 +378,10 @@ chargeType.repaymentSupplementRecDescription = to recover the amount overpaid by
 
 chargeType.indirectRevRecoveryTitle = Payment recovery
 chargeType.indirectRevRecoveryDescription = to recover a payment made in error by HMRC
+
+chargeType.overpaymentForTaxRPITitle = Repayment interest on VAT
+chargeType.overpayments1stLPPRPITitle = Repayment interest on penalty
+chargeType.overpayments2ndLPPRPITitle = Repayment interest on second penalty
 
 chargeType.defaultInterestTitle = Default interest
 chargeType.furtherInterestTitle = Further interest
@@ -497,6 +501,8 @@ chargeType.vatErrorCorrection2ndLPPTitle = Second penalty for late payment of er
 chargeType.vatErrorCorrection1stLPPLPITitle = Interest on error correction penalty
 chargeType.vatErrorCorrection2ndLPPLPITitle = Interest on error correction second penalty
 
+chargeType.vatErrorCorrectionRPITitle = Repayment interest on error correction repayment
+
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
 chargeType.vatPaFurtherInterestDescription = due on the protective assessment as this was not paid on time
 
@@ -537,6 +543,8 @@ chargeType.VatPOAReturn1stLPPTitle = Penalty for late payment – payment on acc
 chargeType.VatPOAReturn2ndLPPTitle = Second penalty for late payment – payment on account
 chargeType.VatReturnPOA1stLPPLPITitle = Interest on payment on account penalty
 chargeType.VatReturnPOA2ndLPPLPITitle = Interest on payment on account second penalty
+
+chargeType.VatReturnPOARPITitle = Repayment interest on payment on account balance
 
 chargeType.vatReturnLPITitle = Interest on VAT
 chargeType.vatReturn1stLPPLPITitle = Interest on penalty
@@ -580,6 +588,11 @@ chargeType.VATAAReturnCharge1stLPP = Penalty for late payment – annual account
 chargeType.VATAAReturnCharge2ndLPP = Second penalty for late payment – annual accounting balance
 chargeType.VATReturn2ndLPP = Second penalty for late payment of VAT
 chargeType.VATReturnAALPITitle = Interest on annual accounting balance
+chargeType.VATReturnAARPITitle = Repayment interest on annual accounting repayment
+
+chargeType.VATInaccuracyAssessPenLPITitle = Interest on inaccuracies penalty
+
+chargeType.VATOfficersAssessmentRPITitle = Repayment interest on officer’s assessment of VAT
 
 chargeType.migratedLiabilityTitle = VAT migrated liability
 chargeType.migratedCreditTitle = VAT migrated credit
@@ -591,6 +604,8 @@ chargeType.vatDeferralPenaltyDescription = for unpaid deferred VAT
 chargeType.Overpayments1stLPPLPI = Interest on VAT correction penalty
 
 chargeType.VATOverpaymentForRPITitle = Repayment interest correction
+
+chargeType.VATReturnForRPITitle = Repayment interest on payment on account repayment
 
 chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
 

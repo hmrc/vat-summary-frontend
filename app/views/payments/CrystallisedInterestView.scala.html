@@ -67,7 +67,7 @@
 }
 
 @interestTypeMessageKey = @{
-  if(model.isPenalty) "penalty" else "vat"
+  if(model.isPenalty || model.isNonPenaltyReformPenaltyLPI) "penalty" else "vat"
 }
 
 @mainTemplate(
@@ -89,7 +89,7 @@
       </h1>
 
         @if(model.chargeType == VATOverpaymentforTaxLPI.value) {
-        <p class="govuk-body">@messages("estimatedInterest.vatOverpaymentInterest.description", displayDate(model.periodFrom))</p>
+        <p class="govuk-body" id="overpayment-interest-description">@messages("estimatedInterest.vatOverpaymentInterest.description", displayDate(model.periodFrom))</p>
       } else {
           <p id="charge-interest" class="govuk-body">
             @messages(s"crystallisedInterest.${interestTypeMessageKey}ChargeInterest")

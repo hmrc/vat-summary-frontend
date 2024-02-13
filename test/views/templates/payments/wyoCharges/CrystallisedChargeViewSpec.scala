@@ -16,7 +16,7 @@
 
 package views.templates.payments.wyoCharges
 
-import common.TestModels.{crystallisedInterestCharge, overdueCrystallisedInterestCharge}
+import common.TestModels.{crystallisedLPICharge, overdueCrystallisedLPICharge}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
@@ -30,7 +30,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
 
     "a charge is overdue" should {
 
-      lazy val view = injectedView(overdueCrystallisedInterestCharge)
+      lazy val view = injectedView(overdueCrystallisedLPICharge)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
@@ -49,13 +49,13 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       "have a link with the correct href" in {
         element("a").attr("href") shouldBe
           controllers.routes.ChargeBreakdownController.showBreakdown(
-            overdueCrystallisedInterestCharge.generateHash(user.vrn)
+            overdueCrystallisedLPICharge.generateHash(user.vrn)
           ).url
       }
     }
 
     "the charge is not overdue" should {
-      lazy val view = injectedView(crystallisedInterestCharge)
+      lazy val view = injectedView(crystallisedLPICharge)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
@@ -74,7 +74,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       "have a link with the correct href" in {
         element("a").attr("href") shouldBe
           controllers.routes.ChargeBreakdownController.showBreakdown(
-            crystallisedInterestCharge.generateHash(user.vrn)
+            crystallisedLPICharge.generateHash(user.vrn)
           ).url
       }
     }

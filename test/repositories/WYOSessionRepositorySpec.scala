@@ -19,15 +19,15 @@ package repositories
 import config.AppConfig
 import mocks.MockAppConfig
 import models.WYODatabaseModel
-import org.mongodb.scala.bson.{BsonInt64, BsonString}
+import org.mongodb.scala.bson.{BsonInt32, BsonInt64, BsonString}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.mongo.test.DefaultPlayMongoRepositorySupport
-import java.time.Instant
 
+import java.time.Instant
 import scala.concurrent.ExecutionContext
 
 class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceOneAppPerSuite with
@@ -51,7 +51,17 @@ class WYOSessionRepositorySpec extends AnyWordSpecLike with Matchers with GuiceO
       val ttlIndex = indexes.find(_.get("name").contains(BsonString("expiry")))
 
       ttlIndex.get("key").toString shouldBe """{"creationTimestamp": 1}"""
-      ttlIndex.get("expireAfterSeconds") shouldBe BsonInt64(mockAppConfig.timeToLiveInSeconds)
+
+      val expireAfterSecondsObj = ttlIndex.get("expireAfterSeconds")
+      val expectedTTLValue = mockAppConfig.timeToLiveInSeconds
+
+      val actualTTLValue = expireAfterSecondsObj match {
+        case obj: BsonInt64 => obj.getValue
+        case obj: BsonInt32 => obj.getValue.toLong
+        case _ => fail("Unexpected type for expireAfterSeconds")
+      }
+
+      actualTTLValue shouldBe expectedTTLValue
     }
   }
 

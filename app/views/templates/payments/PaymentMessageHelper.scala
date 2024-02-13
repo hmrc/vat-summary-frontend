@@ -76,6 +76,27 @@ object PaymentMessageHelper {
     Some("chargeType.indirectRevRecoveryDescription")
   )
 
+  object OverpaymentForTaxRPI extends PaymentMessageHelper(
+    VatOverpaymentForTaxRPI.value,
+    "chargeType.overpaymentForTaxRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object Overpayments1stLPPRPI extends PaymentMessageHelper(
+    VatOverpayments1stLPPRPI.value,
+    "chargeType.overpayments1stLPPRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object Overpayments2ndLPPRPI extends PaymentMessageHelper(
+    VatOverpayments2ndLPPRPI.value,
+    "chargeType.overpayments2ndLPPRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   object DefaultInterestDebit extends PaymentMessageHelper(
     VatDefaultInterestDebit.value,
     "chargeType.defaultInterestTitle",
@@ -552,6 +573,13 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object VATReturnPOARPI extends PaymentMessageHelper(
+    VatReturnPOARPI.value,
+    "chargeType.VatReturnPOARPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object VATReturn1stLPP extends PaymentMessageHelper(
     VatReturn1stLPP.value,
     "chargeType.VATReturn1stLPPTitle",
@@ -618,6 +646,13 @@ object PaymentMessageHelper {
   object VATOfficersAssessmentLPI extends PaymentMessageHelper(
     VatOfficersAssessmentLPI.value,
     "chargeType.VATOfficersAssessmentLPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
+  object VATOfficersAssessmentRPI extends PaymentMessageHelper(
+    VatOfficersAssessmentRPI.value,
+    "chargeType.VATOfficersAssessmentRPITitle",
     Some("chargeType.for"),
     Some("chargeType.for")
   )
@@ -823,11 +858,42 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+  object VATAAReturnRPI extends PaymentMessageHelper(
+    VatAAReturnChargeRPI.value,
+    "chargeType.VATReturnAARPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VatReturnForRPI extends PaymentMessageHelper(
+    VatReturnRPI.value,
+    "chargeType.VATReturnForRPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATInaccuracyAssessPenLPI extends PaymentMessageHelper(
+    VatInaccuracyAssessPenLPI.value,
+    "chargeType.VATInaccuracyAssessPenLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATErrorCorrectionRPI extends PaymentMessageHelper(
+    VatErrorCorrectionRPI.value,
+    "chargeType.vatErrorCorrectionRPITitle",
+    Some("chargeType.for"),
+    Some("chargeType.for")
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,
     RepaymentSupplementRecovery,
     IndirectTaxRevenueRecovery,
+    OverpaymentForTaxRPI,
+    Overpayments1stLPPRPI,
+    Overpayments2ndLPPRPI,
     DefaultInterestDebit,
     DefaultInterestCredit,
     FurtherInterestDebit,
@@ -877,6 +943,7 @@ object PaymentMessageHelper {
     VATErrorCorrection2ndLPP,
     VATErrorCorrection1stLPPLPI,
     VATErrorCorrection2ndLPPLPI,
+    VATErrorCorrectionRPI,
     VatPaFurtherInterest,
     VatCarterPenaltyCharge,
     VatFailureToNotifyRCSL,
@@ -928,6 +995,7 @@ object PaymentMessageHelper {
     VATPOAReturn2ndLPP,
     VATReturnPOA1stLPPLPI,
     VATReturnPOA2ndLPPLPI,
+    VATReturnPOARPI,
     VATCA1stLPP,
     VATCA2ndLPP,
     VATOA1stLPP,
@@ -937,7 +1005,11 @@ object PaymentMessageHelper {
     Overpayments1stLPPLPI,
     VATOverpaymentForRPI,
     OverpaymentforTaxLPI,
-    Overpayments2ndLPPLPI
+    Overpayments2ndLPPLPI,
+    VATAAReturnRPI,
+    VatReturnForRPI,
+    VATInaccuracyAssessPenLPI,
+    VATOfficersAssessmentRPI,
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

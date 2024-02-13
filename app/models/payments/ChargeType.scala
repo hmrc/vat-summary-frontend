@@ -16,7 +16,7 @@
 
 package models.payments
 
-import models.payments.ChargeType.{interestChargeTypes, penaltyChargeTypes, penaltyInterestChargeTypes}
+import models.payments.ChargeType.{LPIChargeTypes, nonPenaltyReformPenaltyLPIChargeTypes, penaltyChargeTypes, penaltyLPIChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
@@ -30,9 +30,11 @@ sealed trait ChargeType {
     value.map(_.toLower).replace(' ', '-')
   }
 
-  def isInterest: Boolean = interestChargeTypes.contains(this)
-  def notInterest: Boolean = !isInterest
-  def isPenaltyInterest: Boolean = penaltyInterestChargeTypes.contains(this)
+  def isLPICharge: Boolean = LPIChargeTypes.contains(this)
+  def notLPICharge: Boolean = !isLPICharge
+  def isPenaltyInterest: Boolean = penaltyLPIChargeTypes.contains(this)
+
+  def isNonPenaltyReformPenaltyLPI: Boolean = nonPenaltyReformPenaltyLPIChargeTypes.contains(this)
   def isPenalty: Boolean = penaltyChargeTypes.contains(this)
 }
 
@@ -44,14 +46,21 @@ case object VATOverpaymentforTax extends ChargeType {
   override val value: String = "VAT Overpayment for Tax"
 }
 
+case object VatOverpaymentForTaxRPI extends ChargeType {
+  override val value: String = "VAT Overpayment for Tax RPI"
+}
+case object VatOverpayments1stLPPRPI extends ChargeType {
+  override val value: String = "VAT Overpayments 1st LPP RPI"
+}
+case object VatOverpayments2ndLPPRPI extends ChargeType {
+  override val value: String = "VAT Overpayments 2nd LPP RPI"
+}
 case object VATOverpaymentforTaxLPI extends ChargeType {
   override val value: String = "VAT Overpayment for Tax LPI"
 }
-
 case object VatOverpayments2ndLPPLPI extends ChargeType {
   override val value: String = "VAT Overpayments 2nd LPP LPI"
 }
-
 case object VatUnrepayableOverpayment extends ChargeType {
   override val value: String = "VAT Unrepayable Overpayment"
 }
@@ -235,6 +244,10 @@ case object VatReturnPOA1stLPPLPI extends ChargeType {
 case object VatReturnPOA2ndLPPLPI extends ChargeType {
   override val value: String = "VAT Return POA 2nd LPP LPI"
 }
+// Parent charges: Main transaction 4701, Sub transaction 1174 and Main transaction 4701, Sub transaction 1177
+case object VatReturnPOARPI extends ChargeType {
+  override val value: String = "VAT Return POA RPI"
+}
 case object UnallocatedPayment extends ChargeType {
   override val value: String = "Unallocated payment"
 }
@@ -279,6 +292,11 @@ case object VatCA2ndLPPLPI extends ChargeType {
 }
 case object VatOfficersAssessmentLPI extends ChargeType {
   override val value: String = "VAT Officer's Assessment LPI"
+}
+
+// Parent charges: Main transaction 4731, Sub transaction 1174 and Main transaction 4731, Sub transaction 1177
+case object VatOfficersAssessmentRPI extends ChargeType {
+  override val value: String = "VAT Officer's Assessment RPI"
 }
 case object VatOfficersAssessment1stLPP extends ChargeType {
   override val value: String = "VAT OA 1st LPP"
@@ -388,6 +406,25 @@ case object VatOverpaymentForRPI extends ChargeType {
   override val value: String = "VAT Overpayment for RPI"
 }
 
+// Parent charges: Main transaction 4702, Sub transaction 1174 and Main transaction 4702, Sub transaction 1177
+case object VatAAReturnChargeRPI extends ChargeType {
+  override val value: String = "VAT Return AA RPI"
+}
+
+// Parent charge: Main transaction 4700, Sub transaction 1177
+case object VatReturnRPI extends ChargeType {
+  override val value: String = "VAT Return RPI"
+}
+
+case object VatInaccuracyAssessPenLPI extends ChargeType {
+  override val value: String = "VAT Inaccuracy Assessments Pen LPI"
+}
+
+// Parent charges: Main transaction 4731, Sub transaction 1174 and Main transaction 4731, Sub transaction 1177
+case object VatErrorCorrectionRPI extends ChargeType {
+  override val value: String = "VAT Error Correction RPI"
+}
+
 object ChargeType extends LoggerUtil {
 
   val allChargeTypes: Set[ChargeType] = Set(
@@ -453,6 +490,7 @@ object ChargeType extends LoggerUtil {
     VatPOAReturn2ndLPP,
     VatReturnPOA1stLPPLPI,
     VatReturnPOA2ndLPPLPI,
+    VatReturnPOARPI,
     UnallocatedPayment,
     Refund,
     VatMigratedLiability,
@@ -503,12 +541,19 @@ object ChargeType extends LoggerUtil {
     VatOverpayments1stLPP,
     VatOverpayments2ndLPP,
     VatOverpaymentForRPI,
+    VatOverpaymentForTaxRPI,
+    VatOverpayments1stLPPRPI,
+    VatOverpayments2ndLPPRPI,
     VATOverpaymentforTaxLPI,
     VatOverpayments1stLPPLPI,
-    VatOverpayments2ndLPPLPI
+    VatOverpayments2ndLPPLPI,
+    VatAAReturnChargeRPI,
+    VatReturnRPI,
+    VatInaccuracyAssessPenLPI,
+    VatErrorCorrectionRPI
   )
 
-  val interestChargeTypes: Set[ChargeType] = Set(
+  val LPIChargeTypes: Set[ChargeType] = Set(
     VatReturnLPI,
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
@@ -540,10 +585,11 @@ object ChargeType extends LoggerUtil {
     VatReturnPOA2ndLPPLPI,
     VatOverpayments1stLPPLPI,
     VATOverpaymentforTaxLPI,
-    VatOverpayments2ndLPPLPI
+    VatOverpayments2ndLPPLPI,
+    VatInaccuracyAssessPenLPI
   )
 
-  val penaltyInterestChargeTypes: Set[ChargeType] = Set(
+  val penaltyLPIChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
     VatCA1stLPPLPI,
@@ -564,6 +610,10 @@ object ChargeType extends LoggerUtil {
     VatReturnPOA2ndLPPLPI,
     VatOverpayments1stLPPLPI,
     VatOverpayments2ndLPPLPI
+  )
+
+  val nonPenaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
+    VatInaccuracyAssessPenLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -592,7 +642,7 @@ object ChargeType extends LoggerUtil {
 
   val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
 
-  val interestChargeMapping: Map[ChargeType, ChargeType] = Map(
+  val LPIChargeMapping: Map[ChargeType, ChargeType] = Map(
     ReturnDebitCharge -> VatReturnLPI,
     VatReturn1stLPP -> VatReturn1stLPPLPI,
     CentralAssessmentCharge -> VatCentralAssessmentLPI,
@@ -623,7 +673,8 @@ object ChargeType extends LoggerUtil {
     VatOfficersAssessment2ndLPP -> VatOA2ndLPPLPI,
     VatOverpayments2ndLPP -> VatOverpayments2ndLPPLPI,
     VatOverpayments1stLPP -> VatOverpayments1stLPPLPI,
-    VATOverpaymentforTax -> VATOverpaymentforTaxLPI
+    VATOverpaymentforTax -> VATOverpaymentforTaxLPI,
+    InaccuraciesAssessmentsPenCharge -> VatInaccuracyAssessPenLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(
@@ -653,7 +704,7 @@ object ChargeType extends LoggerUtil {
   def apply: String => ChargeType = input => {
     allChargeTypes.find { chargeType =>
       chargeType.value.toUpperCase.equals(input.trim.toUpperCase)
-    }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type"))
+    }.getOrElse(throw new IllegalArgumentException("Invalid Charge Type: " + input))
   }
 
   def unapply(arg: ChargeType): String = arg.value
