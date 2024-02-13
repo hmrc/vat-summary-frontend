@@ -463,6 +463,8 @@ chargeType.vatEcNoticeFurtherInterestDescription = a godir ar y swm a aseswyd
 chargeType.civilEvasionPenaltyTitle = Cosb osgoi sifil TAW
 chargeType.civilEvasionPenaltyDescription = oherwydd ein bod wedi darganfod anghysondebau yn ymwneud ag anonestrwydd
 
+chargeType.vatCivilEvasionPenaltyLPITitle = Llog ar gosb osgoi sifil TAW
+
 chargeType.vatInaccuraciesInECSalesTitle = Cosb am anghywirdebau
 chargeType.vatInaccuraciesInECSalesDescription = oherwydd eich bod wedi rhoi gwybodaeth wallus yn eich Rhestr Gwerthiannau yn y GE
 chargeType.vatInaccuraciesInECSalesDescription.agent = oherwydd bod eich cleient wedi rhoi gwybodaeth anghywir yn ei Restr Gwerthiannau yn y GE

@@ -95,13 +95,13 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
 
   "isPenalty" should {
 
-    penaltyChargeTypes.foreach { charge =>
+    penaltyReformPenaltiesChargeTypes.foreach { charge =>
       s"return true for $charge" in {
         charge.isPenalty shouldBe true
       }
     }
 
-    allChargeTypes.diff(penaltyChargeTypes).foreach { charge =>
+    allChargeTypes.diff(penaltyReformPenaltiesChargeTypes).foreach { charge =>
       s"return false for $charge" in {
         charge.isPenalty shouldBe false
       }
@@ -135,6 +135,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.LPIChargeMapping(VatPA1stLPP) shouldBe VatPA1stLPPLPI
         ChargeType.LPIChargeMapping(VatPA2ndLPP) shouldBe VatPA2ndLPPLPI
         ChargeType.LPIChargeMapping(VatProtectiveAssessmentCharge) shouldBe VatPALPICharge
+        ChargeType.LPIChargeMapping(CivilEvasionPenaltyCharge) shouldBe VatCivilEvasionPenaltyLPI
         ChargeType.LPIChargeMapping(AACharge) shouldBe VatAdditionalAssessmentLPI
         ChargeType.LPIChargeMapping(VatAA1stLPP) shouldBe VatAA1stLPPLPI
         ChargeType.LPIChargeMapping(VatAA2ndLPP) shouldBe VatAA2ndLPPLPI

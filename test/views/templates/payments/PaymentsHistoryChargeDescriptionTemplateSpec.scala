@@ -23,7 +23,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
 import views.html.templates.payments.PaymentsHistoryChargeDescription
-import views.templates.payments.PaymentMessageHelper.VatReturnForRPI
 
 class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
@@ -224,6 +223,36 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
         "display the correct description" in {
           elementText(Selectors.description) shouldBe "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+        }
+      }
+
+      "there is a Civil Evasion Penalty charge" should {
+
+        val model = exampleModel.copy(chargeType = CivilEvasionPenaltyCharge)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "VAT civil evasion penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "because we have identified irregularities involving dishonesty"
+        }
+      }
+
+      "there is a VAT Civil Evasion Penalty LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatCivilEvasionPenaltyLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on VAT civil evasion penalty"
+        }
+
+        "display no additional description" in {
+          elementText(Selectors.description) shouldBe ""
         }
       }
 

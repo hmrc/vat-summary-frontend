@@ -16,7 +16,7 @@
 
 package models.payments
 
-import models.payments.ChargeType.{LPIChargeTypes, nonPenaltyReformPenaltyLPIChargeTypes, penaltyChargeTypes, penaltyLPIChargeTypes}
+import models.payments.ChargeType.{LPIChargeTypes, nonPenaltyReformPenaltyLPIChargeTypes, penaltyReformPenaltiesChargeTypes, penaltyReformPenaltyLPIChargeTypes}
 import play.api.libs.json.Reads._
 import play.api.libs.json._
 import utils.LoggerUtil
@@ -32,10 +32,10 @@ sealed trait ChargeType {
 
   def isLPICharge: Boolean = LPIChargeTypes.contains(this)
   def notLPICharge: Boolean = !isLPICharge
-  def isPenaltyInterest: Boolean = penaltyLPIChargeTypes.contains(this)
+  def isPenaltyInterest: Boolean = penaltyReformPenaltyLPIChargeTypes.contains(this)
 
   def isNonPenaltyReformPenaltyLPI: Boolean = nonPenaltyReformPenaltyLPIChargeTypes.contains(this)
-  def isPenalty: Boolean = penaltyChargeTypes.contains(this)
+  def isPenalty: Boolean = penaltyReformPenaltiesChargeTypes.contains(this)
 }
 
 case object VatOverpayments2ndLPP extends ChargeType {
@@ -165,6 +165,9 @@ case object MpRepeatedPre2009Charge extends ChargeType {
 }
 case object CivilEvasionPenaltyCharge extends ChargeType {
   override val value: String = "VAT Civil Evasion Penalty"
+}
+case object VatCivilEvasionPenaltyLPI extends ChargeType {
+  override val value: String = "VAT Civil Evasion Penalty LPI"
 }
 case object VatOAInaccuraciesFrom2009 extends ChargeType {
   override val value: String = "VAT OA Inaccuracies from 2009"
@@ -463,6 +466,7 @@ object ChargeType extends LoggerUtil {
     MpPre2009Charge,
     MpRepeatedPre2009Charge,
     CivilEvasionPenaltyCharge,
+    VatCivilEvasionPenaltyLPI,
     VatOAInaccuraciesFrom2009,
     InaccuraciesAssessmentsPenCharge,
     InaccuraciesReturnReplacedCharge,
@@ -567,6 +571,7 @@ object ChargeType extends LoggerUtil {
     VatPA1stLPPLPI,
     VatPA2ndLPPLPI,
     VatPALPICharge,
+    VatCivilEvasionPenaltyLPI,
     VatAdditionalAssessmentLPI,
     VatAA1stLPPLPI,
     VatAA2ndLPPLPI,
@@ -590,7 +595,7 @@ object ChargeType extends LoggerUtil {
     VatInaccuracyAssessPenLPI
   )
 
-  val penaltyLPIChargeTypes: Set[ChargeType] = Set(
+  val penaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
     VatReturn1stLPPLPI,
     VatReturn2ndLPPLPI,
     VatCA1stLPPLPI,
@@ -614,7 +619,8 @@ object ChargeType extends LoggerUtil {
   )
 
   val nonPenaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
-    VatInaccuracyAssessPenLPI
+    VatInaccuracyAssessPenLPI,
+    VatCivilEvasionPenaltyLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -641,7 +647,7 @@ object ChargeType extends LoggerUtil {
     VatOverpayments2ndLPP
   )
 
-  val penaltyChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
+  val penaltyReformPenaltiesChargeTypes: Set[ChargeType] = LPP1ChargeTypes ++ LPP2ChargeTypes
 
   val LPIChargeMapping: Map[ChargeType, ChargeType] = Map(
     ReturnDebitCharge -> VatReturnLPI,
@@ -651,6 +657,7 @@ object ChargeType extends LoggerUtil {
     VatPA1stLPP -> VatPA1stLPPLPI,
     VatPA2ndLPP -> VatPA2ndLPPLPI,
     VatProtectiveAssessmentCharge -> VatPALPICharge,
+    CivilEvasionPenaltyCharge -> VatCivilEvasionPenaltyLPI,
     AACharge -> VatAdditionalAssessmentLPI,
     VatAA1stLPP -> VatAA1stLPPLPI,
     VatAA2ndLPP -> VatAA2ndLPPLPI,
