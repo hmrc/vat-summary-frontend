@@ -481,6 +481,8 @@ chargeType.vatOAInaccuraciesFrom2009Title = Cosb am anghywirdebau
 chargeType.vatOAInaccuraciesFrom2009Description = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = oherwydd bod eich cleient wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 
+chargeType.vatOAInaccuraciesFrom2009LPITitle =  Llog ar gosb am anghywirdebau
+
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Cosb am anghywirdebau
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 chargeType.vatInaccuracyAssessmentsPenChargeDescription.agent = oherwydd bod eich cleient wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}

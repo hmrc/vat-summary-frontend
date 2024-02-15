@@ -370,6 +370,13 @@ object PaymentMessageHelper {
     Some("chargeType.vatOAInaccuraciesFrom2009Description.agent")
   )
 
+  object VatOAInaccuracies2009LPI extends PaymentMessageHelper(
+    VatOAInaccuraciesFrom2009LPI.value,
+    "chargeType.vatOAInaccuraciesFrom2009LPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object VatInaccuracyAssessmentsPenCharge extends PaymentMessageHelper(
     InaccuraciesAssessmentsPenCharge.value,
     "chargeType.vatInaccuracyAssessmentsPenChargeTitle",
@@ -937,6 +944,7 @@ object PaymentMessageHelper {
     VatFailureToSubmitECSales,
     FtnEachPartner,
     VatOAInaccuracies2009,
+    VatOAInaccuracies2009LPI,
     VatInaccuracyAssessmentsPenCharge,
     VatMpPre2009Charge,
     VatMpRepeatedPre2009Charge,
