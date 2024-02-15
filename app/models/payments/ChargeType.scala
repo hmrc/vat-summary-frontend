@@ -626,7 +626,8 @@ object ChargeType extends LoggerUtil {
 
   val nonPenaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
     VatInaccuracyAssessPenLPI,
-    VatCivilEvasionPenaltyLPI
+    VatCivilEvasionPenaltyLPI,
+    VatOAInaccuraciesFrom2009LPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
