@@ -412,6 +412,13 @@ object PaymentMessageHelper {
     Some("chargeType.vatWrongDoingPenaltyChargeDescription.agent")
   )
 
+  object VATWrongDoingPenaltyLPI extends PaymentMessageHelper(
+    VatWrongDoingPenaltyLPI.value,
+    "chargeType.vatWrongDoingPenaltyLPITitle",
+    None,
+    None
+  )
+
   object VatECDefaultInterest extends PaymentMessageHelper(
     VatECDefaultInterestCharge.value,
     "chargeType.vatErrorCorrectionNoticeDefaultInterestTitle",
@@ -950,6 +957,7 @@ object PaymentMessageHelper {
     VatMpRepeatedPre2009Charge,
     VatInaccuraciesReturnReplacedCharge,
     VatWrongDoingPenaltyCharge,
+    VATWrongDoingPenaltyLPI,
     VatPADefaultInterest,
     VatPALPI,
     VatStatutoryInterestCharge,
