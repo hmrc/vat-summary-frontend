@@ -150,6 +150,7 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.LPIChargeMapping(VatErrorCorrection2ndLPP) shouldBe VatErrorCorrection2ndLPPLPI
         ChargeType.LPIChargeMapping(AAReturnDebitCharge) shouldBe VatAAReturnChargeLPI
         ChargeType.LPIChargeMapping(PaymentOnAccountInstalments) shouldBe VatPOAInstalmentLPI
+        ChargeType.LPIChargeMapping(MiscPenaltyCharge) shouldBe VATMiscellaneousPenaltyLPI
         ChargeType.LPIChargeMapping(PaymentOnAccountReturnDebitCharge) shouldBe VatReturnPOALPI
         ChargeType.LPIChargeMapping(VatPOAReturn1stLPP) shouldBe VatReturnPOA1stLPPLPI
         ChargeType.LPIChargeMapping(VatPOAReturn2ndLPP) shouldBe VatReturnPOA2ndLPPLPI

@@ -435,6 +435,7 @@ chargeType.ftnMatPost2010ChargeDescription = oherwydd na wnaethoch roi gwybod i 
 chargeType.ftnMatPost2010ChargeDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni nad oedd wedi’i eithrio mwyach rhag cofrestru ar gyfer TAW
 
 chargeType.miscPenaltyCharge = Cosb gyffredinol TAW
+chargeType.vatMiscellaneousPenaltyLPITitle = Llog ar gosb TAW gyffredinol
 
 chargeType.VatOfficersAssessmentFurtherInterestTitle = Llog pellach ar asesiad y swyddog TAW
 chargeType.VatOfficersAssessmentFurtherInterestDescription = a godir ar asesiad y swyddog

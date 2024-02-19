@@ -237,6 +237,13 @@ object PaymentMessageHelper {
     None
   )
 
+  object VATMiscellaneousPenLPI extends PaymentMessageHelper(
+    VATMiscellaneousPenaltyLPI.value,
+    "chargeType.vatMiscellaneousPenaltyLPITitle",
+    None,
+    None
+  )
+
   object VatOfficersAssessmentFurtherInterest extends PaymentMessageHelper(
     OAFurtherInterestCharge.value,
     "chargeType.VatOfficersAssessmentFurtherInterestTitle",
@@ -935,6 +942,7 @@ object PaymentMessageHelper {
     VatFtnMatPre2010Charge,
     VatFtnMatPost2010Charge,
     VatMiscPenaltyCharge,
+    VATMiscellaneousPenLPI,
     VatSecurityDepositRequest,
     VatEcNoticeFurtherInterest,
     VatOfficersAssessmentFurtherInterest,
