@@ -494,6 +494,8 @@ chargeType.vatWrongDoingPenaltyChargeTitle = Wrongdoing penalty
 chargeType.vatWrongDoingPenaltyChargeDescription = because you charged VAT when you should not have done
 chargeType.vatWrongDoingPenaltyChargeDescription.agent = because your client charged VAT when they should not have done
 
+chargeType.vatWrongDoingPenaltyLPITitle = Interest on wrongdoing penalty
+
 chargeType.vatPADefaultInterestTitle = Protective assessment default interest
 chargeType.vatPADefaultInterestDescription = charged on the protective assessment
 

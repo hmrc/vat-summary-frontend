@@ -185,6 +185,11 @@ case object InaccuraciesReturnReplacedCharge extends ChargeType {
 case object WrongDoingPenaltyCharge extends ChargeType {
   override val value: String = "VAT Wrong Doing Penalty"
 }
+
+case object VatWrongDoingPenaltyLPI extends ChargeType {
+  override val value: String = "VAT Wrong Doing Penalty LPI"
+}
+
 case object CarterPenaltyCharge extends ChargeType {
   override val value: String = "VAT Carter Penalty"
 }
@@ -476,6 +481,7 @@ object ChargeType extends LoggerUtil {
     InaccuraciesAssessmentsPenCharge,
     InaccuraciesReturnReplacedCharge,
     WrongDoingPenaltyCharge,
+    VatWrongDoingPenaltyLPI,
     CarterPenaltyCharge,
     FailureToNotifyRCSLCharge,
     FailureToSubmitRCSLCharge,
@@ -586,6 +592,7 @@ object ChargeType extends LoggerUtil {
     VatReturnAA2ndLPPLPI,
     VatManualLPPLPI,
     VatOAInaccuraciesFrom2009LPI,
+    VatWrongDoingPenaltyLPI,
     VatAAQuarterlyInstalLPI,
     VatAAMonthlyInstalLPI,
     VatErrorCorrectionLPI,
@@ -627,6 +634,7 @@ object ChargeType extends LoggerUtil {
   val nonPenaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
     VatInaccuracyAssessPenLPI,
     VatCivilEvasionPenaltyLPI,
+    VatWrongDoingPenaltyLPI,
     VatOAInaccuraciesFrom2009LPI
   )
 
@@ -678,6 +686,7 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection1stLPP -> VatErrorCorrection1stLPPLPI,
     VatErrorCorrection2ndLPP -> VatErrorCorrection2ndLPPLPI,
     PaymentOnAccountReturnDebitCharge -> VatReturnPOALPI,
+    WrongDoingPenaltyCharge -> VatWrongDoingPenaltyLPI,
     VatOAInaccuraciesFrom2009-> VatOAInaccuraciesFrom2009LPI,
     VatPOAReturn1stLPP -> VatReturnPOA1stLPPLPI,
     VatPOAReturn2ndLPP -> VatReturnPOA2ndLPPLPI,

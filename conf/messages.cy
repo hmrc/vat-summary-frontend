@@ -503,6 +503,8 @@ chargeType.vatWrongDoingPenaltyChargeTitle = Cosb am gamweddu
 chargeType.vatWrongDoingPenaltyChargeDescription = oherwydd eich bod wedi codi TAW pan na ddylech fod wedi gwneud hynny
 chargeType.vatWrongDoingPenaltyChargeDescription.agent = oherwydd bod eich cleient wedi codi TAW pan na ddylai fod wedi gwneud hynny
 
+chargeType.vatWrongDoingPenaltyLPITitle = Llog ar gosb am gamweddu
+
 chargeType.vatPADefaultInterestTitle = Llog diffygdalu ar asesiad i ddiogelu
 chargeType.vatPADefaultInterestDescription = a godir ar yr asesiad i ddiogelu
 
