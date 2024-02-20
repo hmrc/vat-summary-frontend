@@ -487,10 +487,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val result = {
           mockDateServiceCall()
           controller.constructViewModel(
-            Seq(payment.copy(chargeType = MiscPenaltyCharge)), mandationStatus = "MTDfB", penaltyDetailsModelMax
+            Seq(payment.copy(chargeType = FtnEachPartnerCharge)), mandationStatus = "MTDfB", penaltyDetailsModelMax
           )(fakeRequest)
         }
-        result shouldBe Some(viewModelNoChargeDescription)
+          result shouldBe Some(viewModelNoChargeDescription)
       }
     }
   }

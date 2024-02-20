@@ -501,6 +501,21 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT Miscellaneous Penalty LPI" should {
+
+        val model = exampleModel.copy(chargeType = VATMiscellaneousPenaltyLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on VAT general penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
+
       "there is an VAT Migrated Liability Charge Type" should {
 
         val model = exampleModel.copy(chargeType = VatMigratedLiability)

@@ -157,6 +157,9 @@ case object FtnEachPartnerCharge extends ChargeType {
 case object MiscPenaltyCharge extends ChargeType {
   override val value: String = "VAT Miscellaneous Penalty"
 }
+case object VATMiscellaneousPenaltyLPI  extends ChargeType {
+  override val value: String = "VAT Miscellaneous Penalty LPI"
+}
 case object MpPre2009Charge extends ChargeType {
   override val value: String = "VAT MP pre 2009"
 }
@@ -472,6 +475,7 @@ object ChargeType extends LoggerUtil {
     FtnMatPost2010Charge,
     FtnMatPre2010Charge,
     MiscPenaltyCharge,
+    VATMiscellaneousPenaltyLPI,
     MpPre2009Charge,
     MpRepeatedPre2009Charge,
     CivilEvasionPenaltyCharge,
@@ -584,6 +588,7 @@ object ChargeType extends LoggerUtil {
     VatPALPICharge,
     VatCivilEvasionPenaltyLPI,
     VatAdditionalAssessmentLPI,
+    VATMiscellaneousPenaltyLPI,
     VatAA1stLPPLPI,
     VatAA2ndLPPLPI,
     VatAAReturnChargeLPI,
@@ -634,8 +639,9 @@ object ChargeType extends LoggerUtil {
   val nonPenaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
     VatInaccuracyAssessPenLPI,
     VatCivilEvasionPenaltyLPI,
-    VatWrongDoingPenaltyLPI,
-    VatOAInaccuraciesFrom2009LPI
+    VatOAInaccuraciesFrom2009LPI,
+    VATMiscellaneousPenaltyLPI,
+    VatWrongDoingPenaltyLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -694,6 +700,7 @@ object ChargeType extends LoggerUtil {
     PaymentOnAccountInstalments -> VatPOAInstalmentLPI,
     VatCentralAssessment1stLPP -> VatCA1stLPPLPI,
     VatCentralAssessment2ndLPP -> VatCA2ndLPPLPI,
+    MiscPenaltyCharge -> VATMiscellaneousPenaltyLPI,
     VatOfficersAssessment1stLPP -> VatOA1stLPPLPI,
     VatOfficersAssessment2ndLPP -> VatOA2ndLPPLPI,
     VatOverpayments2ndLPP -> VatOverpayments2ndLPPLPI,

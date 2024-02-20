@@ -480,7 +480,7 @@ object TestModels {
 
   val viewModelNoChargeDescription: WhatYouOweViewModel = whatYouOweViewModel.copy(
     charges = Seq(whatYouOweChargeModel.copy(
-      chargeType = "VAT Miscellaneous Penalty"
+      chargeType = "VAT FTN Each Partner"
     ))
   )
 
