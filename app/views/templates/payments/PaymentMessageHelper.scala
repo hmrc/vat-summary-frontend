@@ -489,6 +489,13 @@ object PaymentMessageHelper {
     Some("chargeType.vatCarterPenaltyChargeDescription.agent")
   )
 
+  object VATCarterPenaltyLPI extends PaymentMessageHelper(
+    VatCarterPenaltyLPI.value,
+    "chargeType.vatCarterPenaltyLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
   object VatFailureToNotifyRCSL extends PaymentMessageHelper(
     FailureToNotifyRCSLCharge.value,
     "chargeType.vatFailureToNotifyRCSLTitle",
@@ -501,6 +508,13 @@ object PaymentMessageHelper {
     "chargeType.vatFailureToSubmitRCSLTitle",
     Some("chargeType.vatFailureToSubmitRCSLDescription"),
     Some("chargeType.vatFailureToSubmitRCSLDescription.agent")
+  )
+
+  object VATFailureToSubmitRCSLLPI extends PaymentMessageHelper(
+    VatFailureToSubmitRCSLLPI.value,
+    "chargeType.vatFailureToSubmitRCSLLPITitle",
+    None,
+    None
   )
 
   object VatCreditReturnOffsetCharge extends PaymentMessageHelper(
@@ -978,6 +992,7 @@ object PaymentMessageHelper {
     VatInaccuraciesInECSales,
     VatFailureToSubmitECSales,
     VatFailureToSubmitECSalesLPI,
+    VATFailureToSubmitRCSLLPI,
     FtnEachPartner,
     VatOAInaccuracies2009,
     VatOAInaccuracies2009LPI,
@@ -999,6 +1014,7 @@ object PaymentMessageHelper {
     VATErrorCorrectionRPI,
     VatPaFurtherInterest,
     VatCarterPenaltyCharge,
+    VATCarterPenaltyLPI,
     VatFailureToNotifyRCSL,
     VatFailureToSubmitRCSL,
     VatCreditReturnOffsetCharge,

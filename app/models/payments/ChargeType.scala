@@ -195,12 +195,22 @@ case object VatWrongDoingPenaltyLPI extends ChargeType {
 case object CarterPenaltyCharge extends ChargeType {
   override val value: String = "VAT Carter Penalty"
 }
+
+case object VatCarterPenaltyLPI extends ChargeType {
+  override val value: String = "VAT Carter Penalty LPI"
+}
+
 case object FailureToNotifyRCSLCharge extends ChargeType {
   override val value: String = "VAT FTN RCSL"
 }
 case object FailureToSubmitRCSLCharge extends ChargeType {
   override val value: String = "VAT Failure to submit RCSL"
 }
+
+case object VatFailureToSubmitRCSLLPI extends ChargeType {
+  override val value: String = "VAT Failure to Submit RCSL LPI"
+}
+
 case object VatInaccuraciesInECSalesCharge extends ChargeType {
   override val value: String = "VAT Inaccuracies in EC Sales"
 }
@@ -499,8 +509,10 @@ object ChargeType extends LoggerUtil {
     WrongDoingPenaltyCharge,
     VatWrongDoingPenaltyLPI,
     CarterPenaltyCharge,
+    VatCarterPenaltyLPI,
     FailureToNotifyRCSLCharge,
     FailureToSubmitRCSLCharge,
+    VatFailureToSubmitRCSLLPI,
     VatInaccuraciesInECSalesCharge,
     StatutoryInterestCharge,
     VatPADefaultInterestCharge,
@@ -614,6 +626,8 @@ object ChargeType extends LoggerUtil {
     VatManualLPPLPI,
     VatOAInaccuraciesFrom2009LPI,
     VatWrongDoingPenaltyLPI,
+    VatCarterPenaltyLPI,
+    VatFailureToSubmitRCSLLPI,
     VatAAQuarterlyInstalLPI,
     VatAAMonthlyInstalLPI,
     VatErrorCorrectionLPI,
@@ -659,7 +673,9 @@ object ChargeType extends LoggerUtil {
     VatOAInaccuraciesFrom2009LPI,
     VATMiscellaneousPenaltyLPI,
     VatWrongDoingPenaltyLPI,
-    VatFailureToSubmitECSalesChargeLPI
+    VatFailureToSubmitECSalesChargeLPI,
+    VatCarterPenaltyLPI,
+    VatFailureToSubmitRCSLLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -711,6 +727,8 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrection2ndLPP -> VatErrorCorrection2ndLPPLPI,
     PaymentOnAccountReturnDebitCharge -> VatReturnPOALPI,
     WrongDoingPenaltyCharge -> VatWrongDoingPenaltyLPI,
+    CarterPenaltyCharge -> VatCarterPenaltyLPI,
+    FailureToSubmitRCSLCharge -> VatFailureToSubmitRCSLLPI,
     VatOAInaccuraciesFrom2009-> VatOAInaccuraciesFrom2009LPI,
     VatPOAReturn1stLPP -> VatReturnPOA1stLPPLPI,
     VatPOAReturn2ndLPP -> VatReturnPOA2ndLPPLPI,

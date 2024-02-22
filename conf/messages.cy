@@ -533,12 +533,16 @@ chargeType.vatCarterPenaltyChargeTitle = Cosb am beidio â chyflwyno’n gywir
 chargeType.vatCarterPenaltyChargeDescription = oherwydd na wnaethoch ddefnyddio’r sianel ddigidol gywir ar gyfer y cyfnod {0}
 chargeType.vatCarterPenaltyChargeDescription.agent = oherwydd na wnaeth eich cleient ddefnyddio’r sianel ddigidol gywir ar gyfer y cyfnod {0}
 
+chargeType.vatCarterPenaltyLPITitle = Llog ar gosb am beidio â chyflwyno’n gywir
+
 chargeType.vatFailureToNotifyRCSLTitle = Cosb am fethu â hysbysu
 chargeType.vatFailureToNotifyRCSLDescription = oherwydd eich bod wedi methu â rhoi gwybod i ni am y dyddiad y gwnaethoch werthiant tâl gwrthdro neu roi’r gorau i wneud cyflenwadau
 chargeType.vatFailureToNotifyRCSLDescription.agent = oherwydd bod eich cleient wedi methu â rhoi gwybod i ni am y dyddiad y gwnaeth werthiant tâl gwrthdro neu roi’r gorau i wneud cyflenwadau
 chargeType.vatFailureToSubmitRCSLTitle = Cosb Rhestr Gwerthiannau Tâl Gwrthdro
 chargeType.vatFailureToSubmitRCSLDescription = oherwydd eich bod wedi methu â chyflwyno Rhestr Gwerthiannau Tâl Gwrthdro
 chargeType.vatFailureToSubmitRCSLDescription.agent = oherwydd bod eich cleient wedi methu â chyflwyno Rhestr Gwerthiannau Tâl Gwrthdro
+
+chargeType.vatFailureToSubmitRCSLLPITitle = Llog ar gosb rhestr gwerthiannau Tâl Gwrthdro
 
 chargeType.vatCreditReturnOffsetChargeTitle = Ad-daliad rhannol o ordaliad
 chargeType.vatCreditReturnOffsetChargeDescription = ad-daliad rhannol ar gyfer y cyfnod {0}
