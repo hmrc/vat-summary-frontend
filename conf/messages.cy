@@ -508,6 +508,10 @@ chargeType.vatWrongDoingPenaltyChargeDescription.agent = oherwydd bod eich cleie
 
 chargeType.vatWrongDoingPenaltyLPITitle = Llog ar gosb am gamweddu
 
+chargeType.VatManualLPPRPITitle = Llog ar ad-daliad o gosb am dalu’n hwyr
+
+chargeType.VatReturn1stLPPRPITitle = Llog ar ad-daliad o gosb am dalu TAW yn hwyr
+
 chargeType.vatPADefaultInterestTitle = Llog diffygdalu ar asesiad i ddiogelu
 chargeType.vatPADefaultInterestDescription = a godir ar yr asesiad i ddiogelu
 

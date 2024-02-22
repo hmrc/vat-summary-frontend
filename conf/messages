@@ -498,6 +498,11 @@ chargeType.vatWrongDoingPenaltyChargeDescription.agent = because your client cha
 
 chargeType.vatWrongDoingPenaltyLPITitle = Interest on wrongdoing penalty
 
+chargeType.VatManualLPPRPITitle = Repayment interest on late payment penalty
+
+chargeType.VatReturn1stLPPRPITitle = Repayment interest on penalty for late payment of VAT
+
+
 chargeType.vatPADefaultInterestTitle = Protective assessment default interest
 chargeType.vatPADefaultInterestDescription = charged on the protective assessment
 
