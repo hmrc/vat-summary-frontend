@@ -474,6 +474,8 @@ chargeType.vatFailureToSubmitECSalesTitle = Cosb Rhestr Gwerthiannau yn y GE
 chargeType.vatFailureToSubmitECSalesDescription = oherwydd na wnaethoch gyflwyno Rhestr Gwerthiannau yn y GE neu rydych wedi ei chyflwyno’n hwyr
 chargeType.vatFailureToSubmitECSalesDescription.agent = oherwydd na wnaeth eich cleient gyflwyno Rhestr Gwerthiannau yn y GE neu ei fod wedi’i chyflwyno’n hwyr
 
+chargeType.vatFailureToSubmitECSalesLPITitle = Llog ar gosb rhestr gwerthiannau yn y GE
+
 chargeType.ftnEachPartnerTitle = Cosb am fethu â hysbysu
 chargeType.ftnEachPartnerDescription = oherwydd na wnaethoch roi gwybod i ni am yr holl bartneriaid a newidiadau yn eich partneriaeth
 chargeType.ftnEachPartnerDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni am yr holl bartneriaid a newidiadau yn ei bartneriaeth

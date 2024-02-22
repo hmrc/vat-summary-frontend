@@ -464,6 +464,8 @@ chargeType.vatFailureToSubmitECSalesTitle = EC sales list penalty
 chargeType.vatFailureToSubmitECSalesDescription = because you have not submitted an EC sales list or you have submitted it late
 chargeType.vatFailureToSubmitECSalesDescription.agent = because your client has not submitted an EC sales list or has submitted it late
 
+chargeType.vatFailureToSubmitECSalesLPITitle = Interest on EC sales list penalty
+
 chargeType.ftnEachPartnerTitle = Failure to notify penalty
 chargeType.ftnEachPartnerDescription = because you did not tell us about all the partners and changes in your partnership
 chargeType.ftnEachPartnerDescription.agent = because your client did not tell us about all the partners and changes in their partnership
@@ -473,7 +475,6 @@ chargeType.vatOAInaccuraciesFrom2009Description = because you submitted an inacc
 chargeType.vatOAInaccuraciesFrom2009Description.agent = because your client submitted an inaccurate document for the period {0}
 
 chargeType.vatOAInaccuraciesFrom2009LPITitle =  Interest on inaccuracies penalty
-
 
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Inaccuracies penalty
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = because you submitted an inaccurate document for the period {0}
