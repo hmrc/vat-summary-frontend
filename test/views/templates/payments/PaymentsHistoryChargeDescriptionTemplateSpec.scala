@@ -256,6 +256,36 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a VAT Failure to Submit EC Sales charge" should {
+
+        val model = exampleModel.copy(chargeType = VatFailureToSubmitECSalesCharge)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "EC sales list penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "because you have not submitted an EC sales list or you have submitted it late"
+        }
+      }
+
+      "there is a VAT Failure to Submit EC Sales LPI charge" should {
+
+        val model = exampleModel.copy(chargeType = VatFailureToSubmitECSalesChargeLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on EC sales list penalty"
+        }
+
+        "display no additional description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
+
       "there is a VAT AA Default Interest charge" should {
 
         val model = exampleModel.copy(chargeType = AAInterestCharge)
@@ -1408,6 +1438,36 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
   }
 
   "user is an agent" when {
+
+    "there is a VAT Failure to Submit EC Sales charge" should {
+
+      val model = exampleModel.copy(chargeType = VatFailureToSubmitECSalesCharge)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "EC sales list penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because your client has not submitted an EC sales list or has submitted it late"
+      }
+    }
+
+    "there is a VAT Failure to Submit EC Sales LPI charge" should {
+
+      val model = exampleModel.copy(chargeType = VatFailureToSubmitECSalesChargeLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on EC sales list penalty"
+      }
+
+      "display no additional description" in {
+        elementText(Selectors.description) shouldBe ""
+      }
+    }
 
     "there is a vat return debit charge" should {
 

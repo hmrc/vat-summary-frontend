@@ -363,6 +363,13 @@ object PaymentMessageHelper {
     Some("chargeType.vatFailureToSubmitECSalesDescription.agent")
   )
 
+  object VatFailureToSubmitECSalesLPI extends PaymentMessageHelper(
+    VatFailureToSubmitECSalesChargeLPI.value,
+    "chargeType.vatFailureToSubmitECSalesLPITitle",
+    None,
+    None
+  )
+
   object FtnEachPartner extends PaymentMessageHelper(
     FtnEachPartnerCharge.value,
     "chargeType.ftnEachPartnerTitle",
@@ -957,6 +964,7 @@ object PaymentMessageHelper {
     VATCivilEvasionPenaltyLPI,
     VatInaccuraciesInECSales,
     VatFailureToSubmitECSales,
+    VatFailureToSubmitECSalesLPI,
     FtnEachPartner,
     VatOAInaccuracies2009,
     VatOAInaccuracies2009LPI,
