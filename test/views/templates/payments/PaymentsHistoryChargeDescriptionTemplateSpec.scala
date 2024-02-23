@@ -1220,6 +1220,34 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
           elementText(Selectors.description) shouldBe ""
         }
       }
+
+      "there is a VAT Manual LPP RPI" should {
+        val model = exampleModel.copy(chargeType = VatManualLPPRPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Repayment interest on late payment penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
+
+      "there is a VAT Return LPP1 RPI" should {
+        val model = exampleModel.copy(chargeType = VatReturnLPP1RPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Repayment interest on penalty for late payment of VAT"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
       "there is a VAT AA Quarterly Instal LPI" should {
 
         val model = exampleModel.copy(chargeType = VatAAQuarterlyInstalLPI)
@@ -2406,6 +2434,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
       }
     }
+
     "there is a VAT AA Return Charge 2nd LPP" should {
 
       val model = exampleModel.copy(chargeType = VatAAReturnCharge2ndLPP)
@@ -2418,6 +2447,35 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+      }
+    }
+
+
+    "there is a VAT Manual LPP RPI for agent to see" should {
+      val model = exampleModel.copy(chargeType = VatManualLPPRPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Repayment interest on late payment penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe ""
+      }
+    }
+
+    "there is a VAT Return LPP1 RPI for agent to see" should {
+      val model = exampleModel.copy(chargeType = VatReturnLPP1RPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Repayment interest on penalty for late payment of VAT"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe ""
       }
     }
     "there is a VAT Return 2nd LPP" should {

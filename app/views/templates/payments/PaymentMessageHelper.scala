@@ -906,6 +906,19 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod"),
     Some("chargeType.forPeriod")
   )
+  object VatForManualLPPRPI extends PaymentMessageHelper(
+    VatManualLPPRPI.value,
+    "chargeType.VatManualLPPRPITitle",
+    None,
+    None
+  )
+
+  object VatReturnForLPP1RPI extends PaymentMessageHelper(
+    VatReturnLPP1RPI.value,
+    "chargeType.VatReturn1stLPPRPITitle",
+    None,
+    None
+  )
 
   object VATInaccuracyAssessPenLPI extends PaymentMessageHelper(
     VatInaccuracyAssessPenLPI.value,
@@ -1049,7 +1062,9 @@ object PaymentMessageHelper {
     VATAAReturnRPI,
     VatReturnForRPI,
     VATInaccuracyAssessPenLPI,
-    VATOfficersAssessmentRPI
+    VATOfficersAssessmentRPI,
+    VatForManualLPPRPI,
+    VatReturnForLPP1RPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])
