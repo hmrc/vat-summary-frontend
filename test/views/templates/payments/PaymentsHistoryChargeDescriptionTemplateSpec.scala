@@ -471,6 +471,65 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
         }
       }
 
+      "there is a Carter Penalty Charge" should {
+        val model = exampleModel.copy(chargeType = CarterPenaltyCharge)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Penalty for not filing correctly"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "because you did not use the correct digital channel" +
+            " for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+        }
+      }
+
+      "there is a VAT Carter Penalty LPI" should {
+
+        val model = exampleModel.copy(chargeType = VatCarterPenaltyLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on penalty for not filing correctly"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+        }
+      }
+
+      "there is a Failure To Submit RCSL Charge" should {
+        val model = exampleModel.copy(chargeType = FailureToSubmitRCSLCharge)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Reverse Charge sales list penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "because you have failed to submit a Reverse Charge sales list"
+        }
+      }
+
+      "there is a VAT Failure To Submit RCSL LPI" should {
+
+        val model = exampleModel.copy(chargeType = VatFailureToSubmitRCSLLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on Reverse Charge sales list penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
+
       "there is a Vat Credit Return Offset Charge Charge" should {
 
         val model = exampleModel.copy(chargeType = CreditReturnOffsetCharge)
@@ -1797,6 +1856,80 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
 
       "display the correct description" in {
         elementText(Selectors.description) shouldBe "because your client charged VAT when they should not have done"
+      }
+    }
+
+    "there is a VAT Wrong Doing Penalty LPI" should {
+
+      val model = exampleModel.copy(chargeType = VatWrongDoingPenaltyLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on wrongdoing penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe ""
+      }
+    }
+
+    "there is a Carter Penalty Charge" should {
+      val model = exampleModel.copy(chargeType = CarterPenaltyCharge)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Penalty for not filing correctly"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because your client did not use the correct digital channel" +
+          " for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+      }
+    }
+
+    "there is a VAT Carter Penalty LPI" should {
+
+      val model = exampleModel.copy(chargeType = VatCarterPenaltyLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on penalty for not filing correctly"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
+      }
+    }
+
+    "there is a Failure To Submit RCSL Charge" should {
+      val model = exampleModel.copy(chargeType = FailureToSubmitRCSLCharge)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Reverse Charge sales list penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because your client failed to submit a reverse charge sales list"
+      }
+    }
+
+    "there is a VAT Failure To Submit RCSL LPI" should {
+
+      val model = exampleModel.copy(chargeType = VatFailureToSubmitRCSLLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on Reverse Charge sales list penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe ""
       }
     }
 
