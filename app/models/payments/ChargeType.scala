@@ -151,8 +151,14 @@ case object FtnMatPre2010Charge extends ChargeType {
 case object FtnMatPost2010Charge extends ChargeType {
   override val value: String = "VAT FTN Mat Change Post 2010"
 }
+case object FtnMatPost2010ChargeLPI extends ChargeType {
+  override val value: String = "VAT FTN Mat Chg Post 2010 LPI"
+}
 case object FtnEachPartnerCharge extends ChargeType {
   override val value: String = "VAT FTN Each Partner"
+}
+case object FtnEachPartnerChargeLPI extends ChargeType {
+  override val value: String = "VAT FTN Each Partner LPI"
 }
 case object MiscPenaltyCharge extends ChargeType {
   override val value: String = "VAT Miscellaneous Penalty"
@@ -494,7 +500,9 @@ object ChargeType extends LoggerUtil {
     BnpRegPre2010Charge,
     BnpRegPost2010Charge,
     FtnEachPartnerCharge,
+    FtnEachPartnerChargeLPI,
     FtnMatPost2010Charge,
+    FtnMatPost2010ChargeLPI,
     FtnMatPre2010Charge,
     MiscPenaltyCharge,
     VATMiscellaneousPenaltyLPI,
@@ -641,7 +649,9 @@ object ChargeType extends LoggerUtil {
     VATOverpaymentforTaxLPI,
     VatOverpayments2ndLPPLPI,
     VatInaccuracyAssessPenLPI,
-    VatFailureToSubmitECSalesChargeLPI
+    VatFailureToSubmitECSalesChargeLPI,
+    FtnEachPartnerChargeLPI,
+    FtnMatPost2010ChargeLPI
   )
 
   val penaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
@@ -675,7 +685,10 @@ object ChargeType extends LoggerUtil {
     VatWrongDoingPenaltyLPI,
     VatFailureToSubmitECSalesChargeLPI,
     VatCarterPenaltyLPI,
-    VatFailureToSubmitRCSLLPI
+    VatFailureToSubmitRCSLLPI,
+    VatFailureToSubmitECSalesChargeLPI,
+    FtnEachPartnerChargeLPI,
+    FtnMatPost2010ChargeLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -743,7 +756,9 @@ object ChargeType extends LoggerUtil {
     VatOverpayments1stLPP -> VatOverpayments1stLPPLPI,
     VATOverpaymentforTax -> VATOverpaymentforTaxLPI,
     InaccuraciesAssessmentsPenCharge -> VatInaccuracyAssessPenLPI,
-    VatFailureToSubmitECSalesCharge -> VatFailureToSubmitECSalesChargeLPI
+    VatFailureToSubmitECSalesCharge -> VatFailureToSubmitECSalesChargeLPI,
+    FtnEachPartnerCharge -> FtnEachPartnerChargeLPI,
+    FtnMatPost2010Charge -> FtnMatPost2010ChargeLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(

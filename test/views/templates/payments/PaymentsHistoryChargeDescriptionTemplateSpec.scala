@@ -1521,10 +1521,131 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec {
           elementText(Selectors.description) shouldBe "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"
         }
       }
+
+      "there is a VAT FTN Mat Change Post 2010" should {
+
+        val model = exampleModel.copy(chargeType = FtnMatPost2010Charge)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Failure to notify penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "because you did not tell us you are no longer exempt from VAT registration"
+        }
+      }
+
+      "there is a VAT FTN Mat Change Post 2010 LPI" should {
+
+        val model = exampleModel.copy(chargeType = FtnMatPost2010ChargeLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on failure to notify penalty – exempt VAT reg"
+        }
+
+        "display no additional description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
+
+      "there is a VAT FTN Each Partner" should {
+
+        val model = exampleModel.copy(chargeType = FtnEachPartnerCharge)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Failure to notify penalty"
+        }
+
+        "display the correct description" in {
+          elementText(Selectors.description) shouldBe "because you did not tell us about all the partners and changes in your partnership"
+        }
+      }
+
+      "there is a VAT FTN Each Partner LPI" should {
+
+        val model = exampleModel.copy(chargeType = FtnEachPartnerChargeLPI)
+        lazy val template = paymentsHistoryChargeDescription(model)
+        lazy implicit val document: Document = Jsoup.parse(template.body)
+
+        "display the correct charge title" in {
+          elementText(Selectors.chargeTitle) shouldBe "Interest on failure to notify penalty - partners"
+        }
+
+        "display no additional description" in {
+          elementText(Selectors.description) shouldBe ""
+        }
+      }
+
     }
   }
 
   "user is an agent" when {
+
+    "there is a VAT FTN Mat Change Post 2010" should {
+
+      val model = exampleModel.copy(chargeType = FtnMatPost2010Charge)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Failure to notify penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because your client did not tell us they were no longer exempt from VAT registration"
+      }
+    }
+
+    "there is a VAT FTN Mat Change Post 2010 LPI" should {
+
+      val model = exampleModel.copy(chargeType = FtnMatPost2010ChargeLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on failure to notify penalty – exempt VAT reg"
+      }
+
+      "display no additional description" in {
+        elementText(Selectors.description) shouldBe ""
+      }
+    }
+
+    "there is a VAT FTN Each Partner" should {
+
+      val model = exampleModel.copy(chargeType = FtnEachPartnerCharge)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Failure to notify penalty"
+      }
+
+      "display the correct description" in {
+        elementText(Selectors.description) shouldBe "because your client did not tell us about all the partners and changes in their partnership"
+      }
+    }
+
+    "there is a VAT FTN Each Partner LPI" should {
+
+      val model = exampleModel.copy(chargeType = FtnEachPartnerChargeLPI)
+      lazy val template = paymentsHistoryChargeDescription(model)(messages, agentUser)
+      lazy implicit val document: Document = Jsoup.parse(template.body)
+
+      "display the correct charge title" in {
+        elementText(Selectors.chargeTitle) shouldBe "Interest on failure to notify penalty - partners"
+      }
+
+      "display no additional description" in {
+        elementText(Selectors.description) shouldBe ""
+      }
+    }
 
     "there is a VAT Failure to Submit EC Sales charge" should {
 
