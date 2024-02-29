@@ -434,6 +434,8 @@ chargeType.ftnMatPost2010ChargeTitle = Cosb am fethu â hysbysu
 chargeType.ftnMatPost2010ChargeDescription = oherwydd na wnaethoch roi gwybod i ni nad ydych wedi’ch eithrio mwyach rhag cofrestru ar gyfer TAW
 chargeType.ftnMatPost2010ChargeDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni nad oedd wedi’i eithrio mwyach rhag cofrestru ar gyfer TAW
 
+chargeType.ftnMatPost2010ChargeLPITitle = Llog ar gosb am fethu â hysbysu – cofrestriad TAW wedi’i eithrio
+
 chargeType.miscPenaltyCharge = Cosb gyffredinol TAW
 chargeType.vatMiscellaneousPenaltyLPITitle = Llog ar gosb TAW gyffredinol
 
@@ -479,6 +481,8 @@ chargeType.vatFailureToSubmitECSalesLPITitle = Llog ar gosb rhestr gwerthiannau 
 chargeType.ftnEachPartnerTitle = Cosb am fethu â hysbysu
 chargeType.ftnEachPartnerDescription = oherwydd na wnaethoch roi gwybod i ni am yr holl bartneriaid a newidiadau yn eich partneriaeth
 chargeType.ftnEachPartnerDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni am yr holl bartneriaid a newidiadau yn ei bartneriaeth
+
+chargeType.ftnEachPartnerLPITitle = Llog ar gosb am fethu â hysbysu - partneriaid
 
 chargeType.vatOAInaccuraciesFrom2009Title = Cosb am anghywirdebau
 chargeType.vatOAInaccuraciesFrom2009Description = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}

@@ -230,6 +230,13 @@ object PaymentMessageHelper {
     Some("chargeType.ftnMatPost2010ChargeDescription.agent")
   )
 
+  object VatFtnMatPost2010ChargeLPI extends PaymentMessageHelper(
+    FtnMatPost2010ChargeLPI.value,
+    "chargeType.ftnMatPost2010ChargeLPITitle",
+    None,
+    None
+  )
+
   object VatMiscPenaltyCharge extends PaymentMessageHelper(
     MiscPenaltyCharge.value,
     "chargeType.miscPenaltyCharge",
@@ -375,6 +382,13 @@ object PaymentMessageHelper {
     "chargeType.ftnEachPartnerTitle",
     Some("chargeType.ftnEachPartnerDescription"),
     Some("chargeType.ftnEachPartnerDescription.agent")
+  )
+
+  object FtnEachPartnerLPI extends PaymentMessageHelper(
+    FtnEachPartnerChargeLPI.value,
+    "chargeType.ftnEachPartnerLPITitle",
+    None,
+    None
   )
 
   object VatOAInaccuracies2009 extends PaymentMessageHelper(
@@ -975,6 +989,7 @@ object PaymentMessageHelper {
     VatBnpRegPost2010Charge,
     VatFtnMatPre2010Charge,
     VatFtnMatPost2010Charge,
+    VatFtnMatPost2010ChargeLPI,
     VatMiscPenaltyCharge,
     VATMiscellaneousPenLPI,
     VatSecurityDepositRequest,
@@ -994,6 +1009,7 @@ object PaymentMessageHelper {
     VatFailureToSubmitECSalesLPI,
     VATFailureToSubmitRCSLLPI,
     FtnEachPartner,
+    FtnEachPartnerLPI,
     VatOAInaccuracies2009,
     VatOAInaccuracies2009LPI,
     VatInaccuracyAssessmentsPenCharge,
