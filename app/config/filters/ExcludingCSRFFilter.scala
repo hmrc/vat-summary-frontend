@@ -16,7 +16,7 @@
 
 package config.filters
 
-import akka.util.ByteString
+import org.apache.pekko.util.ByteString
 import javax.inject.Inject
 import play.api.libs.streams.Accumulator
 import play.api.mvc._

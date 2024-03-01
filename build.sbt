@@ -42,21 +42,21 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   )
 }
 
-val mongoVersion = "1.5.0"
-val bootstrapPlayVersion = "8.1.0"
+val mongoVersion = "1.7.0"
+val bootstrapPlayVersion = "8.4.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"       %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc"       %% "play-frontend-hmrc"         % "7.7.0-play-28",
-  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-28"         % mongoVersion,
+  "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
+  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "8.5.0",
+  "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"         % mongoVersion,
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"        %% "bootstrap-test-play-28"      % bootstrapPlayVersion      % scope,
-  "org.scalatestplus"  %% "mockito-3-4"                 % "3.2.9.0"     % scope,
+  "uk.gov.hmrc"        %% "bootstrap-test-play-30"      % bootstrapPlayVersion      % scope,
+  "org.scalatestplus"  %% "mockito-4-11"                % "3.2.18.0"    % scope,
   "org.scalamock"      %% "scalamock"                   % "5.2.0"       % scope,
-  "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-28"     % mongoVersion  % scope
+  "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-30"     % mongoVersion  % scope
 )
 
 TwirlKeys.templateImports ++= Seq(
@@ -84,8 +84,9 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.13",
     libraryDependencies ++= appDependencies,
+    scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
     scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=.*routes.*:s"),
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
