@@ -15,7 +15,6 @@
  */
 
 package connectors
-
 import java.time.LocalDate
 
 import config.AppConfig
