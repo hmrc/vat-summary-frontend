@@ -472,7 +472,7 @@ chargeType.ftnEachPartnerTitle = Failure to notify penalty
 chargeType.ftnEachPartnerDescription = because you did not tell us about all the partners and changes in your partnership
 chargeType.ftnEachPartnerDescription.agent = because your client did not tell us about all the partners and changes in their partnership
 
-chargeType.ftnEachPartnerLPITitle = Interest on failure to notify penalty - partners
+chargeType.ftnEachPartnerLPITitle = Interest on failure to notify penalty – partners
 
 chargeType.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 chargeType.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
