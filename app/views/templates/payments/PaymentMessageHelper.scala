@@ -962,6 +962,26 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+
+  object VatReturn2ndLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturn2ndLPPRPI.value,
+    "chargeType.vatReturn2ndLPPRPI",
+    None,
+    None
+  )
+  object VatReturnPOA1stLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturnPOA1stLPPRPI.value,
+    "chargeType.vatReturnPOA1stLPPRPI",
+    None,
+    None
+  )
+  object VatReturnPOA2ndLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturnPOA2ndLPPRPI.value,
+    "chargeType.vatReturnPOA2ndLPPRPI",
+    None,
+    None
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,
@@ -1096,7 +1116,10 @@ object PaymentMessageHelper {
     VATInaccuracyAssessPenLPI,
     VATOfficersAssessmentRPI,
     VatForManualLPPRPI,
-    VatReturnForLPP1RPI
+    VatReturnForLPP1RPI,
+    VatReturn2ndLPPRPI,
+    VatReturnPOA1stLPPRPI,
+    VatReturnPOA2ndLPPRPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

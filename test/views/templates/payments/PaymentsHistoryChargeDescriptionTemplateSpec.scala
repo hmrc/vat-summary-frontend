@@ -149,6 +149,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (FtnMatPost2010ChargeLPI, "Interest on failure to notify penalty – exempt VAT reg", ""),
     (FtnEachPartnerCharge, "Failure to notify penalty", "because you did not tell us about all the partners and changes in your partnership"),
     (FtnEachPartnerChargeLPI, "Interest on failure to notify penalty – partners", ""),
+    (VatReturn2ndLPPRPI, "Repayment interest on second late payment penalty", ""),
+    (VatReturnPOA1stLPPRPI, "Repayment interest on penalty for late payment – payment on account", ""),
+    (VatReturnPOA2ndLPPRPI, "Repayment interest on second penalty for late payment – payment on account", ""),
   )
 
   private val agentChargeTable = Table(
@@ -244,6 +247,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatAAReturnChargeRPI, "Repayment interest on annual accounting repayment", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"),
     (VatErrorCorrectionRPI, "Repayment interest on error correction repayment", "for 12\u00a0Jan to 23\u00a0Mar\u00a02018"),
     (VatReturnPOARPI, "Repayment interest on payment on account balance", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"),
+    (VatReturn2ndLPPRPI, "Repayment interest on second late payment penalty", ""),
+    (VatReturnPOA1stLPPRPI, "Repayment interest on penalty for late payment – payment on account", ""),
+    (VatReturnPOA2ndLPPRPI, "Repayment interest on second penalty for late payment – payment on account", ""),
   )
 
   "When user is not an agent, PaymentsHistoryChargeDescription template" should
