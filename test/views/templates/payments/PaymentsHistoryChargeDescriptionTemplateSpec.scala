@@ -153,7 +153,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatReturnPOA1stLPPRPI, "Repayment interest on penalty for late payment — payment on account", ""),
     (VatReturnPOA2ndLPPRPI, "Repayment interest on second penalty for late payment — payment on account", ""),
     (VatReturnAA1stLPPRPI, "Repayment interest on penalty for late payment — annual accounting balance", ""),
-    (VatReturnAA2ndLPPRPI, "Repayment interest on second penalty for late payment — annual accounting balance", ""),
+    (VatReturnAA2ndLPPRPI, "Repayment interest on second penalty for late payment — annual accounting balance", ""), (VatInaccRtnReplacedLPI, "Interest on inaccuracies penalty — information", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"),
+    (VatProtectiveAssessRPI, "Repayment interest on protective assessment of VAT", ""),
+    (VatAdditionalAssessRPI, "Repayment interest on additional assessment of VAT", "")
   )
 
   private val agentChargeTable = Table(
@@ -254,6 +256,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatReturnPOA2ndLPPRPI, "Repayment interest on second penalty for late payment — payment on account", ""),
     (VatReturnAA1stLPPRPI, "Repayment interest on penalty for late payment — annual accounting balance", ""),
     (VatReturnAA2ndLPPRPI, "Repayment interest on second penalty for late payment — annual accounting balance", ""),
+    (VatInaccRtnReplacedLPI, "Interest on inaccuracies penalty — information", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018"),
+    (VatProtectiveAssessRPI, "Repayment interest on protective assessment of VAT", ""),
+    (VatAdditionalAssessRPI, "Repayment interest on additional assessment of VAT", "")
   )
 
   "When user is not an agent, PaymentsHistoryChargeDescription template" should
