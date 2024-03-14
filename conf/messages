@@ -632,8 +632,8 @@ chargeType.VATReturnForRPITitle = Repayment interest on payment on account repay
 chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
 
 chargeType.vatReturn2ndLPPRPI = Repayment interest on second late payment penalty
-chargeType.vatReturnPOA1stLPPRPI = Repayment interest on penalty for late payment – payment on account
-chargeType.vatReturnPOA2ndLPPRPI = Repayment interest on second penalty for late payment – payment on account
+chargeType.vatReturnPOA1stLPPRPI = Repayment interest on penalty for late payment — payment on account
+chargeType.vatReturnPOA2ndLPPRPI = Repayment interest on second penalty for late payment — payment on account
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
