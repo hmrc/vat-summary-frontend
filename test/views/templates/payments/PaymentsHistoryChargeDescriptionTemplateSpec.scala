@@ -152,6 +152,8 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatReturn2ndLPPRPI, "Repayment interest on second late payment penalty", ""),
     (VatReturnPOA1stLPPRPI, "Repayment interest on penalty for late payment — payment on account", ""),
     (VatReturnPOA2ndLPPRPI, "Repayment interest on second penalty for late payment — payment on account", ""),
+    (VatReturnAA1stLPPRPI, "Repayment interest on penalty for late payment — annual accounting balance", ""),
+    (VatReturnAA2ndLPPRPI, "Repayment interest on second penalty for late payment — annual accounting balance", ""),
   )
 
   private val agentChargeTable = Table(
@@ -250,6 +252,8 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatReturn2ndLPPRPI, "Repayment interest on second late payment penalty", ""),
     (VatReturnPOA1stLPPRPI, "Repayment interest on penalty for late payment — payment on account", ""),
     (VatReturnPOA2ndLPPRPI, "Repayment interest on second penalty for late payment — payment on account", ""),
+    (VatReturnAA1stLPPRPI, "Repayment interest on penalty for late payment — annual accounting balance", ""),
+    (VatReturnAA2ndLPPRPI, "Repayment interest on second penalty for late payment — annual accounting balance", ""),
   )
 
   "When user is not an agent, PaymentsHistoryChargeDescription template" should
