@@ -529,7 +529,9 @@ chargeType.vatErrorCorrection1stLPPLPITitle = Llog ar gosb cywiriad gwall
 chargeType.vatErrorCorrection2ndLPPLPITitle = Llog ar ail gosb cywiriad gwall
 
 chargeType.vatErrorCorrectionRPITitle = Llog ar ad-daliadau ar ad-daliad cywiro gwallau
-
+chargeType.vatInaccRtnReplacedLPITitle = Llog ar gosb am anghywirdebau — gwybodaeth
+chargeType.vatProtectiveAssessRPITitle = Llog ar ad-daliadau ar asesiad i ddiogelu TAW
+chargeType.vatAdditionalAssessRPITitle = Llog ar ad-daliadau ar asesiad ychwanegol o TAW
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
 chargeType.vatPaFurtherInterestDescription = sy’n ddyledus ar yr asesiad i ddiogelu oherwydd na thalwyd hyn mewn pryd
 

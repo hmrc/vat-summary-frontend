@@ -520,7 +520,9 @@ chargeType.vatErrorCorrection1stLPPLPITitle = Interest on error correction penal
 chargeType.vatErrorCorrection2ndLPPLPITitle = Interest on error correction second penalty
 
 chargeType.vatErrorCorrectionRPITitle = Repayment interest on error correction repayment
-
+chargeType.vatInaccRtnReplacedLPITitle = Interest on inaccuracies penalty — information
+chargeType.vatProtectiveAssessRPITitle = Repayment interest on protective assessment of VAT
+chargeType.vatAdditionalAssessRPITitle = Repayment interest on additional assessment of VAT
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
 chargeType.vatPaFurtherInterestDescription = due on the protective assessment as this was not paid on time
 

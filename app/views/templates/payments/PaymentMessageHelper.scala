@@ -962,7 +962,6 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
-
   object VatReturn2ndLPPRPI extends PaymentMessageHelper (
     models.payments.VatReturn2ndLPPRPI.value,
     "chargeType.vatReturn2ndLPPRPI",
@@ -991,6 +990,27 @@ object PaymentMessageHelper {
   object VatReturnAA2ndLPPRPI extends PaymentMessageHelper (
     models.payments.VatReturnAA2ndLPPRPI.value,
     "chargeType.vatReturnAA2ndLPPRPI",
+    None,
+    None
+  )
+
+  object VATInaccRtnReplacedLPI extends PaymentMessageHelper(
+    VatInaccRtnReplacedLPI.value,
+    "chargeType.vatInaccRtnReplacedLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATProtectiveAssessRPI extends PaymentMessageHelper(
+    VatProtectiveAssessRPI.value,
+    "chargeType.vatProtectiveAssessRPITitle",
+    None,
+    None
+  )
+
+  object VATAdditionalAssessRPI extends PaymentMessageHelper(
+    VatAdditionalAssessRPI.value,
+    "chargeType.vatAdditionalAssessRPITitle",
     None,
     None
   )
@@ -1134,7 +1154,10 @@ object PaymentMessageHelper {
     VatReturnPOA1stLPPRPI,
     VatReturnPOA2ndLPPRPI,
     VatReturnAA2ndLPPRPI,
-    VatReturnAA1stLPPRPI
+    VatReturnAA1stLPPRPI,
+    VATInaccRtnReplacedLPI,
+    VATProtectiveAssessRPI,
+    VATAdditionalAssessRPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

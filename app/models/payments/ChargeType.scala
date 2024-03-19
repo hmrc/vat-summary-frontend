@@ -493,6 +493,20 @@ case object VatErrorCorrectionRPI extends ChargeType {
   override val value: String = "VAT Error Correction RPI"
 }
 
+case object VatInaccRtnReplacedLPI extends ChargeType {
+  override val value: String = "VAT Inaccuracy Return Replaced LPI"
+}
+
+// Parent charge: Main transaction 4733, Sub transaction 1174
+case object VatProtectiveAssessRPI extends ChargeType {
+  override val value: String = "VAT Protective Assessment RPI"
+}
+
+// Parent charge: Main transaction 4732, Sub transaction 1174
+case object VatAdditionalAssessRPI extends ChargeType {
+  override val value: String = "VAT Additional Assessment RPI"
+}
+
 object ChargeType extends LoggerUtil {
 
   val allChargeTypes: Set[ChargeType] = Set(
@@ -635,7 +649,10 @@ object ChargeType extends LoggerUtil {
     VatReturnPOA1stLPPRPI,
     VatReturnPOA2ndLPPRPI,
     VatReturnAA2ndLPPRPI,
-    VatReturnAA1stLPPRPI
+    VatReturnAA1stLPPRPI,
+    VatProtectiveAssessRPI,
+    VatAdditionalAssessRPI,
+    VatInaccRtnReplacedLPI
   )
 
   val LPIChargeTypes: Set[ChargeType] = Set(
@@ -680,7 +697,8 @@ object ChargeType extends LoggerUtil {
     VatInaccuracyAssessPenLPI,
     VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerChargeLPI,
-    FtnMatPost2010ChargeLPI
+    FtnMatPost2010ChargeLPI,
+    VatInaccRtnReplacedLPI
   )
 
   val penaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
@@ -717,7 +735,8 @@ object ChargeType extends LoggerUtil {
     VatFailureToSubmitRCSLLPI,
     VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerChargeLPI,
-    FtnMatPost2010ChargeLPI
+    FtnMatPost2010ChargeLPI,
+    VatInaccRtnReplacedLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -787,7 +806,8 @@ object ChargeType extends LoggerUtil {
     InaccuraciesAssessmentsPenCharge -> VatInaccuracyAssessPenLPI,
     VatFailureToSubmitECSalesCharge -> VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerCharge -> FtnEachPartnerChargeLPI,
-    FtnMatPost2010Charge -> FtnMatPost2010ChargeLPI
+    FtnMatPost2010Charge -> FtnMatPost2010ChargeLPI,
+    InaccuraciesReturnReplacedCharge -> VatInaccRtnReplacedLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(
