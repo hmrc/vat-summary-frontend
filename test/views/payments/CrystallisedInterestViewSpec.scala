@@ -57,11 +57,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 VAT officer’s assessment interest"
+        elementWholeText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 VAT officer’s assessment interest"
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
+        elementWholeText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
       }
 
       "render breadcrumbs which" should {
@@ -107,7 +107,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display when the interest is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
+        elementWholeText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
       }
 
       "have the correct heading for the second row" in {
@@ -184,11 +184,12 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 Interest on VAT correction"
+        elementWholeText("h1 > span") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 Interest on VAT correction"
+
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
+        elementWholeText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
       }
 
       "render breadcrumbs which" should {
@@ -216,7 +217,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the charge explanation paragraph" in {
-        elementText("#overpayment-interest-description") shouldBe
+        elementWholeText("#overpayment-interest-description") shouldBe
           "This interest started to build up daily from 1\u00a0October\u00a02022 – this is the date HMRC paid you more VAT than we owed you."
       }
 
@@ -230,7 +231,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display when the interest is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
+        elementWholeText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
       }
 
       "have the correct heading for the second row" in {

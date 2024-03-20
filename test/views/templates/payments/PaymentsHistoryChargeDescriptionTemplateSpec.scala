@@ -269,7 +269,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
         implicit val document: Document = Jsoup.parse(template.body)
 
         elementText(Selectors.chargeTitle) shouldBe expectedTitle
-        elementText(Selectors.description) shouldBe expectedDescription
+        elementWholeText(Selectors.description) shouldBe expectedDescription
       }
     }
 
@@ -281,7 +281,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
         implicit val document: Document = Jsoup.parse(template.body)
 
         elementText(Selectors.chargeTitle) shouldBe expectedTitle
-        elementText(Selectors.description) shouldBe expectedDescription
+        elementWholeText(Selectors.description) shouldBe expectedDescription
 
       }
     }

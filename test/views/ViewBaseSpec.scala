@@ -77,6 +77,10 @@ trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeA
     element(selector).text()
   }
 
+  def elementWholeText(selector: String)(implicit document: Document): String = {
+    element(selector).wholeText()
+  }
+
   def elementAttributes(cssSelector: String)(implicit document: Document): Map[String, String] = {
     val attributes = element(cssSelector).attributes.asList().asScala.toList
     attributes.map(attribute => (attribute.getKey, attribute.getValue)).toMap

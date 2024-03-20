@@ -38,11 +38,11 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementText("h1") shouldBe "7\u00a0April\u00a02018 to 10\u00a0April\u00a02018 Repayment interest correction"
+      elementWholeText("h1") shouldBe "7\u00a0April\u00a02018 to 10\u00a0April\u00a02018 Repayment interest correction"
     }
 
     "have a period caption" in {
-      elementText(".govuk-caption-xl") shouldBe "7\u00a0April\u00a02018 to 10\u00a0April\u00a02018"
+      elementWholeText(".govuk-caption-xl") shouldBe "7\u00a0April\u00a02018 to 10\u00a0April\u00a02018"
     }
 
     "have the correct first paragraph" in {
@@ -95,7 +95,7 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
     }
 
     "display when the correction charge is due by" in {
-      elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "15\u00a0April\u00a02018"
+      elementWholeText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "15\u00a0April\u00a02018"
     }
 
     "have the correct heading for the second row" in {
