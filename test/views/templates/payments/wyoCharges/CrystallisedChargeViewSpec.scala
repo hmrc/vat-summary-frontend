@@ -34,7 +34,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe
+        elementWholeText("a") shouldBe
           "Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021"
       }
 
@@ -43,7 +43,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       }
 
       "have the correct due hint text" in {
-        elementText("span") shouldBe "due 8\u00a0April\u00a02021"
+        elementWholeText("span") shouldBe "due 8\u00a0April\u00a02021"
       }
 
       "have a link with the correct href" in {
@@ -59,7 +59,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe
+        elementWholeText("a") shouldBe
           "Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021"
       }
 
@@ -68,7 +68,7 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       }
 
       "have the correct due hint text" in {
-        elementText("span") shouldBe "due 8\u00a0April\u00a02021"
+        elementWholeText("span") shouldBe "due 8\u00a0April\u00a02021"
       }
 
       "have a link with the correct href" in {

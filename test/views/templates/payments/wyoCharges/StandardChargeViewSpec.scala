@@ -36,7 +36,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe "VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018"
+        elementWholeText("a") shouldBe "VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018"
       }
 
       "have a link to the breakdown page" in {
@@ -63,7 +63,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
         }
 
         "has the correct hidden text" in {
-          elementText(".what-you-owe-view-return-hidden-text") shouldBe "View VAT Return for the period 1\u00a0January to 1\u00a0February\u00a02018"
+          elementWholeText(".what-you-owe-view-return-hidden-text") shouldBe "View VAT Return for the period 1\u00a0January to 1\u00a0February\u00a02018"
         }
 
       }
@@ -75,7 +75,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
-        elementText("a") shouldBe "Penalty for not filing correctly because you did not use " +
+        elementWholeText("a") shouldBe "Penalty for not filing correctly because you did not use " +
           "the correct digital channel for the period 1\u00a0Jan to 1\u00a0Feb\u00a02018"
       }
 
@@ -89,7 +89,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
       }
 
       "have the correct due hint text" in {
-        elementText("span") shouldBe "due 1\u00a0December\u00a02018"
+        elementWholeText("span") shouldBe "due 1\u00a0December\u00a02018"
       }
 
       "not have a link to view the VAT return" in {

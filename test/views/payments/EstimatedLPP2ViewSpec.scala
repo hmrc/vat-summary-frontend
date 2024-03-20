@@ -61,11 +61,11 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText(Selectors.heading) shouldBe "1\u00a0January\u00a02020 to 2\u00a0February\u00a02020 Second late payment penalty"
+        elementWholeText(Selectors.heading) shouldBe "1\u00a0January\u00a02020 to 2\u00a0February\u00a02020 Second late payment penalty"
       }
 
       "have a period caption" in {
-        elementText(Selectors.caption) shouldBe "1\u00a0January\u00a02020 to 2\u00a0February\u00a02020"
+        elementWholeText(Selectors.caption) shouldBe "1\u00a0January\u00a02020 to 2\u00a0February\u00a02020"
       }
 
       "render breadcrumbs which" should {

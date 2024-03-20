@@ -32,7 +32,7 @@ class EstimatedInterestChargeViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct charge description text" in {
-      elementText("a") shouldBe "Interest on central assessment of VAT for period 1\u00a0Jan to 2\u00a0Feb\u00a02018"
+      elementWholeText("a") shouldBe "Interest on central assessment of VAT for period 1\u00a0Jan to 2\u00a0Feb\u00a02018"
     }
 
     "not have an overdue label" in {

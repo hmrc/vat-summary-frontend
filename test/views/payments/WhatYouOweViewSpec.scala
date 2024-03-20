@@ -101,7 +101,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
             elementText(tableBodyCell(1, 1) + " .govuk-tag") + " " +
               elementText(tableBodyCell(1, 1) + "> a") + " " +
               elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
-              elementText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe
+              elementWholeText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe
               "overdue VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018 due 1\u00a0March\u00a02018 View VAT Return"
           }
 
@@ -118,7 +118,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
             "has the correct text" in {
               elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
-                elementText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe "due 1\u00a0March\u00a02018 View VAT Return"
+                elementWholeText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe "due 1\u00a0March\u00a02018 View VAT Return"
             }
 
             "has the correct href" in {
@@ -135,7 +135,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         "has the correct row for an example second charge not showing the View VAT Return link" which {
 
           "has the correct charge description text for a charge that does not allow a user to view a VAT return" in {
-            elementText(tableBodyCell(2, 1)) shouldBe
+            elementWholeText(tableBodyCell(2, 1)) shouldBe
               "Penalty for not filing correctly because you did not use the correct digital channel for the period " +
                 "1\u00a0Jan to 1\u00a0Feb\u00a02018 due 1\u00a0December\u00a02018"
           }
@@ -151,7 +151,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           }
 
           "has the correct due hint text" in {
-            elementText(tableBodyCell(2, 1) + "> span") shouldBe "due 1\u00a0December\u00a02018"
+            elementWholeText(tableBodyCell(2, 1) + "> span") shouldBe "due 1\u00a0December\u00a02018"
           }
 
           "has the correct amount" in {
@@ -161,14 +161,14 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         "has the correct row for an example overdue crystallised charge" which {
           "has the correct charge description" in {
-            elementText(tableBodyCell(3, 1)) shouldBe
+            elementWholeText(tableBodyCell(3, 1)) shouldBe
               "overdue Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021 due 8\u00a0April\u00a02021"
           }
           "has an overdue label" in {
             elementText(tableBodyCell(3, 1) + " .govuk-tag") shouldBe "overdue"
           }
           "has the correct due hint text" in {
-            elementText(tableBodyCell(3, 1) + "> span") shouldBe "due 8\u00a0April\u00a02021"
+            elementWholeText(tableBodyCell(3, 1) + "> span") shouldBe "due 8\u00a0April\u00a02021"
           }
           "has a form with the correct action" in {
 

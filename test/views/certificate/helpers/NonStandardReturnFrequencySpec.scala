@@ -50,7 +50,7 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     }
 
     "have the correct first paragraph" in {
-      elementText(Selectors.nthParagraph(2)) shouldBe "If you do not renew your non-standard tax periods, " +
+      elementWholeText(Selectors.nthParagraph(2)) shouldBe "If you do not renew your non-standard tax periods, " +
         "an additional period (6\u00a0January\u00a02019 to 31\u00a0January\u00a02019) will be added."
     }
 
@@ -64,11 +64,11 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     }
 
     "have the first non-standard tax period without years" in {
-      elementText(Selectors.firstPeriod) shouldBe "29\u00a0December to 30\u00a0December"
+      elementWholeText(Selectors.firstPeriod) shouldBe "29\u00a0December to 30\u00a0December"
     }
 
     "have the second non-standard tax period with years" in {
-      elementText(Selectors.secondPeriod) shouldBe "31\u00a0December\u00a02018 to 1\u00a0January\u00a02019"
+      elementWholeText(Selectors.secondPeriod) shouldBe "31\u00a0December\u00a02018 to 1\u00a0January\u00a02019"
     }
 
     "have a 2019 year" in {
@@ -76,11 +76,11 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     }
 
     "have the third non-standard tax period without years" in {
-      elementText(Selectors.thirdPeriod) shouldBe "2\u00a0January to 3\u00a0January"
+      elementWholeText(Selectors.thirdPeriod) shouldBe "2\u00a0January to 3\u00a0January"
     }
 
     "have the fourth non-standard tax period without years" in {
-      elementText(Selectors.fourthPeriod) shouldBe "4\u00a0January to 5\u00a0January"
+      elementWholeText(Selectors.fourthPeriod) shouldBe "4\u00a0January to 5\u00a0January"
     }
   }
 }

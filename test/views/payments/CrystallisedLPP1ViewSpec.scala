@@ -57,7 +57,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       lazy implicit val document2: Document = Jsoup.parse(view2.body)
 
       "have the correct first explanation paragraph" in {
-        elementText("#content > div > div > p:nth-child(2)") shouldBe
+        elementWholeText("#content > div > div > p:nth-child(2)") shouldBe
           "This penalty applies if the VAT correction charge for 3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 has not been paid for 99 days."
       }
     }
@@ -72,11 +72,11 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Late payment penalty"
+        elementWholeText("h1") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Late payment penalty"
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020"
+        elementWholeText(".govuk-caption-xl") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020"
       }
 
       "render breadcrumbs which" should {
@@ -134,7 +134,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "display when the penalty is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1\u00a0January\u00a02020"
+        elementWholeText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1\u00a0January\u00a02020"
       }
 
       "have the correct heading for the second row" in {
