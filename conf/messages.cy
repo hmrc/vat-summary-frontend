@@ -483,6 +483,9 @@ chargeType.ftnEachPartnerDescription = oherwydd na wnaethoch roi gwybod i ni am 
 chargeType.ftnEachPartnerDescription.agent = oherwydd na wnaeth eich cleient roi gwybod i ni am yr holl bartneriaid a newidiadau yn ei bartneriaeth
 
 chargeType.ftnEachPartnerLPITitle = Llog ar gosb am fethu â hysbysu – partneriaid
+chargeType.ftnRCSLChargeLPITitle = Llog ar gosb am fethu â hysbysu – gwerthiant tâl gwrthdro
+
+chargeType.inaccurInECSalesChargeLPITitle = Llog ar gosb am anghywirdebau – Gwerthiannau yn y GE
 
 chargeType.vatOAInaccuraciesFrom2009Title = Cosb am anghywirdebau
 chargeType.vatOAInaccuraciesFrom2009Description = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}

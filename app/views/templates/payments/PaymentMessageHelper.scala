@@ -650,6 +650,20 @@ object PaymentMessageHelper {
     Some("chargeType.forPeriod")
   )
 
+  object VATFtnRCSLChargeLPI extends PaymentMessageHelper(
+    FtnRCSLChargeLPI.value,
+    "chargeType.ftnRCSLChargeLPITitle",
+    None,
+    None
+  )
+
+  object VATInaccurInECSalesChargeLPI extends PaymentMessageHelper(
+    InaccurInECSalesChargeLPI.value,
+    "chargeType.inaccurInECSalesChargeLPITitle",
+    None,
+    None
+  )
+
   object VATReturnLPI extends PaymentMessageHelper(
     VatReturnLPI.value,
     "chargeType.vatReturnLPITitle",
@@ -1150,6 +1164,8 @@ object PaymentMessageHelper {
     VATOfficersAssessmentRPI,
     VatForManualLPPRPI,
     VatReturnForLPP1RPI,
+    VATInaccurInECSalesChargeLPI,
+    VATFtnRCSLChargeLPI,
     VatReturn2ndLPPRPI,
     VatReturnPOA1stLPPRPI,
     VatReturnPOA2ndLPPRPI,
