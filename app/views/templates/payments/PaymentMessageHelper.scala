@@ -976,6 +976,59 @@ object PaymentMessageHelper {
     Some("chargeType.for")
   )
 
+  object VatReturn2ndLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturn2ndLPPRPI.value,
+    "chargeType.vatReturn2ndLPPRPI",
+    None,
+    None
+  )
+  object VatReturnPOA1stLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturnPOA1stLPPRPI.value,
+    "chargeType.vatReturnPOA1stLPPRPI",
+    None,
+    None
+  )
+  object VatReturnPOA2ndLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturnPOA2ndLPPRPI.value,
+    "chargeType.vatReturnPOA2ndLPPRPI",
+    None,
+    None
+  )
+
+  object VatReturnAA1stLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturnAA1stLPPRPI.value,
+    "chargeType.vatReturnAA1stLPPRPI",
+    None,
+    None
+  )
+  object VatReturnAA2ndLPPRPI extends PaymentMessageHelper (
+    models.payments.VatReturnAA2ndLPPRPI.value,
+    "chargeType.vatReturnAA2ndLPPRPI",
+    None,
+    None
+  )
+
+  object VATInaccRtnReplacedLPI extends PaymentMessageHelper(
+    VatInaccRtnReplacedLPI.value,
+    "chargeType.vatInaccRtnReplacedLPITitle",
+    Some("chargeType.forPeriod"),
+    Some("chargeType.forPeriod")
+  )
+
+  object VATProtectiveAssessRPI extends PaymentMessageHelper(
+    VatProtectiveAssessRPI.value,
+    "chargeType.vatProtectiveAssessRPITitle",
+    None,
+    None
+  )
+
+  object VATAdditionalAssessRPI extends PaymentMessageHelper(
+    VatAdditionalAssessRPI.value,
+    "chargeType.vatAdditionalAssessRPITitle",
+    None,
+    None
+  )
+
   val values: Seq[PaymentMessageHelper] = Seq(
     OverpaymentforTax,
     UnrepayableOverpayment,
@@ -1112,7 +1165,15 @@ object PaymentMessageHelper {
     VatForManualLPPRPI,
     VatReturnForLPP1RPI,
     VATInaccurInECSalesChargeLPI,
-    VATFtnRCSLChargeLPI
+    VATFtnRCSLChargeLPI,
+    VatReturn2ndLPPRPI,
+    VatReturnPOA1stLPPRPI,
+    VatReturnPOA2ndLPPRPI,
+    VatReturnAA2ndLPPRPI,
+    VatReturnAA1stLPPRPI,
+    VATInaccRtnReplacedLPI,
+    VATProtectiveAssessRPI,
+    VATAdditionalAssessRPI
   )
 
   private def getFullDescription(descriptionMessageKey: String, from: Option[LocalDate], to: Option[LocalDate])

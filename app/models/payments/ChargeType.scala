@@ -470,9 +470,48 @@ case object VatInaccuracyAssessPenLPI extends ChargeType {
   override val value: String = "VAT Inaccuracy Assessments Pen LPI"
 }
 
+// Parent charge: Main transaction: 4625 Sub transaction: 1176, Main transaction: 4707 Sub transaction: 1090
+case object VatReturn2ndLPPRPI extends ChargeType {
+  override val value: String = "VAT Return 2nd LPP RPI"
+}
+
+// Parent charge: Main transaction: 4629 Sub transaction: 1176, Main transaction: 4716 Sub transaction: 1090
+case object VatReturnPOA1stLPPRPI extends ChargeType {
+  override val value: String = "VAT Return POA 1st LPP RPI"
+}
+
+// Parent charge: Main transaction: 4631 Sub transaction: 1176, Main transaction: 4717 Sub transaction: 1090
+case object VatReturnPOA2ndLPPRPI extends ChargeType {
+  override val value: String = "VAT Return POA 2nd LPP RPI"
+}
+
+// Parent charge: Main transaction: 4635 Sub transaction: 1176, Main transaction: 4718 Sub transaction: 1090
+case object VatReturnAA1stLPPRPI extends ChargeType {
+  override val value: String = "VAT Return AA 1st LPP RPI"
+}
+
+// Parent charge: Main transaction: 4637 Sub transaction: 1176, Main transaction: 4719 Sub transaction: 1090
+case object VatReturnAA2ndLPPRPI extends ChargeType {
+  override val value: String = "VAT Return AA 2nd LPP RPI"
+}
+
 // Parent charges: Main transaction 4731, Sub transaction 1174 and Main transaction 4731, Sub transaction 1177
 case object VatErrorCorrectionRPI extends ChargeType {
   override val value: String = "VAT Error Correction RPI"
+}
+
+case object VatInaccRtnReplacedLPI extends ChargeType {
+  override val value: String = "VAT Inaccuracy Return Replaced LPI"
+}
+
+// Parent charge: Main transaction 4733, Sub transaction 1174
+case object VatProtectiveAssessRPI extends ChargeType {
+  override val value: String = "VAT Protective Assessment RPI"
+}
+
+// Parent charge: Main transaction 4732, Sub transaction 1174
+case object VatAdditionalAssessRPI extends ChargeType {
+  override val value: String = "VAT Additional Assessment RPI"
 }
 
 object ChargeType extends LoggerUtil {
@@ -614,8 +653,15 @@ object ChargeType extends LoggerUtil {
     VatErrorCorrectionRPI,
     VatOfficersAssessmentRPI,
     VatManualLPPRPI,
-    VatReturnLPP1RPI
-
+    VatReturnLPP1RPI,
+    VatReturn2ndLPPRPI,
+    VatReturnPOA1stLPPRPI,
+    VatReturnPOA2ndLPPRPI,
+    VatReturnAA2ndLPPRPI,
+    VatReturnAA1stLPPRPI,
+    VatProtectiveAssessRPI,
+    VatAdditionalAssessRPI,
+    VatInaccRtnReplacedLPI
   )
 
   val LPIChargeTypes: Set[ChargeType] = Set(
@@ -662,7 +708,8 @@ object ChargeType extends LoggerUtil {
     FtnEachPartnerChargeLPI,
     FtnMatPost2010ChargeLPI,
     FtnRCSLChargeLPI,
-    InaccurInECSalesChargeLPI
+    InaccurInECSalesChargeLPI,
+    VatInaccRtnReplacedLPI
   )
 
   val penaltyReformPenaltyLPIChargeTypes: Set[ChargeType] = Set(
@@ -699,7 +746,8 @@ object ChargeType extends LoggerUtil {
     VatFailureToSubmitRCSLLPI,
     VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerChargeLPI,
-    FtnMatPost2010ChargeLPI
+    FtnMatPost2010ChargeLPI,
+    VatInaccRtnReplacedLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -771,7 +819,8 @@ object ChargeType extends LoggerUtil {
     FtnEachPartnerCharge -> FtnEachPartnerChargeLPI,
     FtnMatPost2010Charge -> FtnMatPost2010ChargeLPI,
     FailureToNotifyRCSLCharge -> FtnRCSLChargeLPI,
-    VatInaccuraciesInECSalesCharge -> InaccurInECSalesChargeLPI
+    VatInaccuraciesInECSalesCharge -> InaccurInECSalesChargeLPI,
+    InaccuraciesReturnReplacedCharge -> VatInaccRtnReplacedLPI
   )
 
   val penaltyChargeMappingLPP1: Map[ChargeType, ChargeType] = Map(

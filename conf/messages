@@ -523,7 +523,9 @@ chargeType.vatErrorCorrection1stLPPLPITitle = Interest on error correction penal
 chargeType.vatErrorCorrection2ndLPPLPITitle = Interest on error correction second penalty
 
 chargeType.vatErrorCorrectionRPITitle = Repayment interest on error correction repayment
-
+chargeType.vatInaccRtnReplacedLPITitle = Interest on inaccuracies penalty — information
+chargeType.vatProtectiveAssessRPITitle = Repayment interest on protective assessment of VAT
+chargeType.vatAdditionalAssessRPITitle = Repayment interest on additional assessment of VAT
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
 chargeType.vatPaFurtherInterestDescription = due on the protective assessment as this was not paid on time
 
@@ -633,6 +635,13 @@ chargeType.VATOverpaymentForRPITitle = Repayment interest correction
 chargeType.VATReturnForRPITitle = Repayment interest on payment on account repayment
 
 chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
+
+chargeType.vatReturn2ndLPPRPI = Repayment interest on second late payment penalty
+chargeType.vatReturnPOA1stLPPRPI = Repayment interest on penalty for late payment — payment on account
+chargeType.vatReturnPOA2ndLPPRPI = Repayment interest on second penalty for late payment — payment on account
+
+chargeType.vatReturnAA1stLPPRPI = Repayment interest on penalty for late payment — annual accounting balance
+chargeType.vatReturnAA2ndLPPRPI = Repayment interest on second penalty for late payment — annual accounting balance
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

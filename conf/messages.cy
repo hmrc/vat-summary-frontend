@@ -532,7 +532,9 @@ chargeType.vatErrorCorrection1stLPPLPITitle = Llog ar gosb cywiriad gwall
 chargeType.vatErrorCorrection2ndLPPLPITitle = Llog ar ail gosb cywiriad gwall
 
 chargeType.vatErrorCorrectionRPITitle = Llog ar ad-daliadau ar ad-daliad cywiro gwallau
-
+chargeType.vatInaccRtnReplacedLPITitle = Llog ar gosb am anghywirdebau — gwybodaeth
+chargeType.vatProtectiveAssessRPITitle = Llog ar ad-daliadau ar asesiad i ddiogelu TAW
+chargeType.vatAdditionalAssessRPITitle = Llog ar ad-daliadau ar asesiad ychwanegol o TAW
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
 chargeType.vatPaFurtherInterestDescription = sy’n ddyledus ar yr asesiad i ddiogelu oherwydd na thalwyd hyn mewn pryd
 
@@ -635,6 +637,13 @@ chargeType.vatDeferralPenaltyDescription = am TAW ohiriedig sydd heb ei thalu
 
 chargeType.Overpayments1stLPPLPI = Llog ar gosb am gywiriad TAW
 chargeType.Overpayments2ndLPPLPI = Llog ar ail gosb am gywiriad TAW
+
+chargeType.vatReturn2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr
+chargeType.vatReturnPOA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr — taliad ar gyfrif
+chargeType.vatReturnPOA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr — taliad ar gyfrif
+
+chargeType.vatReturnAA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
+chargeType.vatReturnAA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
