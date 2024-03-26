@@ -27,7 +27,7 @@ object DisplayDateRangeHelper {
                       (implicit messages: Messages): String = {
     s"${displayDate(from, (from.getYear != to.getYear) || alwaysUseYear , useShortDayFormat)} " +
       s"${messages("common.dateRangeSeparator")} " +
-      s"${displayDate(to, true, useShortDayFormat)}"
+      s"${displayDate(to, showYear = true, useShortDayFormat)}"
   }
 
   def displayDate(date: LocalDate, showYear: Boolean = true, useShortDayFormat: Boolean = false)

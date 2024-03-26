@@ -32,6 +32,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
   "Rendering the Estimated LPP1 breakdown page for a principal user" when {
 
     lazy val view = injectedView(estimatedLPP1Model, Html(""))(request, messages, mockConfig, user)
+    lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -39,11 +40,19 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementWholeText("h1") shouldBe "1\u00a0January\u00a02019 to 2\u00a0February\u00a02019 Late payment penalty"
+      elementText("h1") shouldBe "1 January 2019 to 2 February 2019 Late payment penalty"
+    }
+
+    "use a non breaking space for the page heading" in {
+      viewAsString.contains("1\u00a0January\u00a02019 to 2\u00a0February\u00a02019 Late payment penalty")
     }
 
     "have a period caption" in {
-      elementWholeText(".govuk-caption-xl") shouldBe "1\u00a0January\u00a02019 to 2\u00a0February\u00a02019"
+      elementText(".govuk-caption-xl") shouldBe "1 January 2019 to 2 February 2019"
+    }
+
+    "use a non breaking space for the period caption" in {
+      viewAsString.contains("1\u00a0January\u00a02019 to 2\u00a0February\u00a02019")
     }
 
     "not render a back link" in {

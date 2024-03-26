@@ -168,10 +168,30 @@ class PaymentHistoryTabsContentTemplateSpec extends TemplateBaseSpec {
 
           val document = Jsoup.parse(result.body)
 
-          document.select("tr.govuk-table__row:nth-child(1) > td:nth-child(1)").text() shouldBe "1\u00a0Nov"
-          document.select("tr.govuk-table__row:nth-child(2) > td:nth-child(1)").text() shouldBe "1\u00a0Jul"
-          document.select("tr.govuk-table__row:nth-child(3) > td:nth-child(1)").text() shouldBe "1\u00a0Apr"
-          document.select("tr.govuk-table__row:nth-child(4) > td:nth-child(1)").text() shouldBe "1\u00a0Feb"
+          document.select("tr.govuk-table__row:nth-child(1) > td:nth-child(1)").text() shouldBe "1 Nov"
+          document.select("tr.govuk-table__row:nth-child(2) > td:nth-child(1)").text() shouldBe "1 Jul"
+          document.select("tr.govuk-table__row:nth-child(3) > td:nth-child(1)").text() shouldBe "1 Apr"
+          document.select("tr.govuk-table__row:nth-child(4) > td:nth-child(1)").text() shouldBe "1 Feb"
+        }
+
+        "use non breaking spaces for dates when sorting the transactions by cleared date (descending order)" in {
+          val exampleTransactions = Seq(
+            paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-04-01"))),
+            paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-02-01"))),
+            paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-11-01"))),
+            paymentTransaction.copy(clearedDate = Some(LocalDate.parse("2018-07-01"))),
+          )
+
+          val result = paymentsHistoryTabsContent(
+            paymentHistoryViewModel.copy(transactions = exampleTransactions), currentYear
+          )
+
+          val document = Jsoup.parse(result.body)
+
+          document.select("tr.govuk-table__row:nth-child(1) > td:nth-child(1)").toString.contains("1\u00a0Nov")
+          document.select("tr.govuk-table__row:nth-child(2) > td:nth-child(1)").toString.contains("1\u00a0Jul")
+          document.select("tr.govuk-table__row:nth-child(3) > td:nth-child(1)").toString.contains("1\u00a0Apr")
+          document.select("tr.govuk-table__row:nth-child(4) > td:nth-child(1)").toString.contains("1\u00a0Feb")
         }
       }
   }

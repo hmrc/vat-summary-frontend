@@ -34,6 +34,7 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
 
 
     lazy val view = injectedView(crystallisedLPP2Model, Html(""))(request, messages, mockConfig, user)
+    lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -41,11 +42,19 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementWholeText("h1") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Second late payment penalty"
+      elementText("h1") shouldBe "3 March 2020 to 4 April 2020 Second late payment penalty"
+    }
+
+    "use a non breaking space for the page heading" in {
+      viewAsString.contains("3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Second late payment penalty")
     }
 
     "have a period caption" in {
-      elementWholeText(".govuk-caption-xl") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020"
+      elementText(".govuk-caption-xl") shouldBe "3 March 2020 to 4 April 2020"
+    }
+
+    "use a non breaking space for the period caption" in {
+      viewAsString.contains("3\u00a0March\u00a02020 to 4\u00a0April\u00a02020")
     }
 
     "render breadcrumbs which" should {
@@ -92,7 +101,11 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     }
 
     "display when the penalty is due by" in {
-      elementWholeText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1\u00a0January\u00a02020"
+      elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1 January 2020"
+    }
+
+    "use a non breaking space to display when the penalty is due by" in {
+      viewAsString.contains("Due Date 1\u00a0January\u00a02020")
     }
 
     "have the correct heading for the second row" in {

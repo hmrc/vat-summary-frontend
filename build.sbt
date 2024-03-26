@@ -86,7 +86,6 @@ lazy val microservice: Project = Project(appName, file("."))
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
     scalaVersion := "2.13.13",
     libraryDependencies ++= appDependencies,
-    scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s",
     scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=.*routes.*:s"),
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,

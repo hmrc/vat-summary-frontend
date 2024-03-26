@@ -165,6 +165,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "accessed by a principal or agent user" should {
 
       lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the about your registration card" that {
@@ -180,14 +181,21 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
         "contains the registration date" in {
           elementText(Selectors.regDateTitle) shouldBe "Registration date"
-          elementWholeText(Selectors.regDate) shouldBe "1\u00a0January\u00a02017"
+          elementText(Selectors.regDate) shouldBe "1 January 2017"
+        }
+
+        "uses non breaking spaces to display the registration date" in {
+          viewAsString.contains("Registration date 1\u00a0January\u00a02017")
         }
 
         "contains the certificate date" in {
           elementText(Selectors.certDateTitle) shouldBe "Certificate date"
-          elementWholeText(Selectors.certDate) shouldBe "1\u00a0January\u00a02018"
+          elementText(Selectors.certDate) shouldBe "1 January 2018"
         }
 
+        "uses non breaking spaces to display the certificate date" in {
+          viewAsString.contains("Certificate date 1\u00a0January\u00a02018")
+        }
       }
 
       "have the about the business card" that {
