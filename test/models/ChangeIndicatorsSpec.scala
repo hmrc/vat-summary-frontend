@@ -26,20 +26,20 @@ class ChangeIndicatorsSpec extends AnyWordSpecLike with Matchers {
 
     "deserialize from JSON" when {
       "deregister is true" in {
-        Json.obj("deregister" -> true).as[ChangeIndicators] shouldBe ChangeIndicators(true)
+        Json.obj("deregister" -> true).as[ChangeIndicators] shouldBe ChangeIndicators(deregister = true)
       }
       "deregister is false" in {
-        Json.obj("deregister" -> false).as[ChangeIndicators] shouldBe ChangeIndicators(false)
+        Json.obj("deregister" -> false).as[ChangeIndicators] shouldBe ChangeIndicators(deregister = false)
       }
     }
 
     "serialize to JSON" when {
       "ChangeIndicator is true" in {
-        Json.toJson(ChangeIndicators(true)) shouldBe Json.obj("deregister" -> true)
+        Json.toJson(ChangeIndicators(deregister = true)) shouldBe Json.obj("deregister" -> true)
       }
 
       "ChangeIndicator is false" in {
-        Json.toJson(ChangeIndicators(false)) shouldBe Json.obj("deregister" -> false)
+        Json.toJson(ChangeIndicators(deregister = false)) shouldBe Json.obj("deregister" -> false)
       }
     }
   }
