@@ -53,18 +53,25 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
   "Rendering the Crystallised LPP1 Page for a principal user" when {
 
     "there are two penalty parts with Charge Ref \"VAT Overpayments 1st LPP\"" should {
-      lazy val view2 = injectedView(viewModel(VatOverpayments1stLPP.value), Html(""))(request, messages, mockConfig, user)
-      lazy implicit val document2: Document = Jsoup.parse(view2.body)
+      lazy val view = injectedView(viewModel(VatOverpayments1stLPP.value), Html(""))(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
+      lazy implicit val document2: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
-        elementWholeText("#content > div > div > p:nth-child(2)") shouldBe
-          "This penalty applies if the VAT correction charge for 3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 has not been paid for 99 days."
+        elementText("#content > div > div > p:nth-child(2)") shouldBe
+          "This penalty applies if the VAT correction charge for 3 March 2020 to 4 April 2020 has not been paid for 99 days."
+      }
+
+      "use a non breaking space for the first explanation paragraph" in {
+        viewAsString.contains("This penalty applies if the VAT correction" +
+          "charge for 3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 has not been paid for 99 days.")
       }
     }
+
     "there are two penalty parts with Charge Ref \"VAT Return 1st LPP\"" should {
 
-
       lazy val view = injectedView(viewModel(), Html(""))(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -72,11 +79,19 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementWholeText("h1") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Late payment penalty"
+        elementText("h1") shouldBe "3 March 2020 to 4 April 2020 Late payment penalty"
+      }
+
+      "use a non breaking space for the page heading" in {
+        viewAsString.contains("3\u00a0March\u00a02020 to 4\u00a0April\u00a02020 Late payment penalty")
       }
 
       "have a period caption" in {
-        elementWholeText(".govuk-caption-xl") shouldBe "3\u00a0March\u00a02020 to 4\u00a0April\u00a02020"
+        elementText(".govuk-caption-xl") shouldBe "3 March 2020 to 4 April 2020"
+      }
+
+      "use a non breaking space for the period caption" in {
+        viewAsString.contains("3\u00a0March\u00a02020 to 4\u00a0April\u00a02020")
       }
 
       "render breadcrumbs which" should {
@@ -134,7 +149,11 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
       }
 
       "display when the penalty is due by" in {
-        elementWholeText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1\u00a0January\u00a02020"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "1 January 2020"
+      }
+
+      "use a non breaking space to display when the penalty is due by" in {
+        viewAsString.contains(" Due Date 1\u00a0January\u00a02020")
       }
 
       "have the correct heading for the second row" in {

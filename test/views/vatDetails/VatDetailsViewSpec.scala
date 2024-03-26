@@ -336,6 +336,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   "Rendering the VAT details page with a next return and a next payment" should {
 
     lazy val view = details(detailsModel, Html(""))
+    lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
@@ -343,7 +344,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "render the next return section" in {
-      elementText(Selectors.nextReturn) shouldBe "31\u00a0December\u00a02018"
+      elementText(Selectors.nextReturn) shouldBe "31 December 2018"
+    }
+
+    "use non breaking spaces for the date when rendering the next return section" in {
+      viewAsString.contains(" Next return due31\u00a0December\u00a02018")
     }
 
     "render the next payment section heading" in {
@@ -351,7 +356,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "render the next payment section" in {
-      elementText(Selectors.nextPayment) shouldBe "31\u00a0December\u00a02018"
+      elementText(Selectors.nextPayment) shouldBe "31 December 2018"
+    }
+
+    "use non breaking spaces for the date when rendering the next payment section" in {
+      viewAsString.contains("Next payment due 31\u00a0December\u00a02018")
     }
 
     "render the next payment section vat returns link" in {

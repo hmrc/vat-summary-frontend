@@ -45,6 +45,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           isHybridUser = false,
           isOverdue = false
         )
+        lazy val viewAsString = view.toString
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display the 'Next payment due' heading" in {
@@ -52,7 +53,11 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         }
 
         "display the due date of the payment" in {
-          elementWholeText(Selectors.nextPaymentDate) shouldBe "8\u00a0March\u00a02017"
+          elementText(Selectors.nextPaymentDate) shouldBe "8 March 2017"
+        }
+
+        "use non breaking spaces to display the due date of the payment" in {
+          viewAsString.contains("Next payment due 8\u00a0March\u00a02017")
         }
 
         "display the 'View payment details' button" in {

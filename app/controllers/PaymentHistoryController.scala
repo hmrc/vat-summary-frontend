@@ -103,8 +103,8 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
   private[controllers] def customerMigratedWithin15M(migrationDate: Option[LocalDate]): Boolean =
     migrationDate match {
       case Some(date) =>
-        val prevPaymentsMonthLimit = 14
-        val monthsSinceMigration = Math.abs(Period.between(dateService.now(), date).toTotalMonths)
+        val prevPaymentsMonthLimit: Int = 14
+        val monthsSinceMigration: Int = Math.abs(Period.between(dateService.now(), date).toTotalMonths.toInt)
         0 to prevPaymentsMonthLimit contains monthsSinceMigration
       case None => false
     }

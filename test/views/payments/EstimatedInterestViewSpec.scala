@@ -34,6 +34,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
     "the interest is not for a penalty charge" should {
 
       lazy val view = injectedView(estimatedLPIModel, Html(""))(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -41,11 +42,19 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementWholeText("h1") shouldBe "1\u00a0January\u00a02018 to 2\u00a0February\u00a02018 Interest on central assessment of VAT"
+        elementText("h1") shouldBe "1 January 2018 to 2 February 2018 Interest on central assessment of VAT"
+      }
+
+      "use a non breaking space to display the page heading" in {
+        viewAsString.contains("1\u00a0January\u00a02018 to 2\u00a0February\u00a02018 Interest on central assessment of VAT")
       }
 
       "have a period caption" in {
-        elementWholeText(".govuk-caption-xl") shouldBe "1\u00a0January\u00a02018 to 2\u00a0February\u00a02018"
+        elementText(".govuk-caption-xl") shouldBe "1 January 2018 to 2 February 2018"
+      }
+
+      "use a non breaking space for the period caption" in {
+        viewAsString.contains("1\u00a0January\u00a02018 to 2\u00a0February\u00a02018")
       }
 
       "render breadcrumbs which" should {
@@ -155,6 +164,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
         ),
         serviceInfoContent = Html("")
       )(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -162,11 +172,19 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementWholeText("h1") shouldBe "1\u00a0January\u00a02018 to 2\u00a0February\u00a02018 Interest on VAT correction"
+        elementText("h1") shouldBe "1 January 2018 to 2 February 2018 Interest on VAT correction"
+      }
+
+      "use a non breaking space for the page heading" in {
+        viewAsString.contains("1\u00a0January\u00a02018 to 2\u00a0February\u00a02018 Interest on VAT correction")
       }
 
       "have a period caption" in {
-        elementWholeText(".govuk-caption-xl") shouldBe "1\u00a0January\u00a02018 to 2\u00a0February\u00a02018"
+        elementText(".govuk-caption-xl") shouldBe "1 January 2018 to 2 February 2018"
+      }
+
+      "use a non breaking space for the period caption" in {
+        viewAsString.contains("1\u00a0January\u00a02018 to 2\u00a0February\u00a02018")
       }
 
       "render breadcrumbs which" should {
@@ -198,12 +216,16 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the charge explanation paragraph" in {
-        elementWholeText("#overpayment-interest-description") shouldBe
-          "This interest started to build up daily from 1\u00a0January\u00a02018 – this is the date HMRC paid you more VAT than we owed you."
+        elementText("#overpayment-interest-description") shouldBe
+          "This interest started to build up daily from 1 January 2018 – this is the date HMRC paid you more VAT than we owed you."
+      }
+
+      "use a non breaking space for the charge explanation paragraph" in {
+        viewAsString.contains("This interest started to build up daily from 1\u00a0January\u00a02018" +
+          " – this is the date HMRC paid you more VAT than we owed you.")
       }
 
       "must contain the HowInterestIsCalculated dropdown" in {
-
         elementExistsOnce("#how-interest-calculated-dropdown")
       }
 

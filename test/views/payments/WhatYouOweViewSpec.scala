@@ -36,6 +36,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
         whatYouOweView(whatYouOweViewModel2Charge, Html(""))
       }
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -101,8 +102,12 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
             elementText(tableBodyCell(1, 1) + " .govuk-tag") + " " +
               elementText(tableBodyCell(1, 1) + "> a") + " " +
               elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
-              elementWholeText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe
-              "overdue VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018 due 1\u00a0March\u00a02018 View VAT Return"
+              elementText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe
+              "overdue VAT for period 1 Jan to 1 Feb 2018 due 1 March 2018 View VAT Return"
+          }
+
+          "use breaking spaces for the dates in the charge description text" in {
+            viewAsString.contains("overdue VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018 due 1\u00a0March\u00a02018 View VAT Return")
           }
 
           "has a link to the breakdown page" in {
@@ -118,7 +123,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
             "has the correct text" in {
               elementText(tableBodyCell(1, 1) + "> span > .what-you-owe-due-date") + " " +
-                elementWholeText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe "due 1\u00a0March\u00a02018 View VAT Return"
+                elementWholeText(tableBodyCell(1, 1) + "> span > a > .what-you-owe-view-return") shouldBe "due 1 March 2018 View VAT Return"
+            }
+
+            "uses non breaking spaces for the dates in the text" in {
+              viewAsString.contains("due 1\u00a0March\u00a02018 View VAT Return")
             }
 
             "has the correct href" in {
@@ -135,9 +144,14 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         "has the correct row for an example second charge not showing the View VAT Return link" which {
 
           "has the correct charge description text for a charge that does not allow a user to view a VAT return" in {
-            elementWholeText(tableBodyCell(2, 1)) shouldBe
+            elementText(tableBodyCell(2, 1)) shouldBe
               "Penalty for not filing correctly because you did not use the correct digital channel for the period " +
-                "1\u00a0Jan to 1\u00a0Feb\u00a02018 due 1\u00a0December\u00a02018"
+                "1 Jan to 1 Feb 2018 due 1 December 2018"
+          }
+
+          "uses non breaking spaces for the charge description dates" in {
+            viewAsString.contains("Penalty for not filing correctly because you did not use the correct digital channel for the period " +
+              "1\u00a0Jan to 1\u00a0Feb\u00a02018 due 1\u00a0December\u00a02018")
           }
 
           "has a link to the breakdown page" in {
@@ -151,7 +165,11 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
           }
 
           "has the correct due hint text" in {
-            elementWholeText(tableBodyCell(2, 1) + "> span") shouldBe "due 1\u00a0December\u00a02018"
+            elementText(tableBodyCell(2, 1) + "> span") shouldBe "due 1 December 2018"
+          }
+
+          "uses no braking spaces for the hint text dates" in {
+            viewAsString.contains("due 1\u00a0December\u00a02018")
           }
 
           "has the correct amount" in {
@@ -160,16 +178,28 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct row for an example overdue crystallised charge" which {
+
           "has the correct charge description" in {
-            elementWholeText(tableBodyCell(3, 1)) shouldBe
-              "overdue Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021 due 8\u00a0April\u00a02021"
+            elementText(tableBodyCell(3, 1)) shouldBe
+              "overdue Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021 due 8 April 2021"
           }
+
+          "uses non breaking spaces for the dates in the charge description" in {
+            viewAsString.contains("overdue Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021 due 8\u00a0April\u00a02021")
+          }
+
           "has an overdue label" in {
             elementText(tableBodyCell(3, 1) + " .govuk-tag") shouldBe "overdue"
           }
+
           "has the correct due hint text" in {
-            elementWholeText(tableBodyCell(3, 1) + "> span") shouldBe "due 8\u00a0April\u00a02021"
+            elementText(tableBodyCell(3, 1) + "> span") shouldBe "due 8 April 2021"
           }
+
+          "uses non breaking spaces for the dates in the hint text" in {
+            viewAsString.contains("due 8\u00a0April\u00a02021")
+          }
+
           "has a form with the correct action" in {
 
             element(tableBodyCell(3, 1) + "> a").attr("href") shouldBe
@@ -177,6 +207,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
                 overdueCrystallisedLPICharge.generateHash(user.vrn)
               ).url
           }
+
           "has the correct amount" in {
             elementText(tableBodyCell(3, 2)) shouldBe "£" + overdueCrystallisedLPICharge.leftToPay.setScale(2)
           }

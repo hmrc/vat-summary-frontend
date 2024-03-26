@@ -70,6 +70,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, user)
           }
+        lazy val viewAsString = view.toString
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct document title" in {
@@ -77,11 +78,19 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "have the correct page heading" in {
-            elementWholeText(Selectors.pageHeading) shouldBe "1\u00a0January\u00a02021 to 31\u00a0March\u00a02021 VAT"
+            elementText(Selectors.pageHeading) shouldBe "1 January 2021 to 31 March 2021 VAT"
+          }
+
+          "use a non breaking space for the page heading" in {
+            viewAsString.contains("1\u00a0January\u00a02021 to 31\u00a0March\u00a02021 VAT")
           }
 
           "have a period caption" in {
-            elementWholeText(Selectors.caption) shouldBe "1\u00a0January\u00a02021 to 31\u00a0March\u00a02021"
+            elementText(Selectors.caption) shouldBe "1 January 2021 to 31 March 2021"
+          }
+
+          "use a non breaking space for the period caption" in {
+            viewAsString.contains("1\u00a0January\u00a02021 to 31\u00a0March\u00a02021")
           }
 
           "render breadcrumbs which" should {
@@ -116,7 +125,11 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           }
 
           "display the correct due date for the charge" in {
-            elementWholeText(Selectors.dueDateValue) shouldBe "8\u00a0April\u00a02021"
+            elementText(Selectors.dueDateValue) shouldBe "8 April 2021"
+          }
+
+          "use a non breaking space to display the due date for the charge" in {
+            viewAsString.contains("Due date 8\u00a0April\u00a02021")
           }
 
           "have the correct first column in the second line" in {
@@ -173,10 +186,15 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
           lazy val view = {
             chargeTypeDetailsView(whatYouOweChargeOverdue, Html(""))(request, messages, mockConfig, user)
           }
+          lazy val viewAsstring = view.toString
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "display the overdue label" in {
-            elementWholeText(Selectors.dueDateValue) shouldBe "8\u00a0April\u00a02021 overdue"
+            elementText(Selectors.dueDateValue) shouldBe "8 April 2021 overdue"
+          }
+
+          "use a non breaking space to display the overdue label" in {
+            viewAsstring.contains("8\u00a0April\u00a02021 overdue")
           }
         }
     }
