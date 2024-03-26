@@ -220,7 +220,7 @@ object TestModels {
     Some(TaxPeriod(LocalDate.parse("2018-01-29"), LocalDate.parse("2018-01-31"))),
     Some("MTDfB Voluntary"),
     Some(Deregistration(Some(LocalDate.parse("2020-01-01")))),
-    Some(ChangeIndicators(false)),
+    Some(ChangeIndicators(deregister = false)),
     isMissingTrader = false,
     hasPendingPpobChanges = false,
     mandationStatus = "MTDfB"

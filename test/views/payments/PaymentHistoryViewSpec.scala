@@ -83,7 +83,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
     "the user is not insolvent" should {
 
-      lazy val view: Html = paymentHistoryView(model, Html(""), false)
+      lazy val view: Html = paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -222,7 +222,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the user is insolvent" should {
 
       val insolventViewModel = model.copy(showInsolvencyContent = true)
-      lazy val view: Html = paymentHistoryView(insolventViewModel, Html(""), false)
+      lazy val view: Html = paymentHistoryView(insolventViewModel, Html(""), migratedWithinThreeYears = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the insolvency banner" in {
@@ -237,7 +237,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       implicit val user: User = agentUser
       val entityName = "Capgemini"
-      lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), false)
+      lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), migratedWithinThreeYears = false)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -358,7 +358,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
     implicit val user: User = agentUser
     val entityName = "Capgemini"
-    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), true)
+    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), migratedWithinThreeYears = true)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct inset text" in {
