@@ -42,13 +42,13 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   )
 }
 
-val mongoVersion = "1.7.0"
-val bootstrapPlayVersion = "8.4.0"
+val mongoVersion = "1.8.0"
+val bootstrapPlayVersion = "8.5.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "8.5.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "9.3.0",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"         % mongoVersion,
 )
 
