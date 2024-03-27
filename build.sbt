@@ -53,10 +53,10 @@ val compile: Seq[ModuleID] = Seq(
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"        %% "bootstrap-test-play-30"      % bootstrapPlayVersion      % scope,
-  "org.scalatestplus"  %% "mockito-4-11"                % "3.2.18.0"    % scope,
-  "org.scalamock"      %% "scalamock"                   % "5.2.0"       % scope,
-  "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-30"     % mongoVersion  % scope
+  "uk.gov.hmrc"        %% "bootstrap-test-play-30"      % bootstrapPlayVersion  % scope,
+  "org.scalatestplus"  %% "mockito-4-11"                % "3.2.18.0"            % scope,
+  "org.scalamock"      %% "scalamock"                   % "5.2.0"               % scope,
+  "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-30"     % mongoVersion          % scope
 )
 
 TwirlKeys.templateImports ++= Seq(
@@ -86,7 +86,7 @@ lazy val microservice: Project = Project(appName, file("."))
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
     scalaVersion := "2.13.13",
     libraryDependencies ++= appDependencies,
-    scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=.*routes.*:s"),
+    scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=.*routes.*:s", "-Wconf:cat=unused-imports&src=html/.*:s", "-Wconf:src=routes/.*:s"),
     retrieveManaged := true,
     routesGenerator := InjectedRoutesGenerator,
     routesImport := Seq.empty
