@@ -37,7 +37,8 @@ class FeatureSwitchItems @Inject() () {
   def items(form: Form[FeatureSwitchModel]): Seq[CheckboxItem] = {
     Seq(
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
-      formCheckBoxItem(form, ConfigKeys.overdueTimeToPayDescriptionFeature, "Time to Pay description on WYO page")
+      formCheckBoxItem(form, ConfigKeys.overdueTimeToPayDescriptionFeature, "Time to Pay description on WYO page"),
+      formCheckBoxItem(form, ConfigKeys.webchatEnabled, "Enable the web chat link")
     )
   }
 }

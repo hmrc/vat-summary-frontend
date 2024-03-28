@@ -416,22 +416,22 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         "has the correct first paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(5)") shouldBe "If the amount owed is incorrect, check if you can " +
+            elementText("p.govuk-body:nth-of-type(6)") shouldBe "If the amount owed is incorrect, check if you can " +
               "correct errors on your client’s VAT Return (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(5) > a") shouldBe
+            elementText("p.govuk-body:nth-of-type(6) > a") shouldBe
               "correct errors on your client’s VAT Return (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(5) > a").attr("href") shouldBe mockConfig.govUKCorrections
+            element("p.govuk-body:nth-of-type(6) > a").attr("href") shouldBe mockConfig.govUKCorrections
           }
         }
 
         "has the correct second paragraph" in {
-          elementText("p.govuk-body:nth-of-type(6)") shouldBe "After you have submitted a return, it can take " +
+          elementText("p.govuk-body:nth-of-type(7)") shouldBe "After you have submitted a return, it can take " +
             "24 hours for what is owed to show here."
         }
       }
@@ -449,6 +449,52 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         elementExtinct(".govuk-details__summary-text")
         elementExtinct(".govuk-details__text")
       }
+    }
+  }
+
+  "The webchat link is displayed" when {
+    "the webchatEnabled feature switch is switched on for principal user" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(true)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
+      document.select("#webchatLink-id").attr("href") shouldBe "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+    }
+
+    "the webchatEnabled feature switch is switched on for an agent" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(true)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
+      document.select("#webchatLink-id").attr("href") shouldBe "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+    }
+  }
+
+  "The webchat link is not displayed" when {
+    "the webchatEnabled feature switch is switched off for principal user" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(false)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").size shouldBe 0
+    }
+
+    "the webchatEnabled feature switch is switched off for an agent" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(false)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").size shouldBe 0
     }
   }
 }
