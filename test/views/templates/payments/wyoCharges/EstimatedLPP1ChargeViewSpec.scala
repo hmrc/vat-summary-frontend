@@ -29,10 +29,15 @@ class EstimatedLPP1ChargeViewSpec extends ViewBaseSpec {
   "The estimated LPP1 charge template" should {
 
     lazy val view = injectedView(estimatedLPP1Model)
+    lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct charge description text" in {
-      elementText("a") shouldBe "Penalty for late payment of VAT for period 1\u00a0Jan to 2\u00a0Feb\u00a02019"
+      elementText("a") shouldBe "Penalty for late payment of VAT for period 1 Jan to 2 Feb 2019"
+    }
+
+    "use non breaking spaces to display the dates in the charge description text" in {
+      viewAsString.contains("Penalty for late payment of VAT for period 1\u00a0Jan to 2\u00a0Feb\u00a02019")
     }
 
     "not have an overdue label" in {

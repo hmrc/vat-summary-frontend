@@ -43,6 +43,7 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
 
     lazy val view = nonStandardReturnFrequencyView(
       exampleNonStandardTaxPeriods, exampleNonNSTP)(messages)
+    lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct heading" in {
@@ -51,7 +52,12 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
 
     "have the correct first paragraph" in {
       elementText(Selectors.nthParagraph(2)) shouldBe "If you do not renew your non-standard tax periods, " +
-        "an additional period (6\u00a0January\u00a02019 to 31\u00a0January\u00a02019) will be added."
+        "an additional period (6 January 2019 to 31 January 2019) will be added."
+    }
+
+    "use non breaking spaces for the dates in the first paragraph" in {
+      viewAsString.contains("If you do not renew your non-standard tax periods, " +
+        "an additional period (6\u00a0January\u00a02019 to 31\u00a0January\u00a02019) will be added.")
     }
 
     "have the correct second paragraph" in {
@@ -64,11 +70,19 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     }
 
     "have the first non-standard tax period without years" in {
-      elementText(Selectors.firstPeriod) shouldBe "29\u00a0December to 30\u00a0December"
+      elementText(Selectors.firstPeriod) shouldBe "29 December to 30 December"
+    }
+
+    "use non breaking spaces to display the first non-standard tax period with years" in {
+      viewAsString.contains("29\u00a0December to 30\u00a0December")
     }
 
     "have the second non-standard tax period with years" in {
-      elementText(Selectors.secondPeriod) shouldBe "31\u00a0December\u00a02018 to 1\u00a0January\u00a02019"
+      elementText(Selectors.secondPeriod) shouldBe "31 December 2018 to 1 January 2019"
+    }
+
+    "use non breaking spaces to display the second non-standard tax period with years" in {
+      viewAsString.contains("31\u00a0December\u00a02018 to 1\u00a0January\u00a02019")
     }
 
     "have a 2019 year" in {
@@ -76,11 +90,19 @@ class NonStandardReturnFrequencySpec extends ViewBaseSpec {
     }
 
     "have the third non-standard tax period without years" in {
-      elementText(Selectors.thirdPeriod) shouldBe "2\u00a0January to 3\u00a0January"
+      elementText(Selectors.thirdPeriod) shouldBe "2 January to 3 January"
+    }
+
+    "use non breaking spaces to display the third non-standard tax period without years" in {
+      viewAsString.contains("2\u00a0January to 3\u00a0January")
     }
 
     "have the fourth non-standard tax period without years" in {
-      elementText(Selectors.fourthPeriod) shouldBe "4\u00a0January to 5\u00a0January"
+      elementText(Selectors.fourthPeriod) shouldBe "4 January to 5 January"
+    }
+
+    "use non breaking spaces to display the fourth non-standard tax period without years" in {
+      viewAsString.contains("4\u00a0January to 5\u00a0January")
     }
   }
 }

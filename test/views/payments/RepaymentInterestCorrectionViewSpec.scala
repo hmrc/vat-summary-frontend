@@ -31,6 +31,7 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
   "Rendering the VAT Overpayment for RPI breakdown page for a principal user" when {
 
     lazy val view = injectedView(vatOverpaymentForRPI, Html(""))(request, messages, mockConfig, user)
+    lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -38,11 +39,19 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
     }
 
     "have the correct page heading" in {
-      elementText("h1") shouldBe "7\u00a0April\u00a02018 to 10\u00a0April\u00a02018 Repayment interest correction"
+      elementText("h1") shouldBe "7 April 2018 to 10 April 2018 Repayment interest correction"
+    }
+
+    "use a non breaking space to display the page heading" in {
+      viewAsString.contains("7\u00a0April\u00a02018 to 10\u00a0April\u00a02018 Repayment interest correction")
     }
 
     "have a period caption" in {
-      elementText(".govuk-caption-xl") shouldBe "7\u00a0April\u00a02018 to 10\u00a0April\u00a02018"
+      elementText(".govuk-caption-xl") shouldBe "7 April 2018 to 10 April 2018"
+    }
+
+    "use a non breaking space to display the period caption" in {
+      viewAsString.contains("7\u00a0April\u00a02018 to 10\u00a0April\u00a02018")
     }
 
     "have the correct first paragraph" in {
@@ -95,7 +104,11 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
     }
 
     "display when the correction charge is due by" in {
-      elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "15\u00a0April\u00a02018"
+      elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "15 April 2018"
+    }
+
+    "use a non breaking space to display when the correction charge is due by" in {
+      viewAsString.contains("15\u00a0April\u00a02018")
     }
 
     "have the correct heading for the second row" in {

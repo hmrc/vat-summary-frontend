@@ -31,11 +31,16 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
     "a charge is overdue" should {
 
       lazy val view = injectedView(overdueCrystallisedLPICharge)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
         elementText("a") shouldBe
-          "Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021"
+          "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
+      }
+
+      "use non breaking spaces to display the charge description text" in {
+        viewAsString.contains("Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021")
       }
 
       "have an overdue label" in {
@@ -43,7 +48,11 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       }
 
       "have the correct due hint text" in {
-        elementText("span") shouldBe "due 8\u00a0April\u00a02021"
+        elementText("span") shouldBe "due 8 April 2021"
+      }
+
+      "use non breaking spaces to display the dates in the due hint text" in {
+        viewAsString.contains("due 8\u00a0April\u00a02021")
       }
 
       "have a link with the correct href" in {
@@ -56,11 +65,16 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
 
     "the charge is not overdue" should {
       lazy val view = injectedView(crystallisedLPICharge)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct charge description text" in {
         elementText("a") shouldBe
-          "Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021"
+          "Interest on central assessment of VAT for period 1 Jan to 1 Mar 2021"
+      }
+
+      "use non breaking spaces to display the charge description text" in {
+        viewAsString.contains("Interest on central assessment of VAT for period 1\u00a0Jan to 1\u00a0Mar\u00a02021")
       }
 
       "not have an overdue label" in {
@@ -68,7 +82,11 @@ class CrystallisedChargeViewSpec extends ViewBaseSpec {
       }
 
       "have the correct due hint text" in {
-        elementText("span") shouldBe "due 8\u00a0April\u00a02021"
+        elementText("span") shouldBe "due 8 April 2021"
+      }
+
+      "use non breaking spaces to display the date in the due hint text" in {
+        viewAsString.contains("due 8\u00a0April\u00a02021")
       }
 
       "have a link with the correct href" in {

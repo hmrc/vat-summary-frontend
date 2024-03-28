@@ -54,6 +54,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
     "the user has no time to pay arrangement and no breathing space" should {
 
       lazy val view = injectedView(estimatedLPP2Model, Html(""))(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -61,11 +62,19 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText(Selectors.heading) shouldBe "1\u00a0January\u00a02020 to 2\u00a0February\u00a02020 Second late payment penalty"
+        elementText(Selectors.heading) shouldBe "1 January 2020 to 2 February 2020 Second late payment penalty"
+      }
+
+      "use a non breaking space for the page heading" in {
+        viewAsString.contains("1\u00a0January\u00a02020 to 2\u00a0February\u00a02020 Second late payment penalty")
       }
 
       "have a period caption" in {
-        elementText(Selectors.caption) shouldBe "1\u00a0January\u00a02020 to 2\u00a0February\u00a02020"
+        elementText(Selectors.caption) shouldBe "1 January 2020 to 2 February 2020"
+      }
+
+      "use a non breking space for the period caption" in {
+        viewAsString.contains("1\u00a0January\u00a02020 to 2\u00a0February\u00a02020")
       }
 
       "render breadcrumbs which" should {

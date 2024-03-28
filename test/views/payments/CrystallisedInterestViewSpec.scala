@@ -50,6 +50,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     "the interest is not for a penalty charge" should {
 
       lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -57,11 +58,19 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 VAT officer’s assessment interest"
+        elementText("h1") shouldBe "1 October 2022 to 31 December 2022 VAT officer’s assessment interest"
+      }
+
+      "use a non breaking space for the h1 content" in {
+        viewAsString.contains("1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 VAT officer’s assessment interest")
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
+        elementText(".govuk-caption-xl") shouldBe "1 October 2022 to 31 December 2022"
+      }
+
+      "use a non breaking space for the period caption" in {
+        viewAsString.contains("1\u00a0October\u00a02022 to 31\u00a0December\u00a02022")
       }
 
       "render breadcrumbs which" should {
@@ -107,7 +116,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display when the interest is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30 March 2023 overdue"
+      }
+
+      "use a non breaking space for displaying when the interest is due by" in {
+        viewAsString.contains("30\u00a0March\u00a02023 overdue")
       }
 
       "have the correct heading for the second row" in {
@@ -177,6 +190,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         chargeType = VATOverpaymentforTaxLPI.value
       ),
         serviceInfoContent = Html(""))(request, messages, mockConfig, user)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -184,11 +198,19 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText("h1") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 Interest on VAT correction"
+        elementText("h1") shouldBe "1 October 2022 to 31 December 2022 Interest on VAT correction"
+      }
+
+      "use a non breaking space for the h1 content" in {
+        viewAsString.contains("1\u00a0October\u00a02022 to 31\u00a0December\u00a02022 Interest on VAT correction")
       }
 
       "have a period caption" in {
-        elementText(".govuk-caption-xl") shouldBe "1\u00a0October\u00a02022 to 31\u00a0December\u00a02022"
+        elementText(".govuk-caption-xl") shouldBe "1 October 2022 to 31 December 2022"
+      }
+
+      "use a non breaking space for the period caption" in {
+        viewAsString.contains("1\u00a0October\u00a02022 to 31\u00a0December\u00a02022")
       }
 
       "render breadcrumbs which" should {
@@ -217,7 +239,13 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
       "have the charge explanation paragraph" in {
         elementText("#overpayment-interest-description") shouldBe
+          "This interest started to build up daily from 1 October 2022 – this is the date HMRC paid you more VAT than we owed you."
+      }
+
+      "use a non breaking space for the charge explanation paragraph" in {
+        viewAsString.contains(
           "This interest started to build up daily from 1\u00a0October\u00a02022 – this is the date HMRC paid you more VAT than we owed you."
+        )
       }
 
       "must contain the HowInterestIsCalculated dropdown" in {
@@ -230,7 +258,11 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
       }
 
       "display when the interest is due by" in {
-        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30\u00a0March\u00a02023 overdue"
+        elementText(".govuk-summary-list__row:nth-child(1) > dd") shouldBe "30 March 2023 overdue"
+      }
+
+      "use a non breaking space when displaying when the interest is due by" in {
+        viewAsString.contains("30\u00a0March\u00a02023 overdue")
       }
 
       "have the correct heading for the second row" in {
