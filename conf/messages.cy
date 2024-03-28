@@ -128,6 +128,7 @@ whatYouOwe.details.agent.paymentHelpFive = Os yw’ch cleient eisoes wedi trefnu
 whatYouOwe.details.agent.paymentHelpSix = yn dangos fel amcangyfrifon ar y dudalen hon
 whatYouOwe.details.agent.paymentHelpSeven = wedi’u cynnwys fel rhan o’r cynllun talu presennol
 whatYouOwe.estimate = amcangyfrif
+whatYouOwe.askHMRC = Gofyn i CThEF (yn agor tab newydd)
 
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon

@@ -128,6 +128,7 @@ whatYouOwe.details.agent.paymentHelpFive = If they’ve already set up a plan, t
 whatYouOwe.details.agent.paymentHelpSix = show as estimates on this page
 whatYouOwe.details.agent.paymentHelpSeven = are included in their existing payment plan
 whatYouOwe.estimate = estimate
+whatYouOwe.askHMRC = Ask HMRC (opens in a new tab)
 
 chargeTypeDetails.viewThis = View this
 chargeTypeDetails.vatReturn = VAT Return
