@@ -347,4 +347,50 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       elementText(Selectors.insetText) shouldBe insetText
     }
   }
+
+  "The webchat link is displayed" when {
+    "the webchatEnabled feature switch is switched on for principal user" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(true)
+        paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
+      document.select("#webchatLink-id").attr("href") shouldBe "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+    }
+
+    "the webchatEnabled feature switch is switched on for an agent" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(true)
+        paymentHistoryView(model, Html(""), migratedWithinThreeYears = true)(request, messages, mockConfig, agentUser)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
+      document.select("#webchatLink-id").attr("href") shouldBe "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+    }
+  }
+
+  "The webchat link is not displayed" when {
+    "the webchatEnabled feature switch is switched off for principal user" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(false)
+        paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").size shouldBe 0
+    }
+
+    "the webchatEnabled feature switch is switched off for an agent" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(false)
+        paymentHistoryView(model, Html(""), migratedWithinThreeYears = true)(request, messages, mockConfig, agentUser)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").size shouldBe 0
+    }
+  }
 }

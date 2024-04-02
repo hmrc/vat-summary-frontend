@@ -102,6 +102,16 @@
       ))
   }
 }
+
+  @webchatLink = {
+    <br>
+    <br>
+    <p class="govuk-body">
+      <a class="govuk-link" href="https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
+    </p>
+    <br>
+    <br>
+  }
 @mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
               appConfig = appConfig,
               serviceInfoContent = serviceInfoContent,
@@ -145,7 +155,9 @@
           summary = Text(messages("whatYouOwe.details.agent.paymentHelpOne")),
           content = HtmlContent(paymentHelp)
         ))
+
       }
+      @if(appConfig.features.webchatEnabled() && user.isAgent){ @webchatLink }
       @if(!user.isAgent) {
         @govukButton(Button(
           content = Text(messages("whatYouOwe.makePayment")),
@@ -158,6 +170,7 @@
             ).url
           )
         ))
+        @if(appConfig.features.webchatEnabled()){ @webchatLink }
       }
 
       @if(user.isAgent){
