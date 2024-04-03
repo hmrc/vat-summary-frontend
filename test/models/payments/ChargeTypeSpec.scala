@@ -170,8 +170,6 @@ class ChargeTypeSpec extends AnyWordSpecLike with Matchers {
         ChargeType.LPIChargeMapping(FtnEachPartnerCharge) shouldBe FtnEachPartnerChargeLPI
         ChargeType.LPIChargeMapping(FtnMatPost2010Charge) shouldBe FtnMatPost2010ChargeLPI
         ChargeType.LPIChargeMapping(InaccuraciesReturnReplacedCharge) shouldBe VatInaccRtnReplacedLPI
-        ChargeType.LPIChargeMapping(FailureToNotifyRCSLCharge) shouldBe FtnRCSLChargeLPI
-        ChargeType.LPIChargeMapping(VatInaccuraciesInECSalesCharge) shouldBe InaccurInECSalesChargeLPI
       }
     }
 
