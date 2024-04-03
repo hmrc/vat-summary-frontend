@@ -104,6 +104,7 @@ trait AppConfig {
   val govUkPrevIntRateUrl: String
   val timeToLiveInSeconds: Int
   val essttpService: String
+  val webchatUrl: String
 }
 
 @Singleton
@@ -128,6 +129,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
   override val features = new Features()(runModeConfiguration)
+
+  override val webchatUrl: String = selfLookup + sc.getString("webchat.endpoint")
 
   override lazy val vatSubscriptionBaseUrl: String = sc.baseUrl("vat-subscription")
   override lazy val financialDataBaseUrl: String = sc.baseUrl("financial-transactions")

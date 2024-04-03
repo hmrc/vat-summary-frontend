@@ -83,13 +83,9 @@
 }
 
 @webchatLink = {
-  <br>
-  <br>
-  <p class="govuk-body">
-    <a class="govuk-link" href="https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
+  <p class="govuk-body govuk-!-margin-top-5 govuk-!-margin-bottom-8">
+    <a class="govuk-link" href="@{appConfig.webchatUrl}" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
   </p>
-  <br>
-  <br>
 }
 
 @mainTemplate(

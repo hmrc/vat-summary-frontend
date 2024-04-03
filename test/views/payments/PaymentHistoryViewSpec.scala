@@ -357,7 +357,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
-      document.select("#webchatLink-id").attr("href") shouldBe "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+      document.select("#webchatLink-id").attr("href") shouldBe "/ask-hmrc/chat/vat-online?ds"
     }
 
     "the webchatEnabled feature switch is switched on for an agent" in {
@@ -368,7 +368,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
-      document.select("#webchatLink-id").attr("href") shouldBe "https://www.tax.service.gov.uk/ask-hmrc/chat/vat-online?ds"
+      document.select("#webchatLink-id").attr("href") shouldBe "/ask-hmrc/chat/vat-online?ds"
     }
   }
 
