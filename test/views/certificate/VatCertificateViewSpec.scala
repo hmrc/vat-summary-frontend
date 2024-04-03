@@ -22,7 +22,7 @@ import models.Address
 import models.viewModels.VatCertificateViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.HtmlFormat
+import play.twirl.api.{Html, HtmlFormat}
 import views.ViewBaseSpec
 import views.html.certificate.VatCertificate
 
@@ -358,6 +358,52 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       "not have a Full Name row" in {
         elementExtinct(Selectors.fullNameSelector)
       }
+    }
+  }
+
+  "The webchat link is displayed" when {
+    "the webchatEnabled feature switch is switched on for principal user" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(true)
+        vatCertificateView(Html(""), model)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
+      document.select("#webchatLink-id").attr("href") shouldBe "/ask-hmrc/chat/vat-online?ds"
+    }
+
+    "the webchatEnabled feature switch is switched on for an agent" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(true)
+        vatCertificateView(Html(""), model)(request = request, messages = messages, appConfig = mockConfig, user = agentUser)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
+      document.select("#webchatLink-id").attr("href") shouldBe "/ask-hmrc/chat/vat-online?ds"
+    }
+  }
+
+  "The webchat link is not displayed" when {
+    "the webchatEnabled feature switch is switched off for principal user" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(false)
+        vatCertificateView(Html(""), model)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").size shouldBe 0
+    }
+
+    "the webchatEnabled feature switch is switched off for an agent" in {
+      lazy val view = {
+        mockConfig.features.webchatEnabled(false)
+        vatCertificateView(Html(""), model)(request = request, messages = messages, appConfig = mockConfig, user = agentUser)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#webchatLink-id").size shouldBe 0
     }
   }
 }

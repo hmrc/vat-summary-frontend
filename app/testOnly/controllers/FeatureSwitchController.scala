@@ -34,7 +34,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         staticDateEnabled = appConfig.features.staticDateEnabled(),
-        overdueTimeToPayDescriptionEnabled = appConfig.features.overdueTimeToPayDescriptionEnabled()
+        overdueTimeToPayDescriptionEnabled = appConfig.features.overdueTimeToPayDescriptionEnabled(),
+        webchatEnabled = appConfig.features.webchatEnabled()
       )
     )))
   }
@@ -49,6 +50,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.overdueTimeToPayDescriptionEnabled(model.overdueTimeToPayDescriptionEnabled)
+    appConfig.features.webchatEnabled(model.webchatEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

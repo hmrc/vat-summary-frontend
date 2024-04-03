@@ -107,4 +107,5 @@ class MockAppConfig(val runModeConfiguration: Configuration) extends AppConfig {
   override val timeToLiveInSeconds: Int = 100
 
   override val essttpService: String = "/essttp"
+  override val webchatUrl: String = "/ask-hmrc/chat/vat-online?ds"
 }

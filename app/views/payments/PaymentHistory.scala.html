@@ -82,6 +82,12 @@
   }
 }
 
+@webchatLink = {
+  <p class="govuk-body govuk-!-margin-top-5 govuk-!-margin-bottom-8">
+    <a class="govuk-link" href="@{appConfig.webchatUrl}" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
+  </p>
+}
+
 @mainTemplate(
   title = messages("paymentsHistory.title"),
   appConfig = appConfig,
@@ -120,4 +126,5 @@
       ))
     </div>
   </div>
+  @if(appConfig.features.webchatEnabled()){ @webchatLink }
 }

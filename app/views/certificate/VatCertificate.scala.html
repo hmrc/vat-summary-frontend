@@ -81,6 +81,12 @@
   List("1", "Z1").contains(model.businessTypeMsgKey.split('.').last)
 }
 
+    @webchatLink = {
+        <p class="govuk-body govuk-!-margin-top-5 govuk-!-margin-bottom-8">
+            <a class="govuk-link" href="@{appConfig.webchatUrl}" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
+        </p>
+    }
+
 @mainTemplate(
   if(user.isAgent) messages("vatCertificate.agentTitle") else messages("vatCertificate.title"),
   appConfig = appConfig,
@@ -203,4 +209,5 @@
     attributes = Map("onclick" -> "javascript:window.print()",
                      "id" -> "print-button")
   ))
+    @if(appConfig.features.webchatEnabled()){ @webchatLink }
 }
