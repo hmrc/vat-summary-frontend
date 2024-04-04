@@ -45,7 +45,7 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
 }
 
 @scripts = {
-  <script type="module" src='@routes.Assets.at("lib/govuk-frontend/govuk/all.js")'></script>
+  <script type="module" src='@routes.Assets.at("lib/govuk-frontend/dist/govuk/all.js")'></script>
   <script type="module" src='@routes.Assets.at("lib/hmrc-frontend/hmrc/all.js")'></script>
   <script type="module" src='@routes.Assets.at("javascript/btalinks.js")'></script>
 
