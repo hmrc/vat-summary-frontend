@@ -130,7 +130,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
 
   override val features = new Features()(runModeConfiguration)
 
-  override val webchatUrl: String = sc.baseUrl("digital-engagement-platform-frontend") + sc.getString("webchat.endpoint")
+  override val webchatUrl: String = sc.getString("digital-engagement-platform-frontend.host") + sc.getString("webchat.endpoint")
 
   override lazy val vatSubscriptionBaseUrl: String = sc.baseUrl("vat-subscription")
   override lazy val financialDataBaseUrl: String = sc.baseUrl("financial-transactions")
