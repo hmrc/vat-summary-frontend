@@ -83,7 +83,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
     "the user is not insolvent" should {
 
-      lazy val view: Html = paymentHistoryView(model, Html(""), false)
+      lazy val view: Html = paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -163,12 +164,20 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct date in the first column" in {
-          elementText(Selectors.paymentDateTableContent) shouldBe "1\u00a0Mar"
+          elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar"
+        }
+
+        "use a non breaking space to display the date in the first column" in {
+          viewAsString.contains("1\u00a0Mar")
         }
 
         "has the correct charge description in the second column" in {
           elementText(Selectors.descriptionTableChargeType) shouldBe "VAT"
-          elementText(Selectors.descriptionTableContent) shouldBe "for period 1\u00a0Jan to 1\u00a0Feb\u00a02018"
+          elementText(Selectors.descriptionTableContent) shouldBe "for period 1 Jan to 1 Feb 2018"
+        }
+
+        "use a non breaking space to display the charge description in the second column" in {
+          viewAsString.contains("VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018")
         }
 
         "has the correct payment amount in the third column" in {
@@ -213,7 +222,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the user is insolvent" should {
 
       val insolventViewModel = model.copy(showInsolvencyContent = true)
-      lazy val view: Html = paymentHistoryView(insolventViewModel, Html(""), false)
+      lazy val view: Html = paymentHistoryView(insolventViewModel, Html(""), migratedWithinThreeYears = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the insolvency banner" in {
@@ -228,7 +237,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       implicit val user: User = agentUser
       val entityName = "Capgemini"
-      lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), false)
+      lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), migratedWithinThreeYears = false)
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -304,12 +314,20 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
         }
 
         "has the correct date in the first column" in {
-          elementText(Selectors.paymentDateTableContent) shouldBe "1\u00a0Mar"
+          elementText(Selectors.paymentDateTableContent) shouldBe "1 Mar"
+        }
+
+        "use a non breaking space to display the date in the first column" in {
+          viewAsString.contains("1\u00a0Mar")
         }
 
         "has the correct charge description in the second column" in {
           elementText(Selectors.descriptionTableChargeType) shouldBe "VAT"
-          elementText(Selectors.descriptionTableContent) shouldBe "for period 1\u00a0Jan to 1\u00a0Feb\u00a02018"
+          elementText(Selectors.descriptionTableContent) shouldBe "for period 1 Jan to 1 Feb 2018"
+        }
+
+        "use a non breaking space to display the charge description in the second column" in {
+          viewAsString.contains("VAT for period 1\u00a0Jan to 1\u00a0Feb\u00a02018")
         }
 
         "has the correct payment amount in the third column" in {
@@ -340,7 +358,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
     implicit val user: User = agentUser
     val entityName = "Capgemini"
-    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), true)
+    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), migratedWithinThreeYears = true)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct inset text" in {

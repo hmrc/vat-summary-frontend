@@ -79,7 +79,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
-            elementText("#penalties-banner") shouldBe "Late submission and late payment penalties"
+            elementText("#penalties-banner-title") shouldBe "Late submission and late payment penalties"
           }
 
           "have the correct penalty information" in {
@@ -134,7 +134,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
-            elementText("#penalties-banner") shouldBe "Late submission and late payment penalties"
+            elementText("#penalties-banner-title") shouldBe "Late submission and late payment penalties"
           }
 
           "have the correct penalty information" in {
@@ -188,7 +188,7 @@ class PenaltiesBannerSpec extends ViewBaseSpec {
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
           "have the correct heading" in {
-            elementText("#penalties-banner") shouldBe "Late submission and late payment penalties"
+            elementText("#penalties-banner-title") shouldBe "Late submission and late payment penalties"
           }
 
           "have the correct penalty information" in {

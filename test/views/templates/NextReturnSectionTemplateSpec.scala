@@ -41,6 +41,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = nextReturnSection(
         obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfBOrNonDigital = Some(false)
       )
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -48,7 +49,11 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the due of the return" in {
-        elementText(Selectors.nextReturnDate) shouldBe "30\u00a0April\u00a02019"
+        elementText(Selectors.nextReturnDate) shouldBe "30 April 2019"
+      }
+
+      "use non breaking spaces to display the due date of the return" in {
+        viewAsString.contains("Next return due 30\u00a0April\u00a02019")
       }
 
       "display the 'View return deadlines' link" in {
@@ -63,6 +68,7 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       lazy val view = nextReturnSection(
         obligationDueDate, hasMultiple = false, isOverdue = false, isError = false, isNonMTDfBOrNonDigital = Some(true)
       )
+      lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next return due' heading" in {
@@ -70,7 +76,11 @@ class NextReturnSectionTemplateSpec extends ViewBaseSpec {
       }
 
       "display the due of the return" in {
-        elementText(Selectors.nextReturnDate) shouldBe "30\u00a0April\u00a02019"
+        elementText(Selectors.nextReturnDate) shouldBe "30 April 2019"
+      }
+
+      "use non breaking spaces to display the due date of the return" in {
+        viewAsString.contains("Next return due 30\u00a0April\u00a02019")
       }
 
       "display the 'View return deadlines' link" in {

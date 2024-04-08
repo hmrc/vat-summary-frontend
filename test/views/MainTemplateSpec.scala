@@ -26,7 +26,7 @@ class MainTemplateSpec extends ViewBaseSpec {
   val injectedView: MainTemplate = injector.instanceOf[MainTemplate]
 
   object Selectors {
-    val pageTitle = ".hmrc-header__service-name"
+    val pageTitle = ".govuk-header__service-name"
   }
 
   "The MainTemplate" when {
@@ -41,7 +41,7 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".hmrc-header__service-name").attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+        element(Selectors.pageTitle).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
       }
     }
 
@@ -56,7 +56,7 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".hmrc-header__service-name").attr("href") shouldBe mockConfig.agentClientLookupHubUrl
+        element(Selectors.pageTitle).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
       }
     }
 
@@ -70,7 +70,7 @@ class MainTemplateSpec extends ViewBaseSpec {
       }
 
       "have the correct service URL" in {
-        element(".hmrc-header__service-name").attr("href") shouldBe ""
+        element(Selectors.pageTitle).attr("href") shouldBe ""
       }
     }
   }
