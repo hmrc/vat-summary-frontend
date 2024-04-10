@@ -526,6 +526,12 @@ chargeType.vatAdditionalAssessRPITitle = Repayment interest on additional assess
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
 chargeType.vatPaFurtherInterestDescription = due on the protective assessment as this was not paid on time
 
+chargeType.vatCentralAssessRPITitle = Repayment interest on central assessment of VAT
+
+chargeType.vatCa1stLppRPITitle = Repayment interest on penalty for late payment of central assessment
+
+chargeType.vatErrorCorrection2ndLppRPITitle = Repayment interest on second penalty for late payment of error correction
+
 chargeType.vatCarterPenaltyChargeTitle = Penalty for not filing correctly
 chargeType.vatCarterPenaltyChargeDescription = because you did not use the correct digital channel for the period {0}
 chargeType.vatCarterPenaltyChargeDescription.agent = because your client did not use the correct digital channel for the period {0}
