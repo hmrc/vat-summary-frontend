@@ -655,6 +655,10 @@ chargeType.vatReturnAA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hw
 chargeType.vatRPIRecovery = Adennill llog ar ad-daliadau
 chargeType.vatManualRPI = Llog ar ad-daliadau ar TAW
 
+chargeType.vatOA1stLPPRPITitle = Llog ar ad-daliadau ar gosb am dalu asesiad swyddog yn hwyr
+chargeType.vatOA2ndLPPRPITitle = Llog ar ad-daliadau ar ail gosb am dalu asesiad swyddog yn hwyr
+chargeType.VatCarterPenRPITitle = Llog ar ad-daliadau ar gosb am beidio â chyflwyno’n gywir
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau

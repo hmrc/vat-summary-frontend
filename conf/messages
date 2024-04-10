@@ -653,6 +653,10 @@ chargeType.vatReturnAA2ndLPPRPI = Repayment interest on second penalty for late 
 chargeType.vatRPIRecovery = Repayment interest recovery
 chargeType.vatManualRPI = Repayment interest on VAT
 
+chargeType.vatOA1stLPPRPITitle = Repayment interest on penalty for late payment of officer’s assessment
+chargeType.vatOA2ndLPPRPITitle = Repayment interest on second penalty for late payment of officer’s assessment
+chargeType.VatCarterPenRPITitle = Repayment interest on penalty for not filing correctly
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account

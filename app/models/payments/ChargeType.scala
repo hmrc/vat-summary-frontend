@@ -547,6 +547,21 @@ case object VatCa2ndLppRPI extends ChargeType {
   override val value: String = "VAT CA 2nd LPP RPI"
 }
 
+// Parent charge: Main transaction 4741, Sub transaction 1090
+case object VatOA1stLPPRPI extends ChargeType {
+  override val value: String = "VAT OA 1st LPP RPI"
+}
+
+// Parent charge: Main transaction 4742, Sub transaction 1090
+case object VatOA2ndLPPRPI extends ChargeType {
+  override val value: String = "VAT OA 2nd LPP RPI"
+}
+
+// Parent charge: Main transaction 4775, Sub transaction 1090
+case object VatCarterPenRPI extends ChargeType {
+  override val value: String = "VAT Carter Penalty RPI"
+}
+
 object ChargeType extends LoggerUtil {
 
   val allChargeTypes: Set[ChargeType] = Set(
@@ -700,7 +715,10 @@ object ChargeType extends LoggerUtil {
     VatManualRPI,
     VatErrorCorrect1stLppRPI,
     VatLspRepaymentInterest,
-    VatCa2ndLppRPI
+    VatCa2ndLppRPI,
+    VatOA1stLPPRPI,
+    VatOA2ndLPPRPI,
+    VatCarterPenRPI
   )
 
   val LPIChargeTypes: Set[ChargeType] = Set(
