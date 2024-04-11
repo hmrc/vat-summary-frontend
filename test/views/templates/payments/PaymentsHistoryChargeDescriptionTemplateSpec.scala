@@ -195,6 +195,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (FtnEachPartnerCharge, "Failure to notify penalty", "because you did not tell us about all the partners and changes in your partnership",
       "because you did not tell us about all the partners and changes in your partnership"),
     (FtnEachPartnerChargeLPI, "Interest on failure to notify penalty – partners", "", ""),
+    (VatCentralAssessRPI, "Repayment interest on central assessment of VAT", "", ""),
+    (VatCa1stLppRPI, "Repayment interest on penalty for late payment of central assessment" ,"" , ""),
+    (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", "")
   )
 
   private val agentChargeTable = Table(
@@ -292,8 +295,10 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatAA2ndLPPLPI, "Interest on additional assessment second penalty", "for 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for 12 Jan to 23 Mar 2018"),
     (VatLateSubmissionPen, "Late submission penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for period 12 Jan to 23 Mar 2018"),
     (VatLspInterest, "Interest on late submission penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for period 12 Jan to 23 Mar 2018"),
-    (VatReturnAA1stLPPLPI, "Interest on annual accounting balance penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for period 12 Jan to 23 Mar 2018"),
-    (VatReturnAA2ndLPPLPI, "Interest on annual accounting balance second penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for period 12 Jan to 23 Mar 2018"),
+    (VatReturnAA1stLPPLPI, "Interest on annual accounting balance penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
+      "for period 12 Jan to 23 Mar 2018"),
+    (VatReturnAA2ndLPPLPI, "Interest on annual accounting balance second penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
+      "for period 12 Jan to 23 Mar 2018"),
     (VatPOAInstalmentLPI, "Interest on payment on account instalment", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for period 12 Jan to 23 Mar 2018"),
     (VatAAReturnChargeLPI, "Interest on annual accounting balance", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018", "for period 12 Jan to 23 Mar 2018"),
     (VatManualLPP, "Late payment penalty", "", ""),
@@ -325,6 +330,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
       "for 12 Jan to 23 Mar 2018"),
     (VatReturnPOARPI, "Repayment interest on payment on account balance", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
       "for period 12 Jan to 23 Mar 2018"),
+    (VatCentralAssessRPI, "Repayment interest on central assessment of VAT", "", ""),
+    (VatCa1stLppRPI, "Repayment interest on penalty for late payment of central assessment" ,"" , ""),
+    (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", "")
   )
 
   "When user is not an agent, PaymentsHistoryChargeDescription template" should

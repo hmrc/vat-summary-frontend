@@ -535,6 +535,12 @@ chargeType.vatAdditionalAssessRPITitle = Llog ar ad-daliadau ar asesiad ychwaneg
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
 chargeType.vatPaFurtherInterestDescription = sy’n ddyledus ar yr asesiad i ddiogelu oherwydd na thalwyd hyn mewn pryd
 
+chargeType.vatCentralAssessRPITitle = Llog ar ad-daliadau ar asesiad canolog o TAW
+
+chargeType.vatCa1stLppRPITitle = Llog ar ad-daliadau ar gosb am dalu asesiad canolog yn hwyr
+
+chargeType.vatErrorCorrection2ndLppRPITitle = Llog ar ad-daliadau ar ail gosb am dalu cywiriad gwall yn hwyr
+
 chargeType.vatCarterPenaltyChargeTitle = Cosb am beidio â chyflwyno’n gywir
 chargeType.vatCarterPenaltyChargeDescription = oherwydd na wnaethoch ddefnyddio’r sianel ddigidol gywir ar gyfer y cyfnod {0}
 chargeType.vatCarterPenaltyChargeDescription.agent = oherwydd na wnaeth eich cleient ddefnyddio’r sianel ddigidol gywir ar gyfer y cyfnod {0}
