@@ -648,6 +648,9 @@ chargeType.vatReturnPOA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n h
 chargeType.vatReturnAA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
 chargeType.vatReturnAA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
 
+chargeType.vatRPIRecovery = Adennill llog ar ad-daliadau
+chargeType.vatManualRPI = Llog ar ad-daliadau ar TAW
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau
