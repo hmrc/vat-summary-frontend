@@ -402,6 +402,10 @@ chargeType.vatDefaultSurchargeDescription = for late payment of the {0} return
 chargeType.vatErrorCorrectionDebitChargeTitle = Error correction of VAT
 chargeType.vatErrorCorrectionCreditChargeTitle =  Error correction repayment from HMRC
 
+chargeType.vatErrorCorrect1stLppRPITitle = Repayment interest on penalty for late payment of error correction
+chargeType.vatLspRepaymentInterestTitle = Repayment interest on late submission penalty
+chargeType.vatCa2ndLppRPITitle = Repayment interest on second penalty for late payment of central assessment
+
 chargeType.vatRepaymentSupplementTitle = Late repayment compensation from HMRC
 chargeType.vatRepaymentSupplementDescription = we took too long to repay the {0} return
 

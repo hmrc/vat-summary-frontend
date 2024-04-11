@@ -199,7 +199,10 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatCa1stLppRPI, "Repayment interest on penalty for late payment of central assessment" ,"" , ""),
     (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", ""),
     (VatRPIRecovery, "Repayment interest recovery", "", ""),
-    (VatManualRPI, "Repayment interest on VAT", "", "")
+    (VatManualRPI, "Repayment interest on VAT", "", ""),
+    (VatErrorCorrect1stLppRPI, "Repayment interest on penalty for late payment of error correction", "", ""),
+    (VatLspRepaymentInterest, "Repayment interest on late submission penalty", "", ""),
+    (VatCa2ndLppRPI, "Repayment interest on second penalty for late payment of central assessment", "", "")
   )
 
   private val agentChargeTable = Table(
@@ -334,7 +337,10 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
       "for period 12 Jan to 23 Mar 2018"),
     (VatCentralAssessRPI, "Repayment interest on central assessment of VAT", "", ""),
     (VatCa1stLppRPI, "Repayment interest on penalty for late payment of central assessment" ,"" , ""),
-    (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", "")
+    (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", ""),
+    (VatErrorCorrect1stLppRPI, "Repayment interest on penalty for late payment of error correction", "", ""),
+    (VatLspRepaymentInterest, "Repayment interest on late submission penalty", "", ""),
+    (VatCa2ndLppRPI, "Repayment interest on second penalty for late payment of central assessment", "", "")
   )
 
   "When user is not an agent, PaymentsHistoryChargeDescription template" should
