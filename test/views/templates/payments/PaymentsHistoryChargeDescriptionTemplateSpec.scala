@@ -197,7 +197,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (FtnEachPartnerChargeLPI, "Interest on failure to notify penalty – partners", "", ""),
     (VatCentralAssessRPI, "Repayment interest on central assessment of VAT", "", ""),
     (VatCa1stLppRPI, "Repayment interest on penalty for late payment of central assessment" ,"" , ""),
-    (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", "")
+    (VatErrorCorrection2ndLppRPI, "Repayment interest on second penalty for late payment of error correction", "", ""),
+    (VatRPIRecovery, "Repayment interest recovery", "", ""),
+    (VatManualRPI, "Repayment interest on VAT", "", "")
   )
 
   private val agentChargeTable = Table(
