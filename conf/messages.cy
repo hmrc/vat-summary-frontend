@@ -611,11 +611,17 @@ chargeType.VATPA2ndLPPLPITitle = Llog ar ail gosb asesiad i ddiogelu
 chargeType.VATPA1stLPPTitle = Cosb am dalu asesiad amddiffynnol yn hwyr
 chargeType.VATPA2ndLPPTitle = Ail gosb am dalu asesiad amddiffynnol yn hwyr
 
+chargeType.VatPA1stLppRPITitle = Llog ar ad-daliadau ar gosb am dalu asesiad i ddiogelu yn hwyr
+chargeType.VatPA2ndLppRPITitle = Llog ar ad-daliadau ar ail gosb am dalu asesiad i ddiogelu yn hwyr
+
 chargeType.VATAdditionalAssessmentLPITitle = Llog ar asesiad ychwanegol
 chargeType.VATAA1stLPPTitle = Llog ar gosb asesiad ychwanegol
 chargeType.VATAA2ndLPPTitle = Llog ar ail gosb asesiad ychwanegol
 chargeType.VATAA1stLPPLPITitle = Cosb am dalu asesiad ychwanegol yn hwyr
 chargeType.VATAA2ndLPPLPITitle = Ail gosb am dalu asesiad ychwanegol yn hwyr
+
+chargeType.VatAA1stLppRPITitle = Llog ar ad-daliadau ar gosb am dalu asesiad ychwanegol yn hwyr
+chargeType.VatAA2ndLppRPITitle = Llog ar ad-daliadau ar ail gosb am dalu asesiad ychwanegol yn hwyr
 
 chargeType.VATLateSubPenTitle = Cosb am gyflwyno’n hwyr
 
