@@ -412,6 +412,10 @@ chargeType.vatDefaultSurchargeDescription = ar gyfer talu’r dreth sy’n codi 
 chargeType.vatErrorCorrectionDebitChargeTitle = Cywiriad gwall TAW
 chargeType.vatErrorCorrectionCreditChargeTitle =  Ad-daliad gan CThEF ar gyfer cywiro gwall
 
+chargeType.vatErrorCorrect1stLppRPITitle = Llog ar ad-daliadau ar gosb am dalu cywiriad gwall yn hwyr
+chargeType.vatLspRepaymentInterestTitle = Llog ar ad-daliadau ar gosb am gyflwyno’n hwyr
+chargeType.vatCa2ndLppRPITitle = Llog ar ad-daliadau ar ail gosb am dalu asesiad canolog yn hwyr
+
 chargeType.vatRepaymentSupplementTitle = Iawndal gan CThEF am ad-dalu’n hwyr
 chargeType.vatRepaymentSupplementDescription = gwnaethom gymryd gormod o amser i ad-dalu’r dreth yn codi o’r Ffurflen TAW ar gyfer {0}
 
