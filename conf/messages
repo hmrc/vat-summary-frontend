@@ -478,7 +478,7 @@ chargeType.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 chargeType.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = because your client submitted an inaccurate document for the period {0}
 
-chargeType.vatOAInaccuraciesFrom2009LPITitle =  Interest on inaccuracies penalty
+chargeType.vatOAInaccuraciesFrom2009LPITitle =  Interest on inaccuracies penalty — document
 
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Inaccuracies penalty
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = because you submitted an inaccurate document for the period {0}
