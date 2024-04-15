@@ -602,11 +602,17 @@ chargeType.VATPA2ndLPPLPITitle = Interest on second penalty for protective asses
 chargeType.VATPA1stLPPTitle = Penalty for late payment of protective assessment
 chargeType.VATPA2ndLPPTitle = Second penalty for late payment of protective assessment
 
+chargeType.VatPA1stLppRPITitle = Repayment interest on penalty for late payment of protective assessment
+chargeType.VatPA2ndLppRPITitle = Repayment interest on second penalty for late payment of protective assessment
+
 chargeType.VATAdditionalAssessmentLPITitle = Interest on additional assessment
 chargeType.VATAA1stLPPLPITitle = Interest on additional assessment penalty
 chargeType.VATAA2ndLPPLPITitle = Interest on additional assessment second penalty
 chargeType.VATAA1stLPPTitle = Penalty for late payment of additional assessment
 chargeType.VATAA2ndLPPTitle = Second penalty for late payment of additional assessment
+
+chargeType.VatAA1stLppRPITitle = Repayment interest on penalty for late payment of additional assessment
+chargeType.VatAA2ndLppRPITitle = Repayment interest on second penalty for late payment of additional assessment
 
 chargeType.VATLateSubPenTitle = Late submission penalty
 
