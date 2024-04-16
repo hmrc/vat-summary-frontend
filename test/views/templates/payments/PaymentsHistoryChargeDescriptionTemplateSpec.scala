@@ -77,7 +77,7 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (InaccuraciesAssessmentsPenCharge, "Inaccuracies penalty",
       "because you submitted an inaccurate document for the period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
       "because you submitted an inaccurate document for the period 12 Jan to 23 Mar 2018"),
-    (VatInaccuracyAssessPenLPI, "Interest on inaccuracies penalty", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
+    (VatInaccuracyAssessPenLPI, "Interest on inaccuracies penalty — document", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
       "for period 12 Jan to 23 Mar 2018"),
     (VatOAInaccuraciesFrom2009LPI, "Interest on inaccuracies penalty — document", "for period 12\u00a0Jan to 23\u00a0Mar\u00a02018",
       "for period 12 Jan to 23 Mar 2018"),

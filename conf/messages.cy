@@ -639,7 +639,7 @@ chargeType.VATReturn2ndLPP = Ail gosb am dalu TAW yn hwyr
 chargeType.VATReturnAALPITitle = Llog ar y balans cyfrifyddu blynyddol
 chargeType.VATReturnAARPITitle = Llog ar ad-daliadau ar falans cyfrifyddu blynyddol
 
-chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb anghywirdeb
+chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb am anghywirdebau — dogfen
 
 chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd
