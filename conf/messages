@@ -478,6 +478,10 @@ chargeType.ftnEachPartnerDescription.agent = because your client did not tell us
 
 chargeType.ftnEachPartnerLPITitle = Interest on failure to notify penalty – partners
 
+chargeType.ftnRCSLChargeLPITitle = Interest on failure to notify penalty – reverse charge sale
+
+chargeType.inaccurInECSalesChargeLPITitle = Interest on inaccuracies penalty – EC sales
+
 chargeType.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 chargeType.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = because your client submitted an inaccurate document for the period {0}
