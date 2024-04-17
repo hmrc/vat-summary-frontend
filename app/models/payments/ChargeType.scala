@@ -160,6 +160,12 @@ case object FtnEachPartnerCharge extends ChargeType {
 case object FtnEachPartnerChargeLPI extends ChargeType {
   override val value: String = "VAT FTN Each Partner LPI"
 }
+case object FtnRCSLChargeLPI extends ChargeType {
+  override val value: String = "VAT FTN RCSL LPI"
+}
+case object InaccurInECSalesChargeLPI extends ChargeType {
+  override val value: String = "VAT Inaccur in EC Sales LPI"
+}
 case object MiscPenaltyCharge extends ChargeType {
   override val value: String = "VAT Miscellaneous Penalty"
 }
@@ -560,9 +566,9 @@ case object VatOA2ndLPPRPI extends ChargeType {
 // Parent charge: Main transaction 4775, Sub transaction 1090
 case object VatCarterPenRPI extends ChargeType {
   override val value: String = "VAT Carter Penalty RPI"
-  // Parent charge: Main transaction: 4758, Sub transaction 1090
 }
 
+// Parent charge: Main transaction: 4758, Sub transaction 1090
 case object VatAA1stLppRPI extends ChargeType {
   override val value: String = "VAT AA 1st LPP RPI"
 }
@@ -615,6 +621,7 @@ object ChargeType extends LoggerUtil {
     BnpRegPost2010Charge,
     FtnEachPartnerCharge,
     FtnEachPartnerChargeLPI,
+    FtnRCSLChargeLPI,
     FtnMatPost2010Charge,
     FtnMatPost2010ChargeLPI,
     FtnMatPre2010Charge,
@@ -636,6 +643,7 @@ object ChargeType extends LoggerUtil {
     FailureToSubmitRCSLCharge,
     VatFailureToSubmitRCSLLPI,
     VatInaccuraciesInECSalesCharge,
+    InaccurInECSalesChargeLPI,
     StatutoryInterestCharge,
     VatPADefaultInterestCharge,
     VatPALPICharge,
@@ -788,6 +796,8 @@ object ChargeType extends LoggerUtil {
     VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerChargeLPI,
     FtnMatPost2010ChargeLPI,
+    FtnRCSLChargeLPI,
+    InaccurInECSalesChargeLPI,
     VatInaccRtnReplacedLPI
   )
 
@@ -826,7 +836,9 @@ object ChargeType extends LoggerUtil {
     VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerChargeLPI,
     FtnMatPost2010ChargeLPI,
-    VatInaccRtnReplacedLPI
+    VatInaccRtnReplacedLPI,
+    FtnRCSLChargeLPI,
+    InaccurInECSalesChargeLPI
   )
 
   val LPP1ChargeTypes: Set[ChargeType] = Set(
@@ -897,6 +909,8 @@ object ChargeType extends LoggerUtil {
     VatFailureToSubmitECSalesCharge -> VatFailureToSubmitECSalesChargeLPI,
     FtnEachPartnerCharge -> FtnEachPartnerChargeLPI,
     FtnMatPost2010Charge -> FtnMatPost2010ChargeLPI,
+    FailureToNotifyRCSLCharge -> FtnRCSLChargeLPI,
+    VatInaccuraciesInECSalesCharge -> InaccurInECSalesChargeLPI,
     InaccuraciesReturnReplacedCharge -> VatInaccRtnReplacedLPI
   )
 

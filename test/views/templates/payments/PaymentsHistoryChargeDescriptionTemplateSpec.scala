@@ -205,7 +205,9 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatCa2ndLppRPI, "Repayment interest on second penalty for late payment of central assessment", "", ""),
     (VatCarterPenRPI, "Repayment interest on penalty for not filing correctly", "", ""),
     (VatOA1stLPPRPI, "Repayment interest on penalty for late payment of officer’s assessment", "", ""),
-    (VatOA2ndLPPRPI, "Repayment interest on second penalty for late payment of officer’s assessment", "", "")
+    (VatOA2ndLPPRPI, "Repayment interest on second penalty for late payment of officer’s assessment", "", ""),
+    (InaccurInECSalesChargeLPI, "Interest on inaccuracies penalty – EC sales", "", ""),
+    (FtnRCSLChargeLPI, "Interest on failure to notify penalty – reverse charge sale", "", "")
   )
 
   private val agentChargeTable = Table(
@@ -350,7 +352,10 @@ class PaymentsHistoryChargeDescriptionTemplateSpec extends ViewBaseSpec with Tab
     (VatAA1stLppRPI, "Repayment interest on penalty for late payment of additional assessment", "", ""),
     (VatAA2ndLppRPI, "Repayment interest on second penalty for late payment of additional assessment", "", ""),
     (VatPA1stLppRPI, "Repayment interest on penalty for late payment of protective assessment", "", ""),
-    (VatPA2ndLppRPI, "Repayment interest on second penalty for late payment of protective assessment", "", "")
+    (VatPA2ndLppRPI, "Repayment interest on second penalty for late payment of protective assessment", "", ""),
+    (InaccurInECSalesChargeLPI, "Interest on inaccuracies penalty – EC sales", "", ""),
+    (FtnRCSLChargeLPI, "Interest on failure to notify penalty – reverse charge sale", "", "")
+
   )
 
   "When user is not an agent, PaymentsHistoryChargeDescription template" should
