@@ -720,7 +720,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           10000,
           isOverdue = false,
           "XD002750002155",
-          isPenalty = false,
+          isPenaltyReformPenaltyLPI = false,
           isNonPenaltyReformPenaltyLPI = false
         ))
       }
@@ -746,7 +746,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
           2,
-          isPenalty = false,
+          isPenaltyReformPenaltyLPI = false,
           isNonPenaltyReformPenaltyLPI = false
         ))
       }

@@ -32,7 +32,7 @@ sealed trait ChargeType {
 
   def isLPICharge: Boolean = LPIChargeTypes.contains(this)
   def notLPICharge: Boolean = !isLPICharge
-  def isPenaltyInterest: Boolean = penaltyReformPenaltyLPIChargeTypes.contains(this)
+  def isPenaltyReformPenaltyLPI: Boolean = penaltyReformPenaltyLPIChargeTypes.contains(this)
 
   def isNonPenaltyReformPenaltyLPI: Boolean = nonPenaltyReformPenaltyLPIChargeTypes.contains(this)
   def isPenalty: Boolean = penaltyReformPenaltiesChargeTypes.contains(this)
@@ -394,6 +394,9 @@ case object VatReturnAA2ndLPPLPI extends ChargeType {
 case object VatManualLPP extends ChargeType {
   override val value: String = "VAT Manual LPP"
 }
+case object VatManualLPI extends ChargeType {
+  override val value: String = "VAT Manual LPI"
+}
 case object VatManualLPPLPI extends ChargeType {
   override val value: String = "VAT Manual LPP LPI"
 }
@@ -699,6 +702,7 @@ object ChargeType extends LoggerUtil {
     VatReturnAA1stLPPLPI,
     VatReturnAA2ndLPPLPI,
     VatManualLPP,
+    VatManualLPI,
     VatManualLPPLPI,
     VatAAQuarterlyInstalLPI,
     VatAAMonthlyInstalLPI,
@@ -775,6 +779,7 @@ object ChargeType extends LoggerUtil {
     VatLspInterest,
     VatReturnAA1stLPPLPI,
     VatReturnAA2ndLPPLPI,
+    VatManualLPI,
     VatManualLPPLPI,
     VatOAInaccuraciesFrom2009LPI,
     VatWrongDoingPenaltyLPI,

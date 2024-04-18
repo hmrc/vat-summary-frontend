@@ -288,7 +288,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is for a penalty charge" should {
 
-      lazy val view = injectedView(estimatedLPIModel.copy(isPenalty = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPIModel.copy(isPenaltyReformPenaltyLPI = true), Html(""))(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "must contain the HowInterestIsCalculated dropdown" in {

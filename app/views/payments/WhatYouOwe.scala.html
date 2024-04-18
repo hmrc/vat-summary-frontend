@@ -171,11 +171,11 @@
 
       @if(user.isAgent){
         <h2 class="govuk-heading-s">@messages("whatYouOwe.agent.isIncorrectOne")</h2>
-        <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectTwo")
+        <p class="govuk-body" id="incorrect-p1-agent">@messages("whatYouOwe.agent.isIncorrectTwo")
           <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKCorrections">
             @messages("whatYouOwe.agent.isIncorrectThree")</a>.
         </p>
-        <p class="govuk-body">@messages("whatYouOwe.agent.isIncorrectFour")</p>
+        <p class="govuk-body" id="incorrect-p2-agent">@messages("whatYouOwe.agent.isIncorrectFour")</p>
       } else {
         @if(appConfig.features.overdueTimeToPayDescriptionEnabled() ) {
           <h2 id="cannot-pay-heading" class="govuk-heading-s">@messages("whatYouOwe.ifYouCannotPayOne")</h2>

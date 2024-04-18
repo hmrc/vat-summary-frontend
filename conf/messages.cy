@@ -187,8 +187,10 @@ estimatedLPP1.breathingSpaceAndTTPBulletTwo = mae’r trefniant amser i gael eic
 
 crystallisedInterest.vatChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw TAW sydd heb ei thalu.
 crystallisedInterest.penaltyChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw gosbau sydd heb eu talu.
+crystallisedInterest.manualChargeInterest = Rydym yn codi llog am dalu’n hwyr ar unrhyw swm sydd heb ei dalu.
 crystallisedInterest.vatIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y TAW sydd heb ei thalu ar gyfer y cyfnod.
 crystallisedInterest.penaltyIncreaseDaily = Mae’r cyfanswm yn cynyddu’n ddyddiol ar sail swm y gosb sydd heb ei thalu ar gyfer y cyfnod.
+crystallisedInterest.manualIncreaseDaily = Mae’r cyfanswm yn cynyddu bob dydd ar sail y swm sydd heb ei dalu ar gyfer y cyfnod.
 crystallisedInterest.calculation = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
 crystallisedInterest.vatCalculation = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
 crystallisedInterest.rateChanges = Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny.
@@ -245,7 +247,9 @@ estimatedLPP2.ttpInset.agent = Mae’ch cleient wedi gofyn i CThEF a all drefnu 
 
 chargeBreakdown.interestDropDown.label = Sut y cafodd swm y llog ei gyfrifo
 chargeBreakdown.interestDropDown.p1a = Rydym yn defnyddio’r cyfrifiad canlynol ar gyfer pob diwrnod:
-chargeBreakdown.interestDropDown.p1b = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
+chargeBreakdown.interestDropDown.p1b.vat = (Cyfradd llog × swm y TAW sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
+chargeBreakdown.interestDropDown.p1b.penalty = (Cyfradd llog x swm y gosb sydd heb ei thalu) ÷ nifer y diwrnodau mewn blwyddyn
+chargeBreakdown.interestDropDown.p1b.manual = (Cyfradd llog x swm sydd heb ei dalu) ÷ nifer y diwrnodau mewn blwyddyn
 chargeBreakdown.interestDropDown.p2 = Efallai y caiff y swm ei addasu er mwyn rhoi cyfrif am unrhyw log ar ad-daliadau sy’n ddyledus gan CThEF yn ystod yr un cyfnod.
 chargeBreakdown.interestDropDown.p3 = Gallwch {0}. Os bydd y gyfradd llog yn newid yn ystod y cyfnod y mae’r llog yn cronni, byddwn yn defnyddio’r hen gyfradd llog hyd at y dyddiad y bydd y gyfradd llog yn newid, ac yna’n defnyddio’r un newydd ar ôl hynny.
 chargeBreakdown.interestDropDown.link = ddod o hyd i gyfraddau llog ar GOV.UK
@@ -662,6 +666,7 @@ chargeType.vatReturnPOA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n h
 chargeType.vatReturnAA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
 chargeType.vatReturnAA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
 
+chargeType.vatManualLPI = Llog ar daliad TAW hwyr
 chargeType.vatRPIRecovery = Adennill llog ar ad-daliadau
 chargeType.vatManualRPI = Llog ar ad-daliadau ar TAW
 

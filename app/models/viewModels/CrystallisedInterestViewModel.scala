@@ -31,7 +31,7 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
                                          leftToPay: BigDecimal,
                                          isOverdue: Boolean,
                                          chargeReference: String,
-                                         isPenalty: Boolean,
+                                         isPenaltyReformPenaltyLPI: Boolean,
                                          isNonPenaltyReformPenaltyLPI: Boolean) extends CrystallisedViewModel {
 
 

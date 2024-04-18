@@ -35,7 +35,7 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
     100.11,
     isOverdue = false,
     "XXXXXX1234567890",
-    isPenalty = false,
+    isPenaltyReformPenaltyLPI = false,
     isNonPenaltyReformPenaltyLPI = false
   )
 

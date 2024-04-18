@@ -20,7 +20,7 @@
       link: templates.formatters.links.OpenInNewTab
      )
 
-@()(implicit messages: Messages, appConfig: AppConfig)
+@(messageKeySuffix: String)(implicit messages: Messages, appConfig: AppConfig)
 
 @govukDetails(Details(
   id = Some("how-interest-calculated-dropdown"),
@@ -31,7 +31,7 @@
 @dropDownContent = {
   <p id="how-interest-calculated-p1" class="govuk-body">@messages("chargeBreakdown.interestDropDown.p1a")
     <br>
-    @messages("chargeBreakdown.interestDropDown.p1b")
+    @messages(s"chargeBreakdown.interestDropDown.p1b.${messageKeySuffix}")
   </p>
 
   <p id="how-interest-calculated-p2" class="govuk-body">@messages("chargeBreakdown.interestDropDown.p2")</p>

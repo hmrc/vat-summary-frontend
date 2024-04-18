@@ -55,7 +55,7 @@
 }
 
 @interestTypeMessageKey = @{
-    if(model.isPenalty || model.isNonPenaltyReformPenaltyLPI) "penalty" else "vat"
+    if(model.isPenaltyReformPenaltyLPI || model.isNonPenaltyReformPenaltyLPI) "penalty" else "vat"
 }
 
 @mainTemplate(
@@ -83,7 +83,7 @@
             <p id="increase-daily" class="govuk-body">@messages(s"estimatedInterest.${interestTypeMessageKey}IncreaseDaily")</p>
         }
 
-      @howInterestIsCalculated()
+      @howInterestIsCalculated(interestTypeMessageKey)
 
       @govukSummaryList(SummaryList(
         rows = Seq(

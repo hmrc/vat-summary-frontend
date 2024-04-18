@@ -26,7 +26,7 @@ case class EstimatedInterestViewModel(periodFrom: LocalDate,
                                       periodTo: LocalDate,
                                       chargeType: String,
                                       interestAmount: BigDecimal,
-                                      isPenalty: Boolean,
+                                      isPenaltyReformPenaltyLPI: Boolean,
                                       isNonPenaltyReformPenaltyLPI: Boolean) extends EstimatedViewModel {
 
   override val outstandingAmount: BigDecimal = interestAmount
