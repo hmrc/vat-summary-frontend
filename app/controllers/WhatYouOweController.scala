@@ -309,7 +309,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                          mandationStatus: String,
                          penalties: PenaltyDetails)(implicit request: Request[_]): Option[WhatYouOweViewModel] = {
 
-    val chargeModels = categoriseCharges(payments, penalties).flatten
+    val chargeModels: Seq[ChargeDetailsViewModel] = categoriseCharges(payments, penalties).flatten
     val totalAmount = chargeModels.map(_.outstandingAmount).sum
     val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest) + payments.count(_.showEstimatedPenalty)
 
@@ -321,6 +321,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         payments.exists(_.isOverdue(dateService.now())),
         penalties.breathingSpace))
     } else {
+
+      val test = chargeModels.collect {
+        case model
+      }
+
+
       warnLog(s"[WhatYouOweController][constructViewModel] " +
         s"totalPaymentCount - $totalPaymentCount does not equal chargeModels.length - ${chargeModels.length}" +
         s"\n no. of payments - ${payments.length}" +
@@ -330,6 +336,20 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         s"\n no. of charge references - ${payments.count(_.chargeReference.isDefined)}" +
         s"\n no. of penalties - ${penalties.LPPDetails.length}" +
         s"\n no. of penalty charge ref - ${penalties.LPPDetails.count(_.penaltyChargeReference.isDefined)}")
+
+      warnLog(s"[WhatYouOweController][constructViewModel] " +
+        s"totalPaymentCount - $totalPaymentCount does not equal chargeModels.length - ${chargeModels.length}" +
+        s"\n API#1811 data:" +
+        s"\n no. of payments - ${payments.length}" +
+        s"\n no. of payments - ${payments.length}" +
+        s"\n estimated interest count - ${payments.count(_.showEstimatedInterest)}" +
+        s"\n estimated penalty count - ${payments.count(_.showEstimatedPenalty)}" +
+        s"\n estimated interest and estimated penalty - ${payments.count(p => p.showEstimatedInterest && p.showEstimatedPenalty)}" +
+        s"\n no. of charge references - ${payments.count(_.chargeReference.isDefined)}" +
+        s"\n API#1812 data" +
+        s"\n no. of penalties - ${penalties.LPPDetails.length}" +
+        s"\n no. of penalty charge ref - ${penalties.LPPDetails.count(_.penaltyChargeReference.isDefined)}" +
+        s"")
       None
     }
   }
