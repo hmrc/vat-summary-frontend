@@ -447,22 +447,22 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         "has the correct first paragraph" which {
 
           "has the correct text" in {
-            elementText("p.govuk-body:nth-of-type(5)") shouldBe "If the amount owed is incorrect, check if you can " +
+            elementText("#incorrect-p1-agent") shouldBe "If the amount owed is incorrect, check if you can " +
               "correct errors on your client’s VAT Return (opens in a new tab)."
           }
 
           "has the correct link text" in {
-            elementText("p.govuk-body:nth-of-type(5) > a") shouldBe
+            elementText("#incorrect-p1-agent > a") shouldBe
               "correct errors on your client’s VAT Return (opens in a new tab)"
           }
 
           "has the correct link location" in {
-            element("p.govuk-body:nth-of-type(5) > a").attr("href") shouldBe mockConfig.govUKCorrections
+            element("#incorrect-p1-agent > a").attr("href") shouldBe mockConfig.govUKCorrections
           }
         }
 
         "has the correct second paragraph" in {
-          elementText("p.govuk-body:nth-of-type(6)") shouldBe "After you have submitted a return, it can take " +
+          elementText("#incorrect-p2-agent") shouldBe "After you have submitted a return, it can take " +
             "24 hours for what is owed to show here."
         }
       }

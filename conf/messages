@@ -148,12 +148,6 @@ estimatedInterest.penaltyChargeInterest = We charge late payment interest on any
 estimatedInterest.vatOverpaymentInterest.description = This interest started to build up daily from {0} – this is the date HMRC paid you more VAT than we owed you.
 estimatedInterest.vatIncreaseDaily = The total increases daily based on the amount of unpaid VAT for the period.
 estimatedInterest.penaltyIncreaseDaily = The total increases daily based on the amount of unpaid penalty for the period.
-estimatedInterest.calculation = The calculation we use for each day is:
-estimatedInterest.vatCalculation = (Interest rate × VAT amount unpaid) ÷ days in a year
-estimatedInterest.rateChanges = If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that.
-estimatedInterest.youCan = You can
-estimatedInterest.prevIntRateLink = find interest rates on GOV.UK (opens in a new tab)
-estimatedInterest.penaltyCalculation = (Interest rate × penalty amount unpaid) ÷ days in a year
 estimatedInterest.currentAmount = Current amount (estimate)
 estimatedInterest.amountReceived = Amount received
 estimatedInterest.leftToPay = Left to pay
@@ -187,14 +181,10 @@ estimatedLPP1.breathingSpaceAndTTPBulletTwo = Breathing Space ends
 
 crystallisedInterest.vatChargeInterest = We charge late payment interest on any unpaid VAT.
 crystallisedInterest.penaltyChargeInterest = We charge late payment interest on any unpaid penalty.
+crystallisedInterest.manualChargeInterest = We charge late payment interest on any amount unpaid.
 crystallisedInterest.vatIncreaseDaily = The total increases daily based on the amount of unpaid VAT for the period.
 crystallisedInterest.penaltyIncreaseDaily = The total increases daily based on the amount of unpaid penalty for the period.
-crystallisedInterest.calculation = The calculation we use for each day is:
-crystallisedInterest.vatCalculation = (Interest rate × VAT amount unpaid) ÷ days in a year
-crystallisedInterest.rateChanges = If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that.
-crystallisedInterest.youCan = You can
-crystallisedInterest.prevIntRateLink = find interest rates on GOV.UK (opens in a new tab)
-crystallisedInterest.penaltyCalculation = (Interest rate × penalty amount unpaid) ÷ days in a year
+crystallisedInterest.manualIncreaseDaily = The total increases daily based on the amount unpaid for the period.
 crystallisedInterest.dueDate = Due date
 crystallisedInterest.interestAmount = Interest amount
 crystallisedInterest.amountReceived = Amount received
@@ -245,7 +235,10 @@ estimatedLPP2.ttpInset.agent = Your client has asked HMRC if they can set up a p
 
 chargeBreakdown.interestDropDown.label = How the interest amount was calculated
 chargeBreakdown.interestDropDown.p1a = The calculation we use for each day is:
-chargeBreakdown.interestDropDown.p1b = (Interest rate × VAT amount unpaid) ÷ days in a year
+chargeBreakdown.interestDropDown.p1b.vat = (Interest rate × VAT amount unpaid) ÷ days in a year
+chargeBreakdown.interestDropDown.p1b.penalty = (Interest rate × penalty amount unpaid) ÷ days in a year
+chargeBreakdown.interestDropDown.p1b.manual = (Interest rate × amount unpaid) ÷ days in a year
+
 chargeBreakdown.interestDropDown.p2 = The amount might be adjusted to take account of any repayment interest owed by HMRC during the same time.
 chargeBreakdown.interestDropDown.p3 = You can {0}. If the interest rate changes during the time interest is building up, we use the old interest rate up to the change date, then the new one after that.
 chargeBreakdown.interestDropDown.link = find interest rates on GOV.UK
@@ -660,6 +653,7 @@ chargeType.vatReturnPOA2ndLPPRPI = Repayment interest on second penalty for late
 chargeType.vatReturnAA1stLPPRPI = Repayment interest on penalty for late payment — annual accounting balance
 chargeType.vatReturnAA2ndLPPRPI = Repayment interest on second penalty for late payment — annual accounting balance
 
+chargeType.vatManualLPI = Interest on late payment of VAT
 chargeType.vatRPIRecovery = Repayment interest recovery
 chargeType.vatManualRPI = Repayment interest on VAT
 

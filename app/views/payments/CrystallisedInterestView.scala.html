@@ -67,7 +67,12 @@
 }
 
 @interestTypeMessageKey = @{
-  if(model.isPenalty || model.isNonPenaltyReformPenaltyLPI) "penalty" else "vat"
+  (model.chargeType, model.isPenaltyReformPenaltyLPI, model.isNonPenaltyReformPenaltyLPI) match {
+    case (VatManualLPI.value, _, _) => "manual"
+    case (_, true, _) => "penalty"
+    case (_, _, true) => "penalty"
+    case _ => "vat"
+  }
 }
 
 @mainTemplate(
@@ -99,7 +104,7 @@
           </p>
       }
 
-      @howInterestIsCalculated()
+      @howInterestIsCalculated(interestTypeMessageKey)
 
       @govukSummaryList(SummaryList(
         rows = Seq(

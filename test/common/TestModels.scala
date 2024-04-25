@@ -401,7 +401,7 @@ object TestModels {
     periodTo = LocalDate.parse("2019-02-02"),
     chargeType = VatReturnLPI.value,
     interestAmount = BigDecimal(2),
-    isPenalty = false,
+    isPenaltyReformPenaltyLPI = false,
     isNonPenaltyReformPenaltyLPI = false
   )
 
@@ -435,7 +435,7 @@ object TestModels {
     leftToPay = 10000.00,
     isOverdue = false,
     chargeReference = "XD002750002155",
-    isPenalty = false,
+    isPenaltyReformPenaltyLPI = false,
     isNonPenaltyReformPenaltyLPI = false
   )
 
@@ -449,7 +449,7 @@ object TestModels {
     leftToPay = 10000.00,
     isOverdue = false,
     chargeReference = "XD002750002155",
-    isPenalty = true,
+    isPenaltyReformPenaltyLPI = true,
     isNonPenaltyReformPenaltyLPI = false
   )
 
@@ -564,7 +564,7 @@ object TestModels {
     leftToPay = 111.00,
     isOverdue = true,
     chargeReference = "ChargeRef",
-    isPenalty = false,
+    isPenaltyReformPenaltyLPI = false,
     isNonPenaltyReformPenaltyLPI = false
   )
 
@@ -580,7 +580,7 @@ object TestModels {
     "leftToPay" -> 111.00,
     "isOverdue" -> false,
     "chargeReference" -> "ChargeRef",
-    "isPenalty" -> false,
+    "isPenaltyReformPenaltyLPI" -> false,
     "isNonPenaltyReformPenaltyLPI" -> false
   )
 
@@ -589,7 +589,7 @@ object TestModels {
     LocalDate.parse("2018-02-02"),
     "VAT Central Assessment LPI",
     300.33,
-    isPenalty = false,
+    isPenaltyReformPenaltyLPI = false,
     isNonPenaltyReformPenaltyLPI = false
   )
 
@@ -598,7 +598,7 @@ object TestModels {
     "periodTo" -> "2018-02-02",
     "chargeType" -> "VAT Central Assessment LPI",
     "interestAmount" -> 300.33,
-    "isPenalty" -> false,
+    "isPenaltyReformPenaltyLPI" -> false,
     "isNonPenaltyReformPenaltyLPI" -> false
   )
 
@@ -626,7 +626,7 @@ object TestModels {
     periodTo = LocalDate.parse("2019-02-02"),
     chargeType = "VAT Return 1st LPP LPI",
     interestAmount = 2,
-    isPenalty = true,
+    isPenaltyReformPenaltyLPI = true,
     isNonPenaltyReformPenaltyLPI = false
   )
 
@@ -661,7 +661,7 @@ object TestModels {
       periodTo = crystallisedPenaltyModel.periodTo,
       chargeType = VatOverpayments1stLPPLPI.value,
       interestAmount = BigDecimal(2),
-      isPenalty = true,
+      isPenaltyReformPenaltyLPI = true,
       isNonPenaltyReformPenaltyLPI = false
     )
 
@@ -672,7 +672,7 @@ object TestModels {
       chargeType = VatOverpayments1stLPPLPI.value,
       interestAmount = BigDecimal(10000),
       chargeReference = "BCDEFGHIJKLMNOPQ",
-      isPenalty = true
+      isPenaltyReformPenaltyLPI = true
     )
 
   val estimatedVATOverpaymentforTaxLPI: EstimatedInterestViewModel =
@@ -681,7 +681,7 @@ object TestModels {
       periodTo = crystallisedPenaltyModel.periodTo,
       chargeType = VATOverpaymentforTaxLPI.value,
       interestAmount = BigDecimal(2),
-      isPenalty = false,
+      isPenaltyReformPenaltyLPI = false,
       isNonPenaltyReformPenaltyLPI = false
     )
 
@@ -694,7 +694,7 @@ object TestModels {
       amountReceived = 0,
       leftToPay = 10000,
       chargeReference = "BCDEFGHIJKLMNOPQ",
-      isPenalty = false,
+      isPenaltyReformPenaltyLPI = false,
       isNonPenaltyReformPenaltyLPI = false
     )
 
@@ -852,7 +852,7 @@ object TestModels {
       periodTo = crystallisedPenaltyModel.periodTo,
       chargeType = VatOverpayments2ndLPPLPI.value,
       interestAmount = BigDecimal(2),
-      isPenalty = true,
+      isPenaltyReformPenaltyLPI = true,
       isNonPenaltyReformPenaltyLPI = false
     )
 
@@ -863,7 +863,7 @@ object TestModels {
       chargeType = VatOverpayments2ndLPPLPI.value,
       interestAmount = BigDecimal(10000),
       chargeReference = "BCDEFGHIJKLMNOPQ",
-      isPenalty = true
+      isPenaltyReformPenaltyLPI = true
     )
 
   val crystallisedLPP2Json: JsObject = Json.obj(

@@ -860,6 +860,13 @@ object PaymentMessageHelper {
     None
   )
 
+  object VATManualLPI extends PaymentMessageHelper(
+    VatManualLPI.value,
+    "chargeType.vatManualLPI",
+    None,
+    None
+  )
+
   object VATManualLPPLPI extends PaymentMessageHelper(
     VatManualLPPLPI.value,
     "chargeType.VATManualLPPLPITitle",
@@ -1238,6 +1245,7 @@ object VatManualRPI extends PaymentMessageHelper(
     VATReturnAA1stLPPLPI,
     VATReturnAA2ndLPPLPI,
     VATManualLPP,
+    VATManualLPI,
     VATManualLPPLPI,
     VATAAQuarterlyInstalLPI,
     VATAAMonthlyInstalLPI,

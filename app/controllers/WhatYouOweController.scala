@@ -163,7 +163,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.LPIChargeMapping(payment.chargeType).value,
           interestAmount = interestAmnt,
-          isPenalty = ChargeType.LPIChargeMapping(payment.chargeType).isPenaltyInterest,
+          isPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isPenaltyReformPenaltyLPI,
           isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI
         ))
       case _ =>
@@ -184,7 +184,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           leftToPay = payment.outstandingAmount,
           isOverdue = payment.isOverdue(dateService.now()),
           chargeReference = chargeRef,
-          isPenalty = payment.chargeType.isPenaltyInterest,
+          isPenaltyReformPenaltyLPI = payment.chargeType.isPenaltyReformPenaltyLPI,
           isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI
         ))
       case _ =>
