@@ -29,6 +29,7 @@ object ConfigKeys {
   val staticDateValue: String = "date-service.staticDate.value"
   val overdueTimeToPayDescriptionFeature: String = "features.overdueTimeToPayDescription.enabled"
   val webchatEnabled: String = "features.webchat.enabled"
+  val showUserResearchBannerEnabled: String = "features.showUserResearchBanner.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"

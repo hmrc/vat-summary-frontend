@@ -35,7 +35,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         overdueTimeToPayDescriptionEnabled = appConfig.features.overdueTimeToPayDescriptionEnabled(),
-        webchatEnabled = appConfig.features.webchatEnabled()
+        webchatEnabled = appConfig.features.webchatEnabled(),
+        showUserResearchBannerEnabled = appConfig.features.showUserResearchBannerEnabled()
       )
     )))
   }
@@ -51,6 +52,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.overdueTimeToPayDescriptionEnabled(model.overdueTimeToPayDescriptionEnabled)
     appConfig.features.webchatEnabled(model.webchatEnabled)
+    appConfig.features.showUserResearchBannerEnabled(model.showUserResearchBannerEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

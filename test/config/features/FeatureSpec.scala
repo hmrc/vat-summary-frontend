@@ -30,6 +30,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.staticDateEnabled(true)
     features.overdueTimeToPayDescriptionEnabled(true)
     features.webchatEnabled(true)
+    features.showUserResearchBannerEnabled(false)
   }
 
   "The static date feature" should {
@@ -57,6 +58,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
   }
 
   "The webchat feature" should {
+
     "return its current state" in {
       features.webchatEnabled() shouldBe true
     }
@@ -64,6 +66,18 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "switch to a different state" in {
       features.webchatEnabled(false)
       features.webchatEnabled() shouldBe false
+    }
+  }
+
+  "The show user research banner feature" should {
+
+    "return its current state" in {
+      features.showUserResearchBannerEnabled() shouldBe false
+    }
+
+    "switch to a different state" in {
+      features.showUserResearchBannerEnabled(true)
+      features.showUserResearchBannerEnabled() shouldBe true
     }
   }
 }

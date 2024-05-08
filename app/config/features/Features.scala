@@ -26,4 +26,5 @@ class Features @Inject()(implicit config: Configuration) {
   val staticDateEnabled = new Feature(ConfigKeys.staticDateEnabledFeature)
   val overdueTimeToPayDescriptionEnabled = new Feature(ConfigKeys.overdueTimeToPayDescriptionFeature)
   val webchatEnabled = new Feature(ConfigKeys.webchatEnabled)
+  val showUserResearchBannerEnabled = new Feature(ConfigKeys.showUserResearchBannerEnabled)
 }
