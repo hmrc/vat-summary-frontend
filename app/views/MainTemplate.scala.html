@@ -104,9 +104,9 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
     serviceName = Some(dynamicNavTitle),
     serviceUrl =  titleServiceUrl,
     signOutUrl = if(showLogout) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
-    userResearchBanner = Some(UserResearchBanner(
+    userResearchBanner = if(appConfig.features.showUserResearchBannerEnabled()) Some(UserResearchBanner(
                             url = "https://signup.take-part-in-research.service.gov.uk/?utm_campaign=VATviewchange&utm_source=Other&utm_medium=other&t=HMRC&id=34"
-                         )),
+                         )) else None,
     displayHmrcBanner = false
   )
 }
