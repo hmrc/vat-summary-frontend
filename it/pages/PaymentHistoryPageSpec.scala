@@ -102,7 +102,7 @@ class PaymentHistoryPageSpec extends IntegrationBaseSpec {
         response.status shouldBe Status.OK
         document.title shouldBe "Payment history - Manage your VAT account - GOV.UK"
         document.select("#previous-payment").text shouldBe
-          "You can view your previous payments (opens in a new tab) if you made payments before joining Making Tax Digital."
+          "You can no longer view previous payments. Please refer to your own business records and accounts."
       }
     }
 

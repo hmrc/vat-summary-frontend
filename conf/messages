@@ -280,10 +280,9 @@ insolventError.buttonText = Go to your business tax account
 
 paymentsHistory.title = Payment history
 paymentsHistory.noCurrentYearHistory = You have not made or received any payments using the new VAT service this year.
-paymentsHistory.previousPayments.heading = Previous payments
-paymentsHistory.previousPayments.youCan = You can
-paymentsHistory.previousPayments.viewPreviousPayments = view your previous payments
-paymentsHistory.previousPayments.beforeMtd = if you made payments before joining Making Tax Digital.
+paymentsHistory.previousPayments.tabHeading = Previous payments
+paymentsHistory.previousPayments.subHeading = Service has closed
+paymentsHistory.previousPayments.para = You can no longer view previous payments. Please refer to your own business records and accounts.
 paymentsHistory.backToTop = Back to top
 paymentsHistory.insolvencyNotice = You cannot view payments made before the insolvency date.
 paymentsHistory.whatYouOwe = Find out if you owe anything to HMRC
@@ -294,7 +293,7 @@ paymentsHistory.youPaid = You paid HMRC
 paymentsHistory.paidYou = HMRC paid you
 paymentsHistory.youPaidAgent = Your client paid HMRC
 paymentsHistory.paidYouAgent = HMRC paid your client
-paymentsHistory.agentsHandoffMessage = If you cannot see your all of your client’s history, you may be able to access more through your HMRC online services for agents account. You’ll need to sign in separately.
+paymentsHistory.agentsPreviousPaymentsMessage = For earlier payment history please refer to your client’s business records and accounts.
 
 #VAT certificate
 vatCertificate.title = Your VAT Certificate

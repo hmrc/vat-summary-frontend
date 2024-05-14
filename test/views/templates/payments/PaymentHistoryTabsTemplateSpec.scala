@@ -26,22 +26,20 @@ class PaymentHistoryTabsTemplateSpec extends TemplateBaseSpec {
 
   "The payment history tabs template" should {
 
-    val youCan = "You can"
-    val viewPrefPayments = "view your previous payments (opens in a new tab)"
-    val beforeMTD = "if you made payments before joining Making Tax Digital."
+    val heading = "Service has closed"
+    val para = "You can no longer view previous payments. Please refer to your own business records and accounts."
 
     "render a series of tabs, including the previous payments tab" in {
 
       val expectedMarkup = Html(
         s"""
+          |<h1 class="govuk-heading-s">$heading</h1>
           |<p class="govuk-body" id="previous-payment">
-          |  $youCan
-          |  <a class="govuk-link" rel="noreferrer noopener" href="/previousPaymentsPortal" target="_blank">$viewPrefPayments</a>
-          |  $beforeMTD
+          |  $para
           |</p>
         """.stripMargin
       )
-      val result = paymentsHistoryTabs()(messages, mockAppConfig, user)
+      val result = paymentsHistoryTabs()(messages)
 
       formatHtml(result) shouldBe formatHtml(expectedMarkup)
     }
