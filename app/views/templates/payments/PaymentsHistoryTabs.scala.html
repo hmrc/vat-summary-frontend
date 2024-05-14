@@ -19,13 +19,11 @@
 
 @this(openInNewTab: OpenInNewTab)
 
-@()(implicit messages: Messages, appConfig: config.AppConfig, user: User)
+@()(implicit messages: Messages)
 
+<h1 class="govuk-heading-s">
+    @messages("paymentsHistory.previousPayments.subHeading")
+</h1>
 <p class="govuk-body" id="previous-payment">
-    @messages("paymentsHistory.previousPayments.youCan")
-    @openInNewTab(
-        link = appConfig.portalNonHybridPreviousPaymentsUrl(user.vrn),
-        linkText = messages("paymentsHistory.previousPayments.viewPreviousPayments")
-    )
-    @messages("paymentsHistory.previousPayments.beforeMtd")
+    @messages("paymentsHistory.previousPayments.para")
 </p>

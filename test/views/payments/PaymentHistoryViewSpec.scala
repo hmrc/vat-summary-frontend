@@ -46,8 +46,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     val twoYearsAgoTab = "li.govuk-tabs__list-item:nth-child(3) a"
     val previousPaymentsTab = "li.govuk-tabs__list-item:nth-child(4) a"
     val previousYearNoPayments = "#past-payments-2017 > p"
+    val prevPaymentsHeading = "#previous-payments > h1"
     val prevPaymentsParagraph = "#previous-payments > p"
-    val prevPaymentsLink: String = prevPaymentsParagraph + " > a"
     val paymentDateTableHeading = "tr th:nth-of-type(1) div"
     val paymentDateTableContent = "tr td:nth-of-type(1)"
     val descriptionTableChargeType = "tr:nth-child(1) > td > span:nth-child(1)"
@@ -196,21 +196,13 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       "have the correct previous payments tab content" which {
 
-        "has the correct message" in {
-          elementText(Selectors.prevPaymentsParagraph) shouldBe "You can view your previous payments " +
-            "(opens in a new tab) if you made payments before joining Making Tax Digital."
+        "has the correct heading" in {
+          elementText(Selectors.prevPaymentsHeading) shouldBe "Service has closed"
         }
 
-        "has a link to the old VAT portal" which {
-
-          "has the correct link text" in {
-            elementText(Selectors.prevPaymentsLink) shouldBe "view your previous payments (opens in a new tab)"
-          }
-
-          "has the correct link href" in {
-            element(Selectors.prevPaymentsLink).attr("href") shouldBe
-              mockConfig.portalNonHybridPreviousPaymentsUrl(user.vrn)
-          }
+        "has the correct message" in {
+          elementText(Selectors.prevPaymentsParagraph) shouldBe
+            "You can no longer view previous payments. Please refer to your own business records and accounts."
         }
       }
 

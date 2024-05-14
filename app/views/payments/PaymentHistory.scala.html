@@ -72,7 +72,7 @@
   if(model.previousPaymentsTab && !user.isAgent) {
     panels ++ Seq(TabItem(
       id = Some("previous-payments"),
-      label = messages("paymentsHistory.previousPayments.heading"),
+      label = messages("paymentsHistory.previousPayments.tabHeading"),
       panel = TabPanel(
         content = HtmlContent(paymentsHistoryTabs())
       )

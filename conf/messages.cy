@@ -279,10 +279,9 @@ insolventError.buttonText = Ewch i’ch cyfrif treth busnes
 
 paymentsHistory.title = Hanes taliadau
 paymentsHistory.noCurrentYearHistory = Nid ydych wedi cael na gwneud unrhyw daliadau gan ddefnyddio’r gwasanaeth TAW newydd y flwyddyn hon.
-paymentsHistory.previousPayments.heading = Taliadau blaenorol
-paymentsHistory.previousPayments.youCan = Gallwch
-paymentsHistory.previousPayments.viewPreviousPayments = fwrw golwg dros eich taliadau blaenorol
-paymentsHistory.previousPayments.beforeMtd = os gwnaethoch daliadau cyn ymuno â’r cynllun Troi Treth yn Ddigidol.
+paymentsHistory.previousPayments.tabHeading = Taliadau blaenorol
+paymentsHistory.previousPayments.subHeading = Mae’r gwasanaeth wedi cau
+paymentsHistory.previousPayments.para = Ni allwch fwrw golwg dros daliadau blaenorol bellach. Cyfeiriwch at eich cofnodion a chyfrifon busnes eich hun.
 paymentsHistory.backToTop = Nôl i’r brig
 paymentsHistory.insolvencyNotice = Ni allwch fwrw golwg dros daliadau a wnaed cyn dyddiad yr ansolfedd.
 paymentsHistory.whatYouOwe = Cael gwybod a oes arnoch unrhyw beth i CThEF
