@@ -37,7 +37,6 @@ object MessageLookup {
   }
 
   object PaymentHistoryMessages {
-    val insetText: String = "If you cannot see your all of your client’s history, " +
-      "you may be able to access more through your HMRC online services for agents account. You’ll need to sign in separately."
+    val insetText: String = "For earlier payment history please refer to your client’s business records and accounts."
   }
 }

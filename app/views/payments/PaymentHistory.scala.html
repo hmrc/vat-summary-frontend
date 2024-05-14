@@ -104,7 +104,7 @@
       <h1 id="top" class="govuk-heading-xl">@messages("paymentsHistory.title")</h1>
       @if(user.isAgent && migratedWithinThreeYears) {
         @govukInsetText(InsetText(
-          content = Text(messages("paymentsHistory.agentsHandoffMessage"))
+          content = Text(messages("paymentsHistory.agentsPreviousPaymentsMessage"))
         ))
       }
       <p class="govuk-body govuk-!-margin-bottom-8">
