@@ -293,7 +293,7 @@ paymentsHistory.youPaid = Rydych chi wedi talu CThEF
 paymentsHistory.paidYou = Gwnaeth CThEF eich talu
 paymentsHistory.youPaidAgent = Talodd eich cleient CThEF
 paymentsHistory.paidYouAgent = Talodd CThEF eich cleient
-paymentsHistory.agentsHandoffMessage = Os na allwch weld holl hanes eich cleient, mae’n bosibl y gallwch weld rhagor o’r hanes drwy’ch cyfrif gwasanaethau ar-lein CThEF ar gyfer asiantau.  Bydd angen i chi fewngofnodi ar wahân.
+paymentsHistory.agentsPreviousPaymentsMessage = I fwrw golwg dros hanes taliadau cynharach, cyfeiriwch at gyfrifon a chofnodion busnes eich cleient.
 
 #VAT certificate
 vatCertificate.title = Eich tystysgrif TAW
