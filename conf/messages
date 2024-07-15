@@ -478,7 +478,7 @@ chargeType.vatOAInaccuraciesFrom2009Title = Inaccuracies penalty
 chargeType.vatOAInaccuraciesFrom2009Description = because you submitted an inaccurate document for the period {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = because your client submitted an inaccurate document for the period {0}
 
-chargeType.vatOAInaccuraciesFrom2009LPITitle =  Interest on inaccuracies penalty — document
+chargeType.vatOAInaccuraciesFrom2009LPITitle =  Interest on inaccuracies penalty (document)
 
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Inaccuracies penalty
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = because you submitted an inaccurate document for the period {0}
@@ -520,7 +520,7 @@ chargeType.vatErrorCorrection1stLPPLPITitle = Interest on error correction penal
 chargeType.vatErrorCorrection2ndLPPLPITitle = Interest on error correction second penalty
 
 chargeType.vatErrorCorrectionRPITitle = Repayment interest on error correction repayment
-chargeType.vatInaccRtnReplacedLPITitle = Interest on inaccuracies penalty — information
+chargeType.vatInaccRtnReplacedLPITitle = Interest on inaccuracies penalty (information)
 chargeType.vatProtectiveAssessRPITitle = Repayment interest on protective assessment of VAT
 chargeType.vatAdditionalAssessRPITitle = Repayment interest on additional assessment of VAT
 chargeType.vatPaFurtherInterestTitle = Protective assessment further interest
@@ -626,7 +626,7 @@ chargeType.VATReturn2ndLPP = Second penalty for late payment of VAT
 chargeType.VATReturnAALPITitle = Interest on annual accounting balance
 chargeType.VATReturnAARPITitle = Repayment interest on annual accounting repayment
 
-chargeType.VATInaccuracyAssessPenLPITitle = Interest on inaccuracies penalty — document
+chargeType.VATInaccuracyAssessPenLPITitle = Interest on inaccuracies penalty (document)
 chargeType.VATOfficersAssessmentRPITitle = Repayment interest on officer’s assessment of VAT
 
 
@@ -646,11 +646,11 @@ chargeType.VATReturnForRPITitle = Repayment interest on payment on account repay
 chargeType.Overpayments2ndLPPLPI = Interest on VAT correction second penalty
 
 chargeType.vatReturn2ndLPPRPI = Repayment interest on second late payment penalty
-chargeType.vatReturnPOA1stLPPRPI = Repayment interest on penalty for late payment — payment on account
-chargeType.vatReturnPOA2ndLPPRPI = Repayment interest on second penalty for late payment — payment on account
+chargeType.vatReturnPOA1stLPPRPI = Repayment interest on penalty for late payment (payment on account)
+chargeType.vatReturnPOA2ndLPPRPI = Repayment interest on second penalty for late payment (payment on account)
 
-chargeType.vatReturnAA1stLPPRPI = Repayment interest on penalty for late payment — annual accounting balance
-chargeType.vatReturnAA2ndLPPRPI = Repayment interest on second penalty for late payment — annual accounting balance
+chargeType.vatReturnAA1stLPPRPI = Repayment interest on penalty for late payment (annual accounting balance)
+chargeType.vatReturnAA2ndLPPRPI = Repayment interest on second penalty for late payment (annual accounting balance)
 
 chargeType.vatManualLPI = Interest on late payment of VAT
 chargeType.vatRPIRecovery = Repayment interest recovery

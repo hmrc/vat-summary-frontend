@@ -487,7 +487,7 @@ chargeType.vatOAInaccuraciesFrom2009Title = Cosb am anghywirdebau
 chargeType.vatOAInaccuraciesFrom2009Description = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 chargeType.vatOAInaccuraciesFrom2009Description.agent = oherwydd bod eich cleient wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
 
-chargeType.vatOAInaccuraciesFrom2009LPITitle =  Llog ar gosb am anghywirdebau — dogfen
+chargeType.vatOAInaccuraciesFrom2009LPITitle =  Llog ar gosb am anghywirdebau (dogfen)
 
 chargeType.vatInaccuracyAssessmentsPenChargeTitle = Cosb am anghywirdebau
 chargeType.vatInaccuracyAssessmentsPenChargeDescription = oherwydd eich bod wedi cyflwyno dogfen wallus ar gyfer y cyfnod {0}
@@ -528,7 +528,7 @@ chargeType.vatErrorCorrection1stLPPLPITitle = Llog ar gosb cywiriad gwall
 chargeType.vatErrorCorrection2ndLPPLPITitle = Llog ar ail gosb cywiriad gwall
 
 chargeType.vatErrorCorrectionRPITitle = Llog ar ad-daliadau ar ad-daliad cywiro gwallau
-chargeType.vatInaccRtnReplacedLPITitle = Llog ar gosb am anghywirdebau — gwybodaeth
+chargeType.vatInaccRtnReplacedLPITitle = Llog ar gosb am anghywirdebau (gwybodaeth)
 chargeType.vatProtectiveAssessRPITitle = Llog ar ad-daliadau ar asesiad i ddiogelu TAW
 chargeType.vatAdditionalAssessRPITitle = Llog ar ad-daliadau ar asesiad ychwanegol o TAW
 chargeType.vatPaFurtherInterestTitle = Llog pellach ar asesiad i ddiogelu
@@ -634,7 +634,7 @@ chargeType.VATReturn2ndLPP = Ail gosb am dalu TAW yn hwyr
 chargeType.VATReturnAALPITitle = Llog ar y balans cyfrifyddu blynyddol
 chargeType.VATReturnAARPITitle = Llog ar ad-daliadau ar falans cyfrifyddu blynyddol
 
-chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb am anghywirdebau — dogfen
+chargeType.VATInaccuracyAssessPenLPITitle = Llog ar gosb am anghywirdebau (dogfen)
 
 chargeType.migratedLiabilityTitle = Rhwymedigaeth TAW a fudwyd
 chargeType.migratedCreditTitle = Credyd TAW a fudwyd
@@ -647,11 +647,11 @@ chargeType.Overpayments1stLPPLPI = Llog ar gosb am gywiriad TAW
 chargeType.Overpayments2ndLPPLPI = Llog ar ail gosb am gywiriad TAW
 
 chargeType.vatReturn2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr
-chargeType.vatReturnPOA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr — taliad ar gyfrif
-chargeType.vatReturnPOA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr — taliad ar gyfrif
+chargeType.vatReturnPOA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr (taliad ar gyfrif)
+chargeType.vatReturnPOA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr (taliad ar gyfrif)
 
-chargeType.vatReturnAA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
-chargeType.vatReturnAA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr — balans cyfrifyddu blynyddol
+chargeType.vatReturnAA1stLPPRPI = Llog ar ad-daliadau ar gosb am dalu’n hwyr (balans cyfrifyddu blynyddol)
+chargeType.vatReturnAA2ndLPPRPI = Llog ar ad-daliadau ar ail gosb am dalu’n hwyr (balans cyfrifyddu blynyddol)
 
 chargeType.vatManualLPI = Llog ar daliad TAW hwyr
 chargeType.vatRPIRecovery = Adennill llog ar ad-daliadau
