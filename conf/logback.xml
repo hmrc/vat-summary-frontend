@@ -57,7 +57,7 @@
     <logger name="org.asynchttpclient.netty" level="WARN" />
     <logger name="play.core.netty.utils.ServerCookieDecoder" level="WARN" />
     <logger name="io.netty.util.internal" level="WARN" />
-    <logger name="pekko.stream" level="WARN" />
+    <logger name="org.apache.pekko.stream" level="WARN" />
 
     <root level="WARN">
         <appender-ref ref="FILE"/>
