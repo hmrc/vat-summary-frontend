@@ -17,6 +17,5 @@
 package models
 
 case class FeatureSwitchModel(staticDateEnabled: Boolean,
-                              overdueTimeToPayDescriptionEnabled: Boolean,
                               webchatEnabled: Boolean,
                               showUserResearchBannerEnabled: Boolean)

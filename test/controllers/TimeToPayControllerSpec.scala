@@ -44,7 +44,6 @@ class TimeToPayControllerSpec extends ControllerBaseSpec {
       "the service returns a URL" should {
 
         lazy val result = {
-          mockAppConfig.features.overdueTimeToPayDescriptionEnabled(true)
           mockPrincipalAuth()
           mockTTPServiceCall(Right("/example-url"))
           controller.redirect(fakeRequest)
@@ -62,7 +61,6 @@ class TimeToPayControllerSpec extends ControllerBaseSpec {
       "the service returns an error" should {
 
         lazy val result = {
-          mockAppConfig.features.overdueTimeToPayDescriptionEnabled(true)
           mockPrincipalAuth()
           mockTTPServiceCall(Left(TimeToPayRedirectError))
           controller.redirect(fakeRequest)
@@ -75,23 +73,6 @@ class TimeToPayControllerSpec extends ControllerBaseSpec {
         "render the technical difficulties page" in {
           Jsoup.parse(contentAsString(result)).title shouldBe "There is a problem with the service - VAT - GOV.UK"
         }
-      }
-    }
-
-    "the TTP feature switch is off" should {
-
-      lazy val result = {
-        mockAppConfig.features.overdueTimeToPayDescriptionEnabled(false)
-        mockPrincipalAuth()
-        controller.redirect(fakeRequest)
-      }
-
-      "return 404" in {
-        status(result) shouldBe Status.NOT_FOUND
-      }
-
-      "render the not found page" in {
-        Jsoup.parse(contentAsString(result)).title shouldBe "Page not found - VAT - GOV.UK"
       }
     }
   }

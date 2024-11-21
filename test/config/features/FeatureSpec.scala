@@ -50,11 +50,6 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "return its current state" in {
       features.overdueTimeToPayDescriptionEnabled() shouldBe true
     }
-
-    "switch to a new state" in {
-      features.overdueTimeToPayDescriptionEnabled(false)
-      features.overdueTimeToPayDescriptionEnabled() shouldBe false
-    }
   }
 
   "The webchat feature" should {

@@ -24,27 +24,24 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class TimeToPayController @Inject()(authorisedController: AuthorisedController,
                                     mcc: MessagesControllerComponents,
                                     timeToPayService: TimeToPayService,
                                     errorHandler: ServiceErrorHandler)
-                                   (implicit ec: ExecutionContext,
-                                    appConfig: AppConfig)
+                                   (implicit ec: ExecutionContext, appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def redirect: Action[AnyContent] = authorisedController.authorisedAction { implicit request => _ =>
-    if(appConfig.features.overdueTimeToPayDescriptionEnabled()) {
-      timeToPayService.retrieveRedirectUrl.map {
-        case Right(url) => Redirect(url)
-        case Left(_) =>
-          logger.warn("[TimeToPayController][redirect] - Unable to retrieve successful response from TTP service, rendering ISE")
-          errorHandler.showInternalServerError
-      }
-    } else {
-      Future.successful(NotFound(errorHandler.notFoundTemplate))
+    timeToPayService.retrieveRedirectUrl.map {
+      case Right(url) => Redirect(url)
+      case Left(_) =>
+        logger.warn("[TimeToPayController][redirect] - Unable to retrieve successful response from TTP service, rendering ISE")
+        errorHandler.showInternalServerError
     }
   }
 }
+
+
