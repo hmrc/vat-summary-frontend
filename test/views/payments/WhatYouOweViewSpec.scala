@@ -331,18 +331,6 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
       }
     }
 
-    "the overdueTimeToPayDescriptionEnabled feature switch is off" should {
-
-      lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))
-      lazy implicit val document: Document = Jsoup.parse(view.body)
-
-      "not have a section for guidance if the user cannot pay today" in {
-
-        mockConfig.features.overdueTimeToPayDescriptionEnabled(false)
-        elementExtinct("#cannot-pay-heading")
-        elementExtinct("#cannot-pay-paragraph")
-      }
-    }
 
     "the user is in BreathingSpace" should {
 
