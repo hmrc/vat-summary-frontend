@@ -69,9 +69,9 @@
     </ul>
 }
 
-@paymentHtml(chargeModel: ChargeDetailsViewModel) = @{
+@paymentHtml(chargeModel: ChargeDetailsViewModel, ddStatus: Boolean) = @{
   chargeModel match {
-    case charge: StandardChargeViewModel => standardCharge(charge)
+    case charge: StandardChargeViewModel => standardCharge(charge, ddStatus)
     case charge: CrystallisedViewModel   => crystallisedCharge(charge)
     case charge: EstimatedViewModel      => estimatedCharge(charge)
   }
@@ -84,7 +84,7 @@
 @chargeRows = @{
   val individualRows = model.charges.map { charge =>
     Seq(
-      TableRow(content = HtmlContent(paymentHtml(charge))),
+      TableRow(content = HtmlContent(paymentHtml(charge, model.directDebitMandateFound))),
       TableRow(content = HtmlContent(Money.pounds(charge.outstandingAmount)), format = Some("numeric"))
     )
   }
@@ -121,12 +121,35 @@
         @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
       </h1>
 
-      <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
+        <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
       <p class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold govuk-!-margin-bottom-8">
         @Money.pounds(model.totalAmount)
       </p>
 
-      @breathingSpaceInset
+        @if(model.directDebitMandateFound){
+        <div class="govuk-inset-text">
+            <p>
+                You have a Direct Debit Instruction in place.
+            </p>
+            <p>
+                Only the amount due on your VAT Return will be collected by Direct Debit. Other charges, penalties and
+                interest showing as owing will still need to be paid by other methods. </p>
+            <p>
+                For full details of your Direct Debit payment check your <a href="direct-debit-message.html">Messages
+                inbox</a>. We’ll send you a notice there when we’re due to collect your payment.
+            </p>
+            <p>
+                Be careful not to make a payment for an amount that will be covered by your Direct Debit Instruction.
+            </p>
+            <p>
+                <a href="/vvc-1/choose-a-service">View and manage your Direct Debit details </a>
+            </p>
+
+        </div>
+        }
+
+
+        @breathingSpaceInset
 
       @govukTable(Table(
         rows = chargeRows,
@@ -139,12 +162,39 @@
         )),
         captionClasses = "govuk-table__caption--m"
       ))
+        <h3 class="govuk-heading-s">
+            Why charges may still show as owing after you have made a payment
+        </h3>
+
       <p class="govuk-body">@messages("whatYouOwe.paymentClearanceParaOne")
         <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
           @messages(s"whatYouOwe.paymentClearanceLink$agentSuffix")</a>@messages("common.fullStop")
       </p>
 
-      <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
+        @if(model.directDebitMandateFound){
+        <p>
+            For your Direct Debit, there may be a few days delay between the payment being collected and showing as paid on this page.
+        </p>
+        }
+
+        <h3 class="govuk-heading-s">
+            Late payment interest charges
+        </h3>
+
+        @if(model.directDebitMandateFound){
+        <p>Any late payment interest relating to your VAT Return is indicative and will not be charged, after the successful collection
+            of your Direct Debit.</p>
+        <p>You will be charged late payment interest if your Direct Debit payment is not successfully collected.</p>
+        <p> Late payment interest may be charged if you do not submit your VAT return on time.
+        </p>
+
+        } else {
+        <p>You will be charged late payment interest if your payment does not clear by the payment due date.</p>
+        <p> Late payment interest may be charged if you do not submit your VAT return on time.
+        </p>
+        }
+
+        <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
 
       @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() ) {
         @govukDetails(Details(
@@ -155,9 +205,23 @@
       }
       @if(appConfig.features.webchatEnabled() && user.isAgent){ @webchatLink }
       @if(!user.isAgent) {
-        @govukButton(Button(
-          content = Text(messages("whatYouOwe.makePayment")),
-          id = Some("what-you-owe-pay-now-button"),
+        @if(model.directDebitMandateFound){
+            @govukButton(Button(
+              content = Text(messages("whatYouOwe.makePayment")),
+              id = Some("what-you-owe-pay-now-button"),
+
+
+              href = Some(controllers.routes.ExistingDirectDebitController.show(
+                  earliestDueDate = model.earliestDueDateFormatted,
+                  linkId = "what-you-owe-pay-now-button",
+        ddStatus = model.directDebitMandateFound
+        ).url
+              )
+            ))
+        } else {
+            @govukButton(Button(
+              content = Text(messages("whatYouOwe.makePayment")),
+              id = Some("what-you-owe-pay-now-button"),
 
 
           href = Some(controllers.routes.MakePaymentController.makeGenericPayment(
@@ -166,6 +230,7 @@
             ).url
           )
         ))
+        }
         @if(appConfig.features.webchatEnabled()){ @webchatLink }
       }
 

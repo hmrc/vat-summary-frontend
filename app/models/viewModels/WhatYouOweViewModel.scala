@@ -24,7 +24,8 @@ case class WhatYouOweViewModel(totalAmount: BigDecimal,
                                charges: Seq[ChargeDetailsViewModel],
                                mandationStatus: String,
                                containsOverduePayments: Boolean,
-                               breathingSpace: Boolean) extends LocalDateHelper {
+                               breathingSpace: Boolean,
+                               directDebitMandateFound: Boolean) extends LocalDateHelper {
 
   val earliestDueDate: Option[LocalDate] = {
     val dueDates: Seq[LocalDate] = charges.collect {

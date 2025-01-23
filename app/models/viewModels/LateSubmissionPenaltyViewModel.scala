@@ -30,7 +30,8 @@ case class LateSubmissionPenaltyViewModel(chargeType: String,
                                           isOverdue: Boolean,
                                           chargeReference: String,
                                           periodFrom: LocalDate,
-                                          periodTo: LocalDate) extends CrystallisedViewModel {
+                                          periodTo: LocalDate,
+                                          directDebitMandateFound: Boolean) extends CrystallisedViewModel {
 
   override val outstandingAmount: BigDecimal = leftToPay
 

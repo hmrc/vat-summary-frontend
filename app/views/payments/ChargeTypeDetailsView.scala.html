@@ -63,6 +63,14 @@
     }
 }
 
+@ddMessageHtml = {
+@displayDate(model.dueDate) @if(model.directDebitMandateFound) {@govukTag(Tag(
+content = Text(messages("base.back")),
+classes = "govuk-tag--red"
+))
+}
+}
+
 @dueDateHtml = {
     @displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
                                                         content = Text(messages("common.overdue")),
@@ -136,7 +144,10 @@
                        class="govuk-link">@messages("chargeTypeDetails.vatReturn")</a>.
                 </p>
             }
-
+            @if(model.directDebitMandateFound) {
+            <p class="govuk-body" id="dd-status"> DD is present
+            </p>
+            }
             @govukSummaryList(SummaryList(
                 rows = Seq(
                     SummaryListRow(

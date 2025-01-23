@@ -2,6 +2,7 @@
 
 GET        /vat-overview                                                                           controllers.VatDetailsController.details
 GET        /what-you-owe                                                                           controllers.WhatYouOweController.show
+GET        /existing-direct-debit                                                                  controllers.ExistingDirectDebitController.show(earliestDueDate: Option[String], linkId: String, ddStatus:Boolean)
 GET        /amount-to-pay/:id                                                                      controllers.ChargeBreakdownController.showBreakdown(id: String)
 GET        /payment-history                                                                        controllers.PaymentHistoryController.paymentHistory
 GET        /vat-certificate                                                                        controllers.VatCertificateController.show

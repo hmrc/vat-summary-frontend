@@ -61,27 +61,31 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             val mandationStatus = accountDetails.map(_.mandationStatus).getOrElse("")
 
             penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
-              (payments, penaltyDetails) match {
-                case (Right(Some(payments)), Right(penalties)) =>
-                  constructViewModel(payments.financialTransactions, mandationStatus, penalties) match {
-                    case Some(model) =>
-                      auditService.extendedAudit(
-                        WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
-                        routes.WhatYouOweController.show.url
-                      )
-                      WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
-                        Ok(view(model, serviceInfoContent))
-                      }
-                    case None =>
-                      logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
-                      Future.successful(InternalServerError(paymentsError()))
-                  }
+              paymentsService.getDirectDebitStatus(user.vrn).flatMap { ddDetails =>
+                val ddStatus: Boolean = ddDetails.map(_.directDebitMandateFound).getOrElse(false)
+                (payments, penaltyDetails) match {
+                  case (Right(Some(payments)), Right(penalties)) =>
+
+                constructViewModel(payments.financialTransactions, mandationStatus, penalties, ddStatus) match {
+                  case Some(model) =>
+                    auditService.extendedAudit(
+                      WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
+                      routes.WhatYouOweController.show.url
+                    )
+                    WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
+                      Ok(view(model, serviceInfoContent))
+                    }
+                  case None =>
+                    logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
+                    Future.successful(InternalServerError(paymentsError()))
+                }
                 case (Right(None), Right(_)) =>
-                  val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-                  Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus)))
+                val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+                Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus)))
                 case _ =>
                   logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
                   Future.successful(InternalServerError(paymentsError()))
+              }
               }
             }
           }
@@ -89,46 +93,49 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       }
   }
 
-  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: PenaltyDetails)
+  private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: PenaltyDetails,
+                                             ddStatus: Boolean)
                                             (implicit request: Request[_]): Seq[Option[ChargeDetailsViewModel]] =
     payments collect {
       case p: PaymentWithPeriod if p.chargeType.isPenalty =>
         val matchingPenalty = findPenaltyCharge(p.chargeReference, p.penaltyType, isEstimate = false, penalties.LPPDetails)
-        buildCrystallisedChargePlusEstimates(p, matchingPenalty)
+        buildCrystallisedChargePlusEstimates(p, matchingPenalty, ddStatus)
       case p: PaymentWithPeriod if p.chargeType.isLPICharge =>
-        Seq(buildCrystallisedIntViewModel(p))
+        Seq(buildCrystallisedIntViewModel(p, ddStatus))
       case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) =>
-        Seq(buildLateSubmissionPenaltyViewModel(p))
+        Seq(buildLateSubmissionPenaltyViewModel(p, ddStatus))
       case p: PaymentWithPeriod if p.chargeType.eq(VatOverpaymentForRPI) =>
-        Seq(buildVatOverpaymentForRPIViewModel(p))
+        Seq(buildVatOverpaymentForRPIViewModel(p, ddStatus))
       case p =>
-        buildChargePlusEstimates(p, penalties)
+        buildChargePlusEstimates(p, penalties, ddStatus)
     } flatten
 
   private[controllers] def buildCrystallisedChargePlusEstimates(charge: PaymentWithPeriod,
-                                                                matchingPenalty: Option[LPPDetails]): Seq[Option[ChargeDetailsViewModel]] =
+                                                                matchingPenalty: Option[LPPDetails],
+                                                                ddStatus: Boolean): Seq[Option[ChargeDetailsViewModel]] =
     if (charge.showEstimatedInterest) {
-      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty), buildEstimatedIntViewModel(charge))
+      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty, ddStatus), buildEstimatedIntViewModel(charge, ddStatus))
     } else {
-      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty))
+      Seq(buildCrystallisedLPPViewModel(charge, matchingPenalty, ddStatus))
     }
 
   private[controllers] def buildChargePlusEstimates(charge: Payment,
-                                                    penalties: PenaltyDetails)(implicit request: Request[_]): Seq[Option[ChargeDetailsViewModel]] =
+                                                    penalties: PenaltyDetails,
+                                                    ddStatus: Boolean)(implicit request: Request[_]): Seq[Option[ChargeDetailsViewModel]] =
     charge match {
       case p: PaymentWithPeriod if p.showEstimatedInterest && p.showEstimatedPenalty =>
         val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties.LPPDetails)
-        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty, penalties.breathingSpace))
+        Seq(buildStandardChargeViewModel(p, ddStatus), buildEstimatedIntViewModel(p, ddStatus), buildEstimatedLPPViewModel(p, matchingPenalty, penalties.breathingSpace, ddStatus))
       case p: PaymentWithPeriod if p.showEstimatedPenalty =>
         val matchingPenalty = findPenaltyCharge(charge.chargeReference, charge.penaltyType, isEstimate = true, penalties.LPPDetails)
-        Seq(buildStandardChargeViewModel(p), buildEstimatedLPPViewModel(p, matchingPenalty, penalties.breathingSpace))
+        Seq(buildStandardChargeViewModel(p, ddStatus), buildEstimatedLPPViewModel(p, matchingPenalty, penalties.breathingSpace, ddStatus))
       case p: PaymentWithPeriod if p.showEstimatedInterest =>
-        Seq(buildStandardChargeViewModel(p), buildEstimatedIntViewModel(p))
+        Seq(buildStandardChargeViewModel(p, ddStatus), buildEstimatedIntViewModel(p, ddStatus))
       case _ =>
-        Seq(buildStandardChargeViewModel(charge))
+        Seq(buildStandardChargeViewModel(charge, ddStatus))
     }
 
-  private[controllers] def buildStandardChargeViewModel(payment: Payment): Option[StandardChargeViewModel] =
+  private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] =
     Some(StandardChargeViewModel(
       chargeType = payment.chargeType.value,
       outstandingAmount = payment.outstandingAmount,
@@ -139,10 +146,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       isOverdue = payment.isOverdue(dateService.now()),
       chargeReference = payment.chargeReference,
       periodFrom = periodFrom(payment),
-      periodTo = periodTo(payment)
+      periodTo = periodTo(payment),
+      directDebitMandateFound = ddStatus
     ))
 
-  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod): Option[VatOverpaymentForRPIViewModel] =
+  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[VatOverpaymentForRPIViewModel] =
     Some(VatOverpaymentForRPIViewModel(
       periodFrom = payment.periodFrom,
       periodTo = payment.periodTo,
@@ -152,10 +160,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       amountReceived = payment.clearedAmount.getOrElse(0),
       leftToPay = payment.outstandingAmount,
       isOverdue = payment.isOverdue(dateService.now()),
-      chargeReference = payment.chargeReference
+      chargeReference = payment.chargeReference,
+      directDebitMandateFound = ddStatus
     ))
 
-  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod): Option[EstimatedInterestViewModel] =
+  private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[EstimatedInterestViewModel] =
     payment.accruingInterestAmount match {
       case Some(interestAmnt) =>
         Some(EstimatedInterestViewModel(
@@ -164,14 +173,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           chargeType = ChargeType.LPIChargeMapping(payment.chargeType).value,
           interestAmount = interestAmnt,
           isPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isPenaltyReformPenaltyLPI,
-          isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI
+          isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI,
+          directDebitMandateFound = ddStatus
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
         None
     }
 
-  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod): Option[CrystallisedInterestViewModel] =
+  private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[CrystallisedInterestViewModel] =
     payment.chargeReference match {
       case Some(chargeRef) =>
         Some(CrystallisedInterestViewModel(
@@ -185,14 +195,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isOverdue = payment.isOverdue(dateService.now()),
           chargeReference = chargeRef,
           isPenaltyReformPenaltyLPI = payment.chargeType.isPenaltyReformPenaltyLPI,
-          isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI
+          isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI,
+          directDebitMandateFound = ddStatus
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")
         None
     }
 
-  private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod): Option[LateSubmissionPenaltyViewModel] =
+  private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[LateSubmissionPenaltyViewModel] =
     payment.chargeReference match {
       case Some(chargeRef) =>
         Some(LateSubmissionPenaltyViewModel(
@@ -204,7 +215,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isOverdue = payment.isOverdue(dateService.now()),
           chargeReference = chargeRef,
           periodFrom = payment.periodFrom,
-          periodTo = payment.periodTo
+          periodTo = payment.periodTo,
+          directDebitMandateFound = ddStatus
         ))
       case _ =>
         logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] - Missing charge reference")
@@ -213,7 +225,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   private[controllers] def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
                                                       penaltyDetails: Option[LPPDetails],
-                                                      breathingSpace: Boolean): Option[ChargeDetailsViewModel] =
+                                                      breathingSpace: Boolean,
+                                                      ddStatus: Boolean): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), _, _, _, _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP1ViewModel(
@@ -230,7 +243,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value,
           timeToPayPlan = timeToPay,
-          breathingSpace = breathingSpace
+          breathingSpace = breathingSpace,
+          directDebitMandateFound = ddStatus
         ))
       case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, timeToPay)), Some(penaltyAmnt)) =>
         Some(EstimatedLPP2ViewModel(
@@ -241,7 +255,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value,
           timeToPay = timeToPay,
-          breathingSpace = breathingSpace
+          breathingSpace = breathingSpace,
+          directDebitMandateFound = ddStatus
         ))
       case _ =>
         val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
@@ -254,7 +269,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
-                                                         penaltyDetails: Option[LPPDetails]): Option[ChargeDetailsViewModel] =
+                                                         penaltyDetails: Option[LPPDetails],
+                                                         ddStatus: Boolean): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.chargeReference) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _, _)),
       Some(chargeRef)) =>
@@ -278,7 +294,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = payment.chargeType.value,
           chargeReference = chargeRef,
-          isOverdue = payment.isOverdue(dateService.now())
+          isOverdue = payment.isOverdue(dateService.now()),
+          directDebitMandateFound = ddStatus
         ))
       case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _)),
       Some(chargeRef)) =>
@@ -293,7 +310,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           chargeType = payment.chargeType.value,
           chargeReference = chargeRef,
-          isOverdue = payment.isOverdue(dateService.now())
+          isOverdue = payment.isOverdue(dateService.now()),
+          directDebitMandateFound = ddStatus
         ))
       case (Some(penDetails), _) =>
         logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - " +
@@ -307,9 +325,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
   def constructViewModel(payments: Seq[Payment],
                          mandationStatus: String,
-                         penalties: PenaltyDetails)(implicit request: Request[_]): Option[WhatYouOweViewModel] = {
+                         penalties: PenaltyDetails,
+                         ddStatus: Boolean)(implicit request: Request[_]): Option[WhatYouOweViewModel] = {
 
-    val chargeModels = categoriseCharges(payments, penalties).flatten
+    val chargeModels = categoriseCharges(payments, penalties,ddStatus).flatten
     val totalAmount = chargeModels.map(_.outstandingAmount).sum
     val totalPaymentCount = payments.length + payments.count(_.showEstimatedInterest) + payments.count(_.showEstimatedPenalty)
 
@@ -319,11 +338,13 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         chargeModels,
         mandationStatus,
         payments.exists(_.isOverdue(dateService.now())),
-        penalties.breathingSpace))
+        penalties.breathingSpace,
+        ddStatus))
     } else {
       warnLog(s"[WhatYouOweController][constructViewModel] " +
         s"totalPaymentCount - $totalPaymentCount does not equal chargeModels.length - ${chargeModels.length}" +
         s"\n no. of payments - ${payments.length}" +
+        s"\n DD-Status - ${ddStatus}" +
         s"\n estimated interest count - ${payments.count(_.showEstimatedInterest)}" +
         s"\n estimated penalty count - ${payments.count(_.showEstimatedPenalty)}" +
         s"\n estimated interest and estimated penalty - ${payments.count(p => p.showEstimatedInterest && p.showEstimatedPenalty)}" +

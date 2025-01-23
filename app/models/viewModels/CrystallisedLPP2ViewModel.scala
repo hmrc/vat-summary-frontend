@@ -31,7 +31,8 @@ case class CrystallisedLPP2ViewModel(numberOfDays: String,
                                     periodTo: LocalDate,
                                     chargeType: String,
                                     chargeReference: String,
-                                    isOverdue: Boolean) extends CrystallisedViewModel {
+                                    isOverdue: Boolean,
+                                     directDebitMandateFound: Boolean) extends CrystallisedViewModel {
 
   override val outstandingAmount: BigDecimal = leftToPay
 

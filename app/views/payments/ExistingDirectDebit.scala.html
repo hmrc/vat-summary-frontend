@@ -1,0 +1,110 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.User
+@import models.viewModels._
+@import utils.Money
+@import views.html.templates.payments.wyoCharges._
+
+@this(mainTemplate: MainTemplate,
+govukBreadcrumbs: GovukBreadcrumbs,
+govukBackLink: GovukBackLink,
+govukButton : GovukButton,
+govukTable : GovukTable,
+govukDetails: GovukDetails,
+govukInset: GovukInsetText,
+standardCharge: StandardCharge,
+estimatedCharge: EstimatedCharge,
+crystallisedCharge: CrystallisedCharge)
+
+@(model: ExistingDirectDebitViewModel, serviceInfoContent: Html)(
+implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+@govukBreadcrumbs(Breadcrumbs(
+items = Seq(
+BreadcrumbsItem(
+content = Text(messages("breadcrumbs.bta")),
+href = Some(appConfig.btaHomeUrl)
+),
+BreadcrumbsItem(
+content = Text(messages("vatDetails.title")),
+href = Some(controllers.routes.VatDetailsController.details.url)
+)
+)
+))
+}
+
+@backLink = {
+@govukBackLink(BackLink(
+href = appConfig.agentClientLookupHubUrl,
+content = Text(messages("base.back"))
+))
+}
+
+@paymentHelp = {
+<p id="payment-help-agent-p1" class="govuk-body">
+ @messages("whatYouOwe.details.agent.paymentHelpTwo")
+ <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
+  @messages("whatYouOwe.details.agent.paymentHelpThree")</a>
+ @messages("whatYouOwe.details.agent.paymentHelpFour")
+</p>
+<p id="payment-help-agent-p2" class="govuk-body">@messages("whatYouOwe.details.agent.paymentHelpFive")</p>
+<ul id="agent-help-bullet" class="govuk-list govuk-list--bullet">
+ <li>@messages("whatYouOwe.ifYouCannotPaySix")</li>
+ <li>@messages("whatYouOwe.details.agent.paymentHelpSeven")</li>
+</ul>
+}
+
+@paymentHtml(chargeModel: ChargeDetailsViewModel, ddStatus: Boolean) = @{
+chargeModel match {
+case charge: StandardChargeViewModel => standardCharge(charge, ddStatus)
+case charge: CrystallisedViewModel   => crystallisedCharge(charge)
+case charge: EstimatedViewModel      => estimatedCharge(charge)
+}
+}
+
+@agentSuffix = @{
+if(user.isAgent) {".agent"} else {""}
+}
+
+
+@webchatLink = {
+<p class="govuk-body govuk-!-margin-top-5 govuk-!-margin-bottom-8">
+ <a class="govuk-link" href="@{appConfig.webchatUrl}" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
+</p>
+}
+@mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
+appConfig = appConfig,
+serviceInfoContent = serviceInfoContent,
+user = Some(user),
+navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+<div class="govuk-grid-row">
+ <div class="govuk-grid-column-two-thirds">
+
+  <h1 class="govuk-heading-xl">
+   @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
+  </h1>
+
+  @if(model.directDebitMandateFound){
+  <p class="govuk-body" id="dd-inplace">You have DD inplace</p>
+  }
+
+  
+ </div>
+</div>
+}
