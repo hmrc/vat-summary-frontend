@@ -16,52 +16,33 @@
 
 package controllers
 
-import audit.AuditingService
-import audit.models.{PayFullChargeAuditModel, PayGenericChargeAuditModel, PayVatReturnChargeAuditModel, WhatYouOweAuditModel}
-import common.SessionKeys
-import config.AppConfig
-import controllers.AuthorisedController
-import models.User
-import models.payments.{ChargeType, PaymentDetailsModel, PaymentDetailsModelGeneric, PaymentDetailsModelNoPeriod, PaymentDetailsModelWithPeriod, ReturnDebitCharge}
 import models.viewModels.ExistingDirectDebitViewModel
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
-import services.{DateService, PaymentsService, ServiceInfoService}
-import uk.gov.hmrc.http.HeaderCarrier
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.ExistingDirectDebit
-import services.{AccountDetailsService, ServiceInfoService}
-import config.{AppConfig, ServiceErrorHandler}
+import config.AppConfig
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ExistingDirectDebitController @Inject()(paymentsService: PaymentsService,
-                                      authorisedController: AuthorisedController,
-                                      auditingService: AuditingService,
-                                              accountDetailsService: AccountDetailsService,
-                                      mcc: MessagesControllerComponents,
+class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedController,
+                                              mcc: MessagesControllerComponents,
                                               serviceInfoService: ServiceInfoService,
                                               view: ExistingDirectDebit,
-                                              serviceErrorHandler: ServiceErrorHandler
                                              )(implicit ec: ExecutionContext,
-                                       appConfig: AppConfig,
-                                       dateService: DateService)
+                                                appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  def show(earliestDueDate: Option[String], linkId: String, ddStatus: Boolean): Action[AnyContent] = authorisedController.financialAction {
+  def show(dueDateOrUrl: String, linkId: String, ddStatus: Boolean): Action[AnyContent] = authorisedController.financialAction {
     implicit request =>
       implicit user =>
-        val vrn = user.vrn
-        serviceInfoService.getPartial.flatMap { serviceInfoContent =>
-          accountDetailsService.getAccountDetails(vrn).map {
-            case Right(customerInformation) =>
-              var model: ExistingDirectDebitViewModel = new ExistingDirectDebitViewModel(true);
-              Ok(view(model, serviceInfoContent))
-            case Left(_) =>
-              serviceErrorHandler.showInternalServerError
+        serviceInfoService.getPartial.flatMap {
+          serviceInfoContent =>
+            val model : ExistingDirectDebitViewModel = new ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus)
+              Future.successful(Ok(view(model, serviceInfoContent)))
           }
-        }
       }
   }

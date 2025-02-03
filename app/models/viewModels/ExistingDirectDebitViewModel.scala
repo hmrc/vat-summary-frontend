@@ -16,7 +16,17 @@
 
 package models.viewModels
 
-case class ExistingDirectDebitViewModel(directDebitMandateFound: Boolean) {
+import play.api.libs.json.{Json, OFormat}
 
 
+case class ExistingDirectDebitViewModel(dueDateOrUrl: Option[String],
+                                        linkId: String,
+                                        directDebitMandateFound: Boolean) {
+
+}
+
+
+object ExistingDirectDebitViewModel {
+
+  implicit val format: OFormat[ExistingDirectDebitViewModel] = Json.format[ExistingDirectDebitViewModel]
 }

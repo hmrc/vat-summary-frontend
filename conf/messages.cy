@@ -129,6 +129,49 @@ whatYouOwe.details.agent.paymentHelpSix = yn dangos fel amcangyfrifon ar y dudal
 whatYouOwe.details.agent.paymentHelpSeven = wedi’u cynnwys fel rhan o’r cynllun talu presennol
 whatYouOwe.estimate = amcangyfrif
 
+whatYouOwe.charges.heading = Pam y gall taliadau barhau i ymddangos yn ddyledus ar ôl i chi wneud taliad
+whatYouOwe.charges.p1.preText = Gall gymryd hyd at 5 diwrnod i daliad glirio, a hynny’n dibynnu ar
+whatYouOwe.charges.p1.linkText = y dull talu rydych yn ei ddefnyddio (yn agor tab newydd)
+whatYouOwe.charges.p1.postText = .
+whatYouOwe.charges.p2 = Wrth dalu drwy Ddebyd Uniongyrchol, mae’n bosibl y bydd oedi am ychydig o ddyddiau rhwng casglu’r taliad a’r taliad yn ymddangos fel wedi’i dalu ar y dudalen hon.
+
+whatYouOwe.latePayment.heading = Llog am dalu’n hwyr
+whatYouOwe.latePayment.p1 = Bydd unrhyw nodyn o log am dalu’n hwyr sy’n gysylltiedig â’ch Ffurflen TAW er eich gwybodaeth yn unig. Ni fydd y llog hwn yn cael ei godi arnoch os bydd eich Debyd Uniongyrchol yn cael ei gasglu’n llwyddiannus.
+whatYouOwe.latePayment.p2 = Fodd bynnag, os na fydd eich Debyd Uniongyrchol yn cael ei gasglu’n llwyddiannus, bydd y llog hwnnw yn cael ei godi arnoch.
+whatYouOwe.latePayment.p3 = Mae’n bosibl y bydd llog am dalu’n hwyr yn cael ei godi arnoch os nad ydych yn cyflwyno’ch Ffurflen TAW mewn pryd.
+
+existingDD.banner.p1 = Mae gennych Gyfarwyddyd Debyd Uniongyrchol ar waith.
+existingDD.banner.p2 = Dim ond y swm sy’n ddyledus ar eich Ffurflen TAW bydd yn cael ei gasglu drwy Ddebyd Uniongyrchol.
+existingDD.banner.p2.2 = Bydd angen i unrhyw gosbau, llog a thaliadau eraill sy’n ddyledus gael eu talu drwy ddulliau eraill.
+existingDD.banner.p3.preText = I gael yr holl fanylion ynghylch eich taliad Debyd Uniongyrchol, gwiriwch eich
+existingDD.banner.p3.linkText = Mewnflwch negeseuon
+existingDD.banner.p3.postText = .
+existingDD.banner.p3.extra = Byddwn yn anfon neges i’ch mewnflwch pan fyddwn ar fin casglu’ch taliad.
+existingDD.banner.p4 = Byddwch yn ofalus i beidio â gwneud taliad am swm y mae’ch Cyfarwyddyd Debyd Uniongyrchol yn ei gwmpasu.
+existingDD.banner.p5.linkText = Bwrw golwg dros eich manylion Debyd Uniongyrchol a’u rheoli
+
+existingDD.title.tab = Mae gennych Gyfarwyddyd Debyd Uniongyrchol ar waith
+existingDD.title = Mae gennych Gyfarwyddyd Debyd Uniongyrchol ar waith
+existingDD.p1 = Dim ond y swm sy’n ddyledus ar eich Ffurflen TAW bydd yn cael ei gasglu drwy Ddebyd Uniongyrchol.
+existingDD.p1.2 = Bydd angen i unrhyw gosbau, llog a thaliadau eraill sy’n ddyledus gael eu talu drwy ddulliau eraill.
+existingDD.p2.preText = I gael yr holl fanylion ynghylch eich taliad Debyd Uniongyrchol, gwiriwch eich
+existingDD.p2.linkText = Mewnflwch negeseuon
+existingDD.p2.postText = Byddwn yn anfon neges i’ch mewnflwch pan fyddwn ar fin casglu’ch taliad.
+existingDD.p3 = Byddwch yn ofalus i beidio â gwneud taliad am swm y mae’ch Cyfarwyddyd Debyd Uniongyrchol yn ei gwmpasu.
+
+existingDD.details1.summary = Pam mae symiau yn dal i ymddangos yn ddyledus ar fy nghyfrif ar ôl i’r taliad Debyd Uniongyrchol gael ei gasglu?
+existingDD.details1.p1 = Mae’n bosibl y bydd oedi am ychydig o ddyddiau rhwng casglu’r taliad Debyd Uniongyrchol a’r taliad yn ymddangos fel wedi’i dalu ar y dudalen ‘Yr hyn sydd arnoch’.
+existingDD.details1.p2 = Sylwer: dim ond y swm sy’n ddyledus ar eich Ffurflen TAW bydd yn cael ei gasglu drwy Ddebyd Uniongyrchol.
+
+existingDD.details2.summary = Pam mae llog am dalu’n hwyr wedi’i godi arnaf?
+existingDD.details2.p1 = Bydd unrhyw nodyn o log am dalu’n hwyr sy’n gysylltiedig â’ch Ffurflen TAW er eich gwybodaeth yn unig. Ni fydd y llog hwn yn cael ei godi arnoch os bydd eich Debyd Uniongyrchol yn cael ei gasglu’n llwyddiannus.
+existingDD.details2.p1.2 = Mae’n bosibl y bydd llog am dalu’n hwyr yn cael ei godi arnoch os nad ydych yn cyflwyno’ch Ffurflen TAW mewn pryd.
+
+existingDD.radio.question = A ydych am wneud taliad o hyd?
+existingDD.radio.yes = Ydw, rwyf am wneud taliad ar gyfer swm nad yw’r Cyfarwyddyd Debyd Uniongyrchol yn ei gwmpasu
+existingDD.radio.no = Na, rwyf am fynd yn ôl i ‘Yr hyn sydd arnoch’
+existingDD.continue = Yn eich blaen
+
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon
 chargeTypeDetails.dueDate = Dyddiad dyledus

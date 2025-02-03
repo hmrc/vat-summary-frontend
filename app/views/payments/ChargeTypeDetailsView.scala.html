@@ -144,9 +144,16 @@ classes = "govuk-tag--red"
                        class="govuk-link">@messages("chargeTypeDetails.vatReturn")</a>.
                 </p>
             }
-            @if(model.directDebitMandateFound) {
-            <p class="govuk-body" id="dd-status"> DD is present
-            </p>
+            @if(model.directDebitMandateFound && model.chargeType == "VAT Return Debit Charge") {
+            <div class="govuk-inset-text">
+                <p>@messages("existingDD.banner.p1")</p>
+                <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>
+                <p>@messages("existingDD.banner.p3.preText")
+                    <a href= "@appConfig.btaHomeUrl/messages/inbox">@messages("existingDD.banner.p3.linkText")</a>@messages("existingDD.banner.p3.postText")
+                    @messages("existingDD.banner.p3.extra")</p>
+                <p>@messages("existingDD.banner.p4")</p>
+                <p><a href="@appConfig.paymentsAndRepaymentsUrl">@messages("existingDD.banner.p5.linkText")</a></p>
+            </div>
             }
             @govukSummaryList(SummaryList(
                 rows = Seq(
@@ -195,10 +202,22 @@ classes = "govuk-tag--red"
             }
 
             @if(!user.isAgent) {
-                @govukButton(Button(
-                    content = Text(messages("chargeTypeDetails.button")),
-                    href    = Some(model.makePaymentRedirect)
-                ))
+                @if(model.directDebitMandateFound) {
+                    @govukButton(Button(
+                        content = Text(messages("chargeTypeDetails.button")),
+                        href    = Some(controllers.routes.ExistingDirectDebitController.show(
+                                    dueDateOrUrl = model.makePaymentRedirect,
+                                    linkId = "charge-breakdown",
+                                    ddStatus = model.directDebitMandateFound
+                                    ).url
+                                    )
+            ))
+                } else {
+                    @govukButton(Button(
+                        content = Text(messages("chargeTypeDetails.button")),
+                        href    = Some(model.makePaymentRedirect)
+                    ))
+                }
             }
 
             <p class="govuk-body">

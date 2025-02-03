@@ -20,91 +20,128 @@
 @import views.html.templates.payments.wyoCharges._
 
 @this(mainTemplate: MainTemplate,
-govukBreadcrumbs: GovukBreadcrumbs,
-govukBackLink: GovukBackLink,
-govukButton : GovukButton,
-govukTable : GovukTable,
-govukDetails: GovukDetails,
-govukInset: GovukInsetText,
-standardCharge: StandardCharge,
-estimatedCharge: EstimatedCharge,
-crystallisedCharge: CrystallisedCharge)
+     govukBreadcrumbs: GovukBreadcrumbs,
+     govukBackLink: GovukBackLink,
+     govukButton : GovukButton,
+     govukTable : GovukTable,
+     govukDetails: GovukDetails,
+     govukInset: GovukInsetText,
+     standardCharge: StandardCharge,
+     estimatedCharge: EstimatedCharge,
+     crystallisedCharge: CrystallisedCharge)
 
 @(model: ExistingDirectDebitViewModel, serviceInfoContent: Html)(
 implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
-@govukBreadcrumbs(Breadcrumbs(
-items = Seq(
-BreadcrumbsItem(
-content = Text(messages("breadcrumbs.bta")),
-href = Some(appConfig.btaHomeUrl)
-),
-BreadcrumbsItem(
-content = Text(messages("vatDetails.title")),
-href = Some(controllers.routes.VatDetailsController.details.url)
-)
-)
-))
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+                ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title")),
+                href = Some(controllers.routes.VatDetailsController.details.url)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("whatYouOwe.title")),
+                href = Some(controllers.routes.WhatYouOweController.show.url)
+            )
+        )
+    ))
 }
 
 @backLink = {
-@govukBackLink(BackLink(
-href = appConfig.agentClientLookupHubUrl,
-content = Text(messages("base.back"))
-))
-}
-
-@paymentHelp = {
-<p id="payment-help-agent-p1" class="govuk-body">
- @messages("whatYouOwe.details.agent.paymentHelpTwo")
- <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUKDifficultiesPayingUrl">
-  @messages("whatYouOwe.details.agent.paymentHelpThree")</a>
- @messages("whatYouOwe.details.agent.paymentHelpFour")
-</p>
-<p id="payment-help-agent-p2" class="govuk-body">@messages("whatYouOwe.details.agent.paymentHelpFive")</p>
-<ul id="agent-help-bullet" class="govuk-list govuk-list--bullet">
- <li>@messages("whatYouOwe.ifYouCannotPaySix")</li>
- <li>@messages("whatYouOwe.details.agent.paymentHelpSeven")</li>
-</ul>
-}
-
-@paymentHtml(chargeModel: ChargeDetailsViewModel, ddStatus: Boolean) = @{
-chargeModel match {
-case charge: StandardChargeViewModel => standardCharge(charge, ddStatus)
-case charge: CrystallisedViewModel   => crystallisedCharge(charge)
-case charge: EstimatedViewModel      => estimatedCharge(charge)
-}
-}
-
-@agentSuffix = @{
-if(user.isAgent) {".agent"} else {""}
+    @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
+    ))
 }
 
 
-@webchatLink = {
-<p class="govuk-body govuk-!-margin-top-5 govuk-!-margin-bottom-8">
- <a class="govuk-link" href="@{appConfig.webchatUrl}" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
-</p>
-}
-@mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
-appConfig = appConfig,
-serviceInfoContent = serviceInfoContent,
-user = Some(user),
-navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+@mainTemplate(title = if(user.isAgent) messages("existingDD.title.tab") else messages("existingDD.title.tab"),
+    appConfig = appConfig,
+    serviceInfoContent = serviceInfoContent,
+    user = Some(user),
+    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
 ) {
 <div class="govuk-grid-row">
  <div class="govuk-grid-column-two-thirds">
 
-  <h1 class="govuk-heading-xl">
-   @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
-  </h1>
+  <header class="hmrc-page-heading govuk-!-margin-top-0">
+   <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@messages("existingDD.title")</h1>
+  </header>
 
-  @if(model.directDebitMandateFound){
-  <p class="govuk-body" id="dd-inplace">You have DD inplace</p>
+  <p class="govuk-body">@messages("existingDD.p1")
+   @messages("existingDD.p1.2")</p>
+  <p class="govuk-body"> @messages("existingDD.p2.preText")
+     <a href="@appConfig.btaHomeUrl/messages/inbox">@messages("existingDD.p2.linkText")</a>@messages("existingDD.banner.p3.postText")
+   <br>@messages("existingDD.p2.postText")</p>
+
+  <p class="govuk-body">@messages("existingDD.p3")</p>
+
+  <details class="govuk-details">
+   <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+         @messages("existingDD.details1.summary")
+        </span>
+   </summary>
+   <div class="govuk-details__text">
+    <p class="govuk-body">@messages("existingDD.details1.p1")</p>
+    <p class="govuk-body">@messages("existingDD.details1.p2")</p>
+   </div>
+  </details>
+
+  <details class="govuk-details">
+   <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+         @messages("existingDD.details2.summary")
+        </span>
+   </summary>
+   <div class="govuk-details__text">
+    <p class="govuk-body">@messages("existingDD.details2.p1")@messages("existingDD.details2.p1.2")</p>
+   </div>
+  </details>
+
+  <div class="govuk-form-group">
+   <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+     <h2 class="govuk-fieldset__heading">@messages("existingDD.radio.question")</h2>
+    </legend>
+    <div class="govuk-radios" data-module="govuk-radios">
+     <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="doYouWantToPayYes" name="doYouWantToPay" type="radio" value="Yes">
+      <label class="govuk-label govuk-radios__label" for="doYouWantToPayYes">@messages("existingDD.radio.yes")</label>
+     </div>
+     <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="doYouWantToPayNo" name="doYouWantToPay" type="radio" value="No"
+             onclick="window.location.href = '/vat-through-software/what-you-owe';">
+      <label class="govuk-label govuk-radios__label" for="doYouWantToPayNo">@messages("existingDD.radio.no")</label>
+     </div>
+
+    </div>
+   </fieldset>
+  </div>
+
+  @if("wyo"==model.linkId) {
+      @govukButton(Button(
+        content = Text(messages("existingDD.continue")),
+        id = Some("existing-dd-pay-now-button"),
+        href = Some(controllers.routes.MakePaymentController.makeGenericPayment(
+        earliestDueDate = model.dueDateOrUrl,
+        linkId = "existing-dd-pay-now-button",
+        ).url
+    )
+  ))
+  } else {
+    @govukButton(Button(
+        content = Text(messages("existingDD.continue")),
+        id = Some("existing-dd-pay-now-button"),
+        href = model.dueDateOrUrl
+     ))
   }
 
-  
  </div>
 </div>
 }

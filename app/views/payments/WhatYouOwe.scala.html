@@ -121,30 +121,20 @@
         @if(user.isAgent) {@messages("whatYouOwe.agentTitle")} else {@messages("whatYouOwe.title")}
       </h1>
 
-        <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
+      <p class="govuk-body govuk-!-font-size-24">@messages("whatYouOwe.totalAmountToPay")</p>
       <p class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold govuk-!-margin-bottom-8">
         @Money.pounds(model.totalAmount)
       </p>
 
         @if(model.directDebitMandateFound){
         <div class="govuk-inset-text">
-            <p>
-                You have a Direct Debit Instruction in place.
-            </p>
-            <p>
-                Only the amount due on your VAT Return will be collected by Direct Debit. Other charges, penalties and
-                interest showing as owing will still need to be paid by other methods. </p>
-            <p>
-                For full details of your Direct Debit payment check your <a href="direct-debit-message.html">Messages
-                inbox</a>. We’ll send you a notice there when we’re due to collect your payment.
-            </p>
-            <p>
-                Be careful not to make a payment for an amount that will be covered by your Direct Debit Instruction.
-            </p>
-            <p>
-                <a href="/vvc-1/choose-a-service">View and manage your Direct Debit details </a>
-            </p>
-
+            <p>@messages("existingDD.banner.p1")</p>
+            <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>
+            <p>@messages("existingDD.banner.p3.preText")
+                <a href= "@appConfig.btaHomeUrl/messages/inbox">@messages("existingDD.banner.p3.linkText")</a>@messages("existingDD.banner.p3.postText")
+                @messages("existingDD.banner.p3.extra")</p>
+            <p>@messages("existingDD.banner.p4")</p>
+            <p><a href="@appConfig.paymentsAndRepaymentsUrl">@messages("existingDD.banner.p5.linkText")</a></p>
         </div>
         }
 
@@ -162,9 +152,7 @@
         )),
         captionClasses = "govuk-table__caption--m"
       ))
-        <h3 class="govuk-heading-s">
-            Why charges may still show as owing after you have made a payment
-        </h3>
+        <h3 class="govuk-heading-s">@messages("whatYouOwe.charges.heading")</h3>
 
       <p class="govuk-body">@messages("whatYouOwe.paymentClearanceParaOne")
         <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
@@ -172,29 +160,23 @@
       </p>
 
         @if(model.directDebitMandateFound){
-        <p>
-            For your Direct Debit, there may be a few days delay between the payment being collected and showing as paid on this page.
-        </p>
+        <p class="govuk-body">@messages("whatYouOwe.charges.p2")</p>
         }
 
-        <h3 class="govuk-heading-s">
-            Late payment interest charges
-        </h3>
+        <h3 class="govuk-heading-s">@messages("whatYouOwe.latePayment.heading")</h3>
 
-        @if(model.directDebitMandateFound){
-        <p>Any late payment interest relating to your VAT Return is indicative and will not be charged, after the successful collection
-            of your Direct Debit.</p>
-        <p>You will be charged late payment interest if your Direct Debit payment is not successfully collected.</p>
-        <p> Late payment interest may be charged if you do not submit your VAT return on time.
-        </p>
-
+        @if(user.isAgent) {
+            <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
         } else {
-        <p>You will be charged late payment interest if your payment does not clear by the payment due date.</p>
-        <p> Late payment interest may be charged if you do not submit your VAT return on time.
-        </p>
+            @if(model.directDebitMandateFound){
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p1")</p>
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p2")</p>
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p3")</p>
+            } else {
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p2")</p>
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p3")</p>
+            }
         }
-
-        <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
 
       @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() ) {
         @govukDetails(Details(
@@ -212,9 +194,9 @@
 
 
               href = Some(controllers.routes.ExistingDirectDebitController.show(
-                  earliestDueDate = model.earliestDueDateFormatted,
-                  linkId = "what-you-owe-pay-now-button",
-        ddStatus = model.directDebitMandateFound
+                  dueDateOrUrl = model.earliestDueDateFormatted.get,
+                  linkId = "wyo",
+                  ddStatus = model.directDebitMandateFound
         ).url
               )
             ))
@@ -261,9 +243,13 @@
             @messages("whatYouOwe.isIncorrectThree")</a>.
         </p>
         <p id="incorrect-p2" class ="govuk-body">@messages("whatYouOwe.isIncorrectFour")
-          <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-make-payment-link"
-            href="@controllers.routes.MakePaymentController.makeGenericPayment(earliestDueDate=model.earliestDueDateFormatted,linkId="what-you-owe-make-payment-link").url">
-
+            @if(model.directDebitMandateFound){
+            <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-make-payment-link"
+            href="@controllers.routes.ExistingDirectDebitController.show(dueDateOrUrl=model.earliestDueDateFormatted.get,linkId="wyo",ddStatus = model.directDebitMandateFound).url">
+            } else {
+            <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-dd-make-payment-link"
+               href="@controllers.routes.MakePaymentController.makeGenericPayment(earliestDueDate=model.earliestDueDateFormatted,linkId="what-you-owe-make-payment-link").url">
+            }
             @messages("whatYouOwe.isIncorrectFive")</a>.
         </p>
       }
