@@ -36,7 +36,7 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
     isOverdue = false,
     "XXXXXX1234567890",
     isPenaltyReformPenaltyLPI = false,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false, false
   )
 
   "The makePaymentRedirect value" should {

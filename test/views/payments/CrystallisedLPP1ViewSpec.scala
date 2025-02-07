@@ -47,7 +47,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
     LocalDate.parse("2020-04-04"),
     chargeValue,
     "CHARGEREF",
-    isOverdue = false
+    isOverdue = false, false
   )
 
   "Rendering the Crystallised LPP1 Page for a principal user" when {

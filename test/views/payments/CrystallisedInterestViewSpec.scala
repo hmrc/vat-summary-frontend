@@ -42,7 +42,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
     isOverdue = true,
     "chargeRef",
     isPenaltyReformPenaltyLPI = false,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false, false
   )
 
   "Rendering the Crystallised Interest Page for a principal user" when {

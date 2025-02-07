@@ -41,7 +41,7 @@ class WhatYouOweViewModelSpec extends SpecBase {
       charges = charges,
       mandationStatus = "mtdVatMandationStatus",
       containsOverduePayments = true,
-      breathingSpace = false
+      breathingSpace = false, false
     )
 
   "earliestDueDate" when {

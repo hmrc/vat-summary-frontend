@@ -393,7 +393,8 @@ object TestModels {
     isOverdue = false,
     chargeReference = Some("XD002750002155"),
     periodFrom = Some(LocalDate.parse("2019-01-01")),
-    periodTo = Some(LocalDate.parse("2019-02-02"))
+    periodTo = Some(LocalDate.parse("2019-02-02")),
+    directDebitMandateFound = false
   )
 
   val whatYouOweChargeModelEstimatedLPI: EstimatedInterestViewModel = EstimatedInterestViewModel(
@@ -402,7 +403,8 @@ object TestModels {
     chargeType = VatReturnLPI.value,
     interestAmount = BigDecimal(2),
     isPenaltyReformPenaltyLPI = false,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
   )
 
   val vatOverpaymentTax: StandardChargeViewModel = whatYouOweChargeModel.copy(
@@ -436,7 +438,8 @@ object TestModels {
     isOverdue = false,
     chargeReference = "XD002750002155",
     isPenaltyReformPenaltyLPI = false,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
   )
 
   val penaltyReformPenaltyLPICharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
@@ -450,7 +453,8 @@ object TestModels {
     isOverdue = false,
     chargeReference = "XD002750002155",
     isPenaltyReformPenaltyLPI = true,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
   )
 
   val lateSubmissionPenaltyCharge: LateSubmissionPenaltyViewModel = LateSubmissionPenaltyViewModel(
@@ -462,7 +466,8 @@ object TestModels {
     isOverdue = false,
     chargeReference = "XD002750002155",
     periodFrom = LocalDate.parse("2019-01-01"),
-    periodTo = LocalDate.parse("2019-02-02")
+    periodTo = LocalDate.parse("2019-02-02"),
+    directDebitMandateFound = false
   )
 
   val whatYouOweViewModel: WhatYouOweViewModel = WhatYouOweViewModel(
@@ -470,7 +475,8 @@ object TestModels {
     Seq(whatYouOweChargeModel),
     mandationStatus = "MTDfB",
     containsOverduePayments = false,
-    breathingSpace = false
+    breathingSpace = false,
+    directDebitMandateFound = false
   )
 
   val whatYouOweViewModelWithEstimatedLPI: WhatYouOweViewModel = whatYouOweViewModel.copy(
@@ -494,7 +500,8 @@ object TestModels {
     isOverdue = true,
     Some("ABCD"),
     Some(LocalDate.parse("2018-01-01")),
-    Some(LocalDate.parse("2018-02-01"))
+    Some(LocalDate.parse("2018-02-01")),
+    directDebitMandateFound = false
   )
 
   val standardChargeModelMaxJson: JsObject = Json.obj(
@@ -507,7 +514,8 @@ object TestModels {
     "isOverdue" -> true,
     "chargeReference" -> "ABCD",
     "periodFrom" -> "2018-01-01",
-    "periodTo" -> "2018-02-01"
+    "periodTo" -> "2018-02-01",
+    "directDebitMandateFound" -> false
   )
 
   val standardChargeModelMin: StandardChargeViewModel =
@@ -519,7 +527,8 @@ object TestModels {
     "originalAmount" -> 333.33,
     "clearedAmount" -> 222.22,
     "dueDate" -> "2018-03-01",
-    "isOverdue" -> true
+    "isOverdue" -> true,
+    "directDebitMandateFound" -> false
   )
 
   val chargeModel2: StandardChargeViewModel =
@@ -539,7 +548,8 @@ object TestModels {
     "amountReceived" -> 40.00,
     "leftToPay" -> 160.00,
     "isOverdue" -> false,
-    "chargeReference" -> "ABCD"
+    "chargeReference" -> "ABCD",
+    "directDebitMandateFound" -> false
   )
 
   val vatOverpaymentForRPI: VatOverpaymentForRPIViewModel = VatOverpaymentForRPIViewModel(
@@ -551,7 +561,8 @@ object TestModels {
     amountReceived = 40.00,
     leftToPay = 160.00,
     isOverdue = false,
-    chargeReference = Some("ABCD")
+    chargeReference = Some("ABCD"),
+    directDebitMandateFound = false
   )
 
   val overdueCrystallisedLPICharge: CrystallisedInterestViewModel = CrystallisedInterestViewModel(
@@ -565,7 +576,8 @@ object TestModels {
     isOverdue = true,
     chargeReference = "ChargeRef",
     isPenaltyReformPenaltyLPI = false,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
   )
 
   val crystallisedLPICharge: CrystallisedInterestViewModel = overdueCrystallisedLPICharge.copy(isOverdue = false)
@@ -581,7 +593,8 @@ object TestModels {
     "isOverdue" -> false,
     "chargeReference" -> "ChargeRef",
     "isPenaltyReformPenaltyLPI" -> false,
-    "isNonPenaltyReformPenaltyLPI" -> false
+    "isNonPenaltyReformPenaltyLPI" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val estimatedLPIModel: EstimatedInterestViewModel = EstimatedInterestViewModel(
@@ -590,7 +603,8 @@ object TestModels {
     "VAT Central Assessment LPI",
     300.33,
     isPenaltyReformPenaltyLPI = false,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
   )
 
   val estimatedLPIJson: JsObject = Json.obj(
@@ -599,7 +613,8 @@ object TestModels {
     "chargeType" -> "VAT Central Assessment LPI",
     "interestAmount" -> 300.33,
     "isPenaltyReformPenaltyLPI" -> false,
-    "isNonPenaltyReformPenaltyLPI" -> false
+    "isNonPenaltyReformPenaltyLPI" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val crystallisedPenaltyModel: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
@@ -618,7 +633,8 @@ object TestModels {
     periodTo = LocalDate.parse("2019-02-02"),
     chargeType = "VAT Return 1st LPP",
     chargeReference = "XD002750002155",
-    isOverdue = false
+    isOverdue = false,
+    directDebitMandateFound = false
   )
 
   val estimatedLPIPenalty: EstimatedInterestViewModel = EstimatedInterestViewModel(
@@ -627,7 +643,8 @@ object TestModels {
     chargeType = "VAT Return 1st LPP LPI",
     interestAmount = 2,
     isPenaltyReformPenaltyLPI = true,
-    isNonPenaltyReformPenaltyLPI = false
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
   )
 
   val crystallisedLPP1Model: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
@@ -646,7 +663,8 @@ object TestModels {
     LocalDate.parse("2020-04-04"),
     "VAT Return 1st LPP",
     "CHARGEREF",
-    isOverdue = false
+    isOverdue = false,
+    directDebitMandateFound = false
   )
 
   val crystallisedVatOPLPP1Model: CrystallisedLPP1ViewModel =
@@ -662,7 +680,8 @@ object TestModels {
       chargeType = VatOverpayments1stLPPLPI.value,
       interestAmount = BigDecimal(2),
       isPenaltyReformPenaltyLPI = true,
-      isNonPenaltyReformPenaltyLPI = false
+      isNonPenaltyReformPenaltyLPI = false,
+      directDebitMandateFound = false
     )
 
   val crystallisedVatOPLPP1LPIModel: CrystallisedInterestViewModel =
@@ -682,7 +701,8 @@ object TestModels {
       chargeType = VATOverpaymentforTaxLPI.value,
       interestAmount = BigDecimal(2),
       isPenaltyReformPenaltyLPI = false,
-      isNonPenaltyReformPenaltyLPI = false
+      isNonPenaltyReformPenaltyLPI = false,
+      directDebitMandateFound = false
     )
 
   val crystallisedVATOverpaymentforTaxLPI: CrystallisedInterestViewModel =
@@ -727,7 +747,8 @@ object TestModels {
     "periodTo" -> "2020-04-04",
     "chargeType" -> "VAT Return 1st LPP",
     "chargeReference" -> "CHARGEREF",
-    "isOverdue" -> false
+    "isOverdue" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val crystallisedLPP1ModelMin: CrystallisedLPP1ViewModel =
@@ -800,7 +821,8 @@ object TestModels {
     "periodTo" -> "2020-04-04",
     "chargeType" -> "VAT Return 1st LPP",
     "chargeReference" -> "CHARGEREF",
-    "isOverdue" -> false
+    "isOverdue" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val crystallisedLPP2Model: CrystallisedLPP2ViewModel = CrystallisedLPP2ViewModel(
@@ -814,7 +836,8 @@ object TestModels {
     LocalDate.parse("2020-04-04"),
     "VAT AA 2nd LPP",
     "CHARGEREF",
-    isOverdue = false
+    isOverdue = false,
+    directDebitMandateFound = false
   )
 
   val crystallisedLPP2ModelMax: CrystallisedLPP2ViewModel = CrystallisedLPP2ViewModel(
@@ -828,7 +851,8 @@ object TestModels {
     LocalDate.parse("2019-02-02"),
     "VAT AA 2nd LPP",
     "CHARGEREF",
-    isOverdue = false
+    isOverdue = false,
+    directDebitMandateFound = false
   )
 
   val overpaymentforTaxLPP2: PaymentWithPeriod =
@@ -853,7 +877,8 @@ object TestModels {
       chargeType = VatOverpayments2ndLPPLPI.value,
       interestAmount = BigDecimal(2),
       isPenaltyReformPenaltyLPI = true,
-      isNonPenaltyReformPenaltyLPI = false
+      isNonPenaltyReformPenaltyLPI = false,
+      directDebitMandateFound = false
     )
 
   val crystallisedVatOPLPP2LPIModel: CrystallisedInterestViewModel =
@@ -877,7 +902,8 @@ object TestModels {
     "periodTo" -> "2020-04-04",
     "chargeType" -> "VAT AA 2nd LPP",
     "chargeReference" -> "CHARGEREF",
-    "isOverdue" -> false
+    "isOverdue" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val estimatedLPP1Model: EstimatedLPP1ViewModel = EstimatedLPP1ViewModel(
@@ -891,7 +917,8 @@ object TestModels {
     LocalDate.parse("2019-02-02"),
     "VAT Return 1st LPP",
     timeToPayPlan = false,
-    breathingSpace = false
+    breathingSpace = false,
+    directDebitMandateFound = false
   )
 
   val estimatedLPP1Json: JsObject = Json.obj(
@@ -905,11 +932,12 @@ object TestModels {
     "periodTo" -> "2019-02-02",
     "chargeType" -> "VAT Return 1st LPP",
     "timeToPayPlan" -> false,
-    "breathingSpace" -> false
+    "breathingSpace" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val estimatedLPP2Model: EstimatedLPP2ViewModel = EstimatedLPP2ViewModel(
-    "31", 4.4, 4.22, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT AA 2nd LPP", timeToPay = false, breathingSpace = false
+    "31", 4.4, 4.22, LocalDate.parse("2020-01-01"), LocalDate.parse("2020-02-02"), "VAT AA 2nd LPP", timeToPay = false, breathingSpace = false, directDebitMandateFound = false
   )
   val estimatedLPP2ModelTTP: EstimatedLPP2ViewModel = estimatedLPP2Model.copy(timeToPay = true)
 
@@ -921,7 +949,8 @@ object TestModels {
     "periodTo" -> "2020-02-02",
     "chargeType" -> "VAT AA 2nd LPP",
     "timeToPay" -> false,
-    "breathingSpace" -> false
+    "breathingSpace" -> false,
+    "directDebitMandateFound" -> false
   )
 
   val lateSubmissionPenaltyModel: LateSubmissionPenaltyViewModel = LateSubmissionPenaltyViewModel(
@@ -933,7 +962,8 @@ object TestModels {
     isOverdue = false,
     "CHARGEREF",
     LocalDate.parse("2020-05-05"),
-    LocalDate.parse("2020-06-06")
+    LocalDate.parse("2020-06-06"),
+    directDebitMandateFound = false
   )
 
   val lateSubmissionPenaltyJson: JsObject = Json.obj(
@@ -945,7 +975,8 @@ object TestModels {
     "isOverdue" -> false,
     "chargeReference" -> "CHARGEREF",
     "periodFrom" -> "2020-05-05",
-    "periodTo" -> "2020-06-06"
+    "periodTo" -> "2020-06-06",
+    "directDebitMandateFound" -> false
   )
 
   val whatYouOweViewModel2Charge: WhatYouOweViewModel = WhatYouOweViewModel(
@@ -953,7 +984,8 @@ object TestModels {
     Seq(chargeModel1, chargeModel2, overdueCrystallisedLPICharge),
     mandationStatus = "",
     containsOverduePayments = true,
-    breathingSpace = false
+    breathingSpace = false,
+    directDebitMandateFound = false
   )
 
   val whatYouOweViewModelBreathingSpace: WhatYouOweViewModel = whatYouOweViewModel.copy(
@@ -969,7 +1001,8 @@ object TestModels {
     isOverdue = false,
     chargeReference = None,
     periodFrom = Some(LocalDate.parse("2021-01-01")),
-    periodTo = Some(LocalDate.parse("2021-03-31"))
+    periodTo = Some(LocalDate.parse("2021-03-31")),
+    directDebitMandateFound = false
   )
 
   val whatYouOweViewModelMultipleTypes: WhatYouOweViewModel = WhatYouOweViewModel(
@@ -983,7 +1016,8 @@ object TestModels {
     ),
     mandationStatus = "MTDfB",
     containsOverduePayments = false,
-    breathingSpace = false
+    breathingSpace = false,
+    directDebitMandateFound = false
   )
 
   val whatYouOweChargeOverdue: StandardChargeViewModel = whatYouOweCharge.copy(isOverdue = true)
