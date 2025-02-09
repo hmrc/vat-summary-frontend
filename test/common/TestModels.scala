@@ -1176,4 +1176,8 @@ object TestModels {
     "journeyId" -> "592d4a09cdc8e04b00021459",
     "nextUrl" -> "http://localhost:1111/test"
   )
+
+  val directDebitEnrolled: DirectDebitStatus = DirectDebitStatus(directDebitMandateFound = true, None)
+  val directDebitNotEnrolled : DirectDebitStatus = DirectDebitStatus(directDebitMandateFound = false, None)
+
 }

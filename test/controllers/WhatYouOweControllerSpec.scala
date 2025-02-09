@@ -67,6 +67,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           mockWYOSessionServiceCall()
           mockAudit()
           controller.show(fakeRequest)
@@ -92,6 +93,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           mockAudit()
           controller.show(fakeRequest)
         }
@@ -117,6 +119,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
 
@@ -140,6 +143,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall(Left(UnexpectedStatusError("500", "oops")))
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
 
@@ -165,6 +169,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
 
@@ -188,6 +193,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationMax))
         mockDateServiceCall()
         mockPenaltyDetailsServiceCall()
+        mockGetDirectDebitStatus(Right(directDebitEnrolled))
         mockWYOSessionServiceCall()
         mockAudit()
         controller.show(agentFinancialRequest)
