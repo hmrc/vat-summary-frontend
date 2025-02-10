@@ -31,10 +31,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedController,
                                               mcc: MessagesControllerComponents,
                                               serviceInfoService: ServiceInfoService,
-                                              view: ExistingDirectDebit,
-                                             )(implicit ec: ExecutionContext,
-                                                appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                                              view: ExistingDirectDebit
+                                             )(implicit ec: ExecutionContext, appConfig: AppConfig)
+                                              extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def show(dueDateOrUrl: String, linkId: String, ddStatus: Boolean): Action[AnyContent] = authorisedController.financialAction {
     implicit request =>
@@ -45,4 +44,4 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
               Future.successful(Ok(view(model, serviceInfoContent)))
           }
       }
-  }
+}
