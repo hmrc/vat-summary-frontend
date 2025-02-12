@@ -16,21 +16,21 @@
 
 @import models.User
 @import models.viewModels._
-@import utils.Money
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 @import views.html.templates.payments.wyoCharges._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-@this(mainTemplate: MainTemplate,
+@import models.viewModels.helpers.RadioOption
+
+
+
+@this(uiForm: FormWithCSRF,
+     mainTemplate: MainTemplate,
      govukBreadcrumbs: GovukBreadcrumbs,
-     govukBackLink: GovukBackLink,
-     govukButton : GovukButton,
-     govukTable : GovukTable,
-     govukDetails: GovukDetails,
-     govukInset: GovukInsetText,
-     standardCharge: StandardCharge,
-     estimatedCharge: EstimatedCharge,
-     crystallisedCharge: CrystallisedCharge)
+     govukBackLink: GovukBackLink
+)
 
-@(model: ExistingDirectDebitViewModel, serviceInfoContent: Html)(
+@(model: ExistingDirectDebitViewModel, form: Form[_], radioOptions: Set[RadioOption], serviceInfoContent: Html)(
 implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
@@ -104,44 +104,28 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
    </div>
   </details>
 
-  <div class="govuk-form-group">
-   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-     <h2 class="govuk-fieldset__heading">@messages("existingDD.radio.question")</h2>
-    </legend>
-    <div class="govuk-radios" data-module="govuk-radios">
-     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="doYouWantToPayYes" name="doYouWantToPay" type="radio" value="Yes">
-      <label class="govuk-label govuk-radios__label" for="doYouWantToPayYes">@messages("existingDD.radio.yes")</label>
+    @uiForm(routes.ExistingDirectDebitController.submit) {
+
+     @components.error_summary(form.errors, Some("existingDDContinuePayment.No"))
+
+
+     <div class="govuk-form-group">
+         <input class="govuk-input" id="dueDateOrUrl" name="dueDateOrUrl" type="hidden" value="@{model.dueDateOrUrl}">
+         <input class="govuk-input" id="linkId" name="linkId" type="hidden" value="@{model.linkId}">
+         <input class="govuk-input" id="directDebitMandateFound" name="directDebitMandateFound" type="hidden" value="@{model.directDebitMandateFound}">
      </div>
-     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="doYouWantToPayNo" name="doYouWantToPay" type="radio" value="No"
-             onclick="window.location.href = '/vat-through-software/what-you-owe';">
-      <label class="govuk-label govuk-radios__label" for="doYouWantToPayNo">@messages("existingDD.radio.no")</label>
-     </div>
+
+     @components.input_radio(
+        field = form("value"),
+        headingKey = Some("existingDD.radio.question"),
+        headingId = Some("existingDD-pay-quesion"),
+        inputs = radioOptions.toSeq
+    )
+
+     @components.submit_button(gaEvent = "PayDD")
+
+    }
 
     </div>
-   </fieldset>
-  </div>
-
-  @if("wyo"==model.linkId) {
-      @govukButton(Button(
-        content = Text(messages("existingDD.continue")),
-        id = Some("existing-dd-pay-now-button"),
-        href = Some(controllers.routes.MakePaymentController.makeGenericPayment(
-        earliestDueDate = model.dueDateOrUrl,
-        linkId = "existing-dd-pay-now-button",
-        ).url
-    )
-  ))
-  } else {
-    @govukButton(Button(
-        content = Text(messages("existingDD.continue")),
-        id = Some("existing-dd-pay-now-button"),
-        href = model.dueDateOrUrl
-     ))
-  }
-
- </div>
 </div>
 }

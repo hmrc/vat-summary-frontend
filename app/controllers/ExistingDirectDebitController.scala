@@ -16,7 +16,7 @@
 
 package controllers
 
-import models.viewModels.ExistingDirectDebitViewModel
+import models.viewModels.{ExistingDDContinuePayment, ExistingDirectDebitFormModel, ExistingDirectDebitViewModel}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
@@ -24,6 +24,10 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.ExistingDirectDebit
 import config.AppConfig
+import forms.ExistingDirectDebitFormProvider
+import models.viewModels.ExistingDDContinuePayment.Yes
+import models.viewModels.helpers.Enumerable
+import play.api.data.Form
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,17 +35,55 @@ import scala.concurrent.{ExecutionContext, Future}
 class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedController,
                                               mcc: MessagesControllerComponents,
                                               serviceInfoService: ServiceInfoService,
-                                              view: ExistingDirectDebit
+                                              view: ExistingDirectDebit,
+                                              formProvider: ExistingDirectDebitFormProvider
                                              )(implicit ec: ExecutionContext, appConfig: AppConfig)
-                                              extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                                              extends FrontendController(mcc) with I18nSupport with LoggerUtil with Enumerable.Implicits {
+
+  val form: Form[ExistingDirectDebitFormModel] = formProvider()
 
   def show(dueDateOrUrl: String, linkId: String, ddStatus: Boolean): Action[AnyContent] = authorisedController.financialAction {
     implicit request =>
       implicit user =>
         serviceInfoService.getPartial.flatMap {
           serviceInfoContent =>
-            val model : ExistingDirectDebitViewModel = new ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus)
-              Future.successful(Ok(view(model, serviceInfoContent)))
+            val model : ExistingDirectDebitViewModel = ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus)
+            Future.successful(Ok(view(model, form, ExistingDDContinuePayment.options, serviceInfoContent)))
           }
       }
+
+
+  def submit(): Action[AnyContent] = authorisedController.financialAction {
+    implicit request =>
+      implicit user =>
+        serviceInfoService.getPartial.flatMap {
+          serviceInfoContent =>
+            form.bindFromRequest()
+              .fold(
+                formWithErrors => Future.successful(BadRequest(view(
+                  ExistingDirectDebitViewModel(formWithErrors.data.get("dueDateOrUrl"), formWithErrors.data.get("linkId").get, formWithErrors.data.get("directDebitMandateFound").get.toBoolean),
+                  formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent))),
+                formModel => {
+                  formModel.value match {
+                    case Yes =>
+                      formModel.linkId match {
+                        case "wyo" => val makePaymentRedirect: String = controllers.routes.MakePaymentController.makeGenericPayment(
+                          earliestDueDate = formModel.dueDateOrUrl,
+                          linkId = "existing-dd-pay-now-button"
+                        ).url
+                          infoLog(s"User clicked Yes to pay even DD has hence navigating to payment " + makePaymentRedirect)
+                          Future.successful(Redirect(makePaymentRedirect))
+                        case _ =>
+                          infoLog(s"User clicked Yes to pay even DD has hence navigating to payment " + formModel.dueDateOrUrl.get)
+                          Future.successful(Redirect(formModel.dueDateOrUrl.get))
+                      }
+                    case _ =>
+                      val wyo: String = controllers.routes.WhatYouOweController.show.url
+                      infoLog(s"User clicked No to pay hence navigating to wyo ")
+                      Future.successful(Redirect(wyo))
+                  }
+                }
+          )
+        }
+  }
 }

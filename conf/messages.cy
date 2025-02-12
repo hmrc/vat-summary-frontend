@@ -168,9 +168,11 @@ existingDD.details2.p1 = Bydd unrhyw nodyn o log am dalu’n hwyr sy’n gysyllt
 existingDD.details2.p1.2 = Mae’n bosibl y bydd llog am dalu’n hwyr yn cael ei godi arnoch os nad ydych yn cyflwyno’ch Ffurflen TAW mewn pryd.
 
 existingDD.radio.question = A ydych am wneud taliad o hyd?
-existingDD.radio.yes = Ydw, rwyf am wneud taliad ar gyfer swm nad yw’r Cyfarwyddyd Debyd Uniongyrchol yn ei gwmpasu
-existingDD.radio.no = Na, rwyf am fynd yn ôl i ‘Yr hyn sydd arnoch’
+existingDDContinuePayment.Yes = Ydw, rwyf am wneud taliad ar gyfer swm nad yw’r Cyfarwyddyd Debyd Uniongyrchol yn ei gwmpasu
+existingDDContinuePayment.No = Na, rwyf am fynd yn ôl i ‘Yr hyn sydd arnoch’
+existingDD.radio.required = Dewiswch a ydych am wneud taliad o hyd ai peidio
 existingDD.continue = Yn eich blaen
+error.summary.title1 = Mae problem wedi codi
 
 chargeTypeDetails.viewThis = Bwrw golwg dros y
 chargeTypeDetails.vatReturn = Ffurflen TAW hon
