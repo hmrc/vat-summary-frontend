@@ -33,7 +33,7 @@ class ExistingDirectDebitFormProvider @Inject() extends FormErrorHelper with Map
       "dueDateOrUrl" -> optional(nonEmptyText),
       "linkId" -> nonEmptyText,
       "directDebitMandateFound" -> Forms.boolean,
-      "value" -> enumerable[ExistingDDContinuePayment]("existingDD.radio.required"),
+      "value" -> enumerable[ExistingDDContinuePayment]("existingDD.radio.required")
       ) (ExistingDirectDebitFormModel.formApply)(ExistingDirectDebitFormModel.formUnapply)
     )
   }
