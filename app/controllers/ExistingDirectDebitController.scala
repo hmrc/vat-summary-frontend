@@ -38,7 +38,7 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
                                               view: ExistingDirectDebit,
                                               formProvider: ExistingDirectDebitFormProvider
                                              )(implicit ec: ExecutionContext, appConfig: AppConfig)
-                                              extends FrontendController(mcc) with I18nSupport with LoggerUtil with Enumerable.Implicits {
+  extends FrontendController(mcc) with I18nSupport with LoggerUtil with Enumerable.Implicits {
 
   val form: Form[ExistingDirectDebitFormModel] = formProvider()
 
@@ -47,30 +47,33 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
       implicit user =>
         serviceInfoService.getPartial.flatMap {
           serviceInfoContent =>
-            val model : ExistingDirectDebitViewModel = ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus)
-            Future.successful(Ok(view(model, form, ExistingDDContinuePayment.options, serviceInfoContent)))
+            Future.successful(Ok(view(ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus),
+              form, ExistingDDContinuePayment.options, serviceInfoContent)))
           }
       }
 
 
-  def submit(): Action[AnyContent] = authorisedController.financialAction {
-    implicit request =>
-      implicit user =>
+  def submit() : Action[AnyContent] = authorisedController.financialAction {
+    implicit request => {
+      implicit user => {
         serviceInfoService.getPartial.flatMap {
           serviceInfoContent =>
             form.bindFromRequest()
               .fold(
                 formWithErrors => Future.successful(BadRequest(view(
-                  ExistingDirectDebitViewModel(formWithErrors.data.get("dueDateOrUrl"), formWithErrors.data.get("linkId").get, formWithErrors.data.get("directDebitMandateFound").get.toBoolean),
-                  formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent))),
+                  ExistingDirectDebitViewModel(formWithErrors.data.get("dueDateOrUrl"),
+                    formWithErrors.data.get("linkId").get,
+                    formWithErrors.data.get("directDebitMandateFound").get.toBoolean),
+                    formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent))),
                 formModel => {
                   formModel.value match {
                     case Yes =>
                       formModel.linkId match {
-                        case "wyo" => val makePaymentRedirect: String = controllers.routes.MakePaymentController.makeGenericPayment(
-                          earliestDueDate = formModel.dueDateOrUrl,
-                          linkId = "existing-dd-pay-now-button"
-                        ).url
+                        case "wyo" =>
+                          val makePaymentRedirect: String = controllers.routes.MakePaymentController.makeGenericPayment(
+                            earliestDueDate = formModel.dueDateOrUrl,
+                            linkId = "existing-dd-pay-now-button"
+                          ).url
                           infoLog(s"User clicked Yes to pay even DD has hence navigating to payment " + makePaymentRedirect)
                           Future.successful(Redirect(makePaymentRedirect))
                         case _ =>
@@ -78,12 +81,14 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
                           Future.successful(Redirect(formModel.dueDateOrUrl.get))
                       }
                     case _ =>
-                      val wyo: String = controllers.routes.WhatYouOweController.show.url
-                      infoLog(s"User clicked No to pay hence navigating to wyo ")
-                      Future.successful(Redirect(wyo))
+                      val wyoLink: String = controllers.routes.WhatYouOweController.show.url
+                      infoLog(s"User clicked No to pay hence navigating to wyo " + wyoLink)
+                      Future.successful(Redirect(wyoLink))
                   }
                 }
-          )
+              )
         }
+      }
+    }
   }
 }
