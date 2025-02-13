@@ -103,7 +103,7 @@ class ExistingDirectDebitControllerSpec extends ControllerBaseSpec {
       "redirect to the payment page when user clicked yes and form submitted from wyo page" in {
 
         val postRequest = fakePostRequest.withFormUrlEncodedBody(("value", ExistingDDContinuePayment.Yes.toString),
-          ("dueDateOrUrl",dueDateOrUrl), ("linkId",linkId), ("ddStatus", ddStatus.toString)).withMethod("POST")
+          ("dueDateOrUrl",dueDateOrUrl), ("linkId",linkId), ("directDebitMandateFound", ddStatus.toString)).withMethod("POST")
 
         lazy val result = {
           mockPrincipalAuth()
@@ -128,7 +128,7 @@ class ExistingDirectDebitControllerSpec extends ControllerBaseSpec {
         val chargeDetailMakePaymentUrl = " /vat-through-software/make-payment/50000/7/2017/2017-07-31/VAT%20Return%20Debit%20Charge/2017-12-07/VAT-RTN-DEBIT-2"
 
         val postRequest = fakePostRequest.withFormUrlEncodedBody(("value", ExistingDDContinuePayment.Yes.toString),
-          ("dueDateOrUrl", chargeDetailMakePaymentUrl), ("linkId","charge-breakdown"), ("ddStatus", ddStatus.toString)).withMethod("POST")
+          ("dueDateOrUrl", chargeDetailMakePaymentUrl), ("linkId","charge-breakdown"), ("directDebitMandateFound", ddStatus.toString)).withMethod("POST")
 
         lazy val result = {
           mockPrincipalAuth()
@@ -151,7 +151,7 @@ class ExistingDirectDebitControllerSpec extends ControllerBaseSpec {
       "redirect to the wyo page when user clicked No and form submitted from wyo page" in {
 
         val postRequest = fakePostRequest.withFormUrlEncodedBody(("value", ExistingDDContinuePayment.No.toString),
-          ("dueDateOrUrl",dueDateOrUrl), ("linkId",linkId), ("ddStatus", ddStatus.toString)).withMethod("POST")
+          ("dueDateOrUrl",dueDateOrUrl), ("linkId",linkId), ("directDebitMandateFound", ddStatus.toString)).withMethod("POST")
 
         lazy val result = {
           mockPrincipalAuth()
@@ -166,6 +166,27 @@ class ExistingDirectDebitControllerSpec extends ControllerBaseSpec {
     }
   }
 
+
+  "The ExistingDirectDebitController .submit method from wyo page without selecting yes or no" when {
+
+    "a principal user is authenticated" when {
+
+      "redirect to error page when user not selected any option and form submitted from wyo page" in {
+
+        val postRequest = fakePostRequest.withFormUrlEncodedBody(
+          ("dueDateOrUrl",dueDateOrUrl), ("linkId",linkId), ("directDebitMandateFound", ddStatus.toString)).withMethod("POST")
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockCustomerInfo(Right(customerInformationMax))
+          mockDateServiceCall()
+          mockServiceInfoCall()
+          controller.submit()(postRequest)
+        }
+        status(result) mustBe BAD_REQUEST
+      }
+    }
+  }
 
 
 }
