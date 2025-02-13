@@ -76,14 +76,14 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
   <p class="govuk-body">@messages("existingDD.p1")
    @messages("existingDD.p1.2")</p>
   <p class="govuk-body"> @messages("existingDD.p2.preText")
-     <a href="@appConfig.btaHomeUrl/messages/inbox">@messages("existingDD.p2.linkText")</a>@messages("existingDD.banner.p3.postText")
+     <a href="@appConfig.btaHomeUrl/messages/inbox" id="messages-inbox-link">@messages("existingDD.p2.linkText")</a>@messages("existingDD.banner.p3.postText")
    <br>@messages("existingDD.p2.postText")</p>
 
   <p class="govuk-body">@messages("existingDD.p3")</p>
 
   <details class="govuk-details">
    <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
+        <span class="govuk-details__summary-text" id="what-does-my-account-show-span">
          @messages("existingDD.details1.summary")
         </span>
    </summary>
@@ -95,7 +95,7 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
 
   <details class="govuk-details">
    <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
+        <span class="govuk-details__summary-text" id="why-have-i-been-charged-span">
          @messages("existingDD.details2.summary")
         </span>
    </summary>
