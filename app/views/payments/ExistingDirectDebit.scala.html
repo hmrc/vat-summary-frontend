@@ -60,7 +60,7 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
 }
 
 
-@mainTemplate(title = if(user.isAgent) messages("existingDD.title.tab") else messages("existingDD.title.tab"),
+@mainTemplate(title = messages("existingDD.title.tab"),
     appConfig = appConfig,
     serviceInfoContent = serviceInfoContent,
     user = Some(user),

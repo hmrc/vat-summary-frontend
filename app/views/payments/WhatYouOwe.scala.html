@@ -126,7 +126,7 @@
         @Money.pounds(model.totalAmount)
       </p>
 
-        @if(model.directDebitMandateFound){
+        @if(!user.isAgent && model.directDebitMandateFound){
         <div class="govuk-inset-text">
             <p>@messages("existingDD.banner.p1")</p>
             <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>

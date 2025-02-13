@@ -144,7 +144,7 @@ classes = "govuk-tag--red"
                        class="govuk-link">@messages("chargeTypeDetails.vatReturn")</a>.
                 </p>
             }
-            @if(model.directDebitMandateFound && model.chargeType == "VAT Return Debit Charge") {
+            @if(!user.isAgent && model.directDebitMandateFound && model.chargeType == "VAT Return Debit Charge") {
             <div class="govuk-inset-text">
                 <p>@messages("existingDD.banner.p1")</p>
                 <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>
