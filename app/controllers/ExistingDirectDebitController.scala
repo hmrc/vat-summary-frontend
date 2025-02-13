@@ -45,10 +45,10 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
   def show(dueDateOrUrl: String, linkId: String, ddStatus: Boolean): Action[AnyContent] = authorisedController.financialAction {
     implicit request =>
       implicit user =>
-        serviceInfoService.getPartial.flatMap {
+        serviceInfoService.getPartial map {
           serviceInfoContent =>
-            Future.successful(Ok(view(ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus),
-              form, ExistingDDContinuePayment.options, serviceInfoContent)))
+            Ok(view(ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus),
+              form, ExistingDDContinuePayment.options, serviceInfoContent))
           }
       }
 
@@ -56,15 +56,15 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
   def submit() : Action[AnyContent] = authorisedController.financialAction {
     implicit request => {
       implicit user => {
-        serviceInfoService.getPartial.flatMap {
+        serviceInfoService.getPartial map {
           serviceInfoContent =>
             form.bindFromRequest()
               .fold(
-                formWithErrors => Future.successful(BadRequest(view(
+                formWithErrors => BadRequest(view(
                   ExistingDirectDebitViewModel(formWithErrors.data.get("dueDateOrUrl"),
                     formWithErrors.data.get("linkId").get,
                     formWithErrors.data.get("directDebitMandateFound").get.toBoolean),
-                    formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent))),
+                    formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent)),
                 formModel => {
                   formModel.value match {
                     case Yes =>
@@ -74,16 +74,19 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
                             earliestDueDate = formModel.dueDateOrUrl,
                             linkId = "existing-dd-pay-now-button"
                           ).url
-                          infoLog(s"User clicked Yes to pay even DD has hence navigating to payment " + makePaymentRedirect)
-                          Future.successful(Redirect(makePaymentRedirect))
+                          infoLog(s"[ExistingDirectDebitController] [submit] " +
+                            s"User clicked Yes to pay even DD has hence navigating to payment " + makePaymentRedirect)
+                           Redirect(makePaymentRedirect)
                         case _ =>
-                          infoLog(s"User clicked Yes to pay even DD has hence navigating to payment " + formModel.dueDateOrUrl.get)
-                          Future.successful(Redirect(formModel.dueDateOrUrl.get))
+                          infoLog(s" [ExistingDirectDebitController] [submit] " +
+                            s"User clicked Yes to pay even DD has hence navigating to payment " + formModel.dueDateOrUrl.get)
+                          Redirect(formModel.dueDateOrUrl.get)
                       }
                     case _ =>
                       val wyoLink: String = controllers.routes.WhatYouOweController.show.url
-                      infoLog(s"User clicked No to pay hence navigating to wyo " + wyoLink)
-                      Future.successful(Redirect(wyoLink))
+                      infoLog(s"[ExistingDirectDebitController] [submit] " +
+                        s"User clicked No to pay hence navigating to wyo " + wyoLink)
+                      Redirect(wyoLink)
                   }
                 }
               )
