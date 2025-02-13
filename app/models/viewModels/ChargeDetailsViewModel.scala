@@ -25,6 +25,7 @@ import java.time.LocalDate
 trait ChargeDetailsViewModel {
   val chargeType: String
   val outstandingAmount: BigDecimal
+  val directDebitMandateFound: Boolean
 
   def title(implicit messages: Messages): String = messages(PaymentMessageHelper.getChargeType(chargeType).title)
   def description(isAgent: Boolean)(implicit messages: Messages): String

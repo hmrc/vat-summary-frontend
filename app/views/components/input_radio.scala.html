@@ -1,0 +1,64 @@
+@*
+ * Copyright 2024 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.viewModels.helpers.RadioOption
+
+@(
+    field: Field,
+    inputs: Seq[RadioOption],
+    headingKey: Option[String] = None,
+    headingId: Option[String] = None,
+    legendText: Option[String] = None,
+    legendClass: Option[String] = None,
+    hint: Option[String] = None,
+    noMarginClass: Option[String] = None,
+    hintTextSpacing: Option[String] = None
+)(implicit messages: Messages)
+
+<div class="govuk-form-group @if(field.hasErrors){form-group-error govuk-form-group--error}">
+    <fieldset class="govuk-fieldset" id="@{field.id}" @if(hint.isDefined){aria-describedby="form-hint-text"}>
+            @if(headingKey.isDefined && headingId.isDefined) {
+                @components.heading(headingId.get, headingKey.get)
+            }
+
+            @if(legendText.isDefined && legendClass.isDefined) {
+                <span class="bold-small @if(legendClass.nonEmpty){@{legendClass.get} span-inline-block}">@legendText</span>
+            }
+
+            <div class="govuk-hint">
+                @if(hint.nonEmpty){
+                  <span id="form-hint-text" class="govuk-hint @{hintTextSpacing}">@Html(hint.get)</span>
+                }
+                @field.errors.map { error =>
+                            <span class="govuk-error-message margin-bottom-small" id="error-message-@{field.id}-input"><span id="visually-hidden-error-prefix" class="govuk-visually-hidden">@messages("error.message.prefix")</span> @messages(error.message, error.args: _*)</span>
+                }
+            </div>
+            @for(input <- inputs) {
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="@{input.id}" type="radio" name="@{field.id}" value="@{input.value}"
+                           @if(field.value == Some(input.value)){checked="checked"}
+                           data-journey-val="@{input.value}"/>
+
+                    <label class="govuk-label govuk-radios__label" for="@{input.id}">
+                        @messages(input.messageKey)
+                    </label>
+                </div>
+
+            }
+    </fieldset>
+</div>
+
+

@@ -98,6 +98,7 @@ whatYouOwe.due = due
 whatYouOwe.viewReturn = View VAT Return
 whatYouOwe.headCell.paymentType = Payment type
 whatYouOwe.headCell.amountDue = Amount due
+
 whatYouOwe.paymentClearanceParaOne = Payments can take up to 5 working days to clear, depending on
 whatYouOwe.paymentClearanceLink = the payment method you use (opens in a new tab)
 whatYouOwe.paymentClearanceLink.agent = the payment method your client uses (opens in a new tab)
@@ -128,6 +129,51 @@ whatYouOwe.details.agent.paymentHelpFive = If they’ve already set up a plan, t
 whatYouOwe.details.agent.paymentHelpSix = show as estimates on this page
 whatYouOwe.details.agent.paymentHelpSeven = are included in their existing payment plan
 whatYouOwe.estimate = estimate
+
+whatYouOwe.charges.heading = Why charges may still show as owing after you have made a payment
+whatYouOwe.charges.p1.preText = Payments can take up to 5 working days to clear, depending on
+whatYouOwe.charges.p1.linkText = the payment method you use (opens in a new tab)
+whatYouOwe.charges.p1.postText = .
+whatYouOwe.charges.p2 = For your Direct Debit, there may be a few days delay between the payment being collected and showing as paid on this page.
+
+whatYouOwe.latePayment.heading = Late payment interest charges
+whatYouOwe.latePayment.p1 = Any late payment interest relating to your VAT Return is indicative and will not be charged, after the successful collection of your Direct Debit.
+whatYouOwe.latePayment.p2 = You will be charged late payment interest if your Direct Debit payment is not successfully collected.
+whatYouOwe.latePayment.p3 = Late payment interest may be charged if you do not submit your VAT return on time.
+
+existingDD.banner.p1 = You have a Direct Debit Instruction in place.
+existingDD.banner.p2 = Only the amount due on your VAT Return will be collected by Direct Debit.
+existingDD.banner.p2.2 = Other charges, penalties and interest showing as owing will still need to be paid by other methods.
+existingDD.banner.p3.preText = For full details of your Direct Debit payment check your
+existingDD.banner.p3.linkText = Messages inbox
+existingDD.banner.p3.postText = .
+existingDD.banner.p3.extra = We'll send you a notice there when we're due to collect your payment.
+existingDD.banner.p4 = Be careful not to make a payment for an amount that will be covered by your Direct Debit Instruction.
+existingDD.banner.p5.linkText = View and manage your Direct Debit details
+
+existingDD.title.tab = You have a Direct Debit Instruction in place
+existingDD.title = You have a Direct Debit Instruction in place
+existingDD.p1 = Only the amount due on your VAT Return will be collected by Direct Debit.
+existingDD.p1.2 = Other charges, penalties and interest showing as owing will still need to be paid by other methods.
+existingDD.p2.preText = For full details of your Direct Debit payment check your
+existingDD.p2.linkText = Messages inbox
+existingDD.p2.postText = We''ll'' send you a notice there when we're due to collect your payment.
+existingDD.p3 = Be careful not to make a payment for an amount that will be covered by your Direct Debit Instruction.
+
+existingDD.details1.summary = Why does my account show that I still owe money after my Direct Debit has been collected?
+existingDD.details1.p1 = There may be a few days delay between the Direct Debit payment being collected and showing as paid on the ''What you owe'' page.
+existingDD.details1.p2 = In addition, only the amount due on your VAT return will be collected by Direct Debit.
+
+existingDD.details2.summary = Why have I been charged late payment interest?
+existingDD.details2.p1 = Any late payment interest relating to your VAT Return is indicative and will not be charged,
+existingDD.details2.p1.2 = after the successful collection of your Direct Debit. Late payment interest may be charged if you do not submit your return on time.
+
+existingDD.radio.question = Do you still want to make a payment?
+existingDDContinuePayment.Yes = Yes, I want to make a payment for something not covered by the Direct Debit Instruction
+existingDDContinuePayment.No = No, take me back to 'What you owe'
+existingDD.radio.required = Select whether you still want to make a payment
+existingDD.continue = Continue
+error.summary.title1 = There is a problem
 
 chargeTypeDetails.viewThis = View this
 chargeTypeDetails.vatReturn = VAT Return

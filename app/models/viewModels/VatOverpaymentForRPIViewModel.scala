@@ -30,7 +30,8 @@ case class VatOverpaymentForRPIViewModel(periodFrom: LocalDate,
                                          amountReceived: BigDecimal,
                                          leftToPay: BigDecimal,
                                          isOverdue: Boolean,
-                                         chargeReference: Option[String]) extends CrystallisedViewModel {
+                                         chargeReference: Option[String],
+                                         directDebitMandateFound: Boolean) extends CrystallisedViewModel {
 
   override val outstandingAmount: BigDecimal = leftToPay
 

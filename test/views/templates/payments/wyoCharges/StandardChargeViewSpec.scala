@@ -32,7 +32,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
 
     "a charge is overdue and view return is enabled" should {
 
-      lazy val view = injectedView(chargeModel1)
+      lazy val view = injectedView(chargeModel1, false)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -83,7 +83,7 @@ class StandardChargeViewSpec extends ViewBaseSpec {
 
     "a charge is not overdue and view return is not enabled" should {
 
-      lazy val view = injectedView(chargeModel2)
+      lazy val view = injectedView(chargeModel2, false)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

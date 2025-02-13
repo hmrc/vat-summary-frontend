@@ -63,6 +63,14 @@
     }
 }
 
+@ddMessageHtml = {
+@displayDate(model.dueDate) @if(model.directDebitMandateFound) {@govukTag(Tag(
+content = Text(messages("base.back")),
+classes = "govuk-tag--red"
+))
+}
+}
+
 @dueDateHtml = {
     @displayDate(model.dueDate) @if(model.isOverdue) {@govukTag(Tag(
                                                         content = Text(messages("common.overdue")),
@@ -136,7 +144,17 @@
                        class="govuk-link">@messages("chargeTypeDetails.vatReturn")</a>.
                 </p>
             }
-
+            @if(!user.isAgent && model.directDebitMandateFound && model.chargeType == "VAT Return Debit Charge") {
+            <div class="govuk-inset-text">
+                <p>@messages("existingDD.banner.p1")</p>
+                <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>
+                <p>@messages("existingDD.banner.p3.preText")
+                    <a href= "@appConfig.btaHomeUrl/messages/inbox" id="messages-inbox-link">@messages("existingDD.banner.p3.linkText")</a>@messages("existingDD.banner.p3.postText")
+                    @messages("existingDD.banner.p3.extra")</p>
+                <p>@messages("existingDD.banner.p4")</p>
+                <p><a href="@appConfig.paymentsAndRepaymentsUrl" id="view-and-manage-dd-details-link">@messages("existingDD.banner.p5.linkText")</a></p>
+            </div>
+            }
             @govukSummaryList(SummaryList(
                 rows = Seq(
                     SummaryListRow(
@@ -184,10 +202,22 @@
             }
 
             @if(!user.isAgent) {
-                @govukButton(Button(
-                    content = Text(messages("chargeTypeDetails.button")),
-                    href    = Some(model.makePaymentRedirect)
-                ))
+                @if(model.directDebitMandateFound) {
+                    @govukButton(Button(
+                        content = Text(messages("chargeTypeDetails.button")),
+                        href    = Some(controllers.routes.ExistingDirectDebitController.show(
+                                    dueDateOrUrl = model.makePaymentRedirect,
+                                    linkId = "charge-breakdown",
+                                    ddStatus = model.directDebitMandateFound
+                                    ).url
+                                    )
+            ))
+                } else {
+                    @govukButton(Button(
+                        content = Text(messages("chargeTypeDetails.button")),
+                        href    = Some(model.makePaymentRedirect)
+                    ))
+                }
             }
 
             <p class="govuk-body">

@@ -69,9 +69,9 @@
     </ul>
 }
 
-@paymentHtml(chargeModel: ChargeDetailsViewModel) = @{
+@paymentHtml(chargeModel: ChargeDetailsViewModel, ddStatus: Boolean) = @{
   chargeModel match {
-    case charge: StandardChargeViewModel => standardCharge(charge)
+    case charge: StandardChargeViewModel => standardCharge(charge, ddStatus)
     case charge: CrystallisedViewModel   => crystallisedCharge(charge)
     case charge: EstimatedViewModel      => estimatedCharge(charge)
   }
@@ -84,7 +84,7 @@
 @chargeRows = @{
   val individualRows = model.charges.map { charge =>
     Seq(
-      TableRow(content = HtmlContent(paymentHtml(charge))),
+      TableRow(content = HtmlContent(paymentHtml(charge, model.directDebitMandateFound))),
       TableRow(content = HtmlContent(Money.pounds(charge.outstandingAmount)), format = Some("numeric"))
     )
   }
@@ -126,7 +126,20 @@
         @Money.pounds(model.totalAmount)
       </p>
 
-      @breathingSpaceInset
+        @if(!user.isAgent && model.directDebitMandateFound){
+        <div class="govuk-inset-text">
+            <p>@messages("existingDD.banner.p1")</p>
+            <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>
+            <p>@messages("existingDD.banner.p3.preText")
+                <a href= "@appConfig.btaHomeUrl/messages/inbox" id="messages-inbox-link">@messages("existingDD.banner.p3.linkText")</a>@messages("existingDD.banner.p3.postText")
+                @messages("existingDD.banner.p3.extra")</p>
+            <p>@messages("existingDD.banner.p4")</p>
+            <p><a href="@appConfig.paymentsAndRepaymentsUrl" id="view-and-manage-dd-details-link">@messages("existingDD.banner.p5.linkText")</a></p>
+        </div>
+        }
+
+
+        @breathingSpaceInset
 
       @govukTable(Table(
         rows = chargeRows,
@@ -139,12 +152,31 @@
         )),
         captionClasses = "govuk-table__caption--m"
       ))
+        <h3 class="govuk-heading-s">@messages("whatYouOwe.charges.heading")</h3>
+
       <p class="govuk-body">@messages("whatYouOwe.paymentClearanceParaOne")
         <a class="govuk-link" target="_blank" rel="noreferrer noopener" href="@appConfig.govUkPayVATUrl">
           @messages(s"whatYouOwe.paymentClearanceLink$agentSuffix")</a>@messages("common.fullStop")
       </p>
 
-      <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
+        @if(model.directDebitMandateFound){
+        <p class="govuk-body">@messages("whatYouOwe.charges.p2")</p>
+        }
+
+        <h3 class="govuk-heading-s">@messages("whatYouOwe.latePayment.heading")</h3>
+
+        @if(user.isAgent) {
+            <p class="govuk-body">@messages(s"whatYouOwe.paymentClearanceParaTwo$agentSuffix")</p>
+        } else {
+            @if(model.directDebitMandateFound){
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p1")</p>
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p2")</p>
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p3")</p>
+            } else {
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p2")</p>
+                <p class="govuk-body">@messages("whatYouOwe.latePayment.p3")</p>
+            }
+        }
 
       @if(user.isAgent && appConfig.features.overdueTimeToPayDescriptionEnabled() ) {
         @govukDetails(Details(
@@ -155,9 +187,23 @@
       }
       @if(appConfig.features.webchatEnabled() && user.isAgent){ @webchatLink }
       @if(!user.isAgent) {
-        @govukButton(Button(
-          content = Text(messages("whatYouOwe.makePayment")),
-          id = Some("what-you-owe-pay-now-button"),
+        @if(model.directDebitMandateFound){
+            @govukButton(Button(
+              content = Text(messages("whatYouOwe.makePayment")),
+              id = Some("what-you-owe-pay-now-button"),
+
+
+              href = Some(controllers.routes.ExistingDirectDebitController.show(
+                  dueDateOrUrl = model.earliestDueDateFormatted.get,
+                  linkId = "wyo",
+                  ddStatus = model.directDebitMandateFound
+        ).url
+              )
+            ))
+        } else {
+            @govukButton(Button(
+              content = Text(messages("whatYouOwe.makePayment")),
+              id = Some("what-you-owe-pay-now-button"),
 
 
           href = Some(controllers.routes.MakePaymentController.makeGenericPayment(
@@ -166,6 +212,7 @@
             ).url
           )
         ))
+        }
         @if(appConfig.features.webchatEnabled()){ @webchatLink }
       }
 
@@ -196,9 +243,13 @@
             @messages("whatYouOwe.isIncorrectThree")</a>.
         </p>
         <p id="incorrect-p2" class ="govuk-body">@messages("whatYouOwe.isIncorrectFour")
-          <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-make-payment-link"
-            href="@controllers.routes.MakePaymentController.makeGenericPayment(earliestDueDate=model.earliestDueDateFormatted,linkId="what-you-owe-make-payment-link").url">
-
+            @if(model.directDebitMandateFound){
+            <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-make-payment-link"
+            href="@controllers.routes.ExistingDirectDebitController.show(dueDateOrUrl=model.earliestDueDateFormatted.get,linkId="wyo",ddStatus = model.directDebitMandateFound).url">
+            } else {
+            <a class="govuk-link" target="_blank" rel="noreferrer noopener" id="what-you-owe-dd-make-payment-link"
+               href="@controllers.routes.MakePaymentController.makeGenericPayment(earliestDueDate=model.earliestDueDateFormatted,linkId="what-you-owe-make-payment-link").url">
+            }
             @messages("whatYouOwe.isIncorrectFive")</a>.
         </p>
       }

@@ -26,7 +26,7 @@ class ChargeDetailsViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with 
   "The generateHash function" should {
 
     "generate a consistent MD5 hash from a given view model and VRN" in {
-      whatYouOweCharge.generateHash("999999999") shouldBe "e78c89c487e9884e2e5089d35dcc53dc"
+      whatYouOweCharge.generateHash("999999999") shouldBe "203f0fcfa5ab35870e6bf6b00cd556ef"
     }
 
     "generate unique MD5 hashes" when {
