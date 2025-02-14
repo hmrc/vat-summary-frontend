@@ -35,7 +35,7 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
     isOverdue = true,
     chargeReference = Some("XD002750002155"),
     periodFrom = Some(LocalDate.parse("2021-01-01")),
-    periodTo = Some(LocalDate.parse("2021-03-31"))
+    periodTo = Some(LocalDate.parse("2021-03-31")), false
   )
 
   val noDatesModel: StandardChargeViewModel = model.copy(periodFrom = None, periodTo = None)

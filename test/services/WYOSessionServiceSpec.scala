@@ -57,6 +57,7 @@ class WYOSessionServiceSpec extends AnyWordSpecLike with Matchers with MockitoSu
       val unsupportedModel = new ChargeDetailsViewModel {
         val chargeType: String = "unsupportedChargeType"
         override val outstandingAmount: BigDecimal = 0
+        override val directDebitMandateFound: Boolean = false
         override def description(isAgent: Boolean)(implicit messages: play.api.i18n.Messages): String = "description"
       }
 

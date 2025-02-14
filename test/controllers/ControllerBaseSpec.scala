@@ -24,7 +24,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import mocks.MockAppConfig
-import models.{CustomerInformation, ServiceResponse, User, WYODatabaseModel}
+import models.{CustomerInformation, DirectDebitStatus, ServiceResponse, User, WYODatabaseModel}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -129,6 +129,11 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     (mockPaymentsService.getOpenPayments(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
       .returns(Future.successful(result))
+
+  def mockGetDirectDebitStatus(directDebitStatus: ServiceResponse[DirectDebitStatus]): Any =
+    (mockPaymentsService.getDirectDebitStatus(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returns(Future.successful(directDebitStatus))
 
   def mockCustomerInfo(accountDetailsResponse: HttpResult[CustomerInformation]): Any =
     (mockAccountDetailsService.getAccountDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))

@@ -67,6 +67,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           mockWYOSessionServiceCall()
           mockAudit()
           controller.show(fakeRequest)
@@ -92,6 +93,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           mockAudit()
           controller.show(fakeRequest)
         }
@@ -117,6 +119,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
 
@@ -140,6 +143,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall(Left(UnexpectedStatusError("500", "oops")))
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
 
@@ -165,6 +169,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
 
@@ -188,6 +193,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationMax))
         mockDateServiceCall()
         mockPenaltyDetailsServiceCall()
+        mockGetDirectDebitStatus(Right(directDebitEnrolled))
         mockWYOSessionServiceCall()
         mockAudit()
         controller.show(agentFinancialRequest)
@@ -250,7 +256,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         val charge = payment.copy(accruingPenaltyAmount = None)
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(Seq(charge), mandationStatus = "MTDfB", penaltyDetailsModelMax, ddStatus = false
+          )(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModelWithEstimatedLPI)
       }
@@ -262,7 +269,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(Seq(paymentNoAccInterest), mandationStatus = "MTDfB", penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(whatYouOweChargeModel)))
       }
@@ -273,7 +280,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(Seq(unrepayableOverpayment), mandationStatus = "MTDfB", penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(wyoChargeUnrepayableOverpayment)))
       }
@@ -284,7 +291,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(overpaymentforTax), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(Seq(overpaymentforTax), mandationStatus = "MTDfB", penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           totalAmount = BigDecimal(10002),
@@ -304,7 +311,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentforTaxLPP1),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMax)(fakeRequest)
+            penalties = penaltyDetailsModelMax, false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1Model)))
       }
@@ -318,7 +325,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentForTaxLPP1EstLPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMax)(fakeRequest)
+            penalties = penaltyDetailsModelMax, false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           totalAmount = BigDecimal(10002),
@@ -338,7 +345,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentForTaxLPP1LPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMax)(fakeRequest)
+            penalties = penaltyDetailsModelMax, false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1LPIModel)))
       }
@@ -349,7 +356,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return the correct view model with 1 crystalised charge model" in {
         val result = {
           mockDateServiceCall()
-          controller.constructViewModel(Seq(overpaymentforTaxLPI), mandationStatus = "MTDfB", penaltyDetailsModelMax)(fakeRequest)
+          controller.constructViewModel(Seq(overpaymentforTaxLPI), mandationStatus = "MTDfB", penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           charges = Seq(crystallisedVATOverpaymentforTaxLPI),
@@ -366,7 +373,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentforTaxLPP2),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
+            penalties = penaltyDetailsLPP2ModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP2Model)))
       }
@@ -380,7 +387,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentForTaxLPP2EstLPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
+            penalties = penaltyDetailsLPP2ModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           totalAmount = BigDecimal(10002),
@@ -400,7 +407,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentForTaxLPP2LPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsLPP2ModelMax)(fakeRequest)
+            penalties = penaltyDetailsLPP2ModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP2LPIModel)))
       }
@@ -414,7 +421,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(vatInaccAssessPen),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMin)(fakeRequest)
+            penalties = penaltyDetailsModelMin, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           totalAmount = BigDecimal(10002),
@@ -434,7 +441,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(vatInaccAssessPenLPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMin)(fakeRequest)
+            penalties = penaltyDetailsModelMin, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(
           whatYouOweViewModel.copy(totalAmount = BigDecimal(10000),
@@ -457,7 +464,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Seq(payment, crystallisedInterest, lateSubmissionPenalty),
             mandationStatus = "MTDfB",
-            penaltyDetailsModelMax
+            penaltyDetailsModelMax, ddStatus = false
           )(fakeRequest)
         }
 
@@ -474,7 +481,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             Seq(payment.copy(chargeReference = None, chargeType = VatReturn1stLPPLPI)),
             mandationStatus = "MTDfB",
-            penaltyDetailsModelMax
+            penaltyDetailsModelMax, ddStatus = false
           )(fakeRequest)
         }
         result shouldBe None
@@ -614,14 +621,14 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return a crystallised penalty and estimated interest view model" in {
         val charge = payment.copy(chargeType = VatReturn1stLPP)
         mockDateServiceCall()
-        controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage)) shouldBe
+        controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), false) shouldBe
            Seq(Some(crystallisedPenaltyModel), Some(estimatedLPIPenalty))
       }
 
       "return a crystallised penalty view model" in {
         val charge = payment.copy(chargeType = VatReturn1stLPP, accruingInterestAmount = None)
         mockDateServiceCall()
-        controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage)) shouldBe
+        controller.buildCrystallisedChargePlusEstimates(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), false) shouldBe
           Seq(Some(crystallisedPenaltyModel))
       }
     }
@@ -633,7 +640,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "return three charges" in {
         mockDateServiceCall()
-        controller.buildChargePlusEstimates(payment, penaltyDetailsModelMax)(fakeRequest).size shouldBe 3
+        controller.buildChargePlusEstimates(payment, penaltyDetailsModelMax, false)(fakeRequest).size shouldBe 3
       }
     }
 
@@ -642,7 +649,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return two charges" in {
         mockDateServiceCall()
         val charge = payment.copy(accruingInterestAmount = None)
-        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMax)(fakeRequest).size shouldBe 2
+        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMax, false)(fakeRequest).size shouldBe 2
       }
     }
 
@@ -651,7 +658,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return two charges" in {
         mockDateServiceCall()
         val charge = payment.copy(accruingPenaltyAmount = None)
-        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin)(fakeRequest).size shouldBe 2
+        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin, false)(fakeRequest).size shouldBe 2
       }
     }
 
@@ -660,7 +667,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "return one charge" in {
         mockDateServiceCall()
         val charge = payment.copy(accruingInterestAmount = None, accruingPenaltyAmount = None)
-        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin)(fakeRequest).size shouldBe 1
+        controller.buildChargePlusEstimates(charge, penaltyDetailsModelMin, false)(fakeRequest).size shouldBe 1
       }
     }
   }
@@ -669,7 +676,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return a StandardChargeViewModel" in {
         mockDateServiceCall()
-        controller.buildStandardChargeViewModel(payment) shouldBe Some(StandardChargeViewModel(
+        controller.buildStandardChargeViewModel(payment, false) shouldBe Some(StandardChargeViewModel(
           "VAT Return Debit Charge",
           10000,
           10000,
@@ -679,7 +686,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           isOverdue = false,
           Some("XD002750002155"),
           Some(LocalDate.parse("2019-01-01")),
-          Some(LocalDate.parse("2019-02-02"))
+          Some(LocalDate.parse("2019-02-02")), directDebitMandateFound = false
         ))
     }
   }
@@ -688,7 +695,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
     "return a VatOverpaymentForRPIViewModel" in {
       mockDateServiceCall()
-      controller.buildVatOverpaymentForRPIViewModel(overpaymentForRPI) shouldBe
+      controller.buildVatOverpaymentForRPIViewModel(overpaymentForRPI, false) shouldBe
         Some(VatOverpaymentForRPIViewModel(
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
@@ -698,7 +705,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           0,
           10000,
           isOverdue = false,
-          Some("XD002750002155")
+          Some("XD002750002155"), directDebitMandateFound = false
         ))
     }
   }
@@ -710,7 +717,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "chargeReference is present" in {
         mockDateServiceCall()
         val charge = payment.copy(chargeType = VatReturnLPI, clearedAmount = None)
-        controller.buildCrystallisedIntViewModel(charge) shouldBe Some(CrystallisedInterestViewModel(
+        controller.buildCrystallisedIntViewModel(charge, false) shouldBe Some(CrystallisedInterestViewModel(
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
@@ -721,7 +728,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           isOverdue = false,
           "XD002750002155",
           isPenaltyReformPenaltyLPI = false,
-          isNonPenaltyReformPenaltyLPI = false
+          isNonPenaltyReformPenaltyLPI = false, directDebitMandateFound = false
         ))
       }
     }
@@ -730,7 +737,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "chargeReference is missing" in {
         val charge = payment.copy(chargeType = VatReturnLPI, chargeReference = None)
-        controller.buildCrystallisedIntViewModel(charge) shouldBe None
+        controller.buildCrystallisedIntViewModel(charge, false) shouldBe None
       }
 
     }
@@ -741,13 +748,13 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     "return a EstimatedInterestViewModel" when {
 
       "accruingInterestAmount is present" in {
-        controller.buildEstimatedIntViewModel(payment) shouldBe Some(EstimatedInterestViewModel(
+        controller.buildEstimatedIntViewModel(payment, false) shouldBe Some(EstimatedInterestViewModel(
           LocalDate.parse("2019-01-01"),
           LocalDate.parse("2019-02-02"),
           "VAT Return LPI",
           2,
           isPenaltyReformPenaltyLPI = false,
-          isNonPenaltyReformPenaltyLPI = false
+          isNonPenaltyReformPenaltyLPI = false, directDebitMandateFound = false
         ))
       }
     }
@@ -756,7 +763,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "accruingInterestAmount is missing" in {
         val charge = payment.copy(accruingInterestAmount = None)
-        controller.buildEstimatedIntViewModel(charge) shouldBe None
+        controller.buildEstimatedIntViewModel(charge, false) shouldBe None
       }
     }
   }
@@ -769,7 +776,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         controller.buildEstimatedLPPViewModel(
           payment,
           Some(LPPDetailsModelMaxWithoutLPP1HRPercentage),
-          breathingSpace = false
+          breathingSpace = false, false
         ) shouldBe Some(EstimatedLPP1ViewModel(
           "15",
           "30",
@@ -781,7 +788,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT Return 1st LPP",
           timeToPayPlan = false,
-          breathingSpace = false
+          breathingSpace = false, directDebitMandateFound = false
         ))
       }
 
@@ -789,7 +796,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         controller.buildEstimatedLPPViewModel(
           payment,
           Some(LPPDetailsModelMaxWithLPP1HRPercentage),
-          breathingSpace = false
+          breathingSpace = false, false
         ) shouldBe Some(EstimatedLPP1ViewModel(
           "15",
           "30",
@@ -801,7 +808,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT Return 1st LPP",
           timeToPayPlan = false,
-          breathingSpace = false
+          breathingSpace = false, directDebitMandateFound = false
         ))
       }
     }
@@ -811,7 +818,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "accruingPenaltyAmount and all appropriate LPP2 penalty details are present" in {
         val charge = payment.copy(chargeType = AACharge)
         val penalty = LPPDetailsModelMaxWithLPP1HRPercentage.copy(penaltyCategory = "LPP2")
-        controller.buildEstimatedLPPViewModel(charge, Some(penalty), breathingSpace = false) shouldBe Some(EstimatedLPP2ViewModel(
+        controller.buildEstimatedLPPViewModel(charge, Some(penalty), breathingSpace = false, false) shouldBe Some(EstimatedLPP2ViewModel(
           "31",
           5.5,
           50.55,
@@ -819,7 +826,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT AA 2nd LPP",
           timeToPay = false,
-          breathingSpace = false
+          breathingSpace = false, directDebitMandateFound = false
         ))
       }
     }
@@ -829,30 +836,30 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "accruingPenaltyAmount is missing" in {
         val charge = payment.copy(accruingPenaltyAmount = None)
         controller.buildEstimatedLPPViewModel(
-          charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false
+          charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), breathingSpace = false, ddStatus = false
         ) shouldBe None
       }
 
       "penalty type is not recognised" in {
         val penalty = LPPDetailsModelMaxWithLPP1HRPercentage.copy(penaltyCategory = "LPP3")
-        controller.buildEstimatedLPPViewModel(payment, Some(penalty), breathingSpace = false) shouldBe None
+        controller.buildEstimatedLPPViewModel(payment, Some(penalty), breathingSpace = false, ddStatus = false) shouldBe None
       }
 
       "penalty type is LPP1 but LPP1 details are missing" in {
         val penalty = LPPDetailsModelMaxWithLPP1HRPercentage
           .copy(LPP1LRDays = None, LPP1HRDays = None, LPP1LRPercentage = None,
             LPP1HRPercentage = None, LPP1LRCalculationAmount = None)
-        controller.buildEstimatedLPPViewModel(payment, Some(penalty), breathingSpace = false) shouldBe None
+        controller.buildEstimatedLPPViewModel(payment, Some(penalty), breathingSpace = false, ddStatus = false) shouldBe None
       }
 
       "penalty type is LPP2 but LPP2 details are missing" in {
         val penalty = LPPDetailsModelMaxWithLPP1HRPercentage
           .copy(penaltyCategory = "LPP2", LPP2Days = None, LPP2Percentage = None)
-        controller.buildEstimatedLPPViewModel(payment, Some(penalty), breathingSpace = false) shouldBe None
+        controller.buildEstimatedLPPViewModel(payment, Some(penalty), breathingSpace = false, ddStatus = false) shouldBe None
       }
 
       "no matching penalty was found" in {
-        controller.buildEstimatedLPPViewModel(payment, None, breathingSpace = false) shouldBe None
+        controller.buildEstimatedLPPViewModel(payment, None, breathingSpace = false, ddStatus = false) shouldBe None
       }
     }
   }
@@ -867,7 +874,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "chargeReference and all appropriate LPP1 penalty details (lower rate) are present" in {
         val lppDetails = LPPDetailsModelMaxWithLPP1HRPercentage.copy(LPP1HRCalculationAmount = None)
         mockDateServiceCall()
-        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(lppDetails)) shouldBe Some(CrystallisedLPP1ViewModel(
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(lppDetails), false) shouldBe Some(CrystallisedLPP1ViewModel(
           "15",
           "15",
           Some("30"),
@@ -883,13 +890,13 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2019-02-02"),
           "VAT Return 1st LPP",
           "XD002750002155",
-          isOverdue = false
+          isOverdue = false, directDebitMandateFound = false
         ))
       }
 
       "chargeReference and all appropriate LPP1 penalty details (higher rate) are present" in {
         mockDateServiceCall()
-        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(LPPDetailsModelMaxWithLPP1HRPercentage)) shouldBe
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), false) shouldBe
           Some(CrystallisedLPP1ViewModel(
             "30",
             "15",
@@ -906,7 +913,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
             LocalDate.parse("2019-02-02"),
             "VAT Return 1st LPP",
             "XD002750002155",
-            isOverdue = false
+            isOverdue = false, directDebitMandateFound = false
           ))
       }
     }
@@ -915,7 +922,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "chargeReference and all appropriate LPP2 penalty details are present" in {
         mockDateServiceCall()
-        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(LPPLPP2DetailsModelMax)) shouldBe
+        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(LPPLPP2DetailsModelMax), false) shouldBe
           Some(CrystallisedLPP2ViewModel(
             "31",
             5.5,
@@ -927,7 +934,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
             LocalDate.parse("2019-02-02"),
             "VAT PA 2nd LPP",
             "XD002750002155",
-            isOverdue = false
+            isOverdue = false, directDebitMandateFound = false
           ))
       }
     }
@@ -936,33 +943,33 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "charge reference is missing for LPP1" in {
         val charge = penaltyCharge.copy(chargeReference = None)
-        controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage)) shouldBe None
+        controller.buildCrystallisedLPPViewModel(charge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), ddStatus = false) shouldBe None
       }
 
       "charge reference and penalty details are missing for LPP2" in {
         val charge = penaltyLPP2Charge.copy(chargeReference = None)
-        controller.buildCrystallisedLPPViewModel(charge, None) shouldBe None
+        controller.buildCrystallisedLPPViewModel(charge, None, ddStatus = false) shouldBe None
       }
 
       "penalty type is not recognised" in {
         val penalty = LPPDetailsModelMaxWithLPP1HRPercentage.copy(penaltyCategory = "LPP3")
-        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty), ddStatus = false) shouldBe None
       }
 
       "no matching penalty is provided" in {
-        controller.buildCrystallisedLPPViewModel(penaltyCharge, None) shouldBe None
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, None, ddStatus = false) shouldBe None
       }
 
       "penalty type is LPP1 but LPP1 details are missing" in {
         val penalty = LPPDetailsModelMaxWithLPP1HRPercentage
           .copy(LPP1LRDays = None, LPP1HRDays = None, LPP1LRPercentage = None,
             LPP1HRPercentage = None, LPP1LRCalculationAmount = None)
-        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty)) shouldBe None
+        controller.buildCrystallisedLPPViewModel(penaltyCharge, Some(penalty), false) shouldBe None
       }
 
       "penalty type is LPP2 but LPP2 details are missing" in {
         val penalty = LPPLPP2DetailsModelMax.copy(LPP2Days = None, LPP2Percentage = None)
-        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(penalty)) shouldBe None
+        controller.buildCrystallisedLPPViewModel(penaltyLPP2Charge, Some(penalty), ddStatus = false) shouldBe None
       }
     }
   }
@@ -974,7 +981,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "chargeReference is present" in {
         mockDateServiceCall()
         val charge = payment.copy(chargeType = VatLateSubmissionPen, clearedAmount = None)
-        controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe Some(LateSubmissionPenaltyViewModel(
+        controller.buildLateSubmissionPenaltyViewModel(charge, false) shouldBe Some(LateSubmissionPenaltyViewModel(
           "VAT Late Submission Pen",
           LocalDate.parse("2019-03-03"),
           10000,
@@ -983,7 +990,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           isOverdue = false,
           "XD002750002155",
           LocalDate.parse("2019-01-01"),
-          LocalDate.parse("2019-02-02")
+          LocalDate.parse("2019-02-02"), false
         ))
       }
     }
@@ -992,7 +999,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
       "chargeReference is missing" in {
         val charge = payment.copy(chargeType = VatLateSubmissionPen, chargeReference = None)
-        controller.buildLateSubmissionPenaltyViewModel(charge) shouldBe None
+        controller.buildLateSubmissionPenaltyViewModel(charge, false) shouldBe None
       }
     }
   }

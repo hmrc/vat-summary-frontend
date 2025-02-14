@@ -33,7 +33,8 @@ case class StandardChargeViewModel(chargeType: String,
                                    isOverdue: Boolean,
                                    chargeReference: Option[String],
                                    periodFrom: Option[LocalDate],
-                                   periodTo: Option[LocalDate]) extends ChargeDetailsViewModelWithDueDate with LoggerUtil {
+                                   periodTo: Option[LocalDate],
+                                   directDebitMandateFound: Boolean) extends ChargeDetailsViewModelWithDueDate with LoggerUtil {
 
   val makePaymentRedirect: String = periodTo match {
     case Some(date) =>

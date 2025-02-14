@@ -114,6 +114,7 @@ class WhatYouOweAuditModelSpec extends AnyWordSpecLike with Matchers {
         object UnknownCharge extends ChargeDetailsViewModel {
           override val chargeType: String = "Unknown"
           override val outstandingAmount: BigDecimal = 1
+          override val directDebitMandateFound: Boolean = false
           override def description(isAgent: Boolean)(implicit messages: Messages): String = ""
         }
 

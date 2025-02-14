@@ -1,0 +1,131 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.User
+@import models.viewModels._
+@import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
+@import views.html.templates.payments.wyoCharges._
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+@import models.viewModels.helpers.RadioOption
+
+
+
+@this(uiForm: FormWithCSRF,
+     mainTemplate: MainTemplate,
+     govukBreadcrumbs: GovukBreadcrumbs,
+     govukBackLink: GovukBackLink
+)
+
+@(model: ExistingDirectDebitViewModel, form: Form[_], radioOptions: Set[RadioOption], serviceInfoContent: Html)(
+implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@breadcrumbs = {
+    @govukBreadcrumbs(Breadcrumbs(
+        items = Seq(
+            BreadcrumbsItem(
+                content = Text(messages("breadcrumbs.bta")),
+                href = Some(appConfig.btaHomeUrl)
+                ),
+            BreadcrumbsItem(
+                content = Text(messages("vatDetails.title")),
+                href = Some(controllers.routes.VatDetailsController.details.url)
+            ),
+            BreadcrumbsItem(
+                content = Text(messages("whatYouOwe.title")),
+                href = Some(controllers.routes.WhatYouOweController.show.url)
+            )
+        )
+    ))
+}
+
+@backLink = {
+    @govukBackLink(BackLink(
+    href = appConfig.agentClientLookupHubUrl,
+    content = Text(messages("base.back"))
+    ))
+}
+
+
+@mainTemplate(title = messages("existingDD.title.tab"),
+    appConfig = appConfig,
+    serviceInfoContent = serviceInfoContent,
+    user = Some(user),
+    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+) {
+<div class="govuk-grid-row">
+ <div class="govuk-grid-column-two-thirds">
+
+  <header class="hmrc-page-heading govuk-!-margin-top-0">
+   <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@messages("existingDD.title")</h1>
+  </header>
+
+  <p class="govuk-body">@messages("existingDD.p1")
+   @messages("existingDD.p1.2")</p>
+  <p class="govuk-body"> @messages("existingDD.p2.preText")
+     <a href="@appConfig.btaHomeUrl/messages/inbox" id="messages-inbox-link">@messages("existingDD.p2.linkText")</a>@messages("existingDD.banner.p3.postText")
+   <br>@messages("existingDD.p2.postText")</p>
+
+  <p class="govuk-body">@messages("existingDD.p3")</p>
+
+  <details class="govuk-details">
+   <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text" id="what-does-my-account-show-span">
+         @messages("existingDD.details1.summary")
+        </span>
+   </summary>
+   <div class="govuk-details__text">
+    <p class="govuk-body">@messages("existingDD.details1.p1")</p>
+    <p class="govuk-body">@messages("existingDD.details1.p2")</p>
+   </div>
+  </details>
+
+  <details class="govuk-details">
+   <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text" id="why-have-i-been-charged-span">
+         @messages("existingDD.details2.summary")
+        </span>
+   </summary>
+   <div class="govuk-details__text">
+    <p class="govuk-body">@messages("existingDD.details2.p1")@messages("existingDD.details2.p1.2")</p>
+   </div>
+  </details>
+
+    @uiForm(routes.ExistingDirectDebitController.submit) {
+
+     @components.error_summary(form.errors, Some("existingDDContinuePayment.No"))
+
+
+     <div class="govuk-form-group">
+         <input class="govuk-input" id="dueDateOrUrl" name="dueDateOrUrl" type="hidden" value="@{model.dueDateOrUrl}">
+         <input class="govuk-input" id="linkId" name="linkId" type="hidden" value="@{model.linkId}">
+         <input class="govuk-input" id="directDebitMandateFound" name="directDebitMandateFound" type="hidden" value="@{model.directDebitMandateFound}">
+     </div>
+
+     @components.input_radio(
+        field = form("value"),
+        headingKey = Some("existingDD.radio.question"),
+        headingId = Some("existingDD-pay-quesion"),
+        inputs = radioOptions.toSeq
+    )
+
+     @components.submit_button(gaEvent = "PayDD")
+
+    }
+
+    </div>
+</div>
+}
