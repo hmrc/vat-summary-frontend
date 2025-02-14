@@ -21,6 +21,7 @@ import play.api.data.Forms.{mapping, optional, text}
 import play.api.data.{Form, Forms, Mapping}
 import play.api.data.Forms._
 import forms.mappings.Mappings
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import javax.inject.Inject
 
@@ -28,13 +29,18 @@ import javax.inject.Inject
 
 class ExistingDirectDebitFormProvider @Inject() extends FormErrorHelper with Mappings {
 
+  val redirectUrlMapping: Mapping[RedirectUrl] = mapping(
+    "url" -> nonEmptyText
+  )(RedirectUrl.apply)(RedirectUrl.unapply)
+
   def apply(): Form[ExistingDirectDebitFormModel] = {
     Form(mapping(
       "dueDateOrUrl" -> optional(nonEmptyText),
       "linkId" -> nonEmptyText,
       "directDebitMandateFound" -> Forms.boolean,
-      "value" -> enumerable[ExistingDDContinuePayment]("existingDD.radio.required")
-      ) (ExistingDirectDebitFormModel.formApply)(ExistingDirectDebitFormModel.formUnapply)
+      "value" -> enumerable[ExistingDDContinuePayment]("existingDD.radio.required"),
+      "redirectUrl" -> optional(redirectUrlMapping)
+    ) (ExistingDirectDebitFormModel.formApply)(ExistingDirectDebitFormModel.formUnapply)
     )
   }
 

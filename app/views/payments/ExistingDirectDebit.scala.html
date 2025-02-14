@@ -113,6 +113,7 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
          <input class="govuk-input" id="dueDateOrUrl" name="dueDateOrUrl" type="hidden" value="@{model.dueDateOrUrl}">
          <input class="govuk-input" id="linkId" name="linkId" type="hidden" value="@{model.linkId}">
          <input class="govuk-input" id="directDebitMandateFound" name="directDebitMandateFound" type="hidden" value="@{model.directDebitMandateFound}">
+         <input class="govuk-input" id="redirectUrl" name="redirectUrl" type="hidden" value="@{model.redirectUrl}">
      </div>
 
      @components.input_radio(

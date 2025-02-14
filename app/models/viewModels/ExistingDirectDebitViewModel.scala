@@ -17,16 +17,28 @@
 package models.viewModels
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 
 case class ExistingDirectDebitViewModel(dueDateOrUrl: Option[String],
                                         linkId: String,
-                                        directDebitMandateFound: Boolean) {
+                                        directDebitMandateFound: Boolean,
+                                        redirectUrl: Option[RedirectUrl]) {
 
 }
 
 
 object ExistingDirectDebitViewModel {
 
-  implicit val format: OFormat[ExistingDirectDebitViewModel] = Json.format[ExistingDirectDebitViewModel]
+  def formApply(dueDateOrUrl: Option[String],
+                linkId: String,
+                directDebitMandateFound: Boolean,
+                redirectUrl: Option[RedirectUrl]) = ExistingDirectDebitViewModel(dueDateOrUrl, linkId, directDebitMandateFound, redirectUrl)
+
+  def formUnapply(arg: ExistingDirectDebitViewModel): Option[(Option[String], String, Boolean, Option[RedirectUrl])] = Some((
+    arg.dueDateOrUrl,
+    arg.linkId,
+    arg.directDebitMandateFound,
+    arg.redirectUrl
+  ))
 }

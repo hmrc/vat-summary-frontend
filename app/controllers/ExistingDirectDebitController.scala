@@ -28,6 +28,8 @@ import forms.ExistingDirectDebitFormProvider
 import models.viewModels.ExistingDDContinuePayment.Yes
 import models.viewModels.helpers.Enumerable
 import play.api.data.Form
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl.idFunctor
+import uk.gov.hmrc.play.bootstrap.binders.{OnlyRelative, RedirectUrl}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,11 +49,20 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
       implicit user =>
         serviceInfoService.getPartial map {
           serviceInfoContent =>
-            Ok(view(ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus),
+            Ok(view(ExistingDirectDebitViewModel(Some(dueDateOrUrl), linkId, ddStatus, None),
               form, ExistingDDContinuePayment.options, serviceInfoContent))
           }
       }
 
+  def showFromChargeBreakdown(redirectUrl: RedirectUrl, linkId: String, ddStatus: Boolean): Action[AnyContent] = authorisedController.financialAction {
+    implicit request =>
+      implicit user =>
+        serviceInfoService.getPartial map {
+          serviceInfoContent =>
+            Ok(view(ExistingDirectDebitViewModel(None,linkId, ddStatus, Some(redirectUrl)),
+              form, ExistingDDContinuePayment.options, serviceInfoContent))
+        }
+  }
 
   def submit() : Action[AnyContent] = authorisedController.financialAction {
     implicit request => {
@@ -63,8 +74,10 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
                 formWithErrors => BadRequest(view(
                   ExistingDirectDebitViewModel(formWithErrors.data.get("dueDateOrUrl"),
                     formWithErrors.data.get("linkId").get,
-                    formWithErrors.data.get("directDebitMandateFound").get.toBoolean),
-                    formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent)),
+                    formWithErrors.data.get("directDebitMandateFound").get.toBoolean,
+                    Some(RedirectUrl(formWithErrors.data.get("redirectUrl").get))
+                    ),
+                   formWithErrors, ExistingDDContinuePayment.options, serviceInfoContent)),
                 formModel => {
                   formModel.value match {
                     case Yes =>
@@ -80,7 +93,9 @@ class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedCo
                         case _ =>
                           infoLog(s" [ExistingDirectDebitController] [submit] " +
                             s"User clicked Yes to pay even DD has hence navigating to payment " + formModel.dueDateOrUrl.get)
-                          Redirect(formModel.dueDateOrUrl.get)
+                          println("formmodel>>>>>> " + formModel)
+
+                          Redirect(formModel.redirectUrl.get.get(OnlyRelative).url)
                       }
                     case _ =>
                       val wyoLink: String = controllers.routes.WhatYouOweController.show.url

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings.*
 
@@ -98,5 +99,6 @@ lazy val microservice: Project = Project(appName, file("."))
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "it")).value,
     IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     IntegrationTest / parallelExecution  := false,
-    addTestReportOption(IntegrationTest, "int-test-reports")
-  )
+    addTestReportOption(IntegrationTest, "int-test-reports"),
+    RoutesKeys.routesImport += "uk.gov.hmrc.play.bootstrap.binders.RedirectUrl"
+)

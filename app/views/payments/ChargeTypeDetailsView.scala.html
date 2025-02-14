@@ -18,6 +18,8 @@
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
 @import models.payments._
+@import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
+
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -205,8 +207,8 @@ classes = "govuk-tag--red"
                 @if(model.directDebitMandateFound) {
                     @govukButton(Button(
                         content = Text(messages("chargeTypeDetails.button")),
-                        href    = Some(controllers.routes.ExistingDirectDebitController.show(
-                                    dueDateOrUrl = model.makePaymentRedirect,
+                        href    = Some(controllers.routes.ExistingDirectDebitController.showFromChargeBreakdown(
+                                    redirectUrl = RedirectUrl(model.makePaymentRedirect),
                                     linkId = "charge-breakdown",
                                     ddStatus = model.directDebitMandateFound
                                     ).url

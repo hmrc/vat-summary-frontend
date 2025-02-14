@@ -16,23 +16,28 @@
 
 package models.viewModels
 
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
+
 case class ExistingDirectDebitFormModel (dueDateOrUrl: Option[String],
                                          linkId: String,
                                          directDebitMandateFound: Boolean,
-                                         value: ExistingDDContinuePayment)
+                                         value: ExistingDDContinuePayment,
+                                         redirectUrl: Option[RedirectUrl])
 
 object ExistingDirectDebitFormModel {
 
   def formApply(dueDateOrUrl: Option[String],
                 linkId: String,
                 directDebitMandateFound: Boolean,
-                value: ExistingDDContinuePayment) = ExistingDirectDebitFormModel(dueDateOrUrl, linkId, directDebitMandateFound, value)
+                value: ExistingDDContinuePayment,
+                redirectUrl: Option[RedirectUrl]) = ExistingDirectDebitFormModel(dueDateOrUrl, linkId, directDebitMandateFound, value, redirectUrl)
 
-  def formUnapply(arg: ExistingDirectDebitFormModel): Option[(Option[String], String, Boolean, ExistingDDContinuePayment)] = Some((
+  def formUnapply(arg: ExistingDirectDebitFormModel): Option[(Option[String], String, Boolean, ExistingDDContinuePayment, Option[RedirectUrl])] = Some((
     arg.dueDateOrUrl,
     arg.linkId,
     arg.directDebitMandateFound,
-    arg.value
+    arg.value,
+    arg.redirectUrl
   ))
 
 }
