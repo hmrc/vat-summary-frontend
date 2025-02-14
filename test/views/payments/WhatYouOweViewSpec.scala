@@ -241,7 +241,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
         }
 
         "has the correct second paragraph" in {
-          elementText("p.govuk-body:nth-of-type(4)") shouldBe "You will be charged late payment interest if your Direct Debit payment is not successfully collected."
+          elementText("p.govuk-body:nth-of-type(4)") shouldBe "You will be charged late payment interest if your payment does not clear by the payment due date."
         }
       }
 
