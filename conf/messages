@@ -139,6 +139,7 @@ whatYouOwe.charges.p2 = For your Direct Debit, there may be a few days delay bet
 whatYouOwe.latePayment.heading = Late payment interest charges
 whatYouOwe.latePayment.p1 = Any late payment interest relating to your VAT Return is indicative and will not be charged, after the successful collection of your Direct Debit.
 whatYouOwe.latePayment.p2 = You will be charged late payment interest if your Direct Debit payment is not successfully collected.
+whatYouOwe.latePayment.p2.nonDD = You will be charged late payment interest if your payment does not clear by the payment due date.
 whatYouOwe.latePayment.p3 = Late payment interest may be charged if you do not submit your VAT return on time.
 
 existingDD.banner.p1 = You have a Direct Debit Instruction in place.

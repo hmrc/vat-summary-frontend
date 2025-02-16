@@ -138,6 +138,7 @@ whatYouOwe.charges.p2 = Wrth dalu drwy Ddebyd Uniongyrchol, mae’n bosibl y byd
 whatYouOwe.latePayment.heading = Llog am dalu’n hwyr
 whatYouOwe.latePayment.p1 = Bydd unrhyw nodyn o log am dalu’n hwyr sy’n gysylltiedig â’ch Ffurflen TAW er eich gwybodaeth yn unig. Ni fydd y llog hwn yn cael ei godi arnoch os bydd eich Debyd Uniongyrchol yn cael ei gasglu’n llwyddiannus.
 whatYouOwe.latePayment.p2 = Fodd bynnag, os na fydd eich Debyd Uniongyrchol yn cael ei gasglu’n llwyddiannus, bydd y llog hwnnw yn cael ei godi arnoch.
+whatYouOwe.latePayment.p2.nonDD = Bydd llog yn cael ei godi arnoch os na fydd eich taliad yn clirio erbyn dyddiad dyledus y taliad.
 whatYouOwe.latePayment.p3 = Mae’n bosibl y bydd llog am dalu’n hwyr yn cael ei godi arnoch os nad ydych yn cyflwyno’ch Ffurflen TAW mewn pryd.
 
 existingDD.banner.p1 = Mae gennych Gyfarwyddyd Debyd Uniongyrchol ar waith.
