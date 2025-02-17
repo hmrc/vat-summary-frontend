@@ -66,10 +66,15 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
     user = Some(user),
     navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
 ) {
+
+@uiForm(routes.ExistingDirectDebitController.submit) {
+
 <div class="govuk-grid-row">
  <div class="govuk-grid-column-two-thirds">
 
-  <header class="hmrc-page-heading govuk-!-margin-top-0">
+     @components.error_summary(form.errors, Some("existingDDContinuePayment.No"))
+
+     <header class="hmrc-page-heading govuk-!-margin-top-0">
    <h1 class="govuk-heading-xl govuk-!-margin-bottom-5">@messages("existingDD.title")</h1>
   </header>
 
@@ -104,11 +109,6 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
    </div>
   </details>
 
-    @uiForm(routes.ExistingDirectDebitController.submit) {
-
-     @components.error_summary(form.errors, Some("existingDDContinuePayment.No"))
-
-
      <div class="govuk-form-group">
          <input class="govuk-input" id="dueDateOrUrl" name="dueDateOrUrl" type="hidden" value="@{model.dueDateOrUrl}">
          <input class="govuk-input" id="linkId" name="linkId" type="hidden" value="@{model.linkId}">
@@ -118,7 +118,7 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
      @components.input_radio(
         field = form("value"),
         headingKey = Some("existingDD.radio.question"),
-        headingId = Some("existingDD-pay-quesion"),
+        headingId = Some("existingDD-pay-question"),
         inputs = radioOptions.toSeq
     )
 
