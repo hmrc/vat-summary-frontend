@@ -35,7 +35,8 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         webchatEnabled = appConfig.features.webchatEnabled(),
-        showUserResearchBannerEnabled = appConfig.features.showUserResearchBannerEnabled()
+        showUserResearchBannerEnabled = appConfig.features.showUserResearchBannerEnabled(),
+        futureDateOffsetEnabled = appConfig.features.futureDateOffsetEnabled()
       )
     )))
   }

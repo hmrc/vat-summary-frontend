@@ -26,6 +26,8 @@ class DateService @Inject()(appConfig: config.AppConfig) {
   def now(): LocalDate = {
     if (appConfig.features.staticDateEnabled()) {
       LocalDate.parse(appConfig.staticDateValue)
+    } else if(appConfig.features.futureDateOffsetEnabled()){
+      LocalDate.now().plusDays(35)
     } else {
       LocalDate.now()
     }

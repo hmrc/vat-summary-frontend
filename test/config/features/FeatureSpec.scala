@@ -31,6 +31,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.overdueTimeToPayDescriptionEnabled(true)
     features.webchatEnabled(true)
     features.showUserResearchBannerEnabled(false)
+    features.futureDateOffsetEnabled(true)
   }
 
   "The static date feature" should {
@@ -73,6 +74,18 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "switch to a different state" in {
       features.showUserResearchBannerEnabled(true)
       features.showUserResearchBannerEnabled() shouldBe true
+    }
+  }
+
+  "The futureDateOffset feature" should {
+
+    "return its current state" in {
+      features.futureDateOffsetEnabled() shouldBe true
+    }
+
+    "switch to a different state" in {
+      features.futureDateOffsetEnabled(false)
+      features.futureDateOffsetEnabled() shouldBe false
     }
   }
 }
