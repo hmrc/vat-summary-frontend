@@ -127,4 +127,5 @@ object ConfigKeys {
   val timeToLive: String = "mongodb.timeToLiveInSeconds"
 
   val essttpServiceBase: String = "essttp-backend"
+  val futureDateOffsetEnabled: String = "features.futureDateOffset.enabled"
 }
