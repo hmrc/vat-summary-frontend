@@ -1,0 +1,205 @@
+@*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.User
+@import models.viewModels._
+@import utils.Money
+@import views.html.templates.payments.wyoCharges._
+@import views.html.helper.CSPNonce
+
+@this(mainTemplate: MainTemplate,
+      govukBackLink: GovukBackLink)
+
+@(model: PaymentsOnScheduleViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@backLink = {
+    @govukBackLink(BackLink(
+         href = "#back-link",
+         content = Text("Back"),
+         attributes = Map("id" -> "back-link")
+    ))
+     <script @CSPNonce.attr>
+        document.getElementById("back-link").addEventListener("click", function(e) {
+          e.preventDefault()
+          window.history.back()
+        });
+     </script>
+ }
+
+@mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
+              appConfig = appConfig,
+              serviceInfoContent = serviceInfoContent,
+              user = Some(user),
+              navLinkContent = if(user.isAgent) Some(backLink) else None 
+) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      @backLink
+      <main class="govuk-main-wrapper">
+        <h1 class="govuk-heading-xl">Payments on account</h1>
+        
+        <p class="govuk-body">
+          @model.nextPayment match {
+            case Some(payment) if model.isBalancingPayment => {
+              <strong>Your next payment due is your balancing payment.</strong>
+              <br />
+              This is due on
+              <strong>
+                <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
+                  VAT return due date
+                </a>
+              </strong>.
+            }
+            case Some(payment) => {
+              Your next payment of <strong class="govuk-!-font-weight-bold">@payment.amount</strong>
+              is due on <strong>@payment.formattedDueDateOrPending</strong>.
+            }
+          }
+        </p>
+        <p class="govuk-body">
+            <a href="https://www.gov.uk/guidance/vat-payments-on-account#how-to-pay" class="govuk-link" rel="noreferrer noopener" target="_blank">Find out how to pay (opens in a new tab)</a>
+        </p>
+
+
+        @model.changedOnFormattedOpt.map{ changedOnDate =>
+          <div class="govuk-inset-text">
+              The amounts due for your payments on account were changed on @changedOnDate
+          </div>
+        }
+
+        <div class="govuk-tabs" data-module="govuk-tabs">
+          <h2 class="govuk-tabs__title">Contents</h2>
+          <ul class="govuk-tabs__list" role="tablist">
+            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+              <a class="govuk-tabs__tab" href="#current-schedule" id="tab_current-schedule" role="tab" aria-controls="current-schedule" aria-selected="true" tabindex="0">
+                Current and upcoming schedule
+              </a>
+            </li>
+            <li class="govuk-tabs__list-item">
+              <a class="govuk-tabs__tab" href="#past-schedule" id="tab_past-schedule" role="tab" aria-controls="past-schedule" aria-selected="false" tabindex="-1">
+                Past schedules
+              </a>
+            </li>
+          </ul>
+        
+          <div class="govuk-tabs__panel" id="current-schedule" role="tabpanel" aria-labelledby="tab_current-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">Current payment on account schedule</h2>
+            @for(period <- model.currentPeriods) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">VAT period:</h2>
+                  <h2 class="govuk-summary-card__title">@period.title</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">@payment.paymentType.displayName</dt>
+                        @if(period.isCurrent && payment.paymentType == PaymentType.ThirdPayment) {
+                          Same as
+                          <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
+                            VAT return due date
+                          </a>
+                        } else {
+                          @payment.formattedDueDateOrPending
+                        }
+                        <dd class="govuk-summary-list__actions">@payment.amount</dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+        
+          <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-schedule" role="tabpanel" aria-labelledby="tab_past-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">Past payment on account schedule</h2>
+            @for(period <- model.pastPeriods) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">VAT period:</h2>
+                  <h2 class="govuk-summary-card__title">@period.title</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">@payment.paymentType.displayName</dt>
+                        @if(payment.paymentType == PaymentType.ThirdPayment) {
+                          Same as
+                          <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatSubmittedReturnsUrl">
+                            VAT return due date
+                          </a>
+                        } else {
+                          @payment.formattedDueDateOrPending
+                        }
+                        <dd class="govuk-summary-list__actions">@payment.amount</dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+          <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-schedule" role="tabpanel" aria-labelledby="tab_past-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">Past payment on account schedule</h2>
+            @for(period <- model.periods.filter(_.isPast)) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">VAT period:</h2>
+                  <h2 class="govuk-summary-card__title">@period.title</h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">@payment.paymentType</dt>
+                        <dd class="govuk-summary-list__value">@payment.dueDate</dd>
+                        <dd class="govuk-summary-list__actions">@payment.amount</dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+          <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Contact HMRC
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <b>Post</b> <br>
+              Payments on Account Team<br>
+              BT VAT <br>
+              HMRC <br>
+              BX9 1WR <br><br>
+              <b>Email</b><br>
+              @{"poateam@hmrc.gov.uk"}
+      
+            </div>
+          </details>
+          <p class="govuk-body">You can <a href="https://www.gov.uk/guidance/vat-payments-on-account" class="govuk-link govuk-link--no-visited-state">find more information about payments on account here (opens
+            in
+            a new tab)</a>.</p>
+      </main>
+    </div>
+  </div>
+}
