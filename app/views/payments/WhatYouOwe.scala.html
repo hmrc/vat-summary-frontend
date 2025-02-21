@@ -129,7 +129,7 @@
         @if(!user.isAgent && model.directDebitMandateFound){
         <div class="govuk-inset-text">
             <p>@messages("existingDD.banner.p1")</p>
-            <p>@messages("existingDD.banner.p2")@messages("existingDD.banner.p2.2")</p>
+            <p>@messages("existingDD.banner.p2") @messages("existingDD.banner.p2.2")</p>
             <p>@messages("existingDD.banner.p3.preText")
                 <a href= "@appConfig.btaHomeUrl/messages/inbox" id="messages-inbox-link">@messages("existingDD.banner.p3.linkText")</a>@messages("existingDD.banner.p3.postText")
                 @messages("existingDD.banner.p3.extra")</p>
@@ -159,7 +159,7 @@
           @messages(s"whatYouOwe.paymentClearanceLink$agentSuffix")</a>@messages("common.fullStop")
       </p>
 
-        @if(model.directDebitMandateFound){
+        @if(!user.isAgent && model.directDebitMandateFound){
         <p class="govuk-body">@messages("whatYouOwe.charges.p2")</p>
         }
 
