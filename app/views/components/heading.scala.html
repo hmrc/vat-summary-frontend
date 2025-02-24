@@ -16,4 +16,6 @@
 
 @(headingId: String, headingKey: String, headingSize: String = "govuk-heading-l")(implicit messages: Messages)
 
-<h1 id="@headingId" class="@headingSize">@messages(headingKey)</h1>
+<legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+ <h2 class="govuk-fieldset__heading" id="@headingId">@messages(headingKey)</h2>
+</legend>
