@@ -42,6 +42,7 @@ trait AppConfig {
   val vatSubmittedReturnsUrl: String
   val vatReturnDeadlinesUrl: String
   def vatReturnUrl(periodKey: String): String
+  def etmpBaseUrl: String
   val btaBaseUrl: String
   val btaHomeUrl: String
   val paymentsServiceUrl: String
@@ -143,6 +144,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + sc.getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + sc.getString(Keys.vatReturnDeadlines)
   override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + sc.getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
+
+  override def etmpBaseUrl: String = sc.baseUrl(Keys.etmpBaseUrl)
 
   override lazy val btaBaseUrl: String = sc.baseUrl(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = sc.getString(Keys.businessTaxAccountHost) + sc.getString(Keys.businessTaxAccountUrl)

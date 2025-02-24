@@ -23,7 +23,7 @@
 @this(mainTemplate: MainTemplate,
       govukBackLink: GovukBackLink)
 
-@(model: PaymentsOnScheduleViewModel, serviceInfoContent: Html)(
+@(model: PaymentsOnAccountViewModel, serviceInfoContent: Html)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @backLink = {
@@ -40,7 +40,7 @@
      </script>
  }
 
-@mainTemplate(title = if(user.isAgent) messages("whatYouOwe.agentTitle") else messages("whatYouOwe.title"),
+@mainTemplate(title = messages("paymentsOnAccount.title"),
               appConfig = appConfig,
               serviceInfoContent = serviceInfoContent,
               user = Some(user),

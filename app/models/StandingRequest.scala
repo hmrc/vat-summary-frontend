@@ -17,7 +17,6 @@
 package models
 
 import play.api.libs.json._
-import java.time.LocalDateTime
 
 case class RequestItem(
   period: String,
@@ -26,46 +25,35 @@ case class RequestItem(
   endDate: String,
   dueDate: String,
   amount: BigDecimal,
-  chargeReference: Option[String],  
-  postingDueDate: Option[String]   
+  chargeReference: Option[String],
+  postingDueDate: Option[String] 
 )
 
-case class StandingRequest(
+object RequestItem {
+  implicit val format: Format[RequestItem] = Json.format[RequestItem]
+}
+
+case class StandingRequestDetail(
   requestNumber: String,
   requestCategory: String,
   createdOn: String,
-  changedOn: String,
+  changedOn: Option[String],
   requestItems: List[RequestItem]
 )
 
-case class StandingRequestResponse(
-  processingDate: String,  
-  standingRequests: List[StandingRequest]
-)
-
-case class VATStandingRequest(
-  _id: String,
-  schemaId: String,
-  method: String,
-  status: Int,
-  response: StandingRequestResponse
-)
-
-object VATStandingRequest {
-  implicit val requestItemFormat: Format[RequestItem] = Json.format[RequestItem]
-  implicit val standingRequestFormat: Format[StandingRequest] = Json.format[StandingRequest]
-  implicit val standingRequestResponseFormat: Format[StandingRequestResponse] = Json.format[StandingRequestResponse]
-  implicit val vatStandingRequestFormat: Format[VATStandingRequest] = Json.format[VATStandingRequest]
+object StandingRequestDetail {
+  implicit val format: Format[StandingRequestDetail] = Json.format[StandingRequestDetail]
 }
 
-object VATStandingRequestParser {
-  def parseJson(jsonString: String): Either[String, VATStandingRequest] = {
-    Json.parse(jsonString).validate[VATStandingRequest] match {
-      case JsSuccess(standingRequest, _) => Right(standingRequest)
-      case JsError(errors) => Left(s"Failed to parse JSON: $errors")
-    }
-  }
+case class StandingRequest(
+  processingDate: String,  
+  standingRequests: List[StandingRequestDetail]
+)
 
+object StandingRequest {
+  implicit val format: Format[StandingRequest] = Json.format[StandingRequest]
+
+  implicit val reads: Reads[StandingRequest] = (__ \ "response").read[StandingRequest]
   val jsonString =
 """{
   "_id": "/VATC/standing-requests/vrn/121212121",

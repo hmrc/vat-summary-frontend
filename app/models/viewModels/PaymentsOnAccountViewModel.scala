@@ -16,12 +16,10 @@
 
 package models.viewModels
 
-import utils.LocalDateHelper
 import java.time.format.DateTimeFormatter
 import java.time.LocalDate
 import models._
 import java.util.Locale
-import config.AppConfig
 
 sealed trait PaymentType {
   def displayName: String
@@ -57,7 +55,7 @@ case class VatPeriod(title: String, startDate: LocalDate, endDate: LocalDate, pa
   }
 }
 
-case class PaymentsOnScheduleViewModel(
+case class PaymentsOnAccountViewModel(
   breathingSpace: Boolean,
   periods: List[VatPeriod],
   changedOn: Option[LocalDate]
@@ -98,16 +96,16 @@ case class PaymentsOnScheduleViewModel(
   }
 }
 
-object PaymentsOnScheduleViewModel {
+object PaymentsOnAccountViewModel {
 
-  def fromViewModelFromVATStandingRequest(apiResponse: VATStandingRequest): PaymentsOnScheduleViewModel = {
+  def fromViewModelFromVATStandingRequest(standingRequestResponse: StandingRequest): PaymentsOnAccountViewModel = {
     
     val formatter = DateTimeFormatter.ofPattern("d MMM uuuu", Locale.UK)
 
-    val standingRequests = apiResponse.response.standingRequests
+    val standingRequests = standingRequestResponse.standingRequests
 
-    val mostRecentChangedOn: Option[LocalDate] = apiResponse.response.standingRequests
-      .flatMap(req => Some(LocalDate.parse(req.changedOn.trim))) 
+    val mostRecentChangedOn: Option[LocalDate] = standingRequestResponse.standingRequests
+      .flatMap(req => req.changedOn.map(c => LocalDate.parse(c.trim)))
       .sorted(Ordering[LocalDate].reverse) 
       .headOption
 
@@ -148,7 +146,7 @@ object PaymentsOnScheduleViewModel {
         )
       }
 
-    PaymentsOnScheduleViewModel(
+    PaymentsOnAccountViewModel(
       breathingSpace = false, 
       periods = periods.toList,
       changedOn = mostRecentChangedOn
