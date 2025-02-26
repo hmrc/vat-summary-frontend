@@ -38,6 +38,10 @@ object ConfigKeys {
   val vatObligations: String = "vat-obligations"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
+
+
+  val etmpBaseUrl: String = "etmp-standing-request"
+
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"
   val vatSubmittedReturns: String = "view-vat-returns-frontend.submittedReturnsUrl"
   val vatReturn: String = "view-vat-returns-frontend.returnUrl"
