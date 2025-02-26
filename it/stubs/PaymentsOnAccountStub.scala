@@ -31,7 +31,6 @@ object PaymentsOnAccountStub extends WireMockMethods {
   }
 
   def stubErrorFromApi(): StubMapping = {
-    println("Returning stub error")
     stubStandingRequests(errorJson, INTERNAL_SERVER_ERROR)
   }
 
