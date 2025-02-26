@@ -355,7 +355,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(
             paymentDueDate, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
-            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB", isPoaActiveForCustomer = false
           )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()

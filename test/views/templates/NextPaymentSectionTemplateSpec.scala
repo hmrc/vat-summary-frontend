@@ -43,7 +43,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           hasMultiple = false,
           isError = false,
           isHybridUser = false,
-          isOverdue = false
+          isOverdue = false,
+          isPoaActiveForCustomer = false
         )
         lazy val viewAsString = view.toString
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -76,7 +77,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           hasMultiple = false,
           isError = false,
           isHybridUser = false,
-          isOverdue = true
+          isOverdue = true,
+          isPoaActiveForCustomer = false
         )
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -92,7 +94,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = false,
         isError = false,
         isHybridUser = false,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -115,7 +118,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = false,
         isError = true,
         isHybridUser = false,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -139,7 +143,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = true,
         isError = false,
         isHybridUser = false,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -163,7 +168,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = false,
         isError = false,
         isHybridUser = true,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

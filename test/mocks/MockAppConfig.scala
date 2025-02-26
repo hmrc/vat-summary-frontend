@@ -108,4 +108,5 @@ class MockAppConfig(val runModeConfiguration: Configuration) extends AppConfig {
 
   override val essttpService: String = "/essttp"
   override val webchatUrl: String = "/ask-hmrc/chat/vat-online?ds"
+  override lazy val paymentOnAccountUrl: String = "/vat-through-software/payments-on-account"
 }

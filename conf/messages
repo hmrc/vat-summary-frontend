@@ -73,6 +73,8 @@ vatDetails.paymentsDue = You have {0} payments due
 vatDetails.checkWhatYouOwe = Check what you owe and make a payment
 vatDetails.viewPenalties.link = Penalties for late VAT Returns and payments
 vatDetails.viewPenalties.info = View your penalties, make an appeal against a penalty and see the status of any current appeals.
+vatDetails.viewPaymentOnAccount.link = Payments on account
+vatDetails.viewPaymentOnAccount.info = View your payments on account schedule of payments.
 
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
@@ -86,6 +88,8 @@ payment.nextPayments = Payments due
 payment.check = Check what you owe
 payment.stillMake = You can still
 payment.stillMakeLink = make a payment (opens in a new tab)
+payment.paymentOnAccount = Check your payments on account schedule
+
 
 pastHistory.history = History
 

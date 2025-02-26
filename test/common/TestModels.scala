@@ -300,7 +300,7 @@ object TestModels {
   )
 
   val vatDetailsModel: VatDetailsViewModel = VatDetailsViewModel(
-    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1"), mandationStatus = "2"
+    Some("2019-03-03"), Some("2019-03-03"), Some(entityName), currentDate = testDate, partyType = Some("1"), mandationStatus = "2",
   )
 
   val vatDetailsGroupModel: VatDetailsViewModel = VatDetailsViewModel(

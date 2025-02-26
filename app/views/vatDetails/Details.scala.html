@@ -31,6 +31,7 @@
       govukBreadcrumbs: GovukBreadcrumbs,
       govukWarningText: GovukWarningText,
       penaltiesTileSection: PenaltiesTileSection,
+      vatPaymentOnAccountSchedule: VatPaymentOnAccountSchedule,
       penaltiesBanner: PenaltiesBanner)
 
 @(detailsViewModel: VatDetailsViewModel,
@@ -90,7 +91,8 @@
       detailsViewModel.hasMultiplePayments,
       detailsViewModel.paymentError,
       detailsViewModel.isHybridUser,
-      detailsViewModel.paymentOverdue
+      detailsViewModel.paymentOverdue,
+      detailsViewModel.isPoaActiveForCustomer
     )
 
     @nextReturnSection(
@@ -141,5 +143,12 @@
         @penaltiesTileSection()
       </div>
     }
+
+      @if(detailsViewModel.isPoaActiveForCustomer){
+      <div class="govuk-grid-column-one-third">
+          @vatPaymentOnAccountSchedule()
+      </div>
+      }
+
   </div>
 }

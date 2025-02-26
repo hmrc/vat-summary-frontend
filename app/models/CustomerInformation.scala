@@ -35,7 +35,8 @@ case class CustomerInformation(details: CustomerDetails,
                                changeIndicators: Option[ChangeIndicators],
                                isMissingTrader: Boolean,
                                hasPendingPpobChanges: Boolean,
-                               mandationStatus: String) {
+                               mandationStatus: String,
+                               poaActiveUntil: Option[String] = None) {
 
   def extractDate: Option[String] = hybridToFullMigrationDate match {
     case Some(_) => hybridToFullMigrationDate
@@ -67,6 +68,7 @@ object CustomerInformation {
     (__ \ "changeIndicators").readNullable[ChangeIndicators] and
     (__ \ "missingTrader").read[Boolean] and
     (__ \ "changeIndicators" \ "PPOBDetails").readNullable[Boolean].map(_.contains(true)) and
-    (__ \ "mandationStatus").read[String]
+    (__ \ "mandationStatus").read[String] and
+    (__ \ "poaActiveUntil").readNullable[String]
   )(CustomerInformation.apply _)
 }
