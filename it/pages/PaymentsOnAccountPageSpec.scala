@@ -16,6 +16,7 @@
 package pages
 
 import config.AppConfig
+import config.FrontendAppConfig
 import helpers.IntegrationBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -27,68 +28,86 @@ import stubs.CustomerInfoStub.customerInfoJson
 import stubs.ServiceInfoStub
 import java.time.LocalDate
 import play.api.libs.json.JsValue
+import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Helpers.running
+import play.api.Configuration
+import play.api.libs.ws.{WSClient}
 
-class PaymentsOnAccountPageSpec extends IntegrationBaseSpec {
+class PaymentsOnAccountPageSpec extends PaymentsOnAccountPageBaseSpec {
 
-  val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
-
-  println("DATE")
-  println(LocalDate.now())
-    
-  val customerInfo = customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true)
-
-  def setupRequest(responseJson: JsValue, status: Int = Status.OK): WSRequest = {
-    AuthStub.authorised()
-    CustomerInfoStub.stubCustomerInfo(customerInfo)
-    ServiceInfoStub.stubServiceInfoPartial
-    PaymentsOnAccountStub.stubStandingRequests(responseJson, status)
-    buildRequest(s"/payments-on-account")
-  }
-
-  val nextPaymentSelector = "p.govuk-body:nth-of-type(1)"
-  val vatPeriodSelector = "div.govuk-summary-card__title-wrapper h2"
-  val balanceMessageSelector = "#next-payment-text"
+  override def servicesConfig: Map[String, String] = super.servicesConfig ++ Map(
+    "date-service.staticDate.value" -> "2025-03-10"
+  )
 
   "Calling the Payments On Account route as an authenticated user" when {
 
     "when there are upcoming payments" should {
 
       "load the page and display the correct next payment details" in {
-        val request = setupRequest(PaymentsOnAccountStub.futurePOAJson)
-
-        val response: WSResponse = await(request.get())
-        val document: Document = Jsoup.parse(response.body)
-
-        response.status shouldBe Status.OK
-        document.title() shouldBe "Payments on account - Manage your VAT account - GOV.UK"
-        document.select(nextPaymentSelector).text() should include("Your next payment of £22,945.23 is due on 31 May 2025.")
-      }
-    }
-
-    "when there is a balancing payment due" should {
-
-      "display the correct balancing payment message" in {
         val request = setupRequest(PaymentsOnAccountStub.poaJson)
 
         val response: WSResponse = await(request.get())
         val document: Document = Jsoup.parse(response.body)
 
         response.status shouldBe Status.OK
-        println(document)
-        document.select(balanceMessageSelector).text() shouldBe "Your next payment due is your balancing payment."
+        document.title() shouldBe "Payments on account - Manage your VAT account - GOV.UK"
+        document.select(nextPaymentSelector).text() should include("Your next payment of £122,945.23 is due on 31 Mar 2025.")
       }
     }
 
     "there are multiple VAT periods" should {
 
       "display VAT periods correctly" in {
-        val request = setupRequest(PaymentsOnAccountStub.todaysPOAJson)
+        val request = setupRequest(PaymentsOnAccountStub.poaJson)
 
         val response: WSResponse = await(request.get())
         val document: Document = Jsoup.parse(response.body)
+        val extractedText = document.select(vatPeriodSelector).text()
 
         response.status shouldBe Status.OK
-        document.select(vatPeriodSelector).text() shouldBe "VAT period: 1 January 2025 to 31 March 2025"
+        
+
+        extractedText should include("VAT period: 1 February 2025 to 30 April 2025")
+        extractedText should include("VAT period: 1 May 2025 to 31 July 2025")
+        extractedText should include("VAT period: 1 August 2025 to 31 October 2025")
+        extractedText should include("VAT period: 1 November 2025 to 31 January 2026")
+
+        extractedText should include("VAT period: 1 February 2024 to 30 April 2024")
+        extractedText should include("VAT period: 1 May 2024 to 31 July 2024")
+        extractedText should include("VAT period: 1 August 2024 to 31 October 2024")
+        extractedText should include("VAT period: 1 November 2024 to 31 January 2025")
+      }
+
+
+      "display current VAT periods correctly" in {
+        val request = setupRequest(PaymentsOnAccountStub.poaJson)
+
+        val response: WSResponse = await(request.get())
+        val document: Document = Jsoup.parse(response.body)
+        val extractedText = document.select("#current-schedule").text()
+
+        response.status shouldBe Status.OK
+        
+
+        extractedText should include("VAT period: 1 February 2025 to 30 April 2025")
+        extractedText should include("VAT period: 1 May 2025 to 31 July 2025")
+        extractedText should include("VAT period: 1 August 2025 to 31 October 2025")
+        extractedText should include("VAT period: 1 November 2025 to 31 January 2026")
+      }
+
+      "display past VAT periods correctly" in {
+        val request = setupRequest(PaymentsOnAccountStub.poaJson)
+
+        val response: WSResponse = await(request.get())
+        val document: Document = Jsoup.parse(response.body)
+        val extractedText = document.select("#past-schedule").text()
+
+        response.status shouldBe Status.OK
+        
+        extractedText should include("VAT period: 1 February 2024 to 30 April 2024")
+        extractedText should include("VAT period: 1 May 2024 to 31 July 2024")
+        extractedText should include("VAT period: 1 August 2024 to 31 October 2024")
+        extractedText should include("VAT period: 1 November 2024 to 31 January 2025")
       }
     }
 

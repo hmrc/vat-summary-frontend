@@ -36,14 +36,6 @@ import play.api.inject.bind
 trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFutures with WireMockHelper with
   GuiceOneServerPerSuite with BeforeAndAfterEach with BeforeAndAfterAll with Injecting {
 
-  val fixedInstant: Instant = Instant.parse("2025-07-31T12:00:00Z") 
-  val fixedClock: Clock = Clock.fixed(fixedInstant, ZoneId.of("UTC"))
-
-  override def fakeApplication(): Application = 
-    new GuiceApplicationBuilder()
-      .overrides(bind[Clock].toInstance(fixedClock))
-      .build()
-
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wireMockPort.toString
   val appRouteContext: String = "/vat-through-software"

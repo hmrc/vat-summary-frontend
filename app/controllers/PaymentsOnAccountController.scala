@@ -57,7 +57,8 @@ class PaymentsOnAccountController @Inject()(authorisedController: AuthorisedCont
         standingRequestOpt match { 
           case Some(standingRequest) => 
             val viewModel = buildViewModel(standingRequest, today)
-            println(viewModel.nextPayment)
+            println("Date in code")
+            println(today)
             Ok(view(viewModel,serviceInfoContent))
           case None => serviceErrorHandler.showInternalServerError
         }
