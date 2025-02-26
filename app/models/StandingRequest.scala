@@ -50,10 +50,16 @@ case class StandingRequest(
   standingRequests: List[StandingRequestDetail]
 )
 
-object StandingRequest {
-  implicit val format: Format[StandingRequest] = Json.format[StandingRequest]
+case class StandingRequestResponse(
+  response: StandingRequest
+)
 
-  implicit val reads: Reads[StandingRequest] = (__ \ "response").read[StandingRequest]
+object StandingRequestResponse {
+   implicit val format: Format[StandingRequestResponse] = Json.format[StandingRequestResponse]
+}
+
+object StandingRequest {
+implicit val format: Format[StandingRequest] = Json.format[StandingRequest]
   val jsonString =
 """{
   "_id": "/VATC/standing-requests/vrn/121212121",

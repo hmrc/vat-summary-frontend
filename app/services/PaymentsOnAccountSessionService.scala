@@ -17,20 +17,20 @@
 package services
 
 import javax.inject.{Inject, Singleton}
-import models.StandingRequest
+import models.StandingRequestDatabaseModel
 import repositories.StandingRequestSessionRepository
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class StandingRequestSessionService @Inject()(repository: StandingRequestSessionRepository) {
 
-  def storeStandingRequest(standingRequest: StandingRequest, sessionId: String)
+  def storeStandingRequest(standingRequest: StandingRequestDatabaseModel, sessionId: String)
                           (implicit ec: ExecutionContext): Future[Boolean] = {
     repository.write(sessionId, standingRequest)
   }
 
   def retrieveStandingRequest(sessionId: String)
-                             (implicit ec: ExecutionContext): Future[Option[StandingRequest]] = {
+                             (implicit ec: ExecutionContext): Future[Option[StandingRequestDatabaseModel]] = {
     repository.read(sessionId)
   }
 }

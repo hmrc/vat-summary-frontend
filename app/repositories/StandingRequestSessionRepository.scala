@@ -25,15 +25,15 @@ import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import models.StandingRequest
+import models.StandingRequestDatabaseModel
 
 @Singleton
 class StandingRequestSessionRepository @Inject()(appConfig: AppConfig, mongo: MongoComponent)
                                                (implicit ec: ExecutionContext)
-  extends PlayMongoRepository[StandingRequest](
+  extends PlayMongoRepository[StandingRequestDatabaseModel](
     collectionName = "standingRequestSessionData",
     mongoComponent = mongo,
-    domainFormat = StandingRequest.format,
+    domainFormat = StandingRequestDatabaseModel.format,
     indexes = Seq(
       IndexModel(
         ascending("creationTimestamp"),
@@ -44,7 +44,7 @@ class StandingRequestSessionRepository @Inject()(appConfig: AppConfig, mongo: Mo
     )
   ) {
 
-  def write(sessionId: String, standingRequest: StandingRequest): Future[Boolean] = {
+  def write(sessionId: String, standingRequest: StandingRequestDatabaseModel): Future[Boolean] = {
     collection.replaceOne(
       equal("_id", sessionId), 
       standingRequest, 
@@ -52,7 +52,7 @@ class StandingRequestSessionRepository @Inject()(appConfig: AppConfig, mongo: Mo
     ).map(_.wasAcknowledged()).head()
   }
 
-  def read(sessionId: String): Future[Option[StandingRequest]] = {
+  def read(sessionId: String): Future[Option[StandingRequestDatabaseModel]] = {
     collection.find(equal("_id", sessionId)).headOption()
   }
 }

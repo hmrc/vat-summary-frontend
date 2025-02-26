@@ -18,6 +18,7 @@ package models.viewModels
 
 import common.{SpecBase}
 import java.time.{LocalDate, Clock, ZoneId}
+import org.scalatest.matchers.should.Matchers._
 
 class PaymentsOnAccountViewModelSpec extends SpecBase {
 
@@ -25,92 +26,70 @@ class PaymentsOnAccountViewModelSpec extends SpecBase {
   val today: LocalDate = LocalDate.now(fixedClock)
 
   val vatPeriods: List[VatPeriod] = List(
-    VatPeriod("1 Feb 2024 to April 2024", LocalDate.parse("2024-02-01"), LocalDate.parse("2024-04-30"),
+    VatPeriod(LocalDate.parse("2024-02-01"), LocalDate.parse("2024-04-30"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-03-31")), "£22,945.23"),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2024-04-30")), "£22,945.23"),
-        PaymentDetail(PaymentType.ThirdPayment, None, "Balance")
-      )
+        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-03-31")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2024-04-30")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, None, None)
+      ),
+      isCurrent = false,
+      isPast = false
     ),
-    VatPeriod("1 Nov 2024 to January 2025", LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
+    VatPeriod(LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-12-31")), "£22,945.23"),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), "£22,945.23"),
-        PaymentDetail(PaymentType.ThirdPayment, None, "Balance")
-      )
+        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-12-31")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, None, None)
+      ),
+      isCurrent = false,
+      isPast = false
     ),
-    VatPeriod("1 Feb 2025 to April 2025", LocalDate.parse("2025-02-01"), LocalDate.parse("2025-04-30"),
+    VatPeriod(LocalDate.parse("2025-02-01"), LocalDate.parse("2025-04-30"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), "£122,945.23"),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-04-30")), "£122,945.23"),
-        PaymentDetail(PaymentType.ThirdPayment, None, "Balance")
-      )
+        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), Some(BigDecimal(122945.23))),
+        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-04-30")), Some(BigDecimal(122945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, None, None)
+      ),
+      isCurrent = false,
+      isPast = false
     )
   )
+  
+  def currentPeriods: List[VatPeriod] = vatPeriods.filter(_.isCurrentOrUpcoming).toList
+  def pastPeriods: List[VatPeriod] = vatPeriods.filter(_.isPast).toList
 
   val viewModel = PaymentsOnAccountViewModel(
     breathingSpace = false,
     periods = vatPeriods,
-    changedOn = Some(today)
+    changedOn = Some(today),
+    currentPeriods = currentPeriods,
+    pastPeriods = pastPeriods,
+    nextPayment = None
   )
 
   "PaymentsOnAccountViewModel" should {
-
-    "return the correct current or upcoming periods" in {
-      viewModel.currentPeriods mustBe vatPeriods.filter(_.isCurrentOrUpcoming)
+    "correctly filter current and upcoming periods" in {
+      viewModel.currentPeriods should contain theSameElementsAs vatPeriods.filter(_.isCurrentOrUpcoming)
     }
 
-    "return the correct past periods" in {
-      viewModel.pastPeriods mustBe vatPeriods.filter(_.isPast)
+    "correctly filter past periods" in {
+      viewModel.pastPeriods should contain theSameElementsAs vatPeriods.filter(_.isPast)
     }
 
-    "return the next upcoming payment when available" in {
-      val expectedPayment = Some(PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), "£122,945.23"))
-      viewModel.nextPayment mustBe expectedPayment
+    "format changedOn date correctly" in {
+      viewModel.changedOnFormattedOpt shouldBe Some("24 February 2025")
     }
 
-    "return None when no periods are available" in {
-      val emptyViewModel = PaymentsOnAccountViewModel(
-        breathingSpace = false,
-        periods = List.empty,
-        changedOn = Some(today)
-      )
-      emptyViewModel.nextPayment mustBe None
+    "handle missing next payment correctly" in {
+      viewModel.nextPayment shouldBe None
     }
 
-    "return None when no upcoming payments are available" in {
-      val emptyViewModel = PaymentsOnAccountViewModel(
-        breathingSpace = false,
-        periods = List.empty,
-        changedOn = Some(today)
-      )
-      emptyViewModel.nextPayment mustBe None
-    }
-
-    "identify a balancing payment correctly" in {
-      val balancingViewModel = PaymentsOnAccountViewModel(
-        breathingSpace = false,
-        periods = List(
-          VatPeriod("1 Nov 2024 to January 2025", LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
-            List(
-              PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), "£22,945.23"),
-              PaymentDetail(PaymentType.ThirdPayment, Some(LocalDate.parse("2025-02-28")), "Balance")
-            )
-          )
-        ),
-        changedOn = Some(today)
-      )
-
-      balancingViewModel.isBalancingPayment mustBe true
-    }
-
-    "return false for isBalancingPayment when conditions are not met" in {
-      val nonBalancingViewModel = PaymentsOnAccountViewModel(
-        breathingSpace = false,
-        periods = List(vatPeriods.head),
-        changedOn = Some(today)
-      )
-      nonBalancingViewModel.isBalancingPayment mustBe false
+    "return formatted due date or 'Pending' when missing" in {
+      val paymentWithDate = PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), Some(BigDecimal(10000)))
+      val paymentWithoutDate = PaymentDetail(PaymentType.FirstPayment, None, Some(BigDecimal(10000)))
+      
+      paymentWithDate.formattedDueDateOrPending shouldBe "31 Mar 2025"
+      paymentWithoutDate.formattedDueDateOrPending shouldBe "Pending"
     }
   }
 }

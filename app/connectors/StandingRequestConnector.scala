@@ -21,7 +21,7 @@ import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import utils.LoggerUtil
-import models.StandingRequest
+import models.{StandingRequest, StandingRequestResponse}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -33,13 +33,13 @@ class StandingRequestsConnector @Inject()(http: HttpClient, appConfig: AppConfig
   def getStandingRequests(regime: String, taxpayerIdType: String, taxpayerIdValue: String)
                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[StandingRequest]] = {
 
-    import connectors.httpParsers.StandingRequestsHttpParser.StandingRequestsReads
+    import connectors.httpParsers.StandingRequestsHttpParser.StandingRequestsResponseReads
 
-    http.GET[HttpResult[StandingRequest]](standingRequestsUrl(regime, taxpayerIdType, taxpayerIdValue))
+    http.GET[HttpResult[StandingRequestResponse]](standingRequestsUrl(regime, taxpayerIdType, taxpayerIdValue))
       .map {
-        case Right(response) =>
+        case Right(result) =>
           logger.info(s"StandingRequestsConnector response received")
-            Right(response)
+          Right(result.response)
         case Left(error) =>
           logger.warn(s"StandingRequestsConnector received error: ${error.message}")
           Left(error)

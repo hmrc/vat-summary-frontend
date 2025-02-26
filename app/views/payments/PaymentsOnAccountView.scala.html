@@ -52,31 +52,24 @@
       <main class="govuk-main-wrapper">
         <h1 class="govuk-heading-xl">Payments on account</h1>
         
-        <p class="govuk-body">
-          @model.nextPayment match {
-            case Some(payment) if model.isBalancingPayment => {
-              <strong>Your next payment due is your balancing payment.</strong>
+        <p class="govuk-body" id="next-payment-text">
+          @if(model.nextPayment.exists(p => p.paymentType == PaymentType.ThirdPayment)) {
+              Your <strong>next payment due </strong> is your <strong>balancing payment.</strong>
               <br />
-              This is due on
-              <strong>
-                <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
-                  VAT return due date
-                </a>
-              </strong>.
-            }
-            case Some(payment) => {
-              Your next payment of <strong class="govuk-!-font-weight-bold">@payment.amount</strong>
-              is due on <strong>@payment.formattedDueDateOrPending</strong>.
-            }
+              This is due on the same date as your
+              <strong>VAT return due date</strong>.
+          } else {
+              Your next payment of <strong class="govuk-!-font-weight-bold">@Money.pounds(model.nextPayment.get.amount.get)</strong>
+              is due on <strong>@model.nextPayment.get.formattedDueDateOrPending</strong>.
           }
         </p>
         <p class="govuk-body">
-            <a href="https://www.gov.uk/guidance/vat-payments-on-account#how-to-pay" class="govuk-link" rel="noreferrer noopener" target="_blank">Find out how to pay (opens in a new tab)</a>
+            <a id="find-out-how-to-pay-link" href="https://www.gov.uk/guidance/vat-payments-on-account#how-to-pay" class="govuk-link" rel="noreferrer noopener" target="_blank">Find out how to pay (opens in a new tab)</a>
         </p>
 
 
         @model.changedOnFormattedOpt.map{ changedOnDate =>
-          <div class="govuk-inset-text">
+          <div class="govuk-inset-text" id="changed-on-date">
               The amounts due for your payments on account were changed on @changedOnDate
           </div>
         }
@@ -117,7 +110,11 @@
                         } else {
                           @payment.formattedDueDateOrPending
                         }
-                        <dd class="govuk-summary-list__actions">@payment.amount</dd>
+                        @payment.amount.map { amount =>
+                          <dd class="govuk-summary-list__actions">@Money.pounds(amount)</dd>
+                        }.getOrElse(
+                          <dd class="govuk-summary-list__actions">Balance</dd>
+                        )
                       </div>
                     }
                   </dl>
@@ -147,7 +144,11 @@
                         } else {
                           @payment.formattedDueDateOrPending
                         }
-                        <dd class="govuk-summary-list__actions">@payment.amount</dd>
+                        @payment.amount.map { amount =>
+                          <dd class="govuk-summary-list__actions">@Money.pounds(amount)</dd>
+                        }.getOrElse(
+                          <dd class="govuk-summary-list__actions">Pending</dd>
+                        )
                       </div>
                     }
                   </dl>
@@ -156,29 +157,6 @@
             }
           </div>
         </div>
-
-          <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-schedule" role="tabpanel" aria-labelledby="tab_past-schedule">
-            <h2 class="govuk-heading-l govuk-visually-hidden">Past payment on account schedule</h2>
-            @for(period <- model.periods.filter(_.isPast)) {
-              <div class="govuk-summary-card">
-                <div class="govuk-summary-card__title-wrapper">
-                  <h2 class="govuk-summary-card__title">VAT period:</h2>
-                  <h2 class="govuk-summary-card__title">@period.title</h2>
-                </div>
-                <div class="govuk-summary-card__content">
-                  <dl class="govuk-summary-list">
-                    @for(payment <- period.payments) {
-                      <div class="govuk-summary-list__row">
-                        <dt class="govuk-summary-list__key">@payment.paymentType</dt>
-                        <dd class="govuk-summary-list__value">@payment.dueDate</dd>
-                        <dd class="govuk-summary-list__actions">@payment.amount</dd>
-                      </div>
-                    }
-                  </dl>
-                </div>
-              </div>
-            }
-          </div>
           <details class="govuk-details">
             <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">

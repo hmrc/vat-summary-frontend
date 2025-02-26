@@ -23,6 +23,7 @@ import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.payments.PaymentsOnAccountView
 import java.time.{LocalDate, Clock, ZoneId}
+import scala.jdk.CollectionConverters._
 
 class PaymentsOnAccountViewSpec extends ViewBaseSpec {
 
@@ -32,32 +33,45 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
   val today: LocalDate = LocalDate.now(fixedClock)
 
   val vatPeriods: List[VatPeriod] = List(
-    VatPeriod("1 Feb 2024 to April 2024", LocalDate.parse("2024-02-01"), LocalDate.parse("2024-04-30"),
+    VatPeriod(LocalDate.parse("2024-02-01"), LocalDate.parse("2024-04-30"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-03-31")), "£22,945.23"),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2024-04-30")), "£22,945.23"),
-        PaymentDetail(PaymentType.ThirdPayment, None, "Balance")
-      )
+        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-03-31")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2024-04-30")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, None, None)
+      ),
+      isCurrent = false,
+      isPast = false
     ),
-    VatPeriod("1 Nov 2024 to January 2025", LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
+    VatPeriod(LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-12-31")), "£22,945.23"),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), "£22,945.23"),
-        PaymentDetail(PaymentType.ThirdPayment, None, "Balance")
-      )
+        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-12-31")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, None, None)
+      ),
+      isCurrent = false,
+      isPast = false
     ),
-    VatPeriod("1 Feb 2025 to April 2025", LocalDate.parse("2025-02-01"), LocalDate.parse("2025-04-30"),
+    VatPeriod(LocalDate.parse("2025-02-01"), LocalDate.parse("2025-04-30"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), "£122,945.23"),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-04-30")), "£122,945.23"),
-        PaymentDetail(PaymentType.ThirdPayment, None, "Balance")
-      )
+        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), Some(BigDecimal(122945.23))),
+        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-04-30")), Some(BigDecimal(122945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, None, None)
+      ),
+      isCurrent = false,
+      isPast = false
     )
   )
+
+  def currentPeriods: List[VatPeriod] = vatPeriods.filter(_.isCurrentOrUpcoming).toList
+  def pastPeriods: List[VatPeriod] = vatPeriods.filter(_.isPast).toList
+
   val viewModel = PaymentsOnAccountViewModel(
     breathingSpace = false,
     periods = vatPeriods,
-    changedOn = Some(LocalDate.parse("2025-02-24"))
+    changedOn = Some(today),
+    currentPeriods = currentPeriods,
+    pastPeriods = pastPeriods,
+    nextPayment = Some(PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), Some(BigDecimal(122945.23))))
   )
 
   "PaymentsOnAccountView" should {
@@ -74,20 +88,36 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       document.select("h1").text() shouldBe "Payments on account"
     }
 
-    "display the correct next payment message when balancing payment is due" in {
-      val balancingViewModel = viewModel.copy(
-        periods = List(
-          VatPeriod("1 Nov 2024 to January 2025", LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
-            List(
-              PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), "£22,945.23"),
-              PaymentDetail(PaymentType.ThirdPayment, Some(LocalDate.parse("2025-02-28")), "Balance")
-            )
-          )
-        )
-      )
-      lazy val view = paymentsOnAccountView(balancingViewModel, Html(""))
+    "have a back link with correct attributes" in {
+      lazy val view = paymentsOnAccountView(viewModel, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
-      document.select("p.govuk-body strong").text() shouldBe "Your next payment due is your balancing payment. VAT return due date"
+      val backLink = document.select("#back-link")
+      
+      backLink.text() shouldBe "Back"
+      backLink.attr("href") shouldBe "#back-link"
+    }
+
+    "have a link to 'Find out how to pay'" in {
+      lazy val view = paymentsOnAccountView(viewModel, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      val link = document.select("#find-out-how-to-pay-link")
+
+      link.text() shouldBe "Find out how to pay (opens in a new tab)"
+      link.attr("href") shouldBe "https://www.gov.uk/guidance/vat-payments-on-account#how-to-pay"
+      link.attr("target") shouldBe "_blank"
+    }
+
+    "display the correct next payment message when balancing payment is due" in {
+      lazy val view = paymentsOnAccountView(viewModel.copy(nextPayment = Some(PaymentDetail(PaymentType.ThirdPayment, None, None))), Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      document.select("#next-payment-text").text() shouldBe "Your next payment due is your balancing payment. This is due on the same date as your VAT return due date."
+    }
+
+
+    "display the correct changedOn date message" in {
+      lazy val view = paymentsOnAccountView(viewModel, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      document.select("#changed-on-date").text() shouldBe "The amounts due for your payments on account were changed on 24 February 2025"
     }
 
     "display the correct next payment message when a normal payment is due" in {
@@ -113,7 +143,47 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
     "display VAT periods correctly" in {
       lazy val view = paymentsOnAccountView(viewModel, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
-      document.select(".govuk-summary-card__title").text() should include("1 Feb 2024 to April 2024")
+      document.select(".govuk-summary-card__title").text() should include("1 November 2024 to 31 January 2025")
+      document.select(".govuk-summary-card__title").text() should include("1 February 2025 to 30 April 2025")
+    }
+
+    "list VAT periods in chronological order" in {
+      lazy val view = paymentsOnAccountView(viewModel, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      val periodTitles = document.select(".govuk-summary-card__title").eachText().asScala.toSeq
+
+      periodTitles shouldBe Seq(
+        "VAT period:", "1 February 2024 to 30 April 2024",
+        "VAT period:", "1 November 2024 to 31 January 2025",
+        "VAT period:", "1 February 2025 to 30 April 2025"
+      )
+    }
+
+    "show 'Current and Upcoming Schedule' as the default active tab" in {
+      lazy val view = paymentsOnAccountView(viewModel, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      val activeTab = document.select(".govuk-tabs__list-item--selected").text()
+
+      activeTab shouldBe "Current and upcoming schedule"
+    }
+
+    "have a 'Contact HMRC' details section" in {
+      lazy val view = paymentsOnAccountView(viewModel, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+      val detailsSummary = document.select(".govuk-details__summary-text").text()
+      val detailsContent = document.select(".govuk-details__text").text()
+
+      detailsSummary shouldBe "Contact HMRC"
+      detailsContent should include("Payments on Account Team")
+      detailsContent should include("poateam@hmrc.gov.uk")
+    }
+
+    "display 'Pending' for payments without a due date" in {
+      val viewModelWithNoDueDate = viewModel.copy(nextPayment = Some(PaymentDetail(PaymentType.FirstPayment, None, Some(BigDecimal(122945.23)))))
+      lazy val view = paymentsOnAccountView(viewModelWithNoDueDate, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      document.select("#next-payment-text").text() should include("Pending")
     }
   }
 }

@@ -18,7 +18,6 @@ package models.viewModels
 
 import java.time.format.DateTimeFormatter
 import java.time.LocalDate
-import models._
 import java.util.Locale
 
 sealed trait PaymentType {
@@ -37,119 +36,28 @@ object PaymentType {
   }
 }
 
-case class PaymentDetail(paymentType: PaymentType, dueDate: Option[LocalDate], amount: String){
+case class PaymentDetail(paymentType: PaymentType, dueDate: Option[LocalDate], amount: Option[BigDecimal]) {
   private val formatter = DateTimeFormatter.ofPattern("d MMM uuuu", Locale.UK)
-  def formattedDueDateOrPending: String = dueDate.map(_.format(formatter)).getOrElse("Pending")
+  def formattedDueDateOrPending: String = {
+    if (paymentType == PaymentType.ThirdPayment) "Pending"
+    else dueDate.map(_.format(formatter)).getOrElse("Pending")
+  }
 }
 
-case class VatPeriod(title: String, startDate: LocalDate, endDate: LocalDate, payments: List[PaymentDetail]) {
-  def year: Int = startDate.getYear
-  def isPast: Boolean = endDate.isBefore(LocalDate.now().minusDays(35))
+case class VatPeriod(startDate: LocalDate, endDate: LocalDate, payments: List[PaymentDetail], isCurrent: Boolean, isPast: Boolean) {
+  private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
+  def title: String = s"${startDate.format(formatter)} to ${endDate.format(formatter)}"
   def isCurrentOrUpcoming: Boolean = !isPast
-  def isCurrent: Boolean = {
-    val today = LocalDate.now()
-    val visibleStart = startDate.plusDays(35)
-    val visibleEnd = endDate.plusDays(35)
-
-    today.isAfter(visibleStart.minusDays(1)) && today.isBefore(visibleEnd.plusDays(1))
-  }
 }
 
 case class PaymentsOnAccountViewModel(
   breathingSpace: Boolean,
   periods: List[VatPeriod],
-  changedOn: Option[LocalDate]
+  changedOn: Option[LocalDate],
+  currentPeriods: List[VatPeriod],
+  pastPeriods: List[VatPeriod],
+  nextPayment: Option[PaymentDetail],
 ) {
   private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
-  def currentPeriods: List[VatPeriod] = periods.filter(_.isCurrentOrUpcoming)
-  def pastPeriods: List[VatPeriod] = periods.filter(_.isPast)
-
   def changedOnFormattedOpt: Option[String] = changedOn.map(_.format(formatter))
-    
-  def nextPayment: Option[PaymentDetail] = {
-    val today = LocalDate.now()
-
-    periods
-      .flatMap(_.payments)
-      .filter { payment =>
-        payment.dueDate.exists(_.isAfter(today)) || 
-        (payment.paymentType == PaymentType.ThirdPayment && isBalancingPayment) 
-      }
-      .sortBy(_.dueDate.getOrElse(LocalDate.MAX))
-      .headOption
-  }
-
-  def isBalancingPayment: Boolean = {
-    val today = LocalDate.now()
-
-    periods.exists { period =>
-      val secondPaymentHasPassed = period.payments.exists(p =>
-        p.paymentType == PaymentType.SecondPayment && p.dueDate.exists(_.isBefore(today))
-      )
-
-      val thirdPaymentIsNext = period.payments.exists(p =>
-        p.paymentType == PaymentType.ThirdPayment && p.dueDate.exists(_.isAfter(today))
-      )
-
-      secondPaymentHasPassed && thirdPaymentIsNext
-    }
-  }
-}
-
-object PaymentsOnAccountViewModel {
-
-  def fromViewModelFromVATStandingRequest(standingRequestResponse: StandingRequest): PaymentsOnAccountViewModel = {
-    
-    val formatter = DateTimeFormatter.ofPattern("d MMM uuuu", Locale.UK)
-
-    val standingRequests = standingRequestResponse.standingRequests
-
-    val mostRecentChangedOn: Option[LocalDate] = standingRequestResponse.standingRequests
-      .flatMap(req => req.changedOn.map(c => LocalDate.parse(c.trim)))
-      .sorted(Ordering[LocalDate].reverse) 
-      .headOption
-
-    val periods = standingRequests
-      .flatMap(_.requestItems)
-      .groupBy(_.periodKey)
-      .toSeq.sortBy(_._1)
-      .map { case (periodKey, items) =>
-
-        val sortedPayments = items.sortBy(_.period) 
-
-        val paymentsWithPlaceholder = {
-          val actualPayments = sortedPayments.take(2).zipWithIndex.map { case (item, index) =>
-              PaymentDetail(
-                paymentType = if (index == 0) PaymentType.FirstPayment else PaymentType.SecondPayment,
-                dueDate = Some(LocalDate.parse(item.dueDate)),
-                amount = f"£${item.amount}%.2f"
-              )
-          }
-
-          val thirdPayment = PaymentDetail(
-            paymentType = PaymentType.ThirdPayment,
-            dueDate = None,
-            amount = "Balance"
-          )
-
-          actualPayments :+ thirdPayment
-        }
-
-        val startDate = LocalDate.parse(items.head.startDate)
-        val endDate = LocalDate.parse(items.head.endDate)
-
-        VatPeriod(
-          title = s"${startDate.format(formatter)} to ${endDate.format(DateTimeFormatter.ofPattern("MMMM uuuu"))}",
-          startDate = startDate,
-          endDate = endDate,
-          payments = paymentsWithPlaceholder
-        )
-      }
-
-    PaymentsOnAccountViewModel(
-      breathingSpace = false, 
-      periods = periods.toList,
-      changedOn = mostRecentChangedOn
-    )
-  }
 }

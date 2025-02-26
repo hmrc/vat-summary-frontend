@@ -22,26 +22,29 @@ import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 import play.api.libs.json._
-import models.StandingRequest
+import models.{StandingRequestResponse, StandingRequest}
 
 object StandingRequestsHttpParser extends ResponseHttpParsers {
 
-  implicit object StandingRequestsReads extends HttpReads[HttpResult[StandingRequest]] {
-    override def read(method: String, url: String, response: HttpResponse): HttpResult[StandingRequest] = {
+  implicit object StandingRequestsResponseReads extends HttpReads[HttpResult[StandingRequestResponse]] {
+    override def read(method: String, url: String, response: HttpResponse): HttpResult[StandingRequestResponse] = {
+
       response.status match {
         case OK =>
-          Json.parse(response.body).validate[StandingRequest] match {
-            case JsSuccess(standingRequest, _) =>
-              val filteredRequests = standingRequest.copy(
-                standingRequests = standingRequest.standingRequests.filter(_.requestCategory == "3")
+          Json.parse(response.body).validate[StandingRequestResponse] match {
+            case JsSuccess(standingRequestResponse, _) =>
+              val filteredResponse = standingRequestResponse.copy(
+                response = standingRequestResponse.response.copy(
+                  standingRequests = standingRequestResponse.response.standingRequests.filter(_.requestCategory == "3")
+                )
               )
-              Right(filteredRequests)
+              Right(filteredResponse)
 
             case JsError(errors) =>
               Left(UnexpectedStatusError(response.status.toString, s"JSON Parsing Error: $errors"))
           }
 
-        case NOT_FOUND => Right(StandingRequest("", List.empty)) // Empty StandingRequest if not found
+        case NOT_FOUND => Right(StandingRequestResponse(StandingRequest("", List.empty)))
         case BAD_REQUEST => handleBadRequest(response.json)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))
         case _ => Left(UnexpectedStatusError(response.status.toString, response.body))
