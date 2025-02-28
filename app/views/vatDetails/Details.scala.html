@@ -144,7 +144,7 @@
       </div>
     }
 
-      @if(detailsViewModel.isPoaActiveForCustomer){
+      @if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
       <div class="govuk-grid-column-one-third">
           @vatPaymentOnAccountSchedule()
       </div>

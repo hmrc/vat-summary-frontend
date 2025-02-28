@@ -19,4 +19,5 @@ package models
 case class FeatureSwitchModel(staticDateEnabled: Boolean,
                               webchatEnabled: Boolean,
                               showUserResearchBannerEnabled: Boolean,
-                              futureDateOffsetEnabled: Boolean)
+                              futureDateOffsetEnabled: Boolean,
+                              poaActiveFeatureEnabled: Boolean)

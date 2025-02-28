@@ -32,6 +32,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.webchatEnabled(true)
     features.showUserResearchBannerEnabled(false)
     features.futureDateOffsetEnabled(true)
+    features.poaActiveFeatureEnabled(true)
   }
 
   "The static date feature" should {
@@ -86,6 +87,18 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "switch to a different state" in {
       features.futureDateOffsetEnabled(false)
       features.futureDateOffsetEnabled() shouldBe false
+    }
+  }
+
+  "The poaActiveFeatureEnabled feature" should {
+
+    "return its current state" in {
+      features.poaActiveFeatureEnabled() shouldBe true
+    }
+
+    "switch to a different state" in {
+      features.poaActiveFeatureEnabled(false)
+      features.poaActiveFeatureEnabled() shouldBe false
     }
   }
 }
