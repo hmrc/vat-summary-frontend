@@ -26,24 +26,25 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
   val nextPaymentSection: NextPaymentSection = injector.instanceOf[NextPaymentSection]
 
   "The nextPaymentSection template" when {
-
     object Selectors {
       val nextPaymentDueHeading = "h2:nth-of-type(1)"
       val nextPaymentDate = "p:nth-of-type(1)"
       val viewPaymentButton = "a:nth-of-type(1)"
       val portalLink = "a"
+      val checkPOAlinktext = "#poa-schedule-of-payment"
+      val checkPOAlink = "#poa-schedule-of-payment"
     }
 
     "there is a payment to display" when {
 
       "payment is not overdue" should {
-
         lazy val view = nextPaymentSection(
           Some("2017-03-08"),
           hasMultiple = false,
           isError = false,
           isHybridUser = false,
-          isOverdue = false
+          isOverdue = false,
+          isPoaActiveForCustomer = false
         )
         lazy val viewAsString = view.toString
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -76,7 +77,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           hasMultiple = false,
           isError = false,
           isHybridUser = false,
-          isOverdue = true
+          isOverdue = true,
+          isPoaActiveForCustomer = false
         )
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -92,7 +94,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = false,
         isError = false,
         isHybridUser = false,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -115,7 +118,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = false,
         isError = true,
         isHybridUser = false,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -139,8 +143,8 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = true,
         isError = false,
         isHybridUser = false,
-        isOverdue = false
-      )
+        isOverdue = false,
+        isPoaActiveForCustomer = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the 'Next payment due' heading" in {
@@ -154,7 +158,6 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       "display the 'View payment details' button" in {
         elementText(Selectors.viewPaymentButton) shouldBe "Check what you owe"
       }
-
     }
 
     "the user is hybrid" should {
@@ -163,10 +166,10 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         hasMultiple = false,
         isError = false,
         isHybridUser = true,
-        isOverdue = false
+        isOverdue = false,
+        isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
       "display the 'Next payment due' heading" in {
         elementText(Selectors.nextPaymentDueHeading) shouldBe "Next payment due"
       }
@@ -177,6 +180,63 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
       "have the correct link text" in {
         elementText(Selectors.portalLink) shouldBe "Check what you owe and make a payment (opens in a new tab)"
+      }
+    }
+
+    "there is a payment on account schedule link to display when feature switch is enabled" when {
+      mockConfig.features.poaActiveFeatureEnabled(true)
+      "payment on account link is displayed when POAActiveUntil is valid" should {
+        lazy val view = nextPaymentSection(
+          Some("2017-03-08"),
+          hasMultiple = false,
+          isError = false,
+          isHybridUser = false,
+          isOverdue = false,
+          isPoaActiveForCustomer = true
+        )
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        println( " ******** - 1 " + view.body)
+        "have the correct link text for poa if POAActiveUntil is true and POAActiveFeature is enabled" in {
+          elementText(Selectors.checkPOAlinktext) shouldBe "Check your payments on account schedule"
+        }
+
+        "display the due date of the payment" in {
+          val linkElement = element(Selectors.checkPOAlink)
+          linkElement.attr("href") shouldBe "/vat-through-software/payments-on-account"
+        }
+      }
+
+      "payment on account link is not displayed when POAActiveUntil is false" should {
+        lazy val view = nextPaymentSection(
+          Some("2017-03-08"),
+          hasMultiple = false,
+          isError = false,
+          isHybridUser = false,
+          isOverdue = true,
+          isPoaActiveForCustomer = false
+        )
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        "display overdue flag" in {
+          document.select(Selectors.checkPOAlinktext) should be(empty)
+        }
+      }
+    }
+
+    "there is no payment on account schedule link to display when feature switch is disabled" when {
+      mockConfig.features.poaActiveFeatureEnabled(false)
+      "payment on account link is not displayed" should {
+        lazy val view = nextPaymentSection(
+          Some("2017-03-08"),
+          hasMultiple = false,
+          isError = false,
+          isHybridUser = false,
+          isOverdue = false,
+          isPoaActiveForCustomer = true
+        )
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+        "have the poa link text  is not displayed if POAActiveUntil is true" in {
+          document.select(Selectors.checkPOAlinktext) should be(empty)
+        }
       }
     }
   }

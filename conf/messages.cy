@@ -73,6 +73,8 @@ vatDetails.paymentsDue = Mae gennych {0} o daliadau’n ddyledus
 vatDetails.checkWhatYouOwe = Gwirio’r hyn sydd arnoch a gwneud taliad
 vatDetails.viewPenalties.link = Cosbau yn sgil Ffurflenni TAW a thaliadau hwyr
 vatDetails.viewPenalties.info = Bwrw golwg dros eich cosbau, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
+vatDetails.viewPaymentOnAccount.link = Taliadau ar gyfrif
+vatDetails.viewPaymentOnAccount.info = Bwrw golwg dros eich amserlen ar gyfer taliadau ar gyfrif
 
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i’w chyflwyno
@@ -86,6 +88,7 @@ payment.nextPayments = Taliadau sy’n ddyledus
 payment.check = Gwirio’r hyn sydd arnoch
 payment.stillMake = Mae’n dal yn bosibl i chi
 payment.stillMakeLink = dalu (yn agor mewn tab newydd)
+payment.paymentOnAccount = Gwiriwch eich amserlen ar gyfer taliadau ar gyfrif
 
 pastHistory.history = Hanes
 

@@ -38,7 +38,9 @@ class FeatureSwitchItems @Inject() () {
     Seq(
       formCheckBoxItem(form, ConfigKeys.staticDateEnabledFeature, "Use static date (2018-05-01)"),
       formCheckBoxItem(form, ConfigKeys.webchatEnabled, "Enable the web chat link"),
-      formCheckBoxItem(form, ConfigKeys.showUserResearchBannerEnabled, "Enable the user research banner")
+      formCheckBoxItem(form, ConfigKeys.showUserResearchBannerEnabled, "Enable the user research banner"),
+      formCheckBoxItem(form, ConfigKeys.futureDateOffsetEnabled, "Enable the user future date to 35 days"),
+      formCheckBoxItem(form, ConfigKeys.poaActiveFeatureEnabled, "Enable Payment On Account Schedule link")
     )
   }
 }

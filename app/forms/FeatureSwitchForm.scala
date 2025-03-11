@@ -26,7 +26,9 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.staticDateEnabledFeature -> boolean,
       ConfigKeys.webchatEnabled -> boolean,
-      ConfigKeys.showUserResearchBannerEnabled -> boolean
+      ConfigKeys.showUserResearchBannerEnabled -> boolean,
+      ConfigKeys.futureDateOffsetEnabled -> boolean,
+      ConfigKeys.poaActiveFeatureEnabled -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

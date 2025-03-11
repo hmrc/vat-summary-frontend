@@ -48,6 +48,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val btaBreadcrumbLink = ".govuk-breadcrumbs__link"
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
+    val vatPOASection = "#vat-POA"
+    val vatPOALink = "#vat-POA a.govuk-link"
+    val vatPOAText = "#vat-POA p.govuk-body"
     val historyHeading = "#history > h2"
     val historyPastPayments = ".govuk-list > li:nth-child(1) > p > a"
     val historyPastReturns = ".govuk-list > li:nth-child(2) > p > a"
@@ -145,6 +148,28 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     partyType = Some("1"),
     userEmailVerified = true,
     mandationStatus = "MTDfB"
+  )
+
+  val poaActiveUntiltrue: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentDate = testDate,
+    partyType = Some("1"),
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isPoaActiveForCustomer = true
+  )
+
+  val poaActiveUntilfalse: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentDate = testDate,
+    partyType = Some("1"),
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isPoaActiveForCustomer = false
   )
 
   "Rendering the VAT details page for an mtd user" should {
@@ -547,7 +572,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "the user has no penalties points" should {
 
       "display the penalties changes banner" which {
-
         lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -580,4 +604,50 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
     }
   }
+
+  "Rendering the VAT details page when POA Feature is enabled" should {
+    mockConfig.features.poaActiveFeatureEnabled(true)
+    lazy val view = details(poaActiveUntiltrue, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    lazy val vatPOASection = element(Selectors.vatPOASection)
+
+    "has the correct heading for POA" in {
+      vatPOASection.select("h3").text() shouldBe "Payments on account"
+    }
+
+    "render the correct link inside VAT POA section" in {
+      vatPOASection.select("h3 a").attr("href") shouldBe mockConfig.paymentOnAccountUrl
+    }
+
+    "render the correct informational text inside VAT POA section" in {
+      vatPOASection.select("p").text() shouldBe "View your payments on account schedule of payments."
+    }
+  }
+
+  "Rendering VAT details page when POA Feature is enabled but poaActiveUntil is false" should {
+
+    lazy val view = details(poaActiveUntilfalse, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "has the correct heading for POA" in {
+      mockConfig.features.poaActiveFeatureEnabled(true)
+      document.select(Selectors.vatPOASection) should be(empty)
+    }
+  }
+
+
+
+  "the VAT details page doesn't render POA section when POA Feature is enabled" should {
+
+    lazy val view = details(poaActiveUntiltrue, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "doesn't have POA section" in {
+      mockConfig.features.poaActiveFeatureEnabled(false)
+      document.select(Selectors.vatPOASection) should be(empty)
+    }
+  }
+
+
+
 }

@@ -124,7 +124,11 @@ object ConfigKeys {
   val penaltiesFrontendHost: String = "penalties-frontend.host"
   val penaltiesFrontendUrl: String = "penalties-frontend.endpointUrl"
 
+  val paymentOnAccountUrl: String = "payments-on-account.endpointUrl"
+
   val timeToLive: String = "mongodb.timeToLiveInSeconds"
 
   val essttpServiceBase: String = "essttp-backend"
+  val futureDateOffsetEnabled: String = "features.futureDateOffset.enabled"
+  val poaActiveFeatureEnabled: String = "features.poaActiveFeature.enabled"
 }

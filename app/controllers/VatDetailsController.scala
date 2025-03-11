@@ -16,7 +16,7 @@
 
 package controllers
 
-import java.time.LocalDate
+import java.time.{LocalDate, LocalDateTime}
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import common.MandationStatus._
@@ -24,6 +24,7 @@ import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
+
 import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
@@ -37,7 +38,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.vatDetails.Details
+
+import java.time.format.DateTimeFormatter
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 @Singleton
 class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
@@ -164,6 +168,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
     val emailAddress: Option[String] = accountDetails.fold(_ => None, _.emailAddress.flatMap(_.email))
     val mandationStatus: String = accountDetails.fold(_ => "ERROR", _.mandationStatus)
+    val isPoaActiveForCustomer: Boolean = retrievePoaActiveForCustomer(accountDetails)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -185,7 +190,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       retrieveEmailVerifiedIfExist(accountDetails),
       emailAddress,
       penaltyInformation,
-      mandationStatus
+      mandationStatus,
+      isPoaActiveForCustomer
     )
   }
 
@@ -250,6 +256,32 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
       case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }
+
+
+  def retrievePoaActiveForCustomer(accountDetails: HttpResult[CustomerInformation]): Boolean = {
+    accountDetails match {
+      case Right(customerDetails) => isDateEqualsTodayFuture(customerDetails.poaActiveUntil,dateService.now())
+      case _ => false
+    }
+  }
+
+  val dateFormat: String           = "yyyy-MM-dd"
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
+  def isDateEqualsTodayFuture(poaActiveUntil: Option[String], currentDate: LocalDate): Boolean = {
+    poaActiveUntil match {
+      case Some(poaActiveUntilDate) =>
+        val parsedDate = Try(LocalDate.parse(poaActiveUntilDate, formatter)).getOrElse(LocalDate.MIN)
+        if (parsedDate.isAfter(currentDate) || parsedDate.isEqual(currentDate)) {
+          logger.info(s"Date condition met, parsedDate ($parsedDate) is today or in the future")
+          true
+        } else {
+          logger.info(s"Date condition failed, parsedDate ($parsedDate) is in the past or not available")
+          false
+        }
+      case _ => false
+    }
+  }
+
 
   private[controllers] def auditEvents(user: User,
                                        returnObligations: ServiceResponse[Option[VatReturnObligations]],

@@ -104,6 +104,7 @@ trait AppConfig {
   val timeToLiveInSeconds: Int
   val essttpService: String
   val webchatUrl: String
+  val paymentOnAccountUrl: String
 }
 
 @Singleton
@@ -143,6 +144,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val vatSubmittedReturnsUrl: String = vatReturnsBaseUrl + sc.getString(Keys.vatSubmittedReturns)
   override lazy val vatReturnDeadlinesUrl: String = vatReturnsBaseUrl + sc.getString(Keys.vatReturnDeadlines)
   override def vatReturnUrl(periodKey: String): String = vatReturnsBaseUrl + sc.getString(Keys.vatReturn) + URLEncoder.encode(periodKey, "UTF-8")
+
+  override lazy val paymentOnAccountUrl: String = sc.getString(Keys.paymentOnAccountUrl)
 
   override lazy val btaBaseUrl: String = sc.baseUrl(Keys.businessTaxAccountBase)
   override lazy val btaHomeUrl: String = sc.getString(Keys.businessTaxAccountHost) + sc.getString(Keys.businessTaxAccountUrl)

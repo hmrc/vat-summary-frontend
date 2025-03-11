@@ -24,7 +24,8 @@
   hasMultiple: Boolean,
   isError: Boolean,
   isHybridUser: Boolean,
-  isOverdue: Boolean)(implicit messages: Messages)
+  isOverdue: Boolean,
+  isPoaActiveForCustomer: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
 <div class="tile tile-no-border">
   <div id="payments" class="tile-body">
@@ -63,8 +64,13 @@
           @messages("payment.check")
         </a>
       </p>
-    }
 
+      @if(appConfig.features.poaActiveFeatureEnabled() && isPoaActiveForCustomer){
+      <p class="govuk-body">
+          <a class="govuk-link" id ="poa-schedule-of-payment" href="@{appConfig.paymentOnAccountUrl}">@messages("payment.paymentOnAccount")</a>
+      </p>
+      }
+    }
   </div>
 </div>
 

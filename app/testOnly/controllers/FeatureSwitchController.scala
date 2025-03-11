@@ -35,7 +35,9 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
       FeatureSwitchModel(
         staticDateEnabled = appConfig.features.staticDateEnabled(),
         webchatEnabled = appConfig.features.webchatEnabled(),
-        showUserResearchBannerEnabled = appConfig.features.showUserResearchBannerEnabled()
+        showUserResearchBannerEnabled = appConfig.features.showUserResearchBannerEnabled(),
+        futureDateOffsetEnabled = appConfig.features.futureDateOffsetEnabled(),
+        poaActiveFeatureEnabled = appConfig.features.poaActiveFeatureEnabled()
       )
     )))
   }
@@ -51,6 +53,7 @@ class FeatureSwitchController @Inject()(implicit val appConfig: AppConfig,
     appConfig.features.staticDateEnabled(model.staticDateEnabled)
     appConfig.features.webchatEnabled(model.webchatEnabled)
     appConfig.features.showUserResearchBannerEnabled(model.showUserResearchBannerEnabled)
+    appConfig.features.poaActiveFeatureEnabled(model.poaActiveFeatureEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }
