@@ -20,6 +20,7 @@ import audit.AuditingService
 import audit.models.{AuditModel, ExtendedAuditModel}
 import common.SessionKeys
 import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, penaltyDetailsResponse, successfulAuthResult}
+import common.TestModels._
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import controllers.predicates.{AgentPredicate, FinancialPredicate}
@@ -37,7 +38,7 @@ import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, Insuffic
 import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
-
+import models._
 import java.time.LocalDate
 import models.payments.Payments
 import models.penalties.PenaltyDetails
@@ -77,6 +78,9 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockAuditService: AuditingService = mock[AuditingService]
   val mockPenaltyDetailsService: PenaltyDetailsService = mock[PenaltyDetailsService]
   val mockWYOSessionService: WYOSessionService = mock[WYOSessionService]
+
+  val mockPaymentsOnAccountService: PaymentsOnAccountService = mock[PaymentsOnAccountService]
+
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -202,6 +206,18 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     (mockWYOSessionService.storeChargeModels(_: Seq[ChargeDetailsViewModel],_ : String)(_: ExecutionContext))
       .stubs(*,*,*)
       .returns(Future.successful(Seq()))
+  }
+
+ def mockPaymentsOnAccountServiceCall(): Any = {
+  (mockPaymentsOnAccountService.getPaymentsOnAccounts(_: String)(_: HeaderCarrier, _: ExecutionContext))
+    .expects(*, *, *)
+    .returning(Future.successful(Some(sampleStandingRequest)))
+}
+
+  def mockPaymentsOnAccountServiceCall(response: Option[StandingRequest]): Any = {
+    (mockPaymentsOnAccountService.getPaymentsOnAccounts(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returning(Future.successful(response))
   }
 
   implicit def existenceOfElement[Els <: org.jsoup.select.Elements]: Existence[Els] =

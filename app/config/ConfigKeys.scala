@@ -30,6 +30,7 @@ object ConfigKeys {
   val overdueTimeToPayDescriptionFeature: String = "features.overdueTimeToPayDescription.enabled"
   val webchatEnabled: String = "features.webchat.enabled"
   val showUserResearchBannerEnabled: String = "features.showUserResearchBanner.enabled"
+  val poaScheduleFeature: String = "features.poaScheduleFeature.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"
@@ -38,6 +39,7 @@ object ConfigKeys {
   val vatObligations: String = "vat-obligations"
 
   val vatReturnsBase: String = "view-vat-returns-frontend.host"
+
   val vatReturnDeadlines: String = "view-vat-returns-frontend.returnDeadlinesUrl"
   val vatSubmittedReturns: String = "view-vat-returns-frontend.submittedReturnsUrl"
   val vatReturn: String = "view-vat-returns-frontend.returnUrl"
@@ -123,8 +125,6 @@ object ConfigKeys {
   val penaltiesUrl: String = "penalties.url"
   val penaltiesFrontendHost: String = "penalties-frontend.host"
   val penaltiesFrontendUrl: String = "penalties-frontend.endpointUrl"
-
-  val paymentOnAccountUrl: String = "payments-on-account.endpointUrl"
 
   val timeToLive: String = "mongodb.timeToLiveInSeconds"
 

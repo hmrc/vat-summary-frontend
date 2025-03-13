@@ -1,0 +1,59 @@
+@*
+ * Copyright 2023 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.helper.CSPNonce
+
+@this(mainTemplate: MainTemplate, govukBreadcrumbs: GovukBreadcrumbs, govukBackLink: GovukBackLink)
+
+@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages, user: User)
+
+@backLink = {
+    @govukBackLink(BackLink(
+         href = "#back-link",
+         content = Text("Back"),
+         attributes = Map("id" -> "back-link")
+    ))
+     <script @CSPNonce.attr>
+        document.getElementById("back-link").addEventListener("click", function(e) {
+          e.preventDefault()
+          window.history.back()
+        });
+     </script>
+ }
+
+@mainTemplate(
+  title = messages("paymentsError.title"),
+  appConfig = appConfig,
+  user = Some(user),
+  navLinkContent = if(user.isAgent) Some(backLink) else None 
+) {
+  @backLink
+  <main class="govuk-main-wrapper govuk-main-wrapper--auto-spacing" id="main-content">
+     <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">@messages("paymentsOnAccount.error.heading")</h1>
+        @if(!user.isAgent) {
+            <p class="govuk-body">
+                @messages("paymentsOnAccount.error.message")
+            </p>
+            <p class="govuk-body">
+                <a class="govuk-link" href="@routes.VatDetailsController.details.url">@messages("paymentsOnAccount.error.goBackToManageVat")</a>
+            </p>
+        }
+      </div>
+    </div>
+    </main>
+}

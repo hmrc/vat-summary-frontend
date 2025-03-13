@@ -617,7 +617,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "render the correct link inside VAT POA section" in {
-      vatPOASection.select("h3 a").attr("href") shouldBe mockConfig.paymentOnAccountUrl
+      vatPOASection.select("h3 a").attr("href") shouldBe controllers.routes.PaymentsOnAccountController.show.url
     }
 
     "render the correct informational text inside VAT POA section" in {

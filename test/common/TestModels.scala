@@ -1180,4 +1180,31 @@ object TestModels {
   val directDebitEnrolled: DirectDebitStatus = DirectDebitStatus(directDebitMandateFound = true, None)
   val directDebitNotEnrolled : DirectDebitStatus = DirectDebitStatus(directDebitMandateFound = false, None)
 
+  val sampleStandingRequest = StandingRequest(
+      processingDate = "2024-07-15T09:30:47Z",
+      standingRequests = List(
+        StandingRequestDetail(
+          requestNumber = "20000037272",
+          requestCategory = "3",
+          createdOn = "2023-11-30",
+          changedOn = Some("2024-12-26"),
+          requestItems = List(
+            RequestItem("1", "24A1", "2024-02-01", "2024-04-30", "2024-03-31", 22945.23, Some("XD006411191344"), Some("2024-03-31")),
+            RequestItem("2", "24A1", "2024-02-01", "2024-04-30", "2024-04-30", 22945.23, Some("XD006411191345"), Some("2024-04-30"))
+          )
+        ),
+        StandingRequestDetail(
+          requestNumber = "20000037277",
+          requestCategory = "3",
+          createdOn = "2024-11-30",
+          changedOn = Some("2025-01-26"),
+          requestItems = List(
+            RequestItem("1", "25A1", "2025-02-01", "2025-04-30", "2025-03-31", 122945.23, None, None),
+            RequestItem("2", "25A1", "2025-02-01", "2025-04-30", "2025-04-30", 122945.23, None, None)
+          )
+        )
+      )
+  )
+
+  val sampleStandingRequestResponse = sampleStandingRequest
 }

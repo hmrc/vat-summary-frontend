@@ -28,7 +28,11 @@ import stubs.CustomerInfoStub.customerInfoJson
 
 class PaymentHistoryPageSpec extends IntegrationBaseSpec {
 
-  "Calling the payment history route as an authenticated user" when {
+  override def servicesConfig: Map[String, String] = super.servicesConfig ++ Map(
+    "date-service.staticDate.value" -> "2018-05-01"
+  )
+
+   "Calling the payment history route as an authenticated user" when {
 
     val hmrcPaidYouSelector = "#past-payments-2018 > table > tbody > tr:nth-child(1) > td:nth-child(4)"
     val youPaidHmrcSelector = "#past-payments-2018 > table > tbody > tr:nth-child(1) > td:nth-child(3)"

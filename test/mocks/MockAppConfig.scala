@@ -36,6 +36,7 @@ class MockAppConfig(val runModeConfiguration: Configuration) extends AppConfig {
   override val vatSubmittedReturnsUrl: String = "returns-url"
   override val vatReturnDeadlinesUrl: String = "/return-deadlines"
   override def vatReturnUrl(periodKey: String): String = s"/submitted/${URLEncoder.encode(periodKey, "UTF-8")}"
+
   override val vatObligationsBaseUrl: String = "/obligations-api"
   override val financialDataBaseUrl = ""
   override val btaBaseUrl: String = ""
@@ -108,5 +109,4 @@ class MockAppConfig(val runModeConfiguration: Configuration) extends AppConfig {
 
   override val essttpService: String = "/essttp"
   override val webchatUrl: String = "/ask-hmrc/chat/vat-online?ds"
-  override lazy val paymentOnAccountUrl: String = "/vat-through-software/payments-on-account"
 }
