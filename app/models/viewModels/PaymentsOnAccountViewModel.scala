@@ -27,13 +27,13 @@ sealed trait PaymentType {
 
 object PaymentType {
   case object FirstPayment extends PaymentType {
-    val messageKey = "paymentType.firstPayment"
+    val messageKey = "paymentsOnAccount.paymentType.firstPayment"
   }
   case object SecondPayment extends PaymentType {
-    val messageKey = "paymentType.secondPayment"
+    val messageKey = "paymentsOnAccount.paymentType.secondPayment"
   }
   case object ThirdPayment extends PaymentType {
-    val messageKey = "paymentType.thirdPayment"
+    val messageKey = "paymentsOnAccount.paymentType.thirdPayment"
   }
 }
 
