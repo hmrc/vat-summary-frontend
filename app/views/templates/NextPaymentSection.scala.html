@@ -67,7 +67,7 @@
 
       @if(appConfig.features.poaActiveFeatureEnabled() && isPoaActiveForCustomer){
       <p class="govuk-body">
-          <a class="govuk-link" id ="poa-schedule-of-payment" href="@{appConfig.paymentOnAccountUrl}">@messages("payment.paymentOnAccount")</a>
+          <a class="govuk-link" id="poa-schedule-of-payment" href="@{controllers.routes.PaymentsOnAccountController.show.url}">@messages("payment.paymentOnAccount")</a>
       </p>
       }
     }

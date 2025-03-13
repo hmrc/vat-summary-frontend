@@ -202,7 +202,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
 
         "display the due date of the payment" in {
           val linkElement = element(Selectors.checkPOAlink)
-          linkElement.attr("href") shouldBe "/vat-through-software/payments-on-account"
+          linkElement.attr("href") shouldBe controllers.routes.PaymentsOnAccountController.show.url
         }
       }
 

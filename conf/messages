@@ -86,10 +86,53 @@ payment.noPayment = No payments due right now
 payment.nextPayment = Next payment due
 payment.nextPayments = Payments due
 payment.check = Check what you owe
+payment.checkPoaSchedule = Check your payments on account schedule
 payment.stillMake = You can still
 payment.stillMakeLink = make a payment (opens in a new tab)
 payment.paymentOnAccount = Check your payments on account schedule
 
+
+
+paymentsOnAccount.title = Payments on account
+paymentsOnAccount.heading = Payments on account
+paymentsOnAccount.back = Back
+paymentsOnAccount.nextPayment.your = Your
+paymentsOnAccount.nextPayment.nextPaymentDue = next payment due
+paymentsOnAccount.nextPayment.isYour = is your 
+paymentsOnAccount.nextPayment.strongDue = Your next payment due
+paymentsOnAccount.nextPayment.balancing = balancing payment.
+paymentsOnAccount.nextPayment.thisIsDue = This is due on the same date as your
+paymentsOnAccount.nextPayment.vatReturnDue = VAT return due date
+paymentsOnAccount.nextPayment.amount.prefix = Your next payment of 
+paymentsOnAccount.nextPayment.amount.suffix = is due on
+paymentsOnAccount.howToPay = Find out how to pay (opens in a new tab)
+paymentsOnAccount.changedOn = The amounts due for your payments on account were changed on {0}.
+paymentsOnAccount.contents = Contents
+paymentsOnAccount.currentSchedule = Current and upcoming schedule
+paymentsOnAccount.pastSchedules = Past schedules
+paymentsOnAccount.currentSchedule.hidden = Current payment on account schedule
+paymentsOnAccount.vatPeriod = VAT period:
+paymentsOnAccount.sameAs = Same as 
+paymentsOnAccount.VatReturn = VAT return due date 
+paymentsOnAccount.balance = Balance
+paymentsOnAccount.pending = Pending 
+paymentsOnAccount.pastPaymentsOnSchedule = Past payment on account schedule
+paymentsOnAccount.contactHMRC = Contact HMRC
+paymentsOnAccount.post = Post
+paymentsOnAccount.contactDetails = Payments on Account Team
+paymentsOnAccount.contactDetails.bt = BT VAT
+paymentsOnAccount.contactDetails.hmrc = HMRC 
+paymentsOnAccount.contactDetails.pc = BX9 1WR 
+paymentsOnAccount.email = Email
+paymentsOnAccount.moreInfo = Find more information about payments on account here (opens in a new tab)
+paymentsOnAccount.poaEmail = poateam@hmrc.gov.uk
+paymentsOnAccount.paymentType.firstPayment = 1st payment due 
+paymentsOnAccount.paymentType.secondPayment = 2nd payment due 
+paymentsOnAccount.paymentType.thirdPayment = 3rd payment due 
+paymentsOnAccount.error.heading = Sorry, there is a problem with the service
+paymentsOnAccount.error.message = We cannot display your payments on account schedule right now. You can try again later.
+paymentsOnAccount.error.cannotDisplay = paymentsOnAccount.error.cannotDisplay
+paymentsOnAccount.error.goBackToManageVat = Go to Manage your VAT account
 
 pastHistory.history = History
 

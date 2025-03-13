@@ -1,0 +1,228 @@
+@*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.User
+@import models.viewModels._
+@import utils.Money
+@import views.html.templates.payments.wyoCharges._
+@import views.html.helper.CSPNonce
+@import utils.MessageDateFormat
+
+@this(mainTemplate: MainTemplate,
+      govukBackLink: GovukBackLink)
+
+@(model: PaymentsOnAccountViewModel, serviceInfoContent: Html)(
+  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+
+@backLink = {
+    @govukBackLink(BackLink(
+         href = request.headers.get("Referer").getOrElse("#back-link"),
+         content = Text("Back"),
+         attributes = Map("id" -> "back-link")
+    ))
+     <script @CSPNonce.attr>
+        document.getElementById("back-link").addEventListener("click", function(e) {
+          e.preventDefault()
+          window.history.back()
+        });
+     </script>
+ }
+
+@mainTemplate(title = messages("paymentsOnAccount.title"),
+              appConfig = appConfig,
+              serviceInfoContent = serviceInfoContent,
+              user = Some(user),
+              navLinkContent = if(user.isAgent) Some(backLink) else Some(backLink) 
+) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <main class="govuk-main-wrapper">
+        <h1 class="govuk-heading-xl">
+          @if(user.isAgent) {
+            @messages("paymentsOnAccount.agent.heading")
+          } else{
+            @messages("paymentsOnAccount.heading")
+          }
+        </h1>
+        <p class="govuk-body" id="next-payment-text">
+          @if(model.nextPayment.exists(p => p.paymentType == PaymentType.ThirdPayment)) {
+            @if(user.isAgent) {
+              @messages("paymentsOnAccount.agent.nextPayment.your")
+              <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isTheir") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
+            } else {
+              @messages("paymentsOnAccount.nextPayment.your") <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isYour") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
+              <br />
+              @messages("paymentsOnAccount.nextPayment.thisIsDue")
+              <strong>@messages("paymentsOnAccount.nextPayment.vatReturnDue")</strong>.
+            }
+          } else {
+              @if(user.isAgent) {
+                @messages("paymentsOnAccount.agent.nextPayment.amount.prefix") <strong class="govuk-!-font-weight-bold">@Money.pounds(model.nextPayment.get.amount.get)</strong>
+              } else {
+                @messages("paymentsOnAccount.nextPayment.amount.prefix") <strong class="govuk-!-font-weight-bold">@Money.pounds(model.nextPayment.get.amount.get)</strong>
+              }
+              @messages("paymentsOnAccount.nextPayment.amount.suffix")
+              <strong>@model.nextPayment.get.dueDate.map { dueDate => @MessageDateFormat.format(dueDate)}.getOrElse{@messages("paymentsOnAccount.pending")}</strong>.
+          }
+        </p>
+        <p class="govuk-body">
+            <a id="find-out-how-to-pay-link" href="https://www.gov.uk/guidance/vat-payments-on-account#how-to-pay" class="govuk-link" rel="noreferrer noopener" target="_blank">
+              @messages("paymentsOnAccount.howToPay")
+            </a>
+        </p>
+
+
+        @model.changedOnFormattedOpt.map{ changedOnDate =>
+          <div class="govuk-inset-text" id="changed-on-date">
+            @if(user.isAgent) {
+              @messages("paymentsOnAccount.agent.changedOn", changedOnDate)
+            } else {
+              @messages("paymentsOnAccount.changedOn", changedOnDate)
+            }
+          </div>
+        }
+
+        <div class="govuk-tabs" data-module="govuk-tabs">
+          <h2 class="govuk-tabs__title">@messages("paymentsOnAccount.contents")</h2>
+          <ul class="govuk-tabs__list" role="tablist">
+            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+              <a class="govuk-tabs__tab" href="#current-schedule" id="tab_current-schedule" role="tab" aria-controls="current-schedule" aria-selected="true" tabindex="0">
+                @messages("paymentsOnAccount.currentSchedule")
+              </a>
+            </li>
+            <li class="govuk-tabs__list-item">
+              <a class="govuk-tabs__tab" href="#past-schedule" id="tab_past-schedule" role="tab" aria-controls="past-schedule" aria-selected="false" tabindex="-1">
+                @messages("paymentsOnAccount.pastSchedules")
+              </a>
+            </li>
+          </ul>
+        
+          <div class="govuk-tabs__panel" id="current-schedule" role="tabpanel" aria-labelledby="tab_current-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">@messages("paymentsOnAccount.currentSchedule.hidden")</h2>
+            @for(period <- model.currentPeriods.take(5)) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">@messages("paymentsOnAccount.vatPeriod")</h2>
+                  <h2 class="govuk-summary-card__title">
+                    @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                  </h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">@messages(payment.paymentType.messageKey)</dt>
+                        @if(payment.paymentType == PaymentType.ThirdPayment) {
+                          @if(period.isCurrent) {
+                            @messages("paymentsOnAccount.sameAs")
+                            <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
+                              @messages("paymentsOnAccount.VatReturn")
+                            </a>
+                          } else {
+                            @messages("paymentsOnAccount.pending")
+                          }
+                        } else {
+                          @payment.dueDate.map{ dueDate => 
+                            @MessageDateFormat.format(dueDate)
+                          }.getOrElse{
+                            @messages("paymentsOnAccount.pending")
+                          }
+                        }
+                        <dd id="payment-amount" class="govuk-summary-list__actions">
+                          @payment.amount.map { amount =>
+                            @Money.pounds(amount)
+                          }.getOrElse{
+                            @messages("paymentsOnAccount.balance")
+                          }
+                        </dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+        
+          <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-schedule" role="tabpanel" aria-labelledby="tab_past-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">@messages("paymentsOnAccount.pastPaymentsOnSchedule")</h2>
+            @for(period <- model.pastPeriods) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">VAT period:</h2>
+                  <h2 class="govuk-summary-card__title">
+                    @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                  </h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">@messages(payment.paymentType.messageKey)</dt>
+                        @if(payment.paymentType == PaymentType.ThirdPayment) {
+                          <p id="third-payment-message">
+                            @messages("paymentsOnAccount.sameAs")
+                            <a class="govuk-link" id="vat-submitted-link" href="@appConfig.vatSubmittedReturnsUrl">
+                              @messages("paymentsOnAccount.VatReturn")
+                            </a>
+                          </p>
+                        } else {
+                          <div id="payment-due-date">
+                            @payment.dueDate.map{ dueDate => 
+                              @MessageDateFormat.format(dueDate)
+                            }.getOrElse{
+                              @messages("paymentsOnAccount.pending")
+                            }
+                          </div>
+                       }
+                       <dd id="payment-amount" class="govuk-summary-list__actions">
+                        @payment.amount.map { amount =>
+                          @Money.pounds(amount)
+                        }.getOrElse{
+                          @messages("paymentsOnAccount.balance")
+                        }
+                        </dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+          <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                @messages("paymentsOnAccount.contactHMRC")
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <b>@messages("paymentsOnAccount.post")</b> <br>
+              @messages("paymentsOnAccount.contactDetails")<br>
+              @messages("paymentsOnAccount.contactDetails.bt")<br>
+              @messages("paymentsOnAccount.contactDetails.hmrc") <br>
+              @messages("paymentsOnAccount.contactDetails.pc")<br><br>
+              <b> @messages("paymentsOnAccount.email")</b><br>
+              @messages("paymentsOnAccount.poaEmail")
+      
+            </div>
+          </details>
+          <p class="govuk-body">You can <a href="https://www.gov.uk/guidance/vat-payments-on-account" class="govuk-link govuk-link--no-visited-state">find more information about payments on account here (opens
+            in
+            a new tab)</a>.</p>
+      </main>
+    </div>
+  </div>
+}

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package models
 
-@()(implicit messages: Messages, appConfig: config.AppConfig)
-<div id="vat-POA">
+import play.api.libs.json.{Format, JsValue, Json}
+import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+import java.time.Instant
 
-    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
-        <a class="govuk-link" href="@{controllers.routes.PaymentsOnAccountController.show.url}">
-            @messages("vatDetails.viewPaymentOnAccount.link")</a>
-    </h3>
+case class StandingRequestDatabaseModel(
+  _id: String,
+  modelType: String = "StandingRequest",
+  data: JsValue,
+  creationTimestamp: Instant = Instant.now()
+)
 
-    <p class="govuk-body">@messages("vatDetails.viewPaymentOnAccount.info")</p>
-
-</div>
+object StandingRequestDatabaseModel {
+  implicit val dateFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
+  implicit val format: Format[StandingRequestDatabaseModel] = Json.format[StandingRequestDatabaseModel]
+}
