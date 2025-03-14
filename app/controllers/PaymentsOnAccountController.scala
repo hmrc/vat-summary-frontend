@@ -46,7 +46,7 @@ class PaymentsOnAccountController @Inject()(authorisedController: AuthorisedCont
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
   import PaymentsOnAccountController._
 
-  def show: Action[AnyContent] = authorisedController.authorisedAction { implicit request => 
+  def show: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user => {
       if (appConfig.features.poaActiveFeatureEnabled()) {
         (for {
@@ -54,8 +54,8 @@ class PaymentsOnAccountController @Inject()(authorisedController: AuthorisedCont
           today = dateService.now()
           standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
         } yield {
-          standingRequestOpt match { 
-            case Some(standingRequest) => 
+          standingRequestOpt match {
+            case Some(standingRequest) =>
               val viewModel = buildViewModel(standingRequest, today)
               Ok(view(viewModel,serviceInfoContent))
             case None => serviceErrorHandler.showInternalServerError
@@ -69,7 +69,7 @@ class PaymentsOnAccountController @Inject()(authorisedController: AuthorisedCont
           Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
         }
       }
-    } 
+    }
   }
 
 object PaymentsOnAccountController {
@@ -80,7 +80,7 @@ object PaymentsOnAccountController {
 
   val mostRecentChangedOn: Option[LocalDate] = standingRequests
     .flatMap(req => req.changedOn.map(c => LocalDate.parse(c.trim)))
-    .sorted(Ordering[LocalDate].reverse) 
+    .sorted(Ordering[LocalDate].reverse)
     .headOption
 
   val periods = standingRequests
@@ -107,7 +107,7 @@ object PaymentsOnAccountController {
         val thirdPayment = PaymentDetail(
           paymentType = PaymentType.ThirdPayment,
           dueDate = Some(thirdPaymentDueDate),
-          amount = None 
+          amount = None
         )
 
         actualPayments :+ thirdPayment
@@ -119,11 +119,9 @@ object PaymentsOnAccountController {
       val adjustedStart = startDate.plusDays(35)
       val adjustedEnd = endDate.plusDays(35)
 
-      val hasPastPeriods = standingRequests.exists(_.requestItems.exists(ri => LocalDate.parse(ri.dueDate).isBefore(today)))
-
-      val isCurrent: Boolean = if (hasPastPeriods) {
-         today.isAfter(adjustedStart.minusDays(1)) && today.isBefore(adjustedEnd.plusDays(1))
-      } else today.isBefore(adjustedEnd.plusDays(1))
+      val isCurrent: Boolean = today.isEqual(startDate) || (
+        today.isAfter(adjustedStart.minusDays(1)) && today.isBefore(adjustedEnd.plusDays(1))
+      )
 
       val isPast = endDate.isBefore(today.minusDays(35))
 
@@ -136,8 +134,22 @@ object PaymentsOnAccountController {
       )
     }
 
-  def currentPeriods: List[VatPeriod] = periods.filter(_.isCurrentOrUpcoming).toList
-  def pastPeriods: List[VatPeriod] = periods.filter(_.isPast).toList
+  val hasPastPeriods = periods.exists(_.isPast)
+
+  val currentPeriodOpt = if (hasPastPeriods) {
+    periods
+      .sortBy(_.startDate)
+      .find(p => p.startDate.isBefore(today.plusDays(1)) && !p.isPast)
+  } else {
+    periods.find(_.startDate.isBefore(today.plusDays(1)))
+  }
+
+  val updatedPeriods = periods.map(period =>
+    period.copy(isCurrent = currentPeriodOpt.contains(period))
+  )
+
+  val currentPeriods = updatedPeriods.filter(_.isCurrentOrUpcoming).toList
+  val pastPeriods = updatedPeriods.filter(_.isPast).toList
 
   val nextPaymentOpt = currentPeriods
     .flatMap(_.payments)
@@ -145,15 +157,15 @@ object PaymentsOnAccountController {
     .sortBy(_.dueDate.getOrElse(LocalDate.MAX))
     .headOption
 
-    val orderedPastPeriods = pastPeriods.sortBy(_.endDate)(Ordering[LocalDate].reverse).toList
+  val orderedPastPeriods = pastPeriods.sortBy(_.endDate)(Ordering[LocalDate].reverse).toList
 
-    PaymentsOnAccountViewModel(
-      breathingSpace = false, 
-      periods = periods.toList,
-      changedOn = mostRecentChangedOn,
-      currentPeriods = currentPeriods,
-      pastPeriods = orderedPastPeriods,
-      nextPayment = nextPaymentOpt
-    )
+  PaymentsOnAccountViewModel(
+    breathingSpace = false,
+    periods = updatedPeriods.toList,
+    changedOn = mostRecentChangedOn,
+    currentPeriods = currentPeriods,
+    pastPeriods = orderedPastPeriods,
+    nextPayment = nextPaymentOpt
+  )
   }
 }
