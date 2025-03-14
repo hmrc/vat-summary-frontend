@@ -214,7 +214,7 @@ existingDD.details1.p2 = In addition, only the amount due on your VAT return wil
 
 existingDD.details2.summary = Why have I been charged late payment interest?
 existingDD.details2.p1 = Any late payment interest relating to your VAT Return is indicative and will not be charged,
-existingDD.details2.p1.2 =  after the successful collection of your Direct Debit. Late payment interest may be charged if you do not submit your return on time.
+existingDD.details2.p1.2 = after the successful collection of your Direct Debit. Late payment interest may be charged if you do not submit your return on time.
 
 existingDD.radio.question = Do you still want to make a payment?
 existingDDContinuePayment.Yes = Yes, I want to make a payment for something not covered by the Direct Debit Instruction
