@@ -50,6 +50,14 @@ case class StandingRequest(
   standingRequests: List[StandingRequestDetail]
 )
 
+case class StandingRequestResponse(
+  response: StandingRequest
+)
+
+object StandingRequestResponse {
+   implicit val format: Format[StandingRequestResponse] = Json.format[StandingRequestResponse]
+}
+
 object StandingRequest {
   implicit val format: Format[StandingRequest] = Json.format[StandingRequest]
 }
