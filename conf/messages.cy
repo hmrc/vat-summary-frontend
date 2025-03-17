@@ -43,10 +43,13 @@ month.short.12 = Rhag
 breadcrumbs.bta = Cyfrif Treth Busnes
 
 sessionTimeout.title = Sesiwn wedi dod i ben
-sessionTimeout.helpOne = Mae’n flin gennym, mae’ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch.
-sessionTimeout.helpTwo = I ddefnyddio’r gwasanaeth hwn, rhaid i chi
+sessionTimeout.helpOne = Mae'n flin gennym, mae'ch sesiwn wedi dod i ben o ganlyniad i anweithgarwch.
+sessionTimeout.helpTwo = I ddefnyddio'r gwasanaeth hwn, rhaid i chi
 sessionTimeout.helpThree = fewngofnodi
 
+notFound.title = Heb ddod o hyd i'r dudalen
+notFound.heading = Ni ellir dod o hyd i'r dudalen hon
+notFound.message = Gwiriwch eich bod wedi nodi'r cyfeiriad gwe cywir.
 notFound.title = Heb ddod o hyd i’r dudalen
 notFound.heading = Ni ellir dod o hyd i’r dudalen hon
 notFound.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
@@ -92,8 +95,13 @@ payment.paymentOnAccount = Gwiriwch eich amserlen ar gyfer taliadau ar gyfrif
 
 paymentsOnAccount.title = Taliadau ar gyfrif
 paymentsOnAccount.heading = Taliadau ar gyfrif
+paymentsOnAccount.agent.heading = Taliadau ar gyfrif eich cleient 
 paymentsOnAccount.back = Yn ôl
 paymentsOnAccount.nextPayment.your = Eich
+
+paymentsOnAccount.agent.nextPayment.your =  Eich cleient 
+paymentsOnAccount.agent.nextPayment.thisIsDue = yn ddyledus ar
+
 paymentsOnAccount.nextPayment.nextPaymentDue = taliad nesaf yn ddyledus
 paymentsOnAccount.nextPayment.isYour = yw’ch
 paymentsOnAccount.nextPayment.strongDue = Eich taliad nesaf yn ddyledus
@@ -101,12 +109,18 @@ paymentsOnAccount.nextPayment.balancing = taliad mantoli.
 paymentsOnAccount.nextPayment.thisIsDue = Mae hwn yn ddyledus ar yr un dyddiad a dyddiad cau eich
 paymentsOnAccount.nextPayment.vatReturnDue = dyddiad cau y Ffurflen TAW
 paymentsOnAccount.nextPayment.amount.prefix = Eich taliad nesaf o
+
+paymentsOnAccount.agent.nextPayment.amount.prefix = Taliad nesaf eich cleient o 
+
 paymentsOnAccount.nextPayment.amount.suffix = yn ddyledus ar
 paymentsOnAccount.paymentType.firstPayment = Taliad cyntaf yn ddyledus
-paymentsOnAccount.paymentType.secondPayment = Ail daliad yn ddyledus  
-paymentsOnAccount.paymentType.thirdPayment = Trydydd taliad yn ddyledus 
+paymentsOnAccount.paymentType.secondPayment = Ail daliad yn ddyledus
+paymentsOnAccount.paymentType.thirdPayment = Trydydd taliad yn ddyledus
 paymentsOnAccount.howToPay = Cael gwybod sut i dalu (yn agor tab newydd)
 paymentsOnAccount.changedOn = Gwnaeth y symiau sy’n ddyledus ar gyfer eich taliadau ar gyfrif newid ar {0}.
+
+paymentsOnAccount.agent.changedOn = Newidiodd y symiau sy'n ddyledus ar gyfer taliadau ar gyfrif eich cleient ar {0}.
+
 paymentsOnAccount.contents = Cynnwys
 paymentsOnAccount.currentSchedule = Amserlen gyfredol ac amserlen sydd ar y gweill
 paymentsOnAccount.pastSchedules = Amserlenni o’r gorffennol
@@ -128,8 +142,11 @@ paymentsOnAccount.moreInfo = Cael rhagor o wybodaeth am daliadau ar gyfrif yma (
 paymentsOnAccount.poaEmail = poateam@hmrc.gov.uk
 paymentsOnAccount.error.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 paymentsOnAccount.error.message = Ni allwn ddangos eich amserlen taliadau ar gyfrif ar hyn o bryd. Gallwch roi cynnig arall arni’n hwyrach.
-paymentsOnAccount.error.cannotDisplay = Ni ellir dangos paymentsOnAccount.error.cannotDisplay
-paymentsOnAccount.error.goBackToManageVat = Ewch i Reoli eich cyfrif TAW
+
+paymentsOnAccount.agent.error.message = Ni allwn ddangos eich amserlen ar gyfer taliadau ar gyfrif ar hyn o bryd. Gallwch roi cynnig arall arni nes ymlaen. 
+
+paymentsOnAccount.error.goBackToManageVat = Ewch i’r dudalen Rheoli eich cyfrif TAW
+paymentsOnAccount.agent.error.goBackToManageVat = Ewch i’r dudalen Rheoli cyfrif TAW eich cleient 
 
 pastHistory.history = Hanes
 
