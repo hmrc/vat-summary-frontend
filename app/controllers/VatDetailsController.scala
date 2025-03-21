@@ -39,7 +39,8 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.vatDetails.Details
 
-import java.time.format.DateTimeFormatter
+import java.time.format.{DateTimeFormatter, DateTimeFormatterBuilder}
+import java.util.Locale
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -58,7 +59,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  def details: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
+  def details(poaChangedOn: Option[String] = None): Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
         val accountDetailsCall = accountDetailsService.getAccountDetails(user.vrn)
         val returnObligationsCall = vatDetailsService.getReturnObligations(user.vrn)
@@ -87,10 +88,16 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           } else {
             Ok(detailsView(
               constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo),
-              serviceInfoContent
+              serviceInfoContent, toLocalDate(poaChangedOn)
             )).addingToSession(newSessionVariables: _*)
           }
         }
+  }
+
+  private lazy val poaChangedOnFormatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("d MMM uuuu").toFormatter(Locale.ENGLISH)
+
+  def toLocalDate(poaChangedOn: Option[String]): Option[LocalDate] = {
+    Try(Some(LocalDate.parse(poaChangedOn.get, poaChangedOnFormatter))).getOrElse(None)
   }
 
   def detailsRedirectToEmailVerification: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
@@ -288,8 +295,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                        paymentObligations: ServiceResponse[Option[Payments]])
                                       (implicit hc: HeaderCarrier): Unit = {
     auditingService.audit(
-      ViewNextOutstandingVatPaymentAuditModel(user, paymentObligations), routes.VatDetailsController.details.url)
+      ViewNextOutstandingVatPaymentAuditModel(user, paymentObligations), routes.VatDetailsController.details().url)
     auditingService.audit(
-      ViewNextOpenVatObligationAuditModel(user, returnObligations), routes.VatDetailsController.details.url)
+      ViewNextOpenVatObligationAuditModel(user, returnObligations), routes.VatDetailsController.details().url)
   }
 }

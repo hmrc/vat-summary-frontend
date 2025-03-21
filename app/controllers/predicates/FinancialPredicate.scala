@@ -42,7 +42,7 @@ class FinancialPredicate @Inject()(val accountDetailsService: AccountDetailsServ
         case Right(userDetails) if userDetails.isHybridUser =>
           logger.debug("[FinancialPredicate][authoriseFinancialAction] " +
             "User has a partial migration. Redirecting to Overview page")
-          Future.successful(Redirect(controllers.routes.VatDetailsController.details))
+          Future.successful(Redirect(controllers.routes.VatDetailsController.details()))
         case Right(userDetails) if userDetails.details.insolvencyDateFutureUserBlocked(dateService.now()) =>
           logger.warn("[FinancialPredicate][authoriseFinancialAction] " +
             "User has a future insolvency date. Rendering technical difficulties.")

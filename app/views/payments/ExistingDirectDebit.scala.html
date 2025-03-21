@@ -42,7 +42,7 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
                 ),
             BreadcrumbsItem(
                 content = Text(messages("vatDetails.title")),
-                href = Some(controllers.routes.VatDetailsController.details.url)
+                href = Some(controllers.routes.VatDetailsController.details().url)
             ),
             BreadcrumbsItem(
                 content = Text(messages("whatYouOwe.title")),
