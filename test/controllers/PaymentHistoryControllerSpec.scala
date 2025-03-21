@@ -173,7 +173,7 @@ class PaymentHistoryControllerSpec extends ControllerBaseSpec {
 
       "redirect to VAT overview page" in {
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
     }
 

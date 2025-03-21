@@ -124,8 +124,8 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
           elementText(Selectors.vatBreadcrumb) shouldBe "Your VAT account"
         }
 
-        s"link to ${controllers.routes.VatDetailsController.details.url}" in {
-          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+        s"link to ${controllers.routes.VatDetailsController.details().url}" in {
+          element(Selectors.vatBreadcrumbLink).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
         }
       }
 

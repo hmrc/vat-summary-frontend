@@ -1034,7 +1034,7 @@ object TestModels {
 
   val whatYouOweUrl: String = controllers.routes.WhatYouOweController.show.url
 
-  val vatDetailsUrl: String = controllers.routes.VatDetailsController.details.url
+  val vatDetailsUrl: String = controllers.routes.VatDetailsController.details().url
 
   val LPPDetailsModelMaxWithLPP1HRPercentage: LPPDetails = LPPDetails(
     principalChargeReference = "XD002750002155",

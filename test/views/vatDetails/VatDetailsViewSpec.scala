@@ -26,6 +26,9 @@ import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.vatDetails.Details
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 class VatDetailsViewSpec extends ViewBaseSpec {
 
   val details: Details = injector.instanceOf[Details]
@@ -59,6 +62,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val cancelVatSection = "#cancel-vat"
     val penaltiesSection = "#view-penalties-details"
     val penaltiesBanner = "#penalties-banner"
+    val paoBanner = "#vat-gov-banner-poa"
     val unverifiedMessage = "#unverified-email-notice > strong"
     val unverifiedMessageLink: String = unverifiedMessage + "> a"
   }
@@ -648,6 +652,27 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
   }
 
+  "the VAT details page render POA Banner" should {
 
+    lazy val view = details(poaActiveUntiltrue, Html("<nav>BTA Links</nav>"), Some(toLocalDate("2025-01-01")))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
 
+    lazy val vatPoaBanner = document.select(Selectors.paoBanner)
+
+    "POA Banner is shown" in {
+      mockConfig.features.poaActiveFeatureEnabled(true)
+
+      vatPoaBanner.select(".govuk-notification-banner__link").attr("href") shouldBe "/vat-through-software/payments-on-account"
+      vatPoaBanner.select("h2").text() shouldBe "Important"
+      vatPoaBanner.select("h3").text() shouldBe "Payments on account schedule change"
+      vatPoaBanner.text() shouldBe "Important Payments on account schedule change " +
+        "The amounts due for your payments on account were changed on 1 January 2025. " +
+        "Check your schedule for details."
+    }
+  }
+
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  private def toLocalDate(dateStr: String) = {
+    LocalDate.parse(dateStr, formatter)
+  }
 }

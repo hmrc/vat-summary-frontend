@@ -49,14 +49,14 @@
                 @messages("paymentsOnAccount.agent.error.message")
             </p>
             <p class="govuk-body">
-                <a class="govuk-link" href="@routes.VatDetailsController.details.url">@messages("paymentsOnAccount.agent.error.goBackToManageVat")</a>
+                <a class="govuk-link" href="@routes.VatDetailsController.details().url">@messages("paymentsOnAccount.agent.error.goBackToManageVat")</a>
             </p>
         } else {
             <p class="govuk-body">
                 @messages("paymentsOnAccount.error.message")
             </p>
             <p class="govuk-body">
-                <a class="govuk-link" href="@routes.VatDetailsController.details.url">@messages("paymentsOnAccount.error.goBackToManageVat")</a>
+                <a class="govuk-link" href="@routes.VatDetailsController.details().url">@messages("paymentsOnAccount.error.goBackToManageVat")</a>
             </p>
         }
       </div>

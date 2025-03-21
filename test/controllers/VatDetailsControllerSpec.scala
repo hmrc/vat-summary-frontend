@@ -90,6 +90,18 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         controller.details()(fakeRequest)
       }
 
+      lazy val resultWithPoa: Future[Result] = {
+        mockPrincipalAuth()
+        mockDateServiceCall()
+        mockReturnObligations(Right(Some(obligations)))
+        mockPaymentLiabilities(Right(Some(payments)))
+        mockCustomerInfo(Right(customerInformationMax))
+        mockServiceInfoCall()
+        mockAudit()
+        mockPenaltiesService(penaltySummaryNoResponse)
+        controller.details(Some("1 JAN 2025"))(fakeRequest)
+      }
+
       "return 200" in {
         status(result) shouldBe Status.OK
       }
@@ -103,7 +115,19 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
 
       "return the VAT overview view" in {
-        contentAsString(result).contains("Your VAT account") shouldBe true
+        val content = contentAsString(result)
+        content.contains("Your VAT account") shouldBe true
+        content.contains("Payments on account schedule change") shouldBe false
+      }
+
+      "return correct result for POA" in {
+        status(resultWithPoa) shouldBe Status.OK
+        contentType(resultWithPoa) shouldBe Some("text/html")
+        charset(resultWithPoa) shouldBe Some("utf-8")
+        val content = contentAsString(resultWithPoa)
+        content.contains("Your VAT account") shouldBe true
+        content.contains("Payments on account schedule change") shouldBe true
+        content.contains("The amounts due for your payments on account were changed on 1 January 2025") shouldBe true
       }
 
       "put a customerMigratedToETMPDate key into the session" in {

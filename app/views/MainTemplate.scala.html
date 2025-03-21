@@ -42,7 +42,7 @@
 }
 
 @titleServiceUrl = @{
-user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLookupHubUrl) else Some(controllers.routes.VatDetailsController.details.url))
+user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLookupHubUrl) else Some(controllers.routes.VatDetailsController.details().url))
 }
 
 @scripts = {

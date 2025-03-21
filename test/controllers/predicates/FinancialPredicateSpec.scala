@@ -58,7 +58,7 @@ class FinancialPredicateSpec extends ControllerBaseSpec {
         }
 
         "redirect to the VAT Overview page" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
+          redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
         }
       }
 

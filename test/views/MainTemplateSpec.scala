@@ -46,7 +46,7 @@ class MainTemplateSpec extends ViewBaseSpec {
         }
 
         "have the correct service URL" in {
-          element(Selectors.pageTitle).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+          element(Selectors.pageTitle).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
         }
 
         "not display the user research banner" in {

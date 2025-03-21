@@ -39,7 +39,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
     }
 
@@ -56,7 +56,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
     }
 
@@ -74,7 +74,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
       }
 
       "have the correct redirect location" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details.url)
+        redirectLocation(result) shouldBe Some(controllers.routes.VatDetailsController.details().url)
       }
     }
   }

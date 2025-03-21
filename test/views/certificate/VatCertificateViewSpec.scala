@@ -119,7 +119,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           }
 
           "has the correct href" in {
-            element(Selectors.breadcrumb2).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
+            element(Selectors.breadcrumb2).attr("href") shouldBe controllers.routes.VatDetailsController.details().url
           }
         }
 
