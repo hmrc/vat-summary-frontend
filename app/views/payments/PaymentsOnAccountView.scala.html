@@ -48,7 +48,7 @@
               navLinkContent = if(user.isAgent) Some(backLink) else Some(backLink) 
 ) {
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-three-quarters">
       <main class="govuk-main-wrapper">
         <h1 class="govuk-heading-xl">
           @if(user.isAgent) {
@@ -121,11 +121,12 @@
                   </h2>
                 </div>
                 <div class="govuk-summary-card__content">
-                  <dl class="govuk-summary-list">
+                  <dl class="govuk-summary-list poa-summary-list" >
                     @for(payment <- period.payments) {
-                      <div class="govuk-summary-list__row">
+                      <div class="govuk-summary-list__row @if(payment.paymentType == PaymentType.ThirdPayment) {third-payment-row}">
                         <dt class="govuk-summary-list__key">@messages(payment.paymentType.messageKey)</dt>
                         @if(payment.paymentType == PaymentType.ThirdPayment) {
+                          <p class="third-payment-text">
                           @if(period.isCurrent) {
                             @messages("paymentsOnAccount.sameAs")
                             <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
@@ -134,6 +135,7 @@
                           } else {
                             @messages("paymentsOnAccount.pending")
                           }
+                          </p>
                         } else {
                           @payment.dueDate.map{ dueDate => 
                             @MessageDateFormat.format(dueDate)
@@ -167,16 +169,18 @@
                   </h2>
                 </div>
                 <div class="govuk-summary-card__content">
-                  <dl class="govuk-summary-list">
+                  <dl class="govuk-summary-list poa-summary-list">
                     @for(payment <- period.payments) {
-                      <div class="govuk-summary-list__row">
+                      <div class="govuk-summary-list__row @if(payment.paymentType == PaymentType.ThirdPayment) {third-payment-row}">
                         <dt class="govuk-summary-list__key">@messages(payment.paymentType.messageKey)</dt>
                         @if(payment.paymentType == PaymentType.ThirdPayment) {
                           <p id="third-payment-message">
+                          <p class="third-payment-text">
                             @messages("paymentsOnAccount.sameAs")
                             <a class="govuk-link" id="vat-submitted-link" href="@appConfig.vatSubmittedReturnsUrl">
                               @messages("paymentsOnAccount.VatReturn")
                             </a>
+                          </p>
                           </p>
                         } else {
                           <div id="payment-due-date">

@@ -54,3 +54,11 @@ dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__ke
   line-height: 1.3157894737;
   color: #505a5f;
 }
+
+.poa-summary-list .govuk-summary-list__row:not(.third-payment-row) .govuk-summary-list__actions {
+  width: 35%;
+  text-align: right;
+}
+.poa-summary-list .third-payment-row .third-payment-text {
+  white-space: nowrap;
+}
