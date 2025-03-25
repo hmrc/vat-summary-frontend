@@ -46,7 +46,7 @@ class PaymentsOnAccountController @Inject()(authorisedController: AuthorisedCont
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
   import PaymentsOnAccountController._
 
-  def show: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
+  def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
     implicit user => {
       if (appConfig.features.poaActiveFeatureEnabled()) {
         (for {

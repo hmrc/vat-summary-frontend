@@ -53,7 +53,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      penaltiesService: PenaltiesService,
                                      mcc: MessagesControllerComponents,
                                      detailsView: Details,
-                                     serviceErrorHandler: ServiceErrorHandler)
+                                     serviceErrorHandler: ServiceErrorHandler,
+                                     poaCheckService: POACheckService)
                                     (implicit appConfig: AppConfig,
                                      ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -69,6 +70,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           nextPayment <- if (retrieveHybridStatus(customerInfo)) Future.successful(Right(None)) else paymentObligationsCall
           serviceInfoContent <- serviceInfoService.getPartial
           penaltiesCallResult <- penaltiesService.getPenaltiesInformation(user.vrn)
+          today = dateService.now()
         } yield {
 
           auditEvents(user, nextReturn, nextPayment)
@@ -86,7 +88,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             Redirect(appConfig.missingTraderRedirectUrl)
           } else {
             Ok(detailsView(
-              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo),
+              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo, today),
               serviceInfoContent
             )).addingToSession(newSessionVariables: _*)
           }
@@ -127,18 +129,18 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     )
   }
 
-  private[controllers] def getPaymentObligationDetails(payments: Seq[Payment]): VatDetailsDataModel = {
-    val isOverdue = payments.head.isOverdue(dateService.now())
+  private[controllers] def getPaymentObligationDetails(payments: Seq[Payment], today: LocalDate): VatDetailsDataModel = {
+    val isOverdue = payments.head.isOverdue(today)
     getObligationDetails(
       payments,
       isOverdue
     )
   }
 
-  private[controllers] def getReturnObligationDetails(obligations: Seq[VatReturnObligation]): VatDetailsDataModel =
+  private[controllers] def getReturnObligationDetails(obligations: Seq[VatReturnObligation], today: LocalDate): VatDetailsDataModel =
     getObligationDetails(
       obligations.distinct,
-      obligations.head.due.isBefore(dateService.now())
+      obligations.head.due.isBefore(today)
     )
 
   private[controllers] def getObligationDetails(obligations: Seq[Obligation], isOverdue: Boolean): VatDetailsDataModel = {
@@ -156,10 +158,12 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
   private[controllers] def constructViewModel(obligations: ServiceResponse[Option[VatReturnObligations]],
                                               payments: ServiceResponse[Option[Payments]],
                                               accountDetails: HttpResult[CustomerInformation],
-                                              penaltyInformation: Option[PenaltiesSummary]): VatDetailsViewModel = {
+                                              penaltyInformation: Option[PenaltiesSummary],
+                                              today: LocalDate
+                                              ): VatDetailsViewModel = {
 
-    val returnModel: VatDetailsDataModel = retrieveReturns(obligations)
-    val paymentModel: VatDetailsDataModel = retrievePayments(payments)
+    val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
+    val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val partyType: Option[String] = retrievePartyType(accountDetails)
@@ -168,7 +172,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val pendingDereg: Boolean = accountDetails.fold(_ => false, _.changeIndicators.exists(_.deregister))
     val emailAddress: Option[String] = accountDetails.fold(_ => None, _.emailAddress.flatMap(_.email))
     val mandationStatus: String = accountDetails.fold(_ => "ERROR", _.mandationStatus)
-    val isPoaActiveForCustomer: Boolean = retrievePoaActiveForCustomer(accountDetails)
+    val isPoaActiveForCustomer: Boolean = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
 
     VatDetailsViewModel(
       paymentModel.displayData,
@@ -243,45 +247,19 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       case Left(_) => None
     }
 
-  private def retrievePayments(payments: ServiceResponse[Option[Payments]]): VatDetailsDataModel =
+  private def retrievePayments(payments: ServiceResponse[Option[Payments]], today: LocalDate): VatDetailsDataModel =
     payments match {
-      case Right(Some(model)) => getPaymentObligationDetails(model.financialTransactions)
+      case Right(Some(model)) => getPaymentObligationDetails(model.financialTransactions, today)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
       case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }
 
-  private def retrieveReturns(obligations: ServiceResponse[Option[VatReturnObligations]]): VatDetailsDataModel =
+  private def retrieveReturns(obligations: ServiceResponse[Option[VatReturnObligations]], today: LocalDate): VatDetailsDataModel =
     obligations match {
-      case Right(Some(obs)) => getReturnObligationDetails(obs.obligations)
+      case Right(Some(obs)) => getReturnObligationDetails(obs.obligations, today)
       case Right(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = false)
       case Left(_) => VatDetailsDataModel(None, hasMultiple = false, isOverdue = false, hasError = true)
     }
-
-
-  def retrievePoaActiveForCustomer(accountDetails: HttpResult[CustomerInformation]): Boolean = {
-    accountDetails match {
-      case Right(customerDetails) => isDateEqualsTodayFuture(customerDetails.poaActiveUntil,dateService.now())
-      case _ => false
-    }
-  }
-
-  val dateFormat: String           = "yyyy-MM-dd"
-  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
-  def isDateEqualsTodayFuture(poaActiveUntil: Option[String], currentDate: LocalDate): Boolean = {
-    poaActiveUntil match {
-      case Some(poaActiveUntilDate) =>
-        val parsedDate = Try(LocalDate.parse(poaActiveUntilDate, formatter)).getOrElse(LocalDate.MIN)
-        if (parsedDate.isAfter(currentDate) || parsedDate.isEqual(currentDate)) {
-          logger.info(s"Date condition met, parsedDate ($parsedDate) is today or in the future")
-          true
-        } else {
-          logger.info(s"Date condition failed, parsedDate ($parsedDate) is in the past or not available")
-          false
-        }
-      case _ => false
-    }
-  }
-
 
   private[controllers] def auditEvents(user: User,
                                        returnObligations: ServiceResponse[Option[VatReturnObligations]],

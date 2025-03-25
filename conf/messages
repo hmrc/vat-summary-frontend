@@ -361,6 +361,11 @@ lateSubmissionPenalty.amountReceived = Amount received
 lateSubmissionPenalty.leftToPay = Left to pay
 
 noPayments.oweNothing = You do not owe anything right now.
+noPayments.oweNothing2 = You do not owe anything here right now,
+noPayments.howeverYou = however, you do have a 
+noPayments.poaArrangement = payments on account arrangement 
+noPayments.paymentsDue = Payments due for this will not show here, until their VAT return has been submitted.
+noPayments.forUpcomingSchedule = For upcoming payment details check their schedule
 noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
 noPayments.twentyFourHoursAgent = If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe.

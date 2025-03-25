@@ -370,6 +370,12 @@ noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
 noPayments.twentyFourHoursAgent = Os yw Ffurflen TAW wedi’i chyflwyno a bod angen i’ch cleient dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arno.
 
+noPayments.oweNothing2 = Nid ydych yn ddyledus dim byd yma ar hyn o bryd,
+noPayments.howeverYou = fodd bynnag, mae gennych 
+noPayments.poaArrangement = drefniant taliadau ar gyfrif 
+noPayments.paymentsDue = Ni fydd taliadau sy'n ddyledus ar gyfer hyn yn ymddangos yma, tan fod eu dychweliad TAW wedi'i gyflwyno.
+noPayments.forUpcomingSchedule = Ar gyfer manylion talu sydd ar ddod, gwirio eu hamserlen
+
 paymentsError.title = Mae problem gyda’r gwasanaeth
 paymentsError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth.
 paymentsError.message = Rhowch gynnig arall arni yn nes ymlaen.
