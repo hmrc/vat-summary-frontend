@@ -73,7 +73,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
         "link to the VAT overview page" in {
           element("li.govuk-breadcrumbs__list-item:nth-child(2) > a").attr("href") shouldBe
-            controllers.routes.VatDetailsController.details.url
+            controllers.routes.VatDetailsController.details().url
         }
 
         "have the text 'What you owe'" in {
@@ -203,7 +203,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
         "link to the VAT overview page" in {
           element("li.govuk-breadcrumbs__list-item:nth-child(2) > a").attr("href") shouldBe
-            controllers.routes.VatDetailsController.details.url
+            controllers.routes.VatDetailsController.details().url
         }
 
         "have the text 'What you owe'" in {

@@ -90,7 +90,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
         }
         "link to VAT overview page" in {
           element(Selectors.breadcrumb2).attr("href") shouldBe
-            controllers.routes.VatDetailsController.details.url
+            controllers.routes.VatDetailsController.details().url
         }
         "have the text 'What You Owe'" in {
           elementText(Selectors.breadcrumb3) shouldBe "What you owe"
