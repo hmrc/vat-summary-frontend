@@ -79,6 +79,11 @@ vatDetails.viewPenalties.info = Bwrw golwg dros eich cosbau, apelio yn erbyn cos
 vatDetails.viewPaymentOnAccount.link = Taliadau ar gyfrif
 vatDetails.viewPaymentOnAccount.info = Bwrw golwg dros eich amserlen ar gyfer taliadau ar gyfrif
 
+vatDetails.payment_on_account.alert.title=Pwysig
+vatDetails.payment_on_account.alert.heading=Newid amserlen ar gyfer taliadau ar gyfrif
+vatDetails.payment_on_account.alert.message=Mae’r symiau sy’n ddyledus ar gyfer eich taliadau ar gyfrif wedi newid.
+vatDetails.payment_on_account.alert.link=Gwiriwch eich amserlen am fanylion
+
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i’w chyflwyno
 returnObligation.nextReturns = Ffurflenni TAW sy’n ddyledus

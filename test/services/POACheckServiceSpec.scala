@@ -16,15 +16,13 @@
 
 package services
 
+import common.TestModels._
+import models.CustomerInformation
 import models.errors._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
 import java.time.LocalDate
-import models.{CustomerInformation}
-import services.POACheckService
-import connectors.httpParsers.ResponseHttpParsers.HttpResult
-import controllers.ControllerBaseSpec
-import common.TestModels._
 
 class POACheckServiceSpec extends AnyWordSpec with Matchers{
 

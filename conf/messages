@@ -76,6 +76,11 @@ vatDetails.viewPenalties.info = View your penalties, make an appeal against a pe
 vatDetails.viewPaymentOnAccount.link = Payments on account
 vatDetails.viewPaymentOnAccount.info = View your payments on account schedule of payments.
 
+vatDetails.payment_on_account.alert.title=Important
+vatDetails.payment_on_account.alert.heading=Payments on account schedule change
+vatDetails.payment_on_account.alert.message=The amounts due for your payments on account were changed on
+vatDetails.payment_on_account.alert.link=Check your schedule for details
+
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.nextReturns = Returns due
