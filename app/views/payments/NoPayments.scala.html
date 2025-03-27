@@ -18,7 +18,7 @@
       govukBreadcrumbs: GovukBreadcrumbs,
       govukBackLink: GovukBackLink)
 
-@(user: models.User, serviceInfoContent: Html, clientName: Option[String], mandationStatus: String)(
+@(user: models.User, serviceInfoContent: Html, clientName: Option[String], mandationStatus: String, isPOAActive: Boolean)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @breadcrumbs = {
@@ -61,9 +61,29 @@
       </h1>
 
       <div class="govuk-form-group" id="noPaymentsDetail">
-        <h2 id="no-payments-subheading" class="govuk-body-l">
+        @if(isPOAActive) {
+          <h2 id="no-payments-subheading">
+            @if(user.isAgent) {
+              @messages("noPayments.oweNothingAgent")
+            } else {
+              <p class="govuk-body-l">
+              @messages("noPayments.oweNothing2") @messages("noPayments.howeverYou") 
+              <strong>
+                @messages("noPayments.poaArrangement").
+              </strong>
+              </p>
+              <p class="govuk-body-l">
+                @messages("noPayments.paymentsDue")
+                <a href="payments-on-account">@messages("noPayments.forUpcomingSchedule")</a>.
+              </p>
+            }
+        </h2>
+        } else{
+           <h2 id="no-payments-subheading" class="govuk-body-l">
             @if(user.isAgent) {@messages("noPayments.oweNothingAgent")} else {@messages("noPayments.oweNothing")}
         </h2>
+      }
+
         <p class="govuk-body">
           @if(user.isAgent) {@messages("noPayments.twentyFourHoursAgent")} else {@messages("noPayments.twentyFourHours")}
             @if(!user.isAgent) {

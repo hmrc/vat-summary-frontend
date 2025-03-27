@@ -127,6 +127,7 @@
         @Money.pounds(model.totalAmount)
       </p>
 
+
         @if(!user.isAgent && model.directDebitMandateFound){
         <div class="govuk-inset-text">
             <p>@messages("existingDD.banner.p1")</p>
@@ -137,6 +138,14 @@
             <p>@messages("existingDD.banner.p4")</p>
             <p><a href="@appConfig.paymentsAndRepaymentsUrl" id="view-and-manage-dd-details-link">@messages("existingDD.banner.p5.linkText")</a></p>
         </div>
+        } else {
+          <div class="govuk-inset-text">
+            @if(user.isAgent) {
+              Payments due for your client’s payments on account arrangement will not show here, until their VAT return has been submitted. <br><a class="govuk-link" href="payments-on-account">For upcoming payment details check their schedule</a>.
+            } else {
+              Payments due for your payments on account arrangement will not show here, until you have submitted your VAT return. <br><a class="govuk-link" href="payments-on-account">For upcoming payment details check your schedule</a>.
+            }
+          </div>
         }
 
 

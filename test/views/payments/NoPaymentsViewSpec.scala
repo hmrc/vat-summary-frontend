@@ -45,7 +45,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   "Rendering the no payments page for a principal user" when {
 
     lazy val view = {
-      noPaymentsView(user, Html(""), None, mandationStatus = "2")
+      noPaymentsView(user, Html(""), None, mandationStatus = "2", false)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -104,7 +104,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     val entityName = "Capgemini"
     lazy val view = {
-      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2")
+      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2", false)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

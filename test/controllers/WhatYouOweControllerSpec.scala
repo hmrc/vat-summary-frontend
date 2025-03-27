@@ -50,7 +50,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     mockAccountDetailsService,
     mockPenaltyDetailsService,
     mockWYOSessionService,
-    mockAuditService
+    mockAuditService,
+    mockPOACheckService
   )
 
   "The WhatYouOweController .show method" when {
@@ -92,6 +93,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
+          mockPOACheckServiceCall()
           mockPenaltyDetailsServiceCall()
           mockGetDirectDebitStatus(Right(directDebitEnrolled))
           mockAudit()

@@ -59,6 +59,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   lazy val mockServiceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
   val mcc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
 
+  val mockTodayDate = LocalDate.parse("2018-05-01")
+
   val testVrn = "123456789"
 
   implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
@@ -78,6 +80,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockAuditService: AuditingService = mock[AuditingService]
   val mockPenaltyDetailsService: PenaltyDetailsService = mock[PenaltyDetailsService]
   val mockWYOSessionService: WYOSessionService = mock[WYOSessionService]
+  val mockPOACheckService: POACheckService = mock[POACheckService]
 
   val mockPaymentsOnAccountService: PaymentsOnAccountService = mock[PaymentsOnAccountService]
 
@@ -148,6 +151,11 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     (() => mockDateService.now())
     .stubs()
     .returns(LocalDate.parse("2018-05-01"))
+
+   def mockPOACheckServiceCall(): Any =
+    (mockPOACheckService.retrievePoaActiveForCustomer(_: HttpResult[CustomerInformation], _: LocalDate))
+    .expects(*, *)
+    .returns(false)
 
   def mockServiceInfoCall(): Any =
     (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))
