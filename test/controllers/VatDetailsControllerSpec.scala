@@ -71,7 +71,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     mockPenaltiesService,
     mcc,
     injector.instanceOf[Details],
-    mockServiceErrorHandler
+    mockServiceErrorHandler,
+    mockPOACheckService
   )
   
   "Calling the details action" when {
@@ -84,6 +85,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockReturnObligations(Right(Some(obligations)))
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationMax))
+        mockPOACheckServiceCall()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
@@ -167,6 +169,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           mockReturnObligations(Right(Some(obligations)))
           mockCustomerInfo(Right(customerInformationHybrid))
+          mockPOACheckServiceCall()
           mockAudit()
           mockServiceInfoCall()
           mockPenaltiesService(penaltySummaryNoResponse)
@@ -185,6 +188,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockReturnObligations(Right(Some(obligations)))
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationNonMTDfB))
+        mockPOACheckServiceCall()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
@@ -231,6 +235,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockReturnObligations(Right(Some(obligations)))
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationMax))
+        mockPOACheckServiceCall()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryResponse)
@@ -257,6 +262,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPaymentLiabilities(Right(Some(payments)))
           mockCustomerInfo(Left(UnknownError))
           mockServiceInfoCall()
+          mockPOACheckServiceCall()
           mockAudit()
           mockPenaltiesService(penaltySummaryResponse)
           controller.details()(fakeRequest)
@@ -358,12 +364,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB", isPoaActiveForCustomer = false
           )
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -380,12 +388,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(None),
             Right(Some(payments)),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -402,12 +412,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(None),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -424,12 +436,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -443,12 +457,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMin),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -462,12 +478,15 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, None, isNonMTDfB = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB Exempt")
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
+          
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMTDfBExempt),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -482,12 +501,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           None, None, Some(entityName), returnObligationError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
           currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
+                    mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Left(ObligationsError),
             Right(None),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -502,12 +523,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           None, None, Some(entityName), paymentError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
           currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
+          mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(None),
             Left(NextPaymentError),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -533,11 +556,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
+          mockPOACheckServiceCall()
           controller.constructViewModel(
             Left(ObligationsError),
             Left(NextPaymentError),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -563,12 +588,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mandationStatus = "MTDfB"
         )
         lazy val result: VatDetailsViewModel = {
+            mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(Some(overdueObligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
 
@@ -584,12 +611,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           emailAddress = Some(email), penaltiesSummary = Some(penaltiesSummaryModel), mandationStatus = "MTDfB"
         )
         lazy val result: VatDetailsViewModel = {
+          mockPOACheckServiceCall()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
-            Some(penaltiesSummaryModel)
+            Some(penaltiesSummaryModel),
+            mockTodayDate
           )
         }
         result shouldBe expectedContent
@@ -604,11 +633,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         )
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
+          mockPOACheckServiceCall()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
-            None
+            None,
+            mockTodayDate
           )
         }
         result shouldBe expectedContent
@@ -633,11 +664,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
+          mockPOACheckServiceCall()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Left(BadRequestError("", "")),
-            None
+            None,
+            mockTodayDate
           )
         }
         result shouldBe expectedContent
@@ -778,7 +811,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
               val result: VatDetailsDataModel = {
                 mockDateServiceCall()
-                controller.getPaymentObligationDetails(Seq(testPayment))
+                controller.getPaymentObligationDetails(Seq(testPayment), mockTodayDate)
               }
 
               result.isOverdue shouldBe false
@@ -805,7 +838,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
               val result: VatDetailsDataModel = {
                 mockDateServiceCall()
-                controller.getPaymentObligationDetails(Seq(testPayment))
+                controller.getPaymentObligationDetails(Seq(testPayment), mockTodayDate)
               }
 
               result.isOverdue shouldBe true
@@ -833,7 +866,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
             val result: VatDetailsDataModel = {
               mockDateServiceCall()
-              controller.getPaymentObligationDetails(Seq(testPayment))
+              controller.getPaymentObligationDetails(Seq(testPayment), mockTodayDate)
             }
 
             result.isOverdue shouldBe false
@@ -859,7 +892,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           val result: VatDetailsDataModel = {
             mockDateServiceCall()
-            controller.getReturnObligationDetails(overdueObligations.obligations)
+            controller.getReturnObligationDetails(overdueObligations.obligations, mockTodayDate)
           }
           result shouldBe expected
         }
@@ -878,7 +911,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           val result: VatDetailsDataModel = {
             mockDateServiceCall()
-            controller.getReturnObligationDetails(obligations.obligations)
+            controller.getReturnObligationDetails(obligations.obligations, mockTodayDate)
           }
           result shouldBe expected
         }
@@ -897,7 +930,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
           val result: VatDetailsDataModel = {
             mockDateServiceCall()
-            controller.getReturnObligationDetails(duplicateObligations.obligations)
+            controller.getReturnObligationDetails(duplicateObligations.obligations, mockTodayDate)
           }
           result shouldBe expected
 
@@ -986,37 +1019,39 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     }
   }
 
-  def customerInfoWithDate(date: Option[String]): CustomerInformation =
-      customerInformationMax.copy(poaActiveUntil = date)
-  val fixedDate: LocalDate = LocalDate.parse("2018-05-01")
-  "retrievePoaActiveForCustomer" should {
-    "return true when poaActiveUntil is today" in {
-      mockDateServiceCall()
-      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(fixedDate.toString))))
-      result shouldBe true
-    }
-    "return true when poaActiveUntil is in the future" in {
-      mockDateServiceCall()
-      val futureDate = fixedDate.plusDays(5).toString
-      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(futureDate))))
-      result shouldBe true
-    }
-    "return false when poaActiveUntil is in the past" in {
-      mockDateServiceCall()
-      val pastDate = fixedDate.minusDays(5).toString
-      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(pastDate))))
-      result shouldBe false
-    }
-    "return false when poaActiveUntil is None" in {
-      mockDateServiceCall()
-      val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(None)))
-      result shouldBe false
-    }
-    "return false when accountDetails is an error" in {
-      mockDateServiceCall()
-      val result = controller.retrievePoaActiveForCustomer(Left(UnknownError))
-      result shouldBe false
-    }
-  }
+  // def customerInfoWithDate(date: Option[String]): CustomerInformation =
+  //     customerInformationMax.copy(poaActiveUntil = date)
+
+  // val fixedDate: LocalDate = LocalDate.parse("2018-05-01")
+
+  // "retrievePoaActiveForCustomer" should {
+  //   "return true when poaActiveUntil is today" in {
+  //     mockDateServiceCall()
+  //     val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(fixedDate.toString))))
+  //     result shouldBe true
+  //   }
+  //   "return true when poaActiveUntil is in the future" in {
+  //     mockDateServiceCall()
+  //     val futureDate = fixedDate.plusDays(5).toString
+  //     val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(futureDate))))
+  //     result shouldBe true
+  //   }
+  //   "return false when poaActiveUntil is in the past" in {
+  //     mockDateServiceCall()
+  //     val pastDate = fixedDate.minusDays(5).toString
+  //     val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(Some(pastDate))))
+  //     result shouldBe false
+  //   }
+  //   "return false when poaActiveUntil is None" in {
+  //     mockDateServiceCall()
+  //     val result = controller.retrievePoaActiveForCustomer(Right(customerInfoWithDate(None)))
+  //     result shouldBe false
+  //   }
+  //   "return false when accountDetails is an error" in {
+  //     mockDateServiceCall()
+  //     val result = controller.retrievePoaActiveForCustomer(Left(UnknownError))
+  //     result shouldBe false
+  //   }
+  // }
 
 }

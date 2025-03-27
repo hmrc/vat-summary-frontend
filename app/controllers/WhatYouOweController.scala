@@ -35,6 +35,7 @@ import views.html.payments.{NoPayments, WhatYouOwe}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
+import connectors.httpParsers.ResponseHttpParsers.HttpResult
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      dateService: DateService,
@@ -47,7 +48,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      accountDetailsService: AccountDetailsService,
                                      penaltyDetailsService: PenaltyDetailsService,
                                      WYOSessionService: WYOSessionService,
-                                     auditService: AuditingService)
+                                     auditService: AuditingService,
+                                     poaCheckService: POACheckService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -59,6 +61,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         paymentsService.getOpenPayments(user.vrn).flatMap { payments =>
           accountDetailsService.getAccountDetails(user.vrn).flatMap { accountDetails =>
             val mandationStatus = accountDetails.map(_.mandationStatus).getOrElse("")
+            val today = dateService.now()
 
             penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
               paymentsService.getDirectDebitStatus(user.vrn).flatMap { ddDetails =>
@@ -81,7 +84,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                 }
                 case (Right(None), Right(_)) =>
                 val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-                Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus)))
+                val isPoaActiveForCustomer = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
+                Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
                 case _ =>
                   logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
                   Future.successful(InternalServerError(paymentsError()))
@@ -92,6 +96,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         }
       }
   }
+
 
   private[controllers] def categoriseCharges(payments: Seq[Payment], penalties: PenaltyDetails,
                                              ddStatus: Boolean)
