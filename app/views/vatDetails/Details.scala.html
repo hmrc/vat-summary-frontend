@@ -19,6 +19,10 @@
 @import views.html.templates.penalties.PenaltiesBanner
 @import views.html.templates.penalties.PenaltiesTileSection
 @import play.twirl.api.HtmlFormat
+@import uk.gov.hmrc.govukfrontend.views.html.components.GovukNotificationBanner
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+@import utils.MessageDateFormat
+@import java.time.LocalDate
 
 @this(mainTemplate: MainTemplate,
       nextPaymentSection: NextPaymentSection,
@@ -32,7 +36,8 @@
       govukWarningText: GovukWarningText,
       penaltiesTileSection: PenaltiesTileSection,
       vatPaymentOnAccountSchedule: VatPaymentOnAccountSchedule,
-      penaltiesBanner: PenaltiesBanner)
+      penaltiesBanner: PenaltiesBanner,
+      govukNotificationBanner: GovukNotificationBanner)
 
 @(detailsViewModel: VatDetailsViewModel,
   serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
@@ -67,6 +72,15 @@
   ))
 }
 
+@poaAlertContent = {
+  <h3 class="govuk-notification-banner__heading">@messages("vatDetails.payment_on_account.alert.heading")</h3>
+
+  <p class="govuk-body" id="poa-alert-information">@messages("vatDetails.payment_on_account.alert.message") @MessageDateFormat.formatLong(detailsViewModel.poaChangedOn.get).
+    <a class="govuk-notification-banner__link" href="@controllers.routes.PaymentsOnAccountController.show.url" rel="noreferrer noopener">
+      @messages("vatDetails.payment_on_account.alert.link")</a>.
+  </p>
+}
+
 @mainTemplate(
   title = messages("vatDetails.title"),
   appConfig = appConfig,
@@ -79,6 +93,16 @@
   <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)</span>
   @detailsViewModel.entityName.map { entityName =>
     <span class="govuk-caption-m">@entityName</span>
+  }
+
+  @if(detailsViewModel.poaChangedOn.isDefined) {
+    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-poa">
+      @govukNotificationBanner(NotificationBanner(
+      title = Text(messages("vatDetails.payment_on_account.alert.title")),
+      content = HtmlContent(poaAlertContent),
+      classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
+      titleId = Some("poa-alert-banner")))
+    </div>
   }
 
   @penaltiesBanner(detailsViewModel.penaltiesSummary)

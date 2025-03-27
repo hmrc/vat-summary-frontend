@@ -157,6 +157,15 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     .expects(*, *)
     .returns(false)
 
+  def mockChangedOnDateWithInLatestVatPeriod(poaActive:Boolean = false, someDate: Option[LocalDate] = None): Any = {
+    (mockPOACheckService.retrievePoaActiveForCustomer(_: HttpResult[CustomerInformation], _: LocalDate))
+      .expects(*, *)
+      .returns(poaActive)
+    (mockPOACheckService.changedOnDateWithInLatestVatPeriod(_: Option[StandingRequest], _: LocalDate))
+      .expects(*, *)
+      .returns(someDate)
+  }
+
   def mockServiceInfoCall(): Any =
     (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))
       .stubs(*, *, *, *)

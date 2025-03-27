@@ -54,7 +54,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      mcc: MessagesControllerComponents,
                                      detailsView: Details,
                                      serviceErrorHandler: ServiceErrorHandler,
-                                     poaCheckService: POACheckService)
+                                     poaCheckService: POACheckService,
+                                     paymentsOnAccountService: PaymentsOnAccountService)
                                     (implicit appConfig: AppConfig,
                                      ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -71,6 +72,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           serviceInfoContent <- serviceInfoService.getPartial
           penaltiesCallResult <- penaltiesService.getPenaltiesInformation(user.vrn)
           today = dateService.now()
+          standingRequest <- if (!isPoaActiveUser(customerInfo, today)) Future.successful(None) else paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
         } yield {
 
           auditEvents(user, nextReturn, nextPayment)
@@ -88,11 +90,15 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             Redirect(appConfig.missingTraderRedirectUrl)
           } else {
             Ok(detailsView(
-              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo, today),
+              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo, standingRequest, today),
               serviceInfoContent
             )).addingToSession(newSessionVariables: _*)
           }
         }
+  }
+
+  private def isPoaActiveUser(customerInfo: HttpResult[CustomerInformation], today: LocalDate) = {
+    appConfig.features.poaActiveFeatureEnabled() && poaCheckService.retrievePoaActiveForCustomer(customerInfo, today)
   }
 
   def detailsRedirectToEmailVerification: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
@@ -159,6 +165,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                               payments: ServiceResponse[Option[Payments]],
                                               accountDetails: HttpResult[CustomerInformation],
                                               penaltyInformation: Option[PenaltiesSummary],
+                                              standingRequest: Option[StandingRequest],
                                               today: LocalDate
                                               ): VatDetailsViewModel = {
 
@@ -173,7 +180,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val emailAddress: Option[String] = accountDetails.fold(_ => None, _.emailAddress.flatMap(_.email))
     val mandationStatus: String = accountDetails.fold(_ => "ERROR", _.mandationStatus)
     val isPoaActiveForCustomer: Boolean = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
-
+    val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, today)
     VatDetailsViewModel(
       paymentModel.displayData,
       returnModel.displayData,
@@ -195,7 +202,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       emailAddress,
       penaltyInformation,
       mandationStatus,
-      isPoaActiveForCustomer
+      isPoaActiveForCustomer,
+      poaChangedOn
     )
   }
 

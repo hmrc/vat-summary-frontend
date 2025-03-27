@@ -40,4 +40,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                emailAddress: Option[String] = None,
                                penaltiesSummary: Option[PenaltiesSummary] = None,
                                mandationStatus: String,
-                               isPoaActiveForCustomer: Boolean = false )
+                               isPoaActiveForCustomer: Boolean = false,
+                               poaChangedOn: Option[LocalDate] = None)

@@ -18,6 +18,9 @@ package models
 
 import play.api.libs.json._
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 case class RequestItem(
   period: String,
   periodKey: String,
@@ -54,3 +57,9 @@ object StandingRequest {
   implicit val format: Format[StandingRequest] = Json.format[StandingRequest]
 }
 
+case class ChangedOnVatPeriod(startDate: Option[LocalDate], endDate: Option[LocalDate], isCurrent: Boolean)
+
+object ChangedOnVatPeriod {
+  val RequestCategoryType3 = "3"
+  val dateFormatter = DateTimeFormatter.ofPattern("d MMM uuuu")
+}
