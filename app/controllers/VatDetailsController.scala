@@ -181,6 +181,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val mandationStatus: String = accountDetails.fold(_ => "ERROR", _.mandationStatus)
     val isPoaActiveForCustomer: Boolean = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
     val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, today)
+
     VatDetailsViewModel(
       paymentModel.displayData,
       returnModel.displayData,
