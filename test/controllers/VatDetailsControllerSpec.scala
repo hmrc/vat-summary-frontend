@@ -16,7 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
 import common.MandationStatus._
 import common.TestModels._
 import common.{SessionKeys, TestModels}
@@ -28,7 +27,6 @@ import models.payments.{PaymentNoPeriod, Payments, ReturnDebitCharge}
 import models.penalties.PenaltiesSummary
 import models.viewModels.VatDetailsViewModel
 import org.jsoup.Jsoup
-import org.mockito.Mockito.{doReturn, when}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -36,6 +34,7 @@ import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.vatDetails.Details
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class VatDetailsControllerSpec extends ControllerBaseSpec {
@@ -72,7 +71,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     mcc,
     injector.instanceOf[Details],
     mockServiceErrorHandler,
-    mockPOACheckService
+    mockPOACheckService,
+    mockPaymentsOnAccountService
   )
   
   "Calling the details action" when {
@@ -85,6 +85,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockReturnObligations(Right(Some(obligations)))
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationMax))
+        mockPOACheckServiceCall()
+        mockChangedOnDateWithInLatestVatPeriod()
         mockPOACheckServiceCall()
         mockServiceInfoCall()
         mockAudit()
@@ -170,6 +172,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockReturnObligations(Right(Some(obligations)))
           mockCustomerInfo(Right(customerInformationHybrid))
           mockPOACheckServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
+          mockPOACheckServiceCall()
           mockAudit()
           mockServiceInfoCall()
           mockPenaltiesService(penaltySummaryNoResponse)
@@ -189,9 +193,11 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationNonMTDfB))
         mockPOACheckServiceCall()
+        mockChangedOnDateWithInLatestVatPeriod()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
+        mockPOACheckServiceCall()
         controller.details()(fakeRequest)
       }
 
@@ -213,6 +219,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationMax.copy(isMissingTrader = true)))
         mockServiceInfoCall()
+        mockPOACheckServiceCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
         controller.details()(fakeRequest)
@@ -235,6 +242,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockReturnObligations(Right(Some(obligations)))
         mockPaymentLiabilities(Right(Some(payments)))
         mockCustomerInfo(Right(customerInformationMax))
+        mockPOACheckServiceCall()
+        mockChangedOnDateWithInLatestVatPeriod()
         mockPOACheckServiceCall()
         mockServiceInfoCall()
         mockAudit()
@@ -262,6 +271,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPaymentLiabilities(Right(Some(payments)))
           mockCustomerInfo(Left(UnknownError))
           mockServiceInfoCall()
+          mockPOACheckServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           mockPOACheckServiceCall()
           mockAudit()
           mockPenaltiesService(penaltySummaryResponse)
@@ -364,12 +375,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB", isPoaActiveForCustomer = false
           )
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -388,12 +401,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(None),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -412,12 +427,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(None),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -436,12 +453,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB"
           )
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           mockDateServiceCall()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -457,12 +476,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel =
           VatDetailsViewModel(None, None, None, currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMin),
+            None,
             None,
             mockTodayDate
           )
@@ -478,13 +499,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val expected: VatDetailsViewModel = VatDetailsViewModel(
           None, None, None, isNonMTDfB = Some(true), currentDate = testDate, partyType = None, userEmailVerified = true, mandationStatus = "MTDfB Exempt")
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
-          
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMTDfBExempt),
+            None,
             None,
             mockTodayDate
           )
@@ -501,12 +523,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           None, None, Some(entityName), returnObligationError = true, deregDate = Some(LocalDate.parse("2020-01-01")),
           currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB")
         lazy val result: VatDetailsViewModel = {
-                    mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Left(ObligationsError),
             Right(None),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -525,10 +549,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = {
           mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(None),
             Left(NextPaymentError),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -557,10 +583,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           mockPOACheckServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Left(ObligationsError),
             Left(NextPaymentError),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -588,12 +616,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mandationStatus = "MTDfB"
         )
         lazy val result: VatDetailsViewModel = {
-            mockPOACheckServiceCall()
+          mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(overdueObligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -613,11 +643,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = {
           mockPOACheckServiceCall()
           mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
             Some(penaltiesSummaryModel),
+            None,
             mockTodayDate
           )
         }
@@ -634,10 +666,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           mockPOACheckServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             mockTodayDate
           )
@@ -665,10 +699,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         lazy val result: VatDetailsViewModel = {
           mockDateServiceCall()
           mockPOACheckServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Left(BadRequestError("", "")),
+            None,
             None,
             mockTodayDate
           )
@@ -677,6 +713,60 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
       }
     }
 
+    "there is a payment on account active and has standing request data" should {
+
+      "return a VatDetailsViewModel with a POA changed on date that matches the Standing Request data" in {
+        lazy val expected: VatDetailsViewModel =
+          VatDetailsViewModel(
+            paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email),
+            mandationStatus = "MTDfB", isPoaActiveForCustomer = true, poaChangedOn = Some(LocalDate.parse("2025-02-20"))
+          )
+
+        lazy val result: VatDetailsViewModel = {
+          mockPOACheckServiceCallTrue()
+          mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod(poaActive = true, Some(LocalDate.parse("2025-02-20")))
+          controller.constructViewModel(
+            Right(None),
+            Right(Some(payments)),
+            Right(customerInformationMax),
+            None,
+            Some(standingRequestSample2),
+            mockTodayDate
+          )
+        }
+
+        result shouldBe expected
+      }
+
+      "return a VatDetailsViewModel with no POA changed on date when there is no Standing Request data" in {
+        lazy val expected: VatDetailsViewModel =
+          VatDetailsViewModel(
+            paymentDueDate, None, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email),
+            mandationStatus = "MTDfB", isPoaActiveForCustomer = true, poaChangedOn = None
+          )
+
+
+        lazy val result: VatDetailsViewModel = {
+          mockPOACheckServiceCallTrue()
+          mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
+          controller.constructViewModel(
+            Right(None),
+            Right(Some(payments)),
+            Right(customerInformationMax),
+            None,
+            Some(standingRequestSample2),
+            mockTodayDate
+          )
+        }
+
+        result shouldBe expected
+      }
+
+    }
   }
 
   "Calling .retrieveEmailVerifiedIfExist" should {

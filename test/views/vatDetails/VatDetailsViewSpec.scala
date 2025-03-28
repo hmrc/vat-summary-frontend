@@ -26,6 +26,8 @@ import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.vatDetails.Details
 
+import java.time.LocalDate
+
 class VatDetailsViewSpec extends ViewBaseSpec {
 
   val details: Details = injector.instanceOf[Details]
@@ -49,6 +51,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val overdueLabel = "span strong"
     val returnsVatLink = "#vat-returns-link"
     val vatPOASection = "#vat-POA"
+    val vatPOAAlertBanner = ".govuk-notification-banner"
     val vatPOALink = "#vat-POA a.govuk-link"
     val vatPOAText = "#vat-POA p.govuk-body"
     val historyHeading = "#history > h2"
@@ -159,6 +162,28 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     userEmailVerified = true,
     mandationStatus = "MTDfB",
     isPoaActiveForCustomer = true
+  )
+
+  val poaActiveUntilTrueAndPoaChangedOn: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentDate = testDate,
+    partyType = Some("1"),
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isPoaActiveForCustomer = true,
+    poaChangedOn = Some(LocalDate.parse("2025-03-01"))
+  )
+
+  val poaActiveUntilTrueAndNoPoaChangedOn: VatDetailsViewModel = VatDetailsViewModel(
+    None, None, None,
+    currentDate = testDate,
+    partyType = None,
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isPoaActiveForCustomer = true,
+    poaChangedOn = None
   )
 
   val poaActiveUntilfalse: VatDetailsViewModel = VatDetailsViewModel(
@@ -649,5 +674,28 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
 
+  "Rendering the VAT details page when POA Feature is enabled and POA Changed On date condition passed" should {
+    mockConfig.features.poaActiveFeatureEnabled(true)
+    lazy val view = details(poaActiveUntilTrueAndPoaChangedOn, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    lazy val vatPOAAlertBanner = element(Selectors.vatPOAAlertBanner)
+
+    "render the POA Alert banner" in {
+      vatPOAAlertBanner.select("h2").text() shouldBe "Important"
+      vatPOAAlertBanner.select("h3").text() shouldBe "Payments on account schedule change"
+      vatPOAAlertBanner.select(".govuk-body").text() shouldBe
+        "The amounts due for your payments on account were changed on 1 March 2025. Check your schedule for details."
+    }
+  }
+
+  "Rendering the VAT details page when POA Feature is enabled and POA Changed On date condition failed" should {
+    mockConfig.features.poaActiveFeatureEnabled(true)
+    lazy val view = details(poaActiveUntilTrueAndNoPoaChangedOn, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "should not render the POA Alert banner" in {
+      document.select(Selectors.vatPOAAlertBanner).select("h3").text() shouldNot  be("Payments on account schedule change")
+    }
+  }
 
 }
