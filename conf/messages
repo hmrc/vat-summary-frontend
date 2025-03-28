@@ -202,7 +202,7 @@ existingDD.banner.p2.2 = Other charges, penalties and interest showing as owing 
 existingDD.banner.p3.preText = For full details of your Direct Debit payment check your
 existingDD.banner.p3.linkText = Messages inbox
 existingDD.banner.p3.postText = .
-existingDD.banner.p3.extra = We’ll send you a notice there when we’re due to collect your payment.
+existingDD.banner.p3.extra = We''ll send you a notice there when we''re due to collect your payment.
 existingDD.banner.p4 = Be careful not to make a payment for an amount that will be covered by your Direct Debit Instruction.
 existingDD.banner.p5.linkText = View and manage your Direct Debit details
 
@@ -212,11 +212,11 @@ existingDD.p1 = Only the amount due on your VAT Return will be collected by Dire
 existingDD.p1.2 = Other charges, penalties and interest showing as owing will still need to be paid by other methods.
 existingDD.p2.preText = For full details of your Direct Debit payment check your
 existingDD.p2.linkText = Messages inbox
-existingDD.p2.postText = We’ll send you a notice there when we’re due to collect your payment.
+existingDD.p2.postText = We''ll send you a notice there when we''re due to collect your payment.
 existingDD.p3 = Be careful not to make a payment for an amount that will be covered by your Direct Debit Instruction.
 
 existingDD.details1.summary = Why does my account show that I still owe money after my Direct Debit has been collected?
-existingDD.details1.p1 = There may be a few days delay between the Direct Debit payment being collected and showing as paid on the ‘What you owe’ page.
+existingDD.details1.p1 = There may be a few days delay between the Direct Debit payment being collected and showing as paid on the ''What you owe'' page.
 existingDD.details1.p2 = In addition, only the amount due on your VAT return will be collected by Direct Debit.
 
 existingDD.details2.summary = Why have I been charged late payment interest?
@@ -225,7 +225,7 @@ existingDD.details2.p1.2 = after the successful collection of your Direct Debit.
 
 existingDD.radio.question = Do you still want to make a payment?
 existingDDContinuePayment.Yes = Yes, I want to make a payment for something not covered by the Direct Debit Instruction
-existingDDContinuePayment.No = No, take me back to ‘What you owe’
+existingDDContinuePayment.No = No, take me back to ''What you owe''
 existingDD.radio.required = Select whether you still want to make a payment
 existingDD.continue = Continue
 error.summary.title1 = There is a problem
