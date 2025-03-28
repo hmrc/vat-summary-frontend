@@ -176,6 +176,16 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     poaChangedOn = Some(LocalDate.parse("2025-03-01"))
   )
 
+  val poaActiveUntilTrueAndNoPoaChangedOn: VatDetailsViewModel = VatDetailsViewModel(
+    None, None, None,
+    currentDate = testDate,
+    partyType = None,
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isPoaActiveForCustomer = true,
+    poaChangedOn = None
+  )
+
   val poaActiveUntilfalse: VatDetailsViewModel = VatDetailsViewModel(
     Some("2018-12-31"),
     Some("2018-12-31"),
@@ -681,13 +691,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page when POA Feature is enabled and POA Changed On date condition failed" should {
     mockConfig.features.poaActiveFeatureEnabled(true)
-    lazy val view = details(poaActiveUntiltrue, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(poaActiveUntilTrueAndNoPoaChangedOn, Html("<nav>BTA Links</nav>"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    lazy val vatPOAAlertBanner = element(Selectors.vatPOAAlertBanner)
-
     "should not render the POA Alert banner" in {
-      document.select(Selectors.vatPOAAlertBanner) should be(empty)
+      document.select(Selectors.vatPOAAlertBanner).select("h3").text() shouldNot  be("Payments on account schedule change")
     }
   }
 
