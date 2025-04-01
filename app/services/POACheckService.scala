@@ -105,7 +105,8 @@ class POACheckService @Inject() () extends LoggerUtil {
         val startDateOpt = Try(LocalDate.parse(startDate, formatter)).toOption
         val endDateOpt = Try(LocalDate.parse(endDate, formatter)).toOption
 
-        val isCurrent: Boolean = today.isEqual(startDateOpt.get) || (today.isAfter(startDateOpt.get) && today.isBefore(endDateOpt.get))
+        val isCurrent: Boolean = today.isEqual(startDateOpt.get) ||
+          (today.isAfter(startDateOpt.get) && today.isBefore(endDateOpt.get)) || today.isEqual(endDateOpt.get)
 
         ChangedOnVatPeriod(
           startDate = startDateOpt,
