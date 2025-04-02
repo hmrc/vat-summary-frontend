@@ -19,7 +19,9 @@ package services
 import com.google.inject.Inject
 import services.DateService
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
-import models.CustomerInformation
+import models.ChangedOnVatPeriod.{RequestCategoryType3, dateFormatter}
+import models.{ChangedOnVatPeriod, CustomerInformation, StandingRequest, StandingRequestDetail}
+
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import scala.util.Try
@@ -67,4 +69,60 @@ class POACheckService @Inject() () extends LoggerUtil {
     }
   }
 
+  def changedOnDateWithInLatestVatPeriod(standingRequestScheduleOpt: Option[StandingRequest], today: LocalDate): Option[LocalDate] = {
+    standingRequestScheduleOpt match {
+      case Some(standingRequestSchedule) => standingRequestSchedule.standingRequests.filter(_.requestCategory.equals(RequestCategoryType3)).flatMap(sr =>
+        doesSrChangedOnFallsInLatestVatPeriod(sr,today)).sorted.reverse.headOption match {
+        case Some(date) =>
+          logger.debug(
+            s"[changedOnDateWithInLatestVatPeriod]: Date condition for Changed On passed, with  standingRequestSchedule ($standingRequestSchedule)"
+          )
+          Some(date)
+        case None =>
+          logger.debug(
+            s"[changedOnDateWithInLatestVatPeriod]: Date condition for Changed On failed, with  standingRequestSchedule ($standingRequestSchedule)"
+          )
+          None
+      }
+      case None =>
+        logger.debug(
+          s"[changedOnDateWithInLatestVatPeriod]: standingRequestSchedule for this customer is empty"
+        )
+        None
+    }
+  }
+
+  private def doesSrChangedOnFallsInLatestVatPeriod(standingRequest: StandingRequestDetail, today: LocalDate): Option[LocalDate] = {
+    val dateFormat: String = "yyyy-MM-dd"
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat)
+    val periods = standingRequest.requestItems
+      .groupBy(_.periodKey)
+      .toSeq.sortBy(_._1)
+      .map { case (periodKey, items) =>
+        val startDate = items.head.startDate
+        val endDate = items.last.endDate
+
+        val startDateOpt = Try(LocalDate.parse(startDate, formatter)).toOption
+        val endDateOpt = Try(LocalDate.parse(endDate, formatter)).toOption
+
+        val isCurrent: Boolean = today.isEqual(startDateOpt.get) ||
+          (today.isAfter(startDateOpt.get) && today.isBefore(endDateOpt.get)) || today.isEqual(endDateOpt.get)
+
+        ChangedOnVatPeriod(
+          startDate = startDateOpt,
+          endDate = endDateOpt,
+          isCurrent = isCurrent
+        )
+      }
+
+    val changedOnOpt = if (standingRequest.changedOn.isDefined) Try(LocalDate.parse(standingRequest.changedOn.get, formatter)).toOption else None
+
+    if(changedOnOpt.isDefined && periods.exists(_.isCurrent) &&
+      !changedOnOpt.get.isBefore(periods.filter(_.isCurrent).head.startDate.get) &&
+      !changedOnOpt.get.isAfter(periods.filter(_.isCurrent).head.endDate.get)) {
+      changedOnOpt
+    } else {
+      None
+    }
+  }
 }

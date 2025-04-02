@@ -16,21 +16,20 @@
 
 package services
 
+import common.TestModels._
+import models.CustomerInformation
 import models.errors._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
 import java.time.LocalDate
-import models.{CustomerInformation}
-import services.POACheckService
-import connectors.httpParsers.ResponseHttpParsers.HttpResult
-import controllers.ControllerBaseSpec
-import common.TestModels._
 
 class POACheckServiceSpec extends AnyWordSpec with Matchers{
 
   val service = new POACheckService()
 
   val fixedDate: LocalDate = LocalDate.parse("2018-05-01")
+  val todayFixedDate: LocalDate = LocalDate.parse("2025-02-28")
 
   def customerInfoWithDate(date: Option[String]): CustomerInformation = 
     customerInformationMax.copy(poaActiveUntil = date)
@@ -77,6 +76,23 @@ class POACheckServiceSpec extends AnyWordSpec with Matchers{
         fixedDate
       )
       result shouldBe false
+    }
+  }
+
+  "changedOnDateWithInLatestVatPeriod" should {
+    "should return the valid changed on date" in {
+      val result = service.changedOnDateWithInLatestVatPeriod(
+        Some(modelSrChangedOnTest1),
+        todayFixedDate
+      )
+      result shouldBe Some(LocalDate.parse("2025-03-15"))
+    }
+    "should return none for the changed on date not falling in current valid vat period" in {
+      val result = service.changedOnDateWithInLatestVatPeriod(
+        Some(modelSrChangedOnTest2),
+        todayFixedDate
+      )
+      result shouldBe None
     }
   }
 }
