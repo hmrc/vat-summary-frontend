@@ -73,12 +73,18 @@
 }
 
 @poaAlertContent = {
-  <h3 class="govuk-notification-banner__heading">@messages("vatDetails.payment_on_account.alert.heading")</h3>
+  @if(detailsViewModel.poaChangedOn.isDefined) {
+    <h3 class="govuk-notification-banner__heading">@messages("vatDetails.payment_on_account.alert.heading")</h3>
+    <p class="govuk-body" id="poa-alert-information">@messages("vatDetails.payment_on_account.alert.message") @MessageDateFormat.formatLong(detailsViewModel.poaChangedOn.get).
+      <a class="govuk-notification-banner__link" href="@controllers.routes.PaymentsOnAccountController.show.url" rel="noreferrer noopener">
+        @messages("vatDetails.payment_on_account.alert.link")</a>.
+    </p>
+  }
+}
 
-  <p class="govuk-body" id="poa-alert-information">@messages("vatDetails.payment_on_account.alert.message") @MessageDateFormat.formatLong(detailsViewModel.poaChangedOn.get).
-    <a class="govuk-notification-banner__link" href="@controllers.routes.PaymentsOnAccountController.show.url" rel="noreferrer noopener">
-      @messages("vatDetails.payment_on_account.alert.link")</a>.
-  </p>
+@poaAlertAndPenaltiesContent = {
+  <div>@poaAlertContent</div>
+  <div>@penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined)</div>
 }
 
 @mainTemplate(
@@ -99,14 +105,13 @@
     <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-poa">
       @govukNotificationBanner(NotificationBanner(
       title = Text(messages("vatDetails.payment_on_account.alert.title")),
-      content = HtmlContent(poaAlertContent),
+      content = HtmlContent(poaAlertAndPenaltiesContent),
       classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
       titleId = Some("poa-alert-banner")))
     </div>
+  } else {
+    @penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined)
   }
-
-  @penaltiesBanner(detailsViewModel.penaltiesSummary)
-
   @unverifiedUserEmailContent
 
   <div class="flex-container govuk-grid-row govuk-!-margin-top-6">

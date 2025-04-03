@@ -19,7 +19,7 @@
 
 @this(govukNotificationBanner: GovukNotificationBanner)
 
-@(penaltiesSummary: Option[PenaltiesSummary])(implicit messages: Messages, appConfig: config.AppConfig)
+@(penaltiesSummary: Option[PenaltiesSummary], isPoaAlert: Boolean = false)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @bannerContent = {@penaltiesSummary match {
   case Some(summary) => {
@@ -60,21 +60,33 @@
   </a>
 }
 
-@penaltiesSummary match {
-  case Some(summary) if (summary.hasActivePenalties) => {
-    @govukNotificationBanner(NotificationBanner(
-      title = Text(messages("penaltiesBanner.heading")),
-      content = HtmlContent(bannerContent),
-      classes = "govuk-!-margin-top-6",
-      titleId = Some("penalties-banner-title")
+@if(!isPoaAlert) {
+  @penaltiesSummary match {
+    case Some(summary) if (summary.hasActivePenalties) => {
+      @govukNotificationBanner(NotificationBanner(
+        title = Text(messages("penaltiesBanner.heading")),
+        content = HtmlContent(bannerContent),
+        classes = "govuk-!-margin-top-6",
+        titleId = Some("penalties-banner-title")
     ))
+    }
+    case _ => {
+      @govukNotificationBanner(NotificationBanner(
+        title = Text(messages("common.important")),
+        content = HtmlContent(penaltiesChangesBannerContent),
+        classes = "govuk-!-margin-top-6",
+        titleId = Some("upcoming-penalties-banner")
+      ))
+    }
   }
-  case _ => {
-    @govukNotificationBanner(NotificationBanner(
-      title = Text(messages("common.important")),
-      content = HtmlContent(penaltiesChangesBannerContent),
-      classes = "govuk-!-margin-top-6",
-      titleId = Some("upcoming-penalties-banner")
-    ))
+} else {
+  @penaltiesSummary match {
+    case Some(summary) if (summary.hasActivePenalties) => {
+       <h3 class="govuk-notification-banner__heading">@messages("penaltiesBanner.heading")</h3>
+       @bannerContent
+    }
+    case _ => {
+       @penaltiesChangesBannerContent
+    }
   }
 }
