@@ -1281,7 +1281,7 @@ object TestModels {
             period = "2",
             periodKey = "25A1",
             startDate = "2025-02-01",
-            endDate = "2025-03-31",
+            endDate = "2035-03-31",
             dueDate = "2025-03-31",
             amount = 20000.75,
             chargeReference = Some("XD006411191345"),

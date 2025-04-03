@@ -683,9 +683,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
     "render the POA Alert banner" in {
       vatPOAAlertBanner.select("h2").text() shouldBe "Important"
-      vatPOAAlertBanner.select("h3").text() shouldBe "Payments on account schedule change"
+      vatPOAAlertBanner.select("h3").text() shouldBe "Payments on account schedule change VAT penalties and interest are changing"
       vatPOAAlertBanner.select(".govuk-body").text() shouldBe
-        "The amounts due for your payments on account were changed on 1 March 2025. Check your schedule for details."
+        "The amounts due for your payments on account were changed on 1 March 2025. Check your schedule for details. " +
+          "From January 2023, we’re launching a new penalty system to replace Default Surcharge. " +
+          "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023. " +
+          "We’re also changing how we calculate interest on late payments and repayment returns."
     }
   }
 
