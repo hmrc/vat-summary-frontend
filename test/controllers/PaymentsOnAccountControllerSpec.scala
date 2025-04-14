@@ -25,6 +25,7 @@ import scala.concurrent.Future
 import common.TestModels._
 import models.StandingRequest
 import models.viewModels._
+import models.obligations.{VatReturnObligations, VatReturnObligation}
 import models.User
 import models._
 import org.jsoup.Jsoup
@@ -32,6 +33,7 @@ import org.jsoup.nodes.Document
 import scala.concurrent.ExecutionContext
 import play.api.i18n.{Messages}
 import views.html.errors.PaymentsOnAccountError
+import services.VatDetailsService
 
 class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
 
@@ -43,6 +45,8 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
   implicit val user: User = User("111111111")
   implicit val hc: HeaderCarrier = HeaderCarrier()
 
+  val mockVatDetailsService: VatDetailsService = mock[VatDetailsService]
+
   val testDate: LocalDate = LocalDate.parse("2025-02-24")
 
   val controller = new PaymentsOnAccountController(
@@ -52,10 +56,15 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
     mockServiceInfoService,
     mockServiceErrorHandler,
     paymentsOnAccountErrorView,
+    mockVatDetailsService,
     mcc,
     paymentsOnAccountView,
     mockAuditService
   )
+
+    def mockGetObligationsCall() = (mockVatDetailsService.getReturnObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .stubs(*, *, *)
+        .returns(Future.successful(Right(None)))
 
   "PaymentsOnAccountController.show" when {
 
@@ -65,7 +74,7 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
         mockServiceInfoCall()
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall()
-
+        mockGetObligationsCall() 
         controller.show(fakeRequest)
       }
 
@@ -385,7 +394,7 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       result.nextPayment shouldBe Some(
         PaymentDetail(
           PaymentType.FirstPayment,
-          Some(LocalDate.parse("2025-03-31")),
+           DueDate(Some(LocalDate.parse("2025-03-31"))),
           Some(22945.23)
         )
       )
@@ -452,11 +461,82 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       result.nextPayment shouldBe Some(
         PaymentDetail(
           PaymentType.ThirdPayment,
-          Some(testDate),
+           DueDate(Some(testDate)),
           None
         )
       )
     }
+
+    "correctly determine the third payment date when a vat obligation is due in that period." in {
+      val balancingDay: LocalDate = LocalDate.parse("2025-05-01")
+
+      val standingRequest = StandingRequest(
+        processingDate = "2025-02-24",
+        standingRequests = List(
+          StandingRequestDetail(
+            requestNumber = "20000037272",
+            requestCategory = "3",
+            createdOn = "2023-11-30",
+            changedOn = Some("2025-02-20"),
+            requestItems = List(
+              RequestItem(
+                period = "1",
+                periodKey = "24A1",
+                startDate = "2025-01-01",
+                endDate = "2025-03-31",
+                dueDate = "2025-03-31",
+                amount = 22945.23,
+                chargeReference = Some("XD006411191344"),
+                postingDueDate = Some("2025-03-31")
+              ),
+              RequestItem(
+                period = "2",
+                periodKey = "24A1",
+                startDate = "2025-01-01",
+                endDate = "2025-03-31",
+                dueDate = "2025-04-30",
+                amount = 22945.23,
+                chargeReference = Some("XD006411191345"),
+                postingDueDate = Some("2025-04-30")
+              ),
+              RequestItem(
+                period = "3",
+                periodKey = "24A2",
+                startDate = "2025-05-01",
+                endDate = "2025-07-31",
+                dueDate = "2025-06-30",
+                amount = 22945.23,
+                chargeReference = Some("XD006411191346"),
+                postingDueDate = Some("2025-06-30")
+              )
+            )
+          )
+        )
+      )
+
+      val result = PaymentsOnAccountController.buildViewModel(
+        standingRequest,
+        balancingDay,
+        Some(VatReturnObligations(List(VatReturnObligation(
+          LocalDate.parse("2025-02-01"),
+          LocalDate.parse("2025-04-30"),
+          LocalDate.parse("2025-05-31"),
+          "O",
+          None,
+          "25A1"))))
+      )
+
+      val vatPeriodEnd = LocalDate.parse("2025-03-31")
+
+      result.nextPayment shouldBe Some(
+        PaymentDetail(
+          PaymentType.ThirdPayment,
+           DueDate(Some(LocalDate.parse("2025-05-06")), Some(LocalDate.parse("2025-05-31"))),
+          None
+        )
+      )
+    }
+
 
     "ensure VAT period is marked as current on its startDate only if there are no past periods" in {
       val today: LocalDate =

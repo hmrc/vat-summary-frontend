@@ -58,7 +58,28 @@
           }
         </h1>
         <p class="govuk-body" id="next-payment-text">
-          @if(model.nextPayment.exists(p => p.paymentType == PaymentType.ThirdPayment)) {
+         @model.nextPayment match {
+          case Some(PaymentDetail(PaymentType.ThirdPayment, DueDate(_, Some(obligationsDueDate)), amount)) => {
+            @if(user.isAgent) {
+              @messages("paymentsOnAccount.agent.nextPayment.your")
+              <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isTheir") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
+            } else {
+              @messages("paymentsOnAccount.nextPayment.your") <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isYour") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
+              <br />
+              @messages("paymentsOnAccount.nextPayment.thisIsDueOn")
+              <strong>@MessageDateFormat.format(obligationsDueDate)</strong>.
+            }
+          }
+          case Some(PaymentDetail(_, DueDate(dueDate, obligationsDueDate), Some(amount))) => {
+            @if(user.isAgent) {
+              @messages("paymentsOnAccount.agent.nextPayment.amount.prefix") <strong class="govuk-!-font-weight-bold">@Money.pounds(amount)</strong>
+            } else {
+              @messages("paymentsOnAccount.nextPayment.amount.prefix") <strong class="govuk-!-font-weight-bold">@Money.pounds(amount)</strong>
+            }
+          @messages("paymentsOnAccount.nextPayment.amount.suffix")
+          <strong>@dueDate.map { dueDate => @MessageDateFormat.format(dueDate)}.getOrElse{@messages("paymentsOnAccount.pending")}</strong>.
+          }
+          case Some(PaymentDetail(_, DueDate(dueDate, obligationsDueDate), amount)) => {
             @if(user.isAgent) {
               @messages("paymentsOnAccount.agent.nextPayment.your")
               <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isTheir") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
@@ -68,15 +89,11 @@
               @messages("paymentsOnAccount.nextPayment.thisIsDue")
               <strong>@messages("paymentsOnAccount.nextPayment.vatReturnDue")</strong>.
             }
-          } else {
-              @if(user.isAgent) {
-                @messages("paymentsOnAccount.agent.nextPayment.amount.prefix") <strong class="govuk-!-font-weight-bold">@Money.pounds(model.nextPayment.get.amount.get)</strong>
-              } else {
-                @messages("paymentsOnAccount.nextPayment.amount.prefix") <strong class="govuk-!-font-weight-bold">@Money.pounds(model.nextPayment.get.amount.get)</strong>
-              }
-              @messages("paymentsOnAccount.nextPayment.amount.suffix")
-              <strong>@model.nextPayment.get.dueDate.map { dueDate => @MessageDateFormat.format(dueDate)}.getOrElse{@messages("paymentsOnAccount.pending")}</strong>.
           }
+          case None => {
+            <p class="govuk-body">No upcoming payments found.</p>
+          }
+         }
         </p>
         <p class="govuk-body">
             <a id="find-out-how-to-pay-link" href="https://www.gov.uk/guidance/vat-payments-on-account#how-to-pay" class="govuk-link" rel="noreferrer noopener" target="_blank">
@@ -128,16 +145,23 @@
                         @if(payment.paymentType == PaymentType.ThirdPayment) {
                           <p class="third-payment-text">
                           @if(period.isCurrent) {
-                            @messages("paymentsOnAccount.sameAs")
-                            <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
-                              @messages("paymentsOnAccount.VatReturn")
-                            </a>
+                            @payment.dueDate match {
+                              case DueDate(_, Some(fallback)) => {
+                                @MessageDateFormat.format(fallback)
+                              }
+                              case _ => {
+                                @messages("paymentsOnAccount.sameAs")
+                                <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
+                                  @messages("paymentsOnAccount.VatReturn")
+                                </a>
+                              }
+                            }
                           } else {
                             @messages("paymentsOnAccount.pending")
                           }
                           </p>
                         } else {
-                          @payment.dueDate.map{ dueDate => 
+                          @payment.dueDate.dueDate.map{ dueDate => 
                             @MessageDateFormat.format(dueDate)
                           }.getOrElse{
                             @messages("paymentsOnAccount.pending")
@@ -184,7 +208,7 @@
                           </p>
                         } else {
                           <div id="payment-due-date">
-                            @payment.dueDate.map{ dueDate => 
+                            @payment.dueDate.dueDate.map{ dueDate => 
                               @MessageDateFormat.format(dueDate)
                             }.getOrElse{
                               @messages("paymentsOnAccount.pending")

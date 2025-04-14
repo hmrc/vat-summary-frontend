@@ -28,27 +28,27 @@ class PaymentsOnAccountViewModelSpec extends SpecBase {
   val vatPeriods: List[VatPeriod] = List(
     VatPeriod(LocalDate.parse("2024-02-01"), LocalDate.parse("2024-04-30"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-03-31")), Some(BigDecimal(22945.23))),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2024-04-30")), Some(BigDecimal(22945.23))),
-        PaymentDetail(PaymentType.ThirdPayment, None, None)
+        PaymentDetail(PaymentType.FirstPayment,  DueDate(Some(LocalDate.parse("2024-03-31"))), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.SecondPayment,  DueDate(Some(LocalDate.parse("2024-04-30"))), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.ThirdPayment,  DueDate(None), None)
       ),
       isCurrent = false,
       isPast = false
     ),
     VatPeriod(LocalDate.parse("2024-11-01"), LocalDate.parse("2025-01-31"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2024-12-31")), Some(BigDecimal(22945.23))),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-01-31")), Some(BigDecimal(22945.23))),
-        PaymentDetail(PaymentType.ThirdPayment, None, None)
+        PaymentDetail(PaymentType.FirstPayment, DueDate(Some(LocalDate.parse("2024-12-31"))), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.SecondPayment,  DueDate(Some(LocalDate.parse("2025-01-31"))), Some(BigDecimal(22945.23))),
+        PaymentDetail(PaymentType.ThirdPayment,  DueDate(None), None)
       ),
       isCurrent = false,
       isPast = false
     ),
     VatPeriod(LocalDate.parse("2025-02-01"), LocalDate.parse("2025-04-30"),
       List(
-        PaymentDetail(PaymentType.FirstPayment, Some(LocalDate.parse("2025-03-31")), Some(BigDecimal(122945.23))),
-        PaymentDetail(PaymentType.SecondPayment, Some(LocalDate.parse("2025-04-30")), Some(BigDecimal(122945.23))),
-        PaymentDetail(PaymentType.ThirdPayment, None, None)
+        PaymentDetail(PaymentType.FirstPayment,  DueDate(Some(LocalDate.parse("2025-03-31"))), Some(BigDecimal(122945.23))),
+        PaymentDetail(PaymentType.SecondPayment,  DueDate(Some(LocalDate.parse("2025-04-30"))), Some(BigDecimal(122945.23))),
+        PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
       ),
       isCurrent = false,
       isPast = false

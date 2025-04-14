@@ -37,7 +37,12 @@ object PaymentType {
   }
 }
 
-case class PaymentDetail(paymentType: PaymentType, dueDate: Option[LocalDate], amount: Option[BigDecimal])
+case class DueDate(
+  dueDate: Option[LocalDate],
+  obligationsDueDate: Option[LocalDate] = None
+)
+
+case class PaymentDetail(paymentType: PaymentType, dueDate: DueDate, amount: Option[BigDecimal])
 
 case class VatPeriod(startDate: LocalDate, endDate: LocalDate, payments: List[PaymentDetail], isCurrent: Boolean, isPast: Boolean) {
   def isCurrentOrUpcoming: Boolean = !isPast

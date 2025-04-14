@@ -20,7 +20,8 @@ import models.viewModels.{
   PaymentDetail,
   PaymentType,
   PaymentsOnAccountViewModel,
-  VatPeriod
+  VatPeriod,
+  DueDate
 }
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -51,15 +52,15 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       List(
         PaymentDetail(
           PaymentType.FirstPayment,
-          Some(LocalDate.parse("2024-03-31")),
+          DueDate(Some(LocalDate.parse("2024-03-31"))),
           Some(BigDecimal(22945.23))
         ),
         PaymentDetail(
           PaymentType.SecondPayment,
-          Some(LocalDate.parse("2024-04-30")),
+          DueDate(Some(LocalDate.parse("2024-04-30"))),
           Some(BigDecimal(22945.23))
         ),
-        PaymentDetail(PaymentType.ThirdPayment, None, None)
+        PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
       ),
       isCurrent = true,
       isPast = false
@@ -70,15 +71,15 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       List(
         PaymentDetail(
           PaymentType.FirstPayment,
-          Some(LocalDate.parse("2024-12-31")),
+          DueDate(Some(LocalDate.parse("2024-12-31"))),
           Some(BigDecimal(22945.23))
         ),
         PaymentDetail(
           PaymentType.SecondPayment,
-          Some(LocalDate.parse("2025-01-31")),
+          DueDate(Some(LocalDate.parse("2025-01-31"))),
           Some(BigDecimal(22945.23))
         ),
-        PaymentDetail(PaymentType.ThirdPayment, None, None)
+        PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
       ),
       isCurrent = false,
       isPast = false
@@ -89,15 +90,15 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       List(
         PaymentDetail(
           PaymentType.FirstPayment,
-          Some(LocalDate.parse("2025-03-31")),
+          DueDate(Some(LocalDate.parse("2025-03-31"))),
           Some(BigDecimal(122945.23))
         ),
         PaymentDetail(
           PaymentType.SecondPayment,
-          Some(LocalDate.parse("2025-04-30")),
+          DueDate(Some(LocalDate.parse("2025-04-30"))),
           Some(BigDecimal(122945.23))
         ),
-        PaymentDetail(PaymentType.ThirdPayment, None, None)
+        PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
       ),
       isCurrent = false,
       isPast = false
@@ -117,7 +118,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
     nextPayment = Some(
       PaymentDetail(
         PaymentType.FirstPayment,
-        Some(LocalDate.parse("2025-03-31")),
+        DueDate(Some(LocalDate.parse("2025-03-31"))),
         Some(BigDecimal(122945.23))
       )
     )
@@ -161,7 +162,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
     "display the correct next payment message when balancing payment is due" in {
       lazy val view = paymentsOnAccountView(
         viewModel.copy(nextPayment =
-          Some(PaymentDetail(PaymentType.ThirdPayment, None, None))
+          Some(PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None))
         ),
         Html("")
       )
@@ -259,15 +260,15 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
             payments = List(
               PaymentDetail(
                 PaymentType.FirstPayment,
-                Some(LocalDate.parse("2024-03-31")),
+                DueDate(Some(LocalDate.parse("2024-03-31"))),
                 Some(BigDecimal(22945.23))
               ),
               PaymentDetail(
                 PaymentType.SecondPayment,
-                Some(LocalDate.parse("2024-04-30")),
+                DueDate(Some(LocalDate.parse("2024-04-30"))),
                 Some(BigDecimal(22945.23))
               ),
-              PaymentDetail(PaymentType.ThirdPayment, None, None)
+              PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
             ),
             isCurrent = false,
             isPast = true
@@ -354,7 +355,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
         Some(
           PaymentDetail(
             PaymentType.FirstPayment,
-            None,
+            DueDate(None),
             Some(BigDecimal(122945.23))
           )
         )
@@ -390,15 +391,15 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
           payments = List(
             PaymentDetail(
               PaymentType.FirstPayment,
-              Some(startDate.plusDays(15)),
+              DueDate(Some(startDate.plusDays(15))),
               Some(BigDecimal(100 * i))
             ),
             PaymentDetail(
               PaymentType.SecondPayment,
-              Some(endDate),
+              DueDate(Some(endDate)),
               Some(BigDecimal(200 * i))
             ),
-            PaymentDetail(PaymentType.ThirdPayment, None, None)
+            PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
           ),
           isCurrent = true,
           isPast = false
@@ -423,15 +424,15 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
           payments = List(
             PaymentDetail(
               PaymentType.FirstPayment,
-              Some(LocalDate.parse("2025-05-01")),
+              DueDate(Some(LocalDate.parse("2025-05-01"))),
               Some(BigDecimal(50000.00))
             ),
             PaymentDetail(
               PaymentType.SecondPayment,
-              Some(LocalDate.parse("2025-06-01")),
+              DueDate(Some(LocalDate.parse("2025-06-01"))),
               Some(BigDecimal(50000.00))
             ),
-            PaymentDetail(PaymentType.ThirdPayment, None, None)
+            PaymentDetail(PaymentType.ThirdPayment, DueDate(None), None)
           ),
           isCurrent = true,
           isPast = false
@@ -452,5 +453,65 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       vatReturnLink.attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
 
+    "render link to VAT return deadlines if third payment has no fallback" in {
+      val testViewModel = viewModel.copy(
+        currentPeriods = List(
+          VatPeriod(
+            startDate = LocalDate.parse("2025-04-01"),
+            endDate = LocalDate.parse("2025-06-30"),
+            payments = List(
+              PaymentDetail(
+                PaymentType.FirstPayment,
+                DueDate(Some(LocalDate.parse("2025-05-01"))),
+                Some(BigDecimal(123))
+              ),
+              PaymentDetail(
+                PaymentType.SecondPayment,
+                DueDate(Some(LocalDate.parse("2025-06-01"))),
+                Some(BigDecimal(123))
+              ),
+              PaymentDetail(
+                PaymentType.ThirdPayment,
+                DueDate(None, None),
+                None
+              ) 
+            ),
+            isCurrent = true,
+            isPast = false
+          )
+        )
+      )
+
+      lazy val view = paymentsOnAccountView(testViewModel, Html(""))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      val fallbackLink = document.select("#vat-returns-link")
+
+      fallbackLink.text() shouldBe "VAT return due date"
+      fallbackLink.attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
+    }
+
   }
+
+  "render the correct message when next payment is a balancing payment" in {
+  val balancingDueDate = LocalDate.parse("2025-07-01")
+
+  val balancingPaymentViewModel = viewModel.copy(
+    nextPayment = Some(
+      PaymentDetail(
+        PaymentType.ThirdPayment,
+        DueDate(None, Some(balancingDueDate)), 
+        None
+      )
+    )
+  )
+
+  lazy val view = paymentsOnAccountView(balancingPaymentViewModel, Html(""))
+  lazy implicit val document: Document = Jsoup.parse(view.body)
+
+  val nextPaymentText = document.select("#next-payment-text").text()
+
+  nextPaymentText shouldBe
+    "Your next payment due is your balancing payment. This is due on 1 Jul 2025."
+}
 }

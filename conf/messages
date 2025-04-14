@@ -115,6 +115,7 @@ paymentsOnAccount.nextPayment.vatReturnDue = VAT return due date
 paymentsOnAccount.nextPayment.amount.prefix = Your next payment of
 paymentsOnAccount.agent.nextPayment.amount.prefix = Your client’s next payment of
 paymentsOnAccount.nextPayment.amount.suffix = is due on
+paymentsOnAccount.nextPayment.thisIsDueOn = This is due on
 paymentsOnAccount.howToPay = Find out how to pay (opens in a new tab)
 paymentsOnAccount.changedOn = The amounts due for your payments on account were changed on {0}.
 paymentsOnAccount.agent.changedOn = The amounts due for your client’s payments on account were changed on {0}.
