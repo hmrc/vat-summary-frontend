@@ -146,9 +146,7 @@ val thirdPaymentDueDate: Option[LocalDate] =
       val adjustedStart = startDate.plusDays(35)
       val adjustedEnd = endDate.plusDays(35)
 
-      val isCurrent: Boolean = today.isEqual(startDate) || (
-        today.isAfter(adjustedStart.minusDays(1)) && today.isBefore(adjustedEnd.plusDays(1))
-      )
+      val isCurrent = !today.isBefore(startDate.plusDays(35)) && !today.isAfter(endDate.plusDays(35))
 
       val isPast = endDate.isBefore(today.minusDays(35))
 
