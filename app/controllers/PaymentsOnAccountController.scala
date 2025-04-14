@@ -67,15 +67,6 @@ class PaymentsOnAccountController @Inject() (
               standingRequestOpt match {
                 case Some(standingRequest) =>
                   val obligationsOpt = obligationsResult.toOption.flatten
-                  println("Todays Date: " + today)
-                  println(
-                    "Oblitgation Data" + obligationsOpt
-                  )
-                  println(
-                    "Oblitgation Data Due On" + obligationsOpt.map(
-                      _.obligations.map(_.due)
-                    )
-                  )
                   val viewModel =
                     buildViewModel(standingRequest, today, obligationsOpt)
                   Ok(view(viewModel, serviceInfoContent))
@@ -101,9 +92,6 @@ object PaymentsOnAccountController {
       today: LocalDate,
       returnObligations: Option[VatReturnObligations] = None
   ): PaymentsOnAccountViewModel = {
-
-  println("OBLIGATION")
-  println(returnObligations)
 
   val standingRequests = standingRequestResponse.standingRequests
 
@@ -138,10 +126,6 @@ val thirdPaymentDueDate: Option[LocalDate] =
     val matchOpt = obligations.obligations.find { ob =>
       val overlaps =
         !ob.periodTo.isBefore(startDate) && !ob.periodFrom.isAfter(endDate)
-      if (overlaps) {
-        println(s"[MATCH] Matched obligation for PoA $startDate to $endDate => obligation ${ob.periodFrom} to ${ob.periodTo}, due ${ob.due}")
-        println(s"[FALLBACK DATE] $fallbackDueDate")
-      }
       overlaps
     }
     matchOpt.map(_.due)
