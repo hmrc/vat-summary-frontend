@@ -26,55 +26,84 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.{PaymentsOnAccountView}
-import scala.concurrent.{ExecutionContext,Future}
+import scala.concurrent.{ExecutionContext, Future}
 import config.ServiceErrorHandler
 import models.StandingRequest
 import java.time.LocalDate
-import views.html.errors.{PaymentsOnAccountError,NotFound}
+import views.html.errors.{PaymentsOnAccountError, NotFound}
+import models.obligations.VatReturnObligations
 
-class PaymentsOnAccountController @Inject()(authorisedController: AuthorisedController,
-                                     dateService: DateService,
-                                     paymentsOnAccountService: PaymentsOnAccountService,
-                                     serviceInfoService: ServiceInfoService,
-                                     serviceErrorHandler: ServiceErrorHandler,
-                                     paymentsOnAccountError: PaymentsOnAccountError,
-                                     mcc: MessagesControllerComponents,
-                                     view: PaymentsOnAccountView,
-                                     auditService: AuditingService)
-                                    (implicit ec: ExecutionContext,
-                                     appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+class PaymentsOnAccountController @Inject() (
+    authorisedController: AuthorisedController,
+    dateService: DateService,
+    paymentsOnAccountService: PaymentsOnAccountService,
+    serviceInfoService: ServiceInfoService,
+    serviceErrorHandler: ServiceErrorHandler,
+    paymentsOnAccountError: PaymentsOnAccountError,
+    vatDetailService: VatDetailsService,
+    mcc: MessagesControllerComponents,
+    view: PaymentsOnAccountView,
+    auditService: AuditingService
+)(implicit ec: ExecutionContext, appConfig: AppConfig)
+    extends FrontendController(mcc)
+    with I18nSupport
+    with LoggerUtil {
   import PaymentsOnAccountController._
 
-  def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request =>
-    implicit user => {
-      if (appConfig.features.poaActiveFeatureEnabled()) {
-        (for {
-          serviceInfoContent <- serviceInfoService.getPartial
-          today = dateService.now()
-          standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
-        } yield {
-          standingRequestOpt match {
-            case Some(standingRequest) =>
-              val viewModel = buildViewModel(standingRequest, today)
-              Ok(view(viewModel,serviceInfoContent))
-            case None => serviceErrorHandler.showInternalServerError
-          }
-        }).recover {
-            case e =>
-              logger.error(s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage}")
+  def show: Action[AnyContent] =
+    authorisedController.authorisedActionAllowAgents {
+      implicit request => implicit user =>
+        {
+          if (appConfig.features.poaActiveFeatureEnabled()) {
+            (for {
+              serviceInfoContent <- serviceInfoService.getPartial
+              today = dateService.now()
+              standingRequestOpt <- paymentsOnAccountService
+                .getPaymentsOnAccounts(user.vrn)
+              obligationsResult <- vatDetailService.getReturnObligations(
+                user.vrn
+              )
+            } yield {
+              standingRequestOpt match {
+                case Some(standingRequest) =>
+                  val obligationsOpt = obligationsResult.toOption.flatten
+                  println("Todays Date: " + today)
+                  println(
+                    "Oblitgation Data" + obligationsOpt
+                  )
+                  println(
+                    "Oblitgation Data Due On" + obligationsOpt.map(
+                      _.obligations.map(_.due)
+                    )
+                  )
+                  val viewModel =
+                    buildViewModel(standingRequest, today, obligationsOpt)
+                  Ok(view(viewModel, serviceInfoContent))
+                case None => serviceErrorHandler.showInternalServerError
+              }
+            }).recover { case e =>
+              logger.error(
+                s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage}"
+              )
               serviceErrorHandler.showInternalServerError
+            }
+          } else {
+            Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
           }
-        } else {
-          Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
         }
-      }
     }
-  }
+}
 
 object PaymentsOnAccountController {
 
-  def buildViewModel(standingRequestResponse: StandingRequest, today: LocalDate): PaymentsOnAccountViewModel = {
+  def buildViewModel(
+      standingRequestResponse: StandingRequest,
+      today: LocalDate,
+      returnObligations: Option[VatReturnObligations] = None
+  ): PaymentsOnAccountViewModel = {
+
+  println("OBLIGATION")
+  println(returnObligations)
 
   val standingRequests = standingRequestResponse.standingRequests
 
@@ -95,18 +124,32 @@ object PaymentsOnAccountController {
         val actualPayments = sortedPayments.take(2).zipWithIndex.map { case (item, index) =>
             PaymentDetail(
               paymentType = if (index == 0) PaymentType.FirstPayment else PaymentType.SecondPayment,
-              dueDate = Some(LocalDate.parse(item.dueDate)),
+              dueDate = DueDate(Some(LocalDate.parse(item.dueDate))),
               amount = Some(item.amount)
             )
         }
 
         val startDate = LocalDate.parse(items.head.startDate)
         val endDate = LocalDate.parse(items.head.endDate)
-        val thirdPaymentDueDate = endDate.plusDays(36)
+        val fallbackDueDate = endDate.plusDays(36)
+
+val thirdPaymentDueDate: Option[LocalDate] =
+  returnObligations.flatMap { obligations =>
+    val matchOpt = obligations.obligations.find { ob =>
+      val overlaps =
+        !ob.periodTo.isBefore(startDate) && !ob.periodFrom.isAfter(endDate)
+      if (overlaps) {
+        println(s"[MATCH] Matched obligation for PoA $startDate to $endDate => obligation ${ob.periodFrom} to ${ob.periodTo}, due ${ob.due}")
+        println(s"[FALLBACK DATE] $fallbackDueDate")
+      }
+      overlaps
+    }
+    matchOpt.map(_.due)
+  }
 
         val thirdPayment = PaymentDetail(
           paymentType = PaymentType.ThirdPayment,
-          dueDate = Some(thirdPaymentDueDate),
+          dueDate = DueDate(Some(fallbackDueDate), thirdPaymentDueDate),
           amount = None
         )
 
@@ -153,8 +196,8 @@ object PaymentsOnAccountController {
 
   val nextPaymentOpt = currentPeriods
     .flatMap(_.payments)
-    .filter(_.dueDate.exists(_.isAfter(today)))
-    .sortBy(_.dueDate.getOrElse(LocalDate.MAX))
+    .filter(_.dueDate.dueDate.exists(_.isAfter(today)))
+    .sortBy(_.dueDate.dueDate.getOrElse(LocalDate.MAX))
     .headOption
 
   val orderedPastPeriods = pastPeriods.sortBy(_.endDate)(Ordering[LocalDate].reverse).toList
