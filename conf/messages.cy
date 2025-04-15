@@ -109,6 +109,7 @@ paymentsOnAccount.agent.nextPayment.thisIsDue = yn ddyledus ar
 
 paymentsOnAccount.nextPayment.nextPaymentDue = taliad nesaf yn ddyledus
 paymentsOnAccount.nextPayment.isYour = yw’ch
+paymentsOnAccount.nextPayment.isTheir = yw ei
 paymentsOnAccount.nextPayment.strongDue = Eich taliad nesaf yn ddyledus
 paymentsOnAccount.nextPayment.balancing = taliad mantoli.
 paymentsOnAccount.nextPayment.thisIsDue = Mae hwn yn ddyledus ar yr un dyddiad a dyddiad cau eich
@@ -116,8 +117,9 @@ paymentsOnAccount.nextPayment.vatReturnDue = dyddiad cau y Ffurflen TAW
 paymentsOnAccount.nextPayment.amount.prefix = Eich taliad nesaf o
 
 paymentsOnAccount.agent.nextPayment.amount.prefix = Taliad nesaf eich cleient o 
-
 paymentsOnAccount.nextPayment.amount.suffix = yn ddyledus ar
+paymentsOnAccount.nextPayment.thisIsDueOn = Mae hwn yn ddyledus ar
+
 paymentsOnAccount.paymentType.firstPayment = Taliad cyntaf yn ddyledus
 paymentsOnAccount.paymentType.secondPayment = Ail daliad yn ddyledus
 paymentsOnAccount.paymentType.thirdPayment = Trydydd taliad yn ddyledus
@@ -206,6 +208,9 @@ whatYouOwe.latePayment.p1 = Bydd unrhyw nodyn o log am dalu’n hwyr sy’n gysy
 whatYouOwe.latePayment.p2 = Fodd bynnag, os na fydd eich Debyd Uniongyrchol yn cael ei gasglu’n llwyddiannus, bydd y llog hwnnw yn cael ei godi arnoch.
 whatYouOwe.latePayment.p2.nonDD = Bydd llog yn cael ei godi arnoch os na fydd eich taliad yn clirio erbyn dyddiad dyledus y taliad.
 whatYouOwe.latePayment.p3 = Mae’n bosibl y bydd llog am dalu’n hwyr yn cael ei godi arnoch os nad ydych yn cyflwyno’ch Ffurflen TAW mewn pryd.
+
+whatYouOwe.inset = Payments due for your client’s payments on account arrangement will not show here, until their VAT return has been submitted. For upcoming payment details
+whatYouOwe.agent.inset =  Payments due for your payments on account arrangement will not show here, until you have submitted your VAT return. For upcoming payment details 
 
 existingDD.banner.p1 = Mae gennych Gyfarwyddyd Debyd Uniongyrchol ar waith.
 existingDD.banner.p2 = Dim ond y swm sy’n ddyledus ar eich Ffurflen TAW bydd yn cael ei gasglu drwy Ddebyd Uniongyrchol.
