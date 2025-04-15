@@ -65,10 +65,10 @@
               <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isTheir") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
             } else {
               @messages("paymentsOnAccount.nextPayment.your") <strong>@messages("paymentsOnAccount.nextPayment.nextPaymentDue")</strong> @messages("paymentsOnAccount.nextPayment.isYour") <strong>@messages("paymentsOnAccount.nextPayment.balancing")</strong>
-              <br />
-              @messages("paymentsOnAccount.nextPayment.thisIsDueOn")
-              <strong>@MessageDateFormat.format(obligationsDueDate)</strong>.
             }
+            <br />
+            @messages("paymentsOnAccount.nextPayment.thisIsDueOn")
+            <strong>@MessageDateFormat.format(obligationsDueDate)</strong>.
           }
           case Some(PaymentDetail(_, DueDate(dueDate, obligationsDueDate), Some(amount))) => {
             @if(user.isAgent) {

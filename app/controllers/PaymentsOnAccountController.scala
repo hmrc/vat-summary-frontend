@@ -69,8 +69,13 @@ class PaymentsOnAccountController @Inject() (
                   val obligationsOpt = obligationsResult.toOption.flatten
                   val viewModel =
                     buildViewModel(standingRequest, today, obligationsOpt)
+                  infoLog(s"[PaymentsOnAccountController] [show] successfully rendering POA page.")
                   Ok(view(viewModel, serviceInfoContent))
-                case None => serviceErrorHandler.showInternalServerError
+                case None => 
+                  logger.error(
+                    s"Standingrequest API returned None"
+                  )
+                  serviceErrorHandler.showInternalServerError
               }
             }).recover { case e =>
               logger.error(
@@ -142,9 +147,6 @@ val thirdPaymentDueDate: Option[LocalDate] =
 
       val startDate = LocalDate.parse(items.head.startDate)
       val endDate = LocalDate.parse(items.head.endDate)
-
-      val adjustedStart = startDate.plusDays(35)
-      val adjustedEnd = endDate.plusDays(35)
 
       val isCurrent = !today.isBefore(startDate.plusDays(35)) && !today.isAfter(endDate.plusDays(35))
 
