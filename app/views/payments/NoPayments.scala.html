@@ -64,22 +64,24 @@
         @if(isPOAActive) {
           <h2 id="no-payments-subheading">
             @if(user.isAgent) {
+              <p class="govuk-body-l">
               @messages("noPayments.oweNothingAgent")
+              @messages("noPayments.agent.however")
             } else {
               <p class="govuk-body-l">
               @messages("noPayments.oweNothing2") @messages("noPayments.howeverYou") 
+            }
               <strong>
                 @messages("noPayments.poaArrangement").
               </strong>
               </p>
-              <p class="govuk-body-l">
+              <p class="govuk-body">
                 @messages("noPayments.paymentsDue")
-                <a href="payments-on-account">@messages("noPayments.forUpcomingSchedule")</a>.
+                <a href="payments-on-account">@messages("noPayments.checkTheir")</a>.
               </p>
-            }
         </h2>
         } else{
-           <h2 id="no-payments-subheading" class="govuk-body-l">
+           <h2 id="no-payments-subheading" class="govuk-body">
             @if(user.isAgent) {@messages("noPayments.oweNothingAgent")} else {@messages("noPayments.oweNothing")}
         </h2>
       }

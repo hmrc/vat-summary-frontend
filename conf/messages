@@ -202,6 +202,9 @@ whatYouOwe.latePayment.p2 = You will be charged late payment interest if your Di
 whatYouOwe.latePayment.p2.nonDD = You will be charged late payment interest if your payment does not clear by the payment due date.
 whatYouOwe.latePayment.p3 = Late payment interest may be charged if you do not submit your VAT return on time.
 
+whatYouOwe.inset = Payments due for your client’s payments on account arrangement will not show here, until their VAT return has been submitted. For upcoming payment details
+whatYouOwe.agent.inset =  Payments due for your payments on account arrangement will not show here, until you have submitted your VAT return. For upcoming payment details 
+
 existingDD.banner.p1 = You have a Direct Debit Instruction in place.
 existingDD.banner.p2 = Only the amount due on your VAT Return will be collected by Direct Debit.
 existingDD.banner.p2.2 = Other charges, penalties and interest showing as owing will still need to be paid by other methods.
@@ -370,9 +373,10 @@ noPayments.oweNothing = You do not owe anything right now.
 noPayments.oweNothing2 = You do not owe anything here right now,
 noPayments.howeverYou = however, you do have a 
 noPayments.poaArrangement = payments on account arrangement 
-noPayments.paymentsDue = Payments due for this will not show here, until their VAT return has been submitted.
-noPayments.forUpcomingSchedule = For upcoming payment details check their schedule
+noPayments.paymentsDue = Payments due for this will not show here, until their VAT return has been submitted. For upcoming payment details
+noPayments.checkTheir = check their schedule
 noPayments.oweNothingAgent = Your client does not owe anything right now.
+noPayments.agent.however= however, they do have a 
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
 noPayments.twentyFourHoursAgent = If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe.
 
