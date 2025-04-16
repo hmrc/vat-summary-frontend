@@ -69,17 +69,17 @@ class PaymentsOnAccountController @Inject() (
                   val obligationsOpt = obligationsResult.toOption.flatten
                   val viewModel =
                     buildViewModel(standingRequest, today, obligationsOpt)
-                  infoLog(s"[PaymentsOnAccountController] [show] successfully rendering POA page.")
+                  logger.info(s"[PaymentsOnAccountController] [show] successfully rendering POA page for ${user.vrn}")
                   Ok(view(viewModel, serviceInfoContent))
                 case None => 
                   logger.error(
-                    s"Standingrequest API returned None"
+                    s"Standingrequest API returned None for ${user.vrn}"
                   )
                   serviceErrorHandler.showInternalServerError
               }
             }).recover { case e =>
               logger.error(
-                s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage}"
+                s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage} For: ${user.vrn}"
               )
               serviceErrorHandler.showInternalServerError
             }
