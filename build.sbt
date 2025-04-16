@@ -22,7 +22,7 @@ lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 
 scalacOptions ++= Seq("-Wconf:cat=unused-imports&site=.*views.html.*:s")
 
-lazy val coverageSettings: Seq[Setting[_]] = {
+lazy val coverageSettings: Seq[Setting[?]] = {
   import scoverage.ScoverageKeys
 
   val excludedPackages = Seq(
@@ -55,7 +55,7 @@ val compile: Seq[ModuleID] = Seq(
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"        %% "bootstrap-test-play-30"      % bootstrapPlayVersion  % scope,
   "org.scalatestplus"  %% "mockito-4-11"                % "3.2.18.0"            % scope,
-  "org.scalamock"      %% "scalamock"                   % "5.2.0"               % scope,
+  "org.scalamock"      %% "scalamock"                   % "7.3.0"               % scope,
   "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-30"     % mongoVersion          % scope
 )
 
@@ -78,9 +78,9 @@ lazy val microservice: Project = Project(appName, file("."))
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9152)
   .settings(majorVersion := 0)
-  .settings(coverageSettings: _*)
-  .settings(scalaSettings: _*)
-  .settings(defaultSettings(): _*)
+  .settings(coverageSettings *)
+  .settings(scalaSettings *)
+  .settings(defaultSettings() *)
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
@@ -92,7 +92,7 @@ lazy val microservice: Project = Project(appName, file("."))
     routesImport := Seq.empty
   )
   .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
+  .settings(inConfig(IntegrationTest)(Defaults.itSettings) *)
   .settings(
     IntegrationTest / Keys.fork  := false,
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "it")).value,

@@ -16,28 +16,18 @@
 package pages
 
 import config.AppConfig
-import config.FrontendAppConfig
 import helpers.IntegrationBaseSpec
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.libs.ws.{WSRequest, WSResponse}
-import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import stubs.{ServiceInfoStub, AuthStub, PaymentsOnAccountStub, CustomerInfoStub}
-import stubs.CustomerInfoStub.customerInfoJson
-import stubs.ServiceInfoStub
-import java.time.LocalDate
 import play.api.libs.json.JsValue
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.running
-import play.api.Configuration
-import play.api.libs.ws.{WSClient}
+import play.api.libs.ws.WSRequest
+import stubs.CustomerInfoStub.customerInfoJson
+import stubs.{AuthStub, CustomerInfoStub, PaymentsOnAccountStub, ServiceInfoStub}
 
 trait PaymentsOnAccountPageBaseSpec extends IntegrationBaseSpec {
 
   val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
-  val customerInfo = customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true)
+  val customerInfo: JsValue = customerInfoJson(isPartialMigration = false, hasVerifiedEmail = true)
 
   def setupRequest(responseJson: JsValue, status: Int = Status.OK): WSRequest = {
     AuthStub.authorised()

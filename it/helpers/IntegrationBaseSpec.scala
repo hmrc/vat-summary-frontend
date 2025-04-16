@@ -25,13 +25,12 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.HeaderNames
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.test.Injecting
 import play.api.{Application, Environment, Mode}
-import java.time.{Clock, Instant, ZoneId}
+
 import scala.concurrent.ExecutionContext
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.inject.bind
 
 trait IntegrationBaseSpec extends AnyWordSpecLike with Matchers with ScalaFutures with WireMockHelper with
   GuiceOneServerPerSuite with BeforeAndAfterEach with BeforeAndAfterAll with Injecting {
