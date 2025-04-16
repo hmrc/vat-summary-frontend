@@ -16,26 +16,22 @@
 
 package forms
 
-import models.viewModels.{ExistingDDContinuePayment, ExistingDirectDebitFormModel, ExistingDirectDebitViewModel}
-import play.api.data.Forms.{mapping, optional, text}
-import play.api.data.{Form, Forms, Mapping}
-import play.api.data.Forms._
 import forms.mappings.Mappings
+import models.viewModels.{ExistingDDContinuePayment, ExistingDirectDebitFormModel}
+import play.api.data.Forms._
+import play.api.data.{Form, Forms}
 
 import javax.inject.Inject
 
-
-
 class ExistingDirectDebitFormProvider @Inject() extends FormErrorHelper with Mappings {
 
-  def apply(): Form[ExistingDirectDebitFormModel] = {
-    Form(mapping(
-      "dueDateOrUrl" -> optional(nonEmptyText),
-      "linkId" -> nonEmptyText,
-      "directDebitMandateFound" -> Forms.boolean,
-      "value" -> enumerable[ExistingDDContinuePayment]("existingDD.radio.required")
-      ) (ExistingDirectDebitFormModel.formApply)(ExistingDirectDebitFormModel.formUnapply)
-    )
-  }
+  def apply(): Form[ExistingDirectDebitFormModel] =
+    Form(
+      mapping(
+        "dueDateOrUrl"            -> optional(nonEmptyText),
+        "linkId"                  -> nonEmptyText,
+        "directDebitMandateFound" -> Forms.boolean,
+        "value"                   -> enumerable[ExistingDDContinuePayment]("existingDD.radio.required")
+      )(ExistingDirectDebitFormModel.formApply)(ExistingDirectDebitFormModel.formUnapply))
 
 }

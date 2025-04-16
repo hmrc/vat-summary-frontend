@@ -42,13 +42,13 @@ lazy val coverageSettings: Seq[Setting[?]] = {
   )
 }
 
-val mongoVersion = "1.8.0"
-val bootstrapPlayVersion = "8.5.0"
+val mongoVersion = "1.9.0"
+val bootstrapPlayVersion = "8.6.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "9.4.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "9.11.0",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"         % mongoVersion,
 )
 
@@ -63,15 +63,6 @@ TwirlKeys.templateImports ++= Seq(
   "uk.gov.hmrc.govukfrontend.views.html.components._",
   "uk.gov.hmrc.hmrcfrontend.views.html.components._"
 )
-
-def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
-  test =>
-    Group(
-      test.name,
-      Seq(test),
-      SubProcess(ForkOptions().withRunJVMOptions(Vector("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml")))
-    )
-}
 
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
@@ -96,7 +87,6 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(
     IntegrationTest / Keys.fork  := false,
     IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory) (base => Seq(base / "it")).value,
-    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
     IntegrationTest / parallelExecution  := false,
     addTestReportOption(IntegrationTest, "int-test-reports")
   )

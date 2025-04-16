@@ -16,21 +16,21 @@
 
 package controllers
 
+import config.AppConfig
+import forms.ExistingDirectDebitFormProvider
+import models.viewModels.ExistingDDContinuePayment.Yes
+import models.viewModels.helpers.Enumerable
 import models.viewModels.{ExistingDDContinuePayment, ExistingDirectDebitFormModel, ExistingDirectDebitViewModel}
+import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.ServiceInfoService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.ExistingDirectDebit
-import config.AppConfig
-import forms.ExistingDirectDebitFormProvider
-import models.viewModels.ExistingDDContinuePayment.Yes
-import models.viewModels.helpers.Enumerable
-import play.api.data.Form
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class ExistingDirectDebitController @Inject()(authorisedController: AuthorisedController,
                                               mcc: MessagesControllerComponents,

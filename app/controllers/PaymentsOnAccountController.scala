@@ -18,20 +18,20 @@ package controllers
 
 import audit.AuditingService
 import com.google.inject.Inject
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
+import models.StandingRequest
+import models.obligations.VatReturnObligations
 import models.viewModels._
 import play.api.i18n.I18nSupport
-import services._
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
-import views.html.payments.{PaymentsOnAccountView}
-import scala.concurrent.{ExecutionContext, Future}
-import config.ServiceErrorHandler
-import models.StandingRequest
+import views.html.errors.PaymentsOnAccountError
+import views.html.payments.PaymentsOnAccountView
+
 import java.time.LocalDate
-import views.html.errors.{PaymentsOnAccountError, NotFound}
-import models.obligations.VatReturnObligations
+import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentsOnAccountController @Inject() (
     authorisedController: AuthorisedController,

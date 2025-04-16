@@ -16,7 +16,6 @@
 
 package controllers
 
-import java.time.{LocalDate, LocalDateTime}
 import audit.AuditingService
 import audit.models.{ViewNextOpenVatObligationAuditModel, ViewNextOutstandingVatPaymentAuditModel}
 import common.MandationStatus._
@@ -24,8 +23,6 @@ import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
-
-import javax.inject.{Inject, Singleton}
 import models._
 import models.obligations.{Obligation, VatReturnObligation, VatReturnObligations}
 import models.payments.{Payment, Payments}
@@ -39,9 +36,9 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.vatDetails.Details
 
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 @Singleton
 class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
