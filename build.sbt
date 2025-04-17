@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import sbt.Tests.{Group, SubProcess}
+import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName: String = "vat-summary-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+RoutesKeys.routesImport := Seq("uk.gov.hmrc.play.bootstrap.binders.RedirectUrl")
 
 scalacOptions ++= Seq("-Wconf:cat=unused-imports&site=.*views.html.*:s")
 

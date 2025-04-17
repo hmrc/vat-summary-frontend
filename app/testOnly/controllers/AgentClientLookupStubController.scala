@@ -18,11 +18,13 @@ package testOnly.controllers
 
 import common.SessionKeys
 import config.AppConfig
+
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
 import testOnly.views.html.agentClientLookup.{AgentHub, EnterVrn, Unauthorised}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfig,
@@ -33,8 +35,8 @@ class AgentClientLookupStubController @Inject()(implicit val appConfig: AppConfi
                                                )
   extends FrontendController(mcc) with I18nSupport {
 
-  def show(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
-    Ok(enterVrnView(StubAgentClientLookupForm.form, redirectUrl))
+  def show(redirectUrl: RedirectUrl): Action[AnyContent] = Action { implicit request =>
+    Ok(enterVrnView(StubAgentClientLookupForm.form, redirectUrl.unsafeValue))
   }
 
   def unauthorised: Action[AnyContent] = Action { implicit request =>

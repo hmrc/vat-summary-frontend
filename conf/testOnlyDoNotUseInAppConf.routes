@@ -2,8 +2,8 @@
 
 # !!!WARNING!!! This file MUST NOT be referenced in the "application.conf" file to avoid risk of rolling test routes in the production environment.
 # If you need test routes when running tests in CI make sure that the profile for this micro-service (used by service-manager) defines this router as parameter.
-# To do so add the following line to the micro-service profile: "-Dapplication.router=testOnly.Routes"
-# To start the micro-service locally using the test routes run the following command: "sbt run -Dapplication.router=testOnly.Routes"
+# To do so add the following line to the micro-service profile: "-Dapplication.router=testOnlyDoNotUseInAppConf.Routes"
+# To start the micro-service locally using the test routes run the following command: "sbt run -Dapplication.router=testOnlyDoNotUseInAppConf.Routes"
 
 # Any test-only end-point should be defined here.
 # !!!WARNING!!! Every route defined in this file MUST be prefixed with "/test-only/". This is because NGINX is blocking every uri containing the string "test-only" in production.
@@ -18,7 +18,7 @@ GET         /vat-through-software/test-only/payments-stub                      t
 
 GET         /vat-through-software/test-only/:vrn/portal-stub                   testOnly.controllers.PortalStubController.show(vrn: String)
 
-GET         /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.show(redirectUrl: String)
+GET         /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.show(redirectUrl: RedirectUrl)
 POST        /vat-through-software/test-only/vaclf-stub                         testOnly.controllers.AgentClientLookupStubController.post
 GET         /vat-through-software/test-only/vaclf-stub-unauth                  testOnly.controllers.AgentClientLookupStubController.unauthorised
 GET         /vat-through-software/test-only/vaclf-stub-agent-hub               testOnly.controllers.AgentClientLookupStubController.agentHub
