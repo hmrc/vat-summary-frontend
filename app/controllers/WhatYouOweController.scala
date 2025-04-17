@@ -21,7 +21,7 @@ import audit.models.WhatYouOweAuditModel
 import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
-import models.payments.{ChargeType, Payment, PaymentWithPeriod, VatLateSubmissionPen, VatOverpaymentForRPI}
+import models.payments._
 import models.penalties.{LPPDetails, PenaltyDetails}
 import models.viewModels.StandardChargeViewModel.{periodFrom, periodTo}
 import models.viewModels._
@@ -35,7 +35,6 @@ import views.html.payments.{NoPayments, WhatYouOwe}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
-import connectors.httpParsers.ResponseHttpParsers.HttpResult
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      dateService: DateService,

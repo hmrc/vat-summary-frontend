@@ -16,10 +16,9 @@
 
 package models.viewModels
 
-import java.time.format.DateTimeFormatter
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
-import utils._
 
 sealed trait PaymentType {
   def messageKey: String

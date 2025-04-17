@@ -16,9 +16,10 @@
 
 package services
 
-import javax.inject.{Inject, Singleton}
 import models.StandingRequestDatabaseModel
 import repositories.StandingRequestSessionRepository
+
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

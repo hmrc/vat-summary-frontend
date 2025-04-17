@@ -17,15 +17,14 @@
 package services
 
 import com.google.inject.Inject
-import services.DateService
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
-import models.ChangedOnVatPeriod.{RequestCategoryType3, dateFormatter}
+import models.ChangedOnVatPeriod.RequestCategoryType3
 import models.{ChangedOnVatPeriod, CustomerInformation, StandingRequest, StandingRequestDetail}
+import utils.LoggerUtil
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import scala.util.Try
-import utils.LoggerUtil
 
 class POACheckService @Inject() () extends LoggerUtil {
   def retrievePoaActiveForCustomer(

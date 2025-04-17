@@ -295,7 +295,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         val result = {
           mockPrincipalAuth()
           mockCustomerInfo(Right(customerInformationMax))
-          controller.detailsRedirectToEmailVerification()(fakeRequest)
+          controller.detailsRedirectToEmailVerification()(fakeRequest.withSession())
         }
 
         "redirect to email verification" in {

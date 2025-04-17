@@ -15,23 +15,12 @@
  */
 package pages
 
-import config.AppConfig
-import config.FrontendAppConfig
-import helpers.IntegrationBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
-import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.libs.ws.WSResponse
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import stubs.{ServiceInfoStub, AuthStub, PaymentsOnAccountStub, CustomerInfoStub}
-import stubs.CustomerInfoStub.customerInfoJson
-import stubs.ServiceInfoStub
-import java.time.LocalDate
-import play.api.libs.json.JsValue
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.running
-import play.api.Configuration
-import play.api.libs.ws.{WSClient}
+import stubs.PaymentsOnAccountStub
 
 class PaymentsOnAccountPageSpec extends PaymentsOnAccountPageBaseSpec {
 
