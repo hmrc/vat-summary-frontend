@@ -68,6 +68,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockPOACheckServiceCall()
           mockGetDirectDebitStatus(Right(directDebitEnrolled))
           mockWYOSessionServiceCall()
           mockAudit()
@@ -80,6 +81,35 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
         "return the correct content" in {
           Jsoup.parse(contentAsString(result)).title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
+        }
+
+      }
+
+      "the user has open payments and poa active date is in future" when {
+
+        lazy val result = {
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockDateServiceCall()
+          mockPenaltyDetailsServiceCall()
+          mockPOACheckServiceCallTrue()
+          mockGetDirectDebitStatus(Right(directDebitEnrolled))
+          mockWYOSessionServiceCall()
+          mockAudit()
+          controller.show(fakeRequest)
+        }
+
+        "return OK" in {
+          status(result) shouldBe OK
+        }
+
+        "return the correct content with poa schedule link and banner" in {
+          val document = Jsoup.parse(contentAsString(result))
+          document.title() shouldBe "What you owe - Manage your VAT account - GOV.UK"
+          document.select(".govuk-inset-text .govuk-link").attr("href") shouldBe "/vat-through-software/payments-on-account"
         }
 
       }
@@ -121,6 +151,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockPOACheckServiceCall()
           mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
@@ -144,6 +175,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
+          mockPOACheckServiceCall()
           mockPenaltyDetailsServiceCall(Left(UnexpectedStatusError("500", "oops")))
           mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
@@ -171,6 +203,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockCustomerInfo(Right(customerInformationMax))
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
+          mockPOACheckServiceCall()
           mockGetDirectDebitStatus(Right(directDebitEnrolled))
           controller.show(fakeRequest)
         }
@@ -196,6 +229,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
         mockDateServiceCall()
         mockPenaltyDetailsServiceCall()
         mockGetDirectDebitStatus(Right(directDebitEnrolled))
+        mockPOACheckServiceCall()
         mockWYOSessionServiceCall()
         mockAudit()
         controller.show(agentFinancialRequest)

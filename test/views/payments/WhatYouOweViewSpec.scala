@@ -34,7 +34,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       lazy val view = {
         mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
-        whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)
       }
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -334,20 +334,41 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
     "the user is in BreathingSpace" should {
 
-      lazy val view = whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""))
+      lazy val view = whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""), isPOAActive = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
       "have the breathing space inset text" in {
         elementText("#breathing-space-inset") shouldBe "Interest and penalties do not " +
           "build up during Breathing Space."
       }
     }
+
+    "the user with no POAActive Until date" should {
+
+      lazy val view = whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""), isPOAActive = false)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "not see the poa schedule link and banner" in {
+        document.select(".govuk-inset-text .govuk-link").size() shouldBe 0
+      }
+    }
+
+    "the user with a POAActive Until date in future" should {
+
+      lazy val view = whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""), isPOAActive = true)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "actually see the poa schedule link and banner" in {
+        element(".govuk-inset-text .govuk-link").attr("href") shouldBe "/vat-through-software/payments-on-account"
+      }
+    }
+
   }
 
   "The what you owe page for an agent" when {
 
     "there is at least one overdue payment and the overdueTimeToPayDescriptionEnabled feature switch is on" should {
 
-      lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+      lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -397,7 +418,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
         lazy val view = {
           mockConfig.features.overdueTimeToPayDescriptionEnabled(true)
-          whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+          whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)(request, messages, mockConfig, agentUser)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -460,7 +481,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       "not have a payment help section" in {
 
-        lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+        lazy val view = whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)(request, messages, mockConfig, agentUser)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         mockConfig.features.overdueTimeToPayDescriptionEnabled(false)
@@ -475,7 +496,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched on for principal user" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(true)
-        whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -486,7 +507,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched on for an agent" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(true)
-        whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)(request, messages, mockConfig, agentUser)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -499,7 +520,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched off for principal user" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(false)
-        whatYouOweView(whatYouOweViewModel2Charge, Html(""))
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -509,7 +530,7 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched off for an agent" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(false)
-        whatYouOweView(whatYouOweViewModel2Charge, Html(""))(request, messages, mockConfig, agentUser)
+        whatYouOweView(whatYouOweViewModel2Charge, Html(""), isPOAActive = false)(request, messages, mockConfig, agentUser)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

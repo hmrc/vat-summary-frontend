@@ -65,30 +65,32 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
             penaltyDetailsService.getPenaltyDetails(user.vrn).flatMap { penaltyDetails =>
               paymentsService.getDirectDebitStatus(user.vrn).flatMap { ddDetails =>
                 val ddStatus: Boolean = ddDetails.map(_.directDebitMandateFound).getOrElse(false)
+                val isPoaActiveForCustomer = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
+
                 (payments, penaltyDetails) match {
                   case (Right(Some(payments)), Right(penalties)) =>
 
-                constructViewModel(payments.financialTransactions, mandationStatus, penalties, ddStatus) match {
-                  case Some(model) =>
-                    auditService.extendedAudit(
-                      WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
-                      routes.WhatYouOweController.show.url
-                    )
-                    WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
-                      Ok(view(model, serviceInfoContent))
+                    constructViewModel(payments.financialTransactions, mandationStatus, penalties, ddStatus) match {
+                      case Some(model) =>
+                        auditService.extendedAudit(
+                          WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
+                          routes.WhatYouOweController.show.url
+                        )
+                        WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
+                          Ok(view(model, serviceInfoContent, isPoaActiveForCustomer))
+                        }
+                      case None =>
+                        logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
+                        Future.successful(InternalServerError(paymentsError()))
                     }
-                  case None =>
-                    logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
+                  case (Right(None), Right(_)) =>
+                    val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+
+                    Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
+                  case _ =>
+                    logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
                     Future.successful(InternalServerError(paymentsError()))
                 }
-                case (Right(None), Right(_)) =>
-                val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-                val isPoaActiveForCustomer = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
-                Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
-                case _ =>
-                  logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
-                  Future.successful(InternalServerError(paymentsError()))
-              }
               }
             }
           }

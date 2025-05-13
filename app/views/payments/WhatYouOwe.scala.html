@@ -30,7 +30,7 @@
       estimatedCharge: EstimatedCharge,
       crystallisedCharge: CrystallisedCharge)
 
-@(model: WhatYouOweViewModel, serviceInfoContent: Html)(
+@(model: WhatYouOweViewModel, serviceInfoContent: Html, isPOAActive: Boolean)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 
@@ -139,13 +139,15 @@
             <p><a href="@appConfig.paymentsAndRepaymentsUrl" id="view-and-manage-dd-details-link">@messages("existingDD.banner.p5.linkText")</a></p>
         </div>
         } else {
+          @if(isPOAActive) {
           <div class="govuk-inset-text">
-            @if(user.isAgent) {
-               @messages("whatYouOwe.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check their schedule</a>.
-            } else {
-              @messages("whatYouOwe.agent.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check your schedule</a>.
-            }
-          </div>
+              @if(user.isAgent) {
+                @messages("whatYouOwe.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check their schedule</a>.
+              } else {
+                @messages("whatYouOwe.agent.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check your schedule</a>.
+              }
+            </div>
+          }
         }
 
 
