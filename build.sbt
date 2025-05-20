@@ -43,7 +43,7 @@ lazy val coverageSettings: Seq[Setting[?]] = {
   )
 }
 
-val mongoVersion = "1.9.0"
+val mongoVersion = "2.6.0"
 val bootstrapPlayVersion = "8.6.0"
 
 val compile: Seq[ModuleID] = Seq(
@@ -56,7 +56,7 @@ val compile: Seq[ModuleID] = Seq(
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"        %% "bootstrap-test-play-30"      % bootstrapPlayVersion  % scope,
   "org.scalatestplus"  %% "mockito-4-11"                % "3.2.18.0"            % scope,
-  "org.scalamock"      %% "scalamock"                   % "7.3.0"               % scope,
+  "org.scalamock"      %% "scalamock"                   % "7.3.2"               % scope,
   "uk.gov.hmrc.mongo"  %% "hmrc-mongo-test-play-30"     % mongoVersion          % scope
 )
 
