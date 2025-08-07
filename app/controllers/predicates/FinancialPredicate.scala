@@ -46,14 +46,14 @@ class FinancialPredicate @Inject()(val accountDetailsService: AccountDetailsServ
         case Right(userDetails) if userDetails.details.insolvencyDateFutureUserBlocked(dateService.now()) =>
           logger.warn("[FinancialPredicate][authoriseFinancialAction] " +
             "User has a future insolvency date. Rendering technical difficulties.")
-          Future.successful(errorHandler.showInternalServerError)
+          errorHandler.showInternalServerError
         case Right(_) =>
           block(request)(user).map(result => result.addingToSession(
             SessionKeys.insolventWithoutAccessKey -> "false", SessionKeys.financialAccess -> "true")
           )
         case Left(error) =>
           logger.warn(s"[FinancialPredicate][authoriseFinancialAction] Error returned from accountDetailsService: $error")
-          Future.successful(errorHandler.showInternalServerError)
+          errorHandler.showInternalServerError
       }
     }
   }

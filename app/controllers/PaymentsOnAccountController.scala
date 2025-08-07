@@ -70,14 +70,14 @@ class PaymentsOnAccountController @Inject() (
                   val viewModel =
                     buildViewModel(standingRequest, today, obligationsOpt)
                   logger.info(s"[PaymentsOnAccountController] [show] successfully rendering POA page for ${user.vrn}")
-                  Ok(view(viewModel, serviceInfoContent))
-                case None => 
+                  Future.successful(Ok(view(viewModel, serviceInfoContent)))
+                case None =>
                   logger.error(
                     s"Standingrequest API returned None for ${user.vrn}"
                   )
                   serviceErrorHandler.showInternalServerError
               }
-            }).recover { case e =>
+            }).recoverWith { case e =>
               logger.error(
                 s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage} For: ${user.vrn}"
               )

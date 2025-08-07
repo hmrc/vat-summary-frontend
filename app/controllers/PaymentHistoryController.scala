@@ -22,6 +22,7 @@ import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
+
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
@@ -32,7 +33,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.PaymentHistory
-import scala.concurrent.ExecutionContext
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
@@ -73,7 +75,7 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
         ) match {
           case Some(model) =>
             auditEvent(user.vrn, model.transactions)
-            Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate)))
+            Future.successful(Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate))))
           case None =>
             logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
             serviceErrorHandler.showInternalServerError

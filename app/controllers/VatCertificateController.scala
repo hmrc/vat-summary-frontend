@@ -26,7 +26,7 @@ import services.{AccountDetailsService, ServiceInfoService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.certificate.VatCertificate
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
@@ -43,9 +43,9 @@ class VatCertificateController @Inject()(serviceInfoService: ServiceInfoService,
     implicit user =>
       val vrn = user.vrn
       serviceInfoService.getPartial.flatMap { serviceInfoContent =>
-        accountDetailsService.getAccountDetails(vrn).map {
+        accountDetailsService.getAccountDetails(vrn).flatMap {
           case Right(customerInformation) =>
-            Ok(vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation)))
+            Future.successful(Ok(vatCertificate(serviceInfoContent, VatCertificateViewModel.fromCustomerInformation(vrn, customerInformation))))
           case Left(_) =>
             serviceErrorHandler.showInternalServerError
         }
