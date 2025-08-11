@@ -44,7 +44,7 @@ lazy val coverageSettings: Seq[Setting[?]] = {
 }
 
 val mongoVersion = "2.7.0"
-val bootstrapPlayVersion = "8.6.0"
+val bootstrapPlayVersion = "10.1.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
