@@ -35,7 +35,7 @@
   feedbackOnSignOut: Boolean = true,
   navLinkContent: Option[Html] = None,
   serviceInfoContent: Html = HtmlFormat.empty,
-  user: Option[User] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+  user: Option[User] = None)(mainContent: Html)(implicit request : RequestHeader, messages: Messages)
 
 @dynamicNavTitle = @{
   user.fold(messages("navTitle.vat"))(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))

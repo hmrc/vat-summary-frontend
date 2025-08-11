@@ -17,23 +17,29 @@
 package config
 
 import javax.inject.Inject
-import play.api.i18n.MessagesApi
+import play.api.i18n.{Messages, MessagesApi}
 import play.api.mvc.Results.InternalServerError
-import play.api.mvc.{Request, Result}
+import play.api.mvc.{AnyContent, AnyContentAsEmpty, Request, RequestHeader, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.errors.StandardError
 
+import scala.concurrent.{ExecutionContext, Future}
+
 class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi,
                                     appConfig: AppConfig,
-                                    standardError: StandardError) extends FrontendErrorHandler {
+                                    standardError: StandardError)(implicit executionContext: ExecutionContext) extends FrontendErrorHandler {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: Request[_]): Html = {
-    standardError(appConfig, "standardError.title", "standardError.heading", "standardError.message")
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit request: RequestHeader): Future[Html] = {
+    val messages: Messages = messagesApi.preferred(request)
+    val req: Request[AnyContent] = Request(request, AnyContentAsEmpty)
+    Future.successful(standardError(appConfig, "standardError.title", "standardError.heading", "standardError.message")(req,messages))
   }
 
-  def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(internalServerErrorTemplate)
+  def showInternalServerError(implicit request: RequestHeader): Future[Result] = internalServerErrorTemplate.map(InternalServerError(_))(ec)
 
-  override def notFoundTemplate(implicit request: Request[_]): Html =
-    standardError(appConfig, "notFound.title", "notFound.heading", "notFound.message")
+  override def notFoundTemplate(implicit request: RequestHeader): Future[Html] =
+    Future.successful(standardError(appConfig, "notFound.title", "notFound.heading", "notFound.message"))
+
+  override protected implicit val ec: ExecutionContext = executionContext
 }

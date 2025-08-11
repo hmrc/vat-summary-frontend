@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class TimeToPayController @Inject()(authorisedController: AuthorisedController,
@@ -35,8 +35,8 @@ class TimeToPayController @Inject()(authorisedController: AuthorisedController,
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   def redirect: Action[AnyContent] = authorisedController.authorisedAction { implicit request => _ =>
-    timeToPayService.retrieveRedirectUrl.map {
-      case Right(url) => Redirect(url)
+    timeToPayService.retrieveRedirectUrl.flatMap {
+      case Right(url) => Future.successful(Redirect(url))
       case Left(_) =>
         logger.warn("[TimeToPayController][redirect] - Unable to retrieve successful response from TTP service, rendering ISE")
         errorHandler.showInternalServerError
