@@ -23,8 +23,11 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import views.ViewBaseSpec
 import views.html.errors.StandardError
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOneAppPerSuite{
 
@@ -40,7 +43,7 @@ class ServiceErrorHandlerSpec extends ViewBaseSpec with MockFactory with GuiceOn
       val pageHeading = "h1"
       val message = ".govuk-body-l"
     }
-    lazy val view=service.notFoundTemplate
+    lazy val view = await(service.notFoundTemplate(fakeRequest))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
 

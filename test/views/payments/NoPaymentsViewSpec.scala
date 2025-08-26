@@ -34,10 +34,10 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     val backLink = ".govuk-back-link"
     val noPaymentsDetail = "#noPaymentsDetail p:nth-of-type(1)"
     val paymentLink = "#noPaymentsDetail p:nth-of-type(1) a"
-    val btaBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(1)"
-    val btaBreadcrumbLink = "div.govuk-breadcrumbs li:nth-of-type(1) a"
-    val vatBreadcrumb = "div.govuk-breadcrumbs li:nth-of-type(2)"
-    val vatBreadcrumbLink = "div.govuk-breadcrumbs li:nth-of-type(2) a"
+    val btaBreadcrumb = "nav.govuk-breadcrumbs > ol > li:nth-child(1)"
+    val btaBreadcrumbLink = "nav.govuk-breadcrumbs li:nth-of-type(1) a"
+    val vatBreadcrumb = "nav.govuk-breadcrumbs li:nth-of-type(2)"
+    val vatBreadcrumbLink = "nav.govuk-breadcrumbs li:nth-of-type(2) a"
   }
 
   override val user: User = User("123456789")
@@ -83,6 +83,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     "render breadcrumbs which" should {
 
       "have the text 'Business tax account'" in {
+        println(document)
         elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
       }
 

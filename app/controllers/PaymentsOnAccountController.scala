@@ -23,7 +23,7 @@ import models.StandingRequest
 import models.obligations.VatReturnObligations
 import models.viewModels._
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
@@ -58,33 +58,33 @@ class PaymentsOnAccountController @Inject() (
             (for {
               serviceInfoContent <- serviceInfoService.getPartial
               today = dateService.now()
-              standingRequestOpt <- paymentsOnAccountService
-                .getPaymentsOnAccounts(user.vrn)
-              obligationsResult <- vatDetailService.getReturnObligations(
-                user.vrn
-              )
-            } yield {
-              standingRequestOpt match {
+              standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
+              obligationsResult <- vatDetailService.getReturnObligations(user.vrn)
+              yieldResult <- standingRequestOpt match {
                 case Some(standingRequest) =>
                   val obligationsOpt = obligationsResult.toOption.flatten
                   val viewModel =
                     buildViewModel(standingRequest, today, obligationsOpt)
                   logger.info(s"[PaymentsOnAccountController] [show] successfully rendering POA page for ${user.vrn}")
-                  Ok(view(viewModel, serviceInfoContent))
-                case None => 
+                  Future.successful(Ok(view(viewModel, serviceInfoContent)))
+                case None =>
                   logger.error(
                     s"Standingrequest API returned None for ${user.vrn}"
                   )
                   serviceErrorHandler.showInternalServerError
               }
-            }).recover { case e =>
+            } yield { yieldResult
+            }).recoverWith { case e =>
               logger.error(
                 s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage} For: ${user.vrn}"
               )
-              serviceErrorHandler.showInternalServerError
+              val result: Future[Result] = serviceErrorHandler.showInternalServerError
+              result
             }
           } else {
-            Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
+            serviceErrorHandler.notFoundTemplate.map { html =>
+              NotFound(html)
+            }
           }
         }
     }

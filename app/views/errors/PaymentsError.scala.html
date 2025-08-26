@@ -16,7 +16,7 @@
 
 @this(mainTemplate: MainTemplate, govukBreadcrumbs: GovukBreadcrumbs, govukBackLink: GovukBackLink)
 
-@()(implicit appConfig: config.AppConfig, request: Request[_], messages: Messages, user: User)
+@()(implicit appConfig: config.AppConfig, request: RequestHeader, messages: Messages, user: User)
 
 @breadcrumbs = {
   @govukBreadcrumbs(Breadcrumbs(

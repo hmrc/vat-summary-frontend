@@ -19,7 +19,7 @@
       govukBackLink: GovukBackLink)
 
 @(user: models.User, serviceInfoContent: Html, clientName: Option[String], mandationStatus: String, isPOAActive: Boolean)(
-  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+  implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig)
 
 @breadcrumbs = {
   @govukBreadcrumbs(Breadcrumbs(
