@@ -83,7 +83,6 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
     "render breadcrumbs which" should {
 
       "have the text 'Business tax account'" in {
-        println(document)
         elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
       }
 
