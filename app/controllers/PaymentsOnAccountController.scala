@@ -19,11 +19,12 @@ package controllers
 import audit.AuditingService
 import com.google.inject.Inject
 import config.{AppConfig, ServiceErrorHandler}
-import models.StandingRequest
+import models.{ServiceResponse, StandingRequest, User}
 import models.obligations.VatReturnObligations
 import models.viewModels._
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
+import play.twirl.api.Html
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
@@ -58,36 +59,45 @@ class PaymentsOnAccountController @Inject() (
             (for {
               serviceInfoContent <- serviceInfoService.getPartial
               today = dateService.now()
-              standingRequestOpt <- paymentsOnAccountService
-                .getPaymentsOnAccounts(user.vrn)
-              obligationsResult <- vatDetailService.getReturnObligations(
-                user.vrn
-              )
+              standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
+              obligationsResult <- vatDetailService.getReturnObligations(user.vrn)
+              viewResult <- handleObligationsAndPoa(serviceInfoContent, today, standingRequestOpt, obligationsResult, view)
             } yield {
-              standingRequestOpt match {
-                case Some(standingRequest) =>
-                  val obligationsOpt = obligationsResult.toOption.flatten
-                  val viewModel =
-                    buildViewModel(standingRequest, today, obligationsOpt)
-                  logger.info(s"[PaymentsOnAccountController] [show] successfully rendering POA page for ${user.vrn}")
-                  Ok(view(viewModel, serviceInfoContent))
-                case None => 
-                  logger.error(
-                    s"Standingrequest API returned None for ${user.vrn}"
-                  )
-                  serviceErrorHandler.showInternalServerError
-              }
-            }).recover { case e =>
+              viewResult
+            }).recoverWith { case e =>
               logger.error(
                 s"Unexpected failure in PaymentsOnAccountController: ${e.getMessage} For: ${user.vrn}"
               )
-              serviceErrorHandler.showInternalServerError
+              val result: Future[Result] = serviceErrorHandler.showInternalServerError
+              result
             }
           } else {
-            Future.successful(NotFound(serviceErrorHandler.notFoundTemplate))
+            serviceErrorHandler.notFoundTemplate.map { html =>
+              NotFound(html)
+            }
           }
         }
     }
+
+  def handleObligationsAndPoa(serviceInfoContent: Html,
+                              today: LocalDate,
+                              standingRequestOpt: Option[StandingRequest],
+                              obligationsResult: ServiceResponse[Option[VatReturnObligations]],
+                              view: PaymentsOnAccountView)(implicit request: Request[AnyContent], user: User): Future[Result] = {
+    standingRequestOpt match {
+      case Some(standingRequest) =>
+        val obligationsOpt = obligationsResult.toOption.flatten
+        val viewModel =
+          buildViewModel(standingRequest, today, obligationsOpt)
+        logger.info(s"[PaymentsOnAccountController] [show] successfully rendering POA page for ${user.vrn}")
+        Future.successful(Ok(view(viewModel, serviceInfoContent)))
+      case None =>
+        logger.error(
+          s"Standingrequest API returned None for ${user.vrn}"
+        )
+        serviceErrorHandler.showInternalServerError
+    }
+  }
 }
 
 object PaymentsOnAccountController {

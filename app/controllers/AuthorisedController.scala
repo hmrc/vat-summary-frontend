@@ -66,7 +66,7 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
           case enrolments ~ Some(_) => authoriseAsNonAgent(block, enrolments, financialRequest)
           case _ =>
             logger.warn("[AuthorisedController][authorisedAction] - Missing affinity group")
-            Future.successful(serviceErrorHandler.showInternalServerError)
+            serviceErrorHandler.showInternalServerError
         } recoverWith {
           case _: NoActiveSession => Future.successful(Redirect(appConfig.signInUrl))
           case _: InsufficientEnrolments =>
@@ -103,7 +103,7 @@ class AuthorisedController @Inject()(mcc: MessagesControllerComponents,
               checkHybridAndInsolvency(block, financialRequest)
             case _ =>
               logger.warn("[AuthorisedController][authoriseAsNonAgent] - Failure obtaining insolvency status from Customer Info API")
-              Future.successful(serviceErrorHandler.showInternalServerError)
+              serviceErrorHandler.showInternalServerError
           }
         }
     } getOrElse {

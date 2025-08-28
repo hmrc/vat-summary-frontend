@@ -60,23 +60,23 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
     "render breadcrumbs which" should {
 
       "have the text 'Business tax account'" in {
-        elementText("body > div > div.govuk-breadcrumbs > ol > li:nth-child(1) > a") shouldBe "Business tax account"
+        elementText("body > div > nav.govuk-breadcrumbs > ol > li:nth-child(1) > a") shouldBe "Business tax account"
       }
       "link to bta" in {
-        element("body > div > div.govuk-breadcrumbs > ol > li:nth-child(1) > a").attr("href") shouldBe "bta-url"
+        element("body > div > nav.govuk-breadcrumbs > ol > li:nth-child(1) > a").attr("href") shouldBe "bta-url"
       }
       "have the text 'Your VAT account'" in {
-        elementText("body > div > div.govuk-breadcrumbs > ol > li:nth-child(2) > a") shouldBe "Your VAT account"
+        elementText("body > div > nav.govuk-breadcrumbs > ol > li:nth-child(2) > a") shouldBe "Your VAT account"
       }
       "link to VAT overview page" in {
-        element("body > div > div.govuk-breadcrumbs > ol > li:nth-child(2) > a").attr("href") shouldBe
+        element("body > div > nav.govuk-breadcrumbs > ol > li:nth-child(2) > a").attr("href") shouldBe
           controllers.routes.VatDetailsController.details.url
       }
       "have the text 'What You Owe'" in {
-        elementText("body > div > div.govuk-breadcrumbs > ol > li:nth-child(3) > a") shouldBe "What you owe"
+        elementText("body > div > nav.govuk-breadcrumbs > ol > li:nth-child(3) > a") shouldBe "What you owe"
       }
       "link to the what you owe page" in {
-        element("body > div > div.govuk-breadcrumbs > ol > li:nth-child(3) > a").attr("href") shouldBe
+        element("body > div > nav.govuk-breadcrumbs > ol > li:nth-child(3) > a").attr("href") shouldBe
           whatYouOweLink
       }
     }

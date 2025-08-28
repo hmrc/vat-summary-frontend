@@ -19,7 +19,7 @@
 @(appConfig: config.AppConfig,
   pageTitle: String,
   heading: String,
-  message: String)(implicit request: Request[_], messages: Messages)
+  message: String)(implicit request: RequestHeader, messages: Messages)
 
 @mainTemplate(title = messages(pageTitle), appConfig = appConfig) {
   <h1 class="govuk-heading-xl">@messages(heading)</h1>

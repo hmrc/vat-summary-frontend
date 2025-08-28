@@ -26,7 +26,7 @@
       govukInsetText : GovukInsetText)
 
 @(model: PaymentsHistoryViewModel, serviceInfoContent: Html, migratedWithinThreeYears: Boolean)(
-  implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+  implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
   @govukBreadcrumbs(Breadcrumbs(

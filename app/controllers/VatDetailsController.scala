@@ -100,7 +100,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
   def detailsRedirectToEmailVerification: Action[AnyContent] = authorisedController.authorisedAction { implicit request =>
     implicit user =>
-      accountDetailsService.getAccountDetails(user.vrn).map {
+      accountDetailsService.getAccountDetails(user.vrn).flatMap {
         case Right(details) => details.emailAddress match {
           case Some(email) =>
             email.email match {
@@ -108,7 +108,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                 val sessionValues: Seq[(String, String)] = Seq(SessionKeys.prepopulationEmailKey -> emailAddress) ++
                   (if(details.hasPendingPpobChanges) Seq() else Seq(SessionKeys.inFlightContactKey -> "false"))
 
-                Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*)
+                Future.successful(Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*))
               case _ =>
                 logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
                   "Email address not returned from vat-subscription.")

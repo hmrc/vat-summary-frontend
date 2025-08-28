@@ -22,6 +22,7 @@ import audit.models.ViewVatPaymentHistoryAuditModel
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
+
 import javax.inject.{Inject, Singleton}
 import models.viewModels.{PaymentsHistoryModel, PaymentsHistoryViewModel}
 import models.{CustomerInformation, ServiceResponse}
@@ -32,7 +33,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.payments.PaymentHistory
-import scala.concurrent.ExecutionContext
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
@@ -54,17 +56,16 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
   def paymentHistory: Action[AnyContent] = authorisedController.financialAction { implicit request =>
     implicit user =>
       for {
+        serviceInfoContent <- serviceInfoService.getPartial
         customerInfo <- accountDetailsService.getAccountDetails(user.vrn)
         migrationDate = getMigratedToETMPDate(customerInfo)
         hybridToFullMigrationDate = getHybridToFullMigrationDate(customerInfo)
         showInsolvencyContent = showInsolventContent(customerInfo)
-        serviceInfoContent <- serviceInfoService.getPartial
         migratedWithin15Months = customerMigratedWithin15M(migrationDate)
         payments <- paymentsService.getPaymentsHistory(user.vrn, dateService.now(), migrationDate)
-      } yield {
-        val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
-        val showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
-        generateViewModel(
+        clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+        showPreviousPaymentsTab: Boolean = (migratedWithin15Months || migrationDate.isEmpty) && user.hasNonMtdVat
+        yieldResult <- generateViewModel(
           payments,
           showPreviousPaymentsTab,
           migrationDate,
@@ -73,11 +74,13 @@ class PaymentHistoryController @Inject()(paymentsService: PaymentsService,
         ) match {
           case Some(model) =>
             auditEvent(user.vrn, model.transactions)
-            Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate)))
+            Future.successful(Ok(paymentHistoryView(model, serviceInfoContent, checkIfMigrationWithinLastThreeYears(hybridToFullMigrationDate))))
           case None =>
             logger.warn("[PaymentHistoryController][paymentHistory] error generating view model")
             serviceErrorHandler.showInternalServerError
         }
+      } yield {
+        yieldResult
       }
   }
 
