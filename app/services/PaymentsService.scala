@@ -25,16 +25,18 @@ import models.payments.{PaymentDetailsModel, PaymentOnAccount, Payments}
 import models.viewModels.PaymentsHistoryModel
 import models.{DirectDebitStatus, ServiceResponse}
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
-                                paymentsConnector: PaymentsConnector) {
+                                paymentsConnector: PaymentsConnector) extends LoggerUtil{
 
   def getOpenPayments(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Option[Payments]]] =
     financialDataConnector.getOpenPayments(vrn).map {
       case Right(payments) =>
+        logger.info("[PaymentsService][getOpenPayments] Successfully retrieved open payments for WhatYouOwe")
         val outstandingPayments = payments.financialTransactions
           .filter(_.outstandingAmount > 0)
           .filterNot(_.chargeType equals PaymentOnAccount)

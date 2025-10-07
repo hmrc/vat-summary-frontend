@@ -18,14 +18,16 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
+
 import javax.inject.Inject
 import models.penalties.PenaltyDetails
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PenaltyDetailsConnector @Inject()(http: HttpClient,
-                                        appConfig: AppConfig) {
+                                        appConfig: AppConfig) extends LoggerUtil{
 
   private[connectors] def penaltyDetailsUrl(idValue: String): String =
     s"${appConfig.financialDataBaseUrl}/financial-transactions/penalty/VAT/$idValue"
@@ -36,6 +38,17 @@ class PenaltyDetailsConnector @Inject()(http: HttpClient,
     import connectors.httpParsers.PenaltyDetailsHttpParser.PenaltyDetailsReads
 
     http.GET(penaltyDetailsUrl(idValue))
+      .map {
+        {
+          case penalties@Right(_) =>
+            logger.info("[PenaltyDetailsConnector][getPenaltyDetails] Successfully retrieved LPP details")
+            logger.debug(s"[PenaltyDetailsConnector][getPenaltyDetails] - Penalties:\n\n$penalties")
+            penalties
+          case httpError@Left(error) =>
+            logger.warn("penaltyDetailsConnector received error: " + error.message)
+            httpError
+        }
+      }
 
     }
 }

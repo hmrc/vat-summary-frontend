@@ -88,7 +88,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
                     Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
                   case _ =>
-                    logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
+                    val loggerMessage = (payments, penaltyDetails) match {
+                      case (Left(_), Right(_)) => s"Financial API failed"
+                      case (Right(_), Left(_)) => s"Penalty API failed"
+                      case (Left(_), Left(_)) => s"Both financial and penalty API failed"
+                    }
+                    logger.warn(s"[WhatYouOweController][show] $loggerMessage")
                     Future.successful(InternalServerError(paymentsError()))
                 }
               }
@@ -141,7 +146,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         Seq(buildStandardChargeViewModel(charge, ddStatus))
     }
 
-  private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] =
+  private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] = {
     Some(StandardChargeViewModel(
       chargeType = payment.chargeType.value,
       outstandingAmount = payment.outstandingAmount,
@@ -155,8 +160,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       periodTo = periodTo(payment),
       directDebitMandateFound = ddStatus
     ))
+  }
 
-  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[VatOverpaymentForRPIViewModel] =
+  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[VatOverpaymentForRPIViewModel] = {
     Some(VatOverpaymentForRPIViewModel(
       periodFrom = payment.periodFrom,
       periodTo = payment.periodTo,
@@ -169,6 +175,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       chargeReference = payment.chargeReference,
       directDebitMandateFound = ddStatus
     ))
+  }
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[EstimatedInterestViewModel] =
     payment.accruingInterestAmount match {
@@ -212,6 +219,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[LateSubmissionPenaltyViewModel] =
     payment.chargeReference match {
       case Some(chargeRef) =>
+        if (payment.showEstimatedInterest || payment.showEstimatedPenalty){
+          logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] payment has estimated interest but no estimated charge is made")
+        }
         Some(LateSubmissionPenaltyViewModel(
           chargeType = payment.chargeType.value,
           dueDate = payment.due,

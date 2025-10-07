@@ -48,7 +48,7 @@ class FinancialDataConnector @Inject()(http: HttpClient,
           logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
-          logger.warn("FinancialDataConnector received error: " + error.message)
+          logger.warn("[FinancialDataConnector][getOpenPayments] FinancialDataConnector received error: " + error.message)
           httpError
       }
   }
