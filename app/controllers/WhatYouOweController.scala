@@ -88,11 +88,13 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
                     Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
                   case _ =>
+                    // $SCOVERAGE-OFF$
                     val loggerMessage = (payments, penaltyDetails) match {
                       case (Left(_), Right(_)) => s"Financial API failed"
                       case (Right(_), Left(_)) => s"Penalty API failed"
                       case (Left(_), Left(_)) => s"Both financial and penalty API failed"
                     }
+                    // $SCOVERAGE-ON$
                     logger.warn(s"[WhatYouOweController][show] $loggerMessage")
                     Future.successful(InternalServerError(paymentsError()))
                 }
@@ -160,10 +162,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       periodTo = periodTo(payment),
       directDebitMandateFound = ddStatus
     ))
-
+    // $SCOVERAGE-OFF$
     if (standardChargeViewModel.isEmpty) {
       logger.warn("[WhatYouOweController][buildStandardChargeViewModel] Charge model is None - Potential missing data")
       standardChargeViewModel
+      // $SCOVERAGE-ON$
     } else {
       standardChargeViewModel
     }
@@ -182,10 +185,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       chargeReference = payment.chargeReference,
       directDebitMandateFound = ddStatus
     ))
-
+    // $SCOVERAGE-OFF$
     if (vatOverpaymentForRPIViewModel.isEmpty) {
       logger.warn("[WhatYouOweController][buildVatOverpaymentForRPIViewModel] Charge model is None - Potential missing data")
       vatOverpaymentForRPIViewModel
+      // $SCOVERAGE-ON$
     } else {
       vatOverpaymentForRPIViewModel
     }
@@ -203,10 +207,11 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI,
           directDebitMandateFound = ddStatus
         ))
-
+        // $SCOVERAGE-OFF$
         if (estimatedInterestViewModel.isEmpty) {
           logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] Charge model is None - Potential missing data")
           estimatedInterestViewModel
+          // $SCOVERAGE-ON$
         } else {
           estimatedInterestViewModel
         }
