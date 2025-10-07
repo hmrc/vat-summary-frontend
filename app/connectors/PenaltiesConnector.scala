@@ -29,6 +29,8 @@ class PenaltiesConnector @Inject()(http: HttpClient)
                                   (implicit appConfig: AppConfig){
 
   def getPenaltiesDataForVRN(vrn: String)
-                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] =
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] = {
+    println(appConfig.penaltiesUrl(vrn))
     http.GET(appConfig.penaltiesUrl(vrn))
+  }
 }

@@ -88,7 +88,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
 
                     Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
                   case _ =>
-                    logger.warn(s"[WhatYouOweController][show] Error retrieving data from financial or penalty API")
+                    val loggerMessage = (payments, penaltyDetails) match {
+                      case (Left(_), Right(_)) => s"Financial API failed"
+                      case (Right(_), Left(_)) => s"Penalty API failed"
+                      case (Left(_), Left(_)) => s"Both financial and penalty API failed"
+                    }
+                    logger.warn(s"[WhatYouOweController][show] $loggerMessage")
                     Future.successful(InternalServerError(paymentsError()))
                 }
               }
@@ -141,8 +146,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         Seq(buildStandardChargeViewModel(charge, ddStatus))
     }
 
-  private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] =
-    Some(StandardChargeViewModel(
+  private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] = {
+    val standardChargeViewModel = Some(StandardChargeViewModel(
       chargeType = payment.chargeType.value,
       outstandingAmount = payment.outstandingAmount,
       originalAmount = payment.originalAmount,
@@ -156,8 +161,16 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       directDebitMandateFound = ddStatus
     ))
 
-  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[VatOverpaymentForRPIViewModel] =
-    Some(VatOverpaymentForRPIViewModel(
+    if (standardChargeViewModel.isEmpty) {
+      logger.warn("[WhatYouOweController][buildStandardChargeViewModel] Charge model is None - Potential missing data")
+      standardChargeViewModel
+    } else {
+      standardChargeViewModel
+    }
+  }
+
+  private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[VatOverpaymentForRPIViewModel] = {
+    val vatOverpaymentForRPIViewModel = Some(VatOverpaymentForRPIViewModel(
       periodFrom = payment.periodFrom,
       periodTo = payment.periodTo,
       chargeType = payment.chargeType.value,
@@ -170,10 +183,18 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       directDebitMandateFound = ddStatus
     ))
 
+    if (vatOverpaymentForRPIViewModel.isEmpty) {
+      logger.warn("[WhatYouOweController][buildVatOverpaymentForRPIViewModel] Charge model is None - Potential missing data")
+      vatOverpaymentForRPIViewModel
+    } else {
+      vatOverpaymentForRPIViewModel
+    }
+  }
+
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[EstimatedInterestViewModel] =
     payment.accruingInterestAmount match {
       case Some(interestAmnt) =>
-        Some(EstimatedInterestViewModel(
+        val estimatedInterestViewModel = Some(EstimatedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = ChargeType.LPIChargeMapping(payment.chargeType).value,
@@ -182,6 +203,13 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI,
           directDebitMandateFound = ddStatus
         ))
+
+        if (estimatedInterestViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] Charge model is None - Potential missing data")
+          estimatedInterestViewModel
+        } else {
+          estimatedInterestViewModel
+        }
       case _ =>
         logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] - Missing accrued interest amount")
         None
@@ -190,7 +218,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildCrystallisedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[CrystallisedInterestViewModel] =
     payment.chargeReference match {
       case Some(chargeRef) =>
-        Some(CrystallisedInterestViewModel(
+        val crystallisedInterestViewModel = Some(CrystallisedInterestViewModel(
           periodFrom = payment.periodFrom,
           periodTo = payment.periodTo,
           chargeType = payment.chargeType.value,
@@ -204,6 +232,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI,
           directDebitMandateFound = ddStatus
         ))
+        if (crystallisedInterestViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] Charge model is None - Potential missing data")
+          crystallisedInterestViewModel
+        } else {
+          crystallisedInterestViewModel
+        }
       case _ =>
         logger.warn("[WhatYouOweController][buildCrystallisedIntViewModel] - Missing charge reference")
         None
@@ -212,7 +246,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[LateSubmissionPenaltyViewModel] =
     payment.chargeReference match {
       case Some(chargeRef) =>
-        Some(LateSubmissionPenaltyViewModel(
+        val lateSubmissionPenaltyViewModel = Some(LateSubmissionPenaltyViewModel(
           chargeType = payment.chargeType.value,
           dueDate = payment.due,
           penaltyAmount = payment.originalAmount,
@@ -224,6 +258,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           periodTo = payment.periodTo,
           directDebitMandateFound = ddStatus
         ))
+        if (lateSubmissionPenaltyViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] Charge model is None - Potential missing data")
+          lateSubmissionPenaltyViewModel
+        } else {
+          lateSubmissionPenaltyViewModel
+        }
       case _ =>
         logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] - Missing charge reference")
         None
@@ -235,7 +275,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                                       ddStatus: Boolean): Option[ChargeDetailsViewModel] =
     (penaltyDetails, payment.accruingPenaltyAmount) match {
       case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), _, _, _, _, timeToPay)), Some(penaltyAmnt)) =>
-        Some(EstimatedLPP1ViewModel(
+        val estimatedLPP1ViewModel = Some(EstimatedLPP1ViewModel(
           part1Days = daysLR,
           part2Days = daysHR,
           part1PenaltyRate = rateLR,
@@ -252,8 +292,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           breathingSpace = breathingSpace,
           directDebitMandateFound = ddStatus
         ))
+        if (estimatedLPP1ViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildEstimatedLPPViewModel] Charge model for LPP1 is None - Potential missing data")
+          estimatedLPP1ViewModel
+        } else {
+          estimatedLPP1ViewModel
+        }
       case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, timeToPay)), Some(penaltyAmnt)) =>
-        Some(EstimatedLPP2ViewModel(
+        val estimatedLPP2ViewModel = Some(EstimatedLPP2ViewModel(
           day = daysLPP2,
           penaltyRate = rateLPP2,
           penaltyAmount = penaltyAmnt,
@@ -264,6 +310,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           breathingSpace = breathingSpace,
           directDebitMandateFound = ddStatus
         ))
+        if (estimatedLPP2ViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildEstimatedLPPViewModel] Charge model for LPP2 is None - Potential missing data")
+          estimatedLPP2ViewModel
+        } else {
+          estimatedLPP2ViewModel
+        }
       case _ =>
         val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
           case (Some(pen), Some(_)) => s"Missing particular LPP details for ${pen.penaltyCategory} penalty type"
@@ -284,7 +336,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           case (Some(_), Some(days)) => days
           case _ => daysLR
         }
-        Some(CrystallisedLPP1ViewModel(
+        val crystallisedLPP1ViewModel = Some(CrystallisedLPP1ViewModel(
           numberOfDays = numOfDays,
           part1Days = daysLR,
           part2Days = daysHR,
@@ -303,9 +355,15 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isOverdue = payment.isOverdue(dateService.now()),
           directDebitMandateFound = ddStatus
         ))
+        if (crystallisedLPP1ViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildCrystallisedLPPViewModel] Charge model for crystallisedLPP1ViewModel is None - Potential missing data")
+          crystallisedLPP1ViewModel
+        } else {
+          crystallisedLPP1ViewModel
+        }
       case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, _)),
       Some(chargeRef)) =>
-        Some(CrystallisedLPP2ViewModel(
+        val crystallisedLPP2ViewModel = Some(CrystallisedLPP2ViewModel(
           numberOfDays = daysLPP2,
           penaltyRate = rateLPP2,
           dueDate = payment.due,
@@ -319,6 +377,12 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isOverdue = payment.isOverdue(dateService.now()),
           directDebitMandateFound = ddStatus
         ))
+        if (crystallisedLPP2ViewModel.isEmpty) {
+          logger.warn("[WhatYouOweController][buildCrystallisedLPPViewModel] Charge model for crystallisedLPP2ViewModel is None - Potential missing data")
+          crystallisedLPP2ViewModel
+        } else {
+          crystallisedLPP2ViewModel
+        }
       case (Some(penDetails), _) =>
         logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - " +
           s"Missing LPP details for ${penDetails.penaltyCategory} penalty type")
