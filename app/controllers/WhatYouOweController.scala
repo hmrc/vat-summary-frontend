@@ -149,7 +149,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
     }
 
   private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] = {
-    val standardChargeViewModel = Some(StandardChargeViewModel(
+    Some(StandardChargeViewModel(
       chargeType = payment.chargeType.value,
       outstandingAmount = payment.outstandingAmount,
       originalAmount = payment.originalAmount,
@@ -162,18 +162,10 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       periodTo = periodTo(payment),
       directDebitMandateFound = ddStatus
     ))
-    // $SCOVERAGE-OFF$
-    if (standardChargeViewModel.isEmpty) {
-      logger.warn("[WhatYouOweController][buildStandardChargeViewModel] Charge model is None - Potential missing data")
-      standardChargeViewModel
-      // $SCOVERAGE-ON$
-    } else {
-      standardChargeViewModel
-    }
   }
 
   private[controllers] def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[VatOverpaymentForRPIViewModel] = {
-    val vatOverpaymentForRPIViewModel = Some(VatOverpaymentForRPIViewModel(
+    Some(VatOverpaymentForRPIViewModel(
       periodFrom = payment.periodFrom,
       periodTo = payment.periodTo,
       chargeType = payment.chargeType.value,
@@ -185,14 +177,6 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       chargeReference = payment.chargeReference,
       directDebitMandateFound = ddStatus
     ))
-    // $SCOVERAGE-OFF$
-    if (vatOverpaymentForRPIViewModel.isEmpty) {
-      logger.warn("[WhatYouOweController][buildVatOverpaymentForRPIViewModel] Charge model is None - Potential missing data")
-      vatOverpaymentForRPIViewModel
-      // $SCOVERAGE-ON$
-    } else {
-      vatOverpaymentForRPIViewModel
-    }
   }
 
   private[controllers] def buildEstimatedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[EstimatedInterestViewModel] =
@@ -207,11 +191,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI,
           directDebitMandateFound = ddStatus
         ))
-        // $SCOVERAGE-OFF$
         if (estimatedInterestViewModel.isEmpty) {
           logger.warn("[WhatYouOweController][buildEstimatedIntViewModel] Charge model is None - Potential missing data")
           estimatedInterestViewModel
-          // $SCOVERAGE-ON$
         } else {
           estimatedInterestViewModel
         }
