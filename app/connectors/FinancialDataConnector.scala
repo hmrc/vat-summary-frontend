@@ -45,7 +45,6 @@ class FinancialDataConnector @Inject()(http: HttpClient,
     http.GET(paymentsUrl(vrn), Seq("onlyOpenItems" -> "true"))
       .map {
         case payments@Right(_) =>
-          logger.info("[FinancialDataConnector][getOpenPayments] Successfully retrieved open payments")
           logger.debug(s"[FinancialDataConnector][getOpenPayments] - Payments:\n\n$payments")
           payments
         case httpError@Left(error) =>
