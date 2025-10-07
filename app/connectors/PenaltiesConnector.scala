@@ -26,11 +26,9 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class PenaltiesConnector @Inject()(http: HttpClient)
-                                  (implicit appConfig: AppConfig){
+                                  (implicit appConfig: AppConfig) {
 
   def getPenaltiesDataForVRN(vrn: String)
-                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] = {
-    println(appConfig.penaltiesUrl(vrn))
+                            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PenaltiesSummary]] =
     http.GET(appConfig.penaltiesUrl(vrn))
   }
-}
