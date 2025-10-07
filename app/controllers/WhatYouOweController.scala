@@ -261,6 +261,9 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         if (lateSubmissionPenaltyViewModel.isEmpty) {
           logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] Charge model is None - Potential missing data")
           lateSubmissionPenaltyViewModel
+        } else if (payment.showEstimatedInterest || payment.showEstimatedPenalty){
+          logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] payment has estimated interest but no estimated charge is made")
+          lateSubmissionPenaltyViewModel
         } else {
           lateSubmissionPenaltyViewModel
         }
