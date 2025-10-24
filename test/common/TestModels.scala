@@ -647,6 +647,16 @@ object TestModels {
     directDebitMandateFound = false
   )
 
+  val estimatedLSPInterestPenalty: EstimatedInterestViewModel = EstimatedInterestViewModel(
+    periodFrom = LocalDate.parse("2019-01-01"),
+    periodTo = LocalDate.parse("2019-02-02"),
+    chargeType = "VAT LSP Interest",
+    interestAmount = 2,
+    isPenaltyReformPenaltyLPI = true,
+    isNonPenaltyReformPenaltyLPI = false,
+    directDebitMandateFound = false
+  )
+
   val crystallisedLPP1Model: CrystallisedLPP1ViewModel = CrystallisedLPP1ViewModel(
     "99",
     "10",

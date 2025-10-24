@@ -1010,6 +1010,29 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     }
   }
 
+  "The buildLSPPlusEstimates function" when {
+
+    "there is accruing interest on the Late Submission Penalty" should {
+
+      "return a LateSubmissionPenalty and Estimate view model" in {
+        val charge = payment.copy(chargeType = VatLateSubmissionPen)
+        mockDateServiceCall()
+        controller.buildLSPPlusEstimates(charge, false) shouldBe
+          Seq(Some(LateSubmissionPenaltyViewModel(
+            "VAT Late Submission Pen",
+            LocalDate.parse("2019-03-03"),
+            10000,
+            0,
+            10000,
+            isOverdue = false,
+            "XD002750002155",
+            LocalDate.parse("2019-01-01"),
+            LocalDate.parse("2019-02-02"), false
+          )), Some(estimatedLSPInterestPenalty))
+      }
+    }
+  }
+
   "The buildLateSubmissionPenaltyViewModel function" should {
 
     "return a LateSubmissionPenaltyViewModel" when {
