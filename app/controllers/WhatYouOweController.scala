@@ -114,7 +114,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case p: PaymentWithPeriod if p.chargeType.isLPICharge =>
         Seq(buildCrystallisedIntViewModel(p, ddStatus))
       case p: PaymentWithPeriod if p.chargeType.eq(VatLateSubmissionPen) =>
-        Seq(buildLateSubmissionPenaltyViewModel(p, ddStatus))
+        buildLSPPlusEstimates(p, ddStatus)
       case p: PaymentWithPeriod if p.chargeType.eq(VatOverpaymentForRPI) =>
         Seq(buildVatOverpaymentForRPIViewModel(p, ddStatus))
       case p =>
@@ -144,6 +144,14 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
         Seq(buildStandardChargeViewModel(p, ddStatus), buildEstimatedIntViewModel(p, ddStatus))
       case _ =>
         Seq(buildStandardChargeViewModel(charge, ddStatus))
+    }
+
+  private[controllers] def buildLSPPlusEstimates(charge: PaymentWithPeriod,
+                                                 ddStatus: Boolean): Seq[Option[ChargeDetailsViewModel]] =
+    if (charge.showEstimatedInterest) {
+      Seq(buildLateSubmissionPenaltyViewModel(charge, ddStatus), buildEstimatedIntViewModel(charge, ddStatus))
+    } else {
+      Seq(buildLateSubmissionPenaltyViewModel(charge, ddStatus))
     }
 
   private[controllers] def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean): Option[StandardChargeViewModel] = {
