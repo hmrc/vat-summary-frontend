@@ -227,9 +227,6 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
   private[controllers] def buildLateSubmissionPenaltyViewModel(payment: PaymentWithPeriod, ddStatus: Boolean): Option[LateSubmissionPenaltyViewModel] =
     payment.chargeReference match {
       case Some(chargeRef) =>
-        if (payment.showEstimatedInterest || payment.showEstimatedPenalty){
-          logger.warn("[WhatYouOweController][buildLateSubmissionPenaltyViewModel] payment has estimated interest but no estimated charge is made")
-        }
         Some(LateSubmissionPenaltyViewModel(
           chargeType = payment.chargeType.value,
           dueDate = payment.due,
@@ -285,7 +282,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       case _ =>
         val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
           case (Some(pen), Some(_)) => s"Missing particular LPP details for ${pen.penaltyCategory} penalty type"
-          case (None, Some(_)) => "No matching penalty was found"
+          case (None, Some(_)) => s"No matching penalty was found for charge type: ${payment.chargeType}"
           case _ => "Accruing penalty amount was not found"
         }
         logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - $loggerMessage")
@@ -342,7 +339,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
           s"Missing LPP details for ${penDetails.penaltyCategory} penalty type")
         None
       case _ =>
-        val missingData = if (payment.chargeReference.isDefined) "matching penalty" else "charge reference"
+        val missingData = if (payment.chargeReference.isDefined) s"matching penalty for charge type: ${payment.chargeType}" else "charge reference"
         logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing $missingData")
         None
     }
