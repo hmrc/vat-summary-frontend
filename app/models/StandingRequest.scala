@@ -61,5 +61,6 @@ case class ChangedOnVatPeriod(startDate: Option[LocalDate], endDate: Option[Loca
 
 object ChangedOnVatPeriod {
   val RequestCategoryType3 = "3"
+  val RequestCategoryType4 = "4"
   val dateFormatter = DateTimeFormatter.ofPattern("d MMM uuuu")
 }

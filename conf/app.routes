@@ -3,6 +3,7 @@
 GET        /vat-overview                                                                           controllers.VatDetailsController.details
 GET        /what-you-owe                                                                           controllers.WhatYouOweController.show
 GET        /payments-on-account                                                                    controllers.PaymentsOnAccountController.show
+GET        /annual-accounting                                                                       controllers.AnnualAccountingController.show
 GET        /direct-debit-yes/:dueDateOrUrl/:linkId/:ddStatus                                       controllers.ExistingDirectDebitController.show(dueDateOrUrl: String, linkId: String, ddStatus:Boolean)
 POST       /direct-debit-yes                                                                       controllers.ExistingDirectDebitController.submit
 GET        /amount-to-pay/:id                                                                      controllers.ChargeBreakdownController.showBreakdown(id: String)
