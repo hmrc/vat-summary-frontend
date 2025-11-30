@@ -28,7 +28,8 @@ object FeatureSwitchForm {
       ConfigKeys.webchatEnabled -> boolean,
       ConfigKeys.showUserResearchBannerEnabled -> boolean,
       ConfigKeys.futureDateOffsetEnabled -> boolean,
-      ConfigKeys.poaActiveFeatureEnabled -> boolean
+      ConfigKeys.poaActiveFeatureEnabled -> boolean,
+      ConfigKeys.showAnnualAccounting -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

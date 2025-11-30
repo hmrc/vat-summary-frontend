@@ -765,7 +765,33 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
         result shouldBe expected
       }
+    }
 
+    "the customer is using annual accounting" should {
+
+      "return a VatDetailsViewModel with a link to annual accounting" in {
+        lazy val expected: VatDetailsViewModel =
+          VatDetailsViewModel(
+            None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB",
+            isAACustomer = true
+          )
+        lazy val result: VatDetailsViewModel = {
+          mockPOACheckServiceCall()
+          mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
+          controller.constructViewModel(
+            Right(Some(obligationsWithPeriodKeyStartingWithY)),
+            Right(None),
+            Right(customerInformationMax),
+            None,
+            None,
+            mockTodayDate
+          )
+        }
+
+        result shouldBe expected
+      }
     }
   }
 

@@ -166,6 +166,15 @@ object TestModels {
       "#001")
   ))
 
+  val obligationsWithPeriodKeyStartingWithY: VatReturnObligations = VatReturnObligations(Seq(VatReturnObligation(
+    LocalDate.parse("2019-04-04"),
+    LocalDate.parse("2019-05-05"),
+    LocalDate.parse("2019-06-06"),
+    "O",
+    None,
+    "YA25"
+  )))
+
   val address: Address = Address("Bedrock Quarry", Some("Bedrock"), Some("Graveldon"), None, Some("GV2 4BB"))
   val entityName: String = "Cheapo Clothing"
   val currentYear: Int = 2018

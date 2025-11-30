@@ -36,6 +36,7 @@
       govukWarningText: GovukWarningText,
       penaltiesTileSection: PenaltiesTileSection,
       vatPaymentOnAccountSchedule: VatPaymentOnAccountSchedule,
+      annualAccountingSection: AnnualAccountingSection,
       penaltiesBanner: PenaltiesBanner,
       govukNotificationBanner: GovukNotificationBanner)
 
@@ -179,5 +180,10 @@
       </div>
       }
 
+      @if(appConfig.features.showAnnualAccounting() && detailsViewModel.isAACustomer){
+      <div class="govuk-grid-column-one-third">
+          @annualAccountingSection()
+      </div>
+      }
   </div>
 }

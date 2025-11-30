@@ -75,6 +75,8 @@ vatDetails.viewPenalties.link = Penalties for late VAT Returns and payments
 vatDetails.viewPenalties.info = View your penalties, make an appeal against a penalty and see the status of any current appeals.
 vatDetails.viewPaymentOnAccount.link = Payments on account
 vatDetails.viewPaymentOnAccount.info = View your payments on account schedule of payments.
+vatDetails.annualAccounting.link = Annual Accounting
+vatDetails.annualAccounting.info = View your Annual Accounting schedule on payments.
 
 vatDetails.payment_on_account.alert.title=Important
 vatDetails.payment_on_account.alert.heading=Payments on account schedule change

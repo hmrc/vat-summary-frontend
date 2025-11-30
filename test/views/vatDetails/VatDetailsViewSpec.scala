@@ -54,6 +54,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val vatPOAAlertBanner = ".govuk-notification-banner"
     val vatPOALink = "#vat-POA a.govuk-link"
     val vatPOAText = "#vat-POA p.govuk-body"
+    val annualAccountingSection = "#vat-AA"
     val historyHeading = "#history > h2"
     val historyPastPayments = ".govuk-list > li:nth-child(1) > p > a"
     val historyPastReturns = ".govuk-list > li:nth-child(2) > p > a"
@@ -195,6 +196,28 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     userEmailVerified = true,
     mandationStatus = "MTDfB",
     isPoaActiveForCustomer = false
+  )
+
+  val annualAccountingCustomerModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentDate = testDate,
+    partyType = Some("1"),
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isAACustomer = true
+  )
+
+  val nonAnnualAccountingCustomerModel: VatDetailsViewModel = VatDetailsViewModel(
+    Some("2018-12-31"),
+    Some("2018-12-31"),
+    Some("Cheapo Clothing"),
+    currentDate = testDate,
+    partyType = Some("1"),
+    userEmailVerified = true,
+    mandationStatus = "MTDfB",
+    isAACustomer = false
   )
 
   "Rendering the VAT details page for an mtd user" should {
@@ -698,6 +721,46 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
     "should not render the POA Alert banner" in {
       document.select(Selectors.vatPOAAlertBanner).select("h3").text() shouldNot  be("Payments on account schedule change")
+    }
+  }
+
+  "Rendering the VAT details page when Annual Accounting feature is enabled and user is Annual Accounting customer" should {
+    lazy val view = details(annualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render the Annual Accounting section" in {
+      mockConfig.features.showAnnualAccounting(true)
+      document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe "Annual Accounting"
+    }
+  }
+
+  "Rendering the VAT details page when Annual Accounting feature is enabled and user is not an Annual Accounting customer" should {
+    lazy val view = details(nonAnnualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "not render the Annual Accounting section" in {
+      mockConfig.features.showAnnualAccounting(true)
+      document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
+    }
+  }
+
+  "Rendering the VAT details page when Annual Accounting feature is disabled and user is an Annual Accounting customer" should {
+    lazy val view = details(annualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "not render the Annual Accounting section" in {
+      mockConfig.features.showAnnualAccounting(false)
+      document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
+    }
+  }
+
+  "Rendering the VAT details page when Annual Accounting feature is disabled and user is not an Annual Accounting customer" should {
+    lazy val view = details(nonAnnualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "not render the Annual Accounting section" in {
+      mockConfig.features.showAnnualAccounting(false)
+      document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }
 

@@ -78,6 +78,8 @@ vatDetails.viewPenalties.link = Cosbau yn sgil Ffurflenni TAW a thaliadau hwyr
 vatDetails.viewPenalties.info = Bwrw golwg dros eich cosbau, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
 vatDetails.viewPaymentOnAccount.link = Taliadau ar gyfrif
 vatDetails.viewPaymentOnAccount.info = Bwrw golwg dros eich amserlen ar gyfer taliadau ar gyfrif
+vatDetails.annualAccounting.link = Cyfrifyddu Blynyddol
+vatDetails.annualAccounting.info = Bwrw golwg dros eich amserlen ar gyfer taliadau Cyfrifyddu Blynyddol.
 
 vatDetails.payment_on_account.alert.title=Pwysig
 vatDetails.payment_on_account.alert.heading=Newid amserlen ar gyfer taliadau ar gyfrif
