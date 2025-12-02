@@ -83,9 +83,25 @@
   }
 }
 
+@annualAccountingAlertContent = {
+  @if(detailsViewModel.annualAccountingChangedOn.isDefined) {
+    <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.alert.heading")</h3>
+    <p class="govuk-body" id="aa-alert-information">@messages("vatDetails.annual_accounting.alert.message") @MessageDateFormat.formatLong(detailsViewModel.annualAccountingChangedOn.get).
+        @messages("vatDetails.annual_accounting.alert.fordetails")
+        <a class="govuk-notification-banner__link" href="/vat-through-software/interim-payments" rel="noreferrer noopener">
+        @messages("vatDetails.annual_accounting.alert.link")</a>.
+    </p>
+  }
+}
+
 @poaAlertAndPenaltiesContent = {
   <div>@poaAlertContent</div>
-  <div>@penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined)</div>
+  <div>@penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)</div>
+}
+
+@annualAccountingAlertAndPenaltiesContent = {
+    <div>@annualAccountingAlertContent</div>
+    <div>@penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)</div>
 }
 
 @mainTemplate(
@@ -110,8 +126,16 @@
       classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
       titleId = Some("poa-alert-banner")))
     </div>
+  } else if (detailsViewModel.annualAccountingChangedOn.isDefined) {
+    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-aa">
+        @govukNotificationBanner(NotificationBanner(
+        title = Text(messages("vatDetails.annual_accounting.alert.title")),
+        content = HtmlContent(annualAccountingAlertAndPenaltiesContent),
+        classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
+        titleId = Some("aa-alert-banner")))
+    </div>
   } else {
-    @penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined)
+    @penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)
   }
   @unverifiedUserEmailContent
 

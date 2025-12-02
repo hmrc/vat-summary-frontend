@@ -52,7 +52,9 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                      detailsView: Details,
                                      serviceErrorHandler: ServiceErrorHandler,
                                      poaCheckService: POACheckService,
-                                     paymentsOnAccountService: PaymentsOnAccountService)
+                                     paymentsOnAccountService: PaymentsOnAccountService,
+                                     annualAccountingService: AnnualAccountingService,
+                                     annualAccountingCheckService: AnnualAccountingCheckService)
                                     (implicit appConfig: AppConfig,
                                      ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -70,6 +72,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           penaltiesCallResult <- penaltiesService.getPenaltiesInformation(user.vrn)
           today = dateService.now()
           standingRequest <- if (!isPoaActiveUser(customerInfo, today)) Future.successful(None) else paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
+          standingRequestAA <- annualAccountingService.getStandingRequests(user.vrn)
         } yield {
 
           auditEvents(user, nextReturn, nextPayment)
@@ -87,7 +90,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
             Redirect(appConfig.missingTraderRedirectUrl)
           } else {
             Ok(detailsView(
-              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo, standingRequest, today),
+              constructViewModel(nextReturn, nextPayment, customerInfo, penaltiesInfo, standingRequest, standingRequestAA, today),
               serviceInfoContent
             )).addingToSession(newSessionVariables: _*)
           }
@@ -163,6 +166,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                               accountDetails: HttpResult[CustomerInformation],
                                               penaltyInformation: Option[PenaltiesSummary],
                                               standingRequest: Option[StandingRequest],
+                                              standingRequestAA: Option[StandingRequest],
                                               today: LocalDate
                                               ): VatDetailsViewModel = {
 
@@ -179,6 +183,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val isPoaActiveForCustomer: Boolean = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
     val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, today)
     val isAnnualAccountingCustomer: Boolean = obligations.fold(_ => false, _.exists(_.obligations.exists(_.periodKey.startsWith("Y"))))
+    val annualAccountingChangedOn: Option[LocalDate] = annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequestAA, today)
     VatDetailsViewModel(
       paymentModel.displayData,
       returnModel.displayData,
@@ -202,7 +207,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       mandationStatus,
       isPoaActiveForCustomer,
       poaChangedOn,
-      isAnnualAccountingCustomer
+      isAnnualAccountingCustomer,
+      annualAccountingChangedOn
     )
   }
 

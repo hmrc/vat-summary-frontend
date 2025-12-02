@@ -83,6 +83,8 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockPOACheckService: POACheckService = mock[POACheckService]
 
   val mockPaymentsOnAccountService: PaymentsOnAccountService = mock[PaymentsOnAccountService]
+  val mockAnnualAccountingService: AnnualAccountingService = mock[AnnualAccountingService]
+  val mockAnnualAccountingCheckService: AnnualAccountingCheckService = mock[AnnualAccountingCheckService]
 
   val financialPredicate: FinancialPredicate = new FinancialPredicate(
     mockAccountDetailsService, mockServiceErrorHandler, mcc, mockDateService)
@@ -168,6 +170,12 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .expects(*, *)
       .returns(true)
 
+  def mockChangedOnDateWithinLast3Months(someDate: Option[LocalDate] = None): Any = {
+    (mockAnnualAccountingCheckService.changedOnDateWithinLast3Months(_: Option[StandingRequest], _: LocalDate))
+      .expects(*, *)
+      .returns(someDate)
+  }
+
   def mockServiceInfoCall(): Any =
     (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))
       .stubs(*, *, *, *)
@@ -237,6 +245,12 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     (mockPaymentsOnAccountService.getPaymentsOnAccounts(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
       .returning(Future.successful(response))
+  }
+
+  def mockAnnualAccountingServiceCall(): Any = {
+    (mockAnnualAccountingService.getStandingRequests(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returning(Future.successful(Some(standingRequestSampleAnnualAccounting)))
   }
 
   implicit def existenceOfElement[Els <: org.jsoup.select.Elements]: Existence[Els] =

@@ -19,7 +19,7 @@
 
 @this(govukNotificationBanner: GovukNotificationBanner)
 
-@(penaltiesSummary: Option[PenaltiesSummary], isPoaAlert: Boolean = false)(implicit messages: Messages, appConfig: config.AppConfig)
+@(penaltiesSummary: Option[PenaltiesSummary], isPoaAlert: Boolean = false, isAnnualAccountingAlert: Boolean = false)(implicit messages: Messages, appConfig: config.AppConfig)
 
 @bannerContent = {@penaltiesSummary match {
   case Some(summary) => {
@@ -60,7 +60,7 @@
   </a>
 }
 
-@if(!isPoaAlert) {
+@if(!isPoaAlert && !isAnnualAccountingAlert) {
   @penaltiesSummary match {
     case Some(summary) if (summary.hasActivePenalties) => {
       @govukNotificationBanner(NotificationBanner(
