@@ -24,12 +24,12 @@ import java.time.format.DateTimeFormatter
 case class RequestItem(
   period: String,
   periodKey: String,
-  startDate: String,  
+  startDate: String,
   endDate: String,
   dueDate: String,
   amount: BigDecimal,
   chargeReference: Option[String],
-  postingDueDate: Option[String] 
+  postingDueDate: Option[String]
 )
 
 object RequestItem {
@@ -49,7 +49,7 @@ object StandingRequestDetail {
 }
 
 case class StandingRequest(
-  processingDate: String,  
+  processingDate: String,
   standingRequests: List[StandingRequestDetail]
 )
 
