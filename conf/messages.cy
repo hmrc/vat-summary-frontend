@@ -78,11 +78,19 @@ vatDetails.viewPenalties.link = Cosbau yn sgil Ffurflenni TAW a thaliadau hwyr
 vatDetails.viewPenalties.info = Bwrw golwg dros eich cosbau, apelio yn erbyn cosb a gweld statws unrhyw apeliadau presennol.
 vatDetails.viewPaymentOnAccount.link = Taliadau ar gyfrif
 vatDetails.viewPaymentOnAccount.info = Bwrw golwg dros eich amserlen ar gyfer taliadau ar gyfrif
+vatDetails.annualAccounting.link = Cyfrifyddu Blynyddol
+vatDetails.annualAccounting.info = Bwrw golwg dros eich amserlen ar gyfer taliadau Cyfrifyddu Blynyddol.
 
 vatDetails.payment_on_account.alert.title=Pwysig
 vatDetails.payment_on_account.alert.heading=Newid amserlen ar gyfer taliadau ar gyfrif
 vatDetails.payment_on_account.alert.message=Mae’r symiau sy’n ddyledus ar gyfer eich taliadau ar gyfrif wedi newid.
 vatDetails.payment_on_account.alert.link=Gwiriwch eich amserlen am fanylion
+
+vatDetails.annual_accounting.alert.title=Pwysig
+vatDetails.annual_accounting.alert.heading=Mae newid wedi bod i’ch taliadau Cyfrifyddu Blynyddol
+vatDetails.annual_accounting.alert.message=Newidiodd y swm rydych chi’n ei ddyledus am bob cyfnod ar
+vatDetails.annual_accounting.alert.fordetails=I gael manylion,
+vatDetails.annual_accounting.alert.link=gwiriwch eich amserlen
 
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i’w chyflwyno

@@ -33,6 +33,7 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     features.showUserResearchBannerEnabled(false)
     features.futureDateOffsetEnabled(true)
     features.poaActiveFeatureEnabled(true)
+    features.showAnnualAccounting(false)
   }
 
   "The static date feature" should {
@@ -99,6 +100,18 @@ class FeatureSpec extends ControllerBaseSpec with GuiceOneAppPerSuite with Befor
     "switch to a different state" in {
       features.poaActiveFeatureEnabled(false)
       features.poaActiveFeatureEnabled() shouldBe false
+    }
+  }
+
+  "The showAnnualAccounting feature" should {
+
+    "return its current state" in {
+      features.showAnnualAccounting() shouldBe false
+    }
+
+    "switch to a different state" in {
+      features.showAnnualAccounting(true)
+      features.showAnnualAccounting() shouldBe true
     }
   }
 }

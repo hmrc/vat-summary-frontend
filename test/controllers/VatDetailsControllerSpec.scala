@@ -72,7 +72,9 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
     injector.instanceOf[Details],
     mockServiceErrorHandler,
     mockPOACheckService,
-    mockPaymentsOnAccountService
+    mockPaymentsOnAccountService,
+    mockAnnualAccountingService,
+    mockAnnualAccountingCheckService
   )
   
   "Calling the details action" when {
@@ -88,6 +90,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockPOACheckServiceCall()
         mockChangedOnDateWithInLatestVatPeriod()
         mockPOACheckServiceCall()
+        mockChangedOnDateWithinLast3Months()
+        mockAnnualAccountingServiceCall()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
@@ -174,6 +178,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
           mockPOACheckServiceCall()
+          mockChangedOnDateWithinLast3Months()
+          mockAnnualAccountingServiceCall()
           mockAudit()
           mockServiceInfoCall()
           mockPenaltiesService(penaltySummaryNoResponse)
@@ -194,6 +200,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationNonMTDfB))
         mockPOACheckServiceCall()
         mockChangedOnDateWithInLatestVatPeriod()
+        mockChangedOnDateWithinLast3Months()
+        mockAnnualAccountingServiceCall()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
@@ -220,6 +228,7 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockCustomerInfo(Right(customerInformationMax.copy(isMissingTrader = true)))
         mockServiceInfoCall()
         mockPOACheckServiceCall()
+        mockAnnualAccountingServiceCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryNoResponse)
         controller.details()(fakeRequest)
@@ -245,6 +254,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
         mockPOACheckServiceCall()
         mockChangedOnDateWithInLatestVatPeriod()
         mockPOACheckServiceCall()
+        mockChangedOnDateWithinLast3Months()
+        mockAnnualAccountingServiceCall()
         mockServiceInfoCall()
         mockAudit()
         mockPenaltiesService(penaltySummaryResponse)
@@ -274,6 +285,8 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
           mockPOACheckServiceCall()
+          mockChangedOnDateWithinLast3Months()
+          mockAnnualAccountingServiceCall()
           mockAudit()
           mockPenaltiesService(penaltySummaryResponse)
           controller.details()(fakeRequest)
@@ -376,12 +389,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           )
         lazy val result: VatDetailsViewModel = {
           mockPOACheckServiceCall()
+          mockChangedOnDateWithinLast3Months()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -404,10 +419,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -430,10 +447,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(None),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -456,10 +475,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
           mockDateServiceCall()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -479,10 +500,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMin),
+            None,
             None,
             None,
             mockTodayDate
@@ -502,10 +525,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Right(None),
             Right(customerInformationMTDfBExempt),
+            None,
             None,
             None,
             mockTodayDate
@@ -526,10 +551,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Left(ObligationsError),
             Right(None),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -550,10 +577,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Left(NextPaymentError),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -584,10 +613,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           mockPOACheckServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Left(ObligationsError),
             Left(NextPaymentError),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -619,10 +650,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(Some(overdueObligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -644,11 +677,13 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCall()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
             Some(penaltiesSummaryModel),
+            None,
             None,
             mockTodayDate
           )
@@ -667,10 +702,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           mockPOACheckServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
+            None,
             None,
             None,
             mockTodayDate
@@ -700,10 +737,12 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           mockPOACheckServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(Some(obligations)),
             Right(Some(payments)),
             Left(BadRequestError("", "")),
+            None,
             None,
             None,
             mockTodayDate
@@ -727,12 +766,14 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCallTrue()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod(poaActive = true, Some(LocalDate.parse("2025-02-20")))
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Right(Some(payments)),
             Right(customerInformationMax),
             None,
             Some(standingRequestSample2),
+            None,
             mockTodayDate
           )
         }
@@ -753,19 +794,49 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
           mockPOACheckServiceCallTrue()
           mockDateServiceCall()
           mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months()
           controller.constructViewModel(
             Right(None),
             Right(Some(payments)),
             Right(customerInformationMax),
             None,
             Some(standingRequestSample2),
+            None,
             mockTodayDate
           )
         }
 
         result shouldBe expected
       }
+    }
 
+    "the customer is using annual accounting" should {
+
+      "return a VatDetailsViewModel with a link to annual accounting" in {
+        lazy val expected: VatDetailsViewModel =
+          VatDetailsViewModel(
+            None, obligationData, Some(entityName), deregDate = Some(LocalDate.parse("2020-01-01")),
+            currentDate = testDate, partyType = Some("7"), userEmailVerified = true, emailAddress = Some(email), mandationStatus = "MTDfB",
+            isAACustomer = true, annualAccountingChangedOn = Some(LocalDate.parse("2025-05-15"))
+          )
+        lazy val result: VatDetailsViewModel = {
+          mockPOACheckServiceCall()
+          mockDateServiceCall()
+          mockChangedOnDateWithInLatestVatPeriod()
+          mockChangedOnDateWithinLast3Months(someDate = Some(LocalDate.parse("2025-05-15")))
+          controller.constructViewModel(
+            Right(Some(obligationsWithPeriodKeyStartingWithY)),
+            Right(None),
+            Right(customerInformationMax),
+            None,
+            None,
+            Some(standingRequestSampleAnnualAccounting),
+            mockTodayDate
+          )
+        }
+
+        result shouldBe expected
+      }
     }
   }
 
