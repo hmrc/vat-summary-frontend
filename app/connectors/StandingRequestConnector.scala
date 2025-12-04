@@ -37,11 +37,10 @@ class StandingRequestsConnector @Inject()(http: HttpClient, appConfig: AppConfig
     http.GET[HttpResult[StandingRequest]](standingRequestsUrl(vrn))
       .map {
         case Right(result) =>
-          logger.info(s"StandingRequestsConnector response received")
-          logger.info(standingRequestsUrl(vrn))
+          logger.info(s"[StandingRequestsConnector][getStandingRequests] Response received")
           Right(result)
         case Left(error) =>
-          logger.warn(s"StandingRequestsConnector received error: ${error.message}")
+          logger.warn(s"[StandingRequestsConnector][getStandingRequests] Error: ${error.message}")
           Left(error)
       }
   }

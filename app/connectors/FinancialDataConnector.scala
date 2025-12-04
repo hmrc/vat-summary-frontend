@@ -74,6 +74,22 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       }
   }
 
+  def getPaymentsForPeriod(vrn: String, from: LocalDate, to: LocalDate)
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Payments]] = {
+    import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
+    logger.debug(s"[FinancialDataConnector][getPaymentsForPeriod] - Calling financial API for payments from $from to $to.")
+    http.GET(paymentsUrl(vrn), Seq(
+      "dateFrom" -> from.toString,
+      "dateTo" -> to.toString
+    )).map {
+      case payments@Right(_) =>
+        logger.debug(s"[FinancialDataConnector][getPaymentsForPeriod] Payments: \n\n $payments")
+        payments
+      case httpError@Left(error) =>
+        logger.warn("[FinancialDataConnector][getPaymentsForPeriod] received error: " + error.message)
+        httpError
+    }
+  }
   def getDirectDebitStatus(vrn: String)
                           (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[DirectDebitStatus]] = {
 

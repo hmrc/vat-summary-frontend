@@ -31,6 +31,7 @@ object ConfigKeys {
   val webchatEnabled: String = "features.webchat.enabled"
   val showUserResearchBannerEnabled: String = "features.showUserResearchBanner.enabled"
   val poaScheduleFeature: String = "features.poaScheduleFeature.enabled"
+  val annualAccountingFeatureEnabled: String = "features.annualAccountingFeature.enabled"
 
   val businessTaxAccountBase: String = "business-tax-account"
   val businessTaxAccountHost: String = "business-tax-account.host"

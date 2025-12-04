@@ -34,10 +34,20 @@ object AAPaymentStatus {
     val tagClass: String = "govuk-tag--green"
     val messageKey: String = "annualAccounting.status.paid"
   }
+  case object PaidLate extends AAPaymentStatus {
+    val tagClass: String = "govuk-tag--yellow"
+    val messageKey: String = "annualAccounting.status.paidLate"
+  }
   case object Overdue extends AAPaymentStatus {
     val tagClass: String = "govuk-tag--red"
     val messageKey: String = "annualAccounting.status.overdue"
   }
+}
+
+sealed trait PaymentFrequency { def instalments: Int }
+object PaymentFrequency {
+  case object Monthly extends PaymentFrequency { val instalments: Int = 9 }
+  case object Quarterly extends PaymentFrequency { val instalments: Int = 3 }
 }
 
 case class AAPayment(isBalancing: Boolean, dueDate: LocalDate, amount: Option[BigDecimal], status: AAPaymentStatus)
@@ -50,7 +60,8 @@ case class AnnualAccountingViewModel(
   pastPeriods: List[AASchedulePeriod],
   nextPayment: Option[AAPayment],
   isAgent: Boolean,
-  hasDirectDebit: Option[Boolean]
+  hasDirectDebit: Option[Boolean],
+  frequency: Option[PaymentFrequency] = None
 ) {
   private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
   def changedOnFormattedOpt: Option[String] = changedOn.map(_.format(formatter))

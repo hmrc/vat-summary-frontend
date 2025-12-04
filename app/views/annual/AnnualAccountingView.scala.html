@@ -55,12 +55,16 @@
 
         <p class="govuk-body" id="next-payment-text">
           @model.nextPayment.map { p =>
-            @messages("annualAccounting.nextPayment.prefix")
-            @p.amount.map { amount =>
-              <strong class="govuk-!-font-weight-bold">@Money.pounds(amount)</strong>
+            @if(p.isBalancing) {
+              @messages("annualAccounting.nextPayment.balancing", MessageDateFormat.format(p.dueDate))
+            } else {
+              @messages("annualAccounting.nextPayment.prefix")
+              @p.amount.map { amount =>
+                <strong class="govuk-!-font-weight-bold">@Money.pounds(amount)</strong>
+              }
+              @messages("annualAccounting.nextPayment.suffix")
+              <strong>@MessageDateFormat.format(p.dueDate)</strong>.
             }
-            @messages("annualAccounting.nextPayment.suffix")
-            <strong>@MessageDateFormat.format(p.dueDate)</strong>.
           }.getOrElse(Html(messages("annualAccounting.nextPayment.none")))
         </p>
 
@@ -78,6 +82,15 @@
               @messages("annualAccounting.changedOn", changedOnDate)
             }
           </div>
+        }
+
+        @model.frequency.map { freq =>
+          <p class="govuk-body govuk-!-padding-top-4">
+            @{ freq match {
+              case models.viewModels.PaymentFrequency.Monthly => messages("annualAccounting.frequency.monthly")
+              case models.viewModels.PaymentFrequency.Quarterly => messages("annualAccounting.frequency.quarterly")
+            }}
+          </p>
         }
 
         @model.hasDirectDebit.map { hasDD =>

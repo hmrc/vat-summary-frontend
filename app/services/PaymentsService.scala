@@ -77,4 +77,11 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
       case Right(directDebitStatus) => Right(directDebitStatus)
       case Left(_) => Left(DirectDebitStatusError)
     }
+
+  def getPaymentsForPeriod(vrn: String, from: LocalDate, to: LocalDate)
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Payments]] =
+    financialDataConnector.getPaymentsForPeriod(vrn, from, to).map {
+      case Right(payments) => Right(payments)
+      case Left(_) => Left(PaymentsError)
+    }
 }
