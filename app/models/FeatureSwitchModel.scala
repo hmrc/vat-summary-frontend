@@ -21,4 +21,4 @@ case class FeatureSwitchModel(staticDateEnabled: Boolean,
                               showUserResearchBannerEnabled: Boolean,
                               futureDateOffsetEnabled: Boolean,
                               poaActiveFeatureEnabled: Boolean,
-                              showAnnualAccounting: Boolean)
+                              annualAccountingFeatureEnabled: Boolean)

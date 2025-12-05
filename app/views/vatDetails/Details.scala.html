@@ -204,7 +204,7 @@
       </div>
       }
 
-      @if(appConfig.features.showAnnualAccounting() && detailsViewModel.isAACustomer){
+      @if(appConfig.features.annualAccountingFeatureEnabled() && detailsViewModel.isAACustomer){
       <div class="govuk-grid-column-one-third">
           @annualAccountingSection()
       </div>

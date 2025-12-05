@@ -729,7 +729,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(true)
+      mockConfig.features.annualAccountingFeatureEnabled(true)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe "Annual Accounting"
     }
   }
@@ -739,7 +739,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(true)
+      mockConfig.features.annualAccountingFeatureEnabled(true)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }
@@ -749,7 +749,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(false)
+      mockConfig.features.annualAccountingFeatureEnabled(false)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }
@@ -759,7 +759,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(false)
+      mockConfig.features.annualAccountingFeatureEnabled(false)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }
