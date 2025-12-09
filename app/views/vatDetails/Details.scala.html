@@ -135,7 +135,11 @@
         @annualAccountingAlertContent
       }
       <div>
-        @penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)
+        @penaltiesBanner(
+          detailsViewModel.penaltiesSummary,
+          detailsViewModel.poaChangedOn.isDefined,
+          detailsViewModel.annualAccountingPaymentOverdue || detailsViewModel.annualAccountingChangedOn.isDefined
+        )
       </div>
     </div>
   }

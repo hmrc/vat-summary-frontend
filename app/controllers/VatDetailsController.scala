@@ -172,24 +172,28 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
-    val aaOverdue: Boolean = (standingRequestAA, payments) match {
-      case (Some(sr), Right(Some(model))) =>
-        val aaDueDates: Set[LocalDate] =
-          sr.standingRequests
-            .filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
-            .flatMap(_.requestItems.map(ri => LocalDate.parse(ri.dueDate)))
-            .toSet
-        model.financialTransactions.exists { txn =>
-          (txn.chargeType == models.payments.AAQuarterlyInstalments || txn.chargeType == models.payments.AAMonthlyInstalment) &&
-            aaDueDates.contains(txn.due) &&
-            txn.isOverdue(today)
-        }
-      case (Some(sr), _) =>
-        sr.standingRequests
+    val aaDueDates: Set[LocalDate] =
+      standingRequestAA.toSeq
+        .flatMap(_.standingRequests
           .filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
-          .flatMap(_.requestItems.map(ri => LocalDate.parse(ri.dueDate)))
-          .exists(_.isBefore(today))
-      case _ => false
+          .flatMap(_.requestItems.map(ri => LocalDate.parse(ri.dueDate))))
+        .toSet
+
+    val paymentsModelOpt: Option[Payments] = payments.toOption.flatten
+
+    val overdueFromTxns: Boolean = paymentsModelOpt.exists { model =>
+      model.financialTransactions.exists { transaction =>
+        (transaction.chargeType == models.payments.AAQuarterlyInstalments || transaction.chargeType == models.payments.AAMonthlyInstalment) &&
+          aaDueDates.contains(transaction.due) &&
+          transaction.isOverdue(today)
+      }
+    }
+
+    val overdueFromScheduleOnly: Boolean = aaDueDates.exists(_.isBefore(today))
+
+    val aaOverdue: Boolean = paymentsModelOpt match {
+      case Some(_) => overdueFromTxns
+      case None    => overdueFromScheduleOnly
     }
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
