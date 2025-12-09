@@ -172,6 +172,25 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
+    val aaOverdue: Boolean = (standingRequestAA, payments) match {
+      case (Some(sr), Right(Some(model))) =>
+        val aaDueDates: Set[LocalDate] =
+          sr.standingRequests
+            .filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
+            .flatMap(_.requestItems.map(ri => LocalDate.parse(ri.dueDate)))
+            .toSet
+        model.financialTransactions.exists { txn =>
+          (txn.chargeType == models.payments.AAQuarterlyInstalments || txn.chargeType == models.payments.AAMonthlyInstalment) &&
+            aaDueDates.contains(txn.due) &&
+            txn.isOverdue(today)
+        }
+      case (Some(sr), _) =>
+        sr.standingRequests
+          .filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
+          .flatMap(_.requestItems.map(ri => LocalDate.parse(ri.dueDate)))
+          .exists(_.isBefore(today))
+      case _ => false
+    }
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val partyType: Option[String] = retrievePartyType(accountDetails)
@@ -208,7 +227,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       isPoaActiveForCustomer,
       poaChangedOn,
       isAnnualAccountingCustomer,
-      annualAccountingChangedOn
+      annualAccountingChangedOn,
+      aaOverdue
     )
   }
 
