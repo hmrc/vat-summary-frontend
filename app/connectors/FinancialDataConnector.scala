@@ -74,6 +74,23 @@ class FinancialDataConnector @Inject()(http: HttpClient,
       }
   }
 
+  def getVatLiabilitiesWithDueDate(vrn: String, from: LocalDate, to: LocalDate)
+                       (implicit hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[HttpResult[Seq[models.viewModels.PaymentHistoryWithDueDate]]] = {
+    import connectors.httpParsers.PaymentHistoryWithDueDateHttpParser.PaymentHistoryWithDueDateReads
+    logger.debug(s"[FinancialDataConnector][getVatLiabilitiesWithDueDate] - Calling financial API from $from to $to.")
+    http.GET(paymentsUrl(vrn), Seq(
+      "dateFrom" -> from.toString,
+      "dateTo" -> to.toString
+    )).map {
+      case right@Right(_) =>
+        logger.debug(s"[FinancialDataConnector][getVatLiabilitiesWithDueDate] Payments: \n\n $right")
+        right
+      case left@Left(error) =>
+        logger.warn("[FinancialDataConnector][getVatLiabilitiesWithDueDate] received error: " + error.message)
+        left
+    }
+  }
   def getPaymentsForPeriod(vrn: String, from: LocalDate, to: LocalDate)
                           (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Payments]] = {
     import connectors.httpParsers.PaymentsHttpParser.PaymentsReads

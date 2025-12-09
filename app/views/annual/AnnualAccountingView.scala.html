@@ -189,7 +189,7 @@
                         <dt class="govuk-summary-list__key">
                           @if(payment.isBalancing) {
                             @messages("annualAccounting.balancing")
-                            <p class="govuk-hint govuk-!-font-size-16">@MessageDateFormat.format(payment.dueDate)</p>
+                            <p class="govuk-hint govuk-!-font-size-16 ">@MessageDateFormat.format(payment.dueDate)</p>
                           } else {
                             @MessageDateFormat.format(payment.dueDate)
                           }

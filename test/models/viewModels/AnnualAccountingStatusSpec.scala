@@ -27,7 +27,6 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
 
   private def standingRequest(periodStart: String, periodEnd: String, payments: Seq[(String, BigDecimal)]) = {
     val items = payments.zipWithIndex.map { case ((due, amt), idx) =>
-      // For AA SR items, use the specific due date as the period end for that instalment
       RequestItem((idx + 1).toString, "25A1", periodStart, due, due, amt, None, None)
     }.toList
     StandingRequest(
@@ -59,7 +58,10 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         standingRequestResponse = sr,
         today = today,
         returnObligations = None,
-        paymentsHistory = history,
+        paymentsHistoryByDue = Seq(
+          PaymentHistoryWithDueDate(chargeType = AAMonthlyInstalment, dueDate = LocalDate.parse("2025-03-31"), clearedDate = Some(LocalDate.parse("2025-03-30"))),
+          PaymentHistoryWithDueDate(chargeType = AAMonthlyInstalment, dueDate = LocalDate.parse("2025-04-30"), clearedDate = Some(LocalDate.parse("2025-05-02")))
+        ),
         paymentsOpt = Some(payments),
         isAgent = false,
         hasDirectDebit = Some(false)
@@ -84,7 +86,7 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         standingRequestResponse = sr,
         today = today,
         returnObligations = None,
-        paymentsHistory = Seq.empty,
+        paymentsHistoryByDue = Seq.empty,
         paymentsOpt = Some(payments),
         isAgent = false,
         hasDirectDebit = Some(false)

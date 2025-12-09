@@ -60,20 +60,22 @@ class AnnualAccountingController @Inject() (
         standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
         obligationsResult <- vatDetailService.getReturnObligations(user.vrn)
         ddStatusResult <- paymentsService.getDirectDebitStatus(user.vrn)
-        paymentsHistory <- paymentsService.getPaymentsHistory(user.vrn, today, None)
+        paymentsHistoryByDue <- paymentsService.getLiabilitiesWithDueDate(user.vrn, today, None)
         paymentsForPeriod <- {
           val aaRequests = standingRequestOpt.toSeq.flatMap(_.standingRequests).filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
-          val schedulesRanges = aaRequests.map { d =>
-            val starts = d.requestItems.map(ri => LocalDate.parse(ri.startDate))
-            val ends = d.requestItems.map(ri => LocalDate.parse(ri.endDate))
-            (starts.min, ends.max)
+          val schedulesRanges = aaRequests.flatMap { d =>
+            val byDue = d.requestItems.sortBy(ri => LocalDate.parse(ri.dueDate))
+            byDue.headOption.map { first =>
+              val last = byDue.last
+              (LocalDate.parse(first.startDate), LocalDate.parse(last.endDate))
+            }
           }
           val (from, to) = schedulesRanges.find { case (s, e) => !today.isBefore(s) && !today.isAfter(e) }
             .orElse(schedulesRanges.sortBy(_._2).lastOption)
             .getOrElse(today -> today)
           paymentsService.getPaymentsForPeriod(user.vrn, from, to)
         }
-        viewResult <- handleData(serviceInfoContent, today, standingRequestOpt, obligationsResult, ddStatusResult, paymentsHistory, paymentsForPeriod, view)
+        viewResult <- handleData(serviceInfoContent, today, standingRequestOpt, obligationsResult, ddStatusResult, paymentsHistoryByDue, paymentsForPeriod, view)
       } yield viewResult).recoverWith { case e =>
         logger.error(s"Unexpected failure in AnnualAccountingController: ${e.getMessage} For: ${user.vrn}")
         serviceErrorHandler.showInternalServerError
@@ -89,7 +91,7 @@ class AnnualAccountingController @Inject() (
       standingRequestOpt: Option[StandingRequest],
       obligationsResult: ServiceResponse[Option[VatReturnObligations]],
       ddStatusResult: ServiceResponse[models.DirectDebitStatus],
-      paymentsHistoryResult: ServiceResponse[Seq[models.viewModels.PaymentsHistoryModel]],
+      paymentsHistoryByDueResult: ServiceResponse[Seq[models.viewModels.PaymentHistoryWithDueDate]],
       paymentsResult: ServiceResponse[models.payments.Payments],
       view: AnnualAccountingView
   )(implicit request: Request[AnyContent], user: User): Future[Result] = {
@@ -102,9 +104,9 @@ class AnnualAccountingController @Inject() (
         }
         val obligationsOpt = obligationsResult.toOption.flatten
         val hasDirectDebit: Option[Boolean] = ddStatusResult.toOption.map(_.directDebitMandateFound)
-        val paymentsHistory = paymentsHistoryResult.toOption.getOrElse(Seq.empty)
+        val paymentsHistoryByDue = paymentsHistoryByDueResult.toOption.getOrElse(Seq.empty)
         val paymentsOpt = paymentsResult.toOption
-        val viewModel = buildViewModel(standingRequest, today, obligationsOpt, paymentsHistory, paymentsOpt, user.isAgent, hasDirectDebit)
+        val viewModel = buildViewModel(standingRequest, today, obligationsOpt, paymentsHistoryByDue, paymentsOpt, user.isAgent, hasDirectDebit)
         logger.info(s"[AnnualAccountingController][show] rendering AA page for ${user.vrn}")
         Future.successful(Ok(view(viewModel, serviceInfoContent)))
       case None =>
@@ -116,12 +118,13 @@ class AnnualAccountingController @Inject() (
 
 object AnnualAccountingController {
   import models.ChangedOnVatPeriod.RequestCategoryType4
+  import models.payments.{AAQuarterlyInstalments, AAMonthlyInstalment}
 
   def buildViewModel(
       standingRequestResponse: StandingRequest,
       today: LocalDate,
       returnObligations: Option[VatReturnObligations],
-      paymentsHistory: Seq[models.viewModels.PaymentsHistoryModel],
+      paymentsHistoryByDue: Seq[models.viewModels.PaymentHistoryWithDueDate],
       paymentsOpt: Option[models.payments.Payments],
       isAgent: Boolean,
       hasDirectDebit: Option[Boolean]
@@ -129,76 +132,78 @@ object AnnualAccountingController {
     val aaStandingRequests = standingRequestResponse.standingRequests.filter(_.requestCategory == RequestCategoryType4)
 
     val periods = aaStandingRequests
-      .map { srd =>
-        val sortedByDue = srd.requestItems.sortBy(ri => LocalDate.parse(ri.dueDate))
-        val allStarts = sortedByDue.map(ri => LocalDate.parse(ri.startDate))
-        val allEnds = sortedByDue.map(ri => LocalDate.parse(ri.endDate))
-        val startDate = allStarts.min
-        val endDate = allEnds.max
+      .flatMap { srd =>
+        if (srd.requestItems.isEmpty) {
+          Nil
+        } else {
+          val sortedByDue = srd.requestItems.sortBy(ri => LocalDate.parse(ri.dueDate))
+          val first = sortedByDue.head
+          val last = sortedByDue.last
+          val scheduleStart = LocalDate.parse(first.startDate)
+          val scheduleEnd = LocalDate.parse(last.endDate)
+          val payments = sortedByDue.map { item =>
+              val dueDate = LocalDate.parse(item.dueDate)
 
-        val payments = sortedByDue.map { item =>
-          val dueDate = LocalDate.parse(item.dueDate)
-          val startDate = LocalDate.parse(item.startDate)
-          val endDate = LocalDate.parse(item.endDate)
+              val clearedForThisDueOpt = paymentsHistoryByDue.find(_.dueDate == dueDate).flatMap(_.clearedDate)
 
-          val clearedDateOpt = paymentsHistory
-            .filter(ph => ph.amount == item.amount && ph.taxPeriodFrom.contains(startDate) && ph.taxPeriodTo.contains(endDate))
-            .flatMap(_.clearedDate)
-            .sorted
-            .headOption
+              val paymentMatchOpt = paymentsOpt.flatMap { payments =>
+                val txns = payments.financialTransactions.filter(p =>
+                  p.chargeType == AAQuarterlyInstalments || p.chargeType == AAMonthlyInstalment
+                )
+                txns.find(p => p.due == dueDate)
+              }
 
-          val paymentMatchOpt = paymentsOpt.flatMap { payments =>
-            payments.financialTransactions.find { p =>
-              p.originalAmount == item.amount &&
-              p.due == dueDate &&
-              p.periodKey.contains(item.periodKey)
-            }
-          }
-
-          val status: AAPaymentStatus =
-            paymentMatchOpt match {
-              case Some(pmt) if pmt.outstandingAmount == 0 =>
-                clearedDateOpt match {
-                  case Some(cleared) if cleared.isAfter(dueDate) => AAPaymentStatus.PaidLate
-                  case _ => AAPaymentStatus.Paid
+              val status: AAPaymentStatus =
+                paymentMatchOpt match {
+                  case Some(payment) if payment.outstandingAmount == 0 =>
+                    clearedForThisDueOpt match {
+                      case Some(cleared) if cleared.isAfter(dueDate) => AAPaymentStatus.PaidLate
+                      case _ => AAPaymentStatus.Paid
+                    }
+                  case Some(payment) if payment.outstandingAmount > 0 =>
+                    if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
+                  case _ =>
+                    if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
                 }
-              case Some(pmt) if pmt.outstandingAmount > 0 =>
-                if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
-              case _ =>
-                if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
+              AAPayment(isBalancing = false, dueDate = dueDate, amount = Some(item.amount), status = status)
             }
-          AAPayment(isBalancing = false, dueDate = dueDate, amount = Some(item.amount), status = status)
-        }
 
-        val balancingDue: Option[LocalDate] = returnObligations.flatMap { obligations =>
-          obligations.obligations.find { ob =>
-            !ob.periodTo.isBefore(startDate) && !ob.periodFrom.isAfter(endDate)
-          }.map(_.due)
-        }
-
-        val balancingPayment = AAPayment(
-          isBalancing = true,
-          dueDate = balancingDue.getOrElse(endDate.plusMonths(2)),
-          amount = None,
-          status = {
-            val bd = balancingDue.getOrElse(endDate.plusMonths(2))
-            if (bd.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
+          val balancingDue: Option[LocalDate] = returnObligations.flatMap { obligations =>
+            obligations.obligations.find { ob =>
+              !ob.periodTo.isBefore(scheduleStart) && !ob.periodFrom.isAfter(scheduleEnd)
+            }.map(_.due)
           }
-        )
 
-        val isCurrent = !today.isBefore(startDate) && !today.isAfter(endDate)
-        val isPast = endDate.isBefore(today)
+          val balancingPayment = AAPayment(
+            isBalancing = true,
+            dueDate = balancingDue.getOrElse(scheduleEnd.plusMonths(2)),
+            amount = None,
+            status = {
+              val bd = balancingDue.getOrElse(scheduleEnd.plusMonths(2))
+              if (bd.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
+            }
+          )
 
-        AASchedulePeriod(
-          startDate = startDate,
-          endDate = endDate,
-          payments = payments :+ balancingPayment,
-          isCurrent = isCurrent,
-          isPast = isPast
-        )
+          val lastInstalmentDue = LocalDate.parse(last.dueDate)
+          val latestDue = balancingDue.filter(_.isAfter(lastInstalmentDue)).getOrElse(lastInstalmentDue)
+          val isCurrent = !latestDue.isBefore(today)
+          val isPast = latestDue.isBefore(today)
+
+          List(
+            AASchedulePeriod(
+              startDate = scheduleStart,
+              endDate = scheduleEnd,
+              payments = payments :+ balancingPayment,
+              isCurrent = isCurrent,
+              isPast = isPast
+            )
+          )
+        }
       }
 
-    val currentPeriodOpt = periods.sortBy(_.startDate).find(p => !p.isPast && (p.isCurrent || p.startDate.isAfter(today)))
+    val currentPeriodOpt =
+      periods.sortBy(_.endDate).find(p => p.payments.exists(pmt => !pmt.dueDate.isBefore(today)))
+        .orElse(periods.sortBy(_.endDate).lastOption)
     val updatedPeriods = periods.map(p => p.copy(isCurrent = currentPeriodOpt.contains(p)))
 
     val currentPeriods = updatedPeriods.filter(_.isCurrent).toList
@@ -220,7 +225,8 @@ object AnnualAccountingController {
 
     val nextPaymentOpt = currentPeriods
       .flatMap(_.payments)
-      .filter(p => !p.dueDate.isBefore(today)) 
+      .filter(p => !p.dueDate.isBefore(today))
+      .sortBy(_.dueDate)
       .headOption
 
     val mostRecentChangedOn: Option[LocalDate] =

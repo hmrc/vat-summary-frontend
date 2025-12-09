@@ -198,16 +198,16 @@
       </div>
     }
 
-      @if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
-      <div class="govuk-grid-column-one-third">
-          @vatPaymentOnAccountSchedule()
-      </div>
-      }
 
+      
       @if(appConfig.features.annualAccountingFeatureEnabled() && detailsViewModel.isAACustomer){
-      <div class="govuk-grid-column-one-third">
-          @annualAccountingSection()
-      </div>
-      }
+        <div class="govuk-grid-column-one-third">
+            @annualAccountingSection()
+        </div>
+        } else if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
+          <div class="govuk-grid-column-one-third">
+              @vatPaymentOnAccountSchedule()
+          </div>
+        }
   </div>
 }

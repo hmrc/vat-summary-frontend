@@ -63,6 +63,19 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     }
   }
 
+  def getLiabilitiesWithDueDate(vrn: String, currentDate: LocalDate, migrationDate: Option[LocalDate])
+                        (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Seq[models.viewModels.PaymentHistoryWithDueDate]]] = {
+    val from: LocalDate = migrationDate match {
+      case Some(migDate) if migDate.isAfter(currentDate.minusYears(2)) => migDate
+      case _ => currentDate.minusYears(2)
+    }
+    val to: LocalDate = currentDate
+    financialDataConnector.getVatLiabilitiesWithDueDate(vrn, from, to).map {
+      case Right(rows) => Right(rows)
+      case Left(_) => Left(VatLiabilitiesError)
+    }
+  }
+
   def setupPaymentsJourney(journeyDetails: PaymentDetailsModel)
                           (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[String]] = {
     paymentsConnector.setupJourney(journeyDetails).map {
