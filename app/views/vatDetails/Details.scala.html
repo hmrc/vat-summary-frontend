@@ -88,7 +88,7 @@
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.alert.heading")</h3>
     <p class="govuk-body" id="aa-alert-information">@messages("vatDetails.annual_accounting.alert.message") @MessageDateFormat.formatLong(detailsViewModel.annualAccountingChangedOn.get).
         @messages("vatDetails.annual_accounting.alert.fordetails")
-        <a class="govuk-notification-banner__link" href="/vat-through-software/interim-payments" rel="noreferrer noopener">
+        <a class="govuk-notification-banner__link" href="@{controllers.routes.AnnualAccountingController.show.url}" rel="noreferrer noopener">
         @messages("vatDetails.annual_accounting.alert.link")</a>.
     </p>
   }
@@ -99,10 +99,9 @@
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.overdue.heading")</h3>
     <p class="govuk-body" id="aa-overdue-information">
       @messages("vatDetails.annual_accounting.overdue.message")
-      @messages("vatDetails.annual_accounting.overdue.fordetails")
-      <a class="govuk-notification-banner__link" href="/vat-through-software/interim-payments" rel="noreferrer noopener">
+      <a class="govuk-notification-banner__link" href="@{controllers.routes.WhatYouOweController.show.url}" rel="noreferrer noopener">
         @messages("vatDetails.annual_accounting.overdue.link")
-      </a>.
+      </a>
     </p>
   }
 }

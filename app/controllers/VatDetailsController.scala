@@ -172,28 +172,14 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
-    val aaDueDates: Set[LocalDate] =
-      standingRequestAA.toSeq
-        .flatMap(_.standingRequests
-          .filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
-          .flatMap(_.requestItems.map(ri => LocalDate.parse(ri.dueDate))))
-        .toSet
-
+    // Overdue solely based on existing AA instalment charge types
     val paymentsModelOpt: Option[Payments] = payments.toOption.flatten
-
-    val overdueFromTxns: Boolean = paymentsModelOpt.exists { model =>
-      model.financialTransactions.exists { transaction =>
-        (transaction.chargeType == models.payments.AAQuarterlyInstalments || transaction.chargeType == models.payments.AAMonthlyInstalment) &&
-          aaDueDates.contains(transaction.due) &&
-          transaction.isOverdue(today)
+    val aaOverdue: Boolean = paymentsModelOpt.exists { model =>
+      model.financialTransactions.exists { txn =>
+        (txn.chargeType == models.payments.AAQuarterlyInstalments || txn.chargeType == models.payments.AAMonthlyInstalment) &&
+          txn.outstandingAmount > 0 &&
+          txn.isOverdue(today)
       }
-    }
-
-    val overdueFromScheduleOnly: Boolean = aaDueDates.exists(_.isBefore(today))
-
-    val aaOverdue: Boolean = paymentsModelOpt match {
-      case Some(_) => overdueFromTxns
-      case None    => overdueFromScheduleOnly
     }
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
