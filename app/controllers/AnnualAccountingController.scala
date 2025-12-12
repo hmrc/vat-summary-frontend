@@ -184,34 +184,41 @@ object AnnualAccountingController {
             }
           )
 
-          val lastInstalmentDue = LocalDate.parse(last.dueDate)
-          val latestDue = balancingDue.filter(_.isAfter(lastInstalmentDue)).getOrElse(lastInstalmentDue)
-          val isCurrent = !latestDue.isBefore(today)
-          val isPast = latestDue.isBefore(today)
-
           List(
             AASchedulePeriod(
               startDate = scheduleStart,
               endDate = scheduleEnd,
               payments = payments :+ balancingPayment,
-              isCurrent = isCurrent,
-              isPast = isPast
+              isCurrent = false,
+              isPast = false
             )
           )
         }
       }
 
-    val currentPeriodOpt =
-      periods.sortBy(_.endDate).find(p => p.payments.exists(pmt => !pmt.dueDate.isBefore(today)))
-        .orElse(periods.sortBy(_.endDate).lastOption)
-    val updatedPeriods = periods.map(p => p.copy(isCurrent = currentPeriodOpt.contains(p)))
+    val periodsWithFlagsCleared = periods.map(_.copy(isCurrent = false, isPast = false))
+    val sortedPeriods = periodsWithFlagsCleared.sortBy(_.startDate)
 
-    val currentPeriods = updatedPeriods.filter(_.isCurrent).toList
-    val pastPeriods = updatedPeriods
-      .filter(_.isPast)
-      .sortBy(_.endDate)(Ordering[LocalDate].reverse)
-      .take(1)
-      .toList
+    val currentPeriodOpt =
+      sortedPeriods.find(p => !today.isBefore(p.startDate) && !today.isAfter(p.endDate))
+        .orElse(sortedPeriods.reverse.headOption)
+
+    val pastPeriodOpt = currentPeriodOpt.flatMap { cp =>
+      sortedPeriods
+        .filter(_.endDate.isBefore(cp.startDate))
+        .sortBy(_.endDate)(Ordering[LocalDate].reverse)
+        .headOption
+    }
+
+    val updatedPeriods = periodsWithFlagsCleared.map { p =>
+      p.copy(
+        isCurrent = currentPeriodOpt.contains(p),
+        isPast = pastPeriodOpt.contains(p)
+      )
+    }
+
+    val currentPeriods = updatedPeriods.filter(_.isCurrent)
+    val pastPeriods = updatedPeriods.filter(_.isPast)
 
     val frequencyOpt = currentPeriods.headOption.flatMap { cp =>
       val nonBalancingCount = cp.payments.count(p => !p.isBalancing)

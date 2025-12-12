@@ -110,6 +110,7 @@ payment.checkPoaSchedule = Check your payments on account schedule
 payment.stillMake = You can still
 payment.stillMakeLink = make a payment (opens in a new tab)
 payment.paymentOnAccount = Check your payments on account schedule
+payment.annualAccountingSchedule = Check your Annual Accounting schedule
 
 
 

@@ -95,6 +95,79 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
       val period = vm.currentPeriods.headOption.getOrElse(vm.pastPeriods.head)
       period.payments.head.status shouldBe AAPaymentStatus.Overdue
     }
+
+    "treat the schedule that overlaps today as current, even if it started last year" in {
+      val today = LocalDate.parse("2020-03-15")
+
+      val pastItems = List(
+        RequestItem("1", "18A1", "2018-07-01", "2019-06-30", "2019-06-30", 100, None, None)
+      )
+
+      val currentItems = List(
+        RequestItem("1", "19A1", "2019-07-01", "2020-06-30", "2020-03-31", 200, None, None)
+      )
+
+      val futureItems = List(
+        RequestItem("1", "20A1", "2020-07-01", "2021-06-30", "2021-03-31", 300, None, None)
+      )
+
+      val standingRequest = StandingRequest(
+        processingDate = "2020-01-01",
+        standingRequests = List(
+          StandingRequestDetail("REQ-PAST", "4", "2018-07-01", Some("2018-07-15"), pastItems),
+          StandingRequestDetail("REQ-CURR", "4", "2019-07-01", Some("2019-07-15"), currentItems),
+          StandingRequestDetail("REQ-NEXT", "4", "2020-07-01", Some("2020-07-15"), futureItems)
+        )
+      )
+
+      val vm = AnnualAccountingController.buildViewModel(
+        standingRequestResponse = standingRequest,
+        today = today,
+        returnObligations = None,
+        paymentsHistoryByDue = Seq.empty,
+        paymentsOpt = None,
+        isAgent = false,
+        hasDirectDebit = Some(false)
+      )
+
+      vm.currentPeriods.map(_.startDate.getYear) shouldBe List(2019)
+      vm.pastPeriods.map(_.startDate.getYear) shouldBe List(2018)
+    }
+
+    "pick the previous accounting period (by date range) as past" in {
+      val today = LocalDate.parse("2025-06-15")
+
+      val currentItems = List(
+        RequestItem("1", "25A1", "2025-02-01", "2026-01-31", "2025-11-30", 250, None, None)
+      )
+
+      val previousItems = List(
+        RequestItem("1", "24A1", "2024-02-01", "2025-01-31", "2024-11-30", 225, None, None)
+      )
+
+      val standingRequest = StandingRequest(
+        processingDate = "2025-01-01",
+        standingRequests = List(
+          StandingRequestDetail("REQ-PREV", "4", "2024-01-01", Some("2024-01-15"), previousItems),
+          StandingRequestDetail("REQ-CURR", "4", "2025-01-01", Some("2025-01-15"), currentItems)
+        )
+      )
+
+      val vm = AnnualAccountingController.buildViewModel(
+        standingRequestResponse = standingRequest,
+        today = today,
+        returnObligations = None,
+        paymentsHistoryByDue = Seq.empty,
+        paymentsOpt = None,
+        isAgent = false,
+        hasDirectDebit = Some(false)
+      )
+
+      vm.currentPeriods.head.startDate shouldBe LocalDate.parse("2025-02-01")
+      vm.pastPeriods.head.startDate shouldBe LocalDate.parse("2024-02-01")
+      vm.currentPeriods.head.isCurrent shouldBe true
+      vm.pastPeriods.head.isPast shouldBe true
+    }
   }
 }
 
