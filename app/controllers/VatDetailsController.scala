@@ -172,7 +172,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
-    // Overdue solely based on existing AA instalment charge types
+
     val paymentsModelOpt: Option[Payments] = payments.toOption.flatten
     val aaOverdue: Boolean = paymentsModelOpt.exists { model =>
       model.financialTransactions.exists { txn =>
@@ -193,6 +193,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, today)
     val isAnnualAccountingCustomer: Boolean = obligations.fold(_ => false, _.exists(_.obligations.exists(_.periodKey.startsWith("Y"))))
     val annualAccountingChangedOn: Option[LocalDate] = annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequestAA, today)
+
     VatDetailsViewModel(
       paymentModel.displayData,
       returnModel.displayData,
