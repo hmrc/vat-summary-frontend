@@ -90,10 +90,9 @@ vatDetails.annual_accounting.alert.message=The amount that you owe for each peri
 vatDetails.annual_accounting.alert.fordetails=For details,
 vatDetails.annual_accounting.alert.link=check your schedule
 
-# Annual Accounting overdue alert
 vatDetails.annual_accounting.overdue.title=Important
-vatDetails.annual_accounting.overdue.heading=You have an overdue payment
-vatDetails.annual_accounting.overdue.message=Making a late payment will accrue late payment interest. You can be removed from the Annual Accounting Scheme if you miss too many.
+vatDetails.annual_accounting.overdue.heading=You have an overdue annual accounting payment
+vatDetails.annual_accounting.overdue.message=You have an overdue annual accounting payment. Making a late payment will accrue late payment interest. You can be removed from the Annual Accounting Scheme if you miss too many.
 vatDetails.annual_accounting.overdue.link=Check what you owe.
 
 returnObligation.noReturn = No returns due right now
@@ -220,6 +219,10 @@ whatYouOwe.latePayment.p3 = Late payment interest may be charged if you do not s
 
 whatYouOwe.inset = Payments due for your client’s payments on account arrangement will not show here, until their VAT return has been submitted. For upcoming payment details
 whatYouOwe.agent.inset =  Payments due for your payments on account arrangement will not show here, until you have submitted your VAT return. For upcoming payment details 
+whatYouOwe.aa.agent.inset = Payments due for your client’s Annual Accounting arrangement will not show here until their VAT return has been submitted. For upcoming payment details
+whatYouOwe.aa.agent.linkText = check their schedule
+whatYouOwe.aa.inset = Payments due for your Annual Accounting arrangement will not show here until you have submitted your VAT return. For upcoming payment details
+whatYouOwe.aa.linkText = check your schedule
 
 existingDD.banner.p1 = You have a Direct Debit Instruction in place.
 existingDD.banner.p2 = Only the amount due on your VAT Return will be collected by Direct Debit.

@@ -51,7 +51,8 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     mockPenaltyDetailsService,
     mockWYOSessionService,
     mockAuditService,
-    mockPOACheckService
+    mockPOACheckService,
+    mockAnnualAccountingService
   )
 
   "The WhatYouOweController .show method" when {
@@ -112,6 +113,32 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           document.select(".govuk-inset-text .govuk-link").attr("href") shouldBe "/vat-through-software/payments-on-account"
         }
 
+      }
+
+      "the user has open payments and is an Annual Accounting customer" when {
+
+        lazy val result = {
+          mockConfig.features.annualAccountingFeatureEnabled(true)
+          mockPrincipalAuth()
+          mockServiceInfoCall()
+          mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockCustomerInfo(Right(customerInformationMax))
+          mockPOACheckServiceCall()
+          mockAnnualAccountingServiceCall()
+          mockDateServiceCall()
+          mockPenaltyDetailsServiceCall()
+          mockGetDirectDebitStatus(Right(directDebitNotEnrolled))
+          mockWYOSessionServiceCall()
+          mockAudit()
+          val response = controller.show(fakeRequest)
+          mockConfig.features.annualAccountingFeatureEnabled(false)
+          response
+        }
+
+        "return OK" in {
+          status(result) shouldBe OK
+        }
       }
 
       "the user has no open payments" should {
