@@ -152,6 +152,7 @@ payment.check = Gwirio'r hyn sydd arnoch
 payment.stillMake = Mae'n dal yn bosibl i chi
 payment.stillMakeLink = dalu (yn agor mewn tab newydd)
 payment.paymentOnAccount = Gwiriwch eich amserlen ar gyfer taliadau ar gyfrif
+payment.annualAccountingSchedule = Gwiriwch eich amserlen Cyfrifyddu Blynyddol
 
 paymentsOnAccount.title = Taliadau ar gyfrif
 paymentsOnAccount.heading = Taliadau ar gyfrif
