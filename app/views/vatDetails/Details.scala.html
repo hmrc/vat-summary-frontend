@@ -74,7 +74,10 @@
 }
 
 @poaAlertContent = {
-  @if(detailsViewModel.poaChangedOn.isDefined) {
+  @if(
+    detailsViewModel.poaChangedOn.isDefined &&
+      detailsViewModel.isPoaActiveForCustomer
+  ) {
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.payment_on_account.alert.heading")</h3>
     <p class="govuk-body" id="poa-alert-information">@messages("vatDetails.payment_on_account.alert.message") @MessageDateFormat.formatLong(detailsViewModel.poaChangedOn.get).
       <a class="govuk-notification-banner__link" href="@controllers.routes.PaymentsOnAccountController.show.url" rel="noreferrer noopener">
@@ -84,7 +87,11 @@
 }
 
 @annualAccountingAlertContent = {
-  @if(detailsViewModel.annualAccountingChangedOn.isDefined) {
+  @if(
+    detailsViewModel.annualAccountingChangedOn.isDefined &&
+      detailsViewModel.isAACustomer &&
+      appConfig.features.annualAccountingFeatureEnabled()
+  ) {
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.alert.heading")</h3>
     <p class="govuk-body" id="aa-alert-information">@messages("vatDetails.annual_accounting.alert.message") @MessageDateFormat.formatLong(detailsViewModel.annualAccountingChangedOn.get).
         @messages("vatDetails.annual_accounting.alert.fordetails")
@@ -95,11 +102,15 @@
 }
 
 @annualAccountingOverdueContent = {
-  @if(detailsViewModel.annualAccountingPaymentOverdue) {
+  @if(
+    detailsViewModel.annualAccountingPaymentOverdue &&
+      detailsViewModel.isAACustomer &&
+      appConfig.features.annualAccountingFeatureEnabled()
+  ) {
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.overdue.heading")</h3>
     <p class="govuk-body" id="aa-overdue-information">
       @messages("vatDetails.annual_accounting.overdue.message")
-      <a class="govuk-notification-banner__link" href="@{controllers.routes.WhatYouOweController.show.url}" rel="noreferrer noopener">
+      <a class="govuk-notification-banner__link" href="@{controllers.routes.AnnualAccountingController.show.url}" rel="noreferrer noopener">
         @messages("vatDetails.annual_accounting.overdue.link")
       </a>
     </p>
@@ -122,15 +133,19 @@
 }
 
 @combinedNotificationsContent = {
-  @if(detailsViewModel.annualAccountingPaymentOverdue || detailsViewModel.poaChangedOn.isDefined || detailsViewModel.annualAccountingChangedOn.isDefined) {
+  @if(
+    (detailsViewModel.annualAccountingPaymentOverdue && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled()) ||
+      (detailsViewModel.poaChangedOn.isDefined && detailsViewModel.isPoaActiveForCustomer) ||
+      (detailsViewModel.annualAccountingChangedOn.isDefined && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled())
+  ) {
     <div>
-      @if(detailsViewModel.annualAccountingPaymentOverdue) {
+      @if(detailsViewModel.annualAccountingPaymentOverdue && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled()) {
         @annualAccountingOverdueContent
       }
-      @if(detailsViewModel.poaChangedOn.isDefined) {
+      @if(detailsViewModel.poaChangedOn.isDefined && detailsViewModel.isPoaActiveForCustomer) {
         @poaAlertContent
       }
-      @if(detailsViewModel.annualAccountingChangedOn.isDefined) {
+      @if(detailsViewModel.annualAccountingChangedOn.isDefined && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled()) {
         @annualAccountingAlertContent
       }
       <div>

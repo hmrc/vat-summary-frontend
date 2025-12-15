@@ -717,8 +717,10 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page with AA overdue only" should {
+    mockConfig.features.annualAccountingFeatureEnabled(true)
     lazy val view = details(detailsModel.copy(
       annualAccountingPaymentOverdue = true,
+      isAACustomer = true,
       poaChangedOn = None,
       annualAccountingChangedOn = None
     ), Html("<nav>BTA Links</nav>"))
@@ -740,8 +742,12 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page with AA overdue, POA change and AA change" should {
+    mockConfig.features.annualAccountingFeatureEnabled(true)
+    mockConfig.features.poaActiveFeatureEnabled(true)
     val model = detailsModel.copy(
       annualAccountingPaymentOverdue = true,
+      isAACustomer = true,
+      isPoaActiveForCustomer = true,
       poaChangedOn = Some(LocalDate.parse("2025-03-01")),
       annualAccountingChangedOn = Some(LocalDate.parse("2025-02-01"))
     )

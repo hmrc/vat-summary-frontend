@@ -108,10 +108,17 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           case Some(email) =>
             email.email match {
               case Some(emailAddress) =>
-                val sessionValues: Seq[(String, String)] = Seq(SessionKeys.prepopulationEmailKey -> emailAddress) ++
-                  (if(details.hasPendingPpobChanges) Seq() else Seq(SessionKeys.inFlightContactKey -> "false"))
+                val baseRedirect = Redirect(appConfig.verifyEmailUrl)
+                  .addingToSession(SessionKeys.prepopulationEmailKey -> emailAddress)
 
-                Future.successful(Redirect(appConfig.verifyEmailUrl).addingToSession(sessionValues: _*))
+                val redirectWithSession =
+                  if (details.hasPendingPpobChanges) {
+                    baseRedirect.removingFromSession(SessionKeys.inFlightContactKey)
+                  } else {
+                    baseRedirect.addingToSession(SessionKeys.inFlightContactKey -> "false")
+                  }
+
+                Future.successful(redirectWithSession)
               case _ =>
                 logger.warn("[VatDetailsController][detailsRedirectToEmailVerification] " +
                   "Email address not returned from vat-subscription.")
