@@ -29,6 +29,7 @@ import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
 
 import java.time.LocalDate
+import scala.concurrent.{ExecutionContext, Future}
 
 class WhatYouOweControllerSpec extends ControllerBaseSpec {
 
@@ -54,6 +55,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
     mockPOACheckService,
     mockAnnualAccountingService
   )
+
+  (mockAnnualAccountingService.getStandingRequests(_: String)(_: HeaderCarrier, _: ExecutionContext))
+    .stubs(*, *, *)
+    .returning(Future.successful(None))
 
   "The WhatYouOweController .show method" when {
 
@@ -98,6 +103,10 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
           mockGetDirectDebitStatus(Right(directDebitNotEnrolled))
+          (mockAnnualAccountingService.getStandingRequests(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returning(Future.successful(None))
+            .anyNumberOfTimes()
           mockWYOSessionServiceCall()
           mockAudit()
           controller.show(fakeRequest)
@@ -118,21 +127,24 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
       "the user has open payments and is an Annual Accounting customer" when {
 
         lazy val result = {
-          mockConfig.features.annualAccountingFeatureEnabled(true)
+          mockAppConfig.features.annualAccountingFeatureEnabled(true)
           mockPrincipalAuth()
           mockServiceInfoCall()
           mockOpenPayments(Right(Some(Payments(Seq(payment, payment)))))
           mockCustomerInfo(Right(customerInformationMax))
           mockCustomerInfo(Right(customerInformationMax))
           mockPOACheckServiceCall()
-          mockAnnualAccountingServiceCall()
+          (mockAnnualAccountingService.getStandingRequests(_: String)(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *)
+            .returning(Future.successful(Some(standingRequestSampleAnnualAccounting)))
+            .anyNumberOfTimes()
           mockDateServiceCall()
           mockPenaltyDetailsServiceCall()
           mockGetDirectDebitStatus(Right(directDebitNotEnrolled))
           mockWYOSessionServiceCall()
           mockAudit()
           val response = controller.show(fakeRequest)
-          mockConfig.features.annualAccountingFeatureEnabled(false)
+          mockAppConfig.features.annualAccountingFeatureEnabled(false)
           response
         }
 

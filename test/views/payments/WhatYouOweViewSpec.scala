@@ -384,7 +384,8 @@ class WhatYouOweViewSpec extends ViewBaseSpec {
 
       lazy val view = {
         mockConfig.features.annualAccountingFeatureEnabled(true)
-        whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""), isPOAActive = true, isAACustomer = true)
+        // Controller suppresses POA banner when AA, so POA flag would be false here
+        whatYouOweView(whatYouOweViewModelBreathingSpace, Html(""), isPOAActive = false, isAACustomer = true)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
