@@ -100,7 +100,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                     case (Right(None), Right(_)) =>
                       val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
 
-                      Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, showPoaContent)))
+                      Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, showPoaContent, isAACustomer)))
                     case _ =>
                       val loggerMessage = (payments, penaltyDetails) match {
                         case (Left(_), Right(_)) => s"Financial API failed"

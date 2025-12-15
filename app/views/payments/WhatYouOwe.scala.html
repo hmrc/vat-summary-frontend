@@ -147,7 +147,8 @@
                 @messages("whatYouOwe.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check your schedule</a>.
               }
             </div>
-          } else if(appConfig.features.annualAccountingFeatureEnabled() && isAACustomer) {
+          } 
+          @if(appConfig.features.annualAccountingFeatureEnabled() && isAACustomer) {
             <div class="govuk-inset-text">
               @if(user.isAgent) {
                 @messages("whatYouOwe.aa.agent.inset")

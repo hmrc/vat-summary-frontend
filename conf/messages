@@ -398,6 +398,8 @@ noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.agent.however= however, they do have a 
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
 noPayments.twentyFourHoursAgent = If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe.
+noPayments.aa.intro = You do not owe anything here right now. However, you do have an Annual Accounting arrangement set up.
+noPayments.aa.agent.intro = Your client does not owe anything here right now. However, they do have an Annual Accounting arrangement set up.
 
 paymentsError.title = There is a problem with the service
 paymentsError.heading = Sorry, there is a problem with the service

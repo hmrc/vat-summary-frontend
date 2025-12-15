@@ -45,7 +45,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   "Rendering the no payments page for a principal user" when {
 
     lazy val view = {
-      noPaymentsView(user, Html(""), None, mandationStatus = "2", false)
+      noPaymentsView(user, Html(""), None, mandationStatus = "2", isPOAActive = false, isAACustomer = false)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -104,7 +104,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     val entityName = "Capgemini"
     lazy val view = {
-      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2", false)
+      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2", isPOAActive = false, isAACustomer = false)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -138,6 +138,45 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
       "has the correct href" in {
         element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
       }
+    }
+  }
+
+  "Rendering the no payments page for a principal Annual Accounting customer" should {
+
+    lazy val view = {
+      noPaymentsView(user, Html(""), None, mandationStatus = "2", isPOAActive = false, isAACustomer = true)
+    }
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "show the AA intro message" in {
+      elementText(Selectors.secondaryHeading) shouldBe
+        "You do not owe anything here right now. However, you do have an Annual Accounting arrangement set up."
+    }
+
+    "show the AA inset with link" in {
+      elementText(Selectors.noPaymentsDetail) should include ("Payments due for your Annual Accounting arrangement will not show here until you have submitted your VAT return. For upcoming payment details")
+      elementText(Selectors.paymentLink) shouldBe "check your schedule"
+      element(Selectors.paymentLink).attr("href") shouldBe controllers.routes.AnnualAccountingController.show.url
+    }
+  }
+
+  "Rendering the no payments page for an agent Annual Accounting customer" should {
+
+    val entityName = "Capgemini"
+    lazy val view = {
+      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2", isPOAActive = false, isAACustomer = true)
+    }
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "show the AA intro message" in {
+      elementText(Selectors.secondaryHeading) shouldBe
+        "Your client does not owe anything here right now. However, they do have an Annual Accounting arrangement set up."
+    }
+
+    "show the AA inset with agent link" in {
+      elementText(Selectors.noPaymentsDetail) should include ("Payments due for your client’s Annual Accounting arrangement will not show here until their VAT return has been submitted. For upcoming payment details")
+      elementText(Selectors.paymentLink) shouldBe "check their schedule"
+      element(Selectors.paymentLink).attr("href") shouldBe controllers.routes.AnnualAccountingController.show.url
     }
   }
 }

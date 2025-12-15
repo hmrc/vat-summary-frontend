@@ -443,6 +443,8 @@ noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
 noPayments.twentyFourHoursAgent = Os yw Ffurflen TAW wedi'i chyflwyno a bod angen i'ch cleient dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arno.
+noPayments.aa.intro = Nid ydych yn ddyledus dim byd yma ar hyn o bryd. Fodd bynnag, mae gennych drefniant Cyfrifyddu Blynyddol ar waith.
+noPayments.aa.agent.intro = Nid oes ar eich cleient unrhyw beth ar hyn o bryd. Fodd bynnag, mae ganddynt drefniant Cyfrifyddu Blynyddol ar waith.
 
 noPayments.oweNothing2 = Nid ydych yn ddyledus dim byd yma ar hyn o bryd,
 noPayments.howeverYou = fodd bynnag, mae gennych 
