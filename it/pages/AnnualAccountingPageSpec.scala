@@ -31,7 +31,7 @@ class AnnualAccountingPageSpec extends AnnualAccountingPageBaseSpec {
 
   "GET /interim-payments" should {
     "render the page with next upcoming payment message" in {
-      val request = setupRequest(PaymentsOnAccountStub.poaJson)
+      val request = setupRequest(PaymentsOnAccountStub.aaPoaJson)
       val response: WSResponse = await(request.get())
       val document: Document = Jsoup.parse(response.body)
 
