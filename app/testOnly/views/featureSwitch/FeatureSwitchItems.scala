@@ -41,7 +41,7 @@ class FeatureSwitchItems @Inject() () {
       formCheckBoxItem(form, ConfigKeys.showUserResearchBannerEnabled, "Enable the user research banner"),
       formCheckBoxItem(form, ConfigKeys.futureDateOffsetEnabled, "Enable the user future date to 35 days"),
       formCheckBoxItem(form, ConfigKeys.poaActiveFeatureEnabled, "Enable Payment On Account Schedule link"),
-      formCheckBoxItem(form, ConfigKeys.showAnnualAccounting, "Enable annual accounting link")
+      formCheckBoxItem(form, ConfigKeys.annualAccountingFeatureEnabled, "Enable annual accounting link")
     )
   }
 }

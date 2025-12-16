@@ -44,6 +44,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           isError = false,
           isHybridUser = false,
           isOverdue = false,
+          isAACustomer = false,
           isPoaActiveForCustomer = false
         )
         lazy val viewAsString = view.toString
@@ -78,6 +79,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           isError = false,
           isHybridUser = false,
           isOverdue = true,
+          isAACustomer = false,
           isPoaActiveForCustomer = false
         )
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -95,6 +97,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         isError = false,
         isHybridUser = false,
         isOverdue = false,
+        isAACustomer = false,
         isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -119,6 +122,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         isError = true,
         isHybridUser = false,
         isOverdue = false,
+        isAACustomer = false,
         isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -144,6 +148,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         isError = false,
         isHybridUser = false,
         isOverdue = false,
+        isAACustomer = false,
         isPoaActiveForCustomer = true)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -167,6 +172,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
         isError = false,
         isHybridUser = true,
         isOverdue = false,
+        isAACustomer = false,
         isPoaActiveForCustomer = false
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -183,6 +189,30 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
       }
     }
 
+    "the user is an annual accounting customer" should {
+      mockConfig.features.annualAccountingFeatureEnabled(true)
+      mockConfig.features.poaActiveFeatureEnabled(true)
+
+      lazy val view = nextPaymentSection(
+        Some("2017-03-08"),
+        hasMultiple = false,
+        isError = false,
+        isHybridUser = false,
+        isOverdue = false,
+        isAACustomer = true,
+        isPoaActiveForCustomer = true
+      )
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "display the annual accounting schedule link text" in {
+        elementText(Selectors.checkPOAlinktext) shouldBe "Check your Annual Accounting schedule"
+      }
+
+      "link to the interim payments page" in {
+        element(Selectors.checkPOAlink).attr("href") shouldBe controllers.routes.AnnualAccountingController.show.url
+      }
+    }
+
     "there is a payment on account schedule link to display when feature switch is enabled" when {
       mockConfig.features.poaActiveFeatureEnabled(true)
       "payment on account link is displayed when POAActiveUntil is valid" should {
@@ -192,6 +222,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           isError = false,
           isHybridUser = false,
           isOverdue = false,
+          isAACustomer = false,
           isPoaActiveForCustomer = true
         )
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -213,6 +244,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           isError = false,
           isHybridUser = false,
           isOverdue = true,
+          isAACustomer = false,
           isPoaActiveForCustomer = false
         )
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -231,6 +263,7 @@ class NextPaymentSectionTemplateSpec extends ViewBaseSpec {
           isError = false,
           isHybridUser = false,
           isOverdue = false,
+          isAACustomer = false,
           isPoaActiveForCustomer = true
         )
         lazy implicit val document: Document = Jsoup.parse(view.body)

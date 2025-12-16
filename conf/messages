@@ -5,6 +5,7 @@ common.fullStop = .
 common.notProvided = Not provided
 common.warning = Warning
 common.important = Important
+common.back = Back
 
 navTitle.nonAgent = Manage your VAT account
 navTitle.agent = Your client’s VAT details
@@ -89,6 +90,11 @@ vatDetails.annual_accounting.alert.message=The amount that you owe for each peri
 vatDetails.annual_accounting.alert.fordetails=For details,
 vatDetails.annual_accounting.alert.link=check your schedule
 
+vatDetails.annual_accounting.overdue.title=Important
+vatDetails.annual_accounting.overdue.heading=You have an overdue annual accounting payment
+vatDetails.annual_accounting.overdue.message=You have an overdue annual accounting payment. Making a late payment will accrue late payment interest. You can be removed from the Annual Accounting Scheme if you miss too many.
+vatDetails.annual_accounting.overdue.link=Check what you owe.
+
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.nextReturns = Returns due
@@ -103,6 +109,7 @@ payment.checkPoaSchedule = Check your payments on account schedule
 payment.stillMake = You can still
 payment.stillMakeLink = make a payment (opens in a new tab)
 payment.paymentOnAccount = Check your payments on account schedule
+payment.annualAccountingSchedule = Check your Annual Accounting schedule
 
 
 
@@ -212,6 +219,10 @@ whatYouOwe.latePayment.p3 = Late payment interest may be charged if you do not s
 
 whatYouOwe.inset = Payments due for your client’s payments on account arrangement will not show here, until their VAT return has been submitted. For upcoming payment details
 whatYouOwe.agent.inset =  Payments due for your payments on account arrangement will not show here, until you have submitted your VAT return. For upcoming payment details 
+whatYouOwe.aa.agent.inset = Payments due for your client’s Annual Accounting arrangement will not show here until their VAT return has been submitted. For upcoming payment details
+whatYouOwe.aa.agent.linkText = check their schedule
+whatYouOwe.aa.inset = Payments due for your Annual Accounting arrangement will not show here until you have submitted your VAT return. For upcoming payment details
+whatYouOwe.aa.linkText = check your schedule
 
 existingDD.banner.p1 = You have a Direct Debit Instruction in place.
 existingDD.banner.p2 = Only the amount due on your VAT Return will be collected by Direct Debit.
@@ -387,6 +398,8 @@ noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.agent.however= however, they do have a 
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
 noPayments.twentyFourHoursAgent = If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe.
+noPayments.aa.intro = You do not owe anything here right now. However, you do have an Annual Accounting arrangement set up.
+noPayments.aa.agent.intro = Your client does not owe anything here right now. However, they do have an Annual Accounting arrangement set up.
 
 paymentsError.title = There is a problem with the service
 paymentsError.heading = Sorry, there is a problem with the service
@@ -843,3 +856,52 @@ penaltiesChangesBanner.message.3 = We’re also changing how we calculate intere
 penaltiesChangesBanner.link = Read the guidance on GOV.UK to find out more (opens in a new tab)
 
 webchat.askHMRC = Ask HMRC (opens in a new tab)
+
+annualAccounting.title = Interim payments
+annualAccounting.heading = Interim payments
+annualAccounting.nextPayment.prefix = Your next upcoming payment
+annualAccounting.nextPayment.suffix = is due on
+annualAccounting.nextPayment.none =
+annualAccounting.howToPay = Find out how to pay (opens in a new tab)
+annualAccounting.changedOn = Your Annual Accounting interim payments were last updated on {0}.
+annualAccounting.agent.changedOn = Your client’s Annual Accounting interim payments were last updated on {0}.
+annualAccounting.nextPayment.balancing = Your balancing payment is due on {0}.
+annualAccounting.contents = Contents
+annualAccounting.currentSchedule = Current and upcoming schedule
+annualAccounting.currentSchedule.hidden = Current Annual Accounting schedule
+annualAccounting.pastSchedules = Past schedule
+annualAccounting.pastSchedule.hidden = Past Annual Accounting schedule
+annualAccounting.accountingPeriod = Accounting period:
+annualAccounting.dueBy = Due by
+annualAccounting.amount = Amount
+annualAccounting.balancing = Balancing payment
+annualAccounting.balance = Balance
+annualAccounting.status.upcoming = Upcoming
+annualAccounting.status.paid = Paid
+annualAccounting.status.paidLate = Paid Late
+annualAccounting.status.overdue = Overdue
+annualAccounting.dd.yes.title = You are set up to pay using Direct Debit
+annualAccounting.dd.yes.desc = Payments will be collected automatically and usually take 3 working days after the ‘due by’ dates.
+annualAccounting.dd.no.title = You are not set up to pay using Direct Debit. Your payments will not be collected automatically.
+annualAccounting.changeFrequency.heading = Changing how often I pay
+annualAccounting.changeFrequency.desc.1 = To request a payment plan change, for example from a quarterly pattern to a monthly one, see the ‘Instalments’ section of
+annualAccounting.changeFrequency.desc.2 = Requests made too late in the accounting period may start the following tax year.
+annualAccounting.guidance = Annual Accounting guidance
+annualAccounting.latePayments.heading = Making late payments
+annualAccounting.latePayments.desc.1 = If you make a late interim payment you will be
+annualAccounting.latePayments.link = charged late payment interest
+annualAccounting.latePayments.desc.2 = You could be removed from the Annual Accounting Scheme if you make too many late payments.
+annualAccounting.frequency.monthly = You will need to make 9 monthly interim payments and may have to pay a balancing payment after submitting your VAT Return. The balancing payment is the difference between your advance payments and the actual VAT bill.
+annualAccounting.frequency.quarterly = You will need to make 3 quarterly interim payments and may have to pay a balancing payment after submitting your VAT Return. The balancing payment is the difference between your advance payments and the actual VAT bill.
+annualAccounting.error.heading = Sorry, there is a problem with the service
+annualAccounting.error.message = We cannot show your Annual Accounting payments schedule right now. You can try again later.
+annualAccounting.error.goBackToManageVat = Go to your Manage your VAT account page
+annualAccounting.agent.error.message = We cannot show your client’s Annual Accounting payments schedule right now. You can try again later.
+annualAccounting.agent.error.goBackToManageVat = Go to your client’s Manage VAT account page
+annualAccounting.rejoinOrLeave.summary = Rejoining or leaving the scheme (click to expand)
+annualAccounting.rejoin.heading = Rejoining
+annualAccounting.rejoin.desc = Whether you left the scheme through choice or were removed, you must wait 12 months before attempting to rejoin. You cannot rejoin if you are insolvent or have an increasing VAT debt.
+annualAccounting.leave.heading = Leaving
+annualAccounting.leave.desc = You can leave the Annual Accounting scheme at any time. To do this, write to the Annual Accounting Registration Unit.
+annualAccounting.readGuidance.pre = Read the
+annualAccounting.readGuidance.link = Annual Accounting Scheme guidance (opens in a new tab).

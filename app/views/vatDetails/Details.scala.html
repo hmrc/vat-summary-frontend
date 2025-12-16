@@ -74,7 +74,10 @@
 }
 
 @poaAlertContent = {
-  @if(detailsViewModel.poaChangedOn.isDefined) {
+  @if(
+    detailsViewModel.poaChangedOn.isDefined &&
+      detailsViewModel.isPoaActiveForCustomer
+  ) {
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.payment_on_account.alert.heading")</h3>
     <p class="govuk-body" id="poa-alert-information">@messages("vatDetails.payment_on_account.alert.message") @MessageDateFormat.formatLong(detailsViewModel.poaChangedOn.get).
       <a class="govuk-notification-banner__link" href="@controllers.routes.PaymentsOnAccountController.show.url" rel="noreferrer noopener">
@@ -84,12 +87,32 @@
 }
 
 @annualAccountingAlertContent = {
-  @if(detailsViewModel.annualAccountingChangedOn.isDefined) {
+  @if(
+    detailsViewModel.annualAccountingChangedOn.isDefined &&
+      detailsViewModel.isAACustomer &&
+      appConfig.features.annualAccountingFeatureEnabled()
+  ) {
     <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.alert.heading")</h3>
     <p class="govuk-body" id="aa-alert-information">@messages("vatDetails.annual_accounting.alert.message") @MessageDateFormat.formatLong(detailsViewModel.annualAccountingChangedOn.get).
         @messages("vatDetails.annual_accounting.alert.fordetails")
-        <a class="govuk-notification-banner__link" href="/vat-through-software/interim-payments" rel="noreferrer noopener">
+        <a class="govuk-notification-banner__link" href="@{controllers.routes.AnnualAccountingController.show.url}" rel="noreferrer noopener">
         @messages("vatDetails.annual_accounting.alert.link")</a>.
+    </p>
+  }
+}
+
+@annualAccountingOverdueContent = {
+  @if(
+    detailsViewModel.annualAccountingPaymentOverdue &&
+      detailsViewModel.isAACustomer &&
+      appConfig.features.annualAccountingFeatureEnabled()
+  ) {
+    <h3 class="govuk-notification-banner__heading">@messages("vatDetails.annual_accounting.overdue.heading")</h3>
+    <p class="govuk-body" id="aa-overdue-information">
+      @messages("vatDetails.annual_accounting.overdue.message")
+      <a class="govuk-notification-banner__link" href="@{controllers.routes.AnnualAccountingController.show.url}" rel="noreferrer noopener">
+        @messages("vatDetails.annual_accounting.overdue.link")
+      </a>
     </p>
   }
 }
@@ -102,6 +125,38 @@
 @annualAccountingAlertAndPenaltiesContent = {
     <div>@annualAccountingAlertContent</div>
     <div>@penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)</div>
+}
+
+@annualAccountingOverdueAndPenaltiesContent = {
+    <div>@annualAccountingOverdueContent</div>
+    <div>@penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)</div>
+}
+
+@combinedNotificationsContent = {
+  @if(
+    (detailsViewModel.annualAccountingPaymentOverdue && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled()) ||
+      (detailsViewModel.poaChangedOn.isDefined && detailsViewModel.isPoaActiveForCustomer) ||
+      (detailsViewModel.annualAccountingChangedOn.isDefined && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled())
+  ) {
+    <div>
+      @if(detailsViewModel.annualAccountingPaymentOverdue && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled()) {
+        @annualAccountingOverdueContent
+      }
+      @if(detailsViewModel.poaChangedOn.isDefined && detailsViewModel.isPoaActiveForCustomer) {
+        @poaAlertContent
+      }
+      @if(detailsViewModel.annualAccountingChangedOn.isDefined && detailsViewModel.isAACustomer && appConfig.features.annualAccountingFeatureEnabled()) {
+        @annualAccountingAlertContent
+      }
+      <div>
+        @penaltiesBanner(
+          detailsViewModel.penaltiesSummary,
+          detailsViewModel.poaChangedOn.isDefined,
+          detailsViewModel.annualAccountingPaymentOverdue || detailsViewModel.annualAccountingChangedOn.isDefined
+        )
+      </div>
+    </div>
+  }
 }
 
 @mainTemplate(
@@ -118,21 +173,13 @@
     <span class="govuk-caption-m">@entityName</span>
   }
 
-  @if(detailsViewModel.poaChangedOn.isDefined) {
-    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-poa">
+  @if(detailsViewModel.annualAccountingPaymentOverdue || detailsViewModel.poaChangedOn.isDefined || detailsViewModel.annualAccountingChangedOn.isDefined) {
+    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-all">
       @govukNotificationBanner(NotificationBanner(
-      title = Text(messages("vatDetails.payment_on_account.alert.title")),
-      content = HtmlContent(poaAlertAndPenaltiesContent),
+      title = Text(messages("vatDetails.annual_accounting.alert.title")),
+      content = HtmlContent(combinedNotificationsContent),
       classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
-      titleId = Some("poa-alert-banner")))
-    </div>
-  } else if (detailsViewModel.annualAccountingChangedOn.isDefined) {
-    <div class="govuk-notification-banner govuk-!-margin-bottom-3 govuk-!-margin-top-3" id="vat-gov-banner-aa">
-        @govukNotificationBanner(NotificationBanner(
-        title = Text(messages("vatDetails.annual_accounting.alert.title")),
-        content = HtmlContent(annualAccountingAlertAndPenaltiesContent),
-        classes = "govuk-!-margin-top-0 govuk-!-margin-bottom-0 govuk-!-margin-right-0 govuk-!-margin-left-0",
-        titleId = Some("aa-alert-banner")))
+      titleId = Some("all-alert-banner")))
     </div>
   } else {
     @penaltiesBanner(detailsViewModel.penaltiesSummary, detailsViewModel.poaChangedOn.isDefined, detailsViewModel.annualAccountingChangedOn.isDefined)
@@ -146,6 +193,7 @@
       detailsViewModel.paymentError,
       detailsViewModel.isHybridUser,
       detailsViewModel.paymentOverdue,
+      detailsViewModel.isAACustomer,
       detailsViewModel.isPoaActiveForCustomer
     )
 
@@ -198,16 +246,16 @@
       </div>
     }
 
-      @if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
-      <div class="govuk-grid-column-one-third">
-          @vatPaymentOnAccountSchedule()
-      </div>
-      }
 
-      @if(appConfig.features.showAnnualAccounting() && detailsViewModel.isAACustomer){
-      <div class="govuk-grid-column-one-third">
-          @annualAccountingSection()
-      </div>
-      }
+      
+      @if(appConfig.features.annualAccountingFeatureEnabled() && detailsViewModel.isAACustomer){
+        <div class="govuk-grid-column-one-third">
+            @annualAccountingSection()
+        </div>
+        } else if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
+          <div class="govuk-grid-column-one-third">
+              @vatPaymentOnAccountSchedule()
+          </div>
+        }
   </div>
 }

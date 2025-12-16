@@ -39,10 +39,24 @@ class DateServiceSpec extends ControllerBaseSpec {
 
     }
 
+    "the future date offset feature is enabled" should {
+
+      "return today's date plus the configured offset" in {
+        mockAppConfig.features.staticDateEnabled(false)
+        mockAppConfig.features.futureDateOffsetEnabled(true)
+
+        val result = service.now()
+        val expected = LocalDate.now().plusDays(35)
+
+        result shouldEqual expected
+      }
+    }
+
     "the static date feature is disabled" should {
 
       "return today's date" in {
         mockAppConfig.features.staticDateEnabled(false)
+        mockAppConfig.features.futureDateOffsetEnabled(false)
 
         val result = service.now()
         val expected = LocalDate.now()

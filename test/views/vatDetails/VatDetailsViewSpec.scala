@@ -65,6 +65,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     val penaltiesBanner = "#penalties-banner"
     val unverifiedMessage = "#unverified-email-notice > strong"
     val unverifiedMessageLink: String = unverifiedMessage + "> a"
+    val combinedBanner = "#vat-gov-banner-all"
   }
 
   override implicit val user: User = User("123456789")
@@ -715,6 +716,53 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
   }
 
+  "Rendering the VAT details page with AA overdue only" should {
+    mockConfig.features.annualAccountingFeatureEnabled(true)
+    lazy val view = details(detailsModel.copy(
+      annualAccountingPaymentOverdue = true,
+      isAACustomer = true,
+      poaChangedOn = None,
+      annualAccountingChangedOn = None
+    ), Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render a single combined banner" in {
+      document.select(Selectors.combinedBanner).size() shouldBe 1
+      elementText(".govuk-notification-banner__title") shouldBe "Important"
+    }
+
+    "include the AA overdue message content" in {
+      elementText("#aa-overdue-information") should include ("You have an overdue annual accounting payment.")
+      element("#vat-gov-banner-all .govuk-notification-banner__link").attr("href") should include ("/vat-through-software/interim-payments")
+    }
+
+    "include the penalties changes content within the same banner" in {
+      elementText("#announcement-information") shouldBe "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
+    }
+  }
+
+  "Rendering the VAT details page with AA overdue, POA change and AA change" should {
+    mockConfig.features.annualAccountingFeatureEnabled(true)
+    mockConfig.features.poaActiveFeatureEnabled(true)
+    val model = detailsModel.copy(
+      annualAccountingPaymentOverdue = true,
+      isAACustomer = true,
+      isPoaActiveForCustomer = true,
+      poaChangedOn = Some(LocalDate.parse("2025-03-01")),
+      annualAccountingChangedOn = Some(LocalDate.parse("2025-02-01"))
+    )
+    lazy val view = details(model, Html("<nav>BTA Links</nav>"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "render a single combined banner with ordered headings" in {
+      document.select(Selectors.combinedBanner).size() shouldBe 1
+      val headings = document.select(s"${Selectors.combinedBanner} h3").eachText()
+      headings.get(0) shouldBe "You have an overdue annual accounting payment"
+      headings should contain ("Payments on account schedule change")
+      headings should contain ("There has been a change to your annual accounting payments")
+    }
+  }
+
   "Rendering the VAT details page when POA Feature is enabled and POA Changed On date condition failed" should {
     mockConfig.features.poaActiveFeatureEnabled(true)
     lazy val view = details(poaActiveUntilTrueAndNoPoaChangedOn, Html("<nav>BTA Links</nav>"))
@@ -729,7 +777,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(true)
+      mockConfig.features.annualAccountingFeatureEnabled(true)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe "Annual Accounting"
     }
   }
@@ -739,7 +787,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(true)
+      mockConfig.features.annualAccountingFeatureEnabled(true)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }
@@ -749,7 +797,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(false)
+      mockConfig.features.annualAccountingFeatureEnabled(false)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }
@@ -759,7 +807,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
-      mockConfig.features.showAnnualAccounting(false)
+      mockConfig.features.annualAccountingFeatureEnabled(false)
       document.select(Selectors.annualAccountingSection).select("h3").text() shouldBe empty
     }
   }

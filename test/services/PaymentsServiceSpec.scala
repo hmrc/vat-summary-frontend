@@ -402,4 +402,66 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
       }
     }
   }
+
+  "Calling the .getLiabilitiesWithDueDate function" when {
+
+    val fromDate = LocalDate.parse("2018-01-01")
+    val toDate = LocalDate.parse("2018-02-01")
+    val paymentWithDueDate = models.viewModels.PaymentHistoryWithDueDate(
+      chargeType = ReturnDebitCharge,
+      dueDate = toDate,
+      clearedDate = Some(toDate)
+    )
+
+    "the connector call returns data" should {
+      "return the rows" in {
+        (mockFinancialDataConnector.getVatLiabilitiesWithDueDate(_: String, _: LocalDate, _: LocalDate)
+          (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, fromDate, toDate, *, *)
+          .returns(Future.successful(Right(Seq(paymentWithDueDate))))
+
+        await(paymentsService.getLiabilitiesWithDueDate("123456789", toDate, Some(fromDate))) shouldBe Right(Seq(paymentWithDueDate))
+      }
+    }
+
+    "the connector call fails" should {
+      "return VatLiabilitiesError" in {
+        (mockFinancialDataConnector.getVatLiabilitiesWithDueDate(_: String, _: LocalDate, _: LocalDate)
+          (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *, *)
+          .returns(Future.successful(Left(ServerSideError("500", ""))))
+
+        await(paymentsService.getLiabilitiesWithDueDate("123456789", toDate, None)) shouldBe Left(VatLiabilitiesError)
+      }
+    }
+  }
+
+  "Calling the .getPaymentsForPeriod function" when {
+
+    val fromDate = LocalDate.parse("2018-01-01")
+    val toDate = LocalDate.parse("2018-02-01")
+    val payments = Payments(Seq.empty)
+
+    "the connector call returns data" should {
+      "return the payments" in {
+        (mockFinancialDataConnector.getPaymentsForPeriod(_: String, _: LocalDate, _: LocalDate)
+          (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, fromDate, toDate, *, *)
+          .returns(Future.successful(Right(payments)))
+
+        await(paymentsService.getPaymentsForPeriod("123456789", fromDate, toDate)) shouldBe Right(payments)
+      }
+    }
+
+    "the connector call fails" should {
+      "return PaymentsError" in {
+        (mockFinancialDataConnector.getPaymentsForPeriod(_: String, _: LocalDate, _: LocalDate)
+          (_: HeaderCarrier, _: ExecutionContext))
+          .expects(*, *, *, *, *)
+          .returns(Future.successful(Left(ServerSideError("500", ""))))
+
+        await(paymentsService.getPaymentsForPeriod("123456789", fromDate, toDate)) shouldBe Left(PaymentsError)
+      }
+    }
+  }
 }
