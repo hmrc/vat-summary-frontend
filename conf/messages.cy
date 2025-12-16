@@ -139,6 +139,11 @@ vatDetails.annual_accounting.alert.message=Newidiodd y swm rydych chi’n ei ddy
 vatDetails.annual_accounting.alert.fordetails=I gael manylion,
 vatDetails.annual_accounting.alert.link=gwiriwch eich amserlen
 
+vatDetails.annual_accounting.overdue.title=Pwysig
+vatDetails.annual_accounting.overdue.heading=Mae arnoch daliad sy’n hwyr
+vatDetails.annual_accounting.overdue.message=Bydd gwneud taliad hwyr yn cronni llog am dalu’n hwyr. Gallwch gael eich tynnu o’r Cynllun Cyfrifyddu Blynyddol os byddwch yn methu gormod.
+vatDetails.annual_accounting.overdue.link=Gwirio’r hyn sydd arnoch.
+
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i'w chyflwyno
 returnObligation.nextReturns = Ffurflenni TAW sy'n ddyledus

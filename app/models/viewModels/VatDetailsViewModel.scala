@@ -43,4 +43,5 @@ case class VatDetailsViewModel(paymentsData: Option[String],
                                isPoaActiveForCustomer: Boolean = false,
                                poaChangedOn: Option[LocalDate] = None,
                                isAACustomer: Boolean = false,
-                               annualAccountingChangedOn: Option[LocalDate] = None)
+                               annualAccountingChangedOn: Option[LocalDate] = None,
+                               annualAccountingPaymentOverdue: Boolean = false)

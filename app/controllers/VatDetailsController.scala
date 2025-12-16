@@ -172,6 +172,15 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
+
+    val paymentsModelOpt: Option[Payments] = payments.toOption.flatten
+    val aaOverdue: Boolean = paymentsModelOpt.exists { model =>
+      model.financialTransactions.exists { txn =>
+        (txn.chargeType == models.payments.AAQuarterlyInstalments || txn.chargeType == models.payments.AAMonthlyInstalment) &&
+          txn.outstandingAmount > 0 &&
+          txn.isOverdue(today)
+      }
+    }
     val displayedName: Option[String] = retrieveDisplayedName(accountDetails)
     val isHybridUser: Boolean = retrieveHybridStatus(accountDetails)
     val partyType: Option[String] = retrievePartyType(accountDetails)
@@ -184,6 +193,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, today)
     val isAnnualAccountingCustomer: Boolean = obligations.fold(_ => false, _.exists(_.obligations.exists(_.periodKey.startsWith("Y"))))
     val annualAccountingChangedOn: Option[LocalDate] = annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequestAA, today)
+
     VatDetailsViewModel(
       paymentModel.displayData,
       returnModel.displayData,
@@ -208,7 +218,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
       isPoaActiveForCustomer,
       poaChangedOn,
       isAnnualAccountingCustomer,
-      annualAccountingChangedOn
+      annualAccountingChangedOn,
+      aaOverdue
     )
   }
 

@@ -90,6 +90,12 @@ vatDetails.annual_accounting.alert.message=The amount that you owe for each peri
 vatDetails.annual_accounting.alert.fordetails=For details,
 vatDetails.annual_accounting.alert.link=check your schedule
 
+# Annual Accounting overdue alert
+vatDetails.annual_accounting.overdue.title=Important
+vatDetails.annual_accounting.overdue.heading=You have an overdue payment
+vatDetails.annual_accounting.overdue.message=Making a late payment will accrue late payment interest. You can be removed from the Annual Accounting Scheme if you miss too many.
+vatDetails.annual_accounting.overdue.link=Check what you owe.
+
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.nextReturns = Returns due
