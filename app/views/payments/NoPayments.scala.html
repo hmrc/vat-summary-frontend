@@ -18,7 +18,7 @@
       govukBreadcrumbs: GovukBreadcrumbs,
       govukBackLink: GovukBackLink)
 
-@(user: models.User, serviceInfoContent: Html, clientName: Option[String], mandationStatus: String, isPOAActive: Boolean)(
+@(user: models.User, serviceInfoContent: Html, clientName: Option[String], mandationStatus: String, isPOAActive: Boolean, isAACustomer: Boolean)(
   implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig)
 
 @breadcrumbs = {
@@ -61,7 +61,20 @@
       </h1>
 
       <div class="govuk-form-group" id="noPaymentsDetail">
-        @if(isPOAActive) {
+        @if(isAACustomer) {
+          <h2 id="no-payments-subheading" class="govuk-body">
+            @if(user.isAgent) {@messages("noPayments.aa.agent.intro")} else {@messages("noPayments.aa.intro")}
+          </h2>
+          <p class="govuk-body">
+            @if(user.isAgent) {
+              @messages("whatYouOwe.aa.agent.inset")
+              <a class="govuk-link" id="annual-accounting-schedule-link" href="@controllers.routes.AnnualAccountingController.show">@messages("whatYouOwe.aa.agent.linkText")</a>.
+            } else {
+              @messages("whatYouOwe.aa.inset")
+              <a class="govuk-link" id="annual-accounting-schedule-link" href="@controllers.routes.AnnualAccountingController.show">@messages("whatYouOwe.aa.linkText")</a>.
+            }
+          </p>
+        } else if(isPOAActive) {
           <h2 id="no-payments-subheading">
             @if(user.isAgent) {
               <p class="govuk-body-l">

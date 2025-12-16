@@ -30,7 +30,7 @@
       estimatedCharge: EstimatedCharge,
       crystallisedCharge: CrystallisedCharge)
 
-@(model: WhatYouOweViewModel, serviceInfoContent: Html, isPOAActive: Boolean)(
+@(model: WhatYouOweViewModel, serviceInfoContent: Html, isPOAActive: Boolean, isAACustomer: Boolean)(
   implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 
@@ -142,9 +142,20 @@
           @if(isPOAActive) {
           <div class="govuk-inset-text">
               @if(user.isAgent) {
-                @messages("whatYouOwe.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check their schedule</a>.
+                @messages("whatYouOwe.agent.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check their schedule</a>.
               } else {
-                @messages("whatYouOwe.agent.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check your schedule</a>.
+                @messages("whatYouOwe.inset") <a class="govuk-link" href="@controllers.routes.PaymentsOnAccountController.show">check your schedule</a>.
+              }
+            </div>
+          } 
+          @if(appConfig.features.annualAccountingFeatureEnabled() && isAACustomer) {
+            <div class="govuk-inset-text">
+              @if(user.isAgent) {
+                @messages("whatYouOwe.aa.agent.inset")
+                <a class="govuk-link" href="@controllers.routes.AnnualAccountingController.show">@messages("whatYouOwe.aa.agent.linkText")</a>.
+              } else {
+                @messages("whatYouOwe.aa.inset")
+                <a class="govuk-link" href="@controllers.routes.AnnualAccountingController.show">@messages("whatYouOwe.aa.linkText")</a>.
               }
             </div>
           }

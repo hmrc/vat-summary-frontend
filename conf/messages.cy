@@ -138,6 +138,10 @@ vatDetails.annual_accounting.alert.heading=Mae newid wedi bod i’ch taliadau Cy
 vatDetails.annual_accounting.alert.message=Newidiodd y swm rydych chi’n ei ddyledus am bob cyfnod ar
 vatDetails.annual_accounting.alert.fordetails=I gael manylion,
 vatDetails.annual_accounting.alert.link=gwiriwch eich amserlen
+vatDetails.annual_accounting.overdue.title=Pwysig
+vatDetails.annual_accounting.overdue.heading=Mae arnoch daliad cyfrifyddu blynyddol sy’n hwyr
+vatDetails.annual_accounting.overdue.message=Mae arnoch daliad cyfrifyddu blynyddol sy’n hwyr. Bydd gwneud taliad hwyr yn cronni llog am dalu’n hwyr. Gallwch gael eich tynnu o’r Cynllun Cyfrifyddu Blynyddol os byddwch yn methu gormod.
+vatDetails.annual_accounting.overdue.link=Gwirio’r hyn sydd arnoch.
 
 returnObligation.noReturn = Dim Ffurflenni TAW yn ddyledus ar hyn o bryd
 returnObligation.nextReturn = Ffurflen TAW nesaf i'w chyflwyno
@@ -267,6 +271,10 @@ whatYouOwe.latePayment.p3 = Mae'n bosibl y bydd llog am dalu'n hwyr yn cael ei g
 
 whatYouOwe.inset = Ni fydd taliadau sy'n ddyledus o dan drefniant taliadau ar gyfrif eich cleient yn cael eu dangos yma nes bod eu Ffurflen TAW wedi'i chyflwyno. I weld manylion taliadau sydd ar y gweill
 whatYouOwe.agent.inset = Ni fydd taliadau sy'n ddyledus o dan eich trefniant taliadau ar gyfrif yn cael eu dangos yma nes eich bod wedi cyflwyno'ch Ffurflen TAW. I weld manylion taliadau sydd ar y gweill
+whatYouOwe.aa.agent.inset = Ni fydd taliadau sy'n ddyledus o dan drefniant Cyfrifyddu Blynyddol eich cleient yn cael eu dangos yma nes bod eu Ffurflen TAW wedi’i chyflwyno. I weld manylion taliadau sydd ar y gweill
+whatYouOwe.aa.agent.linkText = gwiriwch eu hamserlen
+whatYouOwe.aa.inset = Ni fydd taliadau sy'n ddyledus o dan eich trefniant Cyfrifyddu Blynyddol yn cael eu dangos yma nes eich bod wedi cyflwyno’ch Ffurflen TAW. I weld manylion taliadau sydd ar y gweill
+whatYouOwe.aa.linkText = gwiriwch eich amserlen
 
 existingDD.banner.p1 = Mae gennych Gyfarwyddyd Debyd Uniongyrchol ar waith.
 existingDD.banner.p2 = Dim ond y swm sy'n ddyledus ar eich Ffurflen TAW bydd yn cael ei gasglu drwy Ddebyd Uniongyrchol.
@@ -435,6 +443,8 @@ noPayments.oweNothing = Nid oes arnoch unrhyw beth ar hyn o bryd.
 noPayments.oweNothingAgent = Nid oes ar eich cleient unrhyw beth ar hyn o bryd.
 noPayments.twentyFourHours = Os ydych wedi cyflwyno Ffurflen TAW, ac mae angen i chi dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arnoch.
 noPayments.twentyFourHoursAgent = Os yw Ffurflen TAW wedi'i chyflwyno a bod angen i'ch cleient dalu TAW, gall gymryd hyd at 24 awr i chi weld yr hyn sydd arno.
+noPayments.aa.intro = Nid ydych yn ddyledus dim byd yma ar hyn o bryd. Fodd bynnag, mae gennych drefniant Cyfrifyddu Blynyddol ar waith.
+noPayments.aa.agent.intro = Nid oes ar eich cleient unrhyw beth ar hyn o bryd. Fodd bynnag, mae ganddynt drefniant Cyfrifyddu Blynyddol ar waith.
 
 noPayments.oweNothing2 = Nid ydych yn ddyledus dim byd yma ar hyn o bryd,
 noPayments.howeverYou = fodd bynnag, mae gennych 

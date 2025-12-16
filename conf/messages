@@ -90,6 +90,11 @@ vatDetails.annual_accounting.alert.message=The amount that you owe for each peri
 vatDetails.annual_accounting.alert.fordetails=For details,
 vatDetails.annual_accounting.alert.link=check your schedule
 
+vatDetails.annual_accounting.overdue.title=Important
+vatDetails.annual_accounting.overdue.heading=You have an overdue annual accounting payment
+vatDetails.annual_accounting.overdue.message=You have an overdue annual accounting payment. Making a late payment will accrue late payment interest. You can be removed from the Annual Accounting Scheme if you miss too many.
+vatDetails.annual_accounting.overdue.link=Check what you owe.
+
 returnObligation.noReturn = No returns due right now
 returnObligation.nextReturn = Next return due
 returnObligation.nextReturns = Returns due
@@ -214,6 +219,10 @@ whatYouOwe.latePayment.p3 = Late payment interest may be charged if you do not s
 
 whatYouOwe.inset = Payments due for your client’s payments on account arrangement will not show here, until their VAT return has been submitted. For upcoming payment details
 whatYouOwe.agent.inset =  Payments due for your payments on account arrangement will not show here, until you have submitted your VAT return. For upcoming payment details 
+whatYouOwe.aa.agent.inset = Payments due for your client’s Annual Accounting arrangement will not show here until their VAT return has been submitted. For upcoming payment details
+whatYouOwe.aa.agent.linkText = check their schedule
+whatYouOwe.aa.inset = Payments due for your Annual Accounting arrangement will not show here until you have submitted your VAT return. For upcoming payment details
+whatYouOwe.aa.linkText = check your schedule
 
 existingDD.banner.p1 = You have a Direct Debit Instruction in place.
 existingDD.banner.p2 = Only the amount due on your VAT Return will be collected by Direct Debit.
@@ -389,6 +398,8 @@ noPayments.oweNothingAgent = Your client does not owe anything right now.
 noPayments.agent.however= however, they do have a 
 noPayments.twentyFourHours = If you have submitted a return and need to pay VAT, it can take up to 24 hours to see what you owe.
 noPayments.twentyFourHoursAgent = If a return has been submitted and your client needs to pay VAT, it can take up to 24 hours to see what they owe.
+noPayments.aa.intro = You do not owe anything here right now. However, you do have an Annual Accounting arrangement set up.
+noPayments.aa.agent.intro = Your client does not owe anything here right now. However, they do have an Annual Accounting arrangement set up.
 
 paymentsError.title = There is a problem with the service
 paymentsError.heading = Sorry, there is a problem with the service

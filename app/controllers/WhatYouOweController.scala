@@ -35,6 +35,7 @@ import views.html.payments.{NoPayments, WhatYouOwe}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
+import models.ChangedOnVatPeriod.RequestCategoryType4
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      dateService: DateService,
@@ -48,7 +49,8 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      penaltyDetailsService: PenaltyDetailsService,
                                      WYOSessionService: WYOSessionService,
                                      auditService: AuditingService,
-                                     poaCheckService: POACheckService)
+                                     poaCheckService: POACheckService,
+                                     annualAccountingService: AnnualAccountingService)
                                     (implicit ec: ExecutionContext,
                                      appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with LoggerUtil {
@@ -66,35 +68,48 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
               paymentsService.getDirectDebitStatus(user.vrn).flatMap { ddDetails =>
                 val ddStatus: Boolean = ddDetails.map(_.directDebitMandateFound).getOrElse(false)
                 val isPoaActiveForCustomer = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
+                val aaStandingRequestsF: Future[Option[models.StandingRequest]] =
+                  if (appConfig.features.annualAccountingFeatureEnabled()) {
+                    annualAccountingService.getStandingRequests(user.vrn)
+                  } else {
+                    Future.successful(None)
+                  }
 
-                (payments, penaltyDetails) match {
-                  case (Right(Some(payments)), Right(penalties)) =>
+                aaStandingRequestsF.flatMap { aaStandingRequests =>
+                  val isAACustomer =
+                    appConfig.features.annualAccountingFeatureEnabled() &&
+                      aaStandingRequests.exists(_.standingRequests.exists(_.requestCategory == RequestCategoryType4))
+                  val showPoaContent = isPoaActiveForCustomer && !isAACustomer
 
-                    constructViewModel(payments.financialTransactions, mandationStatus, penalties, ddStatus) match {
-                      case Some(model) =>
-                        auditService.extendedAudit(
-                          WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
-                          routes.WhatYouOweController.show.url
-                        )
-                        WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
-                          Ok(view(model, serviceInfoContent, isPoaActiveForCustomer))
-                        }
-                      case None =>
-                        logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
-                        Future.successful(InternalServerError(paymentsError()))
-                    }
-                  case (Right(None), Right(_)) =>
-                    val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+                  (payments, penaltyDetails) match {
+                    case (Right(Some(payments)), Right(penalties)) =>
 
-                    Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, isPoaActiveForCustomer)))
-                  case _ =>
-                    val loggerMessage = (payments, penaltyDetails) match {
-                      case (Left(_), Right(_)) => s"Financial API failed"
-                      case (Right(_), Left(_)) => s"Penalty API failed"
-                      case (Left(_), Left(_)) => s"Both financial and penalty API failed"
-                    }
-                    logger.warn(s"[WhatYouOweController][show] $loggerMessage")
-                    Future.successful(InternalServerError(paymentsError()))
+                      constructViewModel(payments.financialTransactions, mandationStatus, penalties, ddStatus) match {
+                        case Some(model) =>
+                          auditService.extendedAudit(
+                            WhatYouOweAuditModel(user.vrn, user.arn, model.charges),
+                            routes.WhatYouOweController.show.url
+                          )
+                          WYOSessionService.storeChargeModels(model.charges, user.vrn).map { _ =>
+                            Ok(view(model, serviceInfoContent, showPoaContent, isAACustomer))
+                          }
+                        case None =>
+                          logger.warn("[WhatYouOweController][show] incorrect fields received for payment(s); failed to render view")
+                          Future.successful(InternalServerError(paymentsError()))
+                      }
+                    case (Right(None), Right(_)) =>
+                      val clientName = request.session.get(SessionKeys.mtdVatvcAgentClientName)
+
+                      Future.successful(Ok(noPayments(user, serviceInfoContent, clientName, mandationStatus, showPoaContent, isAACustomer)))
+                    case _ =>
+                      val loggerMessage = (payments, penaltyDetails) match {
+                        case (Left(_), Right(_)) => s"Financial API failed"
+                        case (Right(_), Left(_)) => s"Penalty API failed"
+                        case (Left(_), Left(_)) => s"Both financial and penalty API failed"
+                      }
+                      logger.warn(s"[WhatYouOweController][show] $loggerMessage")
+                      Future.successful(InternalServerError(paymentsError()))
+                  }
                 }
               }
             }
