@@ -1,0 +1,247 @@
+@*
+ * Copyright 2025 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.User
+@import models.viewModels._
+@import utils.Money
+@import views.html.helper.CSPNonce
+@import utils.MessageDateFormat
+
+@this(mainTemplate: MainTemplate,
+      govukBackLink: GovukBackLink)
+
+@(model: AnnualAccountingViewModel, serviceInfoContent: Html)(
+  implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig, user: User)
+
+@backLink = {
+    @govukBackLink(BackLink(
+         href = request.headers.get("Referer").getOrElse("#back-link"),
+         content = Text(messages("common.back")),
+         attributes = Map("id" -> "back-link")
+    ))
+     <script @CSPNonce.attr>
+        document.getElementById("back-link").addEventListener("click", function(e) {
+          e.preventDefault()
+          window.history.back()
+        });
+     </script>
+ }
+
+@mainTemplate(title = messages("annualAccounting.title"),
+              appConfig = appConfig,
+              serviceInfoContent = serviceInfoContent,
+              user = Some(user),
+              navLinkContent = Some(backLink)
+) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <main class="govuk-main-wrapper">
+        <h1 class="govuk-heading-xl">
+          @messages("annualAccounting.heading")
+        </h1>
+
+        <p class="govuk-body" id="next-payment-text">
+          @model.nextPayment.map { p =>
+            @if(p.isBalancing) {
+              @messages("annualAccounting.nextPayment.balancing", MessageDateFormat.format(p.dueDate))
+            } else {
+              @messages("annualAccounting.nextPayment.prefix")
+              @p.amount.map { amount =>
+                <strong class="govuk-!-font-weight-bold">@Money.pounds(amount)</strong>
+              }
+              @messages("annualAccounting.nextPayment.suffix")
+              <strong>@MessageDateFormat.format(p.dueDate)</strong>.
+            }
+          }.getOrElse(Html(messages("annualAccounting.nextPayment.none")))
+        </p>
+
+        <p class="govuk-body">
+            <a id="find-out-how-to-pay-link" href="https://www.gov.uk/pay-vat" class="govuk-link" rel="noreferrer noopener" target="_blank">
+              @messages("annualAccounting.howToPay")
+            </a>
+        </p>
+
+        @model.changedOnFormattedOpt.map{ changedOnDate =>
+          <div class="govuk-inset-text" id="changed-on-date">
+            @if(model.isAgent) {
+              @messages("annualAccounting.agent.changedOn", changedOnDate)
+            } else {
+              @messages("annualAccounting.changedOn", changedOnDate)
+            }
+          </div>
+        }
+
+        @model.frequency.map { freq =>
+          <p class="govuk-body govuk-!-padding-top-4">
+            @{ freq match {
+              case models.viewModels.PaymentFrequency.Monthly => messages("annualAccounting.frequency.monthly")
+              case models.viewModels.PaymentFrequency.Quarterly => messages("annualAccounting.frequency.quarterly")
+            }}
+          </p>
+        }
+
+        @model.hasDirectDebit.map { hasDD =>
+          @if(hasDD) {
+            <p class="govuk-body govuk-!-padding-bottom-6">
+              <b>@messages("annualAccounting.dd.yes.title")</b><br>
+              @messages("annualAccounting.dd.yes.desc")
+            </p>
+          } else {
+            <p class="govuk-body govuk-!-padding-bottom-6">
+              <b>@messages("annualAccounting.dd.no.title")</b>
+            </p>
+          }
+        }
+
+        <div class="govuk-tabs" data-module="govuk-tabs">
+          <h2 class="govuk-tabs__title">@messages("annualAccounting.contents")</h2>
+          <ul class="govuk-tabs__list" role="tablist">
+            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" role="presentation">
+              <a class="govuk-tabs__tab" href="#current-schedule" id="tab_current-schedule" role="tab" aria-controls="current-schedule" aria-selected="true" tabindex="0">
+                @messages("annualAccounting.currentSchedule")
+              </a>
+            </li>
+            @if(model.pastPeriods.nonEmpty) {
+            <li class="govuk-tabs__list-item" role="presentation">
+              <a class="govuk-tabs__tab" href="#past-schedule" id="tab_past-schedule" role="tab" aria-controls="past-schedule" aria-selected="false" tabindex="-1">
+                @messages("annualAccounting.pastSchedules")
+              </a>
+            </li>
+            }
+          </ul>
+
+          <div class="govuk-tabs__panel" id="current-schedule" role="tabpanel" aria-labelledby="tab_current-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">@messages("annualAccounting.currentSchedule.hidden")</h2>
+            @for(period <- model.currentPeriods) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">@messages("annualAccounting.accountingPeriod")</h2>
+                  <h2 class="govuk-summary-card__title">
+                    @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                  </h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">@messages("annualAccounting.dueBy")</dt>
+                      <dd class="govuk-summary-list__key">@messages("annualAccounting.amount")</dd>
+                      <dd class="govuk-summary-list__actions"></dd>
+                    </div>
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                          @if(payment.isBalancing) {
+                            @messages("annualAccounting.balancing")
+                            <p class="govuk-hint govuk-!-font-size-16">@MessageDateFormat.format(payment.dueDate)</p>
+                          } else {
+                            @MessageDateFormat.format(payment.dueDate)
+                          }
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                          @payment.amount.map(a => Money.pounds(a)).getOrElse(Html(messages("annualAccounting.balance")))
+                        </dd>
+                        <dd class="govuk-summary-list__actions">
+                          <strong class="govuk-tag @payment.status.tagClass">
+                            @messages(payment.status.messageKey)
+                          </strong>
+                        </dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if(model.pastPeriods.nonEmpty) {
+          <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-schedule" role="tabpanel" aria-labelledby="tab_past-schedule">
+            <h2 class="govuk-heading-l govuk-visually-hidden">@messages("annualAccounting.pastSchedule.hidden")</h2>
+            @for(period <- model.pastPeriods) {
+              <div class="govuk-summary-card">
+                <div class="govuk-summary-card__title-wrapper">
+                  <h2 class="govuk-summary-card__title">@messages("annualAccounting.accountingPeriod")</h2>
+                  <h2 class="govuk-summary-card__title">
+                    @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                  </h2>
+                </div>
+                <div class="govuk-summary-card__content">
+                  <dl class="govuk-summary-list">
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">@messages("annualAccounting.dueBy")</dt>
+                      <dd class="govuk-summary-list__key">@messages("annualAccounting.amount")</dd>
+                      <dd class="govuk-summary-list__actions"></dd>
+                    </div>
+                    @for(payment <- period.payments) {
+                      <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__key">
+                          @if(payment.isBalancing) {
+                            @messages("annualAccounting.balancing")
+                            <p class="govuk-hint govuk-!-font-size-16 ">@MessageDateFormat.format(payment.dueDate)</p>
+                          } else {
+                            @MessageDateFormat.format(payment.dueDate)
+                          }
+                        </dt>
+                        <dd class="govuk-summary-list__value">
+                          @payment.amount.map(a => Money.pounds(a)).getOrElse(Html(messages("annualAccounting.balance")))
+                        </dd>
+                        <dd class="govuk-summary-list__actions">
+                          <strong class="govuk-tag @payment.status.tagClass">
+                            @messages(payment.status.messageKey)
+                          </strong>
+                        </dd>
+                      </div>
+                    }
+                  </dl>
+                </div>
+              </div>
+            }
+          </div>
+          }
+        </div>
+
+        <h2 class="govuk-heading-m govuk-!-padding-top-3">@messages("annualAccounting.changeFrequency.heading")</h2>
+        <p class="govuk-body">@messages("annualAccounting.changeFrequency.desc.1")
+          <a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/guidance/vat-annual-accounting-notice-732" rel="noreferrer noopener">@messages("annualAccounting.guidance")</a>.
+        </p>
+        <p class="govuk-body">@messages("annualAccounting.changeFrequency.desc.2")</p>
+
+        <h2 class="govuk-heading-m">@messages("annualAccounting.latePayments.heading")</h2>
+        <p class="govuk-body">@messages("annualAccounting.latePayments.desc.1")
+          <a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/guidance/penalty-points-and-penalties-if-you-submit-your-vat-return-late" rel="noreferrer noopener">@messages("annualAccounting.latePayments.link")</a>.
+        </p>
+        <p class="govuk-body">@messages("annualAccounting.latePayments.desc.2")</p>
+
+        <details class="govuk-details govuk-!-padding-top-3">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              @messages("annualAccounting.rejoinOrLeave.summary")
+            </span>
+          </summary>
+          <div class="govuk-details__text">
+            <h3 class="govuk-heading-s">@messages("annualAccounting.rejoin.heading")</h3>
+            <p class="govuk-body">@messages("annualAccounting.rejoin.desc")</p>
+            <h3 class="govuk-heading-s">@messages("annualAccounting.leave.heading")</h3>
+            <p class="govuk-body">@messages("annualAccounting.leave.desc")</p>
+          </div>
+        </details>
+
+        <p class="govuk-body">@messages("annualAccounting.readGuidance.pre")
+          <a href="https://www.gov.uk/guidance/vat-annual-accounting-notice-732" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">@messages("annualAccounting.readGuidance.link")</a>
+        </p>
+      </main>
+    </div>
+  </div>
+}

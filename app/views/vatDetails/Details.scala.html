@@ -146,6 +146,7 @@
       detailsViewModel.paymentError,
       detailsViewModel.isHybridUser,
       detailsViewModel.paymentOverdue,
+      detailsViewModel.isAACustomer,
       detailsViewModel.isPoaActiveForCustomer
     )
 
@@ -198,16 +199,16 @@
       </div>
     }
 
-      @if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
-      <div class="govuk-grid-column-one-third">
-          @vatPaymentOnAccountSchedule()
-      </div>
-      }
 
-      @if(appConfig.features.showAnnualAccounting() && detailsViewModel.isAACustomer){
-      <div class="govuk-grid-column-one-third">
-          @annualAccountingSection()
-      </div>
-      }
+      
+      @if(appConfig.features.annualAccountingFeatureEnabled() && detailsViewModel.isAACustomer){
+        <div class="govuk-grid-column-one-third">
+            @annualAccountingSection()
+        </div>
+        } else if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
+          <div class="govuk-grid-column-one-third">
+              @vatPaymentOnAccountSchedule()
+          </div>
+        }
   </div>
 }
