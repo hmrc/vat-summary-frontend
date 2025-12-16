@@ -29,5 +29,5 @@ class Features @Inject()(implicit config: Configuration) {
   val showUserResearchBannerEnabled = new Feature(ConfigKeys.showUserResearchBannerEnabled)
   val futureDateOffsetEnabled = new Feature(ConfigKeys.futureDateOffsetEnabled)
   val poaActiveFeatureEnabled = new Feature(ConfigKeys.poaActiveFeatureEnabled)
-  val showAnnualAccounting = new Feature(ConfigKeys.showAnnualAccounting)
+  val annualAccountingFeatureEnabled = new Feature(ConfigKeys.annualAccountingFeatureEnabled)
 }

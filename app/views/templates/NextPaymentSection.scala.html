@@ -25,6 +25,7 @@
   isError: Boolean,
   isHybridUser: Boolean,
   isOverdue: Boolean,
+  isAACustomer: Boolean,
   isPoaActiveForCustomer: Boolean)(implicit messages: Messages, appConfig: config.AppConfig)
 
 <div class="tile tile-no-border">
@@ -65,10 +66,16 @@
         </a>
       </p>
 
-      @if(appConfig.features.poaActiveFeatureEnabled() && isPoaActiveForCustomer){
-      <p class="govuk-body">
+      @if(appConfig.features.annualAccountingFeatureEnabled() && isAACustomer) {
+        <p class="govuk-body">
+          <a class="govuk-link" id="poa-schedule-of-payment" href="@{controllers.routes.AnnualAccountingController.show.url}">
+            @messages("payment.annualAccountingSchedule")
+          </a>
+        </p>
+      } else if(appConfig.features.poaActiveFeatureEnabled() && isPoaActiveForCustomer){
+        <p class="govuk-body">
           <a class="govuk-link" id="poa-schedule-of-payment" href="@{controllers.routes.PaymentsOnAccountController.show.url}">@messages("payment.paymentOnAccount")</a>
-      </p>
+        </p>
       }
     }
   </div>

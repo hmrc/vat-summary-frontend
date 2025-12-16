@@ -29,7 +29,7 @@ object FeatureSwitchForm {
       ConfigKeys.showUserResearchBannerEnabled -> boolean,
       ConfigKeys.futureDateOffsetEnabled -> boolean,
       ConfigKeys.poaActiveFeatureEnabled -> boolean,
-      ConfigKeys.showAnnualAccounting -> boolean
+      ConfigKeys.annualAccountingFeatureEnabled -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }
