@@ -140,6 +140,57 @@ class PaymentDetailsModelSpec extends GuiceBox {
         actualJson mustBe expectedJson
       }
     }
+
+    "expose audit details for payments with a period" in {
+      val payment = PaymentDetailsModel(
+        taxType = "vat",
+        taxReference = "123456789",
+        amountInPence = 123456,
+        taxPeriodMonth = 3,
+        taxPeriodYear = 2018,
+        vatPeriodEnding = "2018-08-08",
+        returnUrl = "https://www.tax.service.gov.uk/mtdfb-page",
+        backUrl = "https://www.tax.service.gov.uk/mtdfb-page2",
+        chargeType = ReturnDebitCharge,
+        dueDate = "2018-08-08",
+        chargeReference = Some("XD002750002155")
+      )
+
+      payment.auditDetail must contain allOf(
+        "taxType" -> "vat",
+        "taxReference" -> "123456789",
+        "amountInPence" -> "123456",
+        "taxPeriodMonth" -> "3",
+        "taxPeriodYear" -> "2018",
+        "returnUrl" -> "https://www.tax.service.gov.uk/mtdfb-page",
+        "backUrl" -> "https://www.tax.service.gov.uk/mtdfb-page2",
+        "chargeType" -> ReturnDebitCharge.value,
+        "dueDate" -> "2018-08-08"
+      )
+    }
+
+    "expose audit details for payments without a period" in {
+      val payment = PaymentDetailsModel(
+        taxType = "vat",
+        taxReference = "123456789",
+        amountInPence = 123456,
+        returnUrl = "https://www.tax.service.gov.uk/mtdfb-page",
+        backUrl = "https://www.tax.service.gov.uk/mtdfb-page2",
+        chargeType = ReturnDebitCharge,
+        dueDate = "2018-08-08",
+        chargeReference = None
+      )
+
+      payment.auditDetail must contain allOf(
+        "taxType" -> "vat",
+        "taxReference" -> "123456789",
+        "amountInPence" -> "123456",
+        "returnUrl" -> "https://www.tax.service.gov.uk/mtdfb-page",
+        "backUrl" -> "https://www.tax.service.gov.uk/mtdfb-page2",
+        "chargeType" -> ReturnDebitCharge.value,
+        "dueDate" -> "2018-08-08"
+      )
+    }
   }
 
   "PaymentDetailsModelGeneric" when {
@@ -210,6 +261,21 @@ class PaymentDetailsModelSpec extends GuiceBox {
 
         expectedResult mustBe actualResult
       }
+    }
+
+    "serialises via PaymentDetailsModel.writes when referenced as the trait type" in {
+      val model: PaymentDetailsModel = testPaymentDetailsModelGeneric
+
+      val expectedResult = Json.obj(
+        "vrn" -> testVrn,
+        "amountInPence" -> testGenericAmountInPence,
+        "returnUrl" -> testReturnUrl,
+        "backUrl" -> testBackUrl,
+        "chargeType" -> testGenericChargeType,
+        "dueDate" -> testDueDate
+      )
+
+      Json.toJson(model)(PaymentDetailsModel.writes) mustBe expectedResult
     }
   }
 }

@@ -305,36 +305,44 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
 
       "there is no pending PPOB change" should {
 
-        val result = {
-          mockPrincipalAuth()
-          mockCustomerInfo(Right(customerInformationMax))
-          controller.detailsRedirectToEmailVerification()(fakeRequest.withSession())
-        }
-
         "redirect to email verification" in {
+          val result = {
+            mockPrincipalAuth()
+            mockCustomerInfo(Right(customerInformationMax))
+            controller.detailsRedirectToEmailVerification()(fakeRequest.withSession())
+          }
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
         }
 
         "add the inFlightContactKey to session" in {
+          val result = {
+            mockPrincipalAuth()
+            mockCustomerInfo(Right(customerInformationMax))
+            controller.detailsRedirectToEmailVerification()(fakeRequest.withSession())
+          }
           session(result).get(SessionKeys.inFlightContactKey) shouldBe Some("false")
         }
       }
 
       "there is a pending PPOB change" should {
 
-        val result = {
-          mockPrincipalAuth()
-          mockCustomerInfo(Right(customerInformationMax.copy(hasPendingPpobChanges = true)))
-          controller.detailsRedirectToEmailVerification()(fakeRequest)
-        }
-
         "redirect to email verification" in {
+          val result = {
+            mockPrincipalAuth()
+            mockCustomerInfo(Right(customerInformationMax.copy(hasPendingPpobChanges = true)))
+            controller.detailsRedirectToEmailVerification()(fakeRequest)
+          }
           status(result) shouldBe SEE_OTHER
           redirectLocation(result) shouldBe Some(mockAppConfig.verifyEmailUrl)
         }
 
         "not add the inFlightContactKey to session" in {
+          val result = {
+            mockPrincipalAuth()
+            mockCustomerInfo(Right(customerInformationMax.copy(hasPendingPpobChanges = true)))
+            controller.detailsRedirectToEmailVerification()(fakeRequest)
+          }
           session(result).get(SessionKeys.inFlightContactKey) shouldBe None
         }
       }

@@ -28,6 +28,18 @@ class AnnualAccountingCheckServiceSpec extends AnyWordSpec with Matchers {
 
   val fixedDate: LocalDate = LocalDate.parse("2018-05-01")
   val todayFixedDate: LocalDate = LocalDate.parse("2025-05-28")
+  val requestWithNoChangedOn = models.StandingRequest(
+    processingDate = "2024-01-01",
+    standingRequests = List(
+      models.StandingRequestDetail(
+        requestNumber = "REQ1",
+        requestCategory = models.ChangedOnVatPeriod.RequestCategoryType4,
+        createdOn = "2024-01-01",
+        changedOn = None,
+        requestItems = Nil
+      )
+    )
+  )
 
   "changedOnDateWithinLast3Months" should {
 
@@ -42,6 +54,22 @@ class AnnualAccountingCheckServiceSpec extends AnyWordSpec with Matchers {
     "should return none for the chaned on date not falling in current 4 month period" in {
       val result = service.changedOnDateWithinLast3Months(
         Some(modelSrChangedOnAnnualAccountingTest2),
+        todayFixedDate
+      )
+      result shouldBe None
+    }
+
+    "should return none when there is no standing request schedule" in {
+      val result = service.changedOnDateWithinLast3Months(
+        None,
+        todayFixedDate
+      )
+      result shouldBe None
+    }
+
+    "should return none when standing request has no changedOn value" in {
+      val result = service.changedOnDateWithinLast3Months(
+        Some(requestWithNoChangedOn),
         todayFixedDate
       )
       result shouldBe None
