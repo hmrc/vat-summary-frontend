@@ -406,7 +406,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -432,7 +431,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(None),
             Right(Some(payments)),
             Right(customerInformationMax),
-            None,
             None,
             None,
             mockTodayDate
@@ -462,7 +460,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -490,7 +487,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -515,7 +511,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMin),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -538,7 +533,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(None),
             Right(None),
             Right(customerInformationMTDfBExempt),
-            None,
             None,
             None,
             mockTodayDate
@@ -566,7 +560,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -590,7 +583,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(None),
             Left(NextPaymentError),
             Right(customerInformationMax),
-            None,
             None,
             None,
             mockTodayDate
@@ -626,7 +618,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Left(ObligationsError),
             Left(NextPaymentError),
             Right(customerInformationMax),
-            None,
             None,
             None,
             mockTodayDate
@@ -665,7 +656,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -692,7 +682,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             Some(penaltiesSummaryModel),
             None,
-            None,
             mockTodayDate
           )
         }
@@ -715,7 +704,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(Some(obligations)),
             Right(Some(payments)),
             Right(customerInformationMax),
-            None,
             None,
             None,
             mockTodayDate
@@ -752,7 +740,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Left(BadRequestError("", "")),
             None,
             None,
-            None,
             mockTodayDate
           )
         }
@@ -781,7 +768,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             Some(standingRequestSample2),
-            None,
             mockTodayDate
           )
         }
@@ -809,7 +795,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(customerInformationMax),
             None,
             Some(standingRequestSample2),
-            None,
             mockTodayDate
           )
         }
@@ -836,7 +821,6 @@ class VatDetailsControllerSpec extends ControllerBaseSpec {
             Right(Some(obligationsWithPeriodKeyStartingWithY)),
             Right(None),
             Right(customerInformationMax),
-            None,
             None,
             Some(standingRequestSampleAnnualAccounting),
             mockTodayDate

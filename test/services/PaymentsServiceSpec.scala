@@ -440,7 +440,7 @@ class PaymentsServiceSpec extends AnyWordSpecLike with MockFactory with Matchers
 
     val fromDate = LocalDate.parse("2018-01-01")
     val toDate = LocalDate.parse("2018-02-01")
-    val payments = Payments(Seq.empty)
+    val payments = PaymentsWithOptionalOutstanding(Seq.empty)
 
     "the connector call returns data" should {
       "return the payments" in {

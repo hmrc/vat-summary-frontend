@@ -48,10 +48,10 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         PaymentsHistoryModel(None, chargeType = null, taxPeriodFrom = Some(LocalDate.parse("2025-02-01")), taxPeriodTo = Some(LocalDate.parse("2025-04-30")), amount = BigDecimal(200), clearedDate = Some(LocalDate.parse("2025-05-02")))  // Paid Late
       )
 
-      val payments = Payments(Seq(
-        PaymentNoPeriod(AAQuarterlyInstalments, LocalDate.parse("2025-03-31"), outstandingAmount = 0, periodKey = Some("25A1"), chargeReference = Some("REF1"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = BigDecimal(100), clearedAmount = Some(100)),
-        PaymentNoPeriod(AAQuarterlyInstalments, LocalDate.parse("2025-04-30"), outstandingAmount = 0, periodKey = Some("25A1"), chargeReference = Some("REF2"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = BigDecimal(200), clearedAmount = Some(200)),
-        PaymentNoPeriod(AAQuarterlyInstalments, LocalDate.parse("2025-11-30"), outstandingAmount = 300, periodKey = Some("25A1"), chargeReference = Some("REF3"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = BigDecimal(300), clearedAmount = None)
+      val payments = PaymentsWithOptionalOutstanding(Seq(
+        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-03-31"), outstandingAmount = Some(0), periodKey = Some("25A1"), chargeReference = Some("REF1"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(100)), clearedAmount = Some(100)),
+        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-04-30"), outstandingAmount = Some(0), periodKey = Some("25A1"), chargeReference = Some("REF2"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(200)), clearedAmount = Some(200)),
+        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-11-30"), outstandingAmount = Some(300), periodKey = Some("25A1"), chargeReference = Some("REF3"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(300)), clearedAmount = None)
       ))
 
       val vm = AnnualAccountingController.buildViewModel(
@@ -78,8 +78,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
       val sr = standingRequest("2025-02-01", "2025-06-30",
         Seq("2025-03-31" -> BigDecimal(100)))
 
-      val payments = Payments(Seq(
-        PaymentNoPeriod(AAQuarterlyInstalments, LocalDate.parse("2025-03-31"), outstandingAmount = 100, periodKey = Some("25A1"), chargeReference = Some("REF1"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = BigDecimal(100), clearedAmount = None)
+      val payments = PaymentsWithOptionalOutstanding(Seq(
+        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-03-31"), outstandingAmount = Some(100), periodKey = Some("25A1"), chargeReference = Some("REF1"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(100)), clearedAmount = None)
       ))
 
       val vm = AnnualAccountingController.buildViewModel(

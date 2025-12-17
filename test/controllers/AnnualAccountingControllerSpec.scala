@@ -22,7 +22,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.Helpers._
-import services.VatDetailsService
+import services.{AccountDetailsService, VatDetailsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.annual.AnnualAccountingView
 
@@ -57,6 +57,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
     mockDateService,
     mockPaymentsOnAccountService,
     mockPaymentsService,
+    mockAccountDetailsService,
     mockServiceInfoService,
     mockServiceErrorHandler,
     mockVatDetailsService,
@@ -71,6 +72,11 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
       .stubs(*, *, *)
       .returns(Future.successful(Right(None)))
 
+  private def mockGetEntityName(name: Option[String]) =
+    (mockAccountDetailsService.getEntityName(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(Right(name)))
+
   "AnnualAccountingController.show" when {
 
     "feature flag is enabled and data is available" should {
@@ -78,6 +84,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
         mockAppConfig.features.annualAccountingFeatureEnabled(true)
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Cheapo Clothing"))
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall(Some(aaStandingRequest))
         mockGetObligationsNone()
@@ -87,7 +94,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
           .returns(Future.successful(Right(Seq.empty)))
         (mockPaymentsService.getPaymentsForPeriod(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
           .stubs(*, *, *, *, *)
-          .returns(Future.successful(Right(models.payments.Payments(Seq.empty))))
+          .returns(Future.successful(Right(models.payments.PaymentsWithOptionalOutstanding(Seq.empty))))
         controller.show(fakeRequest)
       }
 
@@ -106,6 +113,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
         mockAppConfig.features.annualAccountingFeatureEnabled(false)
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Cheapo Clothing"))
         val result = controller.show(fakeRequest)
         status(result) shouldBe NOT_FOUND
       }
@@ -116,6 +124,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
         mockAppConfig.features.annualAccountingFeatureEnabled(true)
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Cheapo Clothing"))
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall(None)
         mockGetObligationsNone()
@@ -125,7 +134,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
           .returns(Future.successful(Right(Seq.empty)))
         (mockPaymentsService.getPaymentsForPeriod(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
           .stubs(*, *, *, *, *)
-          .returns(Future.successful(Right(models.payments.Payments(Seq.empty))))
+          .returns(Future.successful(Right(models.payments.PaymentsWithOptionalOutstanding(Seq.empty))))
         val result = controller.show(fakeRequest)
         status(result) shouldBe INTERNAL_SERVER_ERROR
       }
@@ -136,6 +145,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
         mockAppConfig.features.annualAccountingFeatureEnabled(true)
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Cheapo Clothing"))
         mockDateServiceCall()
         val nonAaStandingRequest = aaStandingRequest.copy(
           standingRequests = aaStandingRequest.standingRequests.map(_.copy(requestCategory = "3"))
@@ -148,7 +158,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
           .returns(Future.successful(Right(Seq.empty)))
         (mockPaymentsService.getPaymentsForPeriod(_: String, _: LocalDate, _: LocalDate)(_: HeaderCarrier, _: ExecutionContext))
           .stubs(*, *, *, *, *)
-          .returns(Future.successful(Right(models.payments.Payments(Seq.empty))))
+          .returns(Future.successful(Right(models.payments.PaymentsWithOptionalOutstanding(Seq.empty))))
         val result = controller.show(fakeRequest)
         status(result) shouldBe INTERNAL_SERVER_ERROR
       }

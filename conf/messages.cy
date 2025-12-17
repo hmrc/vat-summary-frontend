@@ -850,6 +850,13 @@ chargeType.vatOA1stLPPRPITitle = Llog ar ad-daliadau ar gosb am dalu asesiad swy
 chargeType.vatOA2ndLPPRPITitle = Llog ar ad-daliadau ar ail gosb am dalu asesiad swyddog yn hwyr
 chargeType.VatCarterPenRPITitle = Llog ar ad-daliadau ar gosb am beidio â chyflwyno'n gywir
 
+annualAccounting.warning.overdue.prefix = Mae gennych daliad sydd heb ei dalu.
+annualAccounting.warning.overdue.link = Talwch eich bil TAW mewn pryd
+annualAccounting.warning.overdue.suffix = i osgoi llog am daliad hwyr a chael eich tynnu o’r Cynllun Cyfrifyddu Blynyddol.
+annualAccounting.warning.late.prefix = Rydych wedi gwneud taliad hwyr. Gallwch wirio
+annualAccounting.warning.late.link = Yr hyn rydych yn ei ddyledus
+annualAccounting.warning.late.suffix = gan gynnwys unrhyw log taliad hwyr.
+
 unauthorised.agent.title = Ni allwch ddefnyddio'r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio'r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = greu cyfrif gwasanaethau asiantau
