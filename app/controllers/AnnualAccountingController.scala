@@ -55,19 +55,15 @@ class AnnualAccountingController @Inject() (
 
   def show: Action[AnyContent] = authorisedController.authorisedActionAllowAgents { implicit request => implicit user =>
     if (appConfig.features.annualAccountingFeatureEnabled()) {
-      println("Rendering AA Page")
       (for {
         serviceInfoContent <- serviceInfoService.getPartial
         entityNameResult <- accountDetailsService.getEntityName(user.vrn)
-        _ = println("Getting payments")
         today = dateService.now()
         standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
         obligationsResult <- vatDetailService.getReturnObligations(user.vrn)
         ddStatusResult <- paymentsService.getDirectDebitStatus(user.vrn)
-        _ = println("Getting liabilities")
         paymentsHistoryByDue <- paymentsService.getLiabilitiesWithDueDate(user.vrn, today, None)
         paymentsForPeriod <- {
-          println("Getting payments")
           val aaRequests = standingRequestOpt.toSeq.flatMap(_.standingRequests).filter(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
           val schedulesRanges = aaRequests.flatMap { d =>
             val byDue = d.requestItems.sortBy(ri => LocalDate.parse(ri.dueDate))
