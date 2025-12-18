@@ -21,7 +21,7 @@ import connectors.{FinancialDataConnector, PaymentsConnector}
 
 import javax.inject.{Inject, Singleton}
 import models.errors._
-import models.payments.{PaymentDetailsModel, PaymentOnAccount, Payments}
+import models.payments.{PaymentDetailsModel, PaymentOnAccount, Payments, PaymentsWithOptionalOutstanding}
 import models.viewModels.PaymentsHistoryModel
 import models.{DirectDebitStatus, ServiceResponse}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -92,7 +92,7 @@ class PaymentsService @Inject()(financialDataConnector: FinancialDataConnector,
     }
 
   def getPaymentsForPeriod(vrn: String, from: LocalDate, to: LocalDate)
-                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[Payments]] =
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[ServiceResponse[PaymentsWithOptionalOutstanding]] =
     financialDataConnector.getPaymentsForPeriod(vrn, from, to).map {
       case Right(payments) => Right(payments)
       case Left(_) => Left(PaymentsError)

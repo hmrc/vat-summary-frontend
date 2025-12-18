@@ -30,7 +30,6 @@ class AnnualAccountingService @Inject()(standingRequestsConnector: StandingReque
     standingRequestsConnector.getStandingRequests(vrn).map {
       case Right(standingRequest) =>
         logger.info(s"Successfully retrieved standing requests on Annual Accounting for $vrn")
-        println(Some(standingRequest))
         Some(standingRequest)
       case Left(error) =>
         logger.warn(s"Error retrieving standing requests on Annual Accounting: ${error.message}")

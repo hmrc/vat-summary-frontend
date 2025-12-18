@@ -21,7 +21,7 @@ import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.DirectDebitStatus
 import javax.inject.{Inject, Singleton}
-import models.payments.Payments
+import models.payments.{Payments, PaymentsWithOptionalOutstanding}
 import models.viewModels.PaymentsHistoryModel
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
@@ -92,8 +92,8 @@ class FinancialDataConnector @Inject()(http: HttpClient,
     }
   }
   def getPaymentsForPeriod(vrn: String, from: LocalDate, to: LocalDate)
-                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[Payments]] = {
-    import connectors.httpParsers.PaymentsHttpParser.PaymentsReads
+                          (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResult[PaymentsWithOptionalOutstanding]] = {
+    import connectors.httpParsers.PaymentsWithOptionalOutstandingHttpParser.PaymentsWithOptionalOutstandingReads
     logger.debug(s"[FinancialDataConnector][getPaymentsForPeriod] - Calling financial API for payments from $from to $to.")
     http.GET(paymentsUrl(vrn), Seq(
       "dateFrom" -> from.toString,

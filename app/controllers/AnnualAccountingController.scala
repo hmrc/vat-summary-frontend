@@ -38,6 +38,7 @@ class AnnualAccountingController @Inject() (
     dateService: DateService,
     paymentsOnAccountService: PaymentsOnAccountService,
     paymentsService: PaymentsService,
+    accountDetailsService: AccountDetailsService,
     serviceInfoService: ServiceInfoService,
     serviceErrorHandler: ServiceErrorHandler,
     vatDetailService: VatDetailsService,
@@ -56,6 +57,7 @@ class AnnualAccountingController @Inject() (
     if (appConfig.features.annualAccountingFeatureEnabled()) {
       (for {
         serviceInfoContent <- serviceInfoService.getPartial
+        entityNameResult <- accountDetailsService.getEntityName(user.vrn)
         today = dateService.now()
         standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
         obligationsResult <- vatDetailService.getReturnObligations(user.vrn)
@@ -75,7 +77,17 @@ class AnnualAccountingController @Inject() (
             .getOrElse(today -> today)
           paymentsService.getPaymentsForPeriod(user.vrn, from, to)
         }
-        viewResult <- handleData(serviceInfoContent, today, standingRequestOpt, obligationsResult, ddStatusResult, paymentsHistoryByDue, paymentsForPeriod, view)
+        viewResult <- handleData(
+          serviceInfoContent,
+          today,
+          standingRequestOpt,
+          obligationsResult,
+          ddStatusResult,
+          paymentsHistoryByDue,
+          paymentsForPeriod,
+          view,
+          entityNameResult.toOption
+        )
       } yield viewResult).recoverWith { case e =>
         logger.error(s"Unexpected failure in AnnualAccountingController: ${e.getMessage} For: ${user.vrn}")
         serviceErrorHandler.showInternalServerError
@@ -92,8 +104,9 @@ class AnnualAccountingController @Inject() (
       obligationsResult: ServiceResponse[Option[VatReturnObligations]],
       ddStatusResult: ServiceResponse[models.DirectDebitStatus],
       paymentsHistoryByDueResult: ServiceResponse[Seq[models.viewModels.PaymentHistoryWithDueDate]],
-      paymentsResult: ServiceResponse[models.payments.Payments],
-      view: AnnualAccountingView
+      paymentsResult: ServiceResponse[models.payments.PaymentsWithOptionalOutstanding],
+      view: AnnualAccountingView,
+      entityNameOpt: Option[Option[String]]
   )(implicit request: Request[AnyContent], user: User): Future[Result] = {
     standingRequestOpt match {
       case Some(standingRequest) =>
@@ -106,7 +119,16 @@ class AnnualAccountingController @Inject() (
         val hasDirectDebit: Option[Boolean] = ddStatusResult.toOption.map(_.directDebitMandateFound)
         val paymentsHistoryByDue = paymentsHistoryByDueResult.toOption.getOrElse(Seq.empty)
         val paymentsOpt = paymentsResult.toOption
-        val viewModel = buildViewModel(standingRequest, today, obligationsOpt, paymentsHistoryByDue, paymentsOpt, user.isAgent, hasDirectDebit)
+        val viewModel = buildViewModel(
+          standingRequest,
+          today,
+          obligationsOpt,
+          paymentsHistoryByDue,
+          paymentsOpt,
+          user.isAgent,
+          hasDirectDebit,
+          displayName = entityNameOpt.flatten
+        )
         logger.info(s"[AnnualAccountingController][show] rendering AA page for ${user.vrn}")
         Future.successful(Ok(view(viewModel, serviceInfoContent)))
       case None =>
@@ -125,9 +147,10 @@ object AnnualAccountingController {
       today: LocalDate,
       returnObligations: Option[VatReturnObligations],
       paymentsHistoryByDue: Seq[models.viewModels.PaymentHistoryWithDueDate],
-      paymentsOpt: Option[models.payments.Payments],
+      paymentsOpt: Option[models.payments.PaymentsWithOptionalOutstanding],
       isAgent: Boolean,
-      hasDirectDebit: Option[Boolean]
+      hasDirectDebit: Option[Boolean],
+      displayName: Option[String] = None
   ): AnnualAccountingViewModel = {
     val aaStandingRequests = standingRequestResponse.standingRequests.filter(_.requestCategory == RequestCategoryType4)
 
@@ -155,12 +178,12 @@ object AnnualAccountingController {
 
               val status: AAPaymentStatus =
                 paymentMatchOpt match {
-                  case Some(payment) if payment.outstandingAmount == 0 =>
+                  case Some(payment) if payment.outstandingAmount.contains(BigDecimal(0)) =>
                     clearedForThisDueOpt match {
                       case Some(cleared) if cleared.isAfter(dueDate) => AAPaymentStatus.PaidLate
                       case _ => AAPaymentStatus.Paid
                     }
-                  case Some(payment) if payment.outstandingAmount > 0 =>
+                  case Some(payment) if payment.outstandingAmount.exists(_ > 0) =>
                     if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
                   case _ =>
                     if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
@@ -251,7 +274,8 @@ object AnnualAccountingController {
       nextPayment = nextPaymentOpt,
       isAgent = isAgent,
       hasDirectDebit = hasDirectDebit,
-      frequency = frequencyOpt
+      frequency = frequencyOpt,
+      displayName = displayName
     )
   }
 }

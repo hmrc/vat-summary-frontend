@@ -46,12 +46,45 @@
               user = Some(user),
               navLinkContent = Some(backLink)
 ) {
+  @defining(model.currentPeriods.flatMap(_.payments) ++ model.pastPeriods.flatMap(_.payments)) { allPayments =>
+    @defining(allPayments.exists(_.status == models.viewModels.AAPaymentStatus.Overdue)) { hasOverdue =>
+      @defining(allPayments.exists(_.status == models.viewModels.AAPaymentStatus.PaidLate)) { hasPaidLate =>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <main class="govuk-main-wrapper">
-        <h1 class="govuk-heading-xl">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
           @messages("annualAccounting.heading")
         </h1>
+        <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)</span>
+        @model.displayName.map { entityName =>
+          <span class="govuk-caption-m govuk-!-margin-bottom-4">@entityName</span>
+        }
+
+        @if(hasOverdue) {
+          <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-visually-hidden">@messages("common.warning")</span>
+              @messages("annualAccounting.warning.overdue.prefix")
+              <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.WhatYouOweController.show.url">
+                @messages("annualAccounting.warning.overdue.link")
+              </a>
+              @messages("annualAccounting.warning.overdue.suffix")
+            </strong>
+          </div>
+        } else if(hasPaidLate) {
+          <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-visually-hidden">@messages("common.warning")</span>
+              @messages("annualAccounting.warning.late.prefix")
+              <a class="govuk-link govuk-link--no-visited-state" href="@controllers.routes.WhatYouOweController.show.url">
+                @messages("annualAccounting.warning.late.link")
+              </a>
+              @messages("annualAccounting.warning.late.suffix")
+            </strong>
+          </div>
+        }
 
         <p class="govuk-body" id="next-payment-text">
           @model.nextPayment.map { p =>
@@ -244,4 +277,7 @@
       </main>
     </div>
   </div>
+      }
+    }
+  }
 }
