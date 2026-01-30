@@ -53,6 +53,7 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
     authorisedController,
     mockDateService,
     mockPaymentsOnAccountService,
+    mockAccountDetailsService,
     mockServiceInfoService,
     mockServiceErrorHandler,
     paymentsOnAccountErrorView,
@@ -66,15 +67,21 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
         .stubs(*, *, *)
         .returns(Future.successful(Right(None)))
 
+  private def mockGetEntityName(name: Option[String]) =
+    (mockAccountDetailsService.getEntityName(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(Right(name)))
+
   "PaymentsOnAccountController.show" when {
 
     "a user is authenticated and data is retrieved successfully" should {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Entity"))
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall()
-        mockGetObligationsCall() 
+        mockGetObligationsCall()
         controller.show(fakeRequest)
       }
 
@@ -94,6 +101,7 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Entity"))
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall(None)
 
