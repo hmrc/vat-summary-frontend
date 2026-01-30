@@ -53,7 +53,8 @@ case class PaymentsOnAccountViewModel(
   changedOn: Option[LocalDate],
   currentPeriods: List[VatPeriod],
   pastPeriods: List[VatPeriod],
-  nextPayment: Option[PaymentDetail]
+  nextPayment: Option[PaymentDetail],
+  displayName: Option[String] = None
 ) {
   private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
   def changedOnFormattedOpt: Option[String] = changedOn.map(_.format(formatter))
