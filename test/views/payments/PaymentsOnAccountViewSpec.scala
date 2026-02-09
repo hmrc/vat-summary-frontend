@@ -121,7 +121,8 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
         DueDate(Some(LocalDate.parse("2025-03-31"))),
         Some(BigDecimal(122945.23))
       )
-    )
+    ),
+    displayName = Some("testName")
   )
 
   "PaymentsOnAccountView" should {

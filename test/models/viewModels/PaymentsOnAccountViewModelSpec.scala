@@ -64,7 +64,8 @@ class PaymentsOnAccountViewModelSpec extends SpecBase {
     changedOn = Some(today),
     currentPeriods = currentPeriods,
     pastPeriods = pastPeriods,
-    nextPayment = None
+    nextPayment = None,
+    displayName = Some("testName")
   )
 
   "PaymentsOnAccountViewModel" should {

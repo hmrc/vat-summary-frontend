@@ -16,7 +16,6 @@
 
 package controllers
 
-import audit.AuditingService
 import com.google.inject.Inject
 import config.{AppConfig, ServiceErrorHandler}
 import models.{ServiceResponse, StandingRequest, User}
@@ -28,7 +27,6 @@ import play.twirl.api.Html
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
-import views.html.errors.PaymentsOnAccountError
 import views.html.payments.PaymentsOnAccountView
 
 import java.time.LocalDate
@@ -41,11 +39,9 @@ class PaymentsOnAccountController @Inject() (
     accountDetailsService: AccountDetailsService,
     serviceInfoService: ServiceInfoService,
     serviceErrorHandler: ServiceErrorHandler,
-    paymentsOnAccountError: PaymentsOnAccountError,
     vatDetailService: VatDetailsService,
     mcc: MessagesControllerComponents,
-    view: PaymentsOnAccountView,
-    auditService: AuditingService
+    view: PaymentsOnAccountView
 )(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends FrontendController(mcc)
     with I18nSupport
@@ -60,10 +56,11 @@ class PaymentsOnAccountController @Inject() (
             (for {
               serviceInfoContent <- serviceInfoService.getPartial
               entityNameResult <- accountDetailsService.getEntityName(user.vrn)
+              optEntityName = entityNameResult.toOption.flatten
               today = dateService.now()
               standingRequestOpt <- paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
               obligationsResult <- vatDetailService.getReturnObligations(user.vrn)
-              viewResult <- handleObligationsAndPoa(serviceInfoContent, today, standingRequestOpt, obligationsResult, view, entityNameResult.toOption)
+              viewResult <- handleObligationsAndPoa(serviceInfoContent, today, standingRequestOpt, obligationsResult, view, optEntityName)
             } yield {
               viewResult
             }).recoverWith { case e =>
@@ -86,12 +83,12 @@ class PaymentsOnAccountController @Inject() (
                               standingRequestOpt: Option[StandingRequest],
                               obligationsResult: ServiceResponse[Option[VatReturnObligations]],
                               view: PaymentsOnAccountView,
-                              entityNameOpt: Option[Option[String]])(implicit request: Request[AnyContent], user: User): Future[Result] = {
+                              entityNameOpt: Option[String])(implicit request: Request[AnyContent], user: User): Future[Result] = {
     standingRequestOpt match {
       case Some(standingRequest) =>
         val obligationsOpt = obligationsResult.toOption.flatten
         val viewModel =
-          buildViewModel(standingRequest, today, obligationsOpt, displayName = entityNameOpt.flatten)
+          buildViewModel(standingRequest, today, obligationsOpt, displayName = entityNameOpt)
         logger.info(s"[PaymentsOnAccountController] [show] successfully rendering POA page for ${user.vrn}")
         Future.successful(Ok(view(viewModel, serviceInfoContent)))
       case None =>
@@ -109,7 +106,7 @@ object PaymentsOnAccountController {
       standingRequestResponse: StandingRequest,
       today: LocalDate,
       returnObligations: Option[VatReturnObligations] = None,
-      displayName: Option[String] = None
+      displayName: Option[String]
   ): PaymentsOnAccountViewModel = {
 
   val standingRequests = standingRequestResponse.standingRequests
@@ -198,7 +195,7 @@ val thirdPaymentDueDate: Option[LocalDate] =
     .sortBy(_.dueDate.dueDate.getOrElse(LocalDate.MAX))
     .headOption
 
-  val orderedPastPeriods = pastPeriods.sortBy(_.endDate)(Ordering[LocalDate].reverse).toList
+  val orderedPastPeriods = pastPeriods.sortBy(_.endDate)(Ordering[LocalDate].reverse)
 
   PaymentsOnAccountViewModel(
     breathingSpace = false,
