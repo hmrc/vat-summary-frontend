@@ -64,7 +64,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         ),
         paymentsOpt = Some(payments),
         isAgent = false,
-        hasDirectDebit = Some(false)
+        hasDirectDebit = Some(false),
+        displayName = None
       )
 
       val statuses = vm.currentPeriods.head.payments.map(_.status)
@@ -89,7 +90,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         paymentsHistoryByDue = Seq.empty,
         paymentsOpt = Some(payments),
         isAgent = false,
-        hasDirectDebit = Some(false)
+        hasDirectDebit = Some(false),
+        displayName = None
       )
 
       val period = vm.currentPeriods.headOption.getOrElse(vm.pastPeriods.head)
@@ -127,7 +129,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         paymentsHistoryByDue = Seq.empty,
         paymentsOpt = None,
         isAgent = false,
-        hasDirectDebit = Some(false)
+        hasDirectDebit = Some(false),
+        displayName = None
       )
 
       vm.currentPeriods.map(_.startDate.getYear) shouldBe List(2019)
@@ -160,7 +163,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         paymentsHistoryByDue = Seq.empty,
         paymentsOpt = None,
         isAgent = false,
-        hasDirectDebit = Some(false)
+        hasDirectDebit = Some(false),
+        displayName = None
       )
 
       vm.currentPeriods.head.startDate shouldBe LocalDate.parse("2025-02-01")

@@ -50,13 +50,17 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-three-quarters">
       <main class="govuk-main-wrapper">
-        <h1 class="govuk-heading-xl">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-4">
           @if(user.isAgent) {
             @messages("paymentsOnAccount.agent.heading")
           } else{
             @messages("paymentsOnAccount.heading")
           }
         </h1>
+          <span class="govuk-caption-m">@messages("vatDetails.vrn", user.vrn)</span>
+          @model.displayName.map { entityName =>
+          <span class="govuk-caption-m govuk-!-margin-bottom-4">@entityName</span>
+          }
         <p class="govuk-body" id="next-payment-text">
          @model.nextPayment match {
           case Some(PaymentDetail(PaymentType.ThirdPayment, DueDate(_, Some(obligationsDueDate)), amount)) => {

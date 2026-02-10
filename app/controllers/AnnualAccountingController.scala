@@ -150,7 +150,7 @@ object AnnualAccountingController {
       paymentsOpt: Option[models.payments.PaymentsWithOptionalOutstanding],
       isAgent: Boolean,
       hasDirectDebit: Option[Boolean],
-      displayName: Option[String] = None
+      displayName: Option[String]
   ): AnnualAccountingViewModel = {
     val aaStandingRequests = standingRequestResponse.standingRequests.filter(_.requestCategory == RequestCategoryType4)
 

@@ -64,7 +64,8 @@ class AnnualAccountingViewSpec extends ViewBaseSpec {
     pastPeriods = List(pastPeriod),
     nextPayment = Some(AAPayment(isBalancing = false, dueDate = nextDue, amount = Some(BigDecimal(1345.00)), status = AAPaymentStatus.Upcoming)),
     isAgent = false,
-    hasDirectDebit = Some(false)
+    hasDirectDebit = Some(false),
+    displayName = None
   )
 
   "AnnualAccountingView" should {

@@ -62,7 +62,7 @@ case class AnnualAccountingViewModel(
   isAgent: Boolean,
   hasDirectDebit: Option[Boolean],
   frequency: Option[PaymentFrequency] = None,
-  displayName: Option[String] = None
+  displayName: Option[String]
 ) {
   private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu", Locale.UK)
   def changedOnFormattedOpt: Option[String] = changedOn.map(_.format(formatter))

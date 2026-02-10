@@ -53,18 +53,22 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
     authorisedController,
     mockDateService,
     mockPaymentsOnAccountService,
+    mockAccountDetailsService,
     mockServiceInfoService,
     mockServiceErrorHandler,
-    paymentsOnAccountErrorView,
     mockVatDetailsService,
     mcc,
     paymentsOnAccountView,
-    mockAuditService
   )
 
     def mockGetObligationsCall() = (mockVatDetailsService.getReturnObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
         .stubs(*, *, *)
         .returns(Future.successful(Right(None)))
+
+  private def mockGetEntityName(name: Option[String]) =
+    (mockAccountDetailsService.getEntityName(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *)
+      .returns(Future.successful(Right(name)))
 
   "PaymentsOnAccountController.show" when {
 
@@ -72,9 +76,10 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Entity"))
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall()
-        mockGetObligationsCall() 
+        mockGetObligationsCall()
         controller.show(fakeRequest)
       }
 
@@ -94,6 +99,7 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       lazy val result = {
         mockPrincipalAuth()
         mockServiceInfoCall()
+        mockGetEntityName(Some("Entity"))
         mockDateServiceCall()
         mockPaymentsOnAccountServiceCall(None)
 
@@ -218,7 +224,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       )
 
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
       result.changedOn shouldBe Some(LocalDate.parse("2025-03-01"))
     }
 
@@ -226,7 +236,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       val standingRequest =
         StandingRequest(processingDate = "2025-02-24", standingRequests = Nil)
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
       result.periods shouldBe empty
       result.currentPeriods shouldBe empty
       result.pastPeriods shouldBe empty
@@ -295,7 +309,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       )
 
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
       val sortedPastPeriods = result.pastPeriods.map(_.endDate)
 
       sortedPastPeriods shouldBe List(
@@ -348,7 +366,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       )
 
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
 
       result.currentPeriods.size shouldBe 2
       result.pastPeriods.size shouldBe 0
@@ -390,7 +412,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       )
 
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
       result.nextPayment shouldBe Some(
         PaymentDetail(
           PaymentType.FirstPayment,
@@ -449,7 +475,9 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
 
       val result = PaymentsOnAccountController.buildViewModel(
         standingRequest,
-        balancingDay
+        balancingDay,
+        None,
+        None
       )
 
       val vatPeriodEnd = LocalDate.parse("2025-03-31")
@@ -523,7 +551,8 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
           LocalDate.parse("2025-05-31"),
           "O",
           None,
-          "25A1"))))
+          "25A1")))),
+        None
       )
 
       val vatPeriodEnd = LocalDate.parse("2025-03-31")
@@ -585,7 +614,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       )
 
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
 
       val hasPastPeriods = result.pastPeriods.nonEmpty
 
@@ -668,7 +701,11 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
       )
 
       val result =
-        PaymentsOnAccountController.buildViewModel(standingRequest, today)
+        PaymentsOnAccountController.buildViewModel(
+          standingRequest,
+          today,
+          None,
+          None)
 
       val currentPeriods = result.currentPeriods.filter(_.isCurrent)
       currentPeriods.size shouldBe 1
