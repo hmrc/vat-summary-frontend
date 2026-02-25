@@ -19,8 +19,10 @@ package controllers
 import audit.AuditingService
 import com.google.inject.Inject
 import config.{AppConfig, ServiceErrorHandler}
-import models.{ServiceResponse, StandingRequest, User}
+import models.{DirectDebitStatus, RequestItem, ServiceResponse, StandingRequest, User}
 import models.obligations.VatReturnObligations
+import models.payments.{PaymentWithOptionalOutstanding, PaymentsWithOptionalOutstanding}
+import models.viewModels.AAPaymentStatus.{Overdue, Paid, PaidLate, Upcoming}
 import models.viewModels._
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
@@ -102,9 +104,9 @@ class AnnualAccountingController @Inject() (
       today: LocalDate,
       standingRequestOpt: Option[StandingRequest],
       obligationsResult: ServiceResponse[Option[VatReturnObligations]],
-      ddStatusResult: ServiceResponse[models.DirectDebitStatus],
-      paymentsHistoryByDueResult: ServiceResponse[Seq[models.viewModels.PaymentHistoryWithDueDate]],
-      paymentsResult: ServiceResponse[models.payments.PaymentsWithOptionalOutstanding],
+      ddStatusResult: ServiceResponse[DirectDebitStatus],
+      paymentsHistoryByDueResult: ServiceResponse[Seq[PaymentHistoryWithDueDate]],
+      paymentsResult: ServiceResponse[PaymentsWithOptionalOutstanding],
       view: AnnualAccountingView,
       entityNameOpt: Option[Option[String]]
   )(implicit request: Request[AnyContent], user: User): Future[Result] = {
@@ -117,14 +119,14 @@ class AnnualAccountingController @Inject() (
         }
         val obligationsOpt = obligationsResult.toOption.flatten
         val hasDirectDebit: Option[Boolean] = ddStatusResult.toOption.map(_.directDebitMandateFound)
-        val paymentsHistoryByDue = paymentsHistoryByDueResult.toOption.getOrElse(Seq.empty)
-        val paymentsOpt = paymentsResult.toOption
+        val chargesWithDueDates = paymentsHistoryByDueResult.toOption.getOrElse(Seq.empty)
+        val paymentsDetails = paymentsResult.toOption
         val viewModel = buildViewModel(
           standingRequest,
           today,
           obligationsOpt,
-          paymentsHistoryByDue,
-          paymentsOpt,
+          chargesWithDueDates,
+          paymentsDetails,
           user.isAgent,
           hasDirectDebit,
           displayName = entityNameOpt.flatten
@@ -146,12 +148,13 @@ object AnnualAccountingController {
       standingRequestResponse: StandingRequest,
       today: LocalDate,
       returnObligations: Option[VatReturnObligations],
-      paymentsHistoryByDue: Seq[models.viewModels.PaymentHistoryWithDueDate],
-      paymentsOpt: Option[models.payments.PaymentsWithOptionalOutstanding],
+      chargesWithDueDates: Seq[PaymentHistoryWithDueDate],
+      paymentsDetails: Option[PaymentsWithOptionalOutstanding],
       isAgent: Boolean,
       hasDirectDebit: Option[Boolean],
       displayName: Option[String]
   ): AnnualAccountingViewModel = {
+
     val aaStandingRequests = standingRequestResponse.standingRequests.filter(_.requestCategory == RequestCategoryType4)
 
     val periods = aaStandingRequests
@@ -159,37 +162,13 @@ object AnnualAccountingController {
         if (srd.requestItems.isEmpty) {
           Nil
         } else {
-          val sortedByDue = srd.requestItems.sortBy(ri => LocalDate.parse(ri.dueDate))
-          val first = sortedByDue.head
-          val last = sortedByDue.last
+          val requestItemsSortedByDueDate = srd.requestItems.sortBy(ri => LocalDate.parse(ri.dueDate))
+          val first = requestItemsSortedByDueDate.head
+          val last = requestItemsSortedByDueDate.last
           val scheduleStart = LocalDate.parse(first.startDate)
           val scheduleEnd = LocalDate.parse(last.endDate)
-          val payments = sortedByDue.map { item =>
-              val dueDate = LocalDate.parse(item.dueDate)
 
-              val clearedForThisDueOpt = paymentsHistoryByDue.find(_.dueDate == dueDate).flatMap(_.clearedDate)
-
-              val paymentMatchOpt = paymentsOpt.flatMap { payments =>
-                val txns = payments.financialTransactions.filter(p =>
-                  p.chargeType == AAQuarterlyInstalments || p.chargeType == AAMonthlyInstalment
-                )
-                txns.find(p => p.due == dueDate)
-              }
-
-              val status: AAPaymentStatus =
-                paymentMatchOpt match {
-                  case Some(payment) if payment.outstandingAmount.contains(BigDecimal(0)) =>
-                    clearedForThisDueOpt match {
-                      case Some(cleared) if cleared.isAfter(dueDate) => AAPaymentStatus.PaidLate
-                      case _ => AAPaymentStatus.Paid
-                    }
-                  case Some(payment) if payment.outstandingAmount.exists(_ > 0) =>
-                    if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
-                  case _ =>
-                    if (dueDate.isBefore(today)) AAPaymentStatus.Overdue else AAPaymentStatus.Upcoming
-                }
-              AAPayment(isBalancing = false, dueDate = dueDate, amount = Some(item.amount), status = status)
-            }
+          val payments = processPayments(today, requestItemsSortedByDueDate, chargesWithDueDates, paymentsDetails)
 
           val balancingDue: Option[LocalDate] = returnObligations.flatMap { obligations =>
             obligations.obligations.find { ob =>
@@ -245,10 +224,10 @@ object AnnualAccountingController {
 
     val frequencyOpt = currentPeriods.headOption.flatMap { cp =>
       val nonBalancingCount = cp.payments.count(p => !p.isBalancing)
-      if (nonBalancingCount >= models.viewModels.PaymentFrequency.Monthly.instalments)
-        Some(models.viewModels.PaymentFrequency.Monthly)
-      else if (nonBalancingCount >= models.viewModels.PaymentFrequency.Quarterly.instalments)
-        Some(models.viewModels.PaymentFrequency.Quarterly)
+      if (nonBalancingCount >= PaymentFrequency.Monthly.instalments)
+        Some(PaymentFrequency.Monthly)
+      else if (nonBalancingCount >= PaymentFrequency.Quarterly.instalments)
+        Some(PaymentFrequency.Quarterly)
       else
         None
     }
@@ -278,4 +257,41 @@ object AnnualAccountingController {
       displayName = displayName
     )
   }
+
+   private def processPayments(today: LocalDate,
+                              requestItemsSortedByDueDate: List[RequestItem],
+                              paymentsHistoryByDueDate: Seq[PaymentHistoryWithDueDate],
+                              paymentsDetails: Option[PaymentsWithOptionalOutstanding]): List[AAPayment] =
+    requestItemsSortedByDueDate.map { requestItem =>
+      val dueDate: LocalDate = LocalDate.parse(requestItem.dueDate)
+
+      val aaTransactionForDueDate: Option[PaymentWithOptionalOutstanding] = paymentsDetails.flatMap { payments =>
+        val annualAccountingTransactions = payments.financialTransactions.filter(payment =>
+          payment.chargeType == AAQuarterlyInstalments || payment.chargeType == AAMonthlyInstalment
+        )
+        annualAccountingTransactions.find(_.due == dueDate)
+      }
+
+    val status: AAPaymentStatus = getPaymentStatus(today, dueDate, paymentsHistoryByDueDate, aaTransactionForDueDate)
+
+    AAPayment(isBalancing = false, dueDate, Some(requestItem.amount), status)
+  }
+
+   private def getPaymentStatus(today: LocalDate,
+                               dueDate: LocalDate,
+                               paymentsHistoryByDueDate: Seq[PaymentHistoryWithDueDate],
+                               aaTransactionForDueDate: Option[PaymentWithOptionalOutstanding]):AAPaymentStatus = {
+
+    val clearedDateForAPaymentThatMatchesDueDate: Option[LocalDate] = paymentsHistoryByDueDate.find(_.dueDate == dueDate).flatMap(_.clearedDate)
+
+    val paymentMatchesAndHasBeenPaidInFull: Boolean = aaTransactionForDueDate.exists(_.chargeHasBeenPaidWithNoOutstanding)
+    val paymentHasClearedDateWhichIsAfterDueDate: Boolean = clearedDateForAPaymentThatMatchesDueDate.exists(_.isAfter(dueDate))
+
+    if (paymentMatchesAndHasBeenPaidInFull) {
+      if (paymentHasClearedDateWhichIsAfterDueDate) PaidLate else Paid
+    } else {
+      if (dueDate.isBefore(today)) Overdue else Upcoming
+    }
+  }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,21 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-case class PaymentWithOptionalOutstanding(
-  chargeType: ChargeType,
-  due: LocalDate,
-  outstandingAmount: Option[BigDecimal],
-  periodKey: Option[String],
-  chargeReference: Option[String],
-  ddCollectionInProgress: Boolean,
-  accruingInterestAmount: Option[BigDecimal],
-  accruingPenaltyAmount: Option[BigDecimal],
-  penaltyType: Option[String],
-  originalAmount: Option[BigDecimal],
-  clearedAmount: Option[BigDecimal]
-)
+case class PaymentWithOptionalOutstanding(chargeType: ChargeType,
+                                          due: LocalDate,
+                                          outstandingAmount: Option[BigDecimal],
+                                          periodKey: Option[String],
+                                          chargeReference: Option[String],
+                                          ddCollectionInProgress: Boolean,
+                                          accruingInterestAmount: Option[BigDecimal],
+                                          accruingPenaltyAmount: Option[BigDecimal],
+                                          penaltyType: Option[String],
+                                          originalAmount: Option[BigDecimal],
+                                          clearedAmount: Option[BigDecimal],
+                                          clearingDate: Option[LocalDate]) {
+
+  def chargeHasBeenPaidWithNoOutstanding: Boolean = clearingDate.isDefined && outstandingAmount.forall(_ == 0)
+}
 
 case class PaymentsWithOptionalOutstanding(financialTransactions: Seq[PaymentWithOptionalOutstanding])
 
@@ -51,8 +53,9 @@ object PaymentWithOptionalOutstanding {
       (JsPath \ "accruingPenaltyAmount").readNullable[BigDecimal] and
       (JsPath \ "penaltyType").readNullable[String] and
       (JsPath \ "originalAmount").readNullable[BigDecimal] and
-      (JsPath \ "clearedAmount").readNullable[BigDecimal]
-    )(PaymentWithOptionalOutstanding.apply _)
+      (JsPath \ "clearedAmount").readNullable[BigDecimal] and
+      (JsPath \ "items")(0).\("clearingDate").readNullable[LocalDate]
+  )(PaymentWithOptionalOutstanding.apply _)
 }
 
 object PaymentsWithOptionalOutstanding {

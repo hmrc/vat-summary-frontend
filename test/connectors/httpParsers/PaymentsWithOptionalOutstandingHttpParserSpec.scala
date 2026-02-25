@@ -36,15 +36,18 @@ class PaymentsWithOptionalOutstandingHttpParserSpec extends AnyWordSpecLike with
         Json.obj(
           "chargeType" -> ReturnDebitCharge.value,
           "items" -> Json.arr(
-            Json.obj("dueDate" -> "2025-10-25")
+            Json.obj(
+              "dueDate"      -> "2025-10-25",
+              "clearingDate" -> "2026-07-30"
+            )
           ),
-          "outstandingAmount" -> 1000.50,
-          "periodKey" -> "#001",
-          "chargeReference" -> "XD002750002155",
+          "outstandingAmount"      -> 1000.50,
+          "periodKey"              -> "#001",
+          "chargeReference"        -> "XD002750002155",
           "accruingInterestAmount" -> 2,
-          "accruingPenaltyAmount" -> 3,
-          "penaltyType" -> "LPP1",
-          "originalAmount" -> 10000
+          "accruingPenaltyAmount"  -> 3,
+          "penaltyType"            -> "LPP1",
+          "originalAmount"         -> 10000
         )
       )
     )
@@ -64,41 +67,45 @@ class PaymentsWithOptionalOutstandingHttpParserSpec extends AnyWordSpecLike with
           accruingPenaltyAmount = Some(BigDecimal(3)),
           penaltyType = Some("LPP1"),
           originalAmount = Some(BigDecimal(10000)),
-          clearedAmount = None
+          clearedAmount = None,
+          clearingDate = Some(LocalDate.of(2026, 7, 30))
         )
 
         val result = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
         result shouldBe Right(PaymentsWithOptionalOutstanding(Seq(expectedPayment)))
       }
 
-      "allow missing outstandingAmount and still parse" in {
+      "allow missing outstandingAmount and clearingDate values and still parse" in {
         val jsonWithoutOutstanding = baseJson.deepMerge(
-          Json.obj("financialTransactions" -> Json.arr(
-            Json.obj(
-              "chargeType" -> ReturnDebitCharge.value,
-              "items" -> Json.arr(Json.obj("dueDate" -> "2025-10-25"))
-            )
-          ))
+          Json.obj(
+            "financialTransactions" -> Json.arr(
+              Json.obj(
+                "chargeType" -> ReturnDebitCharge.value,
+                "items"      -> Json.arr(Json.obj("dueDate" -> "2025-10-25"))
+              )
+            ))
         )
 
         val httpResponse = HttpResponse(Status.OK, jsonWithoutOutstanding.toString())
-        val result = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
+        val result       = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
         result shouldBe Right(
-          PaymentsWithOptionalOutstanding(Seq(
-            PaymentWithOptionalOutstanding(
-              ReturnDebitCharge,
-              due = LocalDate.parse("2025-10-25"),
-              outstandingAmount = None,
-              periodKey = None,
-              chargeReference = None,
-              ddCollectionInProgress = false,
-              accruingInterestAmount = None,
-              accruingPenaltyAmount = None,
-              penaltyType = None,
-              originalAmount = None,
-              clearedAmount = None
-            )
-          ))
+          PaymentsWithOptionalOutstanding(
+            Seq(
+              PaymentWithOptionalOutstanding(
+                ReturnDebitCharge,
+                due = LocalDate.parse("2025-10-25"),
+                outstandingAmount = None,
+                periodKey = None,
+                chargeReference = None,
+                ddCollectionInProgress = false,
+                accruingInterestAmount = None,
+                accruingPenaltyAmount = None,
+                penaltyType = None,
+                originalAmount = None,
+                clearedAmount = None,
+                clearingDate = None
+              )
+            ))
         )
       }
     }
@@ -106,23 +113,26 @@ class PaymentsWithOptionalOutstandingHttpParserSpec extends AnyWordSpecLike with
     "the http response status is 404 NOT_FOUND" should {
       "return an empty PaymentsWithOptionalOutstanding object" in {
         val httpResponse = HttpResponse(Status.NOT_FOUND, "")
-        val result = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
+        val result       = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
         result shouldBe Right(PaymentsWithOptionalOutstanding(Seq.empty))
       }
     }
 
     "the http response status is 400 BAD_REQUEST (single error)" should {
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        Json.obj(
-          "code" -> "VRN_INVALID",
-          "reason" -> "Fail!"
-        ).toString()
-      )
+      val httpResponse = HttpResponse(
+        Status.BAD_REQUEST,
+        Json
+          .obj(
+            "code"   -> "VRN_INVALID",
+            "reason" -> "Fail!"
+          )
+          .toString())
 
-      val expected = Left(BadRequestError(
-        code = "VRN_INVALID",
-        errorResponse = "Fail!"
-      ))
+      val expected = Left(
+        BadRequestError(
+          code = "VRN_INVALID",
+          errorResponse = "Fail!"
+        ))
 
       val result = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
 
@@ -132,19 +142,22 @@ class PaymentsWithOptionalOutstandingHttpParserSpec extends AnyWordSpecLike with
     }
 
     "a http response of 400 BAD_REQUEST (multiple errors)" should {
-      val httpResponse = HttpResponse(Status.BAD_REQUEST,
-        Json.obj(
-          "failures" -> Json.arr(
-            Json.obj(
-              "code" -> "INVALID DATE FROM",
-              "reason" -> "Bad date from"
-            ),
-            Json.obj(
-              "code" -> "INVALID DATE TO",
-              "reason" -> "Bad date to"
+      val httpResponse = HttpResponse(
+        Status.BAD_REQUEST,
+        Json
+          .obj(
+            "failures" -> Json.arr(
+              Json.obj(
+                "code"   -> "INVALID DATE FROM",
+                "reason" -> "Bad date from"
+              ),
+              Json.obj(
+                "code"   -> "INVALID DATE TO",
+                "reason" -> "Bad date to"
+              )
             )
           )
-        ).toString()
+          .toString()
       )
 
       val errors = Seq(ApiSingleError("INVALID DATE FROM", "Bad date from"), ApiSingleError("INVALID DATE TO", "Bad date to"))
@@ -160,13 +173,13 @@ class PaymentsWithOptionalOutstandingHttpParserSpec extends AnyWordSpecLike with
 
     "the HTTP response status is 5xx" should {
       val body: JsObject = Json.obj(
-        "code" -> "GATEWAY_TIMEOUT",
+        "code"    -> "GATEWAY_TIMEOUT",
         "message" -> "GATEWAY_TIMEOUT"
       )
 
       val httpResponse = HttpResponse(Status.GATEWAY_TIMEOUT, body.toString())
-      val expected = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
-      val result = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
+      val expected     = Left(ServerSideError(Status.GATEWAY_TIMEOUT.toString, httpResponse.body))
+      val result       = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
 
       "return a ServerSideError" in {
         result shouldBe expected
@@ -175,13 +188,13 @@ class PaymentsWithOptionalOutstandingHttpParserSpec extends AnyWordSpecLike with
 
     "the HTTP response status isn't handled" should {
       val body: JsObject = Json.obj(
-        "code" -> "Conflict",
+        "code"    -> "Conflict",
         "message" -> "CONFLICT"
       )
 
       val httpResponse = HttpResponse(Status.CONFLICT, body.toString())
-      val expected = Left(UnexpectedStatusError("409", httpResponse.body))
-      val result = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
+      val expected     = Left(UnexpectedStatusError("409", httpResponse.body))
+      val result       = PaymentsWithOptionalOutstandingReads.read("", "", httpResponse)
 
       "return an UnexpectedStatusError" in {
         result shouldBe expected
