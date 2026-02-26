@@ -22,7 +22,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
 import play.api.test.Helpers._
-import services.{AccountDetailsService, VatDetailsService}
+import services.VatDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.annual.AnnualAccountingView
 

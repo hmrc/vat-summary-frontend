@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,22 @@
 package models.viewModels
 
 import controllers.AnnualAccountingController
-import models.{StandingRequest, StandingRequestDetail, RequestItem}
-import org.scalatest.wordspec.AnyWordSpecLike
-import org.scalatest.matchers.should.Matchers
-import java.time.LocalDate
 import models.payments._
+import models.viewModels.AAPaymentStatus.{Overdue, Paid, PaidLate, Upcoming}
+import models.{RequestItem, StandingRequest, StandingRequestDetail}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+
+import java.time.LocalDate
 
 class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
 
-  private def standingRequest(periodStart: String, periodEnd: String, payments: Seq[(String, BigDecimal)]) = {
+  private val dueDate = LocalDate.parse("2025-03-31")
+  private val today   = LocalDate.parse("2025-08-01")
+  private def standingRequestWithItemsDueDate(dueDate: LocalDate) = {
+    val payments = Seq(dueDate.toString -> BigDecimal(100), dueDate.toString -> BigDecimal(200), dueDate.toString -> BigDecimal(300))
     val items = payments.zipWithIndex.map { case ((due, amt), idx) =>
-      RequestItem((idx + 1).toString, "25A1", periodStart, due, due, amt, None, None)
+      RequestItem((idx + 1).toString, "25A1", "2025-02-01", due, due, amt, None, None)
     }.toList
     StandingRequest(
       processingDate = "2025-01-01",
@@ -37,65 +42,141 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
     )
   }
 
+  private def buildPayments(outstandingAmount: Option[BigDecimal],
+                            clearingDate: Option[LocalDate] = None,
+                            dueDateOverride: Option[LocalDate] = None) =
+    PaymentWithOptionalOutstanding(
+      chargeType = AAQuarterlyInstalments,
+      due = dueDateOverride.getOrElse(dueDate),
+      outstandingAmount = outstandingAmount,
+      periodKey = Some("25A1"),
+      chargeReference = Some("REF1"),
+      ddCollectionInProgress = false,
+      accruingInterestAmount = None,
+      accruingPenaltyAmount = None,
+      penaltyType = None,
+      originalAmount = Some(BigDecimal(100)),
+      clearedAmount = Some(100),
+      clearingDate = clearingDate
+    )
+
+  private def buildViewModel(payment: PaymentWithOptionalOutstanding,
+                             clearingDate: Option[LocalDate] = None,
+                             dueDateOverride: Option[LocalDate] = None): AnnualAccountingViewModel = {
+    val altDueDate = dueDateOverride.getOrElse(dueDate)
+    AnnualAccountingController.buildViewModel(
+      standingRequestResponse = standingRequestWithItemsDueDate(altDueDate),
+      today = today,
+      returnObligations = None,
+      chargesWithDueDates = Seq(
+        PaymentHistoryWithDueDate(chargeType = AAMonthlyInstalment, dueDate = altDueDate, clearedDate = clearingDate),
+        PaymentHistoryWithDueDate(chargeType = AAMonthlyInstalment, dueDate = altDueDate, clearedDate = clearingDate)
+      ),
+      paymentsDetails = Some(PaymentsWithOptionalOutstanding(Seq(payment))),
+      isAgent = false,
+      hasDirectDebit = Some(false),
+      displayName = None
+    )
+  }
+
+  private def getStatusFromViewModel(viewModel: AnnualAccountingViewModel) = viewModel.currentPeriods.head.payments.map(_.status)
+
   "buildViewModel" should {
-    "mark payments as Paid, Paid Late, Upcoming based on clearedDate and Payment outstanding" in {
-      val today = LocalDate.parse("2025-08-01")
-      val sr = standingRequest("2025-02-01", "2025-11-30",
-        Seq("2025-03-31" -> BigDecimal(100), "2025-04-30" -> BigDecimal(200), "2025-11-30" -> BigDecimal(300)))
+    "give payment a 'Paid' status" when {
+      "payment has a clearingDate which is before the dueDate" when {
+        "outstandingAmount is Some(0)" in {
+          val payments = buildPayments(outstandingAmount = Some(0), clearingDate = Some(dueDate.minusWeeks(1)))
+          val result   = buildViewModel(payments, clearingDate = Some(dueDate.minusWeeks(1)))
 
-      val history = Seq(
-        PaymentsHistoryModel(None, chargeType = null, taxPeriodFrom = Some(LocalDate.parse("2025-02-01")), taxPeriodTo = Some(LocalDate.parse("2025-04-30")), amount = BigDecimal(100), clearedDate = Some(LocalDate.parse("2025-03-30"))), // Paid
-        PaymentsHistoryModel(None, chargeType = null, taxPeriodFrom = Some(LocalDate.parse("2025-02-01")), taxPeriodTo = Some(LocalDate.parse("2025-04-30")), amount = BigDecimal(200), clearedDate = Some(LocalDate.parse("2025-05-02")))  // Paid Late
-      )
+          getStatusFromViewModel(result).head shouldBe Paid
+        }
 
-      val payments = PaymentsWithOptionalOutstanding(Seq(
-        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-03-31"), outstandingAmount = Some(0), periodKey = Some("25A1"), chargeReference = Some("REF1"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(100)), clearedAmount = Some(100)),
-        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-04-30"), outstandingAmount = Some(0), periodKey = Some("25A1"), chargeReference = Some("REF2"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(200)), clearedAmount = Some(200)),
-        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-11-30"), outstandingAmount = Some(300), periodKey = Some("25A1"), chargeReference = Some("REF3"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(300)), clearedAmount = None)
-      ))
+        "outstandingAmount is None" in {
+          val payments = buildPayments(outstandingAmount = None, clearingDate = Some(dueDate.minusWeeks(1)))
+          val result   = buildViewModel(payments)
 
-      val vm = AnnualAccountingController.buildViewModel(
-        standingRequestResponse = sr,
-        today = today,
-        returnObligations = None,
-        paymentsHistoryByDue = Seq(
-          PaymentHistoryWithDueDate(chargeType = AAMonthlyInstalment, dueDate = LocalDate.parse("2025-03-31"), clearedDate = Some(LocalDate.parse("2025-03-30"))),
-          PaymentHistoryWithDueDate(chargeType = AAMonthlyInstalment, dueDate = LocalDate.parse("2025-04-30"), clearedDate = Some(LocalDate.parse("2025-05-02")))
-        ),
-        paymentsOpt = Some(payments),
-        isAgent = false,
-        hasDirectDebit = Some(false),
-        displayName = None
-      )
+          getStatusFromViewModel(result).head shouldBe Paid
+        }
+      }
 
-      val statuses = vm.currentPeriods.head.payments.map(_.status)
-      statuses(0) shouldBe AAPaymentStatus.Paid
-      statuses(1) shouldBe AAPaymentStatus.PaidLate
-      statuses(2) shouldBe AAPaymentStatus.Upcoming
+      "payment has a clearingDate which is equal to the dueDate" when {
+        "outstandingAmount is Some(0)" in {
+          val payments = buildPayments(outstandingAmount = Some(0), clearingDate = Some(dueDate))
+          val result   = buildViewModel(payments)
+
+          getStatusFromViewModel(result).head shouldBe Paid
+        }
+
+        "outstandingAmount is None" in {
+          val payments = buildPayments(outstandingAmount = None, clearingDate = Some(dueDate))
+          val result   = buildViewModel(payments)
+
+          getStatusFromViewModel(result).head shouldBe Paid
+        }
+      }
     }
 
-    "mark a past-due unpaid payment as Overdue when outstanding > 0 and no clearedDate" in {
-      val today = LocalDate.parse("2025-05-10")
-      val sr = standingRequest("2025-02-01", "2025-06-30",
-        Seq("2025-03-31" -> BigDecimal(100)))
+    "give payment a 'PaidLate' status" when {
+      "payment has a clearingDate which is after the dueDate" when {
+        "outstandingAmount is Some(0)" in {
+          val payments = buildPayments(outstandingAmount = Some(0), clearingDate = Some(dueDate.plusWeeks(1)))
+          val result   = buildViewModel(payments, clearingDate = Some(dueDate.plusWeeks(1)))
 
-      val payments = PaymentsWithOptionalOutstanding(Seq(
-        PaymentWithOptionalOutstanding(AAQuarterlyInstalments, LocalDate.parse("2025-03-31"), outstandingAmount = Some(100), periodKey = Some("25A1"), chargeReference = Some("REF1"), ddCollectionInProgress = false, accruingInterestAmount = None, accruingPenaltyAmount = None, penaltyType = None, originalAmount = Some(BigDecimal(100)), clearedAmount = None)
-      ))
+          getStatusFromViewModel(result).head shouldBe PaidLate
+        }
 
-      val vm = AnnualAccountingController.buildViewModel(
-        standingRequestResponse = sr,
-        today = today,
-        returnObligations = None,
-        paymentsHistoryByDue = Seq.empty,
-        paymentsOpt = Some(payments),
-        isAgent = false,
-        hasDirectDebit = Some(false),
-        displayName = None
-      )
+        "outstandingAmount is None" in {
+          val payments = buildPayments(outstandingAmount = None, clearingDate = Some(dueDate.plusWeeks(1)))
+          val result   = buildViewModel(payments, clearingDate = Some(dueDate.plusWeeks(1)))
 
-      val period = vm.currentPeriods.headOption.getOrElse(vm.pastPeriods.head)
-      period.payments.head.status shouldBe AAPaymentStatus.Overdue
+          getStatusFromViewModel(result).head shouldBe PaidLate
+        }
+      }
+    }
+
+    "give payment an 'Upcoming' status" when {
+      "the charge has an outstandingAmount" when {
+        "the dueDate is today" in {
+          val payment = buildPayments(
+            outstandingAmount = Some(42),
+            clearingDate = None,
+            dueDateOverride = Some(today)
+          )
+          val result = buildViewModel(
+            payment = payment,
+            clearingDate = None,
+            dueDateOverride = Some(today)
+          )
+
+          getStatusFromViewModel(result).head shouldBe Upcoming
+        }
+
+        "the dueDate is after today" in {
+          val payment = buildPayments(
+            outstandingAmount = Some(42),
+            clearingDate = None,
+            dueDateOverride = Some(today.plusWeeks(1))
+          )
+          val result = buildViewModel(
+            payment = payment,
+            clearingDate = None,
+            dueDateOverride = Some(today.plusWeeks(1))
+          )
+
+          getStatusFromViewModel(result).head shouldBe Upcoming
+        }
+      }
+    }
+
+    "give payment an 'Overdue' status" when {
+      "the charge has an outstandingAmount" when {
+        "the dueDate is before today" in {
+          val payments = buildPayments(outstandingAmount = Some(42), dueDateOverride = Some(today.minusWeeks(1)))
+          val result   = buildViewModel(payments, dueDateOverride = Some(today.minusWeeks(1)))
+
+          getStatusFromViewModel(result).head shouldBe Overdue
+        }
+      }
     }
 
     "treat the schedule that overlaps today as current, even if it started last year" in {
@@ -126,8 +207,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         standingRequestResponse = standingRequest,
         today = today,
         returnObligations = None,
-        paymentsHistoryByDue = Seq.empty,
-        paymentsOpt = None,
+        chargesWithDueDates = Seq.empty,
+        paymentsDetails = None,
         isAgent = false,
         hasDirectDebit = Some(false),
         displayName = None
@@ -160,8 +241,8 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
         standingRequestResponse = standingRequest,
         today = today,
         returnObligations = None,
-        paymentsHistoryByDue = Seq.empty,
-        paymentsOpt = None,
+        chargesWithDueDates = Seq.empty,
+        paymentsDetails = None,
         isAgent = false,
         hasDirectDebit = Some(false),
         displayName = None
@@ -173,6 +254,5 @@ class AnnualAccountingStatusSpec extends AnyWordSpecLike with Matchers {
       vm.pastPeriods.head.isPast shouldBe true
     }
   }
+
 }
-
-
