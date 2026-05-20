@@ -1024,6 +1024,16 @@ object TestModels {
     directDebitMandateFound = false
   )
 
+  val categoriseChargesViewModels: Seq[Option[ChargeDetailsViewModel]] =
+    Seq(
+      Some(estimatedLPP1Model),
+      Some(whatYouOweCharge),
+      Some(estimatedLPP1Model),
+      Some(whatYouOweCharge),
+      Some(estimatedLPP1Model),
+      Some(whatYouOweCharge)
+    )
+
   val whatYouOweViewModelMultipleTypes: WhatYouOweViewModel = WhatYouOweViewModel(
     30052.55,
     Seq(

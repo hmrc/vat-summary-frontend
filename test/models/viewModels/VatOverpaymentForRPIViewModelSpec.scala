@@ -16,11 +16,13 @@
 
 package models.viewModels
 
-import common.TestModels.{vatOverpaymentForRPI, vatOverpaymentForRPIJson}
+import common.TestModels.{overpaymentForRPI, vatOverpaymentForRPI, vatOverpaymentForRPIJson}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import views.ViewBaseSpec
+
+import java.time.LocalDate
 
 class VatOverpaymentForRPIViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
@@ -66,6 +68,25 @@ class VatOverpaymentForRPIViewModelSpec extends ViewBaseSpec with AnyWordSpecLik
       "all fields are populated" in {
         Json.toJson(vatOverpaymentForRPI) shouldBe vatOverpaymentForRPIJson
       }
+    }
+  }
+
+  "The buildVatOverpaymentForRPIViewModel function" should {
+
+    "return a VatOverpaymentForRPIViewModel" in {
+
+      VatOverpaymentForRPIViewModel.buildVatOverpaymentForRPIViewModel(overpaymentForRPI, false, LocalDate.parse("2019-03-02")) shouldBe
+        Some(VatOverpaymentForRPIViewModel(
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Overpayment for RPI",
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          isOverdue = false,
+          Some("XD002750002155"), directDebitMandateFound = false
+        ))
     }
   }
 

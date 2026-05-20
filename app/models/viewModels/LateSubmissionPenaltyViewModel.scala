@@ -16,6 +16,7 @@
 
 package models.viewModels
 
+import models.payments.PaymentWithPeriod
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -56,5 +57,26 @@ case class LateSubmissionPenaltyViewModel(chargeType: String,
 }
 
 object LateSubmissionPenaltyViewModel {
+
+  def buildLateSubmissionPenaltyViewModel(
+                                           payment: PaymentWithPeriod,
+                                           ddStatus: Boolean,
+                                           today: LocalDate,
+                                           chargeRef: String): Option[LateSubmissionPenaltyViewModel] =
+
+        Some(LateSubmissionPenaltyViewModel(
+          chargeType = payment.chargeType.value,
+          dueDate = payment.due,
+          penaltyAmount = payment.originalAmount,
+          amountReceived = payment.clearedAmount.getOrElse(0),
+          leftToPay = payment.outstandingAmount,
+          isOverdue = payment.isOverdue(today),
+          chargeReference = chargeRef,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          directDebitMandateFound = ddStatus
+        ))
+
+
   implicit val format: OFormat[LateSubmissionPenaltyViewModel] = Json.format[LateSubmissionPenaltyViewModel]
 }

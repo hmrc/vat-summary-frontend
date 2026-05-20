@@ -16,6 +16,7 @@
 
 package models.viewModels
 
+import models.payments.PaymentWithPeriod
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -59,6 +60,24 @@ case class CrystallisedInterestViewModel(periodFrom: LocalDate,
 }
 
 object CrystallisedInterestViewModel {
+
+  def buildCrystallisedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean, today: LocalDate, chargeRef: String): Option[CrystallisedInterestViewModel] =
+        Some(CrystallisedInterestViewModel(
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = payment.chargeType.value,
+          dueDate = payment.due,
+          interestAmount = payment.originalAmount,
+          amountReceived = payment.clearedAmount.getOrElse(0),
+          leftToPay = payment.outstandingAmount,
+          isOverdue = payment.isOverdue(today),
+          chargeReference = chargeRef,
+          isPenaltyReformPenaltyLPI = payment.chargeType.isPenaltyReformPenaltyLPI,
+          isNonPenaltyReformPenaltyLPI = payment.chargeType.isNonPenaltyReformPenaltyLPI,
+          directDebitMandateFound = ddStatus
+        ))
+
+
 
   implicit val format: OFormat[CrystallisedInterestViewModel] = Json.format[CrystallisedInterestViewModel]
 }

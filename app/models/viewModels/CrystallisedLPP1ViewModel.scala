@@ -16,6 +16,8 @@
 
 package models.viewModels
 
+import models.payments.PaymentWithPeriod
+import models.penalties.LPPDetails
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -62,6 +64,39 @@ case class CrystallisedLPP1ViewModel(numberOfDays: String,
 }
 
 object CrystallisedLPP1ViewModel {
+
+  def buildCrystallisedLPP1ViewModel(payment: PaymentWithPeriod,
+                                    penaltyDetails: Option[LPPDetails],
+                                    ddStatus: Boolean,
+                                    today: LocalDate): Option[ChargeDetailsViewModel] =
+    (penaltyDetails, payment.chargeReference) match {
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), calcAmountHR, daysHR, rateHR, _, _, _, _)),
+      Some(chargeRef)) =>
+        val numOfDays = (calcAmountHR, daysHR) match {
+          case (Some(_), Some(days)) => days
+          case _ => daysLR
+        }
+        Some(CrystallisedLPP1ViewModel(
+          numberOfDays = numOfDays,
+          part1Days = daysLR,
+          part2Days = daysHR,
+          part1PenaltyRate = rateLR,
+          part2PenaltyRate = rateHR,
+          part1UnpaidVAT = calcAmountLR,
+          part2UnpaidVAT = calcAmountHR,
+          dueDate = payment.due,
+          penaltyAmount = payment.originalAmount,
+          amountReceived = payment.clearedAmount.getOrElse(0),
+          leftToPay = payment.outstandingAmount,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = payment.chargeType.value,
+          chargeReference = chargeRef,
+          isOverdue = payment.isOverdue(today),
+          directDebitMandateFound = ddStatus
+        ))
+      case _ => None
+    }
 
   implicit val format: OFormat[CrystallisedLPP1ViewModel] = Json.format[CrystallisedLPP1ViewModel]
 
