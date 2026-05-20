@@ -159,4 +159,23 @@ class StandardChargeViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with
       }
     }
   }
+
+  "The buildStandardChargeViewModel function" should {
+
+    "return a StandardChargeViewModel" in {
+
+      StandardChargeViewModel.buildStandardChargeViewModel(payment, false, LocalDate.parse("2019-03-02")) shouldBe Some(StandardChargeViewModel(
+        "VAT Return Debit Charge",
+        10000,
+        10000,
+        0,
+        LocalDate.parse("2019-03-03"),
+        Some("ABCD"),
+        isOverdue = false,
+        Some("XD002750002155"),
+        Some(LocalDate.parse("2019-01-01")),
+        Some(LocalDate.parse("2019-02-02")), directDebitMandateFound = false
+      ))
+    }
+  }
 }

@@ -16,6 +16,8 @@
 
 package models.viewModels
 
+import models.payments.{ChargeType, PaymentWithPeriod}
+import models.penalties.LPPDetails
 import play.api.libs.json.{Json, OFormat}
 
 import java.time.LocalDate
@@ -33,7 +35,7 @@ case class EstimatedLPP1ViewModel(part1Days: String,
                                   chargeType: String,
                                   timeToPayPlan: Boolean,
                                   breathingSpace: Boolean,
-                                  directDebitMandateFound: Boolean) extends EstimatedViewModel {
+                                  directDebitMandateFound: Boolean) extends   EstimatedViewModel {
 
   override val outstandingAmount: BigDecimal = penaltyAmount
 
@@ -48,5 +50,32 @@ case class EstimatedLPP1ViewModel(part1Days: String,
 }
 
 object EstimatedLPP1ViewModel {
+
+  def buildEstimatedLPP1ViewModel(payment: PaymentWithPeriod,
+                                 penaltyDetails: Option[LPPDetails],
+                                 breathingSpace: Boolean,
+                                 ddStatus: Boolean): Option[ChargeDetailsViewModel] =
+    (penaltyDetails, payment.accruingPenaltyAmount) match {
+      case (Some(LPPDetails(_, "LPP1", Some(calcAmountLR), Some(daysLR), Some(rateLR), _, Some(daysHR), _, _, _, _, timeToPay)), Some(penaltyAmnt)) =>
+        Some(EstimatedLPP1ViewModel(
+          part1Days = daysLR,
+          part2Days = daysHR,
+          part1PenaltyRate = rateLR,
+          part2PenaltyRate = penaltyDetails match {
+            case Some(LPPDetails(_, "LPP1", _, _, _, _, _, Some(rateHR), _, _, _, _)) => rateHR
+            case _ => rateLR
+          },
+          part1UnpaidVAT = calcAmountLR,
+          penaltyAmount = penaltyAmnt,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = ChargeType.penaltyChargeMappingLPP1(payment.chargeType).value,
+          timeToPayPlan = timeToPay,
+          breathingSpace = breathingSpace,
+          directDebitMandateFound = ddStatus
+        ))
+      case _ => None
+    }
+
   implicit val format: OFormat[EstimatedLPP1ViewModel] = Json.format[EstimatedLPP1ViewModel]
 }

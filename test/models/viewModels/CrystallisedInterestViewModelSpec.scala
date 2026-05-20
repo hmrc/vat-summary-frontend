@@ -16,7 +16,8 @@
 
 package models.viewModels
 
-import common.TestModels.{crystallisedLPICharge, crystallisedLPIJson}
+import common.TestModels.{crystallisedLPICharge, crystallisedLPIJson, payment}
+import models.payments.VatReturnLPI
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
@@ -60,6 +61,30 @@ class CrystallisedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
 
     "write to JSON" in {
       Json.toJson(crystallisedLPICharge) shouldBe crystallisedLPIJson
+    }
+  }
+
+  "The buildCrystallisedIntViewModel function" should {
+
+    "return a CrystallisedInterestViewModel" when {
+
+      "chargeReference is present" in {
+
+        val charge = payment.copy(chargeType = VatReturnLPI, clearedAmount = None)
+        CrystallisedInterestViewModel.buildCrystallisedIntViewModel(charge, false, LocalDate.parse("2019-03-02"), "XD002750002155") shouldBe Some(CrystallisedInterestViewModel(
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Return LPI",
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          isOverdue = false,
+          "XD002750002155",
+          isPenaltyReformPenaltyLPI = false,
+          isNonPenaltyReformPenaltyLPI = false, directDebitMandateFound = false
+        ))
+      }
     }
   }
 }

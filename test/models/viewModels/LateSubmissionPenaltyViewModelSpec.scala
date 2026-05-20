@@ -16,11 +16,14 @@
 
 package models.viewModels
 
-import common.TestModels.{lateSubmissionPenaltyJson, lateSubmissionPenaltyModel}
+import common.TestModels.{lateSubmissionPenaltyJson, lateSubmissionPenaltyModel, payment}
+import models.payments.VatLateSubmissionPen
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import views.ViewBaseSpec
+
+import java.time.LocalDate
 
 class LateSubmissionPenaltyViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
@@ -65,6 +68,29 @@ class LateSubmissionPenaltyViewModelSpec extends ViewBaseSpec with AnyWordSpecLi
 
       "all fields are populated" in {
         Json.toJson(lateSubmissionPenaltyModel) shouldBe lateSubmissionPenaltyJson
+      }
+    }
+  }
+
+  "The buildLateSubmissionPenaltyViewModel function" should {
+
+    "return a LateSubmissionPenaltyViewModel" when {
+
+      "chargeReference is present" in {
+
+        val charge = payment.copy(chargeType = VatLateSubmissionPen, clearedAmount = None)
+        LateSubmissionPenaltyViewModel
+          .buildLateSubmissionPenaltyViewModel(charge, false, LocalDate.parse("2019-03-02"), "XD002750002155") shouldBe Some(LateSubmissionPenaltyViewModel(
+          "VAT Late Submission Pen",
+          LocalDate.parse("2019-03-03"),
+          10000,
+          0,
+          10000,
+          isOverdue = false,
+          "XD002750002155",
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"), false
+        ))
       }
     }
   }

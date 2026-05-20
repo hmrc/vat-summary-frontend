@@ -16,6 +16,7 @@
 
 package models.viewModels
 
+import models.payments.{ChargeType, PaymentWithPeriod}
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -42,5 +43,18 @@ case class EstimatedInterestViewModel(periodFrom: LocalDate,
 }
 
 object EstimatedInterestViewModel {
+
+  def buildEstimatedIntViewModel(payment: PaymentWithPeriod, ddStatus: Boolean, interestAmount: BigDecimal): Option[EstimatedInterestViewModel] =
+        Some(EstimatedInterestViewModel(
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = ChargeType.LPIChargeMapping(payment.chargeType).value,
+          interestAmount = interestAmount,
+          isPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isPenaltyReformPenaltyLPI,
+          isNonPenaltyReformPenaltyLPI = ChargeType.LPIChargeMapping(payment.chargeType).isNonPenaltyReformPenaltyLPI,
+          directDebitMandateFound = ddStatus
+        ))
+
+
   implicit val format: OFormat[EstimatedInterestViewModel] = Json.format[EstimatedInterestViewModel]
 }
