@@ -16,11 +16,14 @@
 
 package models.viewModels
 
-import common.TestModels.{crystallisedLPP2Json, crystallisedLPP2Model}
+import common.TestModels._
+import models.payments.VatPA2ndLPP
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import views.ViewBaseSpec
+
+import java.time.LocalDate
 
 class CrystallisedLPP2ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
@@ -51,6 +54,35 @@ class CrystallisedLPP2ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike wi
 
       "all fields are populated" in {
         Json.toJson(crystallisedLPP2Model) shouldBe crystallisedLPP2Json
+      }
+    }
+  }
+
+  "The buildCrystallisedLPP1ViewModel function" should {
+
+    "The buildCrystallisedLPPViewModel function" should {
+
+      val penaltyCharge = payment.copy(chargeType = VatPA2ndLPP)
+
+      "return a CrystallisedLPP2ViewModel" when {
+
+        "chargeReference and all appropriate LPP2 penalty details are present" in {
+
+          CrystallisedLPP2ViewModel.buildCrystallisedLPP2ViewModel(penaltyCharge, Some(LPPLPP2DetailsModelMax), false, LocalDate.parse("2019-03-03")) shouldBe
+            Some(CrystallisedLPP2ViewModel(
+              "31",
+              5.5,
+              LocalDate.parse("2019-03-03"),
+              10000,
+              0,
+              10000,
+              LocalDate.parse("2019-01-01"),
+              LocalDate.parse("2019-02-02"),
+              "VAT PA 2nd LPP",
+              "XD002750002155",
+              isOverdue = false, directDebitMandateFound = false
+            ))
+        }
       }
     }
   }

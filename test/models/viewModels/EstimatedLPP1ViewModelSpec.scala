@@ -22,6 +22,8 @@ import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import views.ViewBaseSpec
 
+import java.time.LocalDate
+
 class EstimatedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
   "The EstimatedLPP1ViewModel" should {
@@ -34,4 +36,28 @@ class EstimatedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with 
       Json.toJson(estimatedLPP1Model) shouldBe estimatedLPP1Json
     }
   }
+
+  "The buildEstimatedLPP1ViewModel function" should {
+
+    "return a EstimatedLPP1ViewModel" when {
+
+      "penaltyCategory is LPP1" in {
+        EstimatedLPP1ViewModel
+          .buildEstimatedLPP1ViewModel(payment, Some(LPPDetailsModelMaxWithLPP1HRPercentage), false, false) shouldBe Some(EstimatedLPP1ViewModel(
+          "15",
+          "30",
+          2.4,
+          4.2,
+          100.11,
+          50.55,
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Return 1st LPP",
+          timeToPayPlan = false,
+          breathingSpace = false, directDebitMandateFound = false
+        ))
+      }
+    }
+  }
+
 }
