@@ -18,7 +18,7 @@ package services
 
 import common.TestModels._
 import controllers.ControllerBaseSpec
-import models.payments.{AACharge, VatLateSubmissionPen, VatPA2ndLPP, VatReturn1stLPP, VatReturnLPI}
+import models.payments.{AACharge, VatLateSubmissionPen, VatOverpaymentForRPI, VatPA2ndLPP, VatReturn1stLPP, VatReturnLPI}
 import models.viewModels.{CrystallisedInterestViewModel, CrystallisedLPP1ViewModel, CrystallisedLPP2ViewModel, EstimatedInterestViewModel, EstimatedLPP1ViewModel, EstimatedLPP2ViewModel, LateSubmissionPenaltyViewModel, StandardChargeViewModel, VatOverpaymentForRPIViewModel}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.should.Matchers
@@ -35,6 +35,48 @@ class WYOViewServiceSpec extends AnyWordSpec with Matchers with MockFactory {
     (() => mockDateServ.now())
       .stubs()
       .returns(LocalDate.parse("2018-05-01"))
+
+  "The categoriseCharges method" when {
+
+    val paymentNoEstimates = payment.copy(accruingInterestAmount = Some(0), accruingPenaltyAmount = Some(0))
+
+    val paymentsNoEstimatesSeq = Seq(
+      paymentNoEstimates,
+      paymentNoEstimates.copy(chargeType = VatReturn1stLPP),
+      paymentNoEstimates.copy(chargeType = VatReturnLPI),
+      paymentNoEstimates.copy(chargeType = VatLateSubmissionPen),
+      paymentNoEstimates.copy(chargeType = VatOverpaymentForRPI)
+    )
+
+    val paymentWithEstimatesSeq = Seq(
+      payment,
+      payment.copy(chargeType = VatReturn1stLPP),
+      paymentNoEstimates.copy(chargeType = VatReturnLPI),
+      payment.copy(chargeType = VatLateSubmissionPen),
+      paymentNoEstimates.copy(chargeType = VatOverpaymentForRPI)
+    )
+
+    "there are 5 payments with no estimated charges" should {
+
+      "return a Seq with 5 charge view models" in {
+        mockDateServiceCall()
+        val res = service.categoriseCharges(paymentsNoEstimatesSeq, penaltyDetailsModelMax, false)
+
+        res.length shouldBe 5
+      }
+    }
+
+    "there are 5 payments with estimated charges" should {
+
+      "return a Seq with 9 charge view models" in {
+        mockDateServiceCall()
+        val res = service.categoriseCharges(paymentWithEstimatesSeq, penaltyDetailsModelMax, false)
+
+        res.length shouldBe 9
+      }
+    }
+
+  }
 
   "The findPenaltyCharge method" when {
 
