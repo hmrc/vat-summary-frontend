@@ -104,40 +104,45 @@ class WYOViewService @Inject()(dateService: DateService) extends LoggerUtil{
   def buildCrystallisedLPPViewModel(payment: PaymentWithPeriod,
                                     penaltyDetails: Option[LPPDetails],
                                     ddStatus: Boolean): Option[ChargeDetailsViewModel] =
-    penaltyDetails.flatMap { p =>
-      p.penaltyCategory match {
-        case "LPP1" => buildCrystallisedLPP1ViewModel(payment, penaltyDetails, ddStatus, dateService.now())
-        case "LPP2" => buildCrystallisedLPP2ViewModel(payment, penaltyDetails, ddStatus, dateService.now())
-        case _ =>
-          val loggerMessage = (penaltyDetails, payment.chargeReference) match {
-            case (Some(penDetails), _) => s"[WhatYouOweController][buildCrystallisedLPPViewModel] - " +
-              s"Missing LPP details for ${penDetails.penaltyCategory} penalty type"
-            case _ =>
-              val missingData = if (payment.chargeReference.isDefined) s"matching penalty for charge type: ${payment.chargeType}" else "charge reference"
-              s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing $missingData"
-          }
-          logger.warn(loggerMessage)
-          None
-      }
+    (penaltyDetails, payment.chargeReference) match {
+      case (Some(penDetails), Some(_)) =>
+        val viewModelOpt = penDetails.penaltyCategory match {
+          case "LPP1" => buildCrystallisedLPP1ViewModel(payment, penaltyDetails, ddStatus, dateService.now())
+          case "LPP2" => buildCrystallisedLPP2ViewModel(payment, penaltyDetails, ddStatus, dateService.now())
+          case _ => None
+        }
+        if (viewModelOpt.isEmpty) logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing LPP details for " +
+          s"${penDetails.penaltyCategory} penalty type")
+
+        viewModelOpt
+      case _ =>
+        val missingData = if (payment.chargeReference.isDefined) s"matching penalty for charge type: ${payment.chargeType}" else "charge reference"
+        logger.warn(s"[WhatYouOweController][buildCrystallisedLPPViewModel] - Missing $missingData")
+        None
     }
 
   def buildEstimatedLPPViewModel(payment: PaymentWithPeriod,
                                  penaltyDetails: Option[LPPDetails],
                                  breathingSpace:Boolean,
                                  ddStatus: Boolean): Option[ChargeDetailsViewModel] =
-    penaltyDetails.flatMap { p =>
-      p.penaltyCategory match {
-        case "LPP1" => buildEstimatedLPP1ViewModel(payment, penaltyDetails, breathingSpace, ddStatus)
-        case "LPP2" => buildEstimatedLPP2ViewModel(payment, penaltyDetails, breathingSpace, ddStatus)
-        case _ =>
-          val loggerMessage = (penaltyDetails, payment.accruingPenaltyAmount) match {
-          case (Some(pen), Some(_)) => s"Missing particular LPP details for ${pen.penaltyCategory} penalty type"
-          case (None, Some(_)) => s"No matching penalty was found for charge type: ${payment.chargeType}"
-          case _ => "Accruing penalty amount was not found"
+    (penaltyDetails, payment.accruingPenaltyAmount) match {
+      case (Some(penDetails), Some(_)) =>
+        val viewModelOpt = penDetails.penaltyCategory match {
+          case "LPP1" => buildEstimatedLPP1ViewModel(payment, penaltyDetails, breathingSpace, ddStatus)
+          case "LPP2" => buildEstimatedLPP2ViewModel(payment, penaltyDetails, breathingSpace, ddStatus)
+          case _ => None
         }
-          logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - $loggerMessage")
-          None
-      }
+        if (viewModelOpt.isEmpty) logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - Missing particular LPP details for " +
+          s"${penDetails.penaltyCategory} penalty type")
+          viewModelOpt
+      case _ =>
+        val missingData = if (payment.accruingPenaltyAmount.isDefined) {
+          s"No matching penalty was found for charge type: ${payment.chargeType}"
+        } else {
+          "Accruing penalty amount was not found"
+        }
+        logger.warn(s"[WhatYouOweController][buildEstimatedLPPViewModel] - $missingData")
+        None
     }
 
   def buildEstimatedInterest(payment: PaymentWithPeriod, ddStatus: Boolean): Option[ChargeDetailsViewModel] = {

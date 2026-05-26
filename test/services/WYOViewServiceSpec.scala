@@ -442,7 +442,8 @@ class WYOViewServiceSpec extends AnyWordSpec with Matchers with MockFactory {
       }
 
       "no matching penalty is provided" in {
-        service.buildCrystallisedLPPViewModel(penaltyCharge, None, ddStatus = false) shouldBe None
+        val charge = penaltyCharge.copy(chargeReference = None)
+        service.buildCrystallisedLPPViewModel(charge, None, ddStatus = false) shouldBe None
       }
 
       "penalty type is LPP1 but LPP1 details are missing" in {
