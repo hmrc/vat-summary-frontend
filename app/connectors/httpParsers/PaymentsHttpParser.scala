@@ -30,7 +30,9 @@ object PaymentsHttpParser extends ResponseHttpParsers {
       response.status match {
         case OK => response.json.validate[Payments] match {
           case JsSuccess(payments, _) => Right(payments)
-          case JsError(_) => Left(UnexpectedJsonFormat(response.status.toString, response.body))
+          case JsError(errors) =>
+            val errorMessage = errors.flatMap(_._2.flatMap(_.messages)).mkString("; ")
+            Left(UnexpectedJsonFormat(response.status.toString, errorMessage))
         }
         case NOT_FOUND => Right(Payments(Seq.empty))
         case BAD_REQUEST => handleBadRequest(response.json)
