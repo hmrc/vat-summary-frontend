@@ -17,9 +17,10 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
-import models.errors.{ServerSideError, UnexpectedStatusError}
+import models.errors.{ServerSideError, UnexpectedJsonFormat, UnexpectedStatusError}
 import models.payments._
 import play.api.http.Status.{BAD_REQUEST, NOT_FOUND, OK}
+import play.api.libs.json.{JsError, JsSuccess}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object PaymentsHttpParser extends ResponseHttpParsers {
@@ -27,7 +28,12 @@ object PaymentsHttpParser extends ResponseHttpParsers {
   implicit object PaymentsReads extends HttpReads[HttpResult[Payments]] {
     override def read(method: String, url: String, response: HttpResponse): HttpResult[Payments] = {
       response.status match {
-        case OK => Right(response.json.as[Payments])
+        case OK => response.json.validate[Payments] match {
+          case JsSuccess(payments, _) => Right(payments)
+          case JsError(errors) =>
+            val errorMessage = errors.flatMap(_._2.flatMap(_.messages)).mkString("; ")
+            Left(UnexpectedJsonFormat(response.status.toString, errorMessage))
+        }
         case NOT_FOUND => Right(Payments(Seq.empty))
         case BAD_REQUEST => handleBadRequest(response.json)
         case status if status >= 500 && status < 600 => Left(ServerSideError(response.status.toString, response.body))

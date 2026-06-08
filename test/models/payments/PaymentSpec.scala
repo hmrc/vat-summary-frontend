@@ -141,7 +141,7 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
 
     "given only a start date or an end date" should {
 
-      "throw an IllegalArgumentException" in {
+      "return a JsError" in {
         val paymentJson = Json.obj(
           "chargeType" -> ReturnDebitCharge.value,
           "taxPeriodFrom" -> startDate,
@@ -156,8 +156,8 @@ class PaymentSpec extends AnyWordSpecLike with Matchers {
           "originalAmount" -> 10000
         )
 
-        val exception = intercept[IllegalArgumentException](paymentJson.as[Payment])
-        exception.getMessage shouldBe s"Partial taxPeriod was supplied: periodFrom: 'Some($startDate)', periodTo: 'None'"
+        val result = paymentJson.validate[Payment]
+        result.isError shouldBe true
       }
     }
 

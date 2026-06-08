@@ -88,29 +88,6 @@ case class PaymentNoPeriod(chargeType: ChargeType,
 
 object Payment {
 
-  def apply(chargeType: ChargeType,
-            periodFrom: Option[LocalDate],
-            periodTo: Option[LocalDate],
-            due: LocalDate,
-            outstandingAmount: BigDecimal,
-            periodKey: Option[String],
-            chargeReference: Option[String],
-            ddCollectionInProgress: Boolean,
-            accruingInterestAmount: Option[BigDecimal],
-            accruingPenaltyAmount: Option[BigDecimal],
-            penaltyType: Option[String],
-            originalAmount: BigDecimal,
-            clearedAmount: Option[BigDecimal]): Payment =
-    (periodFrom, periodTo) match {
-      case (Some(s), Some(e)) =>
-        PaymentWithPeriod(chargeType, s, e, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress,
-          accruingInterestAmount, accruingPenaltyAmount, penaltyType, originalAmount, clearedAmount)
-      case (None, None) =>
-        PaymentNoPeriod(chargeType, due, outstandingAmount, periodKey, chargeReference, ddCollectionInProgress,
-          accruingInterestAmount, accruingPenaltyAmount, penaltyType, originalAmount, clearedAmount)
-      case (s, e) =>
-        throw new IllegalArgumentException(s"Partial taxPeriod was supplied: periodFrom: '$s', periodTo: '$e'")
-  }
 
   implicit val paymentReads: Reads[Payment] = (
     (JsPath \ "chargeType").read[ChargeType] and
@@ -126,6 +103,18 @@ object Payment {
     (JsPath \ "penaltyType").readNullable[String] and
     (JsPath \ "originalAmount").read[BigDecimal] and
     (JsPath \ "clearedAmount").readNullable[BigDecimal]
-
-  )(Payment.apply _)
+  ).tupled.flatMap {
+    case (chargeType, periodFrom, periodTo, due, outstandingAmt, periodKey, chargeRef,
+      ddInProgress, accruingInt, accruingPen, penaltyType, originalAmt, clearedAmt) =>
+      (periodFrom, periodTo) match {
+        case (Some(from), Some(to)) =>
+          Reads.pure(PaymentWithPeriod(chargeType, from, to, due, outstandingAmt, periodKey, chargeRef,
+            ddInProgress, accruingInt, accruingPen, penaltyType, originalAmt, clearedAmt))
+        case (None, None) =>
+          Reads.pure(PaymentNoPeriod(chargeType, due, outstandingAmt, periodKey, chargeRef,
+            ddInProgress, accruingInt, accruingPen, penaltyType, originalAmt, clearedAmt))
+        case (from, to) =>
+          Reads(_ => JsError(s"Partial taxPeriod supplied: taxPeriodFrom=$from, taxPeriodTo=$to"))
+      }
+  }
 }

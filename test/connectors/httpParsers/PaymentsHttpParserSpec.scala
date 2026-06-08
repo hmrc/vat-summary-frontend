@@ -68,6 +68,26 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
       clearedAmount = None
     )
 
+    def jsonWithPartialTaxPeriodData(charge: ChargeType): String = Json.obj(
+      "financialTransactions" -> Json.arr(
+        Json.obj(
+          "mainType" -> charge.value,
+          "chargeType" -> charge.value,
+          "taxPeriodTo" -> "2017-01-01",
+          "items" -> Json.arr(
+            Json.obj("dueDate" -> "2017-10-25")
+          ),
+          "outstandingAmount" -> 1000.50,
+          "periodKey" -> "#001",
+          "chargeReference" -> "XD002750002155",
+          "accruingInterestAmount" -> 2,
+          "accruingPenaltyAmount" -> 3,
+          "penaltyType" -> "LPP1",
+          "originalAmount" -> 10000
+        )
+      )
+    ).toString
+
     ChargeType.allChargeTypes.foreach { charge =>
 
       s"the http response status is 200 OK and the charge is $charge" should {
@@ -79,6 +99,19 @@ class PaymentsHttpParserSpec extends AnyWordSpecLike with Matchers {
         val result = PaymentsReads.read("", "", httpResponse)
 
         "return a Payments instance" in {
+          result shouldBe expected
+        }
+      }
+
+      s"the http response status is 200 OK but includes partial taxPeriod data and the charge is $charge" should {
+        val httpResponse = HttpResponse(Status.OK, jsonWithPartialTaxPeriodData(charge))
+
+        val expected = Left(UnexpectedJsonFormat(Status.OK.toString, "Partial taxPeriod supplied: taxPeriodFrom=None, " +
+          "taxPeriodTo=Some(2017-01-01)"))
+
+        val result = PaymentsReads.read("", "", httpResponse)
+
+        "return a UnexpectedJsonFormat" in {
           result shouldBe expected
         }
       }

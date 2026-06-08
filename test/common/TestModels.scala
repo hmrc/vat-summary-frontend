@@ -40,10 +40,10 @@ object TestModels {
 
   val testDate: LocalDate = LocalDate.parse("2018-05-01")
 
-  val payments: Payments = Payments(Seq(Payment(
+  val payments: Payments = Payments(Seq(PaymentWithPeriod(
     ReturnDebitCharge,
-    Some(LocalDate.parse("2019-01-01")),
-    Some(LocalDate.parse("2019-02-02")),
+    LocalDate.parse("2019-01-01"),
+    LocalDate.parse("2019-02-02"),
     LocalDate.parse("2019-03-03"),
     1,
     Some("#001"),

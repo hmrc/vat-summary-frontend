@@ -35,6 +35,11 @@ case class UnexpectedStatusError(code: String, errorResponse: String) extends Ht
     s"[UnexpectedStatusError]- RESPONSE status: $code, body: $errorResponse"
 }
 
+case class UnexpectedJsonFormat(code: String, errorResponse: String) extends HttpError {
+  override val message: String = "The server you are connecting to returned an error." +
+    s"[UnexpectedJsonFormat] - RESPONSE status: $code, body: $errorResponse"
+}
+
 case class MultipleErrors(code: String, errorResponse: String) extends HttpError {
   override val message: String = "The server you are connecting to returned an error. " +
     s"[MultipleErrors]- RESPONSE status: $code, message: $errorResponse"
