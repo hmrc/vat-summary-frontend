@@ -85,6 +85,22 @@ object StandardChargeViewModel {
 
   implicit val format: OFormat[StandardChargeViewModel] = Json.format[StandardChargeViewModel]
 
+  def buildStandardChargeViewModel(payment: Payment, ddStatus: Boolean, today: LocalDate): Option[StandardChargeViewModel] = {
+    Some(StandardChargeViewModel(
+      chargeType = payment.chargeType.value,
+      outstandingAmount = payment.outstandingAmount,
+      originalAmount = payment.originalAmount,
+      clearedAmount = payment.clearedAmount.getOrElse(0),
+      dueDate = payment.due,
+      periodKey = payment.periodKey,
+      isOverdue = payment.isOverdue(today),
+      chargeReference = payment.chargeReference,
+      periodFrom = periodFrom(payment),
+      periodTo = periodTo(payment),
+      directDebitMandateFound = ddStatus
+    ))
+  }
+
   def periodFrom(payment: Payment): Option[LocalDate] = payment match {
     case p: PaymentWithPeriod => Some(p.periodFrom)
     case _ => None

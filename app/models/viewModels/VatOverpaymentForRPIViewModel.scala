@@ -16,6 +16,7 @@
 
 package models.viewModels
 
+import models.payments.PaymentWithPeriod
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -55,6 +56,21 @@ case class VatOverpaymentForRPIViewModel(periodFrom: LocalDate,
 }
 
 object VatOverpaymentForRPIViewModel {
+
+  def buildVatOverpaymentForRPIViewModel(payment: PaymentWithPeriod, ddStatus: Boolean, today: LocalDate): Option[VatOverpaymentForRPIViewModel] = {
+    Some(VatOverpaymentForRPIViewModel(
+      periodFrom = payment.periodFrom,
+      periodTo = payment.periodTo,
+      chargeType = payment.chargeType.value,
+      dueDate = payment.due,
+      correctionCharge = payment.originalAmount,
+      amountReceived = payment.clearedAmount.getOrElse(0),
+      leftToPay = payment.outstandingAmount,
+      isOverdue = payment.isOverdue(today),
+      chargeReference = payment.chargeReference,
+      directDebitMandateFound = ddStatus
+    ))
+  }
 
   implicit val format: OFormat[VatOverpaymentForRPIViewModel] = Json.format[VatOverpaymentForRPIViewModel]
 }

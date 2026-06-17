@@ -16,6 +16,8 @@
 
 package models.viewModels
 
+import models.payments.{ChargeType, PaymentWithPeriod}
+import models.penalties.LPPDetails
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 import views.templates.payments.PaymentMessageHelper
@@ -43,6 +45,26 @@ case class EstimatedLPP2ViewModel(day: String,
 }
 
 object EstimatedLPP2ViewModel {
+
+  def buildEstimatedLPP2ViewModel(payment: PaymentWithPeriod,
+                                 penaltyDetails: Option[LPPDetails],
+                                 breathingSpace: Boolean,
+                                 ddStatus: Boolean): Option[ChargeDetailsViewModel] =
+    (penaltyDetails, payment.accruingPenaltyAmount) match {
+      case (Some(LPPDetails(_, "LPP2", _, _, _, _, _, _, Some(daysLPP2), Some(rateLPP2), _, timeToPay)), Some(penaltyAmnt)) =>
+        Some(EstimatedLPP2ViewModel(
+          day = daysLPP2,
+          penaltyRate = rateLPP2,
+          penaltyAmount = penaltyAmnt,
+          periodFrom = payment.periodFrom,
+          periodTo = payment.periodTo,
+          chargeType = ChargeType.penaltyChargeMappingLPP2(payment.chargeType).value,
+          timeToPay = timeToPay,
+          breathingSpace = breathingSpace,
+          directDebitMandateFound = ddStatus
+        ))
+      case _ => None
+    }
 
   implicit val format: OFormat[EstimatedLPP2ViewModel] = Json.format[EstimatedLPP2ViewModel]
 

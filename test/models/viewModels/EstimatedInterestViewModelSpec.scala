@@ -16,10 +16,12 @@
 
 package models.viewModels
 
-import common.TestModels.{estimatedLPIJson, estimatedLPIModel}
+import common.TestModels.{estimatedLPIJson, estimatedLPIModel, payment}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
+
+import java.time.LocalDate
 
 class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
 
@@ -31,6 +33,23 @@ class EstimatedInterestViewModelSpec extends AnyWordSpecLike with Matchers {
 
     "write to JSON" in {
       Json.toJson(estimatedLPIModel) shouldBe estimatedLPIJson
+    }
+  }
+
+  "The buildEstimatedIntViewModel function" should {
+
+    "return a EstimatedInterestViewModel" when {
+
+      "accruingInterestAmount is present" in {
+        EstimatedInterestViewModel.buildEstimatedIntViewModel(payment, false, 2) shouldBe Some(EstimatedInterestViewModel(
+          LocalDate.parse("2019-01-01"),
+          LocalDate.parse("2019-02-02"),
+          "VAT Return LPI",
+          2,
+          isPenaltyReformPenaltyLPI = false,
+          isNonPenaltyReformPenaltyLPI = false, directDebitMandateFound = false
+        ))
+      }
     }
   }
 }

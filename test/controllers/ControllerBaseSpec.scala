@@ -39,8 +39,9 @@ import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
 import org.scalatest.wordspec.AnyWordSpecLike
 import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
 import models._
+
 import java.time.LocalDate
-import models.payments.Payments
+import models.payments.{Payment, Payments}
 import models.penalties.PenaltyDetails
 import models.viewModels.ChargeDetailsViewModel
 import org.scalatest.enablers.Existence
@@ -79,6 +80,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   val mockServiceInfoService: ServiceInfoService = mock[ServiceInfoService]
   val mockAuditService: AuditingService = mock[AuditingService]
   val mockPenaltyDetailsService: PenaltyDetailsService = mock[PenaltyDetailsService]
+  val mockWYOViewService: WYOViewService = mock[WYOViewService]
   val mockWYOSessionService: WYOSessionService = mock[WYOSessionService]
   val mockPOACheckService: POACheckService = mock[POACheckService]
 
@@ -175,6 +177,11 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
       .expects(*, *)
       .returns(someDate)
   }
+
+  def mockCategoriseChargesCall(categorisedCharges: Seq[Option[ChargeDetailsViewModel]]): Any =
+    (mockWYOViewService.categoriseCharges(_: Seq[Payment], _: PenaltyDetails, _: Boolean))
+      .stubs(*, *, *)
+      .returns(categorisedCharges)
 
   def mockServiceInfoCall(): Any =
     (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))

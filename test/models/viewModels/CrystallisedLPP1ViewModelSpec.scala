@@ -16,11 +16,14 @@
 
 package models.viewModels
 
-import common.TestModels.{crystallisedLPP1JsonMax, crystallisedLPP1JsonMin, crystallisedLPP1Model, crystallisedLPP1ModelMin}
+import common.TestModels._
+import models.payments.VatReturn1stLPP
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
 import views.ViewBaseSpec
+
+import java.time.LocalDate
 
 class CrystallisedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike with Matchers {
 
@@ -59,6 +62,64 @@ class CrystallisedLPP1ViewModelSpec extends ViewBaseSpec with AnyWordSpecLike wi
 
       "optional fields are missing" in {
         Json.toJson(crystallisedLPP1ModelMin) shouldBe crystallisedLPP1JsonMin
+      }
+    }
+
+    "The buildCrystallisedLPP1ViewModel function" should {
+
+      "The buildCrystallisedLPPViewModel function" should {
+
+        val penaltyCharge = payment.copy(chargeType = VatReturn1stLPP)
+
+        "return a CrystallisedLPP1ViewModel" when {
+
+          "chargeReference and all appropriate LPP1 penalty details (lower rate) are present" in {
+            val lppDetails = LPPDetailsModelMaxWithLPP1HRPercentage.copy(LPP1HRCalculationAmount = None)
+
+            CrystallisedLPP1ViewModel.buildCrystallisedLPP1ViewModel(penaltyCharge, Some(lppDetails), false, LocalDate.parse("2019-03-03")) shouldBe Some(CrystallisedLPP1ViewModel(
+              "15",
+              "15",
+              Some("30"),
+              2.4,
+              Some(4.2),
+              100.11,
+              None,
+              LocalDate.parse("2019-03-03"),
+              10000,
+              0,
+              10000,
+              LocalDate.parse("2019-01-01"),
+              LocalDate.parse("2019-02-02"),
+              "VAT Return 1st LPP",
+              "XD002750002155",
+              isOverdue = false, directDebitMandateFound = false
+            ))
+          }
+
+          "chargeReference and all appropriate LPP1 penalty details (higher rate) are present" in {
+
+            CrystallisedLPP1ViewModel.buildCrystallisedLPP1ViewModel(penaltyCharge, Some(LPPDetailsModelMaxWithLPP1HRPercentage), false, LocalDate.parse("2019-03-03")) shouldBe
+              Some(CrystallisedLPP1ViewModel(
+                "30",
+                "15",
+                Some("30"),
+                2.4,
+                Some(4.2),
+                100.11,
+                Some(200.22),
+                LocalDate.parse("2019-03-03"),
+                10000,
+                0,
+                10000,
+                LocalDate.parse("2019-01-01"),
+                LocalDate.parse("2019-02-02"),
+                "VAT Return 1st LPP",
+                "XD002750002155",
+                isOverdue = false, directDebitMandateFound = false
+              ))
+
+          }
+        }
       }
     }
   }
