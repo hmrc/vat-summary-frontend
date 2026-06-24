@@ -57,12 +57,14 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
 }
 
 @languageSelect = {
-  @hmrcLanguageSelect(LanguageSelect(
-    language = if (messages.lang.language == "en") En else Cy,
-    languageLinks =
-      En -> appConfig.routeToSwitchLanguage("english").url,
-      Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
-  ))
+  @if(!appConfig.isServiceNavigationEnabled){
+    @hmrcLanguageSelect(LanguageSelect(
+      language = if (messages.lang.language == "en") En else Cy,
+      languageLinks =
+        En -> appConfig.routeToSwitchLanguage("english").url,
+        Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
+    ))
+  }
 }
 
 @beforeContentHtml = {
@@ -107,7 +109,8 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
     userResearchBanner = if(appConfig.features.showUserResearchBannerEnabled()) Some(UserResearchBanner(
                             url = "https://www.gov.uk/government/organisations/hm-revenue-customs"
                          )) else None,
-    displayHmrcBanner = false
+    displayHmrcBanner = false,
+    isWelshTranslationAvailable = true
   )
 }
 

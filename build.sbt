@@ -49,7 +49,7 @@ val bootstrapPlayVersion = "10.1.0"
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "12.8.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "12.32.0",
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"         % mongoVersion,
 )
 
@@ -76,7 +76,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(
     Test / Keys.fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml",
-    scalaVersion := "2.13.16",
+    scalaVersion := "2.13.18",
     libraryDependencies ++= appDependencies,
     scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=.*routes.*:s", "-Wconf:cat=unused-imports&src=html/.*:s", "-Wconf:src=routes/.*:s"),
     retrieveManaged := true,

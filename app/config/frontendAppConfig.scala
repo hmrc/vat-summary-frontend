@@ -104,6 +104,7 @@ trait AppConfig {
   val timeToLiveInSeconds: Int
   val essttpService: String
   val webchatUrl: String
+  val isServiceNavigationEnabled: Boolean
 }
 
 @Singleton
@@ -259,4 +260,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, sc: S
   override lazy val timeToLiveInSeconds: Int = sc.getInt(Keys.timeToLive)
 
   override lazy val essttpService: String = sc.baseUrl(Keys.essttpServiceBase)
+
+  lazy val isServiceNavigationEnabled: Boolean = sc.getBoolean("play-frontend-hmrc.forceServiceNavigation")
 }
