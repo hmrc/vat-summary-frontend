@@ -62,3 +62,21 @@ dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__ke
 .poa-summary-list .third-payment-row .third-payment-text {
   white-space: nowrap;
 }
+
+.two-part span {
+  display: block;
+}
+
+@media (min-width: 40.0625em) {
+  .two-part {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin: 0;
+
+    span {
+      margin: 5px 20px 10px 0;
+    } 
+  }
+}

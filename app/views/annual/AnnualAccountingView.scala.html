@@ -161,9 +161,13 @@
             @for(period <- model.currentPeriods) {
               <div class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
-                  <h2 class="govuk-summary-card__title">@messages("annualAccounting.accountingPeriod")</h2>
-                  <h2 class="govuk-summary-card__title">
-                    @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                  <h2 class="govuk-summary-card__title  two-part">
+                    <span>
+                      @messages("annualAccounting.accountingPeriod")
+                    </span>
+                    <span>
+                      @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                    </span>
                   </h2>
                 </div>
                 <div class="govuk-summary-card__content">
@@ -205,9 +209,13 @@
             @for(period <- model.pastPeriods) {
               <div class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
-                  <h2 class="govuk-summary-card__title">@messages("annualAccounting.accountingPeriod")</h2>
-                  <h2 class="govuk-summary-card__title">
-                    @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                  <h2 class="govuk-summary-card__title  two-part">
+                    <span>
+                      @messages("annualAccounting.accountingPeriod")
+                    </span>
+                    <span>
+                      @MessageDateFormat.formatLong(period.startDate) to @MessageDateFormat.formatLong(period.endDate)
+                    </span>
                   </h2>
                 </div>
                 <div class="govuk-summary-card__content">
