@@ -65,6 +65,7 @@ dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__ke
 
 .two-part span {
   display: block;
+  margin: 5px 20px 10px 0;
 }
 
 @media (min-width: 40.0625em) {
@@ -74,9 +75,5 @@ dl.govuk-\!-margin-bottom-0 > .govuk-summary-list__row > .govuk-summary-list__ke
     justify-content: space-between;
     flex-wrap: nowrap;
     margin: 0;
-
-    span {
-      margin: 5px 20px 10px 0;
-    } 
   }
 }
