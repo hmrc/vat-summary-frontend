@@ -13,9 +13,14 @@ This service is written in [Scala](http://www.scala-lang.org/) and [Play](http:/
 
 ### Running the application
 
-In order to run this microservice, you must have SBT installed. You should then be able to start the application using:
-                                                               
-`./run.sh`
+To run locally:
+
+`sm2 --start CHANGE_VAT_DETAILS_ALL`
+
+`sm2 --stop VAT_SUMMARY_FRONTEND`
+
+`sbt run`
+
 
 ### License
 

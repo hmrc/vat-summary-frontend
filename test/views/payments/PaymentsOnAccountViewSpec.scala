@@ -215,10 +215,10 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       lazy val view = paymentsOnAccountView(viewModel, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
       document.select(".govuk-summary-card__title").text() should include(
-        "1 November 2024 to 31 January 2025"
+        "VAT period: 1 November 2024 to 31 January 2025"
       )
       document.select(".govuk-summary-card__title").text() should include(
-        "1 February 2025 to 30 April 2025"
+        "VAT period: 1 February 2025 to 30 April 2025"
       )
     }
 
@@ -229,12 +229,9 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
         document.select(".govuk-summary-card__title").eachText().asScala.toSeq
 
       periodTitles shouldBe Seq(
-        "VAT period:",
-        "1 February 2024 to 30 April 2024",
-        "VAT period:",
-        "1 November 2024 to 31 January 2025",
-        "VAT period:",
-        "1 February 2025 to 30 April 2025"
+        "VAT period: 1 February 2024 to 30 April 2024",
+        "VAT period: 1 November 2024 to 31 January 2025",
+        "VAT period: 1 February 2025 to 30 April 2025"
       )
     }
 
@@ -326,9 +323,9 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
         .eachText()
         .asScala
 
-      currentScheduleTitles should not contain "1 February 2024 to 30 April 2024"
+      currentScheduleTitles should not contain "VAT period: 1 February 2024 to 30 April 2024"
 
-      pastScheduleTitles should contain("1 February 2024 to 30 April 2024")
+      pastScheduleTitles should contain("VAT period: 1 February 2024 to 30 April 2024")
     }
 
     "show 'Current and Upcoming Schedule' as the default active tab" in {
