@@ -244,7 +244,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       )
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      val returnDeadlineLink = document.select("#vat-returns-link")
+      val returnDeadlineLink = document.select("[id^=vat-returns-link-current-]")
 
       returnDeadlineLink.attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
@@ -283,7 +283,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       val submittedReturnLink =
-        document.select("#past-schedule #vat-submitted-link")
+        document.select("#past-schedule [id^=vat-submitted-link-past-]")
 
       submittedReturnLink.attr(
         "href"
@@ -369,7 +369,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       val paymentAmounts =
-        document.select("#payment-amount").eachText().asScala.toSeq
+        document.select("[id^=payment-amount-]").eachText().asScala.toSeq
 
       val isEveryThirdBalance =
         paymentAmounts.sliding(3, 3).forall(_.lastOption.contains("Balance"))
@@ -445,7 +445,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       lazy val view = paymentsOnAccountView(updatedViewModel, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      val vatReturnLink = document.select("#vat-returns-link")
+      val vatReturnLink = document.select("[id^=vat-returns-link-current-]")
 
       vatReturnLink should not be empty
       vatReturnLink.attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
@@ -483,7 +483,7 @@ class PaymentsOnAccountViewSpec extends ViewBaseSpec {
       lazy val view = paymentsOnAccountView(testViewModel, Html(""))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      val fallbackLink = document.select("#vat-returns-link")
+      val fallbackLink = document.select("[id^=vat-returns-link-current-]")
 
       fallbackLink.text() shouldBe "VAT return due date"
       fallbackLink.attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
