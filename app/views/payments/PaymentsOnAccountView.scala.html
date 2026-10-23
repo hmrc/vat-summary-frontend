@@ -133,7 +133,7 @@
         
           <div class="govuk-tabs__panel" id="current-schedule" role="tabpanel" aria-labelledby="tab_current-schedule">
             <h2 class="govuk-heading-l govuk-visually-hidden">@messages("paymentsOnAccount.currentSchedule.hidden")</h2>
-            @for(period <- model.currentPeriods.take(5)) {
+            @for((period, periodIndex) <- model.currentPeriods.take(5).zipWithIndex) {
               <div class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                   <h2 class="govuk-summary-card__title  two-part">
@@ -147,7 +147,7 @@
                 </div>
                 <div class="govuk-summary-card__content">
                   <dl class="govuk-summary-list poa-summary-list" >
-                    @for(payment <- period.payments) {
+                    @for((payment, paymentIndex) <- period.payments.zipWithIndex) {
                       <div class="govuk-summary-list__row @if(payment.paymentType == PaymentType.ThirdPayment) {third-payment-row}">
                         <dt class="govuk-summary-list__key">@messages(payment.paymentType.messageKey)</dt>
                         @if(payment.paymentType == PaymentType.ThirdPayment) {
@@ -159,7 +159,7 @@
                               }
                               case _ => {
                                 @messages("paymentsOnAccount.sameAs")
-                                <a class="govuk-link" id="vat-returns-link" href="@appConfig.vatReturnDeadlinesUrl">
+                                <a class="govuk-link" id="vat-returns-link-current-@(periodIndex + 1)-@(paymentIndex + 1)" href="@appConfig.vatReturnDeadlinesUrl">
                                   @messages("paymentsOnAccount.VatReturn")
                                 </a>
                               }
@@ -175,7 +175,7 @@
                             @messages("paymentsOnAccount.pending")
                           }
                         }
-                        <dd id="payment-amount" class="govuk-summary-list__actions">
+                        <dd id="payment-amount-current-@(periodIndex + 1)-@(paymentIndex + 1)" class="govuk-summary-list__actions">
                           @payment.amount.map { amount =>
                             @Money.pounds(amount)
                           }.getOrElse{
@@ -192,7 +192,7 @@
         
           <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="past-schedule" role="tabpanel" aria-labelledby="tab_past-schedule">
             <h2 class="govuk-heading-l govuk-visually-hidden">@messages("paymentsOnAccount.pastPaymentsOnSchedule")</h2>
-            @for(period <- model.pastPeriods) {
+            @for((period, periodIndex) <- model.pastPeriods.zipWithIndex) {
               <div class="govuk-summary-card">
                 <div class="govuk-summary-card__title-wrapper">
                   <h2 class="govuk-summary-card__title two-part">
@@ -206,20 +206,20 @@
                 </div>
                 <div class="govuk-summary-card__content">
                   <dl class="govuk-summary-list poa-summary-list">
-                    @for(payment <- period.payments) {
+                    @for((payment, paymentIndex) <- period.payments.zipWithIndex) {
                       <div class="govuk-summary-list__row @if(payment.paymentType == PaymentType.ThirdPayment) {third-payment-row}">
                         <dt class="govuk-summary-list__key">@messages(payment.paymentType.messageKey)</dt>
                         @if(payment.paymentType == PaymentType.ThirdPayment) {
-                          <p id="third-payment-message">
+                          <p id="third-payment-message-past-@(periodIndex + 1)-@(paymentIndex + 1)">
                           <p class="third-payment-text">
                             @messages("paymentsOnAccount.sameAs")
-                            <a class="govuk-link" id="vat-submitted-link" href="@appConfig.vatSubmittedReturnsUrl">
+                            <a class="govuk-link" id="vat-submitted-link-past-@(periodIndex + 1)-@(paymentIndex + 1)" href="@appConfig.vatSubmittedReturnsUrl">
                               @messages("paymentsOnAccount.VatReturn")
                             </a>
                           </p>
                           </p>
                         } else {
-                          <div id="payment-due-date">
+                          <div id="payment-due-date-past-@(periodIndex + 1)-@(paymentIndex + 1)">
                             @payment.dueDate.dueDate.map{ dueDate => 
                               @MessageDateFormat.format(dueDate)
                             }.getOrElse{
@@ -227,7 +227,7 @@
                             }
                           </div>
                        }
-                       <dd id="payment-amount" class="govuk-summary-list__actions">
+                       <dd id="payment-amount-past-@(periodIndex + 1)-@(paymentIndex + 1)" class="govuk-summary-list__actions">
                         @payment.amount.map { amount =>
                           @Money.pounds(amount)
                         }.getOrElse{
