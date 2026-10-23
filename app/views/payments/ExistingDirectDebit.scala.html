@@ -21,6 +21,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @import models.viewModels.helpers.RadioOption
+@import views.helpers.UrBannerUtil
 
 
 
@@ -64,7 +65,8 @@ implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, u
     appConfig = appConfig,
     serviceInfoContent = serviceInfoContent,
     user = Some(user),
-    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs),
+    urBanner = Some(UrBannerUtil.getUrBanner(hideCloseButton = false))
 ) {
 
 @uiForm(routes.ExistingDirectDebitController.submit) {
