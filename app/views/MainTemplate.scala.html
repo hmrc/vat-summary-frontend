@@ -27,7 +27,8 @@
       hmrcStandardHeader: HmrcStandardHeader,
       hmrcStandardFooter: HmrcStandardFooter,
       hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-      hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet)
+      hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+      hmrcUserResearchBanner: HmrcUserResearchBanner)
 
 @(title: String,
   showLogout: Boolean = true,
@@ -35,7 +36,8 @@
   feedbackOnSignOut: Boolean = true,
   navLinkContent: Option[Html] = None,
   serviceInfoContent: Html = HtmlFormat.empty,
-  user: Option[User] = None)(mainContent: Html)(implicit request : RequestHeader, messages: Messages)
+  user: Option[User] = None,
+  urBanner: Option[UserResearchBanner] = None)(mainContent: Html)(implicit request : RequestHeader, messages: Messages)
 
 @dynamicNavTitle = @{
   user.fold(messages("navTitle.vat"))(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
@@ -106,9 +108,7 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
     serviceName = Some(dynamicNavTitle),
     serviceUrl =  titleServiceUrl,
     signOutUrl = if(showLogout) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
-    userResearchBanner = if(appConfig.features.showUserResearchBannerEnabled()) Some(UserResearchBanner(
-                            url = "https://www.gov.uk/government/organisations/hm-revenue-customs"
-                         )) else None,
+    additionalBannersBlock = if(appConfig.features.showUserResearchBannerEnabled()) urBanner.map(hmrcUserResearchBanner(_)) else None,
     displayHmrcBanner = false,
     isWelshTranslationAvailable = true
   )

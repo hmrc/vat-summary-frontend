@@ -110,4 +110,5 @@ class MockAppConfig(val runModeConfiguration: Configuration) extends AppConfig {
   override val essttpService: String = "/essttp"
   override val webchatUrl: String = "/ask-hmrc/chat/vat-online?ds"
   val isServiceNavigationEnabled: Boolean = true
+  override val urBannerUrl: String = "ur-banner-url"
 }

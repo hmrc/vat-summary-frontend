@@ -23,6 +23,7 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import utils.MessageDateFormat
 @import java.time.LocalDate
+@import views.helpers.UrBannerUtil
 
 @this(mainTemplate: MainTemplate,
       nextPaymentSection: NextPaymentSection,
@@ -164,7 +165,8 @@
   appConfig = appConfig,
   serviceInfoContent = serviceInfoContent,
   user = Some(user),
-  navLinkContent = Some(breadcrumbs)
+  navLinkContent = Some(breadcrumbs),
+  urBanner = Some(UrBannerUtil.getUrBanner(hideCloseButton = false))
 ) {
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-0">@messages("vatDetails.title")</h1>
