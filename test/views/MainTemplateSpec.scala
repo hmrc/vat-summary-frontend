@@ -19,26 +19,37 @@ package views
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
+import uk.gov.hmrc.hmrcfrontend.views.Aliases.UserResearchBanner
+import views.helpers.UrBannerUtil
 import views.html.MainTemplate
 
 class MainTemplateSpec extends ViewBaseSpec {
 
   val injectedView: MainTemplate = injector.instanceOf[MainTemplate]
   val userBannerHeading: String = "Help make GOV.UK better"
+  lazy val urBanner: UserResearchBanner = UrBannerUtil.getUrBanner()(mockConfig, messages)
+
+  override def afterEach(): Unit = {
+    mockConfig.features.showUserResearchBannerEnabled(false)
+    super.afterEach()
+  }
 
   object Selectors {
     val pageTitle = ".govuk-header__service-name"
     val userResearchBanner: String = ".hmrc-user-research-banner"
     val userResearchBannerHeading = ".hmrc-user-research-banner__title"
+    val userResearchBannerCloseButton = ".hmrc-user-research-banner__close"
   }
 
   "The MainTemplate" when {
 
     "the showUserResearchBanner feature switch is turned off" when {
 
+      mockConfig.features.showUserResearchBannerEnabled(false)
+
       "the user is an individual or organisation" should {
 
-        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user), urBanner = Some(urBanner))(Html("Test"))(request, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the client nav title" in {
@@ -56,7 +67,7 @@ class MainTemplateSpec extends ViewBaseSpec {
 
       "the user is an agent" should {
 
-        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(agentUser))(Html("Test"))(request, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(agentUser), urBanner = Some(urBanner))(Html("Test"))(request, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct agent title" in {
@@ -75,7 +86,7 @@ class MainTemplateSpec extends ViewBaseSpec {
 
       "the user is not known" should {
 
-        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = None)(Html("Test"))(request, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = None, urBanner = Some(urBanner))(Html("Test"))(request, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have no nav title" in {
@@ -96,34 +107,93 @@ class MainTemplateSpec extends ViewBaseSpec {
 
       "the user is an individual or organisation" should {
 
-        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user), urBanner = Some(urBanner))(Html("Test"))(request, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display the correct user research banner heading" in {
           mockConfig.features.showUserResearchBannerEnabled(true)
           elementText(Selectors.userResearchBannerHeading) shouldBe userBannerHeading
+        }
+
+        "display the user research banner link with the configured url" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          element(s"${Selectors.userResearchBanner} a").attr("href") shouldBe mockConfig.urBannerUrl
         }
       }
 
       "the user is an agent" should {
 
-        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(agentUser))(Html("Test"))(request, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(agentUser), urBanner = Some(urBanner))(Html("Test"))(request, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display the correct user research banner heading" in {
           mockConfig.features.showUserResearchBannerEnabled(true)
           elementText(Selectors.userResearchBannerHeading) shouldBe userBannerHeading
         }
+
+        "display the user research banner link with the configured url" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          element(s"${Selectors.userResearchBanner} a").attr("href") shouldBe mockConfig.urBannerUrl
+        }
       }
 
       "the user is not known" should {
 
-        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = None)(Html("Test"))(request, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = None, urBanner = Some(urBanner))(Html("Test"))(request, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "display the correct user research banner heading" in {
           mockConfig.features.showUserResearchBannerEnabled(true)
           elementText(Selectors.userResearchBannerHeading) shouldBe userBannerHeading
+        }
+
+        "display the user research banner link with the configured url" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          element(s"${Selectors.userResearchBanner} a").attr("href") shouldBe mockConfig.urBannerUrl
+        }
+      }
+
+      "a user research banner with a close button is provided" should {
+
+        lazy val urBannerWithCloseButton: UserResearchBanner = UrBannerUtil.getUrBanner(hideCloseButton = false)(mockConfig, messages)
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user), urBanner = Some(urBannerWithCloseButton))(Html("Test"))(request, messages)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "display the user research banner" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          elementExistsOnce(Selectors.userResearchBanner)
+        }
+
+        "display the close button" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          elementExistsOnce(Selectors.userResearchBannerCloseButton)
+        }
+      }
+
+      "a user research banner without a close button is provided" should {
+
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user), urBanner = Some(urBanner))(Html("Test"))(request, messages)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "display the user research banner" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          elementExistsOnce(Selectors.userResearchBanner)
+        }
+
+        "not display the close button" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          elementExtinct(Selectors.userResearchBannerCloseButton)
+        }
+      }
+
+      "no user research banner is provided" should {
+
+        lazy val view = injectedView(title = "Title of page", appConfig = mockConfig, user = Some(user))(Html("Test"))(request, messages)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "not display the user research banner" in {
+          mockConfig.features.showUserResearchBannerEnabled(true)
+          elementExtinct(Selectors.userResearchBanner)
         }
       }
     }

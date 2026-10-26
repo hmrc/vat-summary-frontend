@@ -132,4 +132,6 @@ object ConfigKeys {
   val essttpServiceBase: String = "essttp-backend"
   val futureDateOffsetEnabled: String = "features.futureDateOffset.enabled"
   val poaActiveFeatureEnabled: String = "features.poaActiveFeature.enabled"
+
+  val urBannerUrl: String = "urBanner.url"
 }

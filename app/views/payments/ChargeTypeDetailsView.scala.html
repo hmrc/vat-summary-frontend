@@ -18,6 +18,7 @@
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
 @import models.payments._
+@import views.helpers.UrBannerUtil
 
 @this(mainTemplate: MainTemplate,
       govukBreadcrumbs: GovukBreadcrumbs,
@@ -96,7 +97,8 @@ classes = "govuk-tag--red"
     appConfig = appConfig,
     serviceInfoContent = serviceInfoContent,
     user = Some(user),
-    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs)
+    navLinkContent = if(user.isAgent) Some(backLink) else Some(breadcrumbs),
+    urBanner = Some(UrBannerUtil.getUrBanner(hideCloseButton = false))
 ) {
 
     <div class="govuk-grid-row">

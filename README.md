@@ -19,7 +19,10 @@ To run locally:
 
 `sm2 --stop VAT_SUMMARY_FRONTEND`
 
-`sbt run`
+`./run.sh`
+
+### Running Unit and Integration Tests
+`./run-all-test.sh`
 
 
 ### License
