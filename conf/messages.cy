@@ -916,3 +916,4 @@ penaltiesChangesBanner.message.3 = Rydym hefyd yn newid sut rydym yn cyfrifo llo
 penaltiesChangesBanner.link = Darllenwch yr arweiniad ar GOV.UK i gael rhagor o wybodaeth (yn agor tab newydd)
 
 webchat.askHMRC = Gofyn i CThEF (yn agor tab newydd)
+navigation.account = Cyfrif
