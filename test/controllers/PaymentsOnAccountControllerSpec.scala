@@ -16,24 +16,21 @@
 
 package controllers
 
-import org.jsoup.Jsoup
-import play.api.test.Helpers._
-import uk.gov.hmrc.http.HeaderCarrier
-import views.html.payments.PaymentsOnAccountView
-import java.time.LocalDate
-import scala.concurrent.Future
 import common.TestModels._
-import models.StandingRequest
-import models.viewModels._
-import models.obligations.{VatReturnObligations, VatReturnObligation}
-import models.User
 import models._
+import models.obligations.{VatReturnObligation, VatReturnObligations}
+import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import scala.concurrent.ExecutionContext
-import play.api.i18n.{Messages}
-import views.html.errors.PaymentsOnAccountError
+import play.api.i18n.Messages
+import play.api.test.Helpers._
 import services.VatDetailsService
+import uk.gov.hmrc.http.HeaderCarrier
+import views.html.errors.PaymentsOnAccountError
+import views.html.payments.PaymentsOnAccountView
+
+import java.time.LocalDate
+import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
 
@@ -554,8 +551,6 @@ class PaymentsOnAccountControllerSpec extends ControllerBaseSpec {
           "25A1")))),
         None
       )
-
-      val vatPeriodEnd = LocalDate.parse("2025-03-31")
 
       result.nextPayment shouldBe Some(
         PaymentDetail(

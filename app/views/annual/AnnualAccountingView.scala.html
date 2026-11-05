@@ -19,11 +19,12 @@
 @import utils.Money
 @import views.html.helper.CSPNonce
 @import utils.MessageDateFormat
+@import models.ServiceNavigationInfo
 
 @this(mainTemplate: MainTemplate,
       govukBackLink: GovukBackLink)
 
-@(model: AnnualAccountingViewModel, serviceInfoContent: Html)(
+@(model: AnnualAccountingViewModel, serviceInfoContent: Option[ServiceNavigationInfo])(
   implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig, user: User)
 
 @backLink = {

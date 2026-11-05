@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,16 @@ package services
 import common.TestModels.navContent
 import connectors.ServiceInfoPartialConnector
 import controllers.ControllerBaseSpec
-import models.{ListLinks, User}
+import models.{ListLinks, ServiceNavigationInfo, User}
 import play.api.i18n.{Lang, Messages, MessagesImpl}
-import play.twirl.api.{Html, HtmlFormat}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.templates.NavLinksView
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceInfoServiceSpec extends ControllerBaseSpec {
 
   val mockConnector: ServiceInfoPartialConnector = mock[ServiceInfoPartialConnector]
-  val btaLinks: NavLinksView = injector.instanceOf[NavLinksView]
-  val service: ServiceInfoService = new ServiceInfoService(mockConnector, btaLinks)
+  val service: ServiceInfoService = new ServiceInfoService(mockConnector)
   val hc: HeaderCarrier = HeaderCarrier()
   val user: User = User("123123123")
   val agentUser: User = User("123123123", arn = Some("XARN1234567"))
@@ -43,21 +39,22 @@ class ServiceInfoServiceSpec extends ControllerBaseSpec {
       (mockConnector.getNavLinks()(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *)
         .returning(Future.successful(Some(navContent)))
+
       val listLinks = Seq(
         ListLinks(navContent.home.en, navContent.home.url),
         ListLinks(navContent.account.en, navContent.account.url),
         ListLinks(navContent.messages.en, navContent.messages.url, navContent.messages.alerts.map(_.toString)),
         ListLinks(navContent.help.en, navContent.help.url)
       )
-      val result: Html = await(service.getPartial(user, hc, ec, messages))
-      val expectedResult: Html = btaLinks(listLinks)
+      val result: Option[ServiceNavigationInfo] = await(service.getPartial(user, hc, ec, messages))
+      val expectedResult = Some(ServiceNavigationInfo(navLinks = listLinks))
 
-      result.body shouldBe expectedResult.body
+      result shouldBe expectedResult
     }
 
     "return empty HTML for agents" in {
-      val result: Html = await(service.getPartial(agentUser, hc, ec, messages))
-      val expectedResult: Html = HtmlFormat.empty
+      val result = await(service.getPartial(agentUser, hc, ec, messages))
+      val expectedResult = Some(ServiceNavigationInfo.apply())
 
       result shouldBe expectedResult
     }

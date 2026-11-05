@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,13 +43,14 @@ lazy val coverageSettings: Seq[Setting[?]] = {
   )
 }
 
-val mongoVersion = "2.14.0"
-val bootstrapPlayVersion = "10.7.0"
+val mongoVersion: String = "2.14.0"
+val bootstrapPlayVersion: String = "10.7.0"
+val playfrontendHmrcVersion: String = "13.11.0"
 
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"       %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % "12.32.0",
+  "uk.gov.hmrc"       %% "play-frontend-hmrc-play-30" % playfrontendHmrcVersion,
   "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"         % mongoVersion,
 )
 

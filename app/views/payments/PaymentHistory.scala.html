@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 @import models.viewModels.PaymentsHistoryViewModel
 @import views.html.templates.payments._
 @import views.helpers.UrBannerUtil
+@import models.ServiceNavigationInfo
 
 @this(mainTemplate: MainTemplate,
       paymentsHistoryTabs: PaymentsHistoryTabs,
@@ -26,7 +27,7 @@
       govukBackLink: GovukBackLink,
       govukInsetText : GovukInsetText)
 
-@(model: PaymentsHistoryViewModel, serviceInfoContent: Html, migratedWithinThreeYears: Boolean)(
+@(model: PaymentsHistoryViewModel, serviceInfoContent: Option[ServiceNavigationInfo], migratedWithinThreeYears: Boolean)(
   implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {

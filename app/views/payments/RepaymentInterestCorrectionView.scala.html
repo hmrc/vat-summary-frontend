@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,17 @@
 @import views.templates.formatters.dates.DisplayDateRangeHelper._
 @import utils.Money
 @import models.payments._
+@import models.ServiceNavigationInfo
 
 @this(mainTemplate: MainTemplate,
-govukBreadcrumbs: GovukBreadcrumbs,
-govukSummaryList: GovukSummaryList,
-govukButton: GovukButton,
-govukTag: GovukTag,
-govukBackLink: GovukBackLink)
+    govukBreadcrumbs: GovukBreadcrumbs,
+    govukSummaryList: GovukSummaryList,
+    govukButton: GovukButton,
+    govukTag: GovukTag,
+    govukBackLink: GovukBackLink)
 
-@(model: VatOverpaymentForRPIViewModel, serviceInfoContent: Html)(
-implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
+@(model: VatOverpaymentForRPIViewModel, serviceInfoContent: Option[ServiceNavigationInfo])(implicit request: Request[_],
+                        messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {
     @govukBreadcrumbs(Breadcrumbs(

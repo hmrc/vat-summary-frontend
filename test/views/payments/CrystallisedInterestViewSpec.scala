@@ -49,7 +49,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is for a VAT charge" should {
 
-      lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(viewModel, serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -189,7 +189,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
         chargeType = VATOverpaymentforTaxLPI.value,
         isNonPenaltyReformPenaltyLPI = true
       ),
-      serviceInfoContent = Html(""))(request, messages, mockConfig, user)
+      serviceInfoContent = serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -329,7 +329,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
       lazy val view = injectedView(viewModel.copy(
         chargeType = VatReturnAA1stLPPLPI.value, isPenaltyReformPenaltyLPI = true
-      ), Html(""))(request, messages, mockConfig, user)
+      ), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -467,7 +467,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
       lazy val view = injectedView(viewModel.copy(
         chargeType = VatManualLPI.value
-      ), Html(""))(request, messages, mockConfig, user)
+      ), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -604,7 +604,7 @@ class CrystallisedInterestViewSpec extends ViewBaseSpec {
 
   "Rendering the Crystallised Interest Page for an agent" should {
 
-    lazy val view = injectedView(viewModel, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(viewModel, serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have a link to the what you owe page" which {

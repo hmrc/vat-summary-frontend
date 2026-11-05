@@ -21,7 +21,6 @@ import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import models.penalties.PenaltiesSummary
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import connectors.httpParsers.PenaltiesHttpParser.PenaltiesReads
-
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 

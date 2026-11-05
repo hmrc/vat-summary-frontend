@@ -18,7 +18,6 @@ package services
 
 import java.time.LocalDate
 import connectors.{FinancialDataConnector, PaymentsConnector}
-
 import javax.inject.{Inject, Singleton}
 import models.errors._
 import models.payments.{PaymentDetailsModel, PaymentOnAccount, Payments, PaymentsWithOptionalOutstanding}

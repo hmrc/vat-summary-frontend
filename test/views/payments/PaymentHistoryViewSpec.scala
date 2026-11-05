@@ -83,7 +83,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
     "the user is not insolvent" should {
 
-      lazy val view: Html = paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
+      lazy val view: Html = paymentHistoryView(model, serviceInfoPartial, migratedWithinThreeYears = false)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -214,7 +214,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the user is insolvent" should {
 
       val insolventViewModel = model.copy(showInsolvencyContent = true)
-      lazy val view: Html = paymentHistoryView(insolventViewModel, Html(""), migratedWithinThreeYears = false)
+      lazy val view: Html = paymentHistoryView(insolventViewModel, serviceInfoPartial, migratedWithinThreeYears = false)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the insolvency banner" in {
@@ -229,7 +229,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
       implicit val user: User = agentUser
       val entityName = "Capgemini"
-      lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), migratedWithinThreeYears = false)
+      lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), serviceInfoPartial, migratedWithinThreeYears = false)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -350,7 +350,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
 
     implicit val user: User = agentUser
     val entityName = "Capgemini"
-    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), Html(""), migratedWithinThreeYears = true)
+    lazy val view: Html = paymentHistoryView(model.copy(clientName = Some(entityName)), serviceInfoPartial, migratedWithinThreeYears = true)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct inset text" in {
@@ -362,7 +362,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched on for principal user" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(true)
-        paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
+        paymentHistoryView(model, serviceInfoPartial, migratedWithinThreeYears = false)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -373,7 +373,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched on for an agent" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(true)
-        paymentHistoryView(model, Html(""), migratedWithinThreeYears = true)(request, messages, mockConfig, agentUser)
+        paymentHistoryView(model, serviceInfoPartial, migratedWithinThreeYears = true)(request, messages, mockConfig, agentUser)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -386,7 +386,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched off for principal user" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(false)
-        paymentHistoryView(model, Html(""), migratedWithinThreeYears = false)
+        paymentHistoryView(model, serviceInfoPartial, migratedWithinThreeYears = false)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -396,7 +396,7 @@ class PaymentHistoryViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched off for an agent" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(false)
-        paymentHistoryView(model, Html(""), migratedWithinThreeYears = true)(request, messages, mockConfig, agentUser)
+        paymentHistoryView(model, serviceInfoPartial, migratedWithinThreeYears = true)(request, messages, mockConfig, agentUser)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,25 +22,21 @@ import com.google.inject.Inject
 import common.SessionKeys
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers
+import models.ChangedOnVatPeriod.RequestCategoryType4
 import models.payments._
-import models.penalties.{LPPDetails, PenaltyDetails}
-import models.viewModels.StandardChargeViewModel.{buildStandardChargeViewModel, periodFrom, periodTo}
+import models.penalties.PenaltyDetails
 import models.viewModels._
+import models.{ServiceNavigationInfo, User}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
+import play.api.mvc._
 import services._
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.language.postfixOps
-import models.ChangedOnVatPeriod.RequestCategoryType4
-import models.viewModels.VatOverpaymentForRPIViewModel.buildVatOverpaymentForRPIViewModel
-import models.{CustomerInformation, DirectDebitStatus, StandingRequest, User}
-import play.twirl.api.Html
-import uk.gov.hmrc.http.HeaderCarrier
 
 class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
                                      dateService: DateService,
@@ -97,13 +93,13 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       } yield result
   }
 
-  def handleWYOResult(serviceInfo: Html,
-                     payments: models.ServiceResponse[Option[Payments]],
-                     penalties: ResponseHttpParsers.HttpResult[PenaltyDetails],
-                     mandationStatus: String,
-                     ddStatus: Boolean,
-                     isAACustomer: Boolean,
-                     showPoaContent: Boolean
+  private def handleWYOResult(serviceInfo: Option[ServiceNavigationInfo],
+                              payments: models.ServiceResponse[Option[Payments]],
+                              penalties: ResponseHttpParsers.HttpResult[PenaltyDetails],
+                              mandationStatus: String,
+                              ddStatus: Boolean,
+                              isAACustomer: Boolean,
+                              showPoaContent: Boolean
                     )(implicit hc: HeaderCarrier, user: User, ec: ExecutionContext, request: Request[_]): Future[Result] = {
     (payments, penalties) match {
       case (Right(Some(payments)), Right(penalties)) =>
@@ -157,7 +153,7 @@ class WhatYouOweController @Inject()(authorisedController: AuthorisedController,
       warnLog(s"[WhatYouOweController][constructViewModel] " +
         s"totalPaymentCount - $totalPaymentCount does not equal chargeModels.length - ${chargeModels.length}" +
         s"\n no. of payments - ${payments.length}" +
-        s"\n DD-Status - ${ddStatus}" +
+        s"\n DD-Status - $ddStatus" +
         s"\n estimated interest count - ${payments.count(_.showEstimatedInterest)}" +
         s"\n estimated penalty count - ${payments.count(_.showEstimatedPenalty)}" +
         s"\n estimated interest and estimated penalty - ${payments.count(p => p.showEstimatedInterest && p.showEstimatedPenalty)}" +

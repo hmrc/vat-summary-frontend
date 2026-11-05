@@ -17,7 +17,7 @@
 package views
 
 import mocks.MockAppConfig
-import models.User
+import models.{ListLinks, ServiceNavigationInfo, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -41,6 +41,12 @@ trait ViewBaseSpec extends AnyWordSpecLike with GuiceOneAppPerSuite with BeforeA
   val agentUser: User = User("999999999", arn = Some("XARN1234567"))
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
+
+  val navBarLinks: Seq[ListLinks] = Seq(
+    ListLinks("Home", "test-url.com"),
+  )
+  val serviceInfoPartial: Option[ServiceNavigationInfo] = Some(ServiceNavigationInfo(navLinks = navBarLinks))
+
   implicit lazy val messages: MessagesImpl = MessagesImpl(Lang("en-GB"), messagesApi)
 
   def asDocument(html: Html): Document = Jsoup.parse(html.toString())

@@ -17,7 +17,7 @@
 package controllers
 
 import common.TestModels._
-import models.User
+import models.{StandingRequest, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.i18n.Messages
@@ -63,9 +63,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
     mockVatDetailsService,
     errorView,
     mcc,
-    view,
-    mockAuditService
-  )
+    view)
 
   private def mockGetObligationsNone() =
     (mockVatDetailsService.getReturnObligations(_: String)(_: HeaderCarrier, _: ExecutionContext))
@@ -147,7 +145,7 @@ class AnnualAccountingControllerSpec extends ControllerBaseSpec {
         mockServiceInfoCall()
         mockGetEntityName(Some("Cheapo Clothing"))
         mockDateServiceCall()
-        val nonAaStandingRequest = aaStandingRequest.copy(
+        val nonAaStandingRequest: StandingRequest = aaStandingRequest.copy(
           standingRequests = aaStandingRequest.standingRequests.map(_.copy(requestCategory = "3"))
         )
         mockPaymentsOnAccountServiceCall(Some(nonAaStandingRequest))

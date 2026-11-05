@@ -53,7 +53,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
   "Rendering the Crystallised LPP1 Page for a principal user" when {
 
     "there are two penalty parts with Charge Ref \"VAT Overpayments 1st LPP\"" should {
-      lazy val view = injectedView(viewModel(VatOverpayments1stLPP.value), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(viewModel(VatOverpayments1stLPP.value), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document2: Document = Jsoup.parse(view.body)
 
@@ -70,7 +70,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
 
     "there are two penalty parts with Charge Ref \"VAT Return 1st LPP\"" should {
 
-      lazy val view = injectedView(viewModel(), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(viewModel(), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -219,7 +219,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
     "there is one penalty part" should {
 
       lazy val view =
-        injectedView(viewModel().copy(part2Days = None, part2UnpaidVAT = None), Html(""))(request, messages, mockConfig, user)
+        injectedView(viewModel().copy(part2Days = None, part2UnpaidVAT = None), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct calculation explanation paragraph" in {
@@ -240,7 +240,7 @@ class CrystallisedLPP1ViewSpec extends ViewBaseSpec {
 
   "Rendering the Crystallised LPP1 Page for an agent" should {
 
-    lazy val view = injectedView(viewModel(), Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(viewModel(), serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

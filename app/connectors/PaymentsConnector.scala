@@ -18,7 +18,6 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
-
 import javax.inject.{Inject, Singleton}
 import models.payments.{PaymentDetailsModel, ReturnDebitCharge}
 import uk.gov.hmrc.http.HeaderCarrier

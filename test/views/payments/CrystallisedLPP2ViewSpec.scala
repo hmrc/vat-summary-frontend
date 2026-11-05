@@ -33,7 +33,7 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
   "Rendering the Crystallised LPP2 Page for a principal user" when {
 
 
-    lazy val view = injectedView(crystallisedLPP2Model, Html(""))(request, messages, mockConfig, user)
+    lazy val view = injectedView(crystallisedLPP2Model, serviceInfoPartial)(request, messages, mockConfig, user)
     lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -172,7 +172,7 @@ class CrystallisedLPP2ViewSpec extends ViewBaseSpec {
 
   "Rendering the Crystallised LPP2 Page for an agent" should {
 
-    lazy val view = injectedView(crystallisedLPP2Model, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(crystallisedLPP2Model, serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

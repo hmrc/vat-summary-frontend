@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,9 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.FormWithCSRF
 @import views.html.templates.payments.wyoCharges._
 @import uk.gov.hmrc.govukfrontend.views.html.components._
-
 @import models.viewModels.helpers.RadioOption
 @import views.helpers.UrBannerUtil
-
-
+@import models.ServiceNavigationInfo
 
 @this(uiForm: FormWithCSRF,
      mainTemplate: MainTemplate,
@@ -31,7 +29,7 @@
      govukBackLink: GovukBackLink
 )
 
-@(model: ExistingDirectDebitViewModel, form: Form[_], radioOptions: Set[RadioOption], serviceInfoContent: Html)(
+@(model: ExistingDirectDebitViewModel, form: Form[_], radioOptions: Set[RadioOption], serviceInfoContent: Option[ServiceNavigationInfo])(
 implicit request: Request[_], messages: Messages, appConfig: config.AppConfig, user: User)
 
 @breadcrumbs = {

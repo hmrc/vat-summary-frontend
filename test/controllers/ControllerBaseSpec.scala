@@ -19,37 +19,33 @@ package controllers
 import audit.AuditingService
 import audit.models.{AuditModel, ExtendedAuditModel}
 import common.SessionKeys
-import common.TestModels.{agentAuthResult, agentEnrolments, authResultWithVatDec, penaltyDetailsResponse, successfulAuthResult}
 import common.TestModels._
 import config.{AppConfig, ServiceErrorHandler}
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import controllers.predicates.{AgentPredicate, FinancialPredicate}
 import mocks.MockAppConfig
-import models.{CustomerInformation, DirectDebitStatus, ServiceResponse, User, WYODatabaseModel}
+import models._
+import models.payments.{Payment, Payments}
+import models.penalties.PenaltyDetails
+import models.viewModels.ChargeDetailsViewModel
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.BeforeAndAfterEach
+import org.scalatest.enablers.Existence
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import services._
-import uk.gov.hmrc.auth.core.{AffinityGroup, AuthConnector, Enrolments, InsufficientEnrolments, MissingBearerToken}
-import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
-import org.scalatest.wordspec.AnyWordSpecLike
-import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
-import models._
-
-import java.time.LocalDate
-import models.payments.{Payment, Payments}
-import models.penalties.PenaltyDetails
-import models.viewModels.ChargeDetailsViewModel
-import org.scalatest.enablers.Existence
-import org.scalatest.matchers.should.Matchers
-import play.twirl.api.Html
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys => GovUKSessionKeys}
+import views.html.errors.{AgentUnauthorised, Unauthorised, UserInsolventError}
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneAppPerSuite with BeforeAndAfterEach with Matchers {
@@ -60,14 +56,19 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   lazy val mockServiceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
   val mcc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
 
-  val mockTodayDate = LocalDate.parse("2018-05-01")
+  val mockTodayDate: LocalDate = LocalDate.parse("2018-05-01")
 
   val testVrn = "123456789"
+
+  val navBarLinks: Seq[ListLinks] = Seq(
+    ListLinks("Home", "test-url.com"),
+  )
+  val serviceInfoPartial: Option[ServiceNavigationInfo] = Some(ServiceNavigationInfo(navLinks = navBarLinks))
 
   implicit val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   implicit val mockAppConfig: AppConfig = new MockAppConfig(app.configuration)
 
-  val baseSession = Seq(SessionKeys.insolventWithoutAccessKey -> "false")
+  val baseSession: Seq[(String, String)] = Seq(SessionKeys.insolventWithoutAccessKey -> "false")
   implicit lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(baseSession: _*)
   implicit lazy val fakePostRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "").withSession(baseSession: _*)
 
@@ -104,7 +105,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
     userInsolvent
   )
 
-  val requestSession = Seq(
+  val requestSession: Seq[(String, String)] = Seq(
     GovUKSessionKeys.lastRequestTimestamp -> "1498236506662",
     GovUKSessionKeys.authToken -> "Bearer Token",
     SessionKeys.migrationToETMP -> "2018-01-01",
@@ -113,12 +114,12 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
 
   lazy val fakeRequestWithSession: FakeRequest[AnyContentAsEmpty.type] = fakeRequest.withSession(requestSession: _*)
 
-  lazy val fakePostWithSession = fakePostRequest.withSession(requestSession: _*)
+  lazy val fakePostWithSession: FakeRequest[AnyContentAsEmpty.type] = fakePostRequest.withSession(requestSession: _*)
 
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
 
-  val agentSession = Seq(
+  val agentSession: Seq[(String, String)] = Seq(
     SessionKeys.financialAccess -> "true",
     SessionKeys.mtdVatvcClientVrn -> "123456789"
   )
@@ -186,7 +187,7 @@ class ControllerBaseSpec extends AnyWordSpecLike with MockFactory with GuiceOneA
   def mockServiceInfoCall(): Any =
     (mockServiceInfoService.getPartial(_: User, _: HeaderCarrier, _: ExecutionContext, _: Messages))
       .stubs(*, *, *, *)
-      .returns(Future.successful(Html("")))
+      .returns(Future.successful(Some(ServiceNavigationInfo())))
 
   def mockWYOSessionServiceCall(model: Option[WYODatabaseModel]): Any =
     (mockWYOSessionService.retrieveViewModel(_: String))

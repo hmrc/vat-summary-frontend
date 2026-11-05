@@ -33,7 +33,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is not for a penalty charge" should {
 
-      lazy val view = injectedView(estimatedLPIModel, Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPIModel, serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -162,7 +162,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
         model = estimatedLPIModel.copy(
           chargeType = VATOverpaymentforTaxLPI.value
         ),
-        serviceInfoContent = Html("")
+        serviceInfoContent = serviceInfoPartial
       )(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -288,7 +288,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
     "the interest is for a penalty charge" should {
 
-      lazy val view = injectedView(estimatedLPIModel.copy(isPenaltyReformPenaltyLPI = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPIModel.copy(isPenaltyReformPenaltyLPI = true), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "must contain the HowInterestIsCalculated dropdown" in {
@@ -300,7 +300,7 @@ class EstimatedInterestViewSpec extends ViewBaseSpec {
 
   "Rendering the Interest Charge Details page for an agent" should {
 
-    lazy val view = injectedView(estimatedLPIModel, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(estimatedLPIModel, serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render breadcrumbs" in {

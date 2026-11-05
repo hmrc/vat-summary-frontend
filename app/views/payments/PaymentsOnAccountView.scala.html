@@ -1,5 +1,5 @@
 @*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,12 @@
 @import views.html.helper.CSPNonce
 @import utils.MessageDateFormat
 @import views.helpers.UrBannerUtil
+@import models.ServiceNavigationInfo
 
 @this(mainTemplate: MainTemplate,
       govukBackLink: GovukBackLink)
 
-@(model: PaymentsOnAccountViewModel, serviceInfoContent: Html)(
+@(model: PaymentsOnAccountViewModel, serviceInfoContent: Option[ServiceNavigationInfo])(
   implicit request: RequestHeader, messages: Messages, appConfig: config.AppConfig, user: User)
 
 @backLink = {
