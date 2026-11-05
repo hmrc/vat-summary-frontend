@@ -33,7 +33,7 @@ class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
   "Rendering the Late Submission Penalty page for a principal user" when {
 
 
-    lazy val view = injectedView(lateSubmissionPenaltyModel, Html(""))(request, messages, mockConfig, user)
+    lazy val view = injectedView(lateSubmissionPenaltyModel, serviceInfoPartial)(request, messages, mockConfig, user)
     lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -167,7 +167,7 @@ class LateSubmissionPenaltyViewSpec extends ViewBaseSpec {
 
   "Rendering the Late Submission Penalty page for an agent" should {
 
-    lazy val view = injectedView(lateSubmissionPenaltyModel, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(lateSubmissionPenaltyModel, serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

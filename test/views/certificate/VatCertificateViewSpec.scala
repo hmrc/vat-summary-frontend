@@ -16,15 +16,15 @@
 
 package views.certificate
 
-import java.time.LocalDate
 import common.TestModels.{exampleNonNSTP, exampleNonStandardTaxPeriods}
 import models.Address
 import models.viewModels.VatCertificateViewModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.{Html, HtmlFormat}
 import views.ViewBaseSpec
 import views.html.certificate.VatCertificate
+
+import java.time.LocalDate
 
 class VatCertificateViewSpec extends ViewBaseSpec {
 
@@ -96,66 +96,54 @@ class VatCertificateViewSpec extends ViewBaseSpec {
   "The VAT Certificate page" when {
 
     "accessed by a principal user" should {
-      lazy val view = vatCertificateView(HtmlFormat.empty, model)
+      lazy val view = vatCertificateView(serviceInfoPartial, model)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have breadcrumbs" which {
-
         "has a link to BTA" which {
-
           "has the correct text" in {
             elementText(Selectors.breadcrumb) shouldBe "Business tax account"
           }
-
           "has the correct href" in {
             element(Selectors.breadcrumb).attr("href") shouldBe mockConfig.btaHomeUrl
           }
         }
 
         "has a link to the VAT overview" which {
-
           "has the correct text" in {
             elementText(Selectors.breadcrumb2) shouldBe "Your VAT account"
           }
-
           "has the correct href" in {
             element(Selectors.breadcrumb2).attr("href") shouldBe controllers.routes.VatDetailsController.details.url
           }
         }
-
       }
 
       "have the correct title" in {
         document.title shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
       }
-
       "have the correct heading" in {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
-
       "not have a back link" in {
         elementExtinct(Selectors.backLink)
       }
     }
 
     "accessed by an agent user" should {
-      lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, agentUser)
+      lazy val view = vatCertificateView(serviceInfoPartial, model)(messages, mockConfig, request, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
         document.title shouldBe "Your client’s VAT Certificate - Your client’s VAT details - GOV.UK"
       }
-
       "have the correct heading" in {
         elementText(Selectors.heading) shouldBe "Your client’s VAT Certificate"
       }
-
       "have a back link" which {
-
         "has the correct text" in {
           elementText(Selectors.backLink) shouldBe "Back"
         }
-
         "has the correct href" in {
           element(Selectors.backLink).attr("href") shouldBe mockConfig.agentClientLookupHubUrl
         }
@@ -164,66 +152,54 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
     "accessed by a principal or agent user" should {
 
-      lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
+      lazy val view = vatCertificateView(serviceInfoPartial, model)(messages, mockConfig, request, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the about your registration card" that {
-
         "contains the correct heading" in {
           elementText(Selectors.aboutYourRegHeading) shouldBe "About your registration"
         }
-
         "contains the VRN row" in {
           elementText(Selectors.vrnTitle) shouldBe "VAT registration number (VRN)"
           elementText(Selectors.vrn) shouldBe "5555555555"
         }
-
         "contains the registration date" in {
           elementText(Selectors.regDateTitle) shouldBe "Registration date"
           elementText(Selectors.regDate) shouldBe "1 January 2017"
         }
-
         "uses non breaking spaces to display the registration date" in {
           viewAsString.contains("Registration date 1\u00a0January\u00a02017")
         }
-
         "contains the certificate date" in {
           elementText(Selectors.certDateTitle) shouldBe "Certificate date"
           elementText(Selectors.certDate) shouldBe "1 January 2018"
         }
-
         "uses non breaking spaces to display the certificate date" in {
           viewAsString.contains("Certificate date 1\u00a0January\u00a02018")
         }
       }
 
       "have the about the business card" that {
-
         "contains the correct heading" in {
           elementText(Selectors.aboutTheBusinessHeading) shouldBe "About the business"
         }
-
         "contains the business name" in {
           elementText(Selectors.businessNameTitle) shouldBe "Business name"
           elementText(Selectors.businessName) shouldBe "Not provided"
         }
-
         "contains the trading name" in {
           elementText(Selectors.tradingNameTitle) shouldBe "Trading name"
           elementText(Selectors.tradingName) shouldBe "ABC Traders"
         }
-
         "contains the business type" in {
           elementText(Selectors.businessTypeTitle) shouldBe "Business type"
           elementText(Selectors.businessType) shouldBe "Organisation"
         }
-
         "contains the trade classification" in {
           elementText(Selectors.tradeClassificationTitle) shouldBe "Trade classification (SIC code)"
           elementText(Selectors.tradeClassification) shouldBe "6602"
         }
-
         "contains the address" in {
           elementText(Selectors.ppobRowTitle) shouldBe "Principal place of business address"
           elementText(Selectors.ppob) shouldBe "Line 1 Line 2 TF4 3ER"
@@ -231,11 +207,9 @@ class VatCertificateViewSpec extends ViewBaseSpec {
       }
 
       "have a button to print the certificate" that {
-
         "has the correct text" in {
           elementText(Selectors.printButton) shouldBe "Print certificate"
         }
-
         "evokes the javascript print event on click" in {
           element(Selectors.printButton).attr("onclick") shouldBe "javascript:window.print()"
         }
@@ -243,8 +217,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     }
 
     "accessed by a user with standard tax periods" should {
-
-      lazy val view = vatCertificateView(HtmlFormat.empty, model)(messages, mockConfig, request, user)
+      lazy val view = vatCertificateView(serviceInfoPartial, model)(messages, mockConfig, request, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the return details card" which {
@@ -252,14 +225,11 @@ class VatCertificateViewSpec extends ViewBaseSpec {
         "contains the correct heading" in {
           card.select("h2").text() shouldBe "Return details"
         }
-
         "contains the return frequency" in {
           document.select("dt.stp").text() shouldBe "VAT Return dates"
           document.select("dd.stp").text() shouldBe "Every month"
         }
-
       }
-
       "not have the non-standard tax periods card" in {
         document.select(Selectors.cardClass).contains("Non-standard tax periods") shouldBe false
       }
@@ -267,8 +237,7 @@ class VatCertificateViewSpec extends ViewBaseSpec {
 
     "accessed by a user with non-standard tax periods" when {
 
-      lazy val view = vatCertificateView(
-        HtmlFormat.empty, modelWithNSTP)(messages, mockConfig, request, user)
+      lazy val view = vatCertificateView(serviceInfoPartial, modelWithNSTP)(messages, mockConfig, request, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the non-standard tax periods card" which {
@@ -277,90 +246,76 @@ class VatCertificateViewSpec extends ViewBaseSpec {
           card.select("h2").text() shouldBe "Non-standard tax periods"
         }
       }
-
       "not have the return details card" in {
         document.select(Selectors.cardClass).contains("Return details") shouldBe false
       }
     }
 
     "accessed by a sole trader" should {
-      lazy val view = vatCertificateView(HtmlFormat.empty, soleTrader)
+      lazy val view = vatCertificateView(serviceInfoPartial, soleTrader)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
         document.title shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
       }
-
       "have the correct heading" in {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
-
       "display the trader's full name" in {
         elementText(Selectors.fullNameSelector) shouldBe "Sole Person"
       }
-
       "display the trader's trading name" in {
         elementText(Selectors.tradingName) shouldBe "ABC Traders"
       }
-
       "not display the business name" in {
         elementExtinct(Selectors.businessName)
       }
-
     }
 
     "accessed by an individual" should {
-      lazy val view = vatCertificateView(HtmlFormat.empty, individual)
+      lazy val view = vatCertificateView(serviceInfoPartial, individual)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
         document.title shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
       }
-
       "have the correct heading" in {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
-
       "display the trader's full name" in {
         elementText(Selectors.fullNameSelector) shouldBe "Andy Vidual"
       }
-
       "display the trader's trading name" in {
         elementText(Selectors.tradingName) shouldBe "ABC Traders"
       }
-
       "not display the business name" in {
         elementExtinct(Selectors.businessName)
       }
     }
 
     "accessed by a sole trader without a trading name" should {
-      lazy val view = vatCertificateView(HtmlFormat.empty, soleTraderWithoutTradingName)
+      lazy val view = vatCertificateView(serviceInfoPartial, soleTraderWithoutTradingName)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
         document.title shouldBe "Your VAT Certificate - Manage your VAT account - GOV.UK"
       }
-
       "have the correct heading" in {
         elementText(Selectors.heading) shouldBe "Your VAT Certificate"
       }
-
       "display the traders full name" in {
         elementText(Selectors.fullNameSelector) shouldBe "Sole Person"
       }
-
       "not display the traders trading name" in {
         elementExtinct(Selectors.tradingName)
       }
-
       "not display the business name" in {
         elementExtinct(Selectors.businessName)
       }
     }
 
     "accessed by a sole trader without a full first and last name" should {
-      lazy val view = vatCertificateView(HtmlFormat.empty, soleTraderWithoutName)
+      lazy val view = vatCertificateView(serviceInfoPartial, soleTraderWithoutName)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not have a Full Name row" in {
@@ -373,10 +328,9 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched on for principal user" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(true)
-        vatCertificateView(Html(""), model)
+        vatCertificateView(serviceInfoPartial, model)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
       document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
       document.select("#webchatLink-id").attr("href") shouldBe "/ask-hmrc/chat/vat-online?ds"
     }
@@ -384,10 +338,9 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched on for an agent" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(true)
-        vatCertificateView(Html(""), model)(request = request, messages = messages, appConfig = mockConfig, user = agentUser)
+        vatCertificateView(serviceInfoPartial, model)(request = request, messages = messages, appConfig = mockConfig, user = agentUser)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
       document.select("#webchatLink-id").text() shouldBe "Ask HMRC (opens in a new tab)"
       document.select("#webchatLink-id").attr("href") shouldBe "/ask-hmrc/chat/vat-online?ds"
     }
@@ -397,20 +350,18 @@ class VatCertificateViewSpec extends ViewBaseSpec {
     "the webchatEnabled feature switch is switched off for principal user" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(false)
-        vatCertificateView(Html(""), model)
+        vatCertificateView(serviceInfoPartial, model)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
       document.select("#webchatLink-id").size shouldBe 0
     }
 
     "the webchatEnabled feature switch is switched off for an agent" in {
       lazy val view = {
         mockConfig.features.webchatEnabled(false)
-        vatCertificateView(Html(""), model)(request = request, messages = messages, appConfig = mockConfig, user = agentUser)
+        vatCertificateView(serviceInfoPartial, model)(request = request, messages = messages, appConfig = mockConfig, user = agentUser)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
-
       document.select("#webchatLink-id").size shouldBe 0
     }
   }

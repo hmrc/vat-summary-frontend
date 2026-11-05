@@ -18,12 +18,11 @@ package controllers
 
 import com.google.inject.Inject
 import config.{AppConfig, ServiceErrorHandler}
-import models.{ServiceResponse, StandingRequest, User}
 import models.obligations.VatReturnObligations
 import models.viewModels._
+import models.{ServiceNavigationInfo, ServiceResponse, StandingRequest, User}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
-import play.twirl.api.Html
+import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
@@ -78,7 +77,7 @@ class PaymentsOnAccountController @Inject() (
         }
     }
 
-  def handleObligationsAndPoa(serviceInfoContent: Html,
+  def handleObligationsAndPoa(serviceInfoContent: Option[ServiceNavigationInfo],
                               today: LocalDate,
                               standingRequestOpt: Option[StandingRequest],
                               obligationsResult: ServiceResponse[Option[VatReturnObligations]],

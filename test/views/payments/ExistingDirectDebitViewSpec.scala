@@ -40,7 +40,7 @@ class ExistingDirectDebitViewSpec extends ViewBaseSpec {
 
   val radioOptions = ExistingDDContinuePayment.options
 
-  lazy val view: Html = existingDirectDebitView(model, form, radioOptions, Html(""))(request, messages, mockConfig, user)
+  lazy val view: Html = existingDirectDebitView(model, form, radioOptions, serviceInfoPartial)(request, messages, mockConfig, user)
   lazy implicit val document: Document = Jsoup.parse(view.body)
 
   "The ExistingDirectDebit view" when {

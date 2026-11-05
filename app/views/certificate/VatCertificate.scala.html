@@ -20,6 +20,7 @@
 @import views.html.templates.formatters.addresses._
 @import views.templates.formatters.dates.DisplayDateRangeHelper.displayDate
 @import views.helpers.UrBannerUtil
+@import models.ServiceNavigationInfo
 
 @this(mainTemplate: MainTemplate,
       fullAddress: FullAddress,
@@ -30,8 +31,8 @@
       govukButton: GovukButton,
       govukSummaryList: GovukSummaryList)
 
-@(serviceInfoContent: Html = HtmlFormat.empty,
-  model: VatCertificateViewModel)(implicit messages: Messages,
+@(serviceInfoContent: Option[ServiceNavigationInfo],
+        model: VatCertificateViewModel)(implicit messages: Messages,
                                            appConfig: config.AppConfig,
                                            request: Request[_],
                                            user: User)

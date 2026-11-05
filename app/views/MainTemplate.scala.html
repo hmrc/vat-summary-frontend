@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,36 +16,62 @@
 
 @import play.twirl.api.HtmlFormat
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
 @import views.html.helper.CSPNonce
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardFooter
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.language.{Cy, En, LanguageSelect}
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.NotificationBadge
+@import uk.gov.hmrc.hmrcfrontend.views.html.components.HmrcNotificationBadge
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers._
+@import models.ServiceNavigationInfo
+@import uk.gov.hmrc.govukfrontend.views.Implicits.RichServiceNavigation
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
 @this(govukTemplate: GovukTemplate,
-      govukLayout: GovukLayout,
-      hmrcLanguageSelect: HmrcLanguageSelect,
-      hmrcTimeoutDialog: HmrcTimeoutDialog,
-      hmrcStandardHeader: HmrcStandardHeader,
-      hmrcStandardFooter: HmrcStandardFooter,
-      hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-      hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
-      hmrcUserResearchBanner: HmrcUserResearchBanner)
+    govukLayout: GovukLayout,
+    hmrcTimeoutDialog: HmrcTimeoutDialog,
+    hmrcStandardHeader: HmrcStandardHeader,
+    hmrcStandardFooter: HmrcStandardFooter,
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
+    hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+    hmrcUserResearchBanner: HmrcUserResearchBanner,
+    hmrcNotificationBadge : HmrcNotificationBadge)
 
 @(title: String,
   showLogout: Boolean = true,
   appConfig: config.AppConfig,
   feedbackOnSignOut: Boolean = true,
   navLinkContent: Option[Html] = None,
-  serviceInfoContent: Html = HtmlFormat.empty,
+  serviceInfoContent: Option[ServiceNavigationInfo] = None,
   user: Option[User] = None,
-  urBanner: Option[UserResearchBanner] = None)(mainContent: Html)(implicit request : RequestHeader, messages: Messages)
+  urBanner: Option[UserResearchBanner] = None,
+  activeTab: String = "home")(mainContent: Html)(implicit request : RequestHeader, messages: Messages)
 
 @dynamicNavTitle = @{
   user.fold(messages("navTitle.vat"))(u => if(u.isAgent) messages("navTitle.agent") else messages("navTitle.nonAgent"))
 }
 
 @titleServiceUrl = @{
-user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLookupHubUrl) else Some(controllers.routes.VatDetailsController.details.url))
+    user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLookupHubUrl) else Some(controllers.routes.VatDetailsController.details.url))
 }
+
+@navTabItems: Seq[ServiceNavigationItem] = @{serviceInfoContent.map(_.navLinks).getOrElse(Seq())
+    .filter(menuItem => !menuItem.showBoolean.contains(false))
+    .map { menuItem =>
+            val menuText = menuItem.alerts match {
+                            case Some(alert) if(alert != "0") => { menuItem.message + " " + hmrcNotificationBadge(NotificationBadge(alert))}
+                            case _ => menuItem.message
+            }
+            val requestUrl = menuItem.url.toLowerCase()
+            val isActiveTab = (requestUrl.contains(activeTab.toLowerCase()) ||
+                                (activeTab.toLowerCase().equals("home") && requestUrl.endsWith("business-account")))
+
+    ServiceNavigationItem(
+        content = HtmlContent(menuText),
+        href = menuItem.url,
+        active = isActiveTab)
+    }
+}
+
 
 @scripts = {
   <script @CSPNonce.attr type="module" src='@routes.Assets.versioned("lib/hmrc-frontend/hmrc/all.js")'></script>
@@ -58,23 +84,8 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
   <script @CSPNonce.attr type="module">window.HMRCFrontend.initAll();</script>
 }
 
-@languageSelect = {
-  @if(!appConfig.isServiceNavigationEnabled){
-    @hmrcLanguageSelect(LanguageSelect(
-      language = if (messages.lang.language == "en") En else Cy,
-      languageLinks =
-        En -> appConfig.routeToSwitchLanguage("english").url,
-        Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
-    ))
-  }
-}
-
 @beforeContentHtml = {
-  <div class="govuk-body govuk-!-margin-bottom-0">
-    @serviceInfoContent
-  </div>
-  @languageSelect
-  @navLinkContent
+    @navLinkContent
 }
 
 @content = {
@@ -104,14 +115,14 @@ user.fold[Option[String]](None)(u => if(u.isAgent) Some(appConfig.agentClientLoo
 }
 
 @header = {
-  @hmrcStandardHeader(
-    serviceName = Some(dynamicNavTitle),
-    serviceUrl =  titleServiceUrl,
-    signOutUrl = if(showLogout) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
-    additionalBannersBlock = if(appConfig.features.showUserResearchBannerEnabled()) urBanner.map(hmrcUserResearchBanner(_)) else None,
-    displayHmrcBanner = false,
-    isWelshTranslationAvailable = true
-  )
+    @hmrcStandardHeader(
+        signOutUrl = if(showLogout) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
+        additionalBannersBlock = if(appConfig.features.showUserResearchBannerEnabled()) urBanner.map(hmrcUserResearchBanner(_)) else None,
+        displayHmrcBanner = false,
+        serviceNavigation = Some(ServiceNavigation(serviceName = Some(dynamicNavTitle),
+                                serviceUrl = titleServiceUrl,
+                                navigation = navTabItems).withLanguageToggle())
+    )
 }
 
 @govukTemplate(

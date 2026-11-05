@@ -17,28 +17,27 @@
 package services
 
 import connectors.ServiceInfoPartialConnector
-
-import javax.inject.{Inject, Singleton}
-import models.{ListLinks, NavContent, User}
+import models.{ListLinks, NavContent, ServiceNavigationInfo, User}
 import play.api.http.HeaderNames
 import play.api.i18n.{Lang, Messages}
-import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.templates.NavLinksView
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ServiceInfoService @Inject()(serviceInfoPartialConnector: ServiceInfoPartialConnector, btaLinks: NavLinksView) {
+class ServiceInfoService @Inject()(serviceInfoPartialConnector: ServiceInfoPartialConnector) {
 
-  def getPartial(implicit user: User, hc: HeaderCarrier, ec: ExecutionContext, messages: Messages): Future[Html] =
+  def getPartial(implicit user: User, hc: HeaderCarrier, ec: ExecutionContext, messages: Messages): Future[Option[ServiceNavigationInfo]] =
     if(user.isAgent){
-      Future.successful(HtmlFormat.empty)
+      Future.successful(Some(ServiceNavigationInfo.apply()))
     } else {
       val hcWithCookie = hc.copy(extraHeaders = hc.headers(Seq(HeaderNames.COOKIE)))
-      serviceInfoPartialConnector.getNavLinks()(hcWithCookie, ec).map { links =>
-        val listLinks = partialList(links)
-        btaLinks(listLinks)
+      val maybeNavLinks = serviceInfoPartialConnector.getNavLinks()(hcWithCookie, ec)
+      for {
+        navLinks <- maybeNavLinks
+      } yield {
+        Some(ServiceNavigationInfo(navLinks = partialList(navLinks)))
       }
     }
 

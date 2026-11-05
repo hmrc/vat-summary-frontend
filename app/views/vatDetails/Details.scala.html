@@ -24,6 +24,7 @@
 @import utils.MessageDateFormat
 @import java.time.LocalDate
 @import views.helpers.UrBannerUtil
+@import models.ServiceNavigationInfo
 
 @this(mainTemplate: MainTemplate,
       nextPaymentSection: NextPaymentSection,
@@ -42,7 +43,7 @@
       govukNotificationBanner: GovukNotificationBanner)
 
 @(detailsViewModel: VatDetailsViewModel,
-  serviceInfoContent: Html = HtmlFormat.empty)(implicit request: Request[_],
+  serviceInfoContent: Option[ServiceNavigationInfo])(implicit request: Request[_],
                                                         messages: Messages,
                                                         appConfig: config.AppConfig,
                                                         user: User)
@@ -248,16 +249,14 @@
       </div>
     }
 
-
-      
-      @if(appConfig.features.annualAccountingFeatureEnabled() && detailsViewModel.isAACustomer){
-        <div class="govuk-grid-column-one-third">
-            @annualAccountingSection()
-        </div>
-        } else if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
-          <div class="govuk-grid-column-one-third">
-              @vatPaymentOnAccountSchedule()
-          </div>
-        }
+    @if(appConfig.features.annualAccountingFeatureEnabled() && detailsViewModel.isAACustomer){
+      <div class="govuk-grid-column-one-third">
+          @annualAccountingSection()
+      </div>
+    } else if(appConfig.features.poaActiveFeatureEnabled() && detailsViewModel.isPoaActiveForCustomer){
+      <div class="govuk-grid-column-one-third">
+          @vatPaymentOnAccountSchedule()
+      </div>
+    }
   </div>
 }

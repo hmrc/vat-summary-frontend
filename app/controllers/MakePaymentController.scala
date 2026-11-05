@@ -153,11 +153,8 @@ class MakePaymentController @Inject()(paymentsService: PaymentsService,
   def makeFullPaymentHandoff: Action[AnyContent] =
     authorisedController.authorisedAction { implicit request =>
       user => {
-        auditingService.audit(PayFullChargeAuditModel(user),
-          controllers.routes.MakePaymentController.makeFullPaymentHandoff.url)
+        auditingService.audit(PayFullChargeAuditModel(user), controllers.routes.MakePaymentController.makeFullPaymentHandoff.url)
         Future.successful(Redirect(appConfig.unauthenticatedPaymentsUrl))
-
-
       }
     }
 }

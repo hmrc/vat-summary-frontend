@@ -16,36 +16,16 @@
 
 package controllers
 
-import common.TestModels.{customerInformationMax, directDebitEnrolled, payment}
+import common.TestModels.customerInformationMax
 import forms.ExistingDirectDebitFormProvider
 import models.User
-import models.payments.Payments
-import org.jsoup.Jsoup
-import play.api.data.Form
-import play.api.http.Status.OK
-import play.api.mvc.MessagesControllerComponents
-import play.api.test.Helpers.{contentAsString, status}
-import uk.gov.hmrc.http.HeaderCarrier
-import views.html.payments.ExistingDirectDebit
-import common.TestModels._
-import models.User
-import models.errors.{PaymentsError, UnexpectedStatusError}
-import models.payments._
 import models.viewModels._
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{verify, when}
-import org.mockito.internal.verification.VerificationModeFactory.times
 import org.scalatest.matchers.must.Matchers.convertToAnyMustWrapper
-import play.api.http.Status
-import play.api.mvc.Results.Redirect
+import play.api.http.Status.OK
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
-import views.html.errors.PaymentsError
-import views.html.payments.{NoPayments, WhatYouOwe}
-
-import scala.concurrent.Future
+import views.html.payments.ExistingDirectDebit
 
 
 class ExistingDirectDebitControllerSpec extends ControllerBaseSpec {

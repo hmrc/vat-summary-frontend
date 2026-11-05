@@ -17,12 +17,11 @@
 package views.vatDetails
 
 import common.TestModels.{penaltiesSummaryModel, testDate}
-import models.User
 import models.viewModels.VatDetailsViewModel
+import models.{ServiceNavigationInfo, User}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.scalatest.exceptions.TestFailedException
-import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.vatDetails.Details
 
@@ -195,9 +194,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     currentDate = testDate,
     partyType = Some("1"),
     userEmailVerified = true,
-    mandationStatus = "MTDfB",
-    isPoaActiveForCustomer = false
-  )
+    mandationStatus = "MTDfB")
 
   val annualAccountingCustomerModel: VatDetailsViewModel = VatDetailsViewModel(
     Some("2018-12-31"),
@@ -217,25 +214,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     currentDate = testDate,
     partyType = Some("1"),
     userEmailVerified = true,
-    mandationStatus = "MTDfB",
-    isAACustomer = false
-  )
+    mandationStatus = "MTDfB")
 
   "Rendering the VAT details page for an mtd user" should {
 
-    lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(detailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "render service information content" in {
-      elementText(Selectors.serviceInfoNav) shouldBe "BTA Links"
-    }
-
     "render breadcrumbs which" should {
-
       "have the text 'Business tax account'" in {
         elementText(Selectors.btaBreadcrumb) shouldBe "Business tax account"
       }
-
       "links to bta" in {
         element(Selectors.btaBreadcrumbLink).attr("href") shouldBe "bta-url"
       }
@@ -244,71 +233,57 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "have the correct document title" in {
       document.title shouldBe "Your VAT account - Manage your VAT account - GOV.UK"
     }
-
     "have the correct entity name" in {
       elementText(Selectors.entityNameHeading) shouldBe "Cheapo Clothing"
     }
-
     "have the correct VRN message" in {
       elementText(Selectors.vatRegNo) should include(s"VAT registration number (VRN): ${user.vrn}")
     }
 
     "have the history section" when {
-
       "the user is NOT Hybrid" should {
-
         "have the heading" in {
           elementText(Selectors.historyHeading) shouldBe "History"
         }
-
-        lazy val view = details(detailsModel)
+        lazy val view = details(detailsModel, serviceInfoPartial)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the payment history text" in {
           elementText(Selectors.historyPastPayments) shouldBe "View past payments"
         }
-
         "have a link to the payment history" in {
           element(Selectors.historyPastPayments).attr("href") shouldBe controllers.routes.PaymentHistoryController.paymentHistory.url
         }
-
         "have the past returns text" in {
           elementText(Selectors.historyPastReturns) shouldBe "View past returns"
         }
-
         "have a link to the Submitted returns" in {
           element(Selectors.historyPastReturns).attr("href") shouldBe "returns-url"
         }
       }
 
       "the user is Hybrid" should {
-
-        lazy val view = details(hybridDetailsModel)
+        lazy val view = details(hybridDetailsModel, serviceInfoPartial)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the past payments text" in {
           elementText(Selectors.historyPastPayments) shouldBe "View past payments (opens in a new tab)"
         }
-
         "have a link to the portal via the PortalController" in {
           element(Selectors.historyPastPayments).attr("href") shouldBe controllers.routes.PortalController.hybridPH.url
         }
-
       }
     }
 
     "have the payments and repayments section" which {
-
       lazy val paymentsAndRepaymentsSection = element(Selectors.paymentsAndRepaymentsSection)
 
       "has the correct heading" in {
         paymentsAndRepaymentsSection.select("h3").text() shouldBe "Payments and repayments"
       }
-
       "has a link to the vat-repayment-tracker service" in {
         paymentsAndRepaymentsSection.select("h3 a").attr("href") shouldBe mockConfig.paymentsAndRepaymentsUrl
       }
-
       "has the correct paragraph" in {
         paymentsAndRepaymentsSection.select("p").text() shouldBe "Manage your Direct Debit, repayment bank account " +
           "details and track what HMRC owes you."
@@ -316,39 +291,30 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     }
 
     "have the vat certificate section" which {
-
       lazy val vatCertificate = element(Selectors.vatCertificate)
-
       "has the correct heading" in {
         vatCertificate.select("h3").text() shouldBe "View VAT certificate"
       }
-
       "has the correct paragraph" in {
         vatCertificate.select("p").text() shouldBe "View and print your VAT certificate."
       }
     }
 
     "have the update your VAT details section" which {
-
       lazy val updateVatDetails = element(Selectors.updateVatDetails)
-
       "has the correct heading" in {
         updateVatDetails.select("h3").text() shouldBe "Your business details"
       }
-
       "has the correct paragraph" in {
         updateVatDetails.select("p").text() shouldBe "Change your business details or VAT Return dates."
       }
     }
 
     "have the cancel VAT section" which {
-
       lazy val cancelVatSection = element(Selectors.cancelVatSection)
-
       "has the correct heading" in {
         cancelVatSection.select("h3").text() shouldBe "Cancel VAT registration"
       }
-
       "has the correct paragraph" in {
         cancelVatSection.select("p").text() shouldBe "Cancel your VAT registration if you’re closing the business, " +
           "transferring ownership or do not need to be VAT registered."
@@ -358,23 +324,18 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "not have the mtd signup section" in {
       elementExtinct(Selectors.mtdSignupSection)
     }
-
     "not have the unverified email content" in {
       elementExtinct(Selectors.unverifiedMessage)
     }
   }
 
   "Rendering the VAT details page for a non mtd user" should {
-
-    lazy val view = details(nonMtdDetailsModel, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(nonMtdDetailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
-
     "have a link to submit a VAT return" which {
-
       "has the correct text" in {
         elementText(Selectors.returnsVatLink) shouldBe "Submit VAT Return"
       }
-
       "has a link to the return deadlines page" in {
         element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
       }
@@ -382,9 +343,8 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page for a hybrid user" should {
-
     "not display the payments and repayments section" in {
-      lazy val view = details(detailsModel.copy(isHybridUser = true))
+      lazy val view = details(detailsModel.copy(isHybridUser = true), serviceInfoPartial)
       lazy implicit val document: Document = Jsoup.parse(view.body)
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
     }
@@ -392,7 +352,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page for a user with an unverified email address" should {
 
-    lazy val view = details(detailsModel.copy(userEmailVerified = false))
+    lazy val view = details(detailsModel.copy(userEmailVerified = false), serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "display the text asking user to verify email" in {
@@ -400,7 +360,6 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       elementText(Selectors.unverifiedMessage) shouldBe
         "Warning Your email address testsi1222@gmail.com is not working. Fix this now"
     }
-
     "have the correct link href" in {
       element(Selectors.unverifiedMessageLink).attr("href") shouldBe mockConfig.fixEmailUrl
     }
@@ -409,38 +368,31 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a next return and a next payment" should {
 
-    lazy val view = details(detailsModel, Html(""))
+    lazy val view = details(detailsModel, Some(ServiceNavigationInfo.apply()))
     lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
       elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
     }
-
     "render the next return section" in {
       elementText(Selectors.nextReturn) shouldBe "31 December 2018"
     }
-
     "use non breaking spaces for the date when rendering the next return section" in {
       viewAsString.contains(" Next return due31\u00a0December\u00a02018")
     }
-
     "render the next payment section heading" in {
       elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
     }
-
     "render the next payment section" in {
       elementText(Selectors.nextPayment) shouldBe "31 December 2018"
     }
-
     "use non breaking spaces for the date when rendering the next payment section" in {
       viewAsString.contains("Next payment due 31\u00a0December\u00a02018")
     }
-
     "render the next payment section vat returns link" in {
       elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
     }
-
     "have the correct next payment section vat returns link href" in {
       element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
@@ -455,30 +407,25 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       customerInfoError = true,
       currentDate = testDate,
       partyType = Some("1"),
-      mandationStatus = "2")
+      mandationStatus = "2"), serviceInfoPartial
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
       elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
     }
-
     "render the no return message" in {
       elementText(Selectors.nextReturn) shouldBe "No returns due right now"
     }
-
     "render the next payment section heading" in {
       elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
     }
-
     "render the next payment section" in {
       elementText(Selectors.nextPayment) shouldBe "No payments due right now"
     }
-
     "render the next payment section vat returns link" in {
       elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
     }
-
     "have the correct next payment section vat returns link href" in {
       element(Selectors.returnsVatLink).attr("href") shouldBe mockConfig.vatReturnDeadlinesUrl
     }
@@ -486,7 +433,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with an overdue return" should {
 
-    lazy val view = details(overdueReturnDetailsModel)
+    lazy val view = details(overdueReturnDetailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the overdue label" in {
@@ -496,7 +443,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with multiple return obligations" should {
 
-    lazy val view = details(multipleReturnsDetailsModel)
+    lazy val view = details(multipleReturnsDetailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the correct message regarding the number of obligations due" in {
@@ -506,13 +453,11 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a payment error" should {
 
-    lazy val view = details(paymentErrorDetailsModel)
+    lazy val view = details(paymentErrorDetailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
-
     "render the next payment section heading" in {
       elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
     }
-
     "render the next payment section" in {
       elementText(Selectors.nextPayment) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
@@ -520,17 +465,15 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with a return error" should {
 
-    lazy val view = details(returnErrorDetailsModel)
+    lazy val view = details(returnErrorDetailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
       elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
     }
-
     "render the next return section" in {
       elementText(Selectors.nextReturn) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
-
     "render the next payment section vat returns link" in {
       elementText(Selectors.returnsVatLink) shouldBe "View return deadlines"
     }
@@ -538,38 +481,31 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page with errors in all APIs" should {
 
-    lazy val view = details(bothErrorDetailsModel)
+    lazy val view = details(bothErrorDetailsModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the next return section heading" in {
       elementText(Selectors.nextReturnHeading) shouldBe "Next return due"
     }
-
     "render the next return section" in {
       elementText(Selectors.nextReturn) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
-
     "render the next payment section heading" in {
       elementText(Selectors.nextPaymentHeading) shouldBe "Next payment due"
     }
-
     "render the next payment section" in {
       elementText(Selectors.nextPayment) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
-
     "not render the next payment section vat returns link" in {
       intercept[TestFailedException](elementText(selector = Selectors.returnsVatLink)
       )
     }
-
     "render the graceful error message in place of the bottom row of tiles" in {
       elementText(Selectors.apiError) shouldBe "Sorry, there is a problem with the service. Try again later."
     }
-
     "not display the payments and repayments section" in {
       elementExtinct(Selectors.paymentsAndRepaymentsSection)
     }
-
     "not display the cancel VAT section" in {
       elementExtinct(Selectors.cancelVatSection)
     }
@@ -578,17 +514,14 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   "Rendering the VAT details page " when {
 
     "the user has penalties" should {
-      lazy val view = details(detailsModel.copy(penaltiesSummary = Some(penaltiesSummaryModel)), Html("<nav>BTA Links</nav>"))
+      lazy val view = details(detailsModel.copy(penaltiesSummary = Some(penaltiesSummaryModel)), serviceInfoPartial)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the Penalties for late VAT Returns and payments tile" which {
-
         lazy val penaltiesSection = element(Selectors.penaltiesSection)
-
         "has the correct heading" in {
           penaltiesSection.select("h3").text shouldBe "Penalties for late VAT Returns and payments"
         }
-
         "has the correct paragraph" in {
           penaltiesSection.select("p").text shouldBe "View your penalties, make an appeal against a " +
             "penalty and see the status of any current appeals."
@@ -596,21 +529,16 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       }
 
       "display the Penalties notification banner" which {
-
         "has the correct heading" in {
           elementText(".govuk-notification-banner__title") shouldBe "Late submission and late payment penalties"
         }
-
         "has content relating to the number of penalties the user has" in {
           elementText(".govuk-notification-banner__content > div") shouldBe "Total penalty points: 3"
         }
-
         "has a link to the penalties service" which {
-
           "has the correct text" in {
             elementText(".govuk-notification-banner__link") shouldBe "Find out why you have penalties"
           }
-
           "has the correct link destination" in {
             element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesFrontendUrl
           }
@@ -621,31 +549,26 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "the user has no penalties points" should {
 
       "display the penalties changes banner" which {
-        lazy val view = details(detailsModel, Html("<nav>BTA Links</nav>"))
+        lazy val view = details(detailsModel, serviceInfoPartial)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct heading" in {
           elementText(".govuk-notification-banner__title") shouldBe "Important"
         }
-
         "have the correct announcement information" in {
           elementText("#announcement-information") shouldBe "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
         }
-
         "have the correct date information" in {
           elementText("#date-information") shouldBe "The change affects late returns and late payments for VAT periods starting on or after 1 January 2023."
         }
-
         "have the correct calculation information" in {
           elementText("#calculation-information") shouldBe "We’re also changing how we calculate interest on late payments and repayment returns."
         }
 
         "the link" should {
-
           "have the correct link message" in {
             elementText(".govuk-notification-banner__link") shouldBe "Read the guidance on GOV.UK to find out more (opens in a new tab)"
           }
-
           "have the correct link location" in {
             element(".govuk-notification-banner__link").attr("href") shouldBe mockConfig.penaltiesChangesUrl
           }
@@ -656,7 +579,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page when POA Feature is enabled" should {
     mockConfig.features.poaActiveFeatureEnabled(true)
-    lazy val view = details(poaActiveUntiltrue, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(poaActiveUntiltrue, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     lazy val vatPOASection = element(Selectors.vatPOASection)
@@ -664,11 +587,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
     "has the correct heading for POA" in {
       vatPOASection.select("h3").text() shouldBe "Payments on account"
     }
-
     "render the correct link inside VAT POA section" in {
       vatPOASection.select("h3 a").attr("href") shouldBe controllers.routes.PaymentsOnAccountController.show.url
     }
-
     "render the correct informational text inside VAT POA section" in {
       vatPOASection.select("p").text() shouldBe "View your payments on account schedule of payments."
     }
@@ -676,7 +597,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering VAT details page when POA Feature is enabled but poaActiveUntil is false" should {
 
-    lazy val view = details(poaActiveUntilfalse, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(poaActiveUntilfalse, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
     "has the correct heading for POA" in {
       mockConfig.features.poaActiveFeatureEnabled(true)
@@ -685,12 +606,9 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
 
-
   "the VAT details page doesn't render POA section when POA Feature is enabled" should {
-
-    lazy val view = details(poaActiveUntiltrue, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(poaActiveUntiltrue, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
-
     "doesn't have POA section" in {
       mockConfig.features.poaActiveFeatureEnabled(false)
       document.select(Selectors.vatPOASection) should be(empty)
@@ -700,7 +618,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page when POA Feature is enabled and POA Changed On date condition passed" should {
     mockConfig.features.poaActiveFeatureEnabled(true)
-    lazy val view = details(poaActiveUntilTrueAndPoaChangedOn, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(poaActiveUntilTrueAndPoaChangedOn, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     lazy val vatPOAAlertBanner = element(Selectors.vatPOAAlertBanner)
@@ -723,19 +641,17 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       isAACustomer = true,
       poaChangedOn = None,
       annualAccountingChangedOn = None
-    ), Html("<nav>BTA Links</nav>"))
+    ), serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render a single combined banner" in {
       document.select(Selectors.combinedBanner).size() shouldBe 1
       elementText(".govuk-notification-banner__title") shouldBe "Important"
     }
-
     "include the AA overdue message content" in {
       elementText("#aa-overdue-information") should include ("You have an overdue annual accounting payment.")
       element("#vat-gov-banner-all .govuk-notification-banner__link").attr("href") should include ("/vat-through-software/interim-payments")
     }
-
     "include the penalties changes content within the same banner" in {
       elementText("#announcement-information") shouldBe "From January 2023, we’re launching a new penalty system to replace Default Surcharge."
     }
@@ -751,7 +667,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
       poaChangedOn = Some(LocalDate.parse("2025-03-01")),
       annualAccountingChangedOn = Some(LocalDate.parse("2025-02-01"))
     )
-    lazy val view = details(model, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(model, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render a single combined banner with ordered headings" in {
@@ -765,7 +681,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT details page when POA Feature is enabled and POA Changed On date condition failed" should {
     mockConfig.features.poaActiveFeatureEnabled(true)
-    lazy val view = details(poaActiveUntilTrueAndNoPoaChangedOn, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(poaActiveUntilTrueAndNoPoaChangedOn, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
     "should not render the POA Alert banner" in {
       document.select(Selectors.vatPOAAlertBanner).select("h3").text() shouldNot  be("Payments on account schedule change")
@@ -773,7 +689,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page when Annual Accounting feature is enabled and user is Annual Accounting customer" should {
-    lazy val view = details(annualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(annualAccountingCustomerModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render the Annual Accounting section" in {
@@ -783,7 +699,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page when Annual Accounting feature is enabled and user is not an Annual Accounting customer" should {
-    lazy val view = details(nonAnnualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(nonAnnualAccountingCustomerModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
@@ -793,7 +709,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page when Annual Accounting feature is disabled and user is an Annual Accounting customer" should {
-    lazy val view = details(annualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(annualAccountingCustomerModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {
@@ -803,7 +719,7 @@ class VatDetailsViewSpec extends ViewBaseSpec {
   }
 
   "Rendering the VAT details page when Annual Accounting feature is disabled and user is not an Annual Accounting customer" should {
-    lazy val view = details(nonAnnualAccountingCustomerModel, Html("<nav>BTA Links</nav>"))
+    lazy val view = details(nonAnnualAccountingCustomerModel, serviceInfoPartial)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render the Annual Accounting section" in {

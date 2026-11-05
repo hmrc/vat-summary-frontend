@@ -31,7 +31,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
   "Rendering the Estimated LPP1 breakdown page for a principal user" when {
 
-    lazy val view = injectedView(estimatedLPP1Model, Html(""))(request, messages, mockConfig, user)
+    lazy val view = injectedView(estimatedLPP1Model, serviceInfoPartial)(request, messages, mockConfig, user)
     lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -180,7 +180,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
     "the user has a time to pay arrangement and no breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not render warning text" in {
@@ -203,7 +203,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
     "the user has time to pay and breathing space arrangements" should {
 
-      lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true, breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true, breathingSpace = true), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not show the warning text" in {
@@ -230,7 +230,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
     "the user has breathing space and no time to pay arrangement" should {
 
-      lazy val view = injectedView(estimatedLPP1Model.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP1Model.copy(breathingSpace = true), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "not show the warning text" in {
@@ -250,7 +250,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
   "Rendering the Estimated LPP1 breakdown page for an agent" should {
 
-    lazy val view = injectedView(estimatedLPP1Model, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(estimatedLPP1Model, serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -323,7 +323,7 @@ class EstimatedLPP1ViewSpec extends ViewBaseSpec {
 
   "Rendering the Estimated LPP1 breakdown page for an agent whose client has a time to pay plan set up" should {
 
-    lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(estimatedLPP1Model.copy(timeToPayPlan = true), serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "not render warning text" in {

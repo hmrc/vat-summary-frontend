@@ -20,7 +20,6 @@ import models.WYODatabaseModel
 import models.viewModels._
 import play.api.libs.json.Json
 import repositories.WYOSessionRepository
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 

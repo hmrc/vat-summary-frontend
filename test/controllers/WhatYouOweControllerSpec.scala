@@ -20,7 +20,6 @@ import common.TestModels._
 import models.User
 import models.errors.{PaymentsError, UnexpectedStatusError}
 import models.payments._
-import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.test.Helpers._
@@ -28,7 +27,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import views.html.errors.PaymentsError
 import views.html.payments.{NoPayments, WhatYouOwe}
 
-import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class WhatYouOweControllerSpec extends ControllerBaseSpec {
@@ -399,7 +397,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentforTaxLPP1),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMax, false)(fakeRequest)
+            penalties = penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1Model)))
       }
@@ -414,7 +412,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentForTaxLPP1EstLPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMax, false)(fakeRequest)
+            penalties = penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(
           totalAmount = BigDecimal(10002),
@@ -435,7 +433,7 @@ class WhatYouOweControllerSpec extends ControllerBaseSpec {
           controller.constructViewModel(
             payments = Seq(overpaymentForTaxLPP1LPI),
             mandationStatus = "MTDfB",
-            penalties = penaltyDetailsModelMax, false)(fakeRequest)
+            penalties = penaltyDetailsModelMax, ddStatus = false)(fakeRequest)
         }
         result shouldBe Some(whatYouOweViewModel.copy(charges = Seq(crystallisedVatOPLPP1LPIModel)))
       }

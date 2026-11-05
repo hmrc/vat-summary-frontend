@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package views.annual
 import models.viewModels._
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.twirl.api.Html
 import views.ViewBaseSpec
 import views.html.annual.AnnualAccountingView
+
 import java.time.LocalDate
 
 class AnnualAccountingViewSpec extends ViewBaseSpec {
@@ -70,19 +70,19 @@ class AnnualAccountingViewSpec extends ViewBaseSpec {
 
   "AnnualAccountingView" should {
     "have the correct title" in {
-      val html = view(model, Html(""))
+      val html = view(model, serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.title shouldBe "Interim payments - Manage your VAT account - GOV.UK"
     }
 
     "have the correct heading" in {
-      val html = view(model, Html(""))
+      val html = view(model, serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.select("h1").text() shouldBe "Interim payments"
     }
 
     "render the next payment line with amount and date" in {
-      val html = view(model, Html(""))
+      val html = view(model, serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       val text = doc.select("#next-payment-text").text()
       text should include ("Your next upcoming payment")
@@ -90,32 +90,32 @@ class AnnualAccountingViewSpec extends ViewBaseSpec {
     }
 
     "render the changed on hint" in {
-      val html = view(model, Html(""))
+      val html = view(model, serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.select("#changed-on-date").text() should include ("were last updated on")
     }
 
     "show both tabs when past periods exist" in {
-      val html = view(model, Html(""))
+      val html = view(model, serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.select(".govuk-tabs__tab").size() shouldBe 2
     }
 
     "show only the current tab when there are no past periods" in {
-      val html = view(model.copy(pastPeriods = Nil), Html(""))
+      val html = view(model.copy(pastPeriods = Nil), serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.select(".govuk-tabs__tab").size() shouldBe 1
       doc.select("#past-schedule").size() shouldBe 0
     }
 
     "render frequency sentence for monthly" in {
-      val html = view(model.copy(frequency = Some(PaymentFrequency.Monthly)), Html(""))
+      val html = view(model.copy(frequency = Some(PaymentFrequency.Monthly)), serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.text() should include("9 monthly interim payments")
     }
 
     "render frequency sentence for quarterly" in {
-      val html = view(model.copy(frequency = Some(PaymentFrequency.Quarterly)), Html(""))
+      val html = view(model.copy(frequency = Some(PaymentFrequency.Quarterly)), serviceInfoPartial)
       implicit val doc: Document = Jsoup.parse(html.body)
       doc.text() should include("3 quarterly interim payments")
     }

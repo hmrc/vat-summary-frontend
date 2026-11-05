@@ -17,7 +17,6 @@
 package connectors
 
 import java.time.LocalDate
-
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import javax.inject.{Inject, Singleton}

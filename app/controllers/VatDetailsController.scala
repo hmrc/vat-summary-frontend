@@ -71,7 +71,8 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
           serviceInfoContent <- serviceInfoService.getPartial
           penaltiesCallResult <- penaltiesService.getPenaltiesInformation(user.vrn)
           today = dateService.now()
-          standingRequest <- if (!isPoaActiveUser(customerInfo, today)) annualAccountingService.getStandingRequests(user.vrn) else paymentsOnAccountService.getPaymentsOnAccounts(user.vrn)
+          standingRequest <- if (!isPoaActiveUser(customerInfo, today)) { annualAccountingService.getStandingRequests(user.vrn) }
+                                  else { paymentsOnAccountService.getPaymentsOnAccounts(user.vrn) }
         } yield {
 
           auditEvents(user, nextReturn, nextPayment)
@@ -172,8 +173,7 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
                                               accountDetails: HttpResult[CustomerInformation],
                                               penaltyInformation: Option[PenaltiesSummary],
                                               standingRequest: Option[StandingRequest],
-                                              today: LocalDate
-                                              ): VatDetailsViewModel = {
+                                              today: LocalDate): VatDetailsViewModel = {
 
     val returnModel: VatDetailsDataModel = retrieveReturns(obligations, today)
     val paymentModel: VatDetailsDataModel = retrievePayments(payments, today)
@@ -196,9 +196,9 @@ class VatDetailsController @Inject()(vatDetailsService: VatDetailsService,
     val mandationStatus: String = accountDetails.fold(_ => "ERROR", _.mandationStatus)
     val isPoaActiveForCustomer: Boolean = poaCheckService.retrievePoaActiveForCustomer(accountDetails, today)
     val poaChangedOn: Option[LocalDate] = poaCheckService.changedOnDateWithInLatestVatPeriod(standingRequest, today)
-    val isAnnualAccountingCustomer: Boolean = standingRequest.exists(_.standingRequests.exists(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4))
-    val annualAccountingChangedOn: Option[LocalDate] = 
-      annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequest, today)
+    val isAnnualAccountingCustomer: Boolean = standingRequest.exists(
+                                  _.standingRequests.exists(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4))
+    val annualAccountingChangedOn: Option[LocalDate] = annualAccountingCheckService.changedOnDateWithinLast3Months(standingRequest, today)
 
     VatDetailsViewModel(
       paymentModel.displayData,

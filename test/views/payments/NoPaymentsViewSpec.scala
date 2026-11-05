@@ -45,7 +45,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   "Rendering the no payments page for a principal user" when {
 
     lazy val view = {
-      noPaymentsView(user, Html(""), None, mandationStatus = "2", isPOAActive = false, isAACustomer = false)
+      noPaymentsView(user, serviceInfoPartial, None, mandationStatus = "2", isPOAActive = false, isAACustomer = false)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -104,7 +104,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     val entityName = "Capgemini"
     lazy val view = {
-      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2", isPOAActive = false, isAACustomer = false)
+      noPaymentsView(agentUser, serviceInfoPartial, Some(entityName), mandationStatus = "2", isPOAActive = false, isAACustomer = false)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -144,7 +144,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
   "Rendering the no payments page for a principal Annual Accounting customer" should {
 
     lazy val view = {
-      noPaymentsView(user, Html(""), None, mandationStatus = "2", isPOAActive = false, isAACustomer = true)
+      noPaymentsView(user, serviceInfoPartial, None, mandationStatus = "2", isPOAActive = false, isAACustomer = true)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -164,7 +164,7 @@ class NoPaymentsViewSpec extends ViewBaseSpec {
 
     val entityName = "Capgemini"
     lazy val view = {
-      noPaymentsView(agentUser, Html(""), Some(entityName), mandationStatus = "2", isPOAActive = false, isAACustomer = true)
+      noPaymentsView(agentUser, serviceInfoPartial, Some(entityName), mandationStatus = "2", isPOAActive = false, isAACustomer = true)
     }
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

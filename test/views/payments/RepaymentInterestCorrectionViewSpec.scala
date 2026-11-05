@@ -30,7 +30,7 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT Overpayment for RPI breakdown page for a principal user" when {
 
-    lazy val view = injectedView(vatOverpaymentForRPI, Html(""))(request, messages, mockConfig, user)
+    lazy val view = injectedView(vatOverpaymentForRPI, serviceInfoPartial)(request, messages, mockConfig, user)
     lazy val viewAsString = view.toString
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -163,7 +163,7 @@ class RepaymentInterestCorrectionViewSpec extends ViewBaseSpec {
 
   "Rendering the VAT Overpayment for RPI breakdown page for an agent" when {
 
-    lazy val view = injectedView(vatOverpaymentForRPI, Html(""))(request, messages, mockConfig, agentUser)
+    lazy val view = injectedView(vatOverpaymentForRPI, serviceInfoPartial)(request, messages, mockConfig, agentUser)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

@@ -68,7 +68,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
       "the charge isn't overdue" should {
 
           lazy val view = {
-            chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, user)
+            chargeTypeDetailsView(whatYouOweCharge, serviceInfoPartial)(request, messages, mockConfig, user)
           }
         lazy val viewAsString = view.toString
           lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -184,7 +184,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
       "the charge is overdue" should {
 
           lazy val view = {
-            chargeTypeDetailsView(whatYouOweChargeOverdue, Html(""))(request, messages, mockConfig, user)
+            chargeTypeDetailsView(whatYouOweChargeOverdue, serviceInfoPartial)(request, messages, mockConfig, user)
           }
           lazy val viewAsstring = view.toString
           lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -202,7 +202,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     "the user has a cleared amount and no period for the charge" should {
 
         lazy val view = {
-          chargeTypeDetailsView(whatYouOweChargeNoPeriod, Html(""))(request, messages, mockConfig, user)
+          chargeTypeDetailsView(whatYouOweChargeNoPeriod, serviceInfoPartial)(request, messages, mockConfig, user)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -214,7 +214,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     "the user only has the periodFrom field but not the periodTo field" should {
 
         lazy val view = {
-          chargeTypeDetailsView(whatYouOweChargeNoPeriodTo, Html(""))(request, messages, mockConfig, user)
+          chargeTypeDetailsView(whatYouOweChargeNoPeriodTo, serviceInfoPartial)(request, messages, mockConfig, user)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -226,7 +226,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     "the user only has the periodTo field but not the periodFrom field" should {
 
         lazy val view = {
-          chargeTypeDetailsView(whatYouOweChargeNoPeriodFrom, Html(""))(request, messages, mockConfig, user)
+          chargeTypeDetailsView(whatYouOweChargeNoPeriodFrom, serviceInfoPartial)(request, messages, mockConfig, user)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -238,7 +238,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     "the charge allows the user to view a VAT return" should {
 
         lazy val view = {
-          chargeTypeDetailsView(chargeModel1, Html(""))(request, messages, mockConfig, user)
+          chargeTypeDetailsView(chargeModel1, serviceInfoPartial)(request, messages, mockConfig, user)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -257,7 +257,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     "the charge does not allow the user to view a VAT return" should {
 
         lazy val view = {
-          chargeTypeDetailsView(whatYouOweChargeNoViewReturn, Html(""))(request, messages, mockConfig, user)
+          chargeTypeDetailsView(whatYouOweChargeNoViewReturn, serviceInfoPartial)(request, messages, mockConfig, user)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -273,7 +273,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge", chargeReference = Some("XD002750002155")),
-              Html(""))(request, messages, mockConfig, user)
+              serviceInfoPartial)(request, messages, mockConfig, user)
           }
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -286,7 +286,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge"),
-              Html(""))(request, messages, mockConfig, user)
+              serviceInfoPartial)(request, messages, mockConfig, user)
           }
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -302,7 +302,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
     "the charge is any charge type" should {
 
         lazy val view = {
-          chargeTypeDetailsView(whatYouOweCharge, Html(""))(request, messages, mockConfig, agentUser)
+          chargeTypeDetailsView(whatYouOweCharge, serviceInfoPartial)(request, messages, mockConfig, agentUser)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -343,7 +343,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge", chargeReference = Some("XD002750002155")),
-              Html(""))(request, messages, mockConfig, agentUser)
+              serviceInfoPartial)(request, messages, mockConfig, agentUser)
           }
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -356,7 +356,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
 
           lazy val view = {
             chargeTypeDetailsView(whatYouOweCharge.copy(chargeType = "VAT Debit Default Surcharge"),
-              Html(""))(request, messages, mockConfig, agentUser)
+              serviceInfoPartial)(request, messages, mockConfig, agentUser)
           }
           lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -371,7 +371,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
       "correctly show content for agent user" in {
         lazy val view = {
           chargeTypeDetailsView(vatOverpaymentTax,
-            Html(""))(request, messages, mockConfig, agentUser)
+            serviceInfoPartial)(request, messages, mockConfig, agentUser)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -386,7 +386,7 @@ class ChargeTypeDetailsViewSpec extends ViewBaseSpec {
       "correctly show content for user" in {
         lazy val view = {
           chargeTypeDetailsView(vatOverpaymentTax,
-            Html(""))(request, messages, mockConfig, user)
+            serviceInfoPartial)(request, messages, mockConfig, user)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 

@@ -24,7 +24,6 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import services.TimeToPayService
 import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class TimeToPayControllerSpec extends ControllerBaseSpec {

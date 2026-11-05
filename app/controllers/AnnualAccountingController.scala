@@ -16,17 +16,15 @@
 
 package controllers
 
-import audit.AuditingService
 import com.google.inject.Inject
 import config.{AppConfig, ServiceErrorHandler}
-import models.{DirectDebitStatus, RequestItem, ServiceResponse, StandingRequest, User}
+import models._
 import models.obligations.VatReturnObligations
 import models.payments.{PaymentWithOptionalOutstanding, PaymentsWithOptionalOutstanding}
 import models.viewModels.AAPaymentStatus.{Overdue, Paid, PaidLate, Upcoming}
 import models.viewModels._
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request, Result}
-import play.twirl.api.Html
+import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil
@@ -46,8 +44,7 @@ class AnnualAccountingController @Inject() (
     vatDetailService: VatDetailsService,
     annualAccountingError: views.html.errors.AnnualAccountingError,
     mcc: MessagesControllerComponents,
-    view: AnnualAccountingView,
-    auditService: AuditingService
+    view: AnnualAccountingView
 )(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends FrontendController(mcc)
     with I18nSupport
@@ -100,39 +97,44 @@ class AnnualAccountingController @Inject() (
   }
 
   private def handleData(
-      serviceInfoContent: Html,
-      today: LocalDate,
-      standingRequestOpt: Option[StandingRequest],
-      obligationsResult: ServiceResponse[Option[VatReturnObligations]],
-      ddStatusResult: ServiceResponse[DirectDebitStatus],
-      paymentsHistoryByDueResult: ServiceResponse[Seq[PaymentHistoryWithDueDate]],
-      paymentsResult: ServiceResponse[PaymentsWithOptionalOutstanding],
-      view: AnnualAccountingView,
-      entityNameOpt: Option[Option[String]]
+                          serviceInfoContent: Option[ServiceNavigationInfo],
+                          today: LocalDate,
+                          standingRequestOpt: Option[StandingRequest],
+                          obligationsResult: ServiceResponse[Option[VatReturnObligations]],
+                          ddStatusResult: ServiceResponse[DirectDebitStatus],
+                          paymentsHistoryByDueResult: ServiceResponse[Seq[PaymentHistoryWithDueDate]],
+                          paymentsResult: ServiceResponse[PaymentsWithOptionalOutstanding],
+                          view: AnnualAccountingView,
+                          entityNameOpt: Option[Option[String]]
   )(implicit request: Request[AnyContent], user: User): Future[Result] = {
     standingRequestOpt match {
       case Some(standingRequest) =>
         val hasAAData = standingRequest.standingRequests.exists(_.requestCategory == models.ChangedOnVatPeriod.RequestCategoryType4)
-        if (!hasAAData) {
-          logger.warn(s"[AnnualAccountingController][show] No Annual Accounting (category 4) schedules found for ${user.vrn}")
-          return Future.successful(InternalServerError(annualAccountingError()))
+
+        hasAAData match {
+          case false =>
+            logger.warn(s"[AnnualAccountingController][show] No Annual Accounting (category 4) schedules found for ${user.vrn}")
+            Future.successful(InternalServerError(annualAccountingError()))
+
+          case true =>
+                val obligationsOpt = obligationsResult.toOption.flatten
+                val hasDirectDebit: Option[Boolean] = ddStatusResult.toOption.map(_.directDebitMandateFound)
+                val chargesWithDueDates = paymentsHistoryByDueResult.toOption.getOrElse(Seq.empty)
+                val paymentsDetails = paymentsResult.toOption
+                val viewModel = buildViewModel(
+                  standingRequest,
+                  today,
+                  obligationsOpt,
+                  chargesWithDueDates,
+                  paymentsDetails,
+                  user.isAgent,
+                  hasDirectDebit,
+                  displayName = entityNameOpt.flatten
+                )
+                logger.info(s"[AnnualAccountingController][show] rendering AA page for ${user.vrn}")
+                Future.successful(Ok(view(viewModel, serviceInfoContent)))
         }
-        val obligationsOpt = obligationsResult.toOption.flatten
-        val hasDirectDebit: Option[Boolean] = ddStatusResult.toOption.map(_.directDebitMandateFound)
-        val chargesWithDueDates = paymentsHistoryByDueResult.toOption.getOrElse(Seq.empty)
-        val paymentsDetails = paymentsResult.toOption
-        val viewModel = buildViewModel(
-          standingRequest,
-          today,
-          obligationsOpt,
-          chargesWithDueDates,
-          paymentsDetails,
-          user.isAgent,
-          hasDirectDebit,
-          displayName = entityNameOpt.flatten
-        )
-        logger.info(s"[AnnualAccountingController][show] rendering AA page for ${user.vrn}")
-        Future.successful(Ok(view(viewModel, serviceInfoContent)))
+
       case None =>
         logger.error(s"Standingrequest API returned None for ${user.vrn} (AA)")
         Future.successful(InternalServerError(annualAccountingError()))
@@ -142,7 +144,7 @@ class AnnualAccountingController @Inject() (
 
 object AnnualAccountingController {
   import models.ChangedOnVatPeriod.RequestCategoryType4
-  import models.payments.{AAQuarterlyInstalments, AAMonthlyInstalment}
+  import models.payments.{AAMonthlyInstalment, AAQuarterlyInstalments}
 
   def buildViewModel(
       standingRequestResponse: StandingRequest,
@@ -224,12 +226,13 @@ object AnnualAccountingController {
 
     val frequencyOpt = currentPeriods.headOption.flatMap { cp =>
       val nonBalancingCount = cp.payments.count(p => !p.isBalancing)
-      if (nonBalancingCount >= PaymentFrequency.Monthly.instalments)
+      if (nonBalancingCount >= PaymentFrequency.Monthly.instalments) {
         Some(PaymentFrequency.Monthly)
-      else if (nonBalancingCount >= PaymentFrequency.Quarterly.instalments)
+      } else if (nonBalancingCount >= PaymentFrequency.Quarterly.instalments) {
         Some(PaymentFrequency.Quarterly)
-      else
+      } else {
         None
+      }
     }
 
     val nextPaymentOpt = currentPeriods

@@ -53,7 +53,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "the user has no time to pay arrangement and no breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2Model, Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP2Model, serviceInfoPartial)(request, messages, mockConfig, user)
       lazy val viewAsString = view.toString
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -178,7 +178,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "the user has a time to pay arrangement and no breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2ModelTTP, Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP2ModelTTP, serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
@@ -209,7 +209,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "the user has no time to pay arrangement but breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2Model.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP2Model.copy(breathingSpace = true), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
@@ -250,7 +250,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "the user has a time to pay arrangement and breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2ModelTTP.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, user)
+      lazy val view = injectedView(estimatedLPP2ModelTTP.copy(breathingSpace = true), serviceInfoPartial)(request, messages, mockConfig, user)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
@@ -295,7 +295,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "their client has no time to pay arrangement and no breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2Model, Html(""))(request, messages, mockConfig, agentUser)
+      lazy val view = injectedView(estimatedLPP2Model, serviceInfoPartial)(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -352,7 +352,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "their client has a time to pay arrangement but no breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2ModelTTP, Html(""))(request, messages, mockConfig, agentUser)
+      lazy val view = injectedView(estimatedLPP2ModelTTP, serviceInfoPartial)(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have inset text with the correct content" in {
@@ -383,7 +383,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "their client has no time to pay arrangement but breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2Model.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, agentUser)
+      lazy val view = injectedView(estimatedLPP2Model.copy(breathingSpace = true), serviceInfoPartial)(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {
@@ -424,7 +424,7 @@ class EstimatedLPP2ViewSpec extends ViewBaseSpec {
 
     "their client has a time to pay arrangement and breathing space" should {
 
-      lazy val view = injectedView(estimatedLPP2ModelTTP.copy(breathingSpace = true), Html(""))(request, messages, mockConfig, agentUser)
+      lazy val view = injectedView(estimatedLPP2ModelTTP.copy(breathingSpace = true), serviceInfoPartial)(request, messages, mockConfig, agentUser)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct first explanation paragraph" in {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,8 @@ import connectors.StandingRequestsConnector
 import models.StandingRequest
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.LoggerUtil
-import javax.inject.{Inject, Singleton}
+
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AnnualAccountingService @Inject()(standingRequestsConnector: StandingRequestsConnector)

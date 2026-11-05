@@ -21,7 +21,6 @@ import connectors.httpParsers.ResponseHttpParsers.HttpResult
 import connectors.httpParsers.TimeToPayHttpParser.TimeToPayReads
 import models.ESSTTP.{TTPRequestModel, TTPResponseModel}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
